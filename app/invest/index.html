@@ -75,6 +75,12 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-tpd-item{padding:3px 9px;font-size:11px;color:#555;border:1px solid #ebebeb;border-radius:5px;cursor:pointer;font-family:'Ochrid',serif;transition:all .12s ease;user-select:none}
 .iv-tpd-item:hover{background:#f5f5f5;border-color:#bbb;color:#0a0a0a}
 .iv-tpd-empty{font-size:11px;color:#bbb;font-family:'Ochrid',serif;padding:2px 4px}
+/* ── Drag ── */
+.iv-tag[draggable]{cursor:grab}
+.iv-tag[draggable]:active{cursor:grabbing}
+.iv-tag.iv-dragging{opacity:.35;transform:scale(.93);transition:opacity .12s,transform .12s}
+.iv-group-box.drop-ready{border-color:#bbb;background:rgba(10,10,10,0.025)}
+.iv-group-box.drag-over{border-color:#0a0a0a!important;background:rgba(10,10,10,0.05)!important;box-shadow:0 0 0 2px rgba(10,10,10,0.07);transform:scale(1.01);transition:all .12s}
 .iv-feed-head{padding:32px 24px 20px;display:flex;align-items:center;justify-content:space-between}
 .iv-feed-title{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Ochrid',serif}
 .iv-feed-count{font-size:10px;color:#bbb;font-family:'Ochrid',serif}
@@ -339,7 +345,7 @@ function _ivSave(){
   }catch(e){}
 })();
 
-let _ivActiveTag=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null;
+let _ivActiveTag=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null;
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}}
 let _ivPendingImages=[];
@@ -463,7 +469,8 @@ function ivRenderTags(){
       const sc=maxSev?SCOLORS[maxSev]:null;
       const style=sc?(active?`background:${sc};border-color:rgba(0,0,0,0.3);color:#222`:`background:${sc};border-color:transparent;color:#4a4a4a`):'';
       const cls=`iv-tag${active&&!sc?' active':''}`;
-      return `<div class="${cls}"${style?` style="${style}"`:''}  onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span></div>`;
+      const escH=t.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+      return `<div class="${cls}" draggable="true" data-layer="${layer}" data-title="${escH}"${style?` style="${style}"`:''}  onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span></div>`;
     }).join('');
   });
 }
@@ -497,6 +504,17 @@ function ivRenderGroups(){
         <span class="iv-group-hdr-name" ondblclick="event.stopPropagation();ivRenameGroup('${layer}','${g.id}',this)">${g.name}</span>
         <span class="iv-grp-act"><span class="iv-grp-act-btn" onclick="event.stopPropagation();ivGroupOpenPicker('${layer}','${g.id}',this)" title="add tag to group">+</span><span class="iv-grp-del-btn" onclick="event.stopPropagation();ivDeleteGroup('${layer}','${g.id}')" title="delete group">×</span></span>
       </div><div class="iv-group-pills">${pills}</div>`;
+      box.addEventListener('dragover',e=>{
+        if(!_ivDragData||_ivDragData.layer!==layer)return;
+        e.preventDefault();e.dataTransfer.dropEffect='link';
+        box.classList.add('drag-over');
+      });
+      box.addEventListener('dragleave',e=>{if(!box.contains(e.relatedTarget))box.classList.remove('drag-over');});
+      box.addEventListener('drop',e=>{
+        e.preventDefault();box.classList.remove('drag-over');
+        if(!_ivDragData||_ivDragData.layer!==layer)return;
+        ivGroupAddTitle(layer,g.id,_ivDragData.title);
+      });
       area.appendChild(box);
     });
     const btn=document.createElement('div');
@@ -807,6 +825,26 @@ function ivSelectDay(ds){
     document.addEventListener(ev,kick,{passive:true})
   );
   kick();
+})();
+
+/* ── Drag delegation ── */
+(function ivInitDrag(){
+  const fw=document.getElementById('iv-framework');
+  fw.addEventListener('dragstart',e=>{
+    const tag=e.target.closest('.iv-tag[draggable]');
+    if(!tag)return;
+    _ivDragData={layer:tag.dataset.layer,title:tag.dataset.title};
+    e.dataTransfer.effectAllowed='link';
+    e.dataTransfer.setData('text/plain',_ivDragData.title);
+    tag.classList.add('iv-dragging');
+    document.querySelectorAll(`#iv-ga-${_ivDragData.layer} .iv-group-box`).forEach(b=>b.classList.add('drop-ready'));
+  });
+  fw.addEventListener('dragend',e=>{
+    const tag=e.target.closest('.iv-tag[draggable]');
+    if(tag)tag.classList.remove('iv-dragging');
+    document.querySelectorAll('.iv-group-box.drop-ready,.iv-group-box.drag-over').forEach(b=>b.classList.remove('drop-ready','drag-over'));
+    _ivDragData=null;
+  });
 })();
 
 ivRenderTags();ivRenderGroups();ivRenderFeed();
