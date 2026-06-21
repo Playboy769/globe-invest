@@ -619,6 +619,7 @@ function ivCardHTML(e,layerLabel){
   const preview=ivStripMd(e.content);
   return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${preview}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
 }
+function _ivBySeverity(a,b){return (b.severity||0)-(a.severity||0) || (b.ts||'').localeCompare(a.ts||'');}
 function ivRenderFeed(){
   const list=document.getElementById('iv-feed-list');
   const detail=document.getElementById('iv-feed-detail');
@@ -627,7 +628,7 @@ function ivRenderFeed(){
   const delBtn=document.getElementById('iv-feed-del');
   if(delBtn)delBtn.style.display=_ivActiveTag?'inline':'none';
   if(_ivActiveTag){
-    const entries=_ivStore[_ivActiveTag.layer].filter(e=>e.title===_ivActiveTag.title);
+    const entries=_ivStore[_ivActiveTag.layer].filter(e=>e.title===_ivActiveTag.title).sort(_ivBySeverity);
     cntEl.textContent=entries.length+' entries';
     if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries yet</div>';return;}
     list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveTag.layer])).join('');return;
@@ -635,18 +636,18 @@ function ivRenderFeed(){
   if(_ivActiveGroup&&!_ivActiveTag){
     const group=(_ivGroups[_ivActiveGroup.layer]||[]).find(g=>g.id===_ivActiveGroup.id);
     const groupTitles=new Set(group?group.titles:[]);
-    const entries=_ivStore[_ivActiveGroup.layer].filter(e=>groupTitles.has(e.title)).sort((a,b)=>b.ts.localeCompare(a.ts));
+    const entries=_ivStore[_ivActiveGroup.layer].filter(e=>groupTitles.has(e.title)).sort(_ivBySeverity);
     cntEl.textContent=entries.length+' entries';
     if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries in this group</div>';return;}
     list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveGroup.layer])).join('');return;
   }
   if(_ivActiveLayer){
-    const entries=[..._ivStore[_ivActiveLayer]].sort((a,b)=>b.ts.localeCompare(a.ts));
+    const entries=[..._ivStore[_ivActiveLayer]].sort(_ivBySeverity);
     cntEl.textContent=entries.length+' entries';
     if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries in '+LN[_ivActiveLayer]+'</div>';return;}
     list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveLayer])).join('');return;
   }
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry].sort((a,b)=>b.ts.localeCompare(a.ts));
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry].sort(_ivBySeverity);
   cntEl.textContent=all.length+' entries';
   if(!all.length){list.innerHTML='<div class="iv-feed-empty">Select a tag to view entries</div>';return;}
   list.innerHTML=all.map(e=>{
