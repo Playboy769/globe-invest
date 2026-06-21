@@ -20,7 +20,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 #iv-wrap{display:flex;height:100vh;user-select:none}
 #iv-wrap.resizing{cursor:col-resize}
 #iv-framework{flex:3;background:#fff;overflow-y:auto;display:flex;flex-direction:column;padding:0 28px;min-width:120px}
-#iv-feed{flex:3;background:#fff;overflow-y:auto;min-width:120px}
+#iv-feed{flex:3;background:#fff;overflow-y:auto;min-width:120px;--iv-art-fz:13px}
 #iv-editor{flex:2;min-width:200px;background:#fff;overflow-y:auto;display:flex;flex-direction:column}
 
 .iv-resize-handle{width:1px;background:#eee;cursor:col-resize;flex-shrink:0;position:relative;transition:background .15s ease,width .12s ease;z-index:10}
@@ -86,6 +86,13 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-feed-count{font-size:10px;color:#bbb;font-family:'Ochrid',serif}
 .iv-feed-del{font-size:9px;color:#ccc;cursor:pointer;font-family:'Ochrid',serif;letter-spacing:.06em;text-transform:uppercase;transition:color .15s ease,border-color .15s ease;padding:3px 8px;border:1px solid #e8e8e8;border-radius:6px;display:none}
 .iv-feed-del:hover{color:#b55;border-color:#daa}
+.iv-fz-ctrl{display:flex;align-items:center;gap:3px}
+.iv-fz-btn{font-family:'Ochrid',serif;color:#bbb;cursor:pointer;height:22px;min-width:26px;padding:0 6px;border:1px solid #e8e8e8;border-radius:6px;transition:all .15s ease;user-select:none;display:flex;align-items:center;justify-content:center;line-height:1}
+.iv-fz-btn:hover{color:#0a0a0a;border-color:#bbb;background:#f5f5f5}
+.iv-fz-minus{font-size:10px}
+.iv-fz-plus{font-size:13px}
+.iv-fz-btn.at-limit{opacity:.3;cursor:default}
+.iv-fz-btn.at-limit:hover{color:#bbb;border-color:#e8e8e8;background:transparent}
 .iv-feed-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
 .iv-feed-empty{text-align:center;padding:48px 24px;color:#bbb;font-size:13px;font-weight:400;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-feed-card{padding:16px 18px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .2s cubic-bezier(.4,0,.2,1);animation:iv-fade-up .22s cubic-bezier(.4,0,.2,1) both}
@@ -105,21 +112,21 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-fd-edit{font-size:10px;color:#888;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;font-family:'Ochrid',serif;padding:3px 10px;border-radius:6px;border:1px solid #ddd;transition:all .15s ease}
 .iv-fd-edit:hover{color:#0a0a0a;border-color:#bbb;background:#f5f5f5}
 .iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Ochrid',serif}
-.iv-fd-title{font-size:18px;color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Ochrid',serif}
-.iv-fd-body{font-size:13px;color:#0a0a0a;line-height:1.9;font-weight:400;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-fd-title{font-size:calc(var(--iv-art-fz,13px) * 1.385);color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Ochrid',serif}
+.iv-fd-body{font-size:var(--iv-art-fz,13px);color:#0a0a0a;line-height:1.9;font-weight:400;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-md h1,.iv-md h2,.iv-md h3{font-family:'Ochrid','Noto Serif TC',serif;color:#0a0a0a;margin:1.2em 0 .4em;font-weight:500;line-height:1.4}
-.iv-md h1{font-size:16px}.iv-md h2{font-size:14px}.iv-md h3{font-size:13px;color:#333}
+.iv-md h1{font-size:1.23em}.iv-md h2{font-size:1.08em}.iv-md h3{font-size:1em;color:#333}
 .iv-md p{margin:.65em 0;line-height:1.9}
 .iv-md p:first-child{margin-top:0}.iv-md p:last-child{margin-bottom:0}
 .iv-md strong{font-weight:600;color:#222}.iv-md em{font-style:italic;color:#444}
-.iv-md code{font-family:Consolas,monospace;font-size:11px;background:#f5f5f5;padding:1px 5px;border-radius:4px;color:#c44}
+.iv-md code{font-family:Consolas,monospace;font-size:0.85em;background:#f5f5f5;padding:1px 5px;border-radius:4px;color:#c44}
 .iv-md pre{background:#f8f8f8;border:1px solid #ececec;border-radius:8px;padding:11px 14px;overflow-x:auto;margin:.75em 0}
-.iv-md pre code{background:none;padding:0;color:#333;font-size:11.5px}
+.iv-md pre code{background:none;padding:0;color:#333;font-size:0.88em}
 .iv-md ul,.iv-md ol{padding-left:1.4em;margin:.65em 0}.iv-md li{margin:.22em 0;line-height:1.75}
 .iv-md blockquote{border-left:2.5px solid #ddd;padding:.3em .8em .3em 1em;margin:.75em 0;color:#999;font-style:italic}
 .iv-md hr{border:none;border-top:1px solid #eee;margin:1em 0}
 .iv-md a{color:#0a0a0a;text-decoration:underline;text-underline-offset:2px;text-decoration-color:#ccc}
-.iv-md table{border-collapse:collapse;font-size:12px;margin:.75em 0;width:100%}
+.iv-md table{border-collapse:collapse;font-size:0.92em;margin:.75em 0;width:100%}
 .iv-md th,.iv-md td{border:1px solid #e8e8e8;padding:5px 10px;text-align:left}
 .iv-md th{background:#fafafa;font-weight:500}
 .iv-fd-meta{margin-top:16px;font-size:10px;color:#bbb;font-family:'Ochrid',serif}
@@ -233,6 +240,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
     <div class="iv-feed-head">
       <span class="iv-feed-title">Feed</span>
       <div style="display:flex;align-items:center;gap:10px">
+        <span class="iv-fz-ctrl"><span class="iv-fz-btn iv-fz-minus" onclick="ivFontStep(-1)" title="Smaller article text">A−</span><span class="iv-fz-btn iv-fz-plus" onclick="ivFontStep(1)" title="Larger article text">A+</span></span>
         <span class="iv-feed-del" id="iv-feed-del" onclick="ivRemoveActiveTag()">Delete tag</span>
         <span class="iv-feed-count" id="iv-feed-cnt">0 entries</span>
       </div>
@@ -849,7 +857,17 @@ function ivSelectDay(ds){
   });
 })();
 
-ivRenderTags();ivRenderGroups();ivRenderFeed();
+/* ── Article font size (A− / A+) ── */
+let _ivArtFz=(function(){const v=parseFloat(localStorage.getItem('iv_art_fz'));return (v>=10&&v<=22)?v:13;})();
+function ivApplyFontSize(){
+  const f=document.getElementById('iv-feed');if(f)f.style.setProperty('--iv-art-fz',_ivArtFz+'px');
+  const mb=document.querySelector('.iv-fz-minus'),pb=document.querySelector('.iv-fz-plus');
+  if(mb)mb.classList.toggle('at-limit',_ivArtFz<=10);
+  if(pb)pb.classList.toggle('at-limit',_ivArtFz>=22);
+}
+function ivFontStep(d){_ivArtFz=Math.max(10,Math.min(22,_ivArtFz+d));try{localStorage.setItem('iv_art_fz',_ivArtFz);}catch(e){}ivApplyFontSize();}
+
+ivRenderTags();ivRenderGroups();ivRenderFeed();ivApplyFontSize();
 </script>
 </body>
 </html>
