@@ -61,8 +61,11 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-fc-img-t{width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #f0f0f0;flex-shrink:0}
 
 .iv-feed-detail{display:none;padding:20px 24px}
-.iv-fd-back{font-size:10px;color:#aaa;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:6px;transition:color .15s ease;font-family:'Ochrid',serif;text-transform:uppercase;letter-spacing:.08em}
+.iv-fd-back-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.iv-fd-back{font-size:10px;color:#aaa;cursor:pointer;display:flex;align-items:center;gap:6px;transition:color .15s ease;font-family:'Ochrid',serif;text-transform:uppercase;letter-spacing:.08em}
 .iv-fd-back:hover{color:#0a0a0a}
+.iv-fd-edit{font-size:10px;color:#888;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;font-family:'Ochrid',serif;padding:3px 10px;border-radius:6px;border:1px solid #ddd;transition:all .15s ease}
+.iv-fd-edit:hover{color:#0a0a0a;border-color:#bbb;background:#f5f5f5}
 .iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Ochrid',serif}
 .iv-fd-title{font-size:18px;color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Ochrid',serif}
 .iv-fd-body{font-size:13px;color:#555;line-height:1.9;font-weight:400;white-space:pre-wrap;font-family:'Ochrid','Noto Serif TC',serif}
@@ -183,8 +186,8 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
   <div id="iv-editor">
     <div class="iv-daily-bar">
       <div class="iv-daily-hd">
-        <div class="iv-week-strip" id="iv-week-strip"></div>
         <span class="iv-daily-tog" id="iv-daily-tog" onclick="ivToggleCompose()">Compose ▾</span>
+        <div class="iv-week-strip" id="iv-week-strip"></div>
       </div>
       <textarea class="iv-daily-note" id="iv-daily-note" placeholder="Today's watch items..."></textarea>
     </div>
@@ -254,7 +257,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
       </div>
       <div class="iv-ed-actions">
         <button class="iv-ed-btn" onclick="ivClearEditor()">Clear</button>
-        <button class="iv-ed-btn primary" onclick="ivSubmitEntry()">Save</button>
+        <button id="iv-submit-btn" class="iv-ed-btn primary" onclick="ivSubmitEntry()">Save</button>
       </div>
     </div>
   </div>
@@ -281,7 +284,7 @@ function _ivSave(){
   }catch(e){}
 })();
 
-let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro',_ivSevVal=1;
+let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null;
 let _ivPendingImages=[];
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
 const SCOLORS={1:'#ced4c6',2:'#c6ccd6',3:'#d6ccba',4:'#d0b4a6',5:'#c0aab8'};
@@ -355,13 +358,38 @@ function ivSubmitEntry(){
   const ts=document.getElementById('iv-ed-date').value||new Date().toISOString().slice(0,10);
   const author=document.getElementById('iv-ed-author').value.trim();
   const source=document.getElementById('iv-ed-source').value.trim();
-  _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,severity:_ivSevVal,images:[..._ivPendingImages]});
-  _ivSave();ivClearEditor();ivRenderTags();
-  _ivActiveTag={layer,title};_ivActiveLayer=null;ivRenderLayers();ivRenderFeed();
+  if(_ivEditingId){
+    const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+    const e=all.find(x=>x.id===_ivEditingId);
+    if(e)Object.assign(e,{title,content,ts,author,source,severity:_ivSevVal,images:[..._ivPendingImages]});
+    _ivSave();ivClearEditor();ivRenderTags();ivRenderFeed();
+  }else{
+    _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,severity:_ivSevVal,images:[..._ivPendingImages]});
+    _ivSave();ivClearEditor();ivRenderTags();
+    _ivActiveTag={layer,title};_ivActiveLayer=null;ivRenderLayers();ivRenderFeed();
+  }
 }
 function ivClearEditor(){
   ['iv-ed-title','iv-ed-content','iv-ed-author','iv-ed-source','iv-ed-date'].forEach(id=>document.getElementById(id).value='');
   _ivPendingImages=[];ivRenderPendingImages();
+  _ivEditingId=null;
+  const sb=document.getElementById('iv-submit-btn');if(sb)sb.textContent='Save';
+}
+function ivEditEntry(id){
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const e=all.find(x=>x.id===id);if(!e)return;
+  _ivEditingId=id;
+  document.getElementById('iv-ed-title').value=e.title;
+  document.getElementById('iv-ed-content').value=e.content;
+  document.getElementById('iv-ed-author').value=e.author||'';
+  document.getElementById('iv-ed-source').value=e.source||'';
+  document.getElementById('iv-ed-date').value=e.ts;
+  _ivPendingImages=[...(e.images||[])];ivRenderPendingImages();
+  const sev=e.severity||1;_ivSevVal=sev;
+  document.querySelectorAll('.iv-sev-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.sev)===sev));
+  const sb=document.getElementById('iv-submit-btn');if(sb)sb.textContent='Update';
+  ivBackToFeed();
+  document.getElementById('iv-ed-title').focus();
 }
 
 /* ── Tags ── */
@@ -395,7 +423,8 @@ function ivRemoveTag(layer,title){
 /* ── Feed ── */
 function ivCardHTML(e,layerLabel){
   const imgs=e.images&&e.images.length?`<div class="iv-fc-imgs">${e.images.slice(0,4).map(b=>`<img class="iv-fc-img-t" src="${b}">`).join('')}</div>`:'';
-  return `<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+  const sbg=e.severity&&SCOLORS[e.severity]?`background:${SCOLORS[e.severity]}28;`:'';
+  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
 }
 function ivRenderFeed(){
   const list=document.getElementById('iv-feed-list');
@@ -431,7 +460,7 @@ function ivShowDetail(id){
   document.getElementById('iv-feed-list').style.display='none';
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
-  det.innerHTML=`<div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body">${e.content}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
+  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div></div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body">${e.content}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
 }
 function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 
