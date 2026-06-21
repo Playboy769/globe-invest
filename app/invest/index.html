@@ -6,6 +6,8 @@
 <title>InvestFrame</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Ochrid','Noto Serif TC',serif;font-weight:400}
@@ -655,6 +657,26 @@ function ivRenderFeed(){
     return ivCardHTML(e,LN[layer]);
   }).join('');
 }
+function ivRenderContent(src){
+  src=src||'';
+  const math=[];
+  const stash=(tex,display)=>{math.push({tex,display});return 'IVMATHTOKEN'+(math.length-1)+'ENDIVMATH';};
+  // protect math BEFORE markdown so _ ^ * { } inside formulas aren't mangled
+  src=src.replace(/\$\$([\s\S]+?)\$\$/g,(m,t)=>stash(t,true));
+  src=src.replace(/\\\[([\s\S]+?)\\\]/g,(m,t)=>stash(t,true));
+  src=src.replace(/\\\(([\s\S]+?)\\\)/g,(m,t)=>stash(t,false));
+  // inline $...$ — guarded so currency like "$5 and $10" is not treated as math
+  src=src.replace(/(?<![\\$])\$(?!\s)((?:[^$\\]|\\.)+?)(?<!\s)\$(?!\d)/g,(m,t)=>stash(t,false));
+  let html=(typeof marked!=='undefined')?marked.parse(src):src.replace(/\n/g,'<br>');
+  html=html.replace(/IVMATHTOKEN(\d+)ENDIVMATH/g,(m,i)=>{
+    const it=math[+i];if(!it)return m;
+    const esc=it.tex.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    if(typeof katex==='undefined')return '<code>'+esc+'</code>';
+    try{return katex.renderToString(it.tex,{displayMode:it.display,throwOnError:false});}
+    catch(e){return '<code>'+esc+'</code>';}
+  });
+  return html;
+}
 function ivShowDetail(id){
   const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
   const e=all.find(x=>x.id===id);if(!e)return;
@@ -662,7 +684,7 @@ function ivShowDetail(id){
   document.getElementById('iv-feed-list').style.display='none';
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
-  const mdBody=typeof marked!=='undefined'?marked.parse(e.content||''):(e.content||'').replace(/\n/g,'<br>');
+  const mdBody=ivRenderContent(e.content||'');
   det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div></div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
 }
 function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
