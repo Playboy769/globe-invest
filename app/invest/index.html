@@ -4,95 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>InvestFrame</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Serif+TC:wght@200;300;400;500;600;700&family=Cormorant+Garant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Noto Serif TC','Playfair Display',serif;font-weight:400}
+html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Ochrid','Noto Serif TC',serif;font-weight:400}
 ::selection{background:#0a0a0a;color:#fff}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#fff}
 ::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:#bbb}
 
-#iv-wrap{display:flex;height:100vh}
-#iv-framework{flex:3;background:#fff;overflow-y:auto;display:flex;flex-direction:column;padding:0 28px;min-width:0}
-#iv-feed{flex:3;background:#fafafa;overflow-y:auto;border-left:1px solid #eee;border-right:1px solid #eee;min-width:0}
-#iv-editor{flex:2;min-width:280px;background:#fff;overflow-y:auto;display:flex;flex-direction:column}
+@keyframes iv-fade-up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-.iv-col-head{padding:32px 24px 20px;font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Cormorant Garant',serif}
+#iv-wrap{display:flex;height:100vh;user-select:none}
+#iv-wrap.resizing{cursor:col-resize}
+#iv-framework{flex:3;background:#fff;overflow-y:auto;display:flex;flex-direction:column;padding:0 28px;min-width:120px}
+#iv-feed{flex:3;background:#fafafa;overflow-y:auto;min-width:120px}
+#iv-editor{flex:2;min-width:200px;background:#fff;overflow-y:auto;display:flex;flex-direction:column}
+
+.iv-resize-handle{width:1px;background:#eee;cursor:col-resize;flex-shrink:0;position:relative;transition:background .15s ease,width .12s ease;z-index:10}
+.iv-resize-handle::after{content:'';position:absolute;inset:0 -5px;cursor:col-resize}
+.iv-resize-handle:hover,.iv-resize-handle.dragging{background:#ccc;width:2px}
+
+.iv-col-head{padding:32px 24px 20px;font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Ochrid',serif}
 .iv-nest{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;padding:0 0 28px}
-.iv-ring{border:1px solid #e8e8e8;border-radius:14px;padding:20px;display:flex;flex-direction:column;flex:1;min-height:0;transition:border-color .2s ease;position:relative}
+.iv-ring{border:1px solid #e8e8e8;border-radius:14px;padding:20px;display:flex;flex-direction:column;flex:1;min-height:0;transition:border-color .22s cubic-bezier(.4,0,.2,1);position:relative}
 .iv-ring:hover{border-color:#ccc}
 .iv-ring-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.14em;font-weight:400;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:color .2s ease}
 .iv-ring-label:hover{color:#0a0a0a}
-.iv-ring-label span{font-family:'Cormorant Garant',serif}
+.iv-ring-label span{font-family:'Ochrid',serif}
 .iv-ring.layer-active{border-color:#0a0a0a}
 .iv-ring.layer-active>.iv-ring-label{color:#0a0a0a;font-weight:600}
-.iv-ring-count{font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+.iv-ring-count{font-size:10px;color:#bbb;font-family:'Ochrid',serif}
 .iv-ring.macro{background:#fafafa}
 .iv-ring.risk{background:#f6f6f6;margin-top:8px}
 .iv-ring.industry{background:#f2f2f2;margin-top:8px}
 .iv-tag-list{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
-.iv-tag{padding:6px 12px;background:#fff;border:1px solid #ddd;border-radius:8px;font-size:11px;color:#555;font-weight:400;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:6px;font-family:'Noto Serif TC',serif}
+.iv-tag{padding:6px 12px;background:#fff;border:1px solid #ddd;border-radius:8px;font-size:11px;color:#555;font-weight:400;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:6px;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-tag:hover{background:#f5f5f5;color:#0a0a0a;border-color:#bbb}
 .iv-tag.active{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
-.iv-tag .iv-tag-x{font-size:8px;color:#aaa;cursor:pointer;margin-left:2px}
-.iv-tag .iv-tag-x:hover{color:#333}
-.iv-tag.active .iv-tag-x{color:rgba(255,255,255,0.5)}
-.iv-tag.active .iv-tag-x:hover{color:#fff}
-
 .iv-feed-head{padding:32px 24px 20px;display:flex;align-items:center;justify-content:space-between}
-.iv-feed-title{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Cormorant Garant',serif}
-.iv-feed-count{font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+.iv-feed-title{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Ochrid',serif}
+.iv-feed-count{font-size:10px;color:#bbb;font-family:'Ochrid',serif}
+.iv-feed-del{font-size:9px;color:#ccc;cursor:pointer;font-family:'Ochrid',serif;letter-spacing:.06em;text-transform:uppercase;transition:color .15s ease,border-color .15s ease;padding:3px 8px;border:1px solid #e8e8e8;border-radius:6px;display:none}
+.iv-feed-del:hover{color:#b55;border-color:#daa}
 .iv-feed-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
-.iv-feed-empty{text-align:center;padding:48px 24px;color:#bbb;font-size:13px;font-weight:400;font-family:'Noto Serif TC',serif}
-.iv-feed-card{padding:16px 18px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;cursor:pointer;transition:all .2s ease}
+.iv-feed-empty{text-align:center;padding:48px 24px;color:#bbb;font-size:13px;font-weight:400;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-feed-card{padding:16px 18px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .2s cubic-bezier(.4,0,.2,1);animation:iv-fade-up .22s cubic-bezier(.4,0,.2,1) both}
 .iv-feed-card:hover{background:#f8f8f8;border-color:#ccc;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.04)}
 .iv-feed-card.active{border-color:#0a0a0a;background:#fff}
-.iv-fc-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-family:'Cormorant Garant',serif}
-.iv-fc-title{font-size:14px;color:#0a0a0a;font-weight:500;margin-bottom:8px;line-height:1.5;font-family:'Playfair Display','Noto Serif TC',serif}
-.iv-fc-preview{font-size:12px;color:#888;line-height:1.6;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:'Noto Serif TC',serif}
-.iv-fc-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+.iv-fc-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-family:'Ochrid',serif}
+.iv-fc-title{font-size:14px;color:#0a0a0a;font-weight:500;margin-bottom:8px;line-height:1.5;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-fc-preview{font-size:12px;color:#888;line-height:1.6;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-fc-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:#bbb;font-family:'Ochrid',serif}
+.iv-fc-imgs{display:flex;gap:4px;margin-top:8px;overflow:hidden}
+.iv-fc-img-t{width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #f0f0f0;flex-shrink:0}
 
 .iv-feed-detail{display:none;padding:20px 24px}
-.iv-fd-back{font-size:10px;color:#aaa;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:6px;transition:color .15s ease;font-family:'Cormorant Garant',serif;text-transform:uppercase;letter-spacing:.08em}
+.iv-fd-back{font-size:10px;color:#aaa;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:6px;transition:color .15s ease;font-family:'Ochrid',serif;text-transform:uppercase;letter-spacing:.08em}
 .iv-fd-back:hover{color:#0a0a0a}
-.iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Cormorant Garant',serif}
-.iv-fd-title{font-size:18px;color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Playfair Display',serif}
-.iv-fd-body{font-size:13px;color:#555;line-height:1.9;font-weight:400;white-space:pre-wrap;font-family:'Noto Serif TC',serif}
-.iv-fd-meta{margin-top:16px;font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+.iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Ochrid',serif}
+.iv-fd-title{font-size:18px;color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Ochrid',serif}
+.iv-fd-body{font-size:13px;color:#555;line-height:1.9;font-weight:400;white-space:pre-wrap;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-fd-meta{margin-top:16px;font-size:10px;color:#bbb;font-family:'Ochrid',serif}
+.iv-fd-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.iv-fd-img{max-width:100%;border-radius:10px;cursor:zoom-in;transition:opacity .18s ease,transform .18s ease}
+.iv-fd-img:hover{opacity:.88;transform:scale(1.01)}
 
 .iv-ed-head{padding:32px 20px 20px}
-.iv-ed-layer{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Cormorant Garant',serif;margin-bottom:12px}
+.iv-ed-layer{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Ochrid',serif;margin-bottom:12px}
 .iv-ed-field{padding:0 20px;margin-bottom:14px}
-.iv-ed-label{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.1em;font-weight:400;margin-bottom:8px;font-family:'Cormorant Garant',serif}
-.iv-ed-input{width:100%;padding:11px 14px;background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Noto Serif TC',serif;transition:all .2s ease;box-sizing:border-box}
+.iv-ed-label{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.1em;font-weight:400;margin-bottom:8px;font-family:'Ochrid',serif}
+.iv-ed-input{width:100%;padding:11px 14px;background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Ochrid','Noto Serif TC',serif;transition:border-color .18s ease,background .18s ease;box-sizing:border-box}
 .iv-ed-input:focus{border-color:#0a0a0a;background:#fff}
 .iv-ed-input::placeholder{color:#bbb}
-.iv-ed-textarea{width:100%;min-height:180px;padding:14px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Noto Serif TC',serif;line-height:1.8;resize:vertical;transition:all .2s ease;box-sizing:border-box}
+.iv-ed-textarea{width:100%;min-height:160px;padding:14px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Ochrid','Noto Serif TC',serif;line-height:1.8;resize:vertical;transition:border-color .18s ease,background .18s ease;box-sizing:border-box}
 .iv-ed-textarea:focus{border-color:#0a0a0a;background:#fff}
 .iv-ed-textarea::placeholder{color:#bbb}
 .iv-ed-actions{padding:12px 20px 24px;display:flex;gap:8px}
-.iv-ed-btn{flex:1;padding:10px;background:transparent;border:1px solid #ddd;border-radius:10px;color:#888;font-size:11px;font-weight:400;cursor:pointer;transition:all .2s ease;font-family:'Cormorant Garant',serif;letter-spacing:.04em;text-transform:uppercase}
+.iv-ed-btn{flex:1;padding:10px;background:transparent;border:1px solid #ddd;border-radius:10px;color:#888;font-size:11px;font-weight:400;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);font-family:'Ochrid',serif;letter-spacing:.04em;text-transform:uppercase}
 .iv-ed-btn:hover{background:#f5f5f5;color:#0a0a0a;border-color:#bbb}
 .iv-ed-btn.primary{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
 .iv-ed-btn.primary:hover{background:#333;color:#fff}
 .iv-ed-select{display:none}
 .iv-cs{position:relative}
-.iv-cs-display{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;color:#0a0a0a;font-size:12.5px;font-weight:400;cursor:pointer;transition:all .2s ease;font-family:'Noto Serif TC',serif}
+.iv-cs-display{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;color:#0a0a0a;font-size:12.5px;font-weight:400;cursor:pointer;transition:all .18s ease;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-cs-display:hover{border-color:#bbb;background:#f5f5f5}
 .iv-cs.open .iv-cs-display{border-color:#0a0a0a;border-radius:12px 12px 0 0;background:#fff}
-.iv-cs-arrow{font-size:7px;color:#aaa;transition:transform .25s ease}
+.iv-cs-arrow{font-size:7px;color:#aaa;transition:transform .22s cubic-bezier(.4,0,.2,1)}
 .iv-cs.open .iv-cs-arrow{transform:rotate(180deg)}
 .iv-cs-dd{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 12px 12px;z-index:50;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
 .iv-cs.open .iv-cs-dd{display:block}
-.iv-cs-opt{padding:11px 16px;font-size:12.5px;color:#888;cursor:pointer;transition:all .15s ease;font-family:'Noto Serif TC',serif;font-weight:400}
+.iv-cs-opt{padding:11px 16px;font-size:12.5px;color:#888;cursor:pointer;transition:all .15s ease;font-family:'Ochrid','Noto Serif TC',serif;font-weight:400}
 .iv-cs-opt:hover{background:#f5f5f5;color:#0a0a0a}
 .iv-cs-opt.active{background:#f0f0f0;color:#0a0a0a}
 .iv-cs-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:10px}
 .iv-ed-row{display:flex;gap:12px}
 .iv-ed-row .iv-ed-field{flex:1}
 .iv-ed-divider{height:1px;background:#eee;margin:8px 20px}
+.iv-sev-row{display:flex;gap:6px}
+.iv-sev-btn{width:34px;height:30px;border:1.5px solid transparent;border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);font-family:'Ochrid',serif;display:flex;align-items:center;justify-content:center;color:#666;letter-spacing:.02em;user-select:none}
+.iv-sev-btn:hover{filter:brightness(0.92);color:#333}
+.iv-sev-btn.active{border-color:rgba(0,0,0,0.28);color:#222;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+
+/* Image upload */
+.iv-img-drop{padding:12px 14px;background:#fafafa;border:1.5px dashed #e0e0e0;border-radius:10px;cursor:pointer;text-align:center;font-size:11px;color:#ccc;transition:all .18s ease;font-family:'Ochrid',serif;letter-spacing:.04em;line-height:1.6}
+.iv-img-drop:hover{border-color:#bbb;color:#888;background:#f5f5f5}
+.iv-img-drop.drag-over{border-color:#0a0a0a;color:#555;background:#f0f0f0;transform:scale(1.01)}
+.iv-img-add-more{margin-top:6px;padding:5px 10px;font-size:10px;color:#bbb;cursor:pointer;text-align:center;font-family:'Ochrid',serif;letter-spacing:.06em;text-transform:uppercase;transition:color .15s ease}
+.iv-img-add-more:hover{color:#555}
+.iv-img-previews{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px;max-height:200px;overflow-y:auto;padding-right:2px}
+.iv-img-previews::-webkit-scrollbar{width:3px}
+.iv-img-previews::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:2px}
+.iv-img-thumb{position:relative;aspect-ratio:1/1;border-radius:7px;overflow:hidden;border:1px solid #eee;transition:opacity .15s ease}
+.iv-img-thumb:hover{opacity:.82}
+.iv-img-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.iv-img-thumb-x{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.45);color:#fff;border-radius:4px;font-size:9px;cursor:pointer;width:15px;height:15px;display:flex;align-items:center;justify-content:center;transition:background .15s ease;opacity:0}
+.iv-img-thumb:hover .iv-img-thumb-x{opacity:1}
+.iv-img-thumb-x:hover{background:rgba(0,0,0,0.78)}
+
+/* Daily bar */
+.iv-daily-bar{padding:20px 20px 14px;border-bottom:1px solid #eee}
+.iv-daily-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px}
+.iv-week-strip{display:flex;gap:3px;flex:1;min-width:0}
+.iv-day-chip{display:flex;flex-direction:column;align-items:center;padding:5px 7px;border-radius:8px;cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1);user-select:none;flex-shrink:0}
+.iv-day-chip:hover{background:#f0f0f0}
+.iv-day-chip.active{background:#0a0a0a}
+.iv-day-dow{font-size:7px;text-transform:uppercase;letter-spacing:.1em;font-family:'Ochrid',serif;color:#bbb;margin-bottom:3px;line-height:1}
+.iv-day-num{font-size:13px;font-weight:400;font-family:'Ochrid',serif;color:#888;line-height:1.1}
+.iv-day-chip.is-today .iv-day-num{color:#0a0a0a;font-weight:600}
+.iv-day-chip.active .iv-day-dow,.iv-day-chip.active .iv-day-num{color:#fff}
+.iv-daily-tog{font-size:9px;color:#bbb;cursor:pointer;transition:color .2s ease;user-select:none;letter-spacing:.08em;font-family:'Ochrid',serif;text-transform:uppercase;padding:3px 0;flex-shrink:0;margin-top:6px}
+.iv-daily-tog:hover{color:#555}
+.iv-daily-note{width:100%;border:none;background:transparent;resize:none;font-size:12.5px;color:#444;font-family:'Ochrid','Noto Serif TC',serif;line-height:1.75;outline:none;min-height:46px;overflow:hidden;display:block}
+.iv-daily-note::placeholder{color:#ddd}
+.iv-compose-body{overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),opacity .3s cubic-bezier(.4,0,.2,1);max-height:1000px;opacity:1}
+.iv-compose-body.collapsed{max-height:0;opacity:0;pointer-events:none}
+
+/* Lightbox */
+#iv-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.76);z-index:999;display:none;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(4px)}
+#iv-lightbox img{max-width:90vw;max-height:90vh;border-radius:10px;box-shadow:0 32px 80px rgba(0,0,0,0.4);transition:transform .2s cubic-bezier(.4,0,.2,1)}
 </style>
 </head>
 <body>
@@ -114,102 +165,137 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
       </div>
     </div>
   </div>
+  <div class="iv-resize-handle" id="iv-rh1"></div>
   <div id="iv-feed">
     <div class="iv-feed-head">
       <span class="iv-feed-title">Feed</span>
-      <span class="iv-feed-count" id="iv-feed-cnt">0 entries</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="iv-feed-del" id="iv-feed-del" onclick="ivRemoveActiveTag()">Delete tag</span>
+        <span class="iv-feed-count" id="iv-feed-cnt">0 entries</span>
+      </div>
     </div>
     <div id="iv-feed-list" class="iv-feed-list">
       <div class="iv-feed-empty">Select a tag to view entries</div>
     </div>
     <div id="iv-feed-detail" class="iv-feed-detail"></div>
   </div>
+  <div class="iv-resize-handle" id="iv-rh2"></div>
   <div id="iv-editor">
-    <div class="iv-ed-head">
-      <div class="iv-ed-layer">Compose</div>
+    <div class="iv-daily-bar">
+      <div class="iv-daily-hd">
+        <div class="iv-week-strip" id="iv-week-strip"></div>
+        <span class="iv-daily-tog" id="iv-daily-tog" onclick="ivToggleCompose()">Compose ▾</span>
+      </div>
+      <textarea class="iv-daily-note" id="iv-daily-note" placeholder="Today's watch items..."></textarea>
     </div>
-    <div class="iv-ed-field">
-      <div class="iv-ed-label">Layer</div>
-      <select class="iv-ed-select" id="iv-ed-layer" style="display:none">
-        <option value="macro">Macro Narrative</option>
-        <option value="risk">Implied Risk</option>
-        <option value="industry">Industry Narrative</option>
-      </select>
-      <div class="iv-cs" id="iv-cs-layer">
-        <div class="iv-cs-display" onclick="ivToggleLayerDD()">
-          <span><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</span>
-          <span class="iv-cs-arrow">▼</span>
+    <div class="iv-compose-body" id="iv-compose-body">
+      <div class="iv-ed-field" style="padding-top:18px">
+        <div class="iv-ed-label">Layer</div>
+        <select class="iv-ed-select" id="iv-ed-layer" style="display:none">
+          <option value="macro">Macro Narrative</option>
+          <option value="risk">Implied Risk</option>
+          <option value="industry">Industry Narrative</option>
+        </select>
+        <div class="iv-cs" id="iv-cs-layer">
+          <div class="iv-cs-display" onclick="ivToggleLayerDD()">
+            <span><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</span>
+            <span class="iv-cs-arrow">▼</span>
+          </div>
+          <div class="iv-cs-dd">
+            <div class="iv-cs-opt active" data-val="macro" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</div>
+            <div class="iv-cs-opt" data-val="risk" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#c8964a"></span>Implied Risk</div>
+            <div class="iv-cs-opt" data-val="industry" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#4a8cc8"></span>Industry Narrative</div>
+          </div>
         </div>
-        <div class="iv-cs-dd">
-          <div class="iv-cs-opt active" data-val="macro" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</div>
-          <div class="iv-cs-opt" data-val="risk" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#c8964a"></span>Implied Risk</div>
-          <div class="iv-cs-opt" data-val="industry" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#4a8cc8"></span>Industry Narrative</div>
+      </div>
+      <div class="iv-ed-field">
+        <div class="iv-ed-label">Severity</div>
+        <div class="iv-sev-row" id="iv-sev-row">
+          <div class="iv-sev-btn active" data-sev="1" onclick="ivPickSev(this)" style="background:#ced4c6">1</div>
+          <div class="iv-sev-btn" data-sev="2" onclick="ivPickSev(this)" style="background:#c6ccd6">2</div>
+          <div class="iv-sev-btn" data-sev="3" onclick="ivPickSev(this)" style="background:#d6ccba">3</div>
+          <div class="iv-sev-btn" data-sev="4" onclick="ivPickSev(this)" style="background:#d0b4a6">4</div>
+          <div class="iv-sev-btn" data-sev="5" onclick="ivPickSev(this)" style="background:#c0aab8">5</div>
         </div>
       </div>
-    </div>
-    <div class="iv-ed-row">
+      <div class="iv-ed-row">
+        <div class="iv-ed-field">
+          <div class="iv-ed-label">Title *</div>
+          <input class="iv-ed-input" id="iv-ed-title" placeholder="e.g. Fed rate cycle, Memory upcycle...">
+        </div>
+        <div class="iv-ed-field" style="flex:0 0 120px">
+          <div class="iv-ed-label">Date</div>
+          <input class="iv-ed-input" id="iv-ed-date" type="date">
+        </div>
+      </div>
+      <div class="iv-ed-row">
+        <div class="iv-ed-field">
+          <div class="iv-ed-label">Author</div>
+          <input class="iv-ed-input" id="iv-ed-author" placeholder="Author name">
+        </div>
+        <div class="iv-ed-field">
+          <div class="iv-ed-label">Source</div>
+          <input class="iv-ed-input" id="iv-ed-source" placeholder="Report, website, research...">
+        </div>
+      </div>
+      <div class="iv-ed-divider"></div>
       <div class="iv-ed-field">
-        <div class="iv-ed-label">Title *</div>
-        <input class="iv-ed-input" id="iv-ed-title" placeholder="e.g. Fed rate cycle, Memory upcycle...">
-      </div>
-      <div class="iv-ed-field" style="flex:0 0 120px">
-        <div class="iv-ed-label">Date</div>
-        <input class="iv-ed-input" id="iv-ed-date" type="date">
-      </div>
-    </div>
-    <div class="iv-ed-row">
-      <div class="iv-ed-field">
-        <div class="iv-ed-label">Author</div>
-        <input class="iv-ed-input" id="iv-ed-author" placeholder="Author name">
+        <div class="iv-ed-label">Content</div>
+        <textarea class="iv-ed-textarea" id="iv-ed-content" placeholder="Write your narrative, thesis, or risk note here..."></textarea>
       </div>
       <div class="iv-ed-field">
-        <div class="iv-ed-label">Source</div>
-        <input class="iv-ed-input" id="iv-ed-source" placeholder="Report, website, research...">
+        <div class="iv-ed-label">Images</div>
+        <input type="file" id="iv-img-input" accept="image/*" multiple style="display:none" onchange="ivHandleImages(this)">
+        <div class="iv-img-drop" id="iv-img-drop-zone" onclick="document.getElementById('iv-img-input').click()">
+          + Add images<br><span style="font-size:10px;opacity:.6">or drag &amp; drop here</span>
+        </div>
+        <div class="iv-img-previews" id="iv-img-previews"></div>
+        <div class="iv-img-add-more" id="iv-img-add-more" style="display:none" onclick="document.getElementById('iv-img-input').click()">+ Add more</div>
       </div>
-    </div>
-    <div class="iv-ed-divider"></div>
-    <div class="iv-ed-field">
-      <div class="iv-ed-label">Content</div>
-      <textarea class="iv-ed-textarea" id="iv-ed-content" placeholder="Write your narrative, thesis, or risk note here..."></textarea>
-    </div>
-    <div class="iv-ed-actions">
-      <button class="iv-ed-btn" onclick="ivClearEditor()">Clear</button>
-      <button class="iv-ed-btn primary" onclick="ivSubmitEntry()">Save</button>
+      <div class="iv-ed-actions">
+        <button class="iv-ed-btn" onclick="ivClearEditor()">Clear</button>
+        <button class="iv-ed-btn primary" onclick="ivSubmitEntry()">Save</button>
+      </div>
     </div>
   </div>
 </div>
 
+<div id="iv-lightbox" onclick="this.style.display='none'"><img id="iv-lightbox-img"></div>
+
 <script>
 const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
-// 立即從 localStorage 同步讀取（快速顯示）
 const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro))return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSave(){
   try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}
   fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
 }
-// 非同步從 Railway Volume 同步，僅在 server 資料比 localStorage 多時才覆蓋
 (async function _ivSync(){
   try{
     const r=await fetch(_IV_API);if(!r.ok)return;
     const d=await r.json();
     if(!Array.isArray(d.macro)||!Array.isArray(d.risk)||!Array.isArray(d.industry))return;
-    const serverTotal=d.macro.length+d.risk.length+d.industry.length;
-    const localTotal=_ivStore.macro.length+_ivStore.risk.length+_ivStore.industry.length;
-    if(serverTotal>localTotal){
-      Object.assign(_ivStore,{macro:d.macro,risk:d.risk,industry:d.industry});
-      try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}
-      ivRenderTags();ivRenderFeed();
-    }
+    const st=d.macro.length+d.risk.length+d.industry.length;
+    const lt=_ivStore.macro.length+_ivStore.risk.length+_ivStore.industry.length;
+    if(st>lt){Object.assign(_ivStore,{macro:d.macro,risk:d.risk,industry:d.industry});try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}ivRenderTags();ivRenderFeed();}
   }catch(e){}
 })();
-let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro';
+
+let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro',_ivSevVal=1;
+let _ivPendingImages=[];
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
+const SCOLORS={1:'#ced4c6',2:'#c6ccd6',3:'#d6ccba',4:'#d0b4a6',5:'#c0aab8'};
 
 function _ivId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 
-function ivToggleLayerDD(){document.getElementById('iv-cs-layer').classList.toggle('open');}
+/* ── Severity ── */
+function ivPickSev(el){
+  _ivSevVal=parseInt(el.dataset.sev);
+  document.querySelectorAll('.iv-sev-btn').forEach(b=>b.classList.toggle('active',b===el));
+}
 
+/* ── Layer dropdown ── */
+function ivToggleLayerDD(){document.getElementById('iv-cs-layer').classList.toggle('open');}
 function ivPickLayer(el){
   _ivLayerVal=el.dataset.val;
   document.getElementById('iv-ed-layer').value=_ivLayerVal;
@@ -218,36 +304,67 @@ function ivPickLayer(el){
   cs.querySelectorAll('.iv-cs-opt').forEach(o=>o.classList.toggle('active',o.dataset.val===_ivLayerVal));
   cs.classList.remove('open');
 }
-
 document.addEventListener('click',e=>{const cs=document.getElementById('iv-cs-layer');if(cs&&!cs.contains(e.target))cs.classList.remove('open');});
 
+/* ── Image upload ── */
+function ivProcessFiles(files){
+  Array.from(files).filter(f=>f.type.startsWith('image/')).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const img=new Image();
+      img.onload=()=>{
+        const MAX=900;let w=img.width,h=img.height;
+        if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+        const c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        _ivPendingImages.push(c.toDataURL('image/jpeg',0.78));
+        ivRenderPendingImages();
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function ivHandleImages(input){ivProcessFiles(input.files);input.value='';}
+function ivRenderPendingImages(){
+  const c=document.getElementById('iv-img-previews');if(!c)return;
+  c.innerHTML=_ivPendingImages.map((b,i)=>`<div class="iv-img-thumb"><img src="${b}"><div class="iv-img-thumb-x" onclick="ivRemovePendingImg(${i})">×</div></div>`).join('');
+  const more=document.getElementById('iv-img-add-more');
+  const drop=document.getElementById('iv-img-drop-zone');
+  if(more)more.style.display=_ivPendingImages.length?'block':'none';
+  if(drop)drop.style.display=_ivPendingImages.length?'none':'block';
+}
+function ivRemovePendingImg(i){_ivPendingImages.splice(i,1);ivRenderPendingImages();}
+function ivOpenImg(src){document.getElementById('iv-lightbox-img').src=src;document.getElementById('iv-lightbox').style.display='flex';}
+(function ivInitImgDrop(){
+  const zone=document.getElementById('iv-img-drop-zone');if(!zone)return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('drag-over');
+    ivProcessFiles(e.dataTransfer.files);
+  });
+})();
+
+/* ── Compose submit / clear ── */
 function ivSubmitEntry(){
   const layer=_ivLayerVal;
   const title=document.getElementById('iv-ed-title').value.trim();
   const content=document.getElementById('iv-ed-content').value.trim();
   if(!title)return;
-  const dateEl=document.getElementById('iv-ed-date');
-  const ts=dateEl.value||new Date().toISOString().slice(0,10);
+  const ts=document.getElementById('iv-ed-date').value||new Date().toISOString().slice(0,10);
   const author=document.getElementById('iv-ed-author').value.trim();
   const source=document.getElementById('iv-ed-source').value.trim();
-  _ivStore[layer].push({id:_ivId(),title,content,ts,author,source});
-  _ivSave();
-  ivClearEditor();
-  ivRenderTags();
-  _ivActiveTag={layer,title};
-  _ivActiveLayer=null;
-  ivRenderLayers();
-  ivRenderFeed();
+  _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,severity:_ivSevVal,images:[..._ivPendingImages]});
+  _ivSave();ivClearEditor();ivRenderTags();
+  _ivActiveTag={layer,title};_ivActiveLayer=null;ivRenderLayers();ivRenderFeed();
 }
-
 function ivClearEditor(){
-  document.getElementById('iv-ed-title').value='';
-  document.getElementById('iv-ed-content').value='';
-  document.getElementById('iv-ed-author').value='';
-  document.getElementById('iv-ed-source').value='';
-  document.getElementById('iv-ed-date').value='';
+  ['iv-ed-title','iv-ed-content','iv-ed-author','iv-ed-source','iv-ed-date'].forEach(id=>document.getElementById(id).value='');
+  _ivPendingImages=[];ivRenderPendingImages();
 }
 
+/* ── Tags ── */
 function ivRenderTags(){
   ['macro','risk','industry'].forEach(layer=>{
     const el=document.getElementById('iv-tags-'+layer);
@@ -256,86 +373,155 @@ function ivRenderTags(){
     cnt.textContent=titles.length;
     el.innerHTML=titles.map(t=>{
       const active=_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===t;
-      return `<div class="iv-tag${active?' active':''}" onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span><span class="iv-tag-x" onclick="event.stopPropagation();ivRemoveTag('${layer}','${t.replace(/'/g,"\\'")}')">x</span></div>`;
+      const entries=_ivStore[layer].filter(e=>e.title===t);
+      const maxSev=entries.reduce((m,e)=>Math.max(m,e.severity||0),0);
+      const sc=maxSev?SCOLORS[maxSev]:null;
+      const style=sc?(active?`background:${sc};border-color:rgba(0,0,0,0.3);color:#222`:`background:${sc};border-color:transparent;color:#4a4a4a`):'';
+      const cls=`iv-tag${active&&!sc?' active':''}`;
+      return `<div class="${cls}"${style?` style="${style}"`:''}  onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span></div>`;
     }).join('');
   });
 }
-
-function ivSelectTag(layer,title){
-  _ivActiveTag={layer,title};
-  _ivActiveLayer=null;
-  ivRenderTags();
-  ivRenderLayers();
-  ivRenderFeed();
-}
-
-function ivSelectLayer(layer){
-  if(_ivActiveLayer===layer){_ivActiveLayer=null;}else{_ivActiveLayer=layer;}
-  _ivActiveTag=null;
-  ivRenderTags();
-  ivRenderLayers();
-  ivRenderFeed();
-}
-
-function ivRenderLayers(){
-  ['macro','risk','industry'].forEach(l=>{
-    const ring=document.getElementById('iv-ring-'+l);
-    if(ring)ring.classList.toggle('layer-active',_ivActiveLayer===l);
-  });
-}
-
+function ivSelectTag(layer,title){_ivActiveTag={layer,title};_ivActiveLayer=null;ivRenderTags();ivRenderLayers();ivRenderFeed();}
+function ivSelectLayer(layer){if(_ivActiveLayer===layer){_ivActiveLayer=null;}else{_ivActiveLayer=layer;}_ivActiveTag=null;ivRenderTags();ivRenderLayers();ivRenderFeed();}
+function ivRenderLayers(){['macro','risk','industry'].forEach(l=>{const r=document.getElementById('iv-ring-'+l);if(r)r.classList.toggle('layer-active',_ivActiveLayer===l);});}
+function ivRemoveActiveTag(){if(_ivActiveTag)ivRemoveTag(_ivActiveTag.layer,_ivActiveTag.title);}
 function ivRemoveTag(layer,title){
-  _ivStore[layer]=_ivStore[layer].filter(e=>e.title!==title);
-  _ivSave();
+  _ivStore[layer]=_ivStore[layer].filter(e=>e.title!==title);_ivSave();
   if(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title)_ivActiveTag=null;
-  ivRenderTags();
-  ivRenderFeed();
+  ivRenderTags();ivRenderFeed();
 }
 
+/* ── Feed ── */
+function ivCardHTML(e,layerLabel){
+  const imgs=e.images&&e.images.length?`<div class="iv-fc-imgs">${e.images.slice(0,4).map(b=>`<img class="iv-fc-img-t" src="${b}">`).join('')}</div>`:'';
+  return `<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+}
 function ivRenderFeed(){
   const list=document.getElementById('iv-feed-list');
   const detail=document.getElementById('iv-feed-detail');
   const cntEl=document.getElementById('iv-feed-cnt');
-  detail.style.display='none';
-  list.style.display='';
+  detail.style.display='none';list.style.display='';
+  const delBtn=document.getElementById('iv-feed-del');
+  if(delBtn)delBtn.style.display=_ivActiveTag?'inline':'none';
   if(_ivActiveTag){
     const entries=_ivStore[_ivActiveTag.layer].filter(e=>e.title===_ivActiveTag.title);
     cntEl.textContent=entries.length+' entries';
-    if(entries.length===0){list.innerHTML='<div class="iv-feed-empty">No entries yet</div>';return;}
-    list.innerHTML=entries.map(e=>`<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${LN[_ivActiveTag.layer]}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div><div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`).join('');
-    return;
+    if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries yet</div>';return;}
+    list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveTag.layer])).join('');return;
   }
   if(_ivActiveLayer){
-    const entries=_ivStore[_ivActiveLayer].sort((a,b)=>b.ts.localeCompare(a.ts));
+    const entries=[..._ivStore[_ivActiveLayer]].sort((a,b)=>b.ts.localeCompare(a.ts));
     cntEl.textContent=entries.length+' entries';
-    if(entries.length===0){list.innerHTML='<div class="iv-feed-empty">No entries in '+LN[_ivActiveLayer]+'</div>';return;}
-    list.innerHTML=entries.map(e=>`<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${LN[_ivActiveLayer]}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div><div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`).join('');
-    return;
+    if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries in '+LN[_ivActiveLayer]+'</div>';return;}
+    list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveLayer])).join('');return;
   }
   const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry].sort((a,b)=>b.ts.localeCompare(a.ts));
   cntEl.textContent=all.length+' entries';
-  if(all.length===0){list.innerHTML='<div class="iv-feed-empty">Select a tag to view entries</div>';return;}
+  if(!all.length){list.innerHTML='<div class="iv-feed-empty">Select a tag to view entries</div>';return;}
   list.innerHTML=all.map(e=>{
     const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
-    return `<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${LN[layer]}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div><div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+    return ivCardHTML(e,LN[layer]);
   }).join('');
 }
-
 function ivShowDetail(id){
   const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
-  const e=all.find(x=>x.id===id);
-  if(!e)return;
+  const e=all.find(x=>x.id===id);if(!e)return;
   const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
   document.getElementById('iv-feed-list').style.display='none';
-  const det=document.getElementById('iv-feed-detail');
-  det.style.display='block';
-  det.innerHTML=`<div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Cormorant Garant',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body">${e.content}</div><div class="iv-fd-meta">${e.ts}</div>`;
+  const det=document.getElementById('iv-feed-detail');det.style.display='block';
+  const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
+  det.innerHTML=`<div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body">${e.content}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
 }
+function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 
-function ivBackToFeed(){
-  document.getElementById('iv-feed-detail').style.display='none';
-  document.getElementById('iv-feed-list').style.display='';
+/* ── Resize handles ── */
+(function ivInitResize(){
+  const panels=[
+    document.getElementById('iv-framework'),
+    document.getElementById('iv-feed'),
+    document.getElementById('iv-editor')
+  ];
+  try{
+    const saved=JSON.parse(localStorage.getItem('iv_col_w'));
+    if(saved&&saved.length===3)panels.forEach((p,i)=>{p.style.flex='0 0 '+saved[i];});
+  }catch(e){}
+  function lockPanels(){panels.forEach(p=>{p.style.flex='0 0 '+p.getBoundingClientRect().width+'px';});}
+  function savePanels(){try{localStorage.setItem('iv_col_w',JSON.stringify(panels.map(p=>p.getBoundingClientRect().width+'px')));}catch(e){}}
+  [document.getElementById('iv-rh1'),document.getElementById('iv-rh2')].forEach((h,hi)=>{
+    const L=panels[hi],R=panels[hi+1];
+    h.addEventListener('mousedown',ev=>{
+      ev.preventDefault();lockPanels();h.classList.add('dragging');
+      document.getElementById('iv-wrap').classList.add('resizing');
+      const x0=ev.clientX,lw=L.getBoundingClientRect().width,rw=R.getBoundingClientRect().width;
+      function mv(e){
+        const dx=e.clientX-x0,nl=Math.max(120,lw+dx),nr=Math.max(120,rw-dx);
+        if(nl>=120&&nr>=120){L.style.flexBasis=nl+'px';R.style.flexBasis=nr+'px';}
+      }
+      function up(){
+        h.classList.remove('dragging');
+        document.getElementById('iv-wrap').classList.remove('resizing');
+        document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);savePanels();
+      }
+      document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+    });
+  });
+  document.addEventListener('selectstart',e=>{if(document.querySelector('.iv-resize-handle.dragging'))e.preventDefault();});
+})();
+
+/* ── Daily bar / week strip ── */
+let _ivComposeOpen=true,_ivSelDay='';
+
+function ivToggleCompose(){
+  _ivComposeOpen=!_ivComposeOpen;
+  const body=document.getElementById('iv-compose-body');
+  const tog=document.getElementById('iv-daily-tog');
+  body.classList.toggle('collapsed',!_ivComposeOpen);
+  tog.textContent=_ivComposeOpen?'Compose ▾':'Compose ▸';
+  try{localStorage.setItem('iv_compose_state',_ivComposeOpen?'1':'0');}catch(e){}
 }
+function ivDateStr(d){return d.toISOString().slice(0,10);}
+function ivGetWorkDays(){
+  const today=new Date();const dow=today.getDay();
+  const start=new Date(today);
+  if(dow===0)start.setDate(today.getDate()+1);
+  else if(dow===6)start.setDate(today.getDate()+2);
+  const days=[];const cur=new Date(start);
+  while(days.length<5){if(cur.getDay()!==0&&cur.getDay()!==6)days.push(new Date(cur));cur.setDate(cur.getDate()+1);}
+  return days;
+}
+function ivNoteResize(){
+  const n=document.getElementById('iv-daily-note');
+  if(!n)return;n.style.height='auto';n.style.height=Math.min(n.scrollHeight,160)+'px';
+}
+function ivRenderWeekStrip(){
+  const strip=document.getElementById('iv-week-strip');if(!strip)return;
+  const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today=new Date().toISOString().slice(0,10);
+  strip.innerHTML=ivGetWorkDays().map(d=>{
+    const ds=ivDateStr(d),isActive=ds===_ivSelDay,isToday=ds===today;
+    return `<div class="iv-day-chip${isActive?' active':''}${isToday&&!isActive?' is-today':''}" onclick="ivSelectDay('${ds}')"><span class="iv-day-dow">${DOW[d.getDay()]}</span><span class="iv-day-num">${d.getDate()}</span></div>`;
+  }).join('');
+}
+function ivSelectDay(ds){
+  const note=document.getElementById('iv-daily-note');
+  if(note&&_ivSelDay)try{localStorage.setItem('iv_daily_'+_ivSelDay,note.value);}catch(e){}
+  _ivSelDay=ds;
+  if(note){try{note.value=localStorage.getItem('iv_daily_'+ds)||'';}catch(e){note.value='';}ivNoteResize();}
+  ivRenderWeekStrip();
+}
+(function ivInitDaily(){
+  const today=new Date();const dow=today.getDay();
+  if(dow===0||dow===6){const d=new Date(today);d.setDate(today.getDate()+(dow===0?1:2));_ivSelDay=ivDateStr(d);}
+  else _ivSelDay=today.toISOString().slice(0,10);
+  try{if(localStorage.getItem('iv_compose_state')==='0'){_ivComposeOpen=false;document.getElementById('iv-compose-body').classList.add('collapsed');document.getElementById('iv-daily-tog').textContent='Compose ▸';}}catch(e){}
+  ivRenderWeekStrip();
+  const note=document.getElementById('iv-daily-note');if(!note)return;
+  try{note.value=localStorage.getItem('iv_daily_'+_ivSelDay)||'';}catch(e){}
+  note.addEventListener('input',()=>{ivNoteResize();try{localStorage.setItem('iv_daily_'+_ivSelDay,note.value);}catch(e){}});
+  ivNoteResize();
+})();
+
 ivRenderTags();ivRenderFeed();
 </script>
 </body>
