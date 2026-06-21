@@ -180,7 +180,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 </div>
 
 <script>
-const _ivStore={macro:[],risk:[],industry:[]};
+const _IV_KEY='investframe_store';
+const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&d.macro&&d.risk&&d.industry)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
+function _ivSave(){try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}}
 let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro';
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
 
@@ -209,6 +211,7 @@ function ivSubmitEntry(){
   const author=document.getElementById('iv-ed-author').value.trim();
   const source=document.getElementById('iv-ed-source').value.trim();
   _ivStore[layer].push({id:_ivId(),title,content,ts,author,source});
+  _ivSave();
   ivClearEditor();
   ivRenderTags();
   _ivActiveTag={layer,title};
@@ -263,6 +266,7 @@ function ivRenderLayers(){
 
 function ivRemoveTag(layer,title){
   _ivStore[layer]=_ivStore[layer].filter(e=>e.title!==title);
+  _ivSave();
   if(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title)_ivActiveTag=null;
   ivRenderTags();
   ivRenderFeed();
@@ -312,6 +316,7 @@ function ivBackToFeed(){
   document.getElementById('iv-feed-detail').style.display='none';
   document.getElementById('iv-feed-list').style.display='';
 }
+ivRenderTags();ivRenderFeed();
 </script>
 </body>
 </html>
