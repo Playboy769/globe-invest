@@ -572,9 +572,8 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
         <div class="op-item"><div class="op-item-top"><span class="op-name">WTI Crude Oil</span><span class="op-price" id="op-wti">$71.24</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-wti-chg">+0.38</span><span class="op-pct op-up" id="op-wti-pct">(+0.53%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-wti" class="op-spark" width="300" height="40"></canvas></div>
         <div class="op-item"><div class="op-item-top"><span class="op-name">Brent Crude Oil</span><span class="op-price" id="op-brent">$75.62</span></div><div class="op-item-bot"><span class="op-chg op-down" id="op-brent-chg">-0.15</span><span class="op-pct op-down" id="op-brent-pct">(-0.20%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-brent" class="op-spark" width="300" height="40"></canvas></div>
         <div class="op-item"><div class="op-item-top"><span class="op-name">Henry Hub NG</span><span class="op-price" id="op-ng">$2.87</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-ng-chg">+0.04</span><span class="op-pct op-up" id="op-ng-pct">(+1.41%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ng" class="op-spark" width="300" height="40"></canvas></div>
-        <div class="op-item"><div class="op-item-top"><span class="op-name">TTF (EU Gas)</span><span class="op-price" id="op-ttf">€35.40</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-ttf-chg">+0.82</span><span class="op-pct op-up" id="op-ttf-pct">(+2.37%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ttf" class="op-spark" width="300" height="40"></canvas></div>
         <div class="op-item"><div class="op-item-top"><span class="op-name">RBOB Gasoline</span><span class="op-price" id="op-rbob">$2.18</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-rbob-chg">+0.03</span><span class="op-pct op-up" id="op-rbob-pct">(+1.39%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-rbob" class="op-spark" width="300" height="40"></canvas></div>
-        <div class="op-item"><div class="op-item-top"><span class="op-name">Heating Oil</span><span class="op-price" id="op-ho">$2.42</span></div><div class="op-item-bot"><span class="op-chg op-down" id="op-ho-chg">-0.01</span><span class="op-pct op-down" id="op-ho-pct">(-0.41%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ho" class="op-spark" width="300" height="40"></canvas></div>
+        <div class="op-item"><div class="op-item-top"><span class="op-name">Jet Fuel</span><span class="op-price" id="op-jet">$3.02</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-jet-chg">+0.05</span><span class="op-pct op-up" id="op-jet-pct">(+1.68%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-jet" class="op-spark" width="300" height="40"></canvas></div>
         <div class="op-ts" id="op-ts">Updated: --</div>
         <div class="op-ts" id="op-src">⏳ Connecting...</div>
       </div>
@@ -3798,47 +3797,33 @@ function toggleThemeFloat(){
 window.toggleThemeFloat=toggleThemeFloat;
 
 (function oilTicker(){
-  const MAX_PTS=60;
-  const YAHOO={wti:'CL%3DF',brent:'BZ%3DF',ng:'NG%3DF',ttf:'TTF%3DF',rbob:'RB%3DF',ho:'HO%3DF'};
+  const EIA_KEY='DEMO_KEY';
+  const EIA_BASE='https://api.eia.gov/v2/';
   const items=[
-    {k:'wti',init:0,cur:0,pre:'$',step:0.12,hist:[],live:false,closed:false,err:''},
-    {k:'brent',init:0,cur:0,pre:'$',step:0.12,hist:[],live:false,closed:false,err:''},
-    {k:'ng',init:0,cur:0,pre:'$',step:0.02,hist:[],live:false,closed:false,err:''},
-    {k:'ttf',init:0,cur:0,pre:'€',step:0.3,hist:[],live:false,closed:false,err:''},
-    {k:'rbob',init:0,cur:0,pre:'$',step:0.015,hist:[],live:false,closed:false,err:''},
-    {k:'ho',init:0,cur:0,pre:'$',step:0.015,hist:[],live:false,closed:false,err:''}
+    {k:'wti',pre:'$',unit:'/bbl',hist:[],cur:0,prev:0,live:false,err:'',
+     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=RWTC&sort[0][column]=period&sort[0][direction]=desc&length=30'},
+    {k:'brent',pre:'$',unit:'/bbl',hist:[],cur:0,prev:0,live:false,err:'',
+     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=RBRTE&sort[0][column]=period&sort[0][direction]=desc&length=30'},
+    {k:'ng',pre:'$',unit:'/MMBtu',hist:[],cur:0,prev:0,live:false,err:'',
+     url:EIA_BASE+'natural-gas/pri/fut/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=RNGWHHD&sort[0][column]=period&sort[0][direction]=desc&length=30'},
+    {k:'rbob',pre:'$',unit:'/gal',hist:[],cur:0,prev:0,live:false,err:'',
+     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=EER_EPMRU_PF4_RGC_DPG&sort[0][column]=period&sort[0][direction]=desc&length=30'},
+    {k:'jet',pre:'$',unit:'/gal',hist:[],cur:0,prev:0,live:false,err:'',
+     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=EER_EPJK_PF4_RGC_DPG&sort[0][column]=period&sort[0][direction]=desc&length=30'}
   ];
 
-  async function fetchOne(sym){
-    const raw1='https://query1.finance.yahoo.com/v8/finance/chart/'+sym+'?interval=5m&range=1d&includePrePost=false';
-    const raw2='https://query2.finance.yahoo.com/v8/finance/chart/'+sym+'?interval=5m&range=1d&includePrePost=false';
-    const urls=[
-      'https://api.allorigins.win/raw?url='+encodeURIComponent(raw1),
-      'https://corsproxy.io/?'+encodeURIComponent(raw1),
-      'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(raw1),
-      'https://api.allorigins.win/raw?url='+encodeURIComponent(raw2),
-      'https://corsproxy.io/?'+encodeURIComponent(raw2)
-    ];
-    let lastErr='';
-    for(const u of urls){
-      try{
-        const ac=new AbortController(),t=setTimeout(()=>ac.abort(),8000);
-        const r=await fetch(u,{signal:ac.signal});clearTimeout(t);
-        if(!r.ok){lastErr='HTTP_'+r.status;continue;}
-        const d=await r.json();
-        if(d.chart&&d.chart.error){lastErr=d.chart.error.code||'API_ERROR';continue;}
-        const res=d.chart.result[0];
-        const closes=res.indicators.quote[0].close.filter(v=>v!=null);
-        if(closes.length<3){lastErr='NO_DATA';continue;}
-        let mktClosed=false;
-        const rmt=res.meta.regularMarketTime;
-        if(rmt){const age=(Date.now()/1000)-rmt;if(age>1800)mktClosed=true;}
-        const tp=res.meta.currentTradingPeriod;
-        if(tp&&tp.regular){const now=Date.now()/1000;if(now<tp.regular.start||now>tp.regular.end)mktClosed=true;}
-        return{ok:true,prices:closes,prev:res.meta.chartPreviousClose||res.meta.previousClose||closes[0],closed:mktClosed};
-      }catch(e){lastErr=e.name==='AbortError'?'TIMEOUT':(e.message||'NETWORK_ERROR').slice(0,30);continue;}
-    }
-    return{ok:false,err:lastErr||'UNKNOWN'};
+  async function fetchOne(it){
+    try{
+      const ac=new AbortController(),t=setTimeout(()=>ac.abort(),10000);
+      const r=await fetch(it.url,{signal:ac.signal});clearTimeout(t);
+      if(!r.ok)return{ok:false,err:'HTTP_'+r.status};
+      const d=await r.json();
+      const rows=d.response&&d.response.data;
+      if(!rows||rows.length<2)return{ok:false,err:'NO_DATA'};
+      const prices=rows.map(r=>parseFloat(r.value)).filter(v=>!isNaN(v)).reverse();
+      if(prices.length<2)return{ok:false,err:'NO_DATA'};
+      return{ok:true,prices:prices,latest:prices[prices.length-1],prev:prices[prices.length-2],date:rows[0].period};
+    }catch(e){return{ok:false,err:e.name==='AbortError'?'TIMEOUT':(e.message||'NETWORK').slice(0,20)};}
   }
 
   function showItemError(it){
@@ -3852,36 +3837,17 @@ window.toggleThemeFloat=toggleThemeFloat;
     if(cv){const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#e44';ctx.font='11px monospace';ctx.fillText('API Error: '+it.err,4,24);}
   }
 
-  async function fetchAll(){
-    const src=document.getElementById('op-src');
-    if(src)src.textContent='🔄 Fetching...';
-    await Promise.allSettled(items.map(async it=>{
-      const d=await fetchOne(YAHOO[it.k]);
-      if(d.ok){it.init=d.prev;it.hist=d.prices.slice(-MAX_PTS);it.cur=it.hist[it.hist.length-1];it.live=true;it.closed=!!d.closed;it.err='';}
-      else{it.live=false;it.err=d.err;showItemError(it);}
-    }));
-    const live=items.filter(it=>it.live&&!it.closed),closed=items.filter(it=>it.live&&it.closed),fail=items.filter(it=>!it.live);
-    if(src){
-      const parts=[];
-      if(live.length>0)parts.push(live.length+'/6 Live');
-      if(closed.length>0)parts.push(closed.length+' Closed');
-      if(fail.length>0)parts.push('<span style="color:#e44">'+fail.length+' Error</span>');
-      src.innerHTML='📡 Yahoo Finance ('+parts.join(' · ')+')';
-    }
-    tick();
-  }
-
   function drawSpark(it){
-    if(!it.live&&!it.closed)return;
+    if(!it.live)return;
     const cv=document.getElementById('op-spark-'+it.k);if(!cv)return;
     const ctx=cv.getContext('2d'),W=cv.width,H=cv.height,h=it.hist;
     if(h.length<2)return;
     const mn=Math.min(...h),mx=Math.max(...h),rng=mx-mn||1;
     ctx.clearRect(0,0,W,H);
-    const up=h[h.length-1]>=it.init;
-    const lineColor=it.closed?'#666':(up?'#dd4444':'#44cc66');
+    const up=it.cur>=it.prev;
+    const lineColor=up?'#dd4444':'#44cc66';
     const grad=ctx.createLinearGradient(0,0,0,H);
-    grad.addColorStop(0,it.closed?'rgba(100,100,100,0.15)':(up?'rgba(221,68,68,0.25)':'rgba(68,204,102,0.25)'));
+    grad.addColorStop(0,up?'rgba(221,68,68,0.25)':'rgba(68,204,102,0.25)');
     grad.addColorStop(1,'rgba(0,0,0,0)');
     ctx.beginPath();ctx.moveTo(0,H);
     h.forEach((v,i)=>{const x=i/(h.length-1)*W,y=H-4-((v-mn)/rng)*(H-8);ctx.lineTo(x,y);});
@@ -3889,52 +3855,52 @@ window.toggleThemeFloat=toggleThemeFloat;
     ctx.beginPath();
     h.forEach((v,i)=>{const x=i/(h.length-1)*W,y=H-4-((v-mn)/rng)*(H-8);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
     ctx.strokeStyle=lineColor;ctx.lineWidth=1.5;ctx.stroke();
-    if(it.closed){
-      ctx.font='bold 10px Consolas,monospace';ctx.fillStyle='#888';ctx.textAlign='right';
-      ctx.fillText('CLOSED',W-4,12);ctx.textAlign='left';
-    }else{
-      const lastY=H-4-((h[h.length-1]-mn)/rng)*(H-8);
-      ctx.beginPath();ctx.arc(W-1,lastY,2.5,0,Math.PI*2);ctx.fillStyle=lineColor;ctx.fill();
-    }
+    const lastY=H-4-((h[h.length-1]-mn)/rng)*(H-8);
+    ctx.beginPath();ctx.arc(W-1,lastY,2.5,0,Math.PI*2);ctx.fillStyle=lineColor;ctx.fill();
   }
 
-  function tick(){
-    const now=new Date();
+  function render(){
     items.forEach(it=>{
-      if(!it.live&&it.cur===0)return;
+      if(!it.live)return;
       const el=document.getElementById('op-'+it.k);
       const chgEl=document.getElementById('op-'+it.k+'-chg');
       const pctEl=document.getElementById('op-'+it.k+'-pct');
       if(!el)return;
-      if(it.closed){
-        el.textContent=it.pre+it.cur.toFixed(2);
-        const chg=it.cur-it.init;
-        const pct=it.init?chg/it.init*100:0;
-        if(chgEl){chgEl.textContent='Market Closed';chgEl.className='op-chg';chgEl.style.color='#888';}
-        if(pctEl){pctEl.textContent='('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';pctEl.className='op-pct';pctEl.style.color='#666';}
-        drawSpark(it);
-        return;
-      }
-      if(it.live){
-        const delta=(Math.random()-0.5)*it.step;
-        it.cur=Math.round((it.cur+delta)*100)/100;
-        it.hist.push(it.cur);if(it.hist.length>MAX_PTS)it.hist.shift();
-      }
-      el.textContent=it.pre+it.cur.toFixed(2);
-      const chg=it.cur-it.init;
-      const pct=it.init?chg/it.init*100:0;
-      if(chgEl){chgEl.textContent=(chg>=0?'+':'')+chg.toFixed(2);chgEl.className='op-chg '+(chg>=0?'op-up':'op-down');chgEl.style.color='';}
+      el.textContent=it.pre+it.cur.toFixed(it.cur>=10?2:3);
+      const chg=it.cur-it.prev;
+      const pct=it.prev?chg/it.prev*100:0;
+      if(chgEl){chgEl.textContent=(chg>=0?'+':'')+chg.toFixed(it.cur>=10?2:3);chgEl.className='op-chg '+(chg>=0?'op-up':'op-down');chgEl.style.color='';}
       if(pctEl){pctEl.textContent='('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';pctEl.className='op-pct '+(pct>=0?'op-up':'op-down');pctEl.style.color='';}
       drawSpark(it);
     });
     const ts=document.getElementById('op-ts');
     const pad=n=>String(n).padStart(2,'0');
+    const now=new Date();
     if(ts)ts.textContent='Updated: '+now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
   }
 
+  async function fetchAll(){
+    const src=document.getElementById('op-src');
+    if(src)src.textContent='🔄 Fetching...';
+    let latestDate='';
+    await Promise.allSettled(items.map(async it=>{
+      const d=await fetchOne(it);
+      if(d.ok){it.hist=d.prices;it.cur=d.latest;it.prev=d.prev;it.live=true;it.err='';if(d.date)latestDate=d.date;}
+      else{it.live=false;it.err=d.err;showItemError(it);}
+    }));
+    const ok=items.filter(it=>it.live).length,fail=items.filter(it=>!it.live).length;
+    if(src){
+      let s='📡 EIA ('+ok+'/'+items.length+' OK';
+      if(fail>0)s+=' · <span style="color:#e44">'+fail+' Error</span>';
+      s+=')';
+      if(latestDate)s+=' · Data: '+latestDate;
+      src.innerHTML=s;
+    }
+    render();
+  }
+
   fetchAll();
-  setInterval(tick,3000);
-  setInterval(fetchAll,30000);
+  setInterval(fetchAll,300000);
 })();
 
 boot();
