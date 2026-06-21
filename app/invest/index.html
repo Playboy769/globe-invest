@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InvestFrame</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Serif+TC:wght@200;300;400;500;600;700&family=Cormorant+Garant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Noto Serif TC','Playfair Display',serif;font-weight:400}
+::selection{background:#0a0a0a;color:#fff}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#fff}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#bbb}
+
+#iv-wrap{display:flex;height:100vh}
+#iv-framework{flex:3;background:#fff;overflow-y:auto;display:flex;flex-direction:column;padding:0 28px;min-width:0}
+#iv-feed{flex:3;background:#fafafa;overflow-y:auto;border-left:1px solid #eee;border-right:1px solid #eee;min-width:0}
+#iv-editor{flex:2;min-width:280px;background:#fff;overflow-y:auto;display:flex;flex-direction:column}
+
+.iv-col-head{padding:32px 24px 20px;font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Cormorant Garant',serif}
+.iv-nest{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;padding:0 0 28px}
+.iv-ring{border:1px solid #e8e8e8;border-radius:14px;padding:20px;display:flex;flex-direction:column;flex:1;min-height:0;transition:border-color .2s ease;position:relative}
+.iv-ring:hover{border-color:#ccc}
+.iv-ring-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.14em;font-weight:400;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:color .2s ease}
+.iv-ring-label:hover{color:#0a0a0a}
+.iv-ring-label span{font-family:'Cormorant Garant',serif}
+.iv-ring.layer-active{border-color:#0a0a0a}
+.iv-ring.layer-active>.iv-ring-label{color:#0a0a0a;font-weight:600}
+.iv-ring-count{font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+.iv-ring.macro{background:#fafafa}
+.iv-ring.risk{background:#f6f6f6;margin-top:8px}
+.iv-ring.industry{background:#f2f2f2;margin-top:8px}
+.iv-tag-list{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
+.iv-tag{padding:6px 12px;background:#fff;border:1px solid #ddd;border-radius:8px;font-size:11px;color:#555;font-weight:400;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:6px;font-family:'Noto Serif TC',serif}
+.iv-tag:hover{background:#f5f5f5;color:#0a0a0a;border-color:#bbb}
+.iv-tag.active{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+.iv-tag .iv-tag-x{font-size:8px;color:#aaa;cursor:pointer;margin-left:2px}
+.iv-tag .iv-tag-x:hover{color:#333}
+.iv-tag.active .iv-tag-x{color:rgba(255,255,255,0.5)}
+.iv-tag.active .iv-tag-x:hover{color:#fff}
+
+.iv-feed-head{padding:32px 24px 20px;display:flex;align-items:center;justify-content:space-between}
+.iv-feed-title{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Cormorant Garant',serif}
+.iv-feed-count{font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+.iv-feed-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
+.iv-feed-empty{text-align:center;padding:48px 24px;color:#bbb;font-size:13px;font-weight:400;font-family:'Noto Serif TC',serif}
+.iv-feed-card{padding:16px 18px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;cursor:pointer;transition:all .2s ease}
+.iv-feed-card:hover{background:#f8f8f8;border-color:#ccc;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.04)}
+.iv-feed-card.active{border-color:#0a0a0a;background:#fff}
+.iv-fc-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-family:'Cormorant Garant',serif}
+.iv-fc-title{font-size:14px;color:#0a0a0a;font-weight:500;margin-bottom:8px;line-height:1.5;font-family:'Playfair Display','Noto Serif TC',serif}
+.iv-fc-preview{font-size:12px;color:#888;line-height:1.6;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:'Noto Serif TC',serif}
+.iv-fc-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+
+.iv-feed-detail{display:none;padding:20px 24px}
+.iv-fd-back{font-size:10px;color:#aaa;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:6px;transition:color .15s ease;font-family:'Cormorant Garant',serif;text-transform:uppercase;letter-spacing:.08em}
+.iv-fd-back:hover{color:#0a0a0a}
+.iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Cormorant Garant',serif}
+.iv-fd-title{font-size:18px;color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Playfair Display',serif}
+.iv-fd-body{font-size:13px;color:#555;line-height:1.9;font-weight:400;white-space:pre-wrap;font-family:'Noto Serif TC',serif}
+.iv-fd-meta{margin-top:16px;font-size:10px;color:#bbb;font-family:'Cormorant Garant',serif}
+
+.iv-ed-head{padding:32px 20px 20px}
+.iv-ed-layer{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Cormorant Garant',serif;margin-bottom:12px}
+.iv-ed-field{padding:0 20px;margin-bottom:14px}
+.iv-ed-label{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.1em;font-weight:400;margin-bottom:8px;font-family:'Cormorant Garant',serif}
+.iv-ed-input{width:100%;padding:11px 14px;background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Noto Serif TC',serif;transition:all .2s ease;box-sizing:border-box}
+.iv-ed-input:focus{border-color:#0a0a0a;background:#fff}
+.iv-ed-input::placeholder{color:#bbb}
+.iv-ed-textarea{width:100%;min-height:180px;padding:14px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Noto Serif TC',serif;line-height:1.8;resize:vertical;transition:all .2s ease;box-sizing:border-box}
+.iv-ed-textarea:focus{border-color:#0a0a0a;background:#fff}
+.iv-ed-textarea::placeholder{color:#bbb}
+.iv-ed-actions{padding:12px 20px 24px;display:flex;gap:8px}
+.iv-ed-btn{flex:1;padding:10px;background:transparent;border:1px solid #ddd;border-radius:10px;color:#888;font-size:11px;font-weight:400;cursor:pointer;transition:all .2s ease;font-family:'Cormorant Garant',serif;letter-spacing:.04em;text-transform:uppercase}
+.iv-ed-btn:hover{background:#f5f5f5;color:#0a0a0a;border-color:#bbb}
+.iv-ed-btn.primary{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+.iv-ed-btn.primary:hover{background:#333;color:#fff}
+.iv-ed-select{display:none}
+.iv-cs{position:relative}
+.iv-cs-display{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;color:#0a0a0a;font-size:12.5px;font-weight:400;cursor:pointer;transition:all .2s ease;font-family:'Noto Serif TC',serif}
+.iv-cs-display:hover{border-color:#bbb;background:#f5f5f5}
+.iv-cs.open .iv-cs-display{border-color:#0a0a0a;border-radius:12px 12px 0 0;background:#fff}
+.iv-cs-arrow{font-size:7px;color:#aaa;transition:transform .25s ease}
+.iv-cs.open .iv-cs-arrow{transform:rotate(180deg)}
+.iv-cs-dd{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #e0e0e0;border-top:none;border-radius:0 0 12px 12px;z-index:50;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.iv-cs.open .iv-cs-dd{display:block}
+.iv-cs-opt{padding:11px 16px;font-size:12.5px;color:#888;cursor:pointer;transition:all .15s ease;font-family:'Noto Serif TC',serif;font-weight:400}
+.iv-cs-opt:hover{background:#f5f5f5;color:#0a0a0a}
+.iv-cs-opt.active{background:#f0f0f0;color:#0a0a0a}
+.iv-cs-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:10px}
+.iv-ed-row{display:flex;gap:12px}
+.iv-ed-row .iv-ed-field{flex:1}
+.iv-ed-divider{height:1px;background:#eee;margin:8px 20px}
+</style>
+</head>
+<body>
+<div id="iv-wrap">
+  <div id="iv-framework">
+    <div class="iv-col-head">Investment Framework</div>
+    <div class="iv-nest">
+      <div class="iv-ring macro" id="iv-ring-macro">
+        <div class="iv-ring-label" onclick="ivSelectLayer('macro')"><span>Macro Narrative</span><span class="iv-ring-count" id="iv-cnt-macro">0</span></div>
+        <div class="iv-tag-list" id="iv-tags-macro"></div>
+        <div class="iv-ring risk" id="iv-ring-risk" style="margin-top:14px">
+          <div class="iv-ring-label" onclick="ivSelectLayer('risk')"><span>Implied Risk</span><span class="iv-ring-count" id="iv-cnt-risk">0</span></div>
+          <div class="iv-tag-list" id="iv-tags-risk"></div>
+          <div class="iv-ring industry" id="iv-ring-industry" style="margin-top:14px">
+            <div class="iv-ring-label" onclick="ivSelectLayer('industry')"><span>Industry Narrative</span><span class="iv-ring-count" id="iv-cnt-industry">0</span></div>
+            <div class="iv-tag-list" id="iv-tags-industry"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="iv-feed">
+    <div class="iv-feed-head">
+      <span class="iv-feed-title">Feed</span>
+      <span class="iv-feed-count" id="iv-feed-cnt">0 entries</span>
+    </div>
+    <div id="iv-feed-list" class="iv-feed-list">
+      <div class="iv-feed-empty">Select a tag to view entries</div>
+    </div>
+    <div id="iv-feed-detail" class="iv-feed-detail"></div>
+  </div>
+  <div id="iv-editor">
+    <div class="iv-ed-head">
+      <div class="iv-ed-layer">Compose</div>
+    </div>
+    <div class="iv-ed-field">
+      <div class="iv-ed-label">Layer</div>
+      <select class="iv-ed-select" id="iv-ed-layer" style="display:none">
+        <option value="macro">Macro Narrative</option>
+        <option value="risk">Implied Risk</option>
+        <option value="industry">Industry Narrative</option>
+      </select>
+      <div class="iv-cs" id="iv-cs-layer">
+        <div class="iv-cs-display" onclick="ivToggleLayerDD()">
+          <span><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</span>
+          <span class="iv-cs-arrow">▼</span>
+        </div>
+        <div class="iv-cs-dd">
+          <div class="iv-cs-opt active" data-val="macro" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</div>
+          <div class="iv-cs-opt" data-val="risk" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#c8964a"></span>Implied Risk</div>
+          <div class="iv-cs-opt" data-val="industry" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#4a8cc8"></span>Industry Narrative</div>
+        </div>
+      </div>
+    </div>
+    <div class="iv-ed-row">
+      <div class="iv-ed-field">
+        <div class="iv-ed-label">Title *</div>
+        <input class="iv-ed-input" id="iv-ed-title" placeholder="e.g. Fed rate cycle, Memory upcycle...">
+      </div>
+      <div class="iv-ed-field" style="flex:0 0 120px">
+        <div class="iv-ed-label">Date</div>
+        <input class="iv-ed-input" id="iv-ed-date" type="date">
+      </div>
+    </div>
+    <div class="iv-ed-row">
+      <div class="iv-ed-field">
+        <div class="iv-ed-label">Author</div>
+        <input class="iv-ed-input" id="iv-ed-author" placeholder="Author name">
+      </div>
+      <div class="iv-ed-field">
+        <div class="iv-ed-label">Source</div>
+        <input class="iv-ed-input" id="iv-ed-source" placeholder="Report, website, research...">
+      </div>
+    </div>
+    <div class="iv-ed-divider"></div>
+    <div class="iv-ed-field">
+      <div class="iv-ed-label">Content</div>
+      <textarea class="iv-ed-textarea" id="iv-ed-content" placeholder="Write your narrative, thesis, or risk note here..."></textarea>
+    </div>
+    <div class="iv-ed-actions">
+      <button class="iv-ed-btn" onclick="ivClearEditor()">Clear</button>
+      <button class="iv-ed-btn primary" onclick="ivSubmitEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const _ivStore={macro:[],risk:[],industry:[]};
+let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro';
+const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
+
+function _ivId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+
+function ivToggleLayerDD(){document.getElementById('iv-cs-layer').classList.toggle('open');}
+
+function ivPickLayer(el){
+  _ivLayerVal=el.dataset.val;
+  document.getElementById('iv-ed-layer').value=_ivLayerVal;
+  const cs=document.getElementById('iv-cs-layer');
+  cs.querySelector('.iv-cs-display span').innerHTML=el.innerHTML;
+  cs.querySelectorAll('.iv-cs-opt').forEach(o=>o.classList.toggle('active',o.dataset.val===_ivLayerVal));
+  cs.classList.remove('open');
+}
+
+document.addEventListener('click',e=>{const cs=document.getElementById('iv-cs-layer');if(cs&&!cs.contains(e.target))cs.classList.remove('open');});
+
+function ivSubmitEntry(){
+  const layer=_ivLayerVal;
+  const title=document.getElementById('iv-ed-title').value.trim();
+  const content=document.getElementById('iv-ed-content').value.trim();
+  if(!title)return;
+  const dateEl=document.getElementById('iv-ed-date');
+  const ts=dateEl.value||new Date().toISOString().slice(0,10);
+  const author=document.getElementById('iv-ed-author').value.trim();
+  const source=document.getElementById('iv-ed-source').value.trim();
+  _ivStore[layer].push({id:_ivId(),title,content,ts,author,source});
+  ivClearEditor();
+  ivRenderTags();
+  _ivActiveTag={layer,title};
+  _ivActiveLayer=null;
+  ivRenderLayers();
+  ivRenderFeed();
+}
+
+function ivClearEditor(){
+  document.getElementById('iv-ed-title').value='';
+  document.getElementById('iv-ed-content').value='';
+  document.getElementById('iv-ed-author').value='';
+  document.getElementById('iv-ed-source').value='';
+  document.getElementById('iv-ed-date').value='';
+}
+
+function ivRenderTags(){
+  ['macro','risk','industry'].forEach(layer=>{
+    const el=document.getElementById('iv-tags-'+layer);
+    const cnt=document.getElementById('iv-cnt-'+layer);
+    const titles=[...new Set(_ivStore[layer].map(e=>e.title))];
+    cnt.textContent=titles.length;
+    el.innerHTML=titles.map(t=>{
+      const active=_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===t;
+      return `<div class="iv-tag${active?' active':''}" onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span><span class="iv-tag-x" onclick="event.stopPropagation();ivRemoveTag('${layer}','${t.replace(/'/g,"\\'")}')">x</span></div>`;
+    }).join('');
+  });
+}
+
+function ivSelectTag(layer,title){
+  _ivActiveTag={layer,title};
+  _ivActiveLayer=null;
+  ivRenderTags();
+  ivRenderLayers();
+  ivRenderFeed();
+}
+
+function ivSelectLayer(layer){
+  if(_ivActiveLayer===layer){_ivActiveLayer=null;}else{_ivActiveLayer=layer;}
+  _ivActiveTag=null;
+  ivRenderTags();
+  ivRenderLayers();
+  ivRenderFeed();
+}
+
+function ivRenderLayers(){
+  ['macro','risk','industry'].forEach(l=>{
+    const ring=document.getElementById('iv-ring-'+l);
+    if(ring)ring.classList.toggle('layer-active',_ivActiveLayer===l);
+  });
+}
+
+function ivRemoveTag(layer,title){
+  _ivStore[layer]=_ivStore[layer].filter(e=>e.title!==title);
+  if(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title)_ivActiveTag=null;
+  ivRenderTags();
+  ivRenderFeed();
+}
+
+function ivRenderFeed(){
+  const list=document.getElementById('iv-feed-list');
+  const detail=document.getElementById('iv-feed-detail');
+  const cntEl=document.getElementById('iv-feed-cnt');
+  detail.style.display='none';
+  list.style.display='';
+  if(_ivActiveTag){
+    const entries=_ivStore[_ivActiveTag.layer].filter(e=>e.title===_ivActiveTag.title);
+    cntEl.textContent=entries.length+' entries';
+    if(entries.length===0){list.innerHTML='<div class="iv-feed-empty">No entries yet</div>';return;}
+    list.innerHTML=entries.map(e=>`<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${LN[_ivActiveTag.layer]}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div><div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`).join('');
+    return;
+  }
+  if(_ivActiveLayer){
+    const entries=_ivStore[_ivActiveLayer].sort((a,b)=>b.ts.localeCompare(a.ts));
+    cntEl.textContent=entries.length+' entries';
+    if(entries.length===0){list.innerHTML='<div class="iv-feed-empty">No entries in '+LN[_ivActiveLayer]+'</div>';return;}
+    list.innerHTML=entries.map(e=>`<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${LN[_ivActiveLayer]}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div><div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`).join('');
+    return;
+  }
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry].sort((a,b)=>b.ts.localeCompare(a.ts));
+  cntEl.textContent=all.length+' entries';
+  if(all.length===0){list.innerHTML='<div class="iv-feed-empty">Select a tag to view entries</div>';return;}
+  list.innerHTML=all.map(e=>{
+    const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+    return `<div class="iv-feed-card" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${LN[layer]}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div><div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+  }).join('');
+}
+
+function ivShowDetail(id){
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const e=all.find(x=>x.id===id);
+  if(!e)return;
+  const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+  document.getElementById('iv-feed-list').style.display='none';
+  const det=document.getElementById('iv-feed-detail');
+  det.style.display='block';
+  det.innerHTML=`<div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Cormorant Garant',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body">${e.content}</div><div class="iv-fd-meta">${e.ts}</div>`;
+}
+
+function ivBackToFeed(){
+  document.getElementById('iv-feed-detail').style.display='none';
+  document.getElementById('iv-feed-list').style.display='';
+}
+</script>
+</body>
+</html>
