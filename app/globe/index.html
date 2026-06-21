@@ -3797,34 +3797,13 @@ function toggleThemeFloat(){
 window.toggleThemeFloat=toggleThemeFloat;
 
 (function oilTicker(){
-  const EIA_KEY='DEMO_KEY';
-  const EIA_BASE='https://api.eia.gov/v2/';
   const items=[
-    {k:'wti',pre:'$',unit:'/bbl',hist:[],cur:0,prev:0,live:false,err:'',
-     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=RWTC&sort[0][column]=period&sort[0][direction]=desc&length=30'},
-    {k:'brent',pre:'$',unit:'/bbl',hist:[],cur:0,prev:0,live:false,err:'',
-     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=RBRTE&sort[0][column]=period&sort[0][direction]=desc&length=30'},
-    {k:'ng',pre:'$',unit:'/MMBtu',hist:[],cur:0,prev:0,live:false,err:'',
-     url:EIA_BASE+'natural-gas/pri/fut/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=RNGWHHD&sort[0][column]=period&sort[0][direction]=desc&length=30'},
-    {k:'rbob',pre:'$',unit:'/gal',hist:[],cur:0,prev:0,live:false,err:'',
-     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=EER_EPMRU_PF4_RGC_DPG&sort[0][column]=period&sort[0][direction]=desc&length=30'},
-    {k:'jet',pre:'$',unit:'/gal',hist:[],cur:0,prev:0,live:false,err:'',
-     url:EIA_BASE+'petroleum/pri/spt/data/?api_key='+EIA_KEY+'&frequency=daily&data[0]=value&facets[series][]=EER_EPJK_PF4_RGC_DPG&sort[0][column]=period&sort[0][direction]=desc&length=30'}
+    {k:'wti', pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
+    {k:'brent',pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
+    {k:'ng',  pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
+    {k:'rbob',pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
+    {k:'jet', pre:'$',hist:[],cur:0,prev:0,live:false,err:''}
   ];
-
-  async function fetchOne(it){
-    try{
-      const ac=new AbortController(),t=setTimeout(()=>ac.abort(),10000);
-      const r=await fetch(it.url,{signal:ac.signal});clearTimeout(t);
-      if(!r.ok)return{ok:false,err:'HTTP_'+r.status};
-      const d=await r.json();
-      const rows=d.response&&d.response.data;
-      if(!rows||rows.length<2)return{ok:false,err:'NO_DATA'};
-      const prices=rows.map(r=>parseFloat(r.value)).filter(v=>!isNaN(v)).reverse();
-      if(prices.length<2)return{ok:false,err:'NO_DATA'};
-      return{ok:true,prices:prices,latest:prices[prices.length-1],prev:prices[prices.length-2],date:rows[0].period};
-    }catch(e){return{ok:false,err:e.name==='AbortError'?'TIMEOUT':(e.message||'NETWORK').slice(0,20)};}
-  }
 
   function showItemError(it){
     const el=document.getElementById('op-'+it.k);
@@ -3834,7 +3813,7 @@ window.toggleThemeFloat=toggleThemeFloat;
     if(chgEl){chgEl.textContent='--';chgEl.className='op-chg';}
     if(pctEl){pctEl.textContent='';pctEl.className='op-pct';}
     const cv=document.getElementById('op-spark-'+it.k);
-    if(cv){const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#e44';ctx.font='11px monospace';ctx.fillText('API Error: '+it.err,4,24);}
+    if(cv){const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#e44';ctx.font='11px monospace';ctx.fillText('Error: '+it.err,4,24);}
   }
 
   function drawSpark(it){
@@ -3882,19 +3861,29 @@ window.toggleThemeFloat=toggleThemeFloat;
   async function fetchAll(){
     const src=document.getElementById('op-src');
     if(src)src.textContent='🔄 Fetching...';
-    let latestDate='';
-    await Promise.allSettled(items.map(async it=>{
-      const d=await fetchOne(it);
-      if(d.ok){it.hist=d.prices;it.cur=d.latest;it.prev=d.prev;it.live=true;it.err='';if(d.date)latestDate=d.date;}
-      else{it.live=false;it.err=d.err;showItemError(it);}
-    }));
-    const ok=items.filter(it=>it.live).length,fail=items.filter(it=>!it.live).length;
-    if(src){
-      let s='📡 EIA ('+ok+'/'+items.length+' OK';
-      if(fail>0)s+=' · <span style="color:#e44">'+fail+' Error</span>';
-      s+=')';
-      if(latestDate)s+=' · Data: '+latestDate;
-      src.innerHTML=s;
+    try{
+      const r=await fetch('/api/oil-prices');
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const d=await r.json();
+      items.forEach(it=>{
+        const entry=d[it.k];
+        if(entry&&!entry.error&&entry.price){
+          it.cur=entry.price;it.prev=entry.prev||entry.price;
+          it.hist=Array.isArray(entry.hist)?entry.hist:[entry.prev,entry.price];
+          it.live=true;it.err='';
+        }else{
+          it.live=false;it.err=(entry&&entry.error)||'NO_DATA';
+          showItemError(it);
+        }
+      });
+      const ok=items.filter(it=>it.live).length,fail=items.filter(it=>!it.live).length;
+      if(src){
+        let s='📡 Yahoo Finance ('+ok+'/'+items.length+' OK)';
+        if(fail>0)s+=' · <span style="color:#e44">'+fail+' Error</span>';
+        src.innerHTML=s;
+      }
+    }catch(e){
+      if(src)src.innerHTML='<span style="color:#e44">連線失敗: '+e.message+'</span>';
     }
     render();
   }

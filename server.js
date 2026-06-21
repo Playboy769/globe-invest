@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,8 +13,81 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json' };
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
 
-const server = http.createServer((req, res) => {
+// 看起來像真人瀏覽器的 headers
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'en-US,en;q=0.9',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'Cache-Control': 'no-cache',
+  'Referer': 'https://finance.yahoo.com/',
+};
+
+// Yahoo Finance symbols
+const SYMBOLS = { wti: 'CL%3DF', brent: 'BZ%3DF', ng: 'NG%3DF', rbob: 'RB%3DF', jet: 'HO%3DF' };
+
+let _oilCache = null;
+let _oilCacheTime = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function fetchUrl(url) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers: BROWSER_HEADERS }, res => {
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
+      res.on('end', () => {
+        if (res.statusCode !== 200) return reject(new Error('HTTP ' + res.statusCode));
+        resolve(Buffer.concat(chunks).toString('utf8'));
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(10000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
+}
+
+async function fetchSymbol(sym) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=30d&includePrePost=false`;
+  const raw = await fetchUrl(url);
+  const d = JSON.parse(raw);
+  const res = d.chart.result[0];
+  const closes = res.indicators.quote[0].close.filter(v => v != null);
+  const meta = res.meta;
+  return {
+    price: meta.regularMarketPrice || closes[closes.length - 1],
+    prev: meta.chartPreviousClose || closes[closes.length - 2],
+    hist: closes.slice(-30),
+    currency: meta.currency || 'USD',
+  };
+}
+
+async function getOilPrices() {
+  if (_oilCache && Date.now() - _oilCacheTime < CACHE_TTL) return _oilCache;
+  const result = {};
+  await Promise.allSettled(
+    Object.entries(SYMBOLS).map(async ([k, sym]) => {
+      try { result[k] = await fetchSymbol(sym); }
+      catch (e) { result[k] = { error: e.message }; }
+    })
+  );
+  _oilCache = result;
+  _oilCacheTime = Date.now();
+  return result;
+}
+
+const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, CORS); res.end(); return; }
+
+  if (req.url === '/api/oil-prices' && req.method === 'GET') {
+    try {
+      const data = await getOilPrices();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(data));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
 
   if (req.url === '/api/invest-data' && req.method === 'GET') {
     const data = fs.existsSync(DATA_FILE) ? fs.readFileSync(DATA_FILE, 'utf8') : '{"macro":[],"risk":[],"industry":[]}';
