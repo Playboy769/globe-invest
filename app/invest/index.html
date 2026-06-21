@@ -182,17 +182,26 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 <script>
 const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
-const _ivStore={macro:[],risk:[],industry:[]};
+// 立即從 localStorage 同步讀取（快速顯示）
+const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro))return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSave(){
   try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}
   fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
 }
-(async function _ivLoad(){
+// 非同步從 Railway Volume 同步，僅在 server 資料比 localStorage 多時才覆蓋
+(async function _ivSync(){
   try{
-    const r=await fetch(_IV_API);
-    if(r.ok){const d=await r.json();if(d.macro){Object.assign(_ivStore,d);ivRenderTags();ivRenderFeed();return;}}
+    const r=await fetch(_IV_API);if(!r.ok)return;
+    const d=await r.json();
+    if(!Array.isArray(d.macro)||!Array.isArray(d.risk)||!Array.isArray(d.industry))return;
+    const serverTotal=d.macro.length+d.risk.length+d.industry.length;
+    const localTotal=_ivStore.macro.length+_ivStore.risk.length+_ivStore.industry.length;
+    if(serverTotal>localTotal){
+      Object.assign(_ivStore,{macro:d.macro,risk:d.risk,industry:d.industry});
+      try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}
+      ivRenderTags();ivRenderFeed();
+    }
   }catch(e){}
-  try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&d.macro){Object.assign(_ivStore,d);ivRenderTags();ivRenderFeed();}}catch(e){}
 })();
 let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro';
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
