@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>InvestFrame</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Ochrid','Noto Serif TC',serif;font-weight:400}
@@ -68,7 +69,22 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-fd-edit:hover{color:#0a0a0a;border-color:#bbb;background:#f5f5f5}
 .iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Ochrid',serif}
 .iv-fd-title{font-size:18px;color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Ochrid',serif}
-.iv-fd-body{font-size:13px;color:#555;line-height:1.9;font-weight:400;white-space:pre-wrap;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-fd-body{font-size:13px;color:#555;line-height:1.9;font-weight:400;font-family:'Ochrid','Noto Serif TC',serif}
+.iv-md h1,.iv-md h2,.iv-md h3{font-family:'Ochrid','Noto Serif TC',serif;color:#0a0a0a;margin:1.2em 0 .4em;font-weight:500;line-height:1.4}
+.iv-md h1{font-size:16px}.iv-md h2{font-size:14px}.iv-md h3{font-size:13px;color:#333}
+.iv-md p{margin:.65em 0;line-height:1.9}
+.iv-md p:first-child{margin-top:0}.iv-md p:last-child{margin-bottom:0}
+.iv-md strong{font-weight:600;color:#222}.iv-md em{font-style:italic;color:#444}
+.iv-md code{font-family:Consolas,monospace;font-size:11px;background:#f5f5f5;padding:1px 5px;border-radius:4px;color:#c44}
+.iv-md pre{background:#f8f8f8;border:1px solid #ececec;border-radius:8px;padding:11px 14px;overflow-x:auto;margin:.75em 0}
+.iv-md pre code{background:none;padding:0;color:#333;font-size:11.5px}
+.iv-md ul,.iv-md ol{padding-left:1.4em;margin:.65em 0}.iv-md li{margin:.22em 0;line-height:1.75}
+.iv-md blockquote{border-left:2.5px solid #ddd;padding:.3em .8em .3em 1em;margin:.75em 0;color:#999;font-style:italic}
+.iv-md hr{border:none;border-top:1px solid #eee;margin:1em 0}
+.iv-md a{color:#0a0a0a;text-decoration:underline;text-underline-offset:2px;text-decoration-color:#ccc}
+.iv-md table{border-collapse:collapse;font-size:12px;margin:.75em 0;width:100%}
+.iv-md th,.iv-md td{border:1px solid #e8e8e8;padding:5px 10px;text-align:left}
+.iv-md th{background:#fafafa;font-weight:500}
 .iv-fd-meta{margin-top:16px;font-size:10px;color:#bbb;font-family:'Ochrid',serif}
 .iv-fd-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .iv-fd-img{max-width:100%;border-radius:10px;cursor:zoom-in;transition:opacity .18s ease,transform .18s ease}
@@ -270,6 +286,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 <div id="iv-lightbox" onclick="this.style.display='none'"><img id="iv-lightbox-img"></div>
 
 <script>
+if(typeof marked!=='undefined')marked.use({gfm:true,breaks:true});
 const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
 const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro))return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
@@ -425,10 +442,18 @@ function ivRemoveTag(layer,title){
 }
 
 /* ── Feed ── */
+function ivStripMd(s){
+  return (s||'').replace(/```[\s\S]*?```/g,'').replace(/`[^`]+`/g,m=>m.slice(1,-1))
+    .replace(/^#{1,6}\s+/gm,'').replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+    .replace(/~~([^~]+)~~/g,'$1').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1')
+    .replace(/^[-*+]\s+/gm,'').replace(/^\d+\.\s+/gm,'').replace(/^>\s*/gm,'')
+    .replace(/^[-*_]{3,}\s*$/gm,'').replace(/\n+/g,' ').trim();
+}
 function ivCardHTML(e,layerLabel){
   const imgs=e.images&&e.images.length?`<div class="iv-fc-imgs">${e.images.slice(0,4).map(b=>`<img class="iv-fc-img-t" src="${b}">`).join('')}</div>`:'';
   const sbg=e.severity&&SCOLORS[e.severity]?`background:${SCOLORS[e.severity]}28;`:'';
-  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${e.content}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+  const preview=ivStripMd(e.content);
+  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${preview}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
 }
 function ivRenderFeed(){
   const list=document.getElementById('iv-feed-list');
@@ -464,7 +489,8 @@ function ivShowDetail(id){
   document.getElementById('iv-feed-list').style.display='none';
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
-  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div></div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body">${e.content}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
+  const mdBody=typeof marked!=='undefined'?marked.parse(e.content||''):(e.content||'').replace(/\n/g,'<br>');
+  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div></div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
 }
 function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 
