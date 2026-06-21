@@ -181,8 +181,19 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 
 <script>
 const _IV_KEY='investframe_store';
-const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&d.macro&&d.risk&&d.industry)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
-function _ivSave(){try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}}
+const _IV_API='/api/invest-data';
+const _ivStore={macro:[],risk:[],industry:[]};
+function _ivSave(){
+  try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}
+  fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
+}
+(async function _ivLoad(){
+  try{
+    const r=await fetch(_IV_API);
+    if(r.ok){const d=await r.json();if(d.macro){Object.assign(_ivStore,d);ivRenderTags();ivRenderFeed();return;}}
+  }catch(e){}
+  try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&d.macro){Object.assign(_ivStore,d);ivRenderTags();ivRenderFeed();}}catch(e){}
+})();
 let _ivActiveTag=null,_ivActiveLayer=null,_ivLayerVal='macro';
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
 
