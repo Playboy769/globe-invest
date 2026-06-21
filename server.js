@@ -124,6 +124,7 @@ const server = http.createServer(async (req, res) => {
   const url = req.url.split('?')[0];
   if (url === '/globe' || url === '/globe/') fp = path.join(APP_DIR, 'globe', 'index.html');
   else if (url === '/invest' || url === '/invest/') fp = path.join(APP_DIR, 'invest', 'index.html');
+  else if (url === '/causal' || url === '/causal/') fp = path.join(APP_DIR, 'causal', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 
