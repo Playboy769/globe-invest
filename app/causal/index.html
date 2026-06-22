@@ -13,7 +13,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 
 #cf-top{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:rgba(255,255,255,0.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #eee;z-index:60}
 .cf-brand{font-size:14px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;white-space:nowrap}
-.cf-top-mid{flex:1;text-align:center;font-size:11px;color:#bbb;letter-spacing:.04em;padding:0 16px;font-family:'Orchid','Noto Serif TC',serif}
+.cf-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:10.5px;color:#cfcfcf;letter-spacing:.05em;white-space:nowrap;pointer-events:none;font-family:'Orchid','Noto Serif TC',serif;display:none}
 .cf-actions{display:flex;align-items:center;gap:13px}
 .cf-count{font-size:11px;color:#bbb;letter-spacing:.05em;white-space:nowrap}
 .cf-btn{font-family:inherit;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#888;background:none;border:1px solid #e2e2e2;border-radius:7px;padding:6px 13px;cursor:pointer;transition:all .16s ease;white-space:nowrap}
@@ -71,7 +71,6 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 <body>
 <div id="cf-top">
   <div class="cf-brand">Causal&nbsp;Framework</div>
-  <div class="cf-top-mid">Double-click to add a cause · drag a node's dot onto another to link · double-click to rename</div>
   <div class="cf-actions">
     <span class="cf-count" id="cf-count">0 nodes · 0 links</span>
     <button class="cf-btn" id="cf-add">+ Node</button>
@@ -98,6 +97,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
     Drag a node's edge dot onto another node to link them<br>
     Select a link to mark it ＋ (reinforcing) or － (opposing)
   </div>
+  <div class="cf-hint" id="cf-hint">Double-click to add · drag a node's dot onto another to link · double-click to rename</div>
 </div>
 
 <script>
@@ -181,6 +181,7 @@ function drawEdges(){
 
 function updateChrome(){
   document.getElementById('cf-empty').style.display=G.nodes.length?'none':'block';
+  document.getElementById('cf-hint').style.display=G.nodes.length?'block':'none';
   document.getElementById('cf-count').textContent=G.nodes.length+' nodes · '+G.edges.length+' links';
 }
 function renderAll(){buildNodes();drawEdges();placeTools();updateChrome();}
