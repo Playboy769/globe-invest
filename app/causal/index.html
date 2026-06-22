@@ -977,12 +977,9 @@ function detectFeedbackLoops() {
     if(e.from===e.to){_loopEdges.add(e.id);return;}
     if(comp[e.from]!==undefined&&comp[e.from]===comp[e.to]&&compSz[comp[e.from]]>1)_loopEdges.add(e.id);
   });
-  _loopsActive=true;btn.classList.add('active');
+  _loopsActive=_loopEdges.size>0;
+  btn.classList.toggle('active',_loopsActive);
   drawEdges();
-  if(_loopEdges.size===0){
-    const prev=btn.innerHTML;btn.innerHTML='✓ None';
-    setTimeout(()=>{btn.innerHTML=prev;btn.classList.remove('active');_loopsActive=false;},1800);
-  }
 }
 
 // ── Export / Import ────────────────────────────────────────
