@@ -257,6 +257,17 @@ body.dark .cf-empty{color:#303030}
 body.dark .cf-hint{color:#404040}
 body.dark #cf-lasso{border-color:#4a88dd;background:rgba(74,136,221,0.08)}
 
+/* ── Overflow menu ───────────────────────────────────────── */
+#cf-overflow-menu{position:fixed;top:52px;right:0;background:#fff;border:1px solid #e4e4e4;border-radius:11px;padding:5px;box-shadow:0 8px 28px rgba(0,0,0,0.11);z-index:80;display:none;flex-direction:column;gap:1px;min-width:148px}
+#cf-overflow-menu.on{display:flex}
+.cf-overflow-item{font-family:inherit;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#888;background:none;border:none;border-radius:7px;padding:8px 13px;cursor:pointer;text-align:left;transition:all .14s;white-space:nowrap}
+.cf-overflow-item:hover{background:#f4f4f4;color:#0a0a0a}
+.cf-overflow-sep{height:1px;background:#f0f0f0;margin:3px 0}
+body.dark #cf-overflow-menu{background:#1e1e1e;border-color:#333;box-shadow:0 8px 28px rgba(0,0,0,0.4)}
+body.dark .cf-overflow-item{color:#666}
+body.dark .cf-overflow-item:hover{background:#2a2a2a;color:#e0e0e0}
+body.dark .cf-overflow-sep{background:#2a2a2a}
+
 /* ── Presentation mode ───────────────────────────────────── */
 body.presentation #cf-top{display:none!important}
 body.presentation #cf-canvas{top:0!important}
@@ -298,13 +309,9 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <button class="cf-btn" id="cf-add-text">+ Text</button>
     <button class="cf-btn cf-btn-icon" id="cf-undo" title="Undo (Ctrl+Z)">↩</button>
     <button class="cf-btn cf-btn-icon" id="cf-redo" title="Redo (Ctrl+Y)">↪</button>
-    <button class="cf-btn" id="cf-loops" title="Highlight feedback loops">⟳ Loops</button>
-    <button class="cf-btn" id="cf-export-svg" title="Export SVG">SVG</button>
-    <button class="cf-btn" id="cf-export-json" title="Export JSON">JSON↓</button>
-    <button class="cf-btn" id="cf-import-json" title="Import JSON">JSON↑</button>
+    <button class="cf-btn cf-btn-icon" id="cf-loops" title="Highlight feedback loops (⟳)">⟳</button>
     <button class="cf-btn cf-btn-icon" id="cf-dark-btn" title="Dark mode (D)">◑</button>
-    <button class="cf-btn cf-btn-icon" id="cf-present-btn" title="Presentation mode (F)">▢</button>
-    <button class="cf-btn cf-btn-icon" id="cf-help-btn" title="Shortcuts (?)">?</button>
+    <button class="cf-btn cf-btn-icon" id="cf-overflow-btn" title="More">···</button>
     <button class="cf-btn danger" id="cf-clear">Clear</button>
   </div>
 </div>
@@ -358,6 +365,16 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <button class="cf-zoom-btn" onclick="cfZoom(0.8)" title="縮小 (-)">−</button>
     <button class="cf-zoom-btn" onclick="cfZoomReset()" title="重置 (0)" style="font-size:11px;letter-spacing:.04em">fit</button>
   </div>
+</div>
+
+<!-- Overflow menu -->
+<div id="cf-overflow-menu">
+  <button class="cf-overflow-item" id="cf-export-svg">Export SVG</button>
+  <button class="cf-overflow-item" id="cf-export-json">Export JSON</button>
+  <button class="cf-overflow-item" id="cf-import-json">Import JSON</button>
+  <div class="cf-overflow-sep"></div>
+  <button class="cf-overflow-item" id="cf-present-btn">Presentation  F</button>
+  <button class="cf-overflow-item" id="cf-help-btn">Shortcuts  ?</button>
 </div>
 
 <!-- Shortcuts overlay -->
@@ -1127,12 +1144,27 @@ document.getElementById('cf-new-file').addEventListener('click',newFile);
 document.getElementById('cf-undo').addEventListener('click',undo);
 document.getElementById('cf-redo').addEventListener('click',redo);
 document.getElementById('cf-loops').addEventListener('click',detectFeedbackLoops);
-document.getElementById('cf-export-svg').addEventListener('click',exportSVG);
-document.getElementById('cf-export-json').addEventListener('click',exportJSON);
-document.getElementById('cf-import-json').addEventListener('click',importJSON);
 document.getElementById('cf-dark-btn').addEventListener('click',toggleDark);
-document.getElementById('cf-present-btn').addEventListener('click',togglePresentation);
-document.getElementById('cf-help-btn').addEventListener('click',toggleShortcuts);
+document.getElementById('cf-export-svg').addEventListener('click',()=>{closeOverflow();exportSVG();});
+document.getElementById('cf-export-json').addEventListener('click',()=>{closeOverflow();exportJSON();});
+document.getElementById('cf-import-json').addEventListener('click',()=>{closeOverflow();importJSON();});
+document.getElementById('cf-present-btn').addEventListener('click',()=>{closeOverflow();togglePresentation();});
+document.getElementById('cf-help-btn').addEventListener('click',()=>{closeOverflow();toggleShortcuts();});
+
+function closeOverflow(){document.getElementById('cf-overflow-menu').classList.remove('on');document.getElementById('cf-overflow-btn').classList.remove('active');}
+document.getElementById('cf-overflow-btn').addEventListener('click',e=>{
+  e.stopPropagation();
+  const menu=document.getElementById('cf-overflow-menu');
+  const btn=document.getElementById('cf-overflow-btn');
+  const r=btn.getBoundingClientRect();
+  menu.style.right=(window.innerWidth-r.right)+'px';
+  menu.style.top=(r.bottom+6)+'px';
+  const on=menu.classList.toggle('on');
+  btn.classList.toggle('active',on);
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#cf-overflow-menu')&&!e.target.closest('#cf-overflow-btn'))closeOverflow();
+});
 
 // rename top filename
 document.getElementById('cf-filename').addEventListener('dblclick', e => {
