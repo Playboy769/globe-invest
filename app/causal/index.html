@@ -104,12 +104,14 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .cf-edge-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke;cursor:pointer}
 .cf-live{fill:none;stroke:#0a0a0a;stroke-width:1.6;stroke-dasharray:5 4;opacity:.6}
 
-.cf-edge-label{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;background:#fff;border:1px solid #ececec;border-radius:6px;padding:1px 7px;font-size:11px;color:#555;white-space:nowrap;cursor:text;display:flex;align-items:center;gap:3px;max-width:170px;overflow:hidden;font-family:'Orchid','Noto Serif TC',serif}
+.cf-edge-label{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;background:#fff;border:1px solid #e0e0e0;border-radius:7px;padding:2px 8px;font-size:11px;color:#555;white-space:nowrap;cursor:text;display:flex;align-items:center;gap:3px;max-width:170px;overflow:hidden;font-family:'Orchid','Noto Serif TC',serif;box-shadow:0 1px 5px rgba(0,0,0,0.07)}
 .cf-edge-label.editing{border-color:#0a0a0a;color:#0a0a0a;overflow:visible}
 .cf-el-text{outline:none;min-width:8px}
-.cf-el-sign{font-weight:600}
-.cf-el-sign.pos{color:#4f7a5e}
-.cf-el-sign.neg{color:#b3564a}
+.cf-el-sign{font-size:15px;font-weight:700;line-height:1}
+.cf-el-sign.pos{color:#3a6e4e}
+.cf-el-sign.neg{color:#a03030}
+.cf-node.multi-sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.22)}
+#cf-lasso{position:absolute;border:1.5px dashed #4a88dd;background:rgba(74,136,221,0.06);border-radius:3px;pointer-events:none;display:none;z-index:5}
 
 .cf-empty{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#c8c8c8;font-size:13.5px;line-height:2.05;letter-spacing:.03em;pointer-events:none;max-width:440px}
 .cf-empty b{display:block;font-size:15px;color:#9a9a9a;margin-bottom:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:400}
@@ -179,6 +181,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
     <svg id="cf-edges"></svg>
     <div id="cf-nodes"></div>
     <div id="cf-labels"></div>
+    <div id="cf-lasso"></div>
     <div id="cf-node-tools" class="cf-tools">
       <div class="cf-tool del" data-act="del" title="Delete node (Del)">✕</div>
     </div>
@@ -353,7 +356,7 @@ function toggleFeed() {
 
 // ── Graph state ────────────────────────────────────────────
 let G = emptyGraph();
-let _sel = null, _editing = false, _els = {};
+let _sel = null, _editing = false, _els = {}, _multiSel = new Set();
 const canvas = document.getElementById('cf-canvas');
 const world  = document.getElementById('cf-world');
 const svg = document.getElementById('cf-edges');
@@ -458,7 +461,7 @@ function buildNodes() {
   nodesLayer.innerHTML = ''; _els = {};
   G.nodes.forEach(n => {
     const d = document.createElement('div');
-    d.className = 'cf-node' + (_sel&&_sel.type==='node'&&_sel.id===n.id?' sel':'');
+    d.className = 'cf-node' + (_sel&&_sel.type==='node'&&_sel.id===n.id?' sel':'') + (_multiSel.has(n.id)?' multi-sel':'');
     d.style.left = n.x+'px'; d.style.top = n.y+'px'; d.dataset.nodeId = n.id;
     const sp = document.createElement('span'); sp.className = 'cf-node-text'; sp.textContent = n.text; d.appendChild(sp);
     ['t','r','b','l'].forEach(side => { const p=document.createElement('div'); p.className='cf-port '+side; p.addEventListener('pointerdown',ev=>startConnect(n.id,ev)); d.appendChild(p); });
@@ -502,6 +505,7 @@ function renderAll() { buildNodes(); drawEdges(); placeTools(); updateChrome(); 
 
 function select(sel) {
   _sel = sel;
+  if (!sel) { _multiSel.clear(); Object.values(_els).forEach(el=>el.classList.remove('multi-sel')); }
   Object.entries(_els).forEach(([id,el]) => el.classList.toggle('sel', !!sel&&sel.type==='node'&&sel.id===id));
   drawEdges(); placeTools();
 }
@@ -536,6 +540,24 @@ function setPolarity(id, pol) { const e=byEdge(id); if(!e)return; e.pol=(e.pol==
 function onNodeDown(id, ev) {
   if (_editing) return;
   ev.preventDefault();
+  // multi-node drag
+  if (_multiSel.size > 1 && _multiSel.has(id)) {
+    const sx=ev.clientX, sy=ev.clientY;
+    const origins={};
+    _multiSel.forEach(nid=>{ const n=byNode(nid); if(n) origins[nid]={x:n.x,y:n.y}; });
+    let moved=false;
+    function mv(e) {
+      const dx=(e.clientX-sx)/vt.s, dy=(e.clientY-sy)/vt.s;
+      if(Math.abs(dx)+Math.abs(dy)>2) moved=true;
+      _multiSel.forEach(nid=>{ const n=byNode(nid),el=_els[nid]; if(!n||!origins[nid])return; n.x=Math.max(0,origins[nid].x+dx); n.y=Math.max(0,origins[nid].y+dy); if(el){el.style.left=n.x+'px';el.style.top=n.y+'px';} });
+      drawEdges();
+    }
+    function up() { document.removeEventListener('pointermove',mv); document.removeEventListener('pointerup',up); if(moved)save(); }
+    document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
+    return;
+  }
+  // single node
+  _multiSel.clear(); Object.values(_els).forEach(el=>el.classList.remove('multi-sel'));
   select({type:'node',id});
   const n=byNode(id), el=_els[id];
   const sx=ev.clientX, sy=ev.clientY, ox=n.x, oy=n.y; let moved=false;
@@ -588,11 +610,38 @@ function editEdgeLabel(id) {
 }
 
 // ── canvas-level interactions ──
+const lasso = document.getElementById('cf-lasso');
 canvas.addEventListener('pointerdown', e => {
   if (e.target.closest('.cf-node')||e.target.closest('.cf-tools')||e.target.closest('.cf-edge-label')||e.target.closest('#cf-zoom-ctrl')) return;
   const hit = e.target.closest('[data-edge]');
   if (hit) { select({type:'edge',id:hit.dataset.edge}); return; }
-  // pan on background
+
+  // Shift+drag → lasso select
+  if (e.shiftKey) {
+    e.preventDefault();
+    const w0=s2w(e.clientX,e.clientY); let wx1=w0.x, wy1=w0.y;
+    lasso.style.cssText='display:block;left:'+w0.x+'px;top:'+w0.y+'px;width:0;height:0';
+    function mvL(ev) {
+      const w=s2w(ev.clientX,ev.clientY); wx1=w.x; wy1=w.y;
+      const x=Math.min(w0.x,wx1),y=Math.min(w0.y,wy1);
+      lasso.style.left=x+'px'; lasso.style.top=y+'px';
+      lasso.style.width=Math.abs(wx1-w0.x)+'px'; lasso.style.height=Math.abs(wy1-w0.y)+'px';
+    }
+    function upL() {
+      document.removeEventListener('pointermove',mvL); document.removeEventListener('pointerup',upL);
+      lasso.style.display='none';
+      const x=Math.min(w0.x,wx1),y=Math.min(w0.y,wy1),x2=Math.max(w0.x,wx1),y2=Math.max(w0.y,wy1);
+      _multiSel.clear(); _sel=null;
+      G.nodes.forEach(n=>{
+        if(n.x<x2&&n.x+(n._w||80)>x&&n.y<y2&&n.y+(n._h||40)>y) _multiSel.add(n.id);
+      });
+      buildNodes(); updateChrome();
+    }
+    document.addEventListener('pointermove',mvL); document.addEventListener('pointerup',upL);
+    return;
+  }
+
+  // plain drag → pan
   const sx=e.clientX, sy=e.clientY, ox=vt.x, oy=vt.y; let panned=false;
   function mv(ev) {
     const dx=ev.clientX-sx, dy=ev.clientY-sy;
