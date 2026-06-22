@@ -154,7 +154,7 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
 .mt-btn:hover:not(.active){color:#eee}
 #energy-ui{display:none;position:absolute;inset:0;z-index:15;pointer-events:none}
 #energy-ui>*{pointer-events:auto}
-#en-left{position:absolute;left:0;top:0;bottom:0;width:280px;background:rgba(8,10,16,0.96);border-right:none;overflow-y:auto;backdrop-filter:blur(20px);z-index:4;font-size:12px;box-shadow:4px 0 32px rgba(0,0,0,0.4)}
+#en-left{position:absolute;left:0;top:0;bottom:0;width:280px;background:rgba(8,10,16,0.96);border-right:none;overflow-y:auto;overflow-x:hidden;backdrop-filter:blur(20px);z-index:4;font-size:12px;box-shadow:4px 0 32px rgba(0,0,0,0.4)}
 #en-font-ctrl{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:4px;padding:13px 20px;background:rgba(8,10,16,0.98);border-bottom:1px solid rgba(255,255,255,0.05)}
 .en-ph-mode{font-size:11px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:.18em;font-family:Consolas,monospace}
 #en-font-ctrl button{width:26px;height:22px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.5);font-size:11px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:Consolas,monospace;transition:all .2s ease}
@@ -164,7 +164,7 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
 #en-left::-webkit-scrollbar-track{background:transparent}
 #en-left::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:3px}
 #en-left::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.12)}
-#en-right{position:absolute;right:0;top:0;bottom:0;width:340px;background:rgba(8,10,16,0.96);border-left:none;overflow-y:auto;backdrop-filter:blur(20px);z-index:4;box-shadow:-4px 0 32px rgba(0,0,0,0.4)}
+#en-right{position:absolute;right:0;top:0;bottom:0;width:340px;background:rgba(8,10,16,0.96);border-left:none;overflow-y:auto;overflow-x:hidden;backdrop-filter:blur(20px);z-index:4;box-shadow:-4px 0 32px rgba(0,0,0,0.4)}
 #en-right::-webkit-scrollbar{width:3px}
 #en-right::-webkit-scrollbar-track{background:transparent}
 #en-right::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:3px}
@@ -524,7 +524,8 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
     <div id="en-drag-left" class="en-drag"></div>
     <div id="en-drag-right" class="en-drag"></div>
     <div id="en-left">
-      <div id="en-font-ctrl"><span class="en-ph-mode">Energy</span><span id="en-clock" style="color:rgba(255,255,255,0.3);font-size:10px;font-family:Consolas,monospace"></span></div>
+      <div id="en-font-ctrl"><span class="en-ph-mode">Energy</span><div style="display:flex;align-items:center;gap:5px"><button onclick="setEnFontScale(-1)">−</button><span id="en-fs-lbl" style="min-width:28px;text-align:center">100%</span><button onclick="setEnFontScale(1)">+</button></div><span id="en-clock" style="color:rgba(255,255,255,0.3);font-size:10px;font-family:Consolas,monospace"></span></div>
+      <div id="en-left-body">
       <div class="en-sec">
         <div class="en-sec-head"><span class="en-sec-title">Layers / Legend</span><div class="en-sec-btns"><button class="en-sec-btn" onclick="enLayerAll(true)">ALL</button><button class="en-sec-btn" onclick="enLayerAll(false)">NONE</button></div></div>
         <div id="en-layers">
@@ -572,8 +573,10 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
         <div class="en-sec-head"><span class="en-sec-title" style="color:#c050e0">⊕ Crisis Zones (38)</span></div>
         <div id="en-crisis-list"></div>
       </div>
+      </div><!-- /en-left-body -->
     </div>
     <div id="en-right">
+      <div id="en-right-body">
       <div id="hub-detail"></div>
       <div id="oil-panel">
         <div class="op-head"><span class="op-live"></span>能源即時報價</div>
@@ -583,9 +586,10 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
         <div class="op-item" data-c="rbob"><div class="op-item-top"><span class="op-name">RBOB Gasoline</span><span class="op-price" id="op-rbob">$2.18</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-rbob-chg">+0.03</span><span class="op-pct op-up" id="op-rbob-pct">(+1.39%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-rbob" class="op-spark" width="300" height="52"></canvas></div>
         <div class="op-item" data-c="jet"><div class="op-item-top"><span class="op-name">Jet Fuel</span><span class="op-price" id="op-jet">$3.02</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-jet-chg">+0.05</span><span class="op-pct op-up" id="op-jet-pct">(+1.68%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-jet" class="op-spark" width="300" height="52"></canvas></div>
         <div class="op-ts" id="op-ts">Updated: --</div>
-        <div class="op-ts" id="op-src">⏳ Connecting...</div>
+        <div class="op-ts" id="op-src">Connecting...</div>
       </div>
       <button id="theme-toggle" onclick="toggleThemeFloat()">地球主題 <span id="theme-toggle-name">Black Marble</span></button>
+      </div><!-- /en-right-body -->
     </div>
     <div id="en-theme-float" style="display:none">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:10px;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:.16em;font-family:Consolas,monospace">地球主題</span><button class="en-sec-btn" onclick="toggleThemeFloat()" style="font-size:14px;cursor:pointer;background:none;border:none;color:rgba(255,255,255,0.4)">✕</button></div>
@@ -3798,6 +3802,19 @@ function toggleThemeFloat(){
   p.style.display=p.style.display==='none'?'block':'none';
 }
 window.toggleThemeFloat=toggleThemeFloat;
+
+let enFontScale=1.0;
+function setEnFontScale(dir){
+  enFontScale=Math.round(Math.max(0.75,Math.min(1.4,enFontScale+dir*0.1))*10)/10;
+  const z=enFontScale;
+  const lb=document.getElementById('en-left-body');
+  const rb=document.getElementById('en-right-body');
+  if(lb)lb.style.zoom=z;
+  if(rb)rb.style.zoom=z;
+  const lbl=document.getElementById('en-fs-lbl');
+  if(lbl)lbl.textContent=Math.round(z*100)+'%';
+}
+window.setEnFontScale=setEnFontScale;
 
 (function oilTicker(){
   const items=[
