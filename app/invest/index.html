@@ -91,6 +91,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-group-box.drag-over{border-color:#0a0a0a!important;background:rgba(10,10,10,0.05)!important;box-shadow:0 0 0 2px rgba(10,10,10,0.07);transform:scale(1.01);transition:all .12s}
 .iv-feed-head{padding:32px 24px 20px;display:flex;align-items:center;justify-content:space-between}
 .iv-feed-title{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Ochrid',serif}
+.iv-feed-title .iv-ft-crumb{color:#888}
+.iv-feed-title .iv-ft-sep{color:#ccc;margin:0 5px;font-weight:400}
+.iv-feed-title .iv-ft-sub{color:#0a0a0a;font-weight:500}
 .iv-feed-count{font-size:10px;color:#bbb;font-family:'Ochrid',serif}
 .iv-feed-del{font-size:9px;color:#ccc;cursor:pointer;font-family:'Ochrid',serif;letter-spacing:.06em;text-transform:uppercase;transition:color .15s ease,border-color .15s ease;padding:3px 8px;border:1px solid #e8e8e8;border-radius:6px;display:none}
 .iv-feed-del:hover{color:#b55;border-color:#daa}
@@ -107,9 +110,11 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-feed-card:hover{background:#f8f8f8;border-color:#ccc;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.04)}
 .iv-feed-card.active{border-color:#0a0a0a;background:#fff}
 .iv-fc-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;font-family:'Ochrid',serif}
+.iv-fc-sub{text-transform:none;color:#888;letter-spacing:.02em;font-size:10px}
 .iv-fc-title{font-size:14px;color:#0a0a0a;font-weight:500;margin-bottom:8px;line-height:1.5;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-fc-preview{font-size:12px;color:#0a0a0a;line-height:1.6;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:'Ochrid','Noto Serif TC',serif}
-.iv-fc-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:#bbb;font-family:'Ochrid',serif}
+.iv-fc-meta{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:10px;color:#bbb;font-family:'Ochrid',serif}
+.iv-fc-author{font-size:12.5px;color:#555;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-fc-imgs{display:flex;gap:4px;margin-top:8px;overflow:hidden}
 .iv-fc-img-t{width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #f0f0f0;flex-shrink:0}
 
@@ -120,6 +125,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-fd-edit{font-size:10px;color:#888;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;font-family:'Ochrid',serif;padding:3px 10px;border-radius:6px;border:1px solid #ddd;transition:all .15s ease}
 .iv-fd-edit:hover{color:#0a0a0a;border-color:#bbb;background:#f5f5f5}
 .iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Ochrid',serif}
+.iv-fd-sub{text-transform:none;color:#888;letter-spacing:.02em;font-size:11px}
 .iv-fd-title{font-size:calc(var(--iv-art-fz,13px) * 1.385);color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Ochrid',serif}
 .iv-fd-body{font-size:var(--iv-art-fz,13px);color:#0a0a0a;line-height:1.9;font-weight:400;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-md h1,.iv-md h2,.iv-md h3{font-family:'Ochrid','Noto Serif TC',serif;color:#0a0a0a;margin:1.2em 0 .4em;font-weight:500;line-height:1.4}
@@ -249,7 +255,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
   <div class="iv-resize-handle" id="iv-rh1"></div>
   <div id="iv-feed">
     <div class="iv-feed-head">
-      <span class="iv-feed-title">Feed</span>
+      <span class="iv-feed-title" id="iv-feed-title">Feed</span>
       <div style="display:flex;align-items:center;gap:10px">
         <span class="iv-fz-ctrl"><span class="iv-fz-btn iv-fz-minus" onclick="ivFontStep(-1)" title="Smaller article text">A−</span><span class="iv-fz-btn iv-fz-plus" onclick="ivFontStep(1)" title="Larger article text">A+</span></span>
         <span class="iv-feed-del" id="iv-feed-del" onclick="ivRemoveActiveTag()">Delete tag</span>
@@ -669,13 +675,29 @@ function ivCardHTML(e,layerLabel){
   const imgs=e.images&&e.images.length?`<div class="iv-fc-imgs">${e.images.slice(0,4).map(b=>`<img class="iv-fc-img-t" src="${b}">`).join('')}</div>`:'';
   const sbg=e.severity&&SCOLORS[e.severity]?`background:${SCOLORS[e.severity]}28;`:'';
   const preview=ivStripMd(e.content);
-  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${preview}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span>${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}${e.sub?` <span class="iv-fc-sub">· ${e.sub}</span>`:''}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${preview}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span class="iv-fc-author">${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
 }
 function _ivBySeverity(a,b){return (b.severity||0)-(a.severity||0) || (b.ts||'').localeCompare(a.ts||'');}
+function ivFeedTitleHTML(){
+  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  if(_ivActiveTag){
+    let h=`<span class="iv-ft-crumb">${esc(_ivActiveTag.title)}</span>`;
+    if(_ivActiveSub)h+=`<span class="iv-ft-sep">›</span><span class="iv-ft-sub">${esc(_ivActiveSub)}</span>`;
+    return h;
+  }
+  if(_ivActiveGroup){
+    const g=(_ivGroups[_ivActiveGroup.layer]||[]).find(x=>x.id===_ivActiveGroup.id);
+    return `<span class="iv-ft-crumb">${esc(g?g.name:'Group')}</span>`;
+  }
+  if(_ivActiveLayer)return `<span class="iv-ft-crumb">${esc(LN[_ivActiveLayer])}</span>`;
+  return 'Feed';
+}
 function ivRenderFeed(){
   const list=document.getElementById('iv-feed-list');
   const detail=document.getElementById('iv-feed-detail');
   const cntEl=document.getElementById('iv-feed-cnt');
+  const titleEl=document.getElementById('iv-feed-title');
+  if(titleEl)titleEl.innerHTML=ivFeedTitleHTML();
   detail.style.display='none';list.style.display='';
   const delBtn=document.getElementById('iv-feed-del');
   if(delBtn)delBtn.style.display=_ivActiveTag?'inline':'none';
@@ -737,7 +759,7 @@ function ivShowDetail(id){
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
   const mdBody=ivRenderContent(e.content||'');
-  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div></div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:10px;color:#bbb;margin-bottom:14px;font-family:'Ochrid',serif">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
+  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Ochrid','Noto Serif TC',serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
 }
 function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 
