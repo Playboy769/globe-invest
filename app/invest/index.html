@@ -46,6 +46,12 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-tag{padding:6px 12px;background:#fff;border:1px solid #ddd;border-radius:8px;font-size:11px;color:#555;font-weight:400;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:6px;font-family:'Ochrid','Noto Serif TC',serif}
 .iv-tag:hover{background:#f5f5f5;color:#0a0a0a;border-color:#bbb}
 .iv-tag.active{background:#0a0a0a;color:#fff;border-color:#0a0a0a}
+.iv-subfeed-bar{display:none}
+.iv-sub-wrap{display:inline-flex;align-items:center;gap:4px;margin-left:1px}
+.iv-sub-arrow{color:#ccc;font-size:12px;user-select:none;margin-right:1px}
+.iv-subtag{padding:2px 8px;border-radius:6px;font-size:10px;color:#7a7a7a;cursor:pointer;transition:all .14s cubic-bezier(.4,0,.2,1);font-family:'Ochrid','Noto Serif TC',serif;background:#f2f2f2;user-select:none;letter-spacing:.01em}
+.iv-subtag:hover{filter:brightness(.94);color:#0a0a0a}
+.iv-subtag.active{color:#1a1a1a;font-weight:500}
 /* ── Group boxes ── */
 .iv-group-area{display:flex;flex-direction:column;gap:5px;margin-top:8px}
 .iv-group-box{border:1px solid #e4e4e4;border-radius:9px;padding:9px 11px 8px;position:relative;transition:border-color .18s ease,background .18s ease;background:rgba(255,255,255,0.55)}
@@ -223,14 +229,17 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
       <div class="iv-ring macro" id="iv-ring-macro">
         <div class="iv-ring-label" onclick="ivSelectLayer('macro')"><span>Macro Narrative</span><span class="iv-ring-count" id="iv-cnt-macro">0</span></div>
         <div class="iv-tag-list" id="iv-tags-macro"></div>
+        <div class="iv-subfeed-bar" id="iv-subs-macro"></div>
         <div class="iv-group-area" id="iv-ga-macro"></div>
         <div class="iv-ring risk" id="iv-ring-risk" style="margin-top:14px">
           <div class="iv-ring-label" onclick="ivSelectLayer('risk')"><span>Implied Risk</span><span class="iv-ring-count" id="iv-cnt-risk">0</span></div>
           <div class="iv-tag-list" id="iv-tags-risk"></div>
+          <div class="iv-subfeed-bar" id="iv-subs-risk"></div>
           <div class="iv-group-area" id="iv-ga-risk"></div>
           <div class="iv-ring industry" id="iv-ring-industry" style="margin-top:14px">
             <div class="iv-ring-label" onclick="ivSelectLayer('industry')"><span>Industry Narrative</span><span class="iv-ring-count" id="iv-cnt-industry">0</span></div>
             <div class="iv-tag-list" id="iv-tags-industry"></div>
+            <div class="iv-subfeed-bar" id="iv-subs-industry"></div>
             <div class="iv-group-area" id="iv-ga-industry"></div>
           </div>
         </div>
@@ -301,6 +310,11 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
           <input class="iv-ed-input" id="iv-ed-date" type="date">
         </div>
       </div>
+      <div class="iv-ed-field">
+        <div class="iv-ed-label">Sub-feed <span style="color:#ccc;text-transform:none;letter-spacing:0;font-size:9px">optional</span></div>
+        <input class="iv-ed-input" id="iv-ed-sub" list="iv-sub-list" placeholder="e.g. Capex, Regulation, Supply…" autocomplete="off" onfocus="ivRefreshSubList()">
+        <datalist id="iv-sub-list"></datalist>
+      </div>
       <div class="iv-ed-row">
         <div class="iv-ed-field">
           <div class="iv-ed-label">Author</div>
@@ -351,11 +365,11 @@ function _ivSave(){
     if(!Array.isArray(d.macro)||!Array.isArray(d.risk)||!Array.isArray(d.industry))return;
     const st=d.macro.length+d.risk.length+d.industry.length;
     const lt=_ivStore.macro.length+_ivStore.risk.length+_ivStore.industry.length;
-    if(st>lt){Object.assign(_ivStore,{macro:d.macro,risk:d.risk,industry:d.industry});try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}ivRenderTags();ivRenderFeed();}
+    if(st>lt){Object.assign(_ivStore,{macro:d.macro,risk:d.risk,industry:d.industry});try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}ivRenderTags();ivRenderSubs();ivRenderFeed();}
   }catch(e){}
 })();
 
-let _ivActiveTag=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null;
+let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null;
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}}
 let _ivPendingImages=[];
@@ -431,19 +445,20 @@ function ivSubmitEntry(){
   const ts=document.getElementById('iv-ed-date').value||new Date().toISOString().slice(0,10);
   const author=document.getElementById('iv-ed-author').value.trim();
   const source=document.getElementById('iv-ed-source').value.trim();
+  const sub=document.getElementById('iv-ed-sub').value.trim();
   if(_ivEditingId){
     const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
     const e=all.find(x=>x.id===_ivEditingId);
-    if(e)Object.assign(e,{title,content,ts,author,source,severity:_ivSevVal,images:[..._ivPendingImages]});
-    _ivSave();ivClearEditor();ivRenderTags();ivRenderFeed();
+    if(e)Object.assign(e,{title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages]});
+    _ivSave();ivClearEditor();ivRenderTags();ivRenderSubs();ivRenderFeed();
   }else{
-    _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,severity:_ivSevVal,images:[..._ivPendingImages]});
+    _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages]});
     _ivSave();ivClearEditor();ivRenderTags();
-    _ivActiveTag={layer,title};_ivActiveLayer=null;ivRenderLayers();ivRenderFeed();
+    _ivActiveTag={layer,title};_ivActiveSub=null;_ivActiveLayer=null;ivRenderLayers();ivRenderSubs();ivRenderFeed();
   }
 }
 function ivClearEditor(){
-  ['iv-ed-title','iv-ed-content','iv-ed-author','iv-ed-source','iv-ed-date'].forEach(id=>document.getElementById(id).value='');
+  ['iv-ed-title','iv-ed-content','iv-ed-author','iv-ed-source','iv-ed-date','iv-ed-sub'].forEach(id=>document.getElementById(id).value='');
   _ivPendingImages=[];ivRenderPendingImages();
   _ivEditingId=null;
   const sb=document.getElementById('iv-submit-btn');if(sb)sb.textContent='Save';
@@ -456,6 +471,7 @@ function ivEditEntry(id){
   document.getElementById('iv-ed-content').value=e.content;
   document.getElementById('iv-ed-author').value=e.author||'';
   document.getElementById('iv-ed-source').value=e.source||'';
+  document.getElementById('iv-ed-sub').value=e.sub||'';
   document.getElementById('iv-ed-date').value=e.ts;
   _ivPendingImages=[...(e.images||[])];ivRenderPendingImages();
   const sev=e.severity||1;_ivSevVal=sev;
@@ -481,18 +497,51 @@ function ivRenderTags(){
       const style=sc?(active?`background:${sc};border-color:rgba(0,0,0,0.3);color:#222`:`background:${sc};border-color:transparent;color:#4a4a4a`):'';
       const cls=`iv-tag${active&&!sc?' active':''}`;
       const escH=t.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-      return `<div class="${cls}" draggable="true" data-layer="${layer}" data-title="${escH}"${style?` style="${style}"`:''}  onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span></div>`;
+      const subInline=active?ivSubChipsHTML(layer,t):'';
+      return `<div class="${cls}" draggable="true" data-layer="${layer}" data-title="${escH}"${style?` style="${style}"`:''}  onclick="ivSelectTag('${layer}','${t.replace(/'/g,"\\'")}')"><span>${t}</span></div>`+subInline;
     }).join('');
   });
 }
-function ivSelectTag(layer,title){_ivActiveTag={layer,title};_ivActiveLayer=null;_ivActiveGroup=null;ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderFeed();}
-function ivSelectLayer(layer){if(_ivActiveLayer===layer){_ivActiveLayer=null;}else{_ivActiveLayer=layer;}_ivActiveTag=null;_ivActiveGroup=null;ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderFeed();}
+/* ── Sub-feeds (filterable sub-tags, rendered inline right after their parent tag) ── */
+function ivSubChipsHTML(layer,title){
+  const entries=_ivStore[layer].filter(e=>e.title===title);
+  const subs=[...new Set(entries.map(e=>(e.sub||'').trim()).filter(Boolean))];
+  if(!subs.length)return '';
+  const maxSev=entries.reduce((m,e)=>Math.max(m,e.severity||0),0);
+  const sc=maxSev?SCOLORS[maxSev]:null;
+  const tJs=title.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const chips=subs.map(s=>{
+    const active=_ivActiveSub===s;
+    let style='';
+    if(sc)style=active?`background:${sc}cc;color:#1f1f1f`:`background:${sc}4d;color:#6f6f6f`;
+    const esJs=s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    const esH=s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    return `<span class="iv-subtag${active?' active':''}"${style?` style="${style}"`:''} onclick="event.stopPropagation();ivSelectSub('${layer}','${tJs}','${esJs}')">${esH}</span>`;
+  }).join('');
+  return `<span class="iv-sub-wrap"><span class="iv-sub-arrow">›</span>${chips}</span>`;
+}
+function ivRenderSubs(){['macro','risk','industry'].forEach(l=>{const b=document.getElementById('iv-subs-'+l);if(b)b.innerHTML='';});}
+function ivSelectSub(layer,title,sub){
+  if(_ivActiveSub===sub&&_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title){_ivActiveSub=null;}
+  else{_ivActiveTag={layer,title};_ivActiveSub=sub;_ivActiveLayer=null;}
+  ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderFeed();
+}
+function ivRefreshSubList(){
+  const dl=document.getElementById('iv-sub-list');if(!dl)return;
+  const cur=(document.getElementById('iv-ed-title').value||'').trim();
+  let pool=_ivStore[_ivLayerVal]||[];
+  if(cur)pool=pool.filter(e=>e.title===cur);
+  const subs=[...new Set(pool.map(e=>(e.sub||'').trim()).filter(Boolean))];
+  dl.innerHTML=subs.map(s=>`<option value="${s.replace(/"/g,'&quot;')}"></option>`).join('');
+}
+function ivSelectTag(layer,title){_ivActiveTag={layer,title};_ivActiveSub=null;_ivActiveLayer=null;_ivActiveGroup=null;ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderSubs();ivRenderFeed();}
+function ivSelectLayer(layer){if(_ivActiveLayer===layer){_ivActiveLayer=null;}else{_ivActiveLayer=layer;}_ivActiveTag=null;_ivActiveSub=null;_ivActiveGroup=null;ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderSubs();ivRenderFeed();}
 function ivRenderLayers(){['macro','risk','industry'].forEach(l=>{const r=document.getElementById('iv-ring-'+l);if(r)r.classList.toggle('layer-active',_ivActiveLayer===l);});}
 function ivRemoveActiveTag(){if(_ivActiveTag)ivRemoveTag(_ivActiveTag.layer,_ivActiveTag.title);}
 function ivRemoveTag(layer,title){
   _ivStore[layer]=_ivStore[layer].filter(e=>e.title!==title);_ivSave();
-  if(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title)_ivActiveTag=null;
-  ivRenderTags();ivRenderFeed();
+  if(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title){_ivActiveTag=null;_ivActiveSub=null;}
+  ivRenderTags();ivRenderSubs();ivRenderFeed();
 }
 
 /* ── Groups ── */
@@ -509,7 +558,8 @@ function ivRenderGroups(){
       const pills=(g.titles||[]).map(t=>{
         const isTagActive=isActive&&_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===t;
         const es=t.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-        return `<div class="iv-gpill${isTagActive?' gpill-active':''}" onclick="event.stopPropagation();ivSelectGroupTag('${layer}','${g.id}','${es}')"><span>${t}</span><span class="iv-gpill-x" onclick="event.stopPropagation();ivGroupRemoveTitle('${layer}','${g.id}','${es}')">×</span></div>`;
+        const subInline=(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===t)?ivSubChipsHTML(layer,t):'';
+        return `<div class="iv-gpill${isTagActive?' gpill-active':''}" onclick="event.stopPropagation();ivSelectGroupTag('${layer}','${g.id}','${es}')"><span>${t}</span><span class="iv-gpill-x" onclick="event.stopPropagation();ivGroupRemoveTitle('${layer}','${g.id}','${es}')">×</span></div>`+subInline;
       }).join('');
       box.innerHTML=`<div class="iv-group-hdr" onclick="ivSelectGroup('${layer}','${g.id}')">
         <span class="iv-group-hdr-name" ondblclick="event.stopPropagation();ivRenameGroup('${layer}','${g.id}',this)">${g.name}</span>
@@ -574,12 +624,12 @@ function ivRenameGroup(layer,id,nameEl){
 }
 function ivSelectGroup(layer,id){
   if(_ivActiveGroup&&_ivActiveGroup.layer===layer&&_ivActiveGroup.id===id){_ivActiveGroup=null;}
-  else{_ivActiveGroup={layer,id};_ivActiveLayer=null;_ivActiveTag=null;ivRenderLayers();}
-  ivRenderTags();ivRenderGroups();ivRenderFeed();
+  else{_ivActiveGroup={layer,id};_ivActiveLayer=null;_ivActiveTag=null;_ivActiveSub=null;ivRenderLayers();}
+  ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();
 }
 function ivSelectGroupTag(layer,groupId,title){
-  _ivActiveGroup={layer,id:groupId};_ivActiveTag={layer,title};_ivActiveLayer=null;
-  ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderFeed();
+  _ivActiveGroup={layer,id:groupId};_ivActiveTag={layer,title};_ivActiveSub=null;_ivActiveLayer=null;
+  ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderSubs();ivRenderFeed();
 }
 function ivGroupOpenPicker(layer,groupId,btn){
   document.querySelectorAll('.iv-tag-picker-drop').forEach(d=>d.remove());
@@ -630,7 +680,9 @@ function ivRenderFeed(){
   const delBtn=document.getElementById('iv-feed-del');
   if(delBtn)delBtn.style.display=_ivActiveTag?'inline':'none';
   if(_ivActiveTag){
-    const entries=_ivStore[_ivActiveTag.layer].filter(e=>e.title===_ivActiveTag.title).sort(_ivBySeverity);
+    let entries=_ivStore[_ivActiveTag.layer].filter(e=>e.title===_ivActiveTag.title);
+    if(_ivActiveSub)entries=entries.filter(e=>(e.sub||'')===_ivActiveSub);
+    entries=entries.sort(_ivBySeverity);
     cntEl.textContent=entries.length+' entries';
     if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries yet</div>';return;}
     list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveTag.layer])).join('');return;
@@ -781,30 +833,36 @@ function ivRenderWeekStrip(animate=true){
   }).join('');
   requestAnimationFrame(()=>ivScrollActiveIntoCenter(animate));
 }
-/* drag-to-scroll with momentum */
+/* drag-to-scroll with momentum + wheel; distinguishes click from drag */
 (function ivStripDrag(){
-  let startX=0,startScroll=0,vel=0,lastX=0,lastT=0,dragging=false,rafId=0;
+  let startX=0,startScroll=0,vel=0,lastX=0,lastT=0,down=false,moved=false,rafId=0,justDragged=false;
+  const THRESH=4; /* px before a press counts as a drag (so a click stays a click) */
+  const getStrip=()=>document.getElementById('iv-week-strip');
   function onDown(e){
-    const strip=document.getElementById('iv-week-strip');if(!strip)return;
-    dragging=true;strip.classList.add('is-dragging');
+    const strip=getStrip();if(!strip)return;
+    down=true;moved=false;
     startX=e.pageX??e.touches?.[0]?.pageX;
     startScroll=strip.scrollLeft;lastX=startX;lastT=performance.now();vel=0;
     cancelAnimationFrame(rafId);
-    e.preventDefault();
   }
   function onMove(e){
-    if(!dragging)return;
-    const strip=document.getElementById('iv-week-strip');if(!strip)return;
+    if(!down)return;
+    const strip=getStrip();if(!strip)return;
     const x=e.pageX??e.touches?.[0]?.pageX;
-    const now=performance.now();const dt=now-lastT||1;
-    vel=(x-lastX)/dt*16; /* px per frame @60fps */
+    if(!moved){
+      if(Math.abs(x-startX)<THRESH)return; /* still a click, ignore */
+      moved=true;strip.classList.add('is-dragging');
+    }
+    const now=performance.now();const dt=now-lastT||16;
+    vel=Math.max(-40,Math.min(40,(x-lastX)/dt*16)); /* clamp so a flick can't fling weeks away */
     lastX=x;lastT=now;
     strip.scrollLeft=startScroll-(x-startX);
+    e.preventDefault();
   }
   function onUp(){
-    if(!dragging)return;dragging=false;
-    const strip=document.getElementById('iv-week-strip');
-    if(strip){strip.classList.remove('is-dragging');momentum(strip);}
+    if(!down)return;down=false;
+    const strip=getStrip();if(!strip)return;
+    if(moved){strip.classList.remove('is-dragging');justDragged=true;setTimeout(()=>{justDragged=false;},0);momentum(strip);}
   }
   function momentum(strip){
     if(Math.abs(vel)<0.4)return;
@@ -813,11 +871,18 @@ function ivRenderWeekStrip(animate=true){
     rafId=requestAnimationFrame(()=>momentum(strip));
   }
   document.addEventListener('mousedown',e=>{if(e.target.closest('#iv-week-strip'))onDown(e);},{passive:false});
-  document.addEventListener('mousemove',e=>{if(dragging)onMove(e);});
+  document.addEventListener('mousemove',e=>{if(down)onMove(e);});
   document.addEventListener('mouseup',onUp);
-  document.addEventListener('touchstart',e=>{if(e.target.closest('#iv-week-strip'))onDown(e);},{passive:false});
-  document.addEventListener('touchmove',e=>{if(dragging){onMove(e);e.preventDefault();}},{passive:false});
+  document.addEventListener('touchstart',e=>{if(e.target.closest('#iv-week-strip'))onDown(e);},{passive:true});
+  document.addEventListener('touchmove',e=>{if(down)onMove(e);},{passive:false});
   document.addEventListener('touchend',onUp);
+  /* swallow the click that fires right after a real drag, so it doesn't select a day */
+  document.addEventListener('click',e=>{if(justDragged&&e.target.closest('#iv-week-strip')){e.stopPropagation();e.preventDefault();}},true);
+  /* mouse wheel → horizontal scroll of the strip */
+  document.addEventListener('wheel',e=>{
+    const strip=e.target.closest('#iv-week-strip');if(!strip)return;
+    if(Math.abs(e.deltaY)>=Math.abs(e.deltaX)){strip.scrollLeft+=e.deltaY;e.preventDefault();}
+  },{passive:false});
 })();
 function ivSelectDay(ds){
   const note=document.getElementById('iv-daily-note');
@@ -890,7 +955,7 @@ function ivApplyFontSize(){
 }
 function ivFontStep(d){_ivArtFz=Math.max(10,Math.min(22,_ivArtFz+d));try{localStorage.setItem('iv_art_fz',_ivArtFz);}catch(e){}ivApplyFontSize();}
 
-ivRenderTags();ivRenderGroups();ivRenderFeed();ivApplyFontSize();
+ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();ivApplyFontSize();
 </script>
 </body>
 </html>
