@@ -59,9 +59,15 @@ async function fetchSymbol(sym) {
   const res = d.chart.result[0];
   const closes = res.indicators.quote[0].close.filter(v => v != null);
   const meta = res.meta;
+  // NOTE: meta.chartPreviousClose is the close BEFORE the requested range
+  // (~30 trading days ago for range=30d) → using it yields a MONTHLY change, not daily.
+  // These futures don't expose meta.previousClose, so derive the prior trading day's
+  // close from the 1d-interval series itself (second-to-last bar).
+  const prevClose = closes.length >= 2 ? closes[closes.length - 2]
+                  : (meta.chartPreviousClose || closes[closes.length - 1]);
   return {
     price: meta.regularMarketPrice || closes[closes.length - 1],
-    prev: meta.chartPreviousClose || closes[closes.length - 2],
+    prev: prevClose,
     hist: closes.slice(-30),
     currency: meta.currency || 'USD',
   };
