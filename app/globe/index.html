@@ -256,13 +256,6 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
 .em-nm{flex:1;color:rgba(255,255,255,0.7);font-weight:300;font-size:10.5px}
 .em-vol{color:rgba(74,170,221,0.7);font-weight:600;font-size:10px;font-family:Consolas,monospace}
 .em-alert{color:#e44;font-size:8px;margin-right:2px}
-#route-stats{position:absolute;top:10px;right:356px;background:rgba(8,10,16,0.92);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:14px 18px;z-index:6;font-family:Consolas,monospace;backdrop-filter:blur(20px);box-shadow:0 4px 24px rgba(0,0,0,0.3)}
-.rs-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.rs-title{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.14em;font-weight:300}
-.rs-tag{font-size:9px;padding:3px 8px;border:1px solid rgba(74,170,221,0.2);border-radius:6px;color:rgba(74,170,221,0.7);font-weight:400;cursor:pointer;transition:all .2s ease;letter-spacing:.04em}
-.rs-row{display:flex;justify-content:space-between;gap:24px;font-size:11px;padding:4px 0}
-.rs-lbl{color:rgba(255,255,255,0.5)}
-.rs-val{font-weight:600;font-size:13px;letter-spacing:.01em}
 .en-theme-grid{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .et-card{width:62px;text-align:center;cursor:pointer;opacity:.35;transition:all .2s ease}
 .et-card:hover,.et-card.active{opacity:1}
@@ -597,13 +590,6 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
         <div class="et-card" data-theme="geo" onclick="setEnTheme('geo')"><div class="et-img">🌍</div><div class="et-label">GOES East</div></div>
         <div class="et-card active" data-theme="night" onclick="setEnTheme('night')"><div class="et-img">🌑</div><div class="et-label">Black Marble</div></div>
       </div>
-    </div>
-    <div id="route-stats">
-      <div class="rs-head"><span class="rs-title">Routes</span><span class="rs-tag" id="rs-theme-tag">Black Marble</span></div>
-      <div class="rs-row"><span class="rs-lbl">Crude</span><span class="rs-val" style="color:#4488cc">32</span></div>
-      <div class="rs-row"><span class="rs-lbl">LNG</span><span class="rs-val" style="color:#44cc88">27</span></div>
-      <div class="rs-row"><span class="rs-lbl">Pipe</span><span class="rs-val" style="color:#cc8844">33</span></div>
-      <div class="rs-row"><span class="rs-lbl">Dis.</span><span class="rs-val" style="color:#dd3355">4</span></div>
     </div>
     <div id="en-hint">Drag · Scroll Zoom · Click Hub</div>
   </div>
@@ -3779,7 +3765,6 @@ function setEnTheme(key){
   const t=EN_THEMES[key];
   document.querySelectorAll('.et-card').forEach(c=>c.classList.toggle('active',c.dataset.theme===key));
   const nameEl=document.getElementById('en-theme-name');if(nameEl)nameEl.textContent=t.nm;
-  document.getElementById('rs-theme-tag').textContent=t.nm;
   const toggleName=document.getElementById('theme-toggle-name');if(toggleName)toggleName.textContent=t.nm;
   new THREE.TextureLoader().load(t.url,tex=>{
     if(gMesh){gMesh.material.map=tex;gMesh.material.needsUpdate=true;}
