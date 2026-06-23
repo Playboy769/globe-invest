@@ -143,8 +143,10 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-node.box-node[data-color="6"]{background:rgba(224,245,245,0.55);border-color:#30aaaa}
 
 .cf-edge{fill:none;stroke:#888;stroke-width:1.6;transition:stroke-width .12s ease}
+.cf-edge.spos{stroke:#2a7a44;stroke-width:2.4}
 .cf-edge.pos{stroke:#4f7a5e}
 .cf-edge.neg{stroke:#b3564a}
+.cf-edge.sneg{stroke:#8a2020;stroke-width:2.4}
 .cf-edge.eq{stroke:#c8a820}
 .cf-edge.sel{stroke-width:2.6}
 .cf-edge-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke;cursor:pointer}
@@ -157,8 +159,10 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-edge-label.editing{border-color:#0a0a0a;color:#0a0a0a;overflow:visible}
 .cf-el-text{outline:none;min-width:8px}
 .cf-el-sign{font-size:15px;font-weight:700;line-height:1}
+.cf-el-sign.spos{color:#2a7a44}
 .cf-el-sign.pos{color:#3a6e4e}
 .cf-el-sign.neg{color:#a03030}
+.cf-el-sign.sneg{color:#8a2020}
 .cf-el-sign.eq{color:#a08020}
 .cf-node.multi-sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.22)}
 .cf-node.traced-node{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.2)}
@@ -171,11 +175,15 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-tools.on{display:flex}
 .cf-tool{width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;font-size:13px;color:#999;transition:all .13s ease;user-select:none;font-family:'Orchid',serif}
 .cf-tool:hover{background:#f3f3f3;color:#0a0a0a}
+.cf-tool.spos{color:#2a7a44;font-weight:700;min-width:30px;width:auto;padding:0 4px}
 .cf-tool.pos{color:#4f7a5e}
 .cf-tool.neg{color:#b3564a}
+.cf-tool.sneg{color:#8a2020;font-weight:700;min-width:30px;width:auto;padding:0 4px}
 .cf-tool.active{background:#f0f0f0}
+.cf-tool.spos.active{background:#e8f4ed}
 .cf-tool.pos.active{background:#eef3ef}
 .cf-tool.neg.active{background:#f7ecea}
+.cf-tool.sneg.active{background:#f4e8e8}
 .cf-tool.del:hover{background:#f7ecea;color:#b3564a}
 .cf-tool.eq{color:#a08020}
 .cf-tool.eq.active{background:#fff8dc}
@@ -259,12 +267,20 @@ body.dark .cf-node.box-node[data-color="4"]{background:rgba(20,28,46,0.55);borde
 body.dark .cf-node.box-node[data-color="5"]{background:rgba(32,20,40,0.55);border-color:#603090}
 body.dark .cf-node.box-node[data-color="6"]{background:rgba(20,32,32,0.55);border-color:#207070}
 body.dark .cf-edge{stroke:#666}
+body.dark .cf-edge.spos{stroke:#3aaa5e;stroke-width:2.4}
 body.dark .cf-edge.pos{stroke:#5c9a6e}
 body.dark .cf-edge.neg{stroke:#c05050}
+body.dark .cf-edge.sneg{stroke:#e06060;stroke-width:2.4}
 body.dark .cf-edge.eq{stroke:#c8a820}
 body.dark .cf-edge-label{background:#1e1e1e;border-color:#383838;color:#aaa}
+body.dark .cf-el-sign.spos{color:#3aaa5e}
 body.dark .cf-el-sign.pos{color:#5c9a6e}
 body.dark .cf-el-sign.neg{color:#c05050}
+body.dark .cf-el-sign.sneg{color:#e06060}
+body.dark .cf-tool.spos{color:#3aaa5e}
+body.dark .cf-tool.sneg{color:#e06060}
+body.dark .cf-tool.spos.active{background:#1a3028}
+body.dark .cf-tool.sneg.active{background:#301a1a}
 body.dark .cf-tools{background:#1e1e1e;border-color:#383838;box-shadow:0 6px 22px rgba(0,0,0,0.4)}
 body.dark .cf-tool{color:#888}
 body.dark .cf-tool:hover{background:#2a2a2a;color:#e0e0e0}
@@ -409,9 +425,11 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-tool del" data-act="del" title="Delete node (Del)">✕</div>
     </div>
     <div id="cf-edge-tools" class="cf-tools">
-      <div class="cf-tool pos" data-pol="+" title="Positive / reinforcing (＋)">＋</div>
-      <div class="cf-tool neg" data-pol="-" title="Negative / opposing (－)">－</div>
+      <div class="cf-tool spos" data-pol="++" title="Strong positive (＋＋)">＋＋</div>
+      <div class="cf-tool pos" data-pol="+" title="Positive (＋)">＋</div>
       <div class="cf-tool eq" data-pol="=" title="Equal / unchanged (＝)">＝</div>
+      <div class="cf-tool neg" data-pol="-" title="Negative (－)">－</div>
+      <div class="cf-tool sneg" data-pol="--" title="Strong negative (－－)">－－</div>
       <div class="cf-tool-sep"></div>
       <div class="cf-tool delay-btn" data-act="delay" title="Delay marker (∼)">∼</div>
       <div class="cf-tool" data-act="label" title="Edit label">✎</div>
@@ -686,7 +704,7 @@ function getDEFS() {
   const dark = document.body.classList.contains('dark');
   const n=dark?'#777':'#888', p=dark?'#5c9a6e':'#4f7a5e', g=dark?'#c05050':'#b3564a';
   const mk=(id,fill)=>`<marker id="${id}" markerWidth="11" markerHeight="11" refX="8.5" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8.5,3.5 L0,7 Z" fill="${fill}"/></marker>`;
-  return '<defs>'+mk('cf-ah-neutral',n)+mk('cf-ah-pos',p)+mk('cf-ah-neg',g)+mk('cf-ah-eq','#c8a820')+mk('cf-ah-loop','#d45000')+'</defs>';
+  return '<defs>'+mk('cf-ah-neutral',n)+mk('cf-ah-spos','#2a7a44')+mk('cf-ah-pos',p)+mk('cf-ah-neg',g)+mk('cf-ah-sneg','#8a2020')+mk('cf-ah-eq','#c8a820')+mk('cf-ah-loop','#d45000')+'</defs>';
 }
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -780,10 +798,10 @@ function drawEdges() {
   G.edges.forEach(e=>{
     const en=edgeEnds(e); if(!en)return;
     const{p1,p2,c1,c2}=en;
-    const polCls=e.pol==='+'?'pos':e.pol==='-'?'neg':e.pol==='='?'eq':'';
+    const polCls=e.pol==='++'?'spos':e.pol==='+'?'pos':e.pol==='--'?'sneg':e.pol==='-'?'neg':e.pol==='='?'eq':'';
     const isLoop=_loopEdges.has(e.id);
     const isTraced=_traceEdges.has(e.id);
-    const ah=isLoop?'cf-ah-loop':(e.pol==='+'?'cf-ah-pos':e.pol==='-'?'cf-ah-neg':e.pol==='='?'cf-ah-eq':'cf-ah-neutral');
+    const ah=isLoop?'cf-ah-loop':(e.pol==='++'?'cf-ah-spos':e.pol==='+'?'cf-ah-pos':e.pol==='--'?'cf-ah-sneg':e.pol==='-'?'cf-ah-neg':e.pol==='='?'cf-ah-eq':'cf-ah-neutral');
     const selCls=(_sel&&_sel.type==='edge'&&_sel.id===e.id)?' sel':'';
     const loopCls=isLoop?' loop':'';
     const delayCls=e.delay?' delay':'';
@@ -793,7 +811,7 @@ function drawEdges() {
     s+='<path class="cf-edge '+polCls+selCls+loopCls+delayCls+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
     if(e.label||e.pol){
       const mx=.125*p1.x+.375*c1.x+.375*c2.x+.125*p2.x,my=.125*p1.y+.375*c1.y+.375*c2.y+.125*p2.y;
-      const sign=e.pol?'<span class="cf-el-sign '+polCls+'">'+(e.pol==='+'?'＋':e.pol==='-'?'－':'＝')+'</span>':'';
+      const sign=e.pol?'<span class="cf-el-sign '+polCls+'">'+(e.pol==='++'?'＋＋':e.pol==='+'?'＋':e.pol==='--'?'－－':e.pol==='-'?'－':'＝')+'</span>':'';
       const txt=e.label?'<span class="cf-el-text">'+esc(e.label)+'</span>':'';
       lbl.push('<div class="cf-edge-label" data-edge="'+e.id+'" style="left:'+mx+'px;top:'+my+'px">'+sign+txt+'</div>');
     }
@@ -998,7 +1016,7 @@ function editEdgeLabel(id) {
   let l=labelsLayer.querySelector('.cf-edge-label[data-edge="'+id+'"]');
   if(!l){const m=edgeMid(e);l=document.createElement('div');l.className='cf-edge-label';l.dataset.edge=id;l.style.left=m.x+'px';l.style.top=m.y+'px';labelsLayer.appendChild(l);}
   l.innerHTML='';
-  if(e.pol){const sg=document.createElement('span');sg.className='cf-el-sign '+(e.pol==='+'?'pos':e.pol==='-'?'neg':'eq');sg.textContent=e.pol==='+'?'＋':e.pol==='-'?'－':'＝';l.appendChild(sg);}
+  if(e.pol){const sg=document.createElement('span');sg.className='cf-el-sign '+(e.pol==='++'?'spos':e.pol==='+'?'pos':e.pol==='--'?'sneg':e.pol==='-'?'neg':'eq');sg.textContent=e.pol==='++'?'＋＋':e.pol==='+'?'＋':e.pol==='--'?'－－':e.pol==='-'?'－':'＝';l.appendChild(sg);}
   const sp=document.createElement('span');sp.className='cf-el-text';sp.textContent=e.label||'';l.appendChild(sp);
   snapshot();
   _editing=true;l.classList.add('editing');sp.contentEditable='true';sp.focus();selectAll(sp);
@@ -1090,7 +1108,7 @@ function findCycles(){
   }
   return cycles;
 }
-function classifyCycle(cyc){ let neg=0; cyc.edges.forEach(e=>{ if(e.pol==='-')neg++; }); return neg%2===0?'R':'B'; }
+function classifyCycle(cyc){ let neg=0; cyc.edges.forEach(e=>{ if(e.pol==='-'||e.pol==='--')neg++; }); return neg%2===0?'R':'B'; }
 function cycleCentroid(cyc){
   let sx=0,sy=0,c=0;
   cyc.nodes.forEach(id=>{const n=byNode(id);if(n){sx+=n.x+(n._w||80)/2;sy+=n.y+(n._h||40)/2;c++;}});
@@ -1134,7 +1152,7 @@ function pulseFrom(id){
       G.edges.filter(e=>e.from===cur).forEach(e=>{
         if(visited.has(e.to))return;
         visited.add(e.to);
-        next.push({id:e.to,sign:e.pol==='-'?flip(sign):sign,delay:e.delay});
+        next.push({id:e.to,sign:(e.pol==='-'||e.pol==='--')?flip(sign):sign,delay:e.delay});
       });
     });
     steps++;
@@ -1185,7 +1203,7 @@ function exportSVG() {
   const nodeBorders={1:'#dfc030',2:'#55aa65',3:'#d06060',4:'#5090d8',5:'#9060c8',6:'#30aaaa'};
   const mk=(id,fill)=>`<marker id="${id}" markerWidth="11" markerHeight="11" refX="8.5" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8.5,3.5 L0,7 Z" fill="${fill}"/></marker>`;
   let out=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${x0} ${y0} ${W} ${H}">`;
-  out+=`<defs>${mk('ah-n','#888')}${mk('ah-p','#4f7a5e')}${mk('ah-g','#b3564a')}${mk('ah-e','#c8a820')}</defs>`;
+  out+=`<defs>${mk('ah-n','#888')}${mk('ah-sp','#2a7a44')}${mk('ah-p','#4f7a5e')}${mk('ah-g','#b3564a')}${mk('ah-sn','#8a2020')}${mk('ah-e','#c8a820')}</defs>`;
   out+=`<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="white"/>`;
   // Box nodes first
   G.nodes.filter(n=>n.isBox).forEach(n=>{
@@ -1197,8 +1215,8 @@ function exportSVG() {
   G.edges.forEach(e=>{
     const en=edgeEnds(e);if(!en)return;
     const{p1,p2,c1,c2}=en;
-    const stroke=e.pol==='+'?'#4f7a5e':e.pol==='-'?'#b3564a':e.pol==='='?'#c8a820':'#888';
-    const ah=e.pol==='+'?'ah-p':e.pol==='-'?'ah-g':e.pol==='='?'ah-e':'ah-n';
+    const stroke=e.pol==='++'?'#2a7a44':e.pol==='+'?'#4f7a5e':e.pol==='--'?'#8a2020':e.pol==='-'?'#b3564a':e.pol==='='?'#c8a820':'#888';
+    const ah=e.pol==='++'?'ah-sp':e.pol==='+'?'ah-p':e.pol==='--'?'ah-sn':e.pol==='-'?'ah-g':e.pol==='='?'ah-e':'ah-n';
     const dash=e.delay?' stroke-dasharray="6 4"':'';
     const d=`M${p1.x},${p1.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${p2.x},${p2.y}`;
     out+=`<path fill="none" stroke="${stroke}" stroke-width="1.6"${dash} d="${d}" marker-end="url(#${ah})"/>`;
