@@ -477,7 +477,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Text mode toggle</div><div class="cf-shortcuts-key">T</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Copy / Paste nodes</div><div class="cf-shortcuts-key">Ctrl C / V</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Undo / Redo</div><div class="cf-shortcuts-key">Ctrl Z / Y</div></div>
-      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Left-align selected</div><div class="cf-shortcuts-key">Ctrl G</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Align left / right / top / bottom</div><div class="cf-shortcuts-key">Ctrl ← → ↑ ↓</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Delete selected</div><div class="cf-shortcuts-key">Del / Backspace</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Color node (yellow → cyan)</div><div class="cf-shortcuts-key">1 – 6</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Remove node color</div><div class="cf-shortcuts-key">0</div></div>
@@ -1442,6 +1442,26 @@ document.addEventListener('keydown', e => {
     const ns=Array.from(_multiSel).map(id=>byNode(id)).filter(Boolean);
     const minX=Math.min(...ns.map(n=>n.x));
     ns.forEach(n=>{n.x=minX;const el=_els[n.id];if(el)el.style.left=n.x+'px';});
+    drawEdges();placeTools();save();
+  }
+  else if(ctrl&&(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='ArrowUp'||e.key==='ArrowDown')){
+    e.preventDefault();
+    if(_multiSel.size<2)return;
+    snapshot();
+    const ns=Array.from(_multiSel).map(id=>byNode(id)).filter(Boolean);
+    if(e.key==='ArrowLeft'){
+      const minX=Math.min(...ns.map(n=>n.x));
+      ns.forEach(n=>{n.x=minX;const el=_els[n.id];if(el)el.style.left=n.x+'px';});
+    } else if(e.key==='ArrowRight'){
+      const maxR=Math.max(...ns.map(n=>{const el=_els[n.id];return n.x+(el?el.offsetWidth:0);}));
+      ns.forEach(n=>{const el=_els[n.id];const w=el?el.offsetWidth:0;n.x=maxR-w;if(el)el.style.left=n.x+'px';});
+    } else if(e.key==='ArrowUp'){
+      const minY=Math.min(...ns.map(n=>n.y));
+      ns.forEach(n=>{n.y=minY;const el=_els[n.id];if(el)el.style.top=n.y+'px';});
+    } else {
+      const maxB=Math.max(...ns.map(n=>{const el=_els[n.id];return n.y+(el?el.offsetHeight:0);}));
+      ns.forEach(n=>{const el=_els[n.id];const h=el?el.offsetHeight:0;n.y=maxB-h;if(el)el.style.top=n.y+'px';});
+    }
     drawEdges();placeTools();save();
   }
   else if((e.key==='t'||e.key==='T')&&!ctrl){
