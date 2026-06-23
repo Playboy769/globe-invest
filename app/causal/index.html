@@ -292,8 +292,34 @@ body.dark .cf-hint{color:#e8e8e8}
 body.dark #cf-lasso{border-color:#4a88dd;background:rgba(74,136,221,0.08)}
 
 /* ── Canvas watermark ────────────────────────────────────── */
-#cf-watermark{position:absolute;bottom:22px;left:24px;font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:#0a0a0a;font-weight:700;pointer-events:none;user-select:none;font-family:'Orchid','Noto Serif TC',serif;z-index:10;transition:opacity .2s}
+#cf-watermark{position:absolute;bottom:22px;left:24px;font-size:18px;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0a;font-weight:700;pointer-events:none;user-select:none;font-family:'Orchid','Noto Serif TC',serif;z-index:10;transition:opacity .2s}
 body.dark #cf-watermark{color:#e8e8e8}
+
+/* ── Analysis: R/B loops · pulse · leverage ── */
+#cf-overlay{position:absolute;inset:0;pointer-events:none;z-index:6}
+.cf-rb-badge{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;font-family:'Orchid','Noto Serif TC',serif;letter-spacing:.05em;box-shadow:0 2px 9px rgba(0,0,0,0.13);white-space:nowrap}
+.cf-rb-badge .cf-rb-ico{font-size:14px;line-height:1}
+.cf-rb-badge.r{background:#eef6f0;color:#3a6e4e;border:1px solid #9cc3a8}
+.cf-rb-badge.b{background:#eef2fb;color:#3a5a8a;border:1px solid #9cb0d8}
+body.dark .cf-rb-badge.r{background:#16261a;color:#7fc090;border-color:#2f5a3c}
+body.dark .cf-rb-badge.b{background:#141d2e;color:#7fa0d0;border-color:#2f4a72}
+
+@keyframes cf-pulse-pos{0%{box-shadow:0 0 0 0 rgba(79,122,94,0.5)}70%{box-shadow:0 0 0 15px rgba(79,122,94,0)}100%{box-shadow:0 0 0 0 rgba(79,122,94,0)}}
+@keyframes cf-pulse-neg{0%{box-shadow:0 0 0 0 rgba(179,86,74,0.5)}70%{box-shadow:0 0 0 15px rgba(179,86,74,0)}100%{box-shadow:0 0 0 0 rgba(179,86,74,0)}}
+.cf-node.pulse-pos{animation:cf-pulse-pos 1.1s ease-out;border-color:#4f7a5e!important}
+.cf-node.pulse-neg{animation:cf-pulse-neg 1.1s ease-out;border-color:#b3564a!important}
+@keyframes cf-tag-fade{0%{opacity:0;transform:translateY(5px)}20%{opacity:1;transform:translateY(0)}78%{opacity:1}100%{opacity:0;transform:translateY(-7px)}}
+.cf-pulse-tag{position:absolute;top:-11px;right:-7px;font-size:13px;font-weight:700;pointer-events:none;animation:cf-tag-fade 1.4s ease-out forwards}
+.cf-pulse-tag.pos{color:#4f7a5e}
+.cf-pulse-tag.neg{color:#b3564a}
+
+.cf-node.leverage{box-shadow:0 0 0 3px rgba(216,168,32,0.55),0 4px 16px rgba(216,168,32,0.28)!important}
+.cf-lev-badge{position:absolute;top:-9px;left:-9px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#d8a820;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Orchid',serif;box-shadow:0 1px 4px rgba(0,0,0,0.25);z-index:5}
+.cf-tool.pulse-btn{color:#c87800}
+.cf-tool.pulse-btn:hover{background:#fdf0e0;color:#a86000}
+body.dark .cf-tool.pulse-btn:hover{background:#2a1e0e;color:#e0a050}
+#cf-leverage.active{color:#a87800;border-color:#d8a820;background:#fdf6e8}
+body.dark #cf-leverage.active{color:#d8a820;border-color:#6a5410;background:#2a2410}
 
 /* ── Overflow menu ───────────────────────────────────────── */
 #cf-overflow-menu{position:fixed;top:52px;right:0;background:#fff;border:1px solid #e4e4e4;border-radius:11px;padding:5px;box-shadow:0 8px 28px rgba(0,0,0,0.11);z-index:80;display:none;flex-direction:column;gap:1px;min-width:148px}
@@ -347,7 +373,8 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <div class="cf-top-sep"></div>
     <button class="cf-btn cf-btn-icon" id="cf-undo" title="Undo (Ctrl+Z)">↩</button>
     <button class="cf-btn cf-btn-icon" id="cf-redo" title="Redo (Ctrl+Y)">↪</button>
-    <button class="cf-btn cf-btn-icon" id="cf-loops" title="Highlight feedback loops (⟳)">⟳</button>
+    <button class="cf-btn cf-btn-icon" id="cf-loops" title="Highlight feedback loops + R/B (⟳)">⟳</button>
+    <button class="cf-btn cf-btn-icon" id="cf-leverage" title="Leverage points · centrality (◈)">◈</button>
     <button class="cf-btn cf-btn-icon" id="cf-dark-btn" title="Dark mode (D)">◑</button>
     <button class="cf-btn cf-btn-icon" id="cf-overflow-btn" title="More">···</button>
   </div>
@@ -367,6 +394,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <svg id="cf-edges"></svg>
     <div id="cf-nodes"></div>
     <div id="cf-labels"></div>
+    <div id="cf-overlay"></div>
     <div id="cf-lasso"></div>
     <div id="cf-node-tools" class="cf-tools">
       <div class="cf-color-dot" data-col="1" style="background:#fffae8;border-color:#dfc030" title="Yellow (1)"></div>
@@ -377,6 +405,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-color-dot" data-col="6" style="background:#e0f5f5;border-color:#30aaaa" title="Cyan (6)"></div>
       <div class="cf-tool-sep"></div>
       <div class="cf-tool trace-btn" data-act="trace" title="Trace paths (P)">⇢</div>
+      <div class="cf-tool pulse-btn" data-act="pulse" title="Pulse simulation (S)">⚡</div>
       <div class="cf-tool del" data-act="del" title="Delete node (Del)">✕</div>
     </div>
     <div id="cf-edge-tools" class="cf-tools">
@@ -395,7 +424,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     Drag a node's edge dot onto another to link · Select a link to mark ＋ ／ － ／ ＝<br>
     Press <b>?</b> for keyboard shortcuts
   </div>
-  <span id="cf-count" class="cf-count" style="position:absolute;bottom:40px;left:24px;z-index:10"></span>
+  <span id="cf-count" class="cf-count" style="position:absolute;bottom:54px;left:24px;z-index:10"></span>
   <div id="cf-watermark" title="點兩下重新命名"></div>
   <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · 1–6: color · P: trace · ?: help</div>
   <div id="cf-zoom-ctrl">
@@ -429,6 +458,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Color node (yellow → cyan)</div><div class="cf-shortcuts-key">1 – 6</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Remove node color</div><div class="cf-shortcuts-key">0</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Trace causal paths</div><div class="cf-shortcuts-key">P</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Pulse simulation</div><div class="cf-shortcuts-key">S</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Deselect / cancel mode</div><div class="cf-shortcuts-key">Esc</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Zoom in / out</div><div class="cf-shortcuts-key">scroll wheel</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Multi-select lasso</div><div class="cf-shortcuts-key">Shift + drag</div></div>
@@ -485,7 +515,7 @@ function openFile(id) {
   if (!G._seq) G._seq = 0;
   _sel = null; _editing = false;
   _history = []; _future = [];
-  _loopsActive = false; _loopEdges.clear();
+  _loopsActive = false; _loopEdges.clear(); _rbCycles = []; _leverageActive = false; { const _lv=document.getElementById('cf-leverage'); if(_lv)_lv.classList.remove('active'); }
   _traceOrigin = null; _traceEdges.clear(); _traceNodes.clear();
   renderAll(); renderFeed(); updateFilename();
 }
@@ -584,7 +614,7 @@ function toggleFeed() {
 let G = emptyGraph();
 let _sel = null, _editing = false, _els = {}, _multiSel = new Set(), _clipboard = [], _textMode = false;
 let _history = [], _future = [];
-let _loopsActive = false, _loopEdges = new Set();
+let _loopsActive = false, _loopEdges = new Set(), _rbCycles = [], _leverageActive = false;
 let _traceOrigin = null, _traceEdges = new Set(), _traceNodes = new Set();
 const canvas = document.getElementById('cf-canvas');
 const world  = document.getElementById('cf-world');
@@ -777,7 +807,12 @@ function updateChrome(){
   document.getElementById('cf-hint').style.display=G.nodes.length?'block':'none';
   document.getElementById('cf-count').textContent=G.nodes.length+' nodes · '+G.edges.length+' links';
 }
-function renderAll(){ buildNodes(); drawEdges(); placeTools(); updateChrome(); }
+function renderAll(){ buildNodes(); drawEdges(); placeTools(); updateChrome(); refreshAnalysis(); }
+function refreshAnalysis(){
+  if(_leverageActive)renderLeverage();
+  const ov=document.getElementById('cf-overlay');
+  if(_loopsActive)renderRBBadges(); else if(ov)ov.innerHTML='';
+}
 
 function select(sel){
   if(!sel&&_traceOrigin){_traceOrigin=null;_traceEdges.clear();_traceNodes.clear();}
@@ -993,7 +1028,7 @@ function traceNode(id) {
 function detectFeedbackLoops() {
   const btn=document.getElementById('cf-loops');
   if(_loopsActive){
-    _loopsActive=false;_loopEdges.clear();btn.classList.remove('active');drawEdges();return;
+    _loopsActive=false;_loopEdges.clear();_rbCycles=[];btn.classList.remove('active');drawEdges();renderRBBadges();return;
   }
   _loopEdges.clear();
   const nodeIds=G.nodes.map(n=>n.id);
@@ -1028,10 +1063,115 @@ function detectFeedbackLoops() {
   });
   _loopsActive=_loopEdges.size>0;
   btn.classList.toggle('active',_loopsActive);
-  drawEdges();
+  _rbCycles=_loopsActive?findCycles():[];
+  drawEdges();renderRBBadges();
 }
 
 // ── Export / Import ────────────────────────────────────────
+// ── R/B loop classification ───────────────────────────────
+function findCycles(){
+  const cycles=[];
+  const adjE={}; G.nodes.forEach(n=>{adjE[n.id]=[];});
+  G.edges.forEach(e=>{ if(adjE[e.from]) adjE[e.from].push(e); });
+  const ids=G.nodes.map(n=>n.id);
+  const idx={}; ids.forEach((id,i)=>{idx[id]=i;});
+  const MAX=80;
+  for(const start of ids){
+    const sIdx=idx[start];
+    const path=[start], pe=[], seen=new Set([start]);
+    (function dfs(cur){
+      if(cycles.length>=MAX)return;
+      for(const e of adjE[cur]){
+        if(e.to===start){ if(path.length>=2||e.from===e.to) cycles.push({nodes:[...path],edges:[...pe,e]}); continue; }
+        if(idx[e.to]>sIdx && !seen.has(e.to)){ seen.add(e.to);path.push(e.to);pe.push(e); dfs(e.to); path.pop();pe.pop();seen.delete(e.to); }
+      }
+    })(start);
+    if(cycles.length>=MAX)break;
+  }
+  return cycles;
+}
+function classifyCycle(cyc){ let neg=0; cyc.edges.forEach(e=>{ if(e.pol==='-')neg++; }); return neg%2===0?'R':'B'; }
+function cycleCentroid(cyc){
+  let sx=0,sy=0,c=0;
+  cyc.nodes.forEach(id=>{const n=byNode(id);if(n){sx+=n.x+(n._w||80)/2;sy+=n.y+(n._h||40)/2;c++;}});
+  return c?{x:sx/c,y:sy/c}:{x:0,y:0};
+}
+function renderRBBadges(){
+  const ov=document.getElementById('cf-overlay'); if(!ov)return;
+  if(!_loopsActive){ ov.innerHTML=''; return; }
+  const used=[]; let html='';
+  _rbCycles.forEach(cyc=>{
+    const t=classifyCycle(cyc);
+    let {x,y}=cycleCentroid(cyc), tries=0;
+    while(used.some(u=>Math.abs(u.x-x)<28&&Math.abs(u.y-y)<20)&&tries<10){ y+=22; tries++; }
+    used.push({x,y});
+    html+='<div class="cf-rb-badge '+(t==='R'?'r':'b')+'" style="left:'+x+'px;top:'+y+'px"><span class="cf-rb-ico">'+(t==='R'?'↻':'↺')+'</span>'+t+'</div>';
+  });
+  ov.innerHTML=html;
+}
+
+// ── Pulse propagation simulation ──────────────────────────
+function markPulse(id,sign){
+  const el=_els[id]; if(!el)return;
+  el.classList.remove('pulse-pos','pulse-neg'); void el.offsetWidth;
+  el.classList.add(sign==='+'?'pulse-pos':'pulse-neg');
+  const tag=document.createElement('div');
+  tag.className='cf-pulse-tag '+(sign==='+'?'pos':'neg');
+  tag.textContent=sign==='+'?'▲':'▼';
+  el.appendChild(tag);
+  setTimeout(()=>{ el.classList.remove('pulse-pos','pulse-neg'); if(tag.parentNode)tag.remove(); },1400);
+}
+function pulseFrom(id){
+  if(!byNode(id))return;
+  const flip=s=>s==='+'?'-':'+';
+  const visited=new Set([id]);
+  let frontier=[{id,sign:'+'}], steps=0;
+  markPulse(id,'+');
+  (function step(){
+    if(!frontier.length||steps>40)return;
+    const next=[];
+    frontier.forEach(({id:cur,sign})=>{
+      G.edges.filter(e=>e.from===cur).forEach(e=>{
+        if(visited.has(e.to))return;
+        visited.add(e.to);
+        next.push({id:e.to,sign:e.pol==='-'?flip(sign):sign,delay:e.delay});
+      });
+    });
+    steps++;
+    if(!next.length)return;
+    next.filter(x=>!x.delay).forEach(x=>markPulse(x.id,x.sign));
+    const later=next.filter(x=>x.delay);
+    if(later.length)setTimeout(()=>later.forEach(x=>markPulse(x.id,x.sign)),330);
+    frontier=next;
+    setTimeout(step,640);
+  })();
+}
+
+// ── Leverage points (degree centrality) ───────────────────
+function clearLeverage(){
+  Object.values(_els).forEach(el=>{ el.classList.remove('leverage'); const b=el.querySelector('.cf-lev-badge'); if(b)b.remove(); });
+}
+function renderLeverage(){
+  clearLeverage();
+  if(!_leverageActive)return;
+  const deg={}; G.nodes.forEach(n=>{ if(!n.isBox&&!n.isText)deg[n.id]=0; });
+  G.edges.forEach(e=>{ if(deg[e.from]!==undefined)deg[e.from]++; if(deg[e.to]!==undefined)deg[e.to]++; });
+  const vals=Object.values(deg); if(!vals.length)return;
+  const max=Math.max(...vals); if(max===0)return;
+  const thresh=Math.max(2,Math.ceil(max*0.6));
+  Object.entries(deg).forEach(([id,d])=>{
+    if(d===0)return;
+    const el=_els[id]; if(!el)return;
+    if(d>=thresh)el.classList.add('leverage');
+    const b=document.createElement('div'); b.className='cf-lev-badge'; b.textContent=d; el.appendChild(b);
+  });
+}
+function toggleLeverage(){
+  const btn=document.getElementById('cf-leverage');
+  if(_leverageActive){ _leverageActive=false; if(btn)btn.classList.remove('active'); clearLeverage(); return; }
+  _leverageActive=true; if(btn)btn.classList.add('active'); renderLeverage();
+}
+
 function exportSVG() {
   measureAll();
   if(!G.nodes.length)return;
@@ -1168,6 +1308,7 @@ document.getElementById('cf-node-tools').addEventListener('click', e => {
   const b=e.target.closest('.cf-color-dot,.cf-tool');if(!b||!_sel||_sel.type!=='node')return;
   if(b.dataset.col)setNodeColor(_sel.id,parseInt(b.dataset.col));
   else if(b.dataset.act==='trace')traceNode(_sel.id);
+  else if(b.dataset.act==='pulse')pulseFrom(_sel.id);
   else if(b.dataset.act==='del')removeNode(_sel.id);
 });
 
@@ -1192,6 +1333,7 @@ document.getElementById('cf-new-file').addEventListener('click',newFile);
 document.getElementById('cf-undo').addEventListener('click',undo);
 document.getElementById('cf-redo').addEventListener('click',redo);
 document.getElementById('cf-loops').addEventListener('click',detectFeedbackLoops);
+document.getElementById('cf-leverage').addEventListener('click',toggleLeverage);
 document.getElementById('cf-dark-btn').addEventListener('click',toggleDark);
 document.getElementById('cf-export-svg').addEventListener('click',()=>{closeOverflow();exportSVG();});
 document.getElementById('cf-export-json').addEventListener('click',()=>{closeOverflow();exportJSON();});
@@ -1278,6 +1420,9 @@ document.addEventListener('keydown', e => {
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
   else if((e.key==='p'||e.key==='P')&&!ctrl&&_sel&&_sel.type==='node'){
     e.preventDefault();traceNode(_sel.id);
+  }
+  else if((e.key==='s'||e.key==='S')&&!ctrl&&_sel&&_sel.type==='node'){
+    e.preventDefault();pulseFrom(_sel.id);
   }
   else if(!ctrl&&_sel&&_sel.type==='node'&&'0123456'.includes(e.key)){
     e.preventDefault();
