@@ -411,11 +411,12 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 if(typeof marked!=='undefined')marked.use({gfm:true,breaks:true});
 const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
+const _IV_GROUPS_API='/api/invest-groups';
 const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro)){if(!d.daily||typeof d.daily!=='object')d.daily={};return d;}}catch(e){}return{macro:[],risk:[],industry:[],daily:{}};})();
 function _ivSaveLocal(){try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));return true;}catch(e){return false;}}
 function _ivSave(){
   const ok=_ivSaveLocal();
-  fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({..._ivStore,groups:_ivGroups})}).catch(()=>{});
+  fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
   return ok;
 }
 let _ivDailyT;
@@ -428,11 +429,12 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
 })();
 (async function _ivSync(){
   try{
-    const r=await fetch(_IV_API);if(!r.ok)return;
+    const [r,rg]=await Promise.all([fetch(_IV_API),fetch(_IV_GROUPS_API)]);
+    if(!r.ok)return;
     const d=await r.json();
     if(!Array.isArray(d.macro)||!Array.isArray(d.risk)||!Array.isArray(d.industry))return;
     let changed=false;
-    /* union by id — keep both local-only and server-only entries (no destructive overwrite) */
+    /* union by id — keep both local-only and server-only entries */
     ['macro','risk','industry'].forEach(layer=>{
       const map=new Map();
       _ivStore[layer].forEach(e=>{if(e&&e.id)map.set(e.id,e);});
@@ -443,16 +445,29 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
     if(d.daily&&typeof d.daily==='object'){
       Object.keys(d.daily).forEach(ds=>{if(!_ivStore.daily[ds]&&d.daily[ds]){_ivStore.daily[ds]=d.daily[ds];changed=true;}});
     }
-    /* adopt server-only groups */
-    if(d.groups&&typeof d.groups==='object'){
-      ['macro','risk','industry'].forEach(layer=>{
-        if(!Array.isArray(d.groups[layer]))return;
-        const gmap=new Map();
-        _ivGroups[layer].forEach(g=>{if(g&&g.id)gmap.set(g.id,g);});
-        d.groups[layer].forEach(g=>{if(g&&g.id&&!gmap.has(g.id)){gmap.set(g.id,g);changed=true;}});
-        if(gmap.size!==_ivGroups[layer].length){_ivGroups[layer]=[...gmap.values()];changed=true;}
-      });
-      if(changed)try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}
+    /* sync groups from dedicated endpoint */
+    if(rg.ok){
+      const dg=await rg.json();
+      if(dg&&typeof dg==='object'){
+        let gchanged=false;
+        ['macro','risk','industry'].forEach(layer=>{
+          if(!Array.isArray(dg[layer]))return;
+          const gmap=new Map();
+          _ivGroups[layer].forEach(g=>{if(g&&g.id)gmap.set(g.id,g);});
+          dg[layer].forEach(g=>{
+            if(!g||!g.id)return;
+            if(!gmap.has(g.id)){gmap.set(g.id,g);gchanged=true;}
+            else{
+              /* merge titles: union so neither machine loses assignments */
+              const loc=gmap.get(g.id);
+              const merged=[...new Set([...(loc.titles||[]),...(g.titles||[])])];
+              if(merged.length!==(loc.titles||[]).length){loc.titles=merged;gchanged=true;}
+            }
+          });
+          if(gmap.size!==_ivGroups[layer].length){_ivGroups[layer]=[...gmap.values()];gchanged=true;}
+        });
+        if(gchanged){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}changed=true;}
+      }
     }
     if(changed){
       _ivSaveLocal();
@@ -465,7 +480,7 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
 
 let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null,_ivSearch='';
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
-function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({..._ivStore,groups:_ivGroups})}).catch(()=>{});}
+function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
 let _ivPendingImages=[];
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
 const SCOLORS={1:'#ced4c6',2:'#c6ccd6',3:'#d6ccba',4:'#d0b4a6',5:'#c0aab8'};
