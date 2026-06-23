@@ -450,6 +450,7 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
       const dg=await rg.json();
       if(dg&&typeof dg==='object'){
         let gchanged=false;
+        const serverEmpty=['macro','risk','industry'].every(l=>!Array.isArray(dg[l])||dg[l].length===0);
         ['macro','risk','industry'].forEach(layer=>{
           if(!Array.isArray(dg[layer]))return;
           const gmap=new Map();
@@ -467,6 +468,11 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
           if(gmap.size!==_ivGroups[layer].length){_ivGroups[layer]=[...gmap.values()];gchanged=true;}
         });
         if(gchanged){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}changed=true;}
+        /* server has no groups but local does — upload now (migration / first sync) */
+        const localHasGroups=['macro','risk','industry'].some(l=>_ivGroups[l]&&_ivGroups[l].length>0);
+        if(serverEmpty&&localHasGroups){
+          fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});
+        }
       }
     }
     if(changed){
