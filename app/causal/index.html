@@ -941,7 +941,7 @@ function onNodeDown(id, ev) {
       const dx=(e.clientX-sx)/vt.s,dy=(e.clientY-sy)/vt.s;
       if(!snapped&&Math.abs(dx)+Math.abs(dy)>2){snapped=true;snapshot();}
       if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
-      _multiSel.forEach(nid=>{const n=byNode(nid),el=_els[nid];if(!n||!origins[nid])return;n.x=Math.max(0,origins[nid].x+dx);n.y=Math.max(0,origins[nid].y+dy);if(el){el.style.left=n.x+'px';el.style.top=n.y+'px';}});
+      _multiSel.forEach(nid=>{const n=byNode(nid),el=_els[nid];if(!n||!origins[nid])return;n.x=origins[nid].x+dx;n.y=origins[nid].y+dy;if(el){el.style.left=n.x+'px';el.style.top=n.y+'px';}});
       drawEdges();
     }
     function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);if(moved)save();}
@@ -957,7 +957,7 @@ function onNodeDown(id, ev) {
     const dx=(e.clientX-sx)/vt.s,dy=(e.clientY-sy)/vt.s;
     if(!snapped&&Math.abs(dx)+Math.abs(dy)>2){snapped=true;snapshot();}
     if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
-    n.x=Math.max(0,ox+dx);n.y=Math.max(0,oy+dy);
+    n.x=ox+dx;n.y=oy+dy;
     el.style.left=n.x+'px';el.style.top=n.y+'px';drawEdges();placeTools();
   }
   function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);el.classList.remove('dragging');if(moved)save();}
@@ -1004,8 +1004,8 @@ function startBoxResize(id, dir, ev) {
     const dx=(e.clientX-sx)/vt.s,dy=(e.clientY-sy)/vt.s;
     if(dir.e){n.w=Math.max(150,initW+dx);}
     if(dir.s){n.bh=Math.max(90,initH+dy);}
-    if(dir.w){const nw=Math.max(150,initW-dx);n.x=Math.max(0,initX+(initW-nw));n.w=nw;el.style.left=n.x+'px';}
-    if(dir.n){const nh=Math.max(90,initH-dy);n.y=Math.max(0,initY+(initH-nh));n.bh=nh;el.style.top=n.y+'px';}
+    if(dir.w){const nw=Math.max(150,initW-dx);n.x=initX+(initW-nw);n.w=nw;el.style.left=n.x+'px';}
+    if(dir.n){const nh=Math.max(90,initH-dy);n.y=initY+(initH-nh);n.bh=nh;el.style.top=n.y+'px';}
     el.style.width=n.w+'px';el.style.height=n.bh+'px';
     n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();
   }
