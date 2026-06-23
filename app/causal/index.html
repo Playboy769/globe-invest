@@ -142,11 +142,11 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-node.box-node[data-color="5"]{background:rgba(240,230,255,0.55);border-color:#9060c8}
 .cf-node.box-node[data-color="6"]{background:rgba(224,245,245,0.55);border-color:#30aaaa}
 
-.cf-edge{fill:none;stroke:#888;stroke-width:1.6;transition:stroke-width .12s ease}
+.cf-edge{fill:none;stroke:#888;stroke-width:1.2;transition:stroke-width .12s ease}
 .cf-edge.spos{stroke:#2a7a44;stroke-width:2.4}
 .cf-edge.pos{stroke:#4f7a5e}
 .cf-edge.neg{stroke:#b3564a}
-.cf-edge.sneg{stroke:#8a2020;stroke-width:2.4}
+.cf-edge.sneg{stroke:#a03838;stroke-width:2.4}
 .cf-edge.eq{stroke:#c8a820}
 .cf-edge.sel{stroke-width:2.6}
 .cf-edge-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke;cursor:pointer}
@@ -162,7 +162,7 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-el-sign.spos{color:#2a7a44}
 .cf-el-sign.pos{color:#3a6e4e}
 .cf-el-sign.neg{color:#a03030}
-.cf-el-sign.sneg{color:#8a2020}
+.cf-el-sign.sneg{color:#a03838}
 .cf-el-sign.eq{color:#a08020}
 .cf-node.multi-sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.22)}
 .cf-node.traced-node{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.2)}
@@ -178,7 +178,7 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-tool.spos{color:#2a7a44;font-weight:700;min-width:30px;width:auto;padding:0 4px}
 .cf-tool.pos{color:#4f7a5e}
 .cf-tool.neg{color:#b3564a}
-.cf-tool.sneg{color:#8a2020;font-weight:700;min-width:30px;width:auto;padding:0 4px}
+.cf-tool.sneg{color:#a03838;font-weight:700;min-width:30px;width:auto;padding:0 4px}
 .cf-tool.active{background:#f0f0f0}
 .cf-tool.spos.active{background:#e8f4ed}
 .cf-tool.pos.active{background:#eef3ef}
@@ -704,7 +704,7 @@ function getDEFS() {
   const dark = document.body.classList.contains('dark');
   const n=dark?'#777':'#888', p=dark?'#5c9a6e':'#4f7a5e', g=dark?'#c05050':'#b3564a';
   const mk=(id,fill)=>`<marker id="${id}" markerWidth="11" markerHeight="11" refX="8.5" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8.5,3.5 L0,7 Z" fill="${fill}"/></marker>`;
-  return '<defs>'+mk('cf-ah-neutral',n)+mk('cf-ah-spos','#2a7a44')+mk('cf-ah-pos',p)+mk('cf-ah-neg',g)+mk('cf-ah-sneg','#8a2020')+mk('cf-ah-eq','#c8a820')+mk('cf-ah-loop','#d45000')+'</defs>';
+  return '<defs>'+mk('cf-ah-neutral',n)+mk('cf-ah-spos','#2a7a44')+mk('cf-ah-pos',p)+mk('cf-ah-neg',g)+mk('cf-ah-sneg','#a03838')+mk('cf-ah-eq','#c8a820')+mk('cf-ah-loop','#d45000')+'</defs>';
 }
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1203,7 +1203,7 @@ function exportSVG() {
   const nodeBorders={1:'#dfc030',2:'#55aa65',3:'#d06060',4:'#5090d8',5:'#9060c8',6:'#30aaaa'};
   const mk=(id,fill)=>`<marker id="${id}" markerWidth="11" markerHeight="11" refX="8.5" refY="3.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8.5,3.5 L0,7 Z" fill="${fill}"/></marker>`;
   let out=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${x0} ${y0} ${W} ${H}">`;
-  out+=`<defs>${mk('ah-n','#888')}${mk('ah-sp','#2a7a44')}${mk('ah-p','#4f7a5e')}${mk('ah-g','#b3564a')}${mk('ah-sn','#8a2020')}${mk('ah-e','#c8a820')}</defs>`;
+  out+=`<defs>${mk('ah-n','#888')}${mk('ah-sp','#2a7a44')}${mk('ah-p','#4f7a5e')}${mk('ah-g','#b3564a')}${mk('ah-sn','#a03838')}${mk('ah-e','#c8a820')}</defs>`;
   out+=`<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="white"/>`;
   // Box nodes first
   G.nodes.filter(n=>n.isBox).forEach(n=>{
@@ -1215,7 +1215,7 @@ function exportSVG() {
   G.edges.forEach(e=>{
     const en=edgeEnds(e);if(!en)return;
     const{p1,p2,c1,c2}=en;
-    const stroke=e.pol==='++'?'#2a7a44':e.pol==='+'?'#4f7a5e':e.pol==='--'?'#8a2020':e.pol==='-'?'#b3564a':e.pol==='='?'#c8a820':'#888';
+    const stroke=e.pol==='++'?'#2a7a44':e.pol==='+'?'#4f7a5e':e.pol==='--'?'#a03838':e.pol==='-'?'#b3564a':e.pol==='='?'#c8a820':'#888';
     const ah=e.pol==='++'?'ah-sp':e.pol==='+'?'ah-p':e.pol==='--'?'ah-sn':e.pol==='-'?'ah-g':e.pol==='='?'ah-e':'ah-n';
     const dash=e.delay?' stroke-dasharray="6 4"':'';
     const d=`M${p1.x},${p1.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${p2.x},${p2.y}`;
