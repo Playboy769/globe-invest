@@ -671,6 +671,9 @@ function redo() {
 let vt = { x: 0, y: 0, s: 1 };
 function applyVT() {
   world.style.transform = `translate(${vt.x}px,${vt.y}px) scale(${vt.s})`;
+  const sp = 22 * vt.s;
+  canvas.style.backgroundSize = `${sp}px ${sp}px`;
+  canvas.style.backgroundPosition = `${vt.x % sp}px ${vt.y % sp}px`;
   const lbl = document.getElementById('cf-zoom-lbl');
   if (lbl) lbl.textContent = Math.round(vt.s*100)+'%';
 }
