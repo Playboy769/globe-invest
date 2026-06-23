@@ -151,7 +151,11 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-edge.sel{stroke-width:2.6}
 .cf-edge-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke;cursor:pointer}
 .cf-live{fill:none;stroke:#666;stroke-width:1.6;stroke-dasharray:5 4;opacity:.6}
-.cf-edge.delay{stroke-dasharray:6 4}
+.cf-edge.ls-dash{stroke-dasharray:8 5}
+.cf-edge.ls-dot{stroke-dasharray:1.5 4;stroke-linecap:round}
+.cf-edge.ls-double{stroke-width:4}
+.cf-edge-gap{fill:none;stroke:#fff;stroke-width:1.8;pointer-events:none}
+body.dark .cf-edge-gap{stroke:#161616}
 .cf-edge.loop{stroke:#d45000!important}
 .cf-edge.traced{stroke:#4a88dd;stroke-width:2.2}
 
@@ -187,8 +191,8 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-tool.del:hover{background:#f7ecea;color:#b3564a}
 .cf-tool.eq{color:#a08020}
 .cf-tool.eq.active{background:#fff8dc}
-.cf-tool.delay-btn{color:#888}
-.cf-tool.delay-btn.active{background:#f0f0f0;color:#555}
+.cf-tool.ls-btn{width:30px;color:#888;padding:0 2px}
+.cf-tool.ls-btn.active{background:#f0f0f0;color:#555}
 .cf-tool.trace-btn{color:#4a88dd;font-size:14px}
 .cf-tool.trace-btn.active{background:#e8f0ff}
 .cf-tool-sep{width:1px;height:15px;background:#ececec;margin:0 2px}
@@ -431,7 +435,9 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-tool neg" data-pol="-" title="Negative (－)">－</div>
       <div class="cf-tool sneg" data-pol="--" title="Strong negative (－－)">－－</div>
       <div class="cf-tool-sep"></div>
-      <div class="cf-tool delay-btn" data-act="delay" title="Delay marker (∼)">∼</div>
+      <div class="cf-tool ls-btn" data-ls="dash" title="Dashed line"><svg width="20" height="12" viewBox="0 0 20 12"><line x1="1" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/></svg></div>
+      <div class="cf-tool ls-btn" data-ls="dot" title="Dotted line"><svg width="20" height="12" viewBox="0 0 20 12"><line x1="1" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="2" stroke-dasharray="1 3.5" stroke-linecap="round"/></svg></div>
+      <div class="cf-tool ls-btn" data-ls="double" title="Double line"><svg width="20" height="12" viewBox="0 0 20 12"><line x1="1" y1="3.5" x2="19" y2="3.5" stroke="currentColor" stroke-width="1.3"/><line x1="1" y1="8.5" x2="19" y2="8.5" stroke="currentColor" stroke-width="1.3"/></svg></div>
       <div class="cf-tool" data-act="label" title="Edit label">✎</div>
       <div class="cf-tool del" data-act="del" title="Delete link (Del)">✕</div>
     </div>
@@ -804,11 +810,16 @@ function drawEdges() {
     const ah=isLoop?'cf-ah-loop':(e.pol==='++'?'cf-ah-spos':e.pol==='+'?'cf-ah-pos':e.pol==='--'?'cf-ah-sneg':e.pol==='-'?'cf-ah-neg':e.pol==='='?'cf-ah-eq':'cf-ah-neutral');
     const selCls=(_sel&&_sel.type==='edge'&&_sel.id===e.id)?' sel':'';
     const loopCls=isLoop?' loop':'';
-    const delayCls=e.delay?' delay':'';
+    const lsCls=e.ls?(' ls-'+e.ls):(e.delay?' ls-dash':'');
     const traceCls=isTraced&&!isLoop?' traced':'';
     const d='M'+p1.x+','+p1.y+' C'+c1.x+','+c1.y+' '+c2.x+','+c2.y+' '+p2.x+','+p2.y;
     s+='<path class="cf-edge-hit" data-edge="'+e.id+'" d="'+d+'"/>';
-    s+='<path class="cf-edge '+polCls+selCls+loopCls+delayCls+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
+    if(e.ls==='double'){
+      s+='<path class="cf-edge '+polCls+selCls+loopCls+' ls-double'+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
+      s+='<path class="cf-edge-gap" d="'+d+'"/>';
+    } else {
+      s+='<path class="cf-edge '+polCls+selCls+loopCls+lsCls+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
+    }
     if(e.label||e.pol){
       const mx=.125*p1.x+.375*c1.x+.375*c2.x+.125*p2.x,my=.125*p1.y+.375*c1.y+.375*c2.y+.125*p2.y;
       const sign=e.pol?'<span class="cf-el-sign '+polCls+'">'+(e.pol==='++'?'＋＋':e.pol==='+'?'＋':e.pol==='--'?'－－':e.pol==='-'?'－':'＝')+'</span>':'';
@@ -852,7 +863,8 @@ function placeTools(){
     const e=byEdge(_sel.id); if(!e)return;
     const m=edgeMid(e); et.style.left=m.x+'px'; et.style.top=(m.y-19)+'px'; et.classList.add('on');
     et.querySelectorAll('.cf-tool[data-pol]').forEach(b=>b.classList.toggle('active',!!e.pol&&b.dataset.pol===e.pol));
-    et.querySelector('.delay-btn').classList.toggle('active',!!e.delay);
+    const curLs=e.ls||(e.delay?'dash':'');
+    et.querySelectorAll('.ls-btn').forEach(b=>b.classList.toggle('active',b.dataset.ls===curLs));
   }
 }
 function _w(n){return n._w||80;}
@@ -903,10 +915,10 @@ function setPolarity(id, pol) {
   snapshot();
   e.pol=(e.pol===pol?'':pol); drawEdges(); placeTools(); save();
 }
-function toggleDelay(id) {
+function setLineStyle(id, ls) {
   const e=byEdge(id); if(!e)return;
   snapshot();
-  e.delay=!e.delay; drawEdges(); placeTools(); save();
+  e.delay=false; e.ls=(e.ls===ls?'':ls); drawEdges(); placeTools(); save();
 }
 function setNodeColor(id, c) {
   const n=byNode(id); if(!n)return;
@@ -1152,7 +1164,7 @@ function pulseFrom(id){
       G.edges.filter(e=>e.from===cur).forEach(e=>{
         if(visited.has(e.to))return;
         visited.add(e.to);
-        next.push({id:e.to,sign:(e.pol==='-'||e.pol==='--')?flip(sign):sign,delay:e.delay});
+        next.push({id:e.to,sign:(e.pol==='-'||e.pol==='--')?flip(sign):sign,delay:e.delay||e.ls==='dash'});
       });
     });
     steps++;
@@ -1217,7 +1229,8 @@ function exportSVG() {
     const{p1,p2,c1,c2}=en;
     const stroke=e.pol==='++'?'#2a7a44':e.pol==='+'?'#4f7a5e':e.pol==='--'?'#a03838':e.pol==='-'?'#b3564a':e.pol==='='?'#c8a820':'#888';
     const ah=e.pol==='++'?'ah-sp':e.pol==='+'?'ah-p':e.pol==='--'?'ah-sn':e.pol==='-'?'ah-g':e.pol==='='?'ah-e':'ah-n';
-    const dash=e.delay?' stroke-dasharray="6 4"':'';
+    const ls=e.ls||(e.delay?'dash':'');
+    const dash=ls==='dash'?' stroke-dasharray="8 5"':ls==='dot'?' stroke-dasharray="1.5 4" stroke-linecap="round"':'';
     const d=`M${p1.x},${p1.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${p2.x},${p2.y}`;
     out+=`<path fill="none" stroke="${stroke}" stroke-width="1.6"${dash} d="${d}" marker-end="url(#${ah})"/>`;
     if(e.label){const mx=.125*p1.x+.375*c1.x+.375*c2.x+.125*p2.x,my=.125*p1.y+.375*c1.y+.375*c2.y+.125*p2.y;out+=`<text x="${mx}" y="${my}" text-anchor="middle" font-size="11" fill="#555" font-family="serif">${esc(e.label)}</text>`;}
@@ -1318,7 +1331,7 @@ labelsLayer.addEventListener('pointerdown',e=>{const l=e.target.closest('.cf-edg
 document.getElementById('cf-edge-tools').addEventListener('click', e => {
   const b=e.target.closest('.cf-tool');if(!b||!_sel||_sel.type!=='edge')return;
   if(b.dataset.pol)setPolarity(_sel.id,b.dataset.pol);
-  else if(b.dataset.act==='delay')toggleDelay(_sel.id);
+  else if(b.dataset.ls)setLineStyle(_sel.id,b.dataset.ls);
   else if(b.dataset.act==='label')editEdgeLabel(_sel.id);
   else if(b.dataset.act==='del')removeEdge(_sel.id);
 });
