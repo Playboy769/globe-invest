@@ -141,6 +141,8 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-fd-actions{display:flex;gap:6px}
 .iv-fd-del{font-size:10px;color:#b55;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;font-family:'Calibri',sans-serif;padding:3px 10px;border-radius:6px;border:1px solid #e8cccc;transition:all .15s ease}
 .iv-fd-del:hover{color:#fff;background:#b55;border-color:#b55}
+.iv-fd-dup{font-size:10px;color:#888;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;font-family:'Calibri',sans-serif;padding:3px 10px;border-radius:6px;border:1px solid #ddd;transition:all .15s ease}
+.iv-fd-dup:hover{color:#0a0a0a;border-color:#bbb;background:#f5f5f5}
 .iv-fd-layer{font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;font-family:'Calibri',sans-serif}
 .iv-fd-sub{text-transform:none;color:#888;letter-spacing:.02em;font-size:11px}
 .iv-fd-title{font-size:calc(var(--iv-art-fz,13px) * 1.385);color:#0a0a0a;font-weight:500;margin-bottom:12px;letter-spacing:.02em;font-family:'Calibri',sans-serif}
@@ -640,6 +642,7 @@ function ivClearEditor(){
   if(pv){pv.style.display='none';pv.innerHTML='';}
   if(ta)ta.style.display='';
   if(btn)btn.classList.remove('active');
+  ivClearDraft();
 }
 function ivEditEntry(id){
   const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
@@ -851,7 +854,7 @@ function ivCardHTML(e,layerLabel){
   const imgs=e.images&&e.images.length?`<div class="iv-fc-imgs">${e.images.slice(0,4).map(b=>`<img class="iv-fc-img-t" src="${b}">`).join('')}</div>`:'';
   const sbg=e.severity&&SCOLORS[e.severity]?`background:${SCOLORS[e.severity]}28;`:'';
   const preview=ivStripMd(e.content);
-  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}${e.sub?` <span class="iv-fc-sub">· ${e.sub}</span>`:''}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${preview}</div>${imgs}<div class="iv-fc-meta"><span>${e.ts}</span><span class="iv-fc-author">${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}${e.sub?` <span class="iv-fc-sub">· ${e.sub}</span>`:''}</div><div class="iv-fc-title">${e.title}</div><div class="iv-fc-preview">${preview}</div>${imgs}<div class="iv-fc-meta"><span>${ivFmtModified(e.modified)||e.ts}</span><span class="iv-fc-author">${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
 }
 function _ivBySeverity(a,b){return (b.severity||0)-(a.severity||0) || (b.ts||'').localeCompare(a.ts||'');}
 function ivFeedTitleHTML(){
@@ -963,7 +966,7 @@ function ivShowDetail(id){
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
   const mdBody=ivRenderContent(e.content||'');
-  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${ivFmtModified(e.modified)||e.ts||''}</div>`;
+  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-dup" onclick="ivDuplicateEntry('${e.id}')">Dup</div><div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${ivFmtModified(e.modified)||e.ts||''}</div>`;
 }
 function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 function ivDeleteEntry(id){
@@ -971,6 +974,16 @@ function ivDeleteEntry(id){
   ['macro','risk','industry'].forEach(l=>{_ivStore[l]=_ivStore[l].filter(e=>e.id!==id);});
   if(_ivEditingId===id)ivClearEditor();
   _ivSave();ivBackToFeed();ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();
+}
+function ivDuplicateEntry(id){
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const e=all.find(x=>x.id===id);if(!e)return;
+  const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+  const dup={...e,id:_ivId(),modified:new Date().toISOString()};
+  _ivStore[layer].push(dup);_ivSave();
+  _ivActiveTag={layer,title:dup.title};_ivActiveSub=null;_ivActiveLayer=null;
+  ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();
+  ivShowDetail(dup.id);
 }
 function ivOnSearch(v){
   _ivSearch=(v||'').trim();
@@ -1208,6 +1221,40 @@ function ivApplyFontSize(){
 }
 function ivFontStep(d){_ivArtFz=Math.max(10,Math.min(22,_ivArtFz+d));try{localStorage.setItem('iv_art_fz',_ivArtFz);}catch(e){}ivApplyFontSize();}
 
+/* ── Draft auto-save & Ctrl+Enter ── */
+const _IV_DRAFT_KEY='iv_draft';
+function ivSaveDraft(){
+  if(_ivEditingId)return;
+  const t=document.getElementById('iv-ed-title').value,c=document.getElementById('iv-ed-content').value;
+  if(!t.trim()&&!c.trim()){ivClearDraft();return;}
+  try{localStorage.setItem(_IV_DRAFT_KEY,JSON.stringify({title:t,content:c,author:document.getElementById('iv-ed-author').value,source:document.getElementById('iv-ed-source').value,sub:document.getElementById('iv-ed-sub').value,date:document.getElementById('iv-ed-date').value,layer:_ivLayerVal,sev:_ivSevVal}));}catch(e){}
+}
+function ivClearDraft(){try{localStorage.removeItem(_IV_DRAFT_KEY);}catch(e){}}
+function ivRestoreDraft(){
+  if(_ivEditingId)return;
+  let o;try{o=JSON.parse(localStorage.getItem(_IV_DRAFT_KEY));}catch(e){return;}
+  if(!o||(!o.title&&!o.content))return;
+  if(o.title)document.getElementById('iv-ed-title').value=o.title;
+  if(o.content)document.getElementById('iv-ed-content').value=o.content;
+  if(o.author)document.getElementById('iv-ed-author').value=o.author;
+  if(o.source)document.getElementById('iv-ed-source').value=o.source;
+  if(o.sub)document.getElementById('iv-ed-sub').value=o.sub;
+  if(o.date)ivSetDate(o.date);
+  if(o.layer){const opt=document.querySelector('#iv-cs-layer .iv-cs-opt[data-val="'+o.layer+'"]');if(opt)ivPickLayer(opt);}
+  if(o.sev){_ivSevVal=o.sev;document.querySelectorAll('.iv-sev-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.sev)===o.sev));}
+}
+(function ivInitEditorListeners(){
+  ['iv-ed-title','iv-ed-content','iv-ed-author','iv-ed-source','iv-ed-sub'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.addEventListener('input',ivSaveDraft);
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey&&e.key==='Enter'){
+      const cb=document.getElementById('iv-compose-body');
+      if(cb&&cb.contains(document.activeElement)){e.preventDefault();ivSubmitEntry();}
+    }
+  });
+})();
+ivRestoreDraft();
 ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();ivApplyFontSize();
 </script>
 </body>
