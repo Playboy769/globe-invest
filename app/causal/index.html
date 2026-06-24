@@ -389,6 +389,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <button class="cf-btn" id="cf-add">+ Node</button>
     <button class="cf-btn" id="cf-add-box">+ Box</button>
     <button class="cf-btn" id="cf-add-text">+ Text</button>
+    <button class="cf-btn" id="cf-fit-nodes" title="Fit nodes to text (`)">Fit</button>
     <button class="cf-btn danger" id="cf-clear">Clear</button>
     <div class="cf-top-sep"></div>
     <button class="cf-btn cf-btn-icon" id="cf-undo" title="Undo (Ctrl+Z)">↩</button>
@@ -1358,6 +1359,7 @@ document.getElementById('cf-add-box').addEventListener('click',()=>{
   const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
   addBoxNode(cx-100,cy-60);
 });
+document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
   _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
   document.getElementById('cf-add-text').classList.toggle('active',_textMode);
@@ -1472,7 +1474,7 @@ document.addEventListener('keydown', e => {
     _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
     document.getElementById('cf-add-text').classList.toggle('active',_textMode);
   }
-  else if(e.key==='`'&&!ctrl){e.preventDefault();fitAllNodes();}
+  else if(e.code==='Backquote'&&!ctrl){e.preventDefault();fitAllNodes();}
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
   else if((e.key==='f'||e.key==='F')&&!ctrl){e.preventDefault();togglePresentation();}
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
