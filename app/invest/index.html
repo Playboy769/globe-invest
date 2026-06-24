@@ -413,6 +413,7 @@ const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
 const _IV_GROUPS_API='/api/invest-groups';
 const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro)){if(!d.daily||typeof d.daily!=='object')d.daily={};return d;}}catch(e){}return{macro:[],risk:[],industry:[],daily:{}};})();
+(function(){let changed=false;['macro','risk','industry'].forEach(l=>{(_ivStore[l]||[]).forEach(e=>{if(!e.modified&&e.ts){e.modified=new Date(e.ts+'T00:00:00').toISOString();changed=true;}});});if(changed)try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}})();
 function _ivSaveLocal(){try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));return true;}catch(e){return false;}}
 function _ivSave(){
   const ok=_ivSaveLocal();
