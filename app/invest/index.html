@@ -168,7 +168,11 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-ed-head{padding:32px 20px 20px}
 .iv-ed-layer{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Calibri',sans-serif;margin-bottom:12px}
 .iv-ed-field{padding:0 20px;margin-bottom:14px}
-.iv-ed-label{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.1em;font-weight:400;margin-bottom:8px;font-family:'Calibri',sans-serif}
+.iv-ed-label{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.1em;font-weight:400;margin-bottom:8px;font-family:'Calibri',sans-serif;display:flex;align-items:center;justify-content:space-between}
+.iv-preview-tog{font-size:9px;color:#ccc;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;border:1px solid #e8e8e8;border-radius:5px;padding:2px 7px;transition:all .15s;font-weight:400;user-select:none}
+.iv-preview-tog:hover{color:#888;border-color:#bbb}
+.iv-preview-tog.active{color:#0a0a0a;border-color:#0a0a0a;background:#f5f5f5}
+.iv-ed-preview{min-height:140px;padding:14px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;font-size:13px;line-height:1.8;font-family:'Calibri','Noto Sans TC',sans-serif;color:#0a0a0a;display:none}
 .iv-ed-input{width:100%;padding:11px 14px;background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Calibri','Noto Sans TC',sans-serif;transition:border-color .18s ease,background .18s ease;box-sizing:border-box}
 .iv-ed-input:focus{border-color:#0a0a0a;background:#fff}
 .iv-ed-input::placeholder{color:#bbb}
@@ -385,8 +389,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
       </div>
       <div class="iv-ed-divider"></div>
       <div class="iv-ed-field">
-        <div class="iv-ed-label">Content</div>
+        <div class="iv-ed-label">Content <span class="iv-preview-tog" id="iv-preview-tog" onclick="ivTogglePreview()">Preview</span></div>
         <textarea class="iv-ed-textarea" id="iv-ed-content" placeholder="Write your narrative, thesis, or risk note here..."></textarea>
+        <div class="iv-ed-preview iv-md" id="iv-ed-preview"></div>
       </div>
       <div class="iv-ed-field">
         <div class="iv-ed-label">Images</div>
@@ -631,6 +636,10 @@ function ivClearEditor(){
   _ivPendingImages=[];ivRenderPendingImages();
   _ivEditingId=null;
   const sb=document.getElementById('iv-submit-btn');if(sb)sb.textContent='Save';
+  const pv=document.getElementById('iv-ed-preview'),ta=document.getElementById('iv-ed-content'),btn=document.getElementById('iv-preview-tog');
+  if(pv){pv.style.display='none';pv.innerHTML='';}
+  if(ta)ta.style.display='';
+  if(btn)btn.classList.remove('active');
 }
 function ivEditEntry(id){
   const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
@@ -910,6 +919,21 @@ function ivRenderFeed(){
     const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
     return ivCardHTML(e,LN[layer]);
   }).join('');
+}
+function ivTogglePreview(){
+  const ta=document.getElementById('iv-ed-content');
+  const pv=document.getElementById('iv-ed-preview');
+  const btn=document.getElementById('iv-preview-tog');
+  if(!ta||!pv)return;
+  const showing=pv.style.display==='block';
+  if(showing){
+    pv.style.display='none';ta.style.display='';
+    if(btn)btn.classList.remove('active');
+  }else{
+    pv.innerHTML=ivRenderContent(ta.value);
+    pv.style.display='block';ta.style.display='none';
+    if(btn)btn.classList.add('active');
+  }
 }
 function ivRenderContent(src){
   src=src||'';
