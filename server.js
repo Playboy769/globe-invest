@@ -9,6 +9,7 @@ const DATA_DIR = '/data';
 const APP_DIR = '/app';
 const DATA_FILE = path.join(DATA_DIR, 'invest-data.json');
 const GROUPS_FILE = path.join(DATA_DIR, 'invest-groups.json');
+const CAUSAL_FILE = path.join(DATA_DIR, 'causal-files.json');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
@@ -141,6 +142,30 @@ const server = http.createServer(async (req, res) => {
       try {
         JSON.parse(body);
         fs.writeFileSync(GROUPS_FILE, body, 'utf8');
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end('{"ok":true}');
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  if (req.url === '/api/causal-files' && req.method === 'GET') {
+    const data = fs.existsSync(CAUSAL_FILE) ? fs.readFileSync(CAUSAL_FILE, 'utf8') : '[]';
+    res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+    res.end(data);
+    return;
+  }
+
+  if (req.url === '/api/causal-files' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => { if (body.length < 10e6) body += c; });
+    req.on('end', () => {
+      try {
+        JSON.parse(body);
+        fs.writeFileSync(CAUSAL_FILE, body, 'utf8');
         res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
         res.end('{"ok":true}');
       } catch (e) {

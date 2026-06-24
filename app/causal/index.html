@@ -498,6 +498,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
 // ── Storage keys ───────────────────────────────────────────
 const FILES_KEY = 'cf_files_v2';
 const LEGACY_KEY = 'cf_graph_v1';
+const CF_API = '/api/causal-files';
 
 // ── File store ─────────────────────────────────────────────
 let files = [];
@@ -520,6 +521,7 @@ function loadFiles() {
 
 function saveFiles() {
   try { localStorage.setItem(FILES_KEY, JSON.stringify(files)); } catch(e) {}
+  fetch(CF_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(files) }).catch(()=>{});
 }
 
 function activeFile() { return files.find(f => f.id === activeId) || files[0]; }
@@ -1515,6 +1517,25 @@ if(localStorage.getItem('cf_dark')){ document.body.classList.add('dark'); docume
 renderAll();
 renderFeed();
 updateFilename();
+// ── Cloud sync (Railway) ───────────────────────────────────
+(async function cfSync(){
+  try{
+    const r=await fetch(CF_API);
+    if(!r.ok)return;
+    const sv=await r.json();
+    if(!Array.isArray(sv)||!sv.length){
+      if(files.length)fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(files)}).catch(()=>{});
+      return;
+    }
+    const map=new Map();
+    sv.forEach(f=>map.set(f.id,f));
+    files.forEach(f=>{const s=map.get(f.id);if(!s||f.modified>s.modified)map.set(f.id,f);});
+    files=Array.from(map.values()).sort((a,b)=>b.modified-a.modified);
+    try{localStorage.setItem(FILES_KEY,JSON.stringify(files));}catch(e){}
+    fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(files)}).catch(()=>{});
+    openFile(files[0].id);
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
