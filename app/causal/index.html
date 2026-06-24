@@ -389,7 +389,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <button class="cf-btn" id="cf-add">+ Node</button>
     <button class="cf-btn" id="cf-add-box">+ Box</button>
     <button class="cf-btn" id="cf-add-text">+ Text</button>
-    <button class="cf-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+`)">Fit</button>
+    <button class="cf-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">Fit</button>
     <button class="cf-btn danger" id="cf-clear">Clear</button>
     <div class="cf-top-sep"></div>
     <button class="cf-btn cf-btn-icon" id="cf-undo" title="Undo (Ctrl+Z)">↩</button>
@@ -476,6 +476,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Add node</div><div class="cf-shortcuts-key">dblclick</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Add text label</div><div class="cf-shortcuts-key">Alt + dblclick</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Text mode toggle</div><div class="cf-shortcuts-key">T</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Select all nodes</div><div class="cf-shortcuts-key">Ctrl A</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Copy / Paste nodes</div><div class="cf-shortcuts-key">Ctrl C / V</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Undo / Redo</div><div class="cf-shortcuts-key">Ctrl Z / Y</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Align left / right / top / bottom</div><div class="cf-shortcuts-key">Ctrl ← → ↑ ↓</div></div>
@@ -489,7 +490,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Multi-select lasso</div><div class="cf-shortcuts-key">Shift + drag</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle dark mode</div><div class="cf-shortcuts-key">D</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Presentation mode</div><div class="cf-shortcuts-key">F</div></div>
-      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">Ctrl `</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">Ctrl B</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">This help panel</div><div class="cf-shortcuts-key">?</div></div>
     </div>
     <button class="cf-shortcuts-close" onclick="toggleShortcuts()">Close</button>
@@ -1440,6 +1441,12 @@ document.addEventListener('keydown', e => {
     _clipboard.forEach(n=>{const nn={...n,id:nid(),x:n.x+off,y:n.y+off};G.nodes.push(nn);_multiSel.add(nn.id);});
     renderAll();save();
   }
+  else if(ctrl&&(e.key==='a'||e.key==='A')){
+    e.preventDefault();
+    _sel=null;_multiSel.clear();
+    G.nodes.forEach(n=>_multiSel.add(n.id));
+    buildNodes();updateChrome();
+  }
   else if(ctrl&&(e.key==='g'||e.key==='G')){
     e.preventDefault();
     if(_multiSel.size<2)return;
@@ -1474,7 +1481,7 @@ document.addEventListener('keydown', e => {
     _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
     document.getElementById('cf-add-text').classList.toggle('active',_textMode);
   }
-  else if(e.code==='Backquote'&&ctrl){e.preventDefault();fitAllNodes();}
+  else if(ctrl&&(e.key==='b'||e.key==='B')){e.preventDefault();fitAllNodes();}
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
   else if((e.key==='f'||e.key==='F')&&!ctrl){e.preventDefault();togglePresentation();}
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
