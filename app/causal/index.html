@@ -488,7 +488,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Multi-select lasso</div><div class="cf-shortcuts-key">Shift + drag</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle dark mode</div><div class="cf-shortcuts-key">D</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Presentation mode</div><div class="cf-shortcuts-key">F</div></div>
-      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">W</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">`</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">This help panel</div><div class="cf-shortcuts-key">?</div></div>
     </div>
     <button class="cf-shortcuts-close" onclick="toggleShortcuts()">Close</button>
@@ -751,17 +751,12 @@ function edgeEnds(e) {
   const A=byNode(e.from), B=byNode(e.to); if(!A||!B)return null;
   const pA=sidePort(A, B.x+(B._w||80)/2, B.y+(B._h||40)/2);
   const pB=sidePort(B, A.x+(A._w||80)/2, A.y+(A._h||40)/2);
-  const dist=Math.hypot(pB.x-pA.x,pB.y-pA.y);
-  const str=Math.max(30,Math.min(dist*0.35,90));
-  const p1={x:pA.x,y:pA.y}, p2={x:pB.x,y:pB.y};
-  const c1={x:p1.x+pA.tx*str,y:p1.y+pA.ty*str};
-  const c2={x:p2.x+pB.tx*str,y:p2.y+pB.ty*str};
-  return{p1,p2,c1,c2};
+  return{p1:{x:pA.x,y:pA.y}, p2:{x:pB.x,y:pB.y}};
 }
 function edgeMid(e) {
   const en=edgeEnds(e); if(!en)return{x:0,y:0};
-  const{p1,c1,c2,p2}=en;
-  return{x:.125*p1.x+.375*c1.x+.375*c2.x+.125*p2.x,y:.125*p1.y+.375*c1.y+.375*c2.y+.125*p2.y};
+  const{p1,p2}=en;
+  return{x:(p1.x+p2.x)/2,y:(p1.y+p2.y)/2};
 }
 
 // ── Build nodes ────────────────────────────────────────────
@@ -809,7 +804,7 @@ function drawEdges() {
   let s=getDEFS(); const lbl=[];
   G.edges.forEach(e=>{
     const en=edgeEnds(e); if(!en)return;
-    const{p1,p2,c1,c2}=en;
+    const{p1,p2}=en;
     const polCls=e.pol==='++'?'spos':e.pol==='+'?'pos':e.pol==='--'?'sneg':e.pol==='-'?'neg':e.pol==='='?'eq':'';
     const isLoop=_loopEdges.has(e.id);
     const isTraced=_traceEdges.has(e.id);
@@ -818,7 +813,7 @@ function drawEdges() {
     const loopCls=isLoop?' loop':'';
     const lsCls=e.ls?(' ls-'+e.ls):(e.delay?' ls-dash':'');
     const traceCls=isTraced&&!isLoop?' traced':'';
-    const d='M'+p1.x+','+p1.y+' C'+c1.x+','+c1.y+' '+c2.x+','+c2.y+' '+p2.x+','+p2.y;
+    const d='M'+p1.x+','+p1.y+' L'+p2.x+','+p2.y;
     s+='<path class="cf-edge-hit" data-edge="'+e.id+'" d="'+d+'"/>';
     if(e.ls==='double'){
       s+='<path class="cf-edge '+polCls+selCls+loopCls+' ls-double'+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
@@ -827,7 +822,7 @@ function drawEdges() {
       s+='<path class="cf-edge '+polCls+selCls+loopCls+lsCls+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
     }
     if(e.label||e.pol){
-      const mx=.125*p1.x+.375*c1.x+.375*c2.x+.125*p2.x,my=.125*p1.y+.375*c1.y+.375*c2.y+.125*p2.y;
+      const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
       const sign=e.pol?'<span class="cf-el-sign '+polCls+'">'+(e.pol==='++'?'＋＋':e.pol==='+'?'＋':e.pol==='--'?'－－':e.pol==='-'?'－':'＝')+'</span>':'';
       const txt=e.label?'<span class="cf-el-text">'+esc(e.label)+'</span>':'';
       lbl.push('<div class="cf-edge-label" data-edge="'+e.id+'" style="left:'+mx+'px;top:'+my+'px">'+sign+txt+'</div>');
@@ -1237,14 +1232,14 @@ function exportSVG() {
   // Edges
   G.edges.forEach(e=>{
     const en=edgeEnds(e);if(!en)return;
-    const{p1,p2,c1,c2}=en;
+    const{p1,p2}=en;
     const stroke=e.pol==='++'?'#2a7a44':e.pol==='+'?'#4f7a5e':e.pol==='--'?'#a03838':e.pol==='-'?'#b3564a':e.pol==='='?'#c8a820':'#888';
     const ah=e.pol==='++'?'ah-sp':e.pol==='+'?'ah-p':e.pol==='--'?'ah-sn':e.pol==='-'?'ah-g':e.pol==='='?'ah-e':'ah-n';
     const ls=e.ls||(e.delay?'dash':'');
     const dash=ls==='dash'?' stroke-dasharray="8 5"':ls==='dot'?' stroke-dasharray="1.5 4" stroke-linecap="round"':'';
-    const d=`M${p1.x},${p1.y} C${c1.x},${c1.y} ${c2.x},${c2.y} ${p2.x},${p2.y}`;
+    const d=`M${p1.x},${p1.y} L${p2.x},${p2.y}`;
     out+=`<path fill="none" stroke="${stroke}" stroke-width="1.6"${dash} d="${d}" marker-end="url(#${ah})"/>`;
-    if(e.label){const mx=.125*p1.x+.375*c1.x+.375*c2.x+.125*p2.x,my=.125*p1.y+.375*c1.y+.375*c2.y+.125*p2.y;out+=`<text x="${mx}" y="${my}" text-anchor="middle" font-size="11" fill="#555" font-family="serif">${esc(e.label)}</text>`;}
+    if(e.label){const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;out+=`<text x="${mx}" y="${my}" text-anchor="middle" font-size="11" fill="#555" font-family="serif">${esc(e.label)}</text>`;}
   });
   // Regular nodes
   G.nodes.filter(n=>!n.isBox).forEach(n=>{
@@ -1477,7 +1472,7 @@ document.addEventListener('keydown', e => {
     _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
     document.getElementById('cf-add-text').classList.toggle('active',_textMode);
   }
-  else if((e.key==='w'||e.key==='W')&&!ctrl){e.preventDefault();fitAllNodes();}
+  else if(e.key==='`'&&!ctrl){e.preventDefault();fitAllNodes();}
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
   else if((e.key==='f'||e.key==='F')&&!ctrl){e.preventDefault();togglePresentation();}
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
