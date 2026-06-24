@@ -160,7 +160,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-md table{border-collapse:collapse;font-size:0.92em;margin:.75em 0;width:100%}
 .iv-md th,.iv-md td{border:1px solid #e8e8e8;padding:5px 10px;text-align:left}
 .iv-md th{background:#fafafa;font-weight:500}
-.iv-fd-meta{margin-top:16px;font-size:10px;color:#bbb;font-family:'Calibri',sans-serif}
+.iv-fd-meta{margin-top:16px;font-size:12px;color:#555;font-weight:600;font-family:'Calibri',sans-serif;letter-spacing:.01em}
 .iv-fd-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .iv-fd-img{max-width:100%;border-radius:10px;cursor:zoom-in;transition:opacity .18s ease,transform .18s ease}
 .iv-fd-img:hover{opacity:.88;transform:scale(1.01)}
@@ -614,11 +614,11 @@ function ivSubmitEntry(){
   if(_ivEditingId){
     const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
     const e=all.find(x=>x.id===_ivEditingId);
-    if(e)Object.assign(e,{title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages]});
+    if(e)Object.assign(e,{title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages],modified:new Date().toISOString()});
     const _ok=_ivSave();if(!_ok&&_ivPendingImages.length)alert('本機儲存空間不足，圖片可能未完整保存。建議減少圖片張數。');
     ivClearEditor();ivRenderTags();ivRenderSubs();ivRenderFeed();
   }else{
-    _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages]});
+    _ivStore[layer].push({id:_ivId(),title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages],modified:new Date().toISOString()});
     const _ok=_ivSave();if(!_ok&&_ivPendingImages.length)alert('本機儲存空間不足，圖片可能未完整保存。建議減少圖片張數。');
     ivClearEditor();ivRenderTags();
     _ivActiveTag={layer,title};_ivActiveSub=null;_ivActiveLayer=null;ivRenderLayers();ivRenderSubs();ivRenderFeed();
@@ -938,7 +938,7 @@ function ivShowDetail(id){
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
   const mdBody=ivRenderContent(e.content||'');
-  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${e.ts}</div>`;
+  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${ivFmtModified(e.modified)||e.ts||''}</div>`;
 }
 function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 function ivDeleteEntry(id){
@@ -1005,6 +1005,7 @@ function ivToggleCompose(){
   try{localStorage.setItem('iv_compose_state',_ivComposeOpen?'1':'0');}catch(e){}
 }
 function ivDateStr(d){return d.toISOString().slice(0,10);}
+function ivFmtModified(iso){if(!iso)return '';const d=new Date(iso);const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;}
 function ivGetWorkDays(){
   const today=new Date();
   const days=[];
