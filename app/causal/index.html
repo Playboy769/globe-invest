@@ -488,6 +488,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Multi-select lasso</div><div class="cf-shortcuts-key">Shift + drag</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle dark mode</div><div class="cf-shortcuts-key">D</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Presentation mode</div><div class="cf-shortcuts-key">F</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">W</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">This help panel</div><div class="cf-shortcuts-key">?</div></div>
     </div>
     <button class="cf-shortcuts-close" onclick="toggleShortcuts()">Close</button>
@@ -736,34 +737,25 @@ function save() {
 
 function selectAll(el){ const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r); }
 
-function borderPoint(n, tx, ty) {
+function sidePort(n, tx, ty) {
   const w=n._w||80, h=n._h||40, cx=n.x+w/2, cy=n.y+h/2;
-  let dx=tx-cx, dy=ty-cy;
-  if(dx===0&&dy===0)return{x:cx,y:cy};
-  const sx=dx!==0?(w/2)/Math.abs(dx):Infinity;
-  const sy=dy!==0?(h/2)/Math.abs(dy):Infinity;
-  const s=Math.min(sx,sy);
-  return{x:cx+dx*s,y:cy+dy*s};
-}
-function getPortTangent(n,p){
-  const w=n._w||80,h=n._h||40,eps=0.6;
-  if(Math.abs(p.x-(n.x+w))<eps)return{x:1,y:0};
-  if(Math.abs(p.x-n.x)<eps)    return{x:-1,y:0};
-  if(Math.abs(p.y-(n.y+h))<eps)return{x:0,y:1};
-  if(Math.abs(p.y-n.y)<eps)    return{x:0,y:-1};
-  const dx=p.x-(n.x+w/2),dy=p.y-(n.y+h/2),l=Math.hypot(dx,dy)||1;
-  return{x:dx/l,y:dy/l};
+  const dx=tx-cx, dy=ty-cy;
+  if(dx===0&&dy===0)return{x:cx,y:n.y,tx:0,ty:-1};
+  if(Math.abs(dx)*h > Math.abs(dy)*w){
+    return dx>0?{x:n.x+w,y:cy,tx:1,ty:0}:{x:n.x,y:cy,tx:-1,ty:0};
+  } else {
+    return dy>0?{x:cx,y:n.y+h,tx:0,ty:1}:{x:cx,y:n.y,tx:0,ty:-1};
+  }
 }
 function edgeEnds(e) {
   const A=byNode(e.from), B=byNode(e.to); if(!A||!B)return null;
-  const acx=A.x+(A._w||80)/2, acy=A.y+(A._h||40)/2;
-  const bcx=B.x+(B._w||80)/2, bcy=B.y+(B._h||40)/2;
-  const p1=borderPoint(A,bcx,bcy), p2=borderPoint(B,acx,acy);
-  const dist=Math.hypot(p2.x-p1.x,p2.y-p1.y);
-  const str=Math.max(40,Math.min(dist*0.45,130));
-  const t1=getPortTangent(A,p1),t2=getPortTangent(B,p2);
-  const c1={x:p1.x+t1.x*str,y:p1.y+t1.y*str};
-  const c2={x:p2.x+t2.x*str,y:p2.y+t2.y*str};
+  const pA=sidePort(A, B.x+(B._w||80)/2, B.y+(B._h||40)/2);
+  const pB=sidePort(B, A.x+(A._w||80)/2, A.y+(A._h||40)/2);
+  const dist=Math.hypot(pB.x-pA.x,pB.y-pA.y);
+  const str=Math.max(30,Math.min(dist*0.35,90));
+  const p1={x:pA.x,y:pA.y}, p2={x:pB.x,y:pB.y};
+  const c1={x:p1.x+pA.tx*str,y:p1.y+pA.ty*str};
+  const c2={x:p2.x+pB.tx*str,y:p2.y+pB.ty*str};
   return{p1,p2,c1,c2};
 }
 function edgeMid(e) {
@@ -941,6 +933,11 @@ function setNodeColor(id, c) {
   const el=_els[id]; if(el){ if(n.color) el.dataset.color=n.color; else delete el.dataset.color; }
   save();
 }
+function fitAllNodes() {
+  snapshot();
+  G.nodes.forEach(n=>{ if(!n.isBox) delete n.w; });
+  renderAll(); save();
+}
 
 // ── Node drag ──────────────────────────────────────────────
 function onNodeDown(id, ev) {
@@ -983,7 +980,7 @@ function startConnect(id, ev) {
   const A=byNode(id);
   const live=document.createElementNS('http://www.w3.org/2000/svg','path');
   live.setAttribute('class','cf-live'); svg.appendChild(live);
-  function mv(e){const w=s2w(e.clientX,e.clientY);const p1=borderPoint(A,w.x,w.y);live.setAttribute('d','M'+p1.x+','+p1.y+' L'+w.x+','+w.y);}
+  function mv(e){const w=s2w(e.clientX,e.clientY);const pt=sidePort(A,w.x,w.y);live.setAttribute('d','M'+pt.x+','+pt.y+' L'+w.x+','+w.y);}
   function up(e){
     document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);
     if(live.parentNode)live.parentNode.removeChild(live);
@@ -1480,6 +1477,7 @@ document.addEventListener('keydown', e => {
     _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
     document.getElementById('cf-add-text').classList.toggle('active',_textMode);
   }
+  else if((e.key==='w'||e.key==='W')&&!ctrl){e.preventDefault();fitAllNodes();}
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
   else if((e.key==='f'||e.key==='F')&&!ctrl){e.preventDefault();togglePresentation();}
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
