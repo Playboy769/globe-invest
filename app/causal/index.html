@@ -106,6 +106,7 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-port{position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;border:1.5px solid #9a9a9a;opacity:0;transition:opacity .14s ease,transform .12s ease,background .12s ease,border-color .12s ease;cursor:crosshair;z-index:3}
 .cf-node:hover .cf-port,.cf-node.sel .cf-port{opacity:1}
 .cf-port:hover{background:#0a0a0a;border-color:#0a0a0a;transform:scale(1.4)}
+.cf-node.connect-hover .cf-port{opacity:1}
 .cf-port.t{top:-6px;left:50%;margin-left:-5.5px}
 .cf-port.b{bottom:-6px;left:50%;margin-left:-5.5px}
 .cf-port.l{left:-6px;top:50%;margin-top:-5.5px}
@@ -749,11 +750,16 @@ function sidePort(n, tx, ty) {
     return dy>0?{x:cx,y:n.y+h,tx:0,ty:1}:{x:cx,y:n.y,tx:0,ty:-1};
   }
 }
+function portCenter(n, side) {
+  const w=n._w||80, h=n._h||40;
+  const m={t:{x:n.x+w/2,y:n.y,tx:0,ty:-1},r:{x:n.x+w,y:n.y+h/2,tx:1,ty:0},b:{x:n.x+w/2,y:n.y+h,tx:0,ty:1},l:{x:n.x,y:n.y+h/2,tx:-1,ty:0}};
+  return m[side]||null;
+}
 function edgeEnds(e) {
   const A=byNode(e.from), B=byNode(e.to); if(!A||!B)return null;
-  const pA=sidePort(A, B.x+(B._w||80)/2, B.y+(B._h||40)/2);
-  const pB=sidePort(B, A.x+(A._w||80)/2, A.y+(A._h||40)/2);
-  return{p1:{x:pA.x,y:pA.y}, p2:{x:pB.x,y:pB.y}};
+  const pA=e.fromSide?portCenter(A,e.fromSide):sidePort(A,B.x+(B._w||80)/2,B.y+(B._h||40)/2);
+  const pB=e.toSide?portCenter(B,e.toSide):sidePort(B,A.x+(A._w||80)/2,A.y+(A._h||40)/2);
+  return{p1:{x:pA.x,y:pA.y},p2:{x:pB.x,y:pB.y}};
 }
 function edgeMid(e) {
   const en=edgeEnds(e); if(!en)return{x:0,y:0};
@@ -791,7 +797,7 @@ function buildNodes() {
     d.dataset.nodeId=n.id;
     const sp=document.createElement('span'); sp.className='cf-node-text'; sp.textContent=n.text; d.appendChild(sp);
     if (!n.isBox) {
-      ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev));d.appendChild(p);});
+      ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     }
     d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
     d.addEventListener('dblclick',ev=>{ev.stopPropagation();editNode(n.id);});
@@ -891,11 +897,11 @@ function addBoxNode(x, y) {
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
-function addEdge(from, to) {
+function addEdge(from, to, fromSide, toSide) {
   const ex=G.edges.find(e=>e.from===from&&e.to===to);
   if(ex){select({type:'edge',id:ex.id});return;}
   snapshot();
-  const e={id:nid(),from,to,label:'',pol:''};
+  const e={id:nid(),from,to,label:'',pol:'',fromSide:fromSide||null,toSide:toSide||null};
   G.edges.push(e); select({type:'edge',id:e.id}); drawEdges(); placeTools(); updateChrome(); save();
 }
 function removeNode(id) {
@@ -932,8 +938,19 @@ function setNodeColor(id, c) {
 }
 function fitAllNodes() {
   snapshot();
-  G.nodes.forEach(n=>{ if(!n.isBox) delete n.w; });
-  renderAll(); save();
+  G.nodes.forEach(n=>{
+    if(n.isBox||n.isText)return;
+    const el=_els[n.id]; if(!el)return;
+    const sp=el.querySelector('.cf-node-text'); if(!sp)return;
+    const prevWS=sp.style.whiteSpace;
+    sp.style.whiteSpace='nowrap';
+    el.style.width='';
+    const w=el.offsetWidth;
+    sp.style.whiteSpace=prevWS;
+    n.w=w; el.style.width=w+'px'; n._w=w;
+    n._h=el.offsetHeight;
+  });
+  drawEdges(); placeTools(); save();
 }
 
 // ── Node drag ──────────────────────────────────────────────
@@ -972,18 +989,36 @@ function onNodeDown(id, ev) {
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
 }
 
-function startConnect(id, ev) {
+function startConnect(id, ev, fromSide) {
   ev.preventDefault(); ev.stopPropagation();
   const A=byNode(id);
   const live=document.createElementNS('http://www.w3.org/2000/svg','path');
   live.setAttribute('class','cf-live'); svg.appendChild(live);
-  function mv(e){const w=s2w(e.clientX,e.clientY);const pt=sidePort(A,w.x,w.y);live.setAttribute('d','M'+pt.x+','+pt.y+' L'+w.x+','+w.y);}
+  const startPt=portCenter(A,fromSide)||sidePort(A,A.x,A.y-1);
+  let hoverTarget=null;
+  function mv(e){
+    const w=s2w(e.clientX,e.clientY);
+    live.setAttribute('d','M'+startPt.x+','+startPt.y+' L'+w.x+','+w.y);
+    const t=document.elementFromPoint(e.clientX,e.clientY);
+    const nd=t&&t.closest('.cf-node');
+    const tid=nd&&nd.dataset.nodeId!==id?nd.dataset.nodeId:null;
+    if(tid!==hoverTarget){
+      if(hoverTarget&&_els[hoverTarget])_els[hoverTarget].classList.remove('connect-hover');
+      hoverTarget=tid;
+      if(tid&&_els[tid])_els[tid].classList.add('connect-hover');
+    }
+  }
   function up(e){
     document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);
     if(live.parentNode)live.parentNode.removeChild(live);
+    if(hoverTarget&&_els[hoverTarget])_els[hoverTarget].classList.remove('connect-hover');
     const t=document.elementFromPoint(e.clientX,e.clientY);
+    const portEl=t&&t.classList.contains('cf-port')?t:null;
     const nd=t&&t.closest('.cf-node');
-    if(nd&&nd.dataset.nodeId&&nd.dataset.nodeId!==id)addEdge(id,nd.dataset.nodeId);
+    if(nd&&nd.dataset.nodeId&&nd.dataset.nodeId!==id){
+      const toSide=portEl?['t','r','b','l'].find(s=>portEl.classList.contains(s)):null;
+      addEdge(id,nd.dataset.nodeId,fromSide,toSide);
+    }
   }
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
 }
