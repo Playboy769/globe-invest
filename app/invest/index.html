@@ -164,6 +164,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-md th{background:#fafafa;font-weight:500}
 .iv-fd-meta{margin-top:16px;font-size:12px;color:#555;font-weight:600;font-family:'Calibri',sans-serif;letter-spacing:.01em}
 .iv-fd-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.iv-hl{background:#ffe566;border-radius:2px;padding:0 1px;cursor:pointer;transition:background .12s}
+.iv-hl:hover{background:#ffd000}
+#iv-hl-popup{position:fixed;z-index:999;background:#ffe566;color:#0a0a0a;border:1px solid #e8c800;border-radius:7px;padding:5px 13px;cursor:pointer;font-size:11px;font-family:'Calibri',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,0.14);display:none;user-select:none;letter-spacing:.04em;white-space:nowrap}
 .iv-fd-img{max-width:100%;border-radius:10px;cursor:zoom-in;transition:opacity .18s ease,transform .18s ease}
 .iv-fd-img:hover{opacity:.88;transform:scale(1.01)}
 
@@ -320,6 +323,7 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
       <div class="iv-feed-empty">Select a tag to view entries</div>
     </div>
     <div id="iv-feed-detail" class="iv-feed-detail"></div>
+    <div id="iv-hl-popup" onmousedown="event.preventDefault()" onclick="ivDoHighlight()">✎ 畫重點</div>
   </div>
   <div class="iv-resize-handle" id="iv-rh2"></div>
   <div id="iv-editor">
@@ -499,6 +503,7 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
 })();
 
 let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null,_ivSearch='';
+let _ivHlEntry=null,_ivHlSel='';
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
 let _ivPendingImages=[];
@@ -969,8 +974,64 @@ function ivShowDetail(id){
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
   const mdBody=ivRenderContent(e.content||'');
   det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-dup" onclick="ivDuplicateEntry('${e.id}')">Dup</div><div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${ivFmtModified(e.modified)||e.ts||''}</div>`;
+  _ivHlEntry=e;
+  if(e.highlights&&e.highlights.length)ivApplyHighlights(det.querySelector('.iv-fd-body'),e.highlights);
+  det.addEventListener('click',e2=>{
+    const m=e2.target.closest('.iv-hl');if(!m)return;
+    const txt=m.dataset.hl;if(!txt||!_ivHlEntry)return;
+    _ivHlEntry.highlights=(_ivHlEntry.highlights||[]).filter(h=>h!==txt);
+    _ivSave();ivShowDetail(_ivHlEntry.id);
+  },{once:true});
 }
-function ivBackToFeed(){document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
+function ivBackToFeed(){_ivHlEntry=null;document.getElementById('iv-hl-popup').style.display='none';document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
+function ivApplyHighlights(container,highlights){
+  if(!container||!highlights||!highlights.length)return;
+  const walk=el=>{
+    Array.from(el.childNodes).forEach(node=>{
+      if(node.nodeType===3){
+        let html=node.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        let changed=false;
+        highlights.forEach(hl=>{
+          const esc=hl.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+          if(new RegExp(esc).test(html)){
+            html=html.replace(new RegExp(esc,'g'),`<mark class="iv-hl" data-hl="${hl.replace(/"/g,'&quot;')}" title="點擊移除螢光筆">${hl.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</mark>`);
+            changed=true;
+          }
+        });
+        if(changed){const s=document.createElement('span');s.innerHTML=html;node.parentNode.replaceChild(s,node);}
+      } else if(node.nodeType===1&&node.tagName!=='SCRIPT'&&!node.classList.contains('iv-hl')){
+        walk(node);
+      }
+    });
+  };
+  walk(container);
+}
+function ivDoHighlight(){
+  if(!_ivHlEntry||!_ivHlSel)return;
+  if(!_ivHlEntry.highlights)_ivHlEntry.highlights=[];
+  if(!_ivHlEntry.highlights.includes(_ivHlSel))_ivHlEntry.highlights.push(_ivHlSel);
+  _ivSave();
+  document.getElementById('iv-hl-popup').style.display='none';
+  window.getSelection().removeAllRanges();
+  const body=document.querySelector('#iv-feed-detail .iv-fd-body');
+  if(body){body.innerHTML=ivRenderContent(_ivHlEntry.content||'');ivApplyHighlights(body,_ivHlEntry.highlights);}
+  _ivHlSel='';
+}
+document.addEventListener('mouseup',e=>{
+  const popup=document.getElementById('iv-hl-popup');if(!popup)return;
+  if(e.target.closest('#iv-hl-popup'))return;
+  if(!_ivHlEntry){popup.style.display='none';return;}
+  const sel=window.getSelection();
+  const txt=sel?sel.toString().trim():'';
+  if(!txt||!sel.rangeCount){popup.style.display='none';return;}
+  const body=document.querySelector('#iv-feed-detail .iv-fd-body');
+  if(!body||!body.contains(sel.anchorNode)){popup.style.display='none';return;}
+  _ivHlSel=txt;
+  const r=sel.getRangeAt(0).getBoundingClientRect();
+  popup.style.left=Math.max(4,r.left+r.width/2-44)+'px';
+  popup.style.top=(r.top-40)+'px';
+  popup.style.display='block';
+});
 function ivDeleteEntry(id){
   if(!confirm('Delete this entry permanently?'))return;
   ['macro','risk','industry'].forEach(l=>{_ivStore[l]=_ivStore[l].filter(e=>e.id!==id);});
