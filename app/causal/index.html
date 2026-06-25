@@ -194,6 +194,8 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-tool.eq.active{background:#fff8dc}
 .cf-tool.ls-btn{width:30px;color:#888;padding:0 2px}
 .cf-tool.ls-btn.active{background:#f0f0f0;color:#555}
+.cf-tool.lock-btn{width:26px;color:#bbb}
+.cf-tool.lock-btn.active{background:#fff8e6;color:#c08000;border-radius:6px}
 .cf-tool.trace-btn{color:#4a88dd;font-size:14px}
 .cf-tool.trace-btn.active{background:#e8f0ff}
 .cf-tool-sep{width:1px;height:15px;background:#ececec;margin:0 2px}
@@ -440,6 +442,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-tool ls-btn" data-ls="dash" title="Dashed line"><svg width="20" height="12" viewBox="0 0 20 12"><line x1="1" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/></svg></div>
       <div class="cf-tool ls-btn" data-ls="dot" title="Dotted line"><svg width="20" height="12" viewBox="0 0 20 12"><line x1="1" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="2" stroke-dasharray="1 3.5" stroke-linecap="round"/></svg></div>
       <div class="cf-tool ls-btn" data-ls="double" title="Double line"><svg width="20" height="12" viewBox="0 0 20 12"><line x1="1" y1="3.5" x2="19" y2="3.5" stroke="currentColor" stroke-width="1.3"/><line x1="1" y1="8.5" x2="19" y2="8.5" stroke="currentColor" stroke-width="1.3"/></svg></div>
+      <div class="cf-tool lock-btn" data-act="lock" title="Lock connection points"><svg width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="10" height="8" rx="2"/><path d="M4.5 7V4.5a2.5 2.5 0 0 1 5 0V7"/></svg></div>
       <div class="cf-tool" data-act="label" title="Edit label">✎</div>
       <div class="cf-tool del" data-act="del" title="Delete link (Del)">✕</div>
     </div>
@@ -874,6 +877,7 @@ function placeTools(){
     et.querySelectorAll('.cf-tool[data-pol]').forEach(b=>b.classList.toggle('active',!!e.pol&&b.dataset.pol===e.pol));
     const curLs=e.ls||(e.delay?'dash':'');
     et.querySelectorAll('.ls-btn').forEach(b=>b.classList.toggle('active',b.dataset.ls===curLs));
+    et.querySelector('.lock-btn').classList.toggle('active',!!e.toSide);
   }
 }
 function _w(n){return n._w||80;}
@@ -928,6 +932,22 @@ function setLineStyle(id, ls) {
   const e=byEdge(id); if(!e)return;
   snapshot();
   e.delay=false; e.ls=(e.ls===ls?'':ls); drawEdges(); placeTools(); save();
+}
+function toggleLock(id) {
+  const e=byEdge(id); if(!e)return;
+  snapshot();
+  if(e.toSide){
+    e.fromSide=null; e.toSide=null;
+  } else {
+    const A=byNode(e.from),B=byNode(e.to); if(!A||!B)return;
+    const pB=sidePort(B,A.x+(A._w||80)/2,A.y+(A._h||40)/2);
+    e.toSide=pB.tx>0?'r':pB.tx<0?'l':pB.ty>0?'b':'t';
+    if(!e.fromSide){
+      const pA=sidePort(A,B.x+(B._w||80)/2,B.y+(B._h||40)/2);
+      e.fromSide=pA.tx>0?'r':pA.tx<0?'l':pA.ty>0?'b':'t';
+    }
+  }
+  drawEdges(); placeTools(); save();
 }
 function setNodeColor(id, c) {
   const n=byNode(id); if(!n)return;
@@ -1380,6 +1400,7 @@ document.getElementById('cf-edge-tools').addEventListener('click', e => {
   const b=e.target.closest('.cf-tool');if(!b||!_sel||_sel.type!=='edge')return;
   if(b.dataset.pol)setPolarity(_sel.id,b.dataset.pol);
   else if(b.dataset.ls)setLineStyle(_sel.id,b.dataset.ls);
+  else if(b.dataset.act==='lock')toggleLock(_sel.id);
   else if(b.dataset.act==='label')editEdgeLabel(_sel.id);
   else if(b.dataset.act==='del')removeEdge(_sel.id);
 });
