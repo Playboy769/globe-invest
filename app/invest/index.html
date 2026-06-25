@@ -175,6 +175,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-preview-tog:hover{color:#888;border-color:#bbb}
 .iv-preview-tog.active{color:#0a0a0a;border-color:#0a0a0a;background:#f5f5f5}
 .iv-ed-preview{min-height:140px;padding:14px 16px;background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;font-size:13px;line-height:1.8;font-family:'Calibri','Noto Sans TC',sans-serif;color:#0a0a0a;display:none}
+.iv-ed-split.split{display:flex;gap:10px;align-items:stretch}
+.iv-ed-split.split>.iv-ed-textarea{flex:1 1 0;min-width:0;resize:none;max-height:340px}
+.iv-ed-split.split>.iv-ed-preview{display:block;flex:1 1 0;min-width:0;margin:0;max-height:340px;overflow-y:auto}
 .iv-ed-input{width:100%;padding:11px 14px;background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;color:#0a0a0a;font-size:13px;font-weight:400;outline:none;font-family:'Calibri','Noto Sans TC',sans-serif;transition:border-color .18s ease,background .18s ease;box-sizing:border-box}
 .iv-ed-input:focus{border-color:#0a0a0a;background:#fff}
 .iv-ed-input::placeholder{color:#bbb}
@@ -392,8 +395,10 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
       <div class="iv-ed-divider"></div>
       <div class="iv-ed-field">
         <div class="iv-ed-label">Content <span class="iv-preview-tog" id="iv-preview-tog" onclick="ivTogglePreview()">Preview</span></div>
-        <textarea class="iv-ed-textarea" id="iv-ed-content" placeholder="Write your narrative, thesis, or risk note here..."></textarea>
-        <div class="iv-ed-preview iv-md" id="iv-ed-preview"></div>
+        <div class="iv-ed-split" id="iv-ed-split">
+          <textarea class="iv-ed-textarea" id="iv-ed-content" placeholder="Write your narrative, thesis, or risk note here..." oninput="ivPreviewLive()"></textarea>
+          <div class="iv-ed-preview iv-md" id="iv-ed-preview"></div>
+        </div>
       </div>
       <div class="iv-ed-field">
         <div class="iv-ed-label">Images</div>
@@ -639,10 +644,8 @@ function ivClearEditor(){
   _ivPendingImages=[];ivRenderPendingImages();
   _ivEditingId=null;
   const sb=document.getElementById('iv-submit-btn');if(sb)sb.textContent='Save';
-  const pv=document.getElementById('iv-ed-preview'),ta=document.getElementById('iv-ed-content'),btn=document.getElementById('iv-preview-tog');
-  if(pv){pv.style.display='none';pv.innerHTML='';}
-  if(ta)ta.style.display='';
-  if(btn)btn.classList.remove('active');
+  const _split=document.getElementById('iv-ed-split');
+  if(_split&&_split.classList.contains('split'))_ivRenderPreview();
   ivClearDraft();
 }
 function ivEditEntry(id){
@@ -662,6 +665,7 @@ function ivEditEntry(id){
   document.querySelectorAll('.iv-sev-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.sev)===sev));
   const sb=document.getElementById('iv-submit-btn');if(sb)sb.textContent='Update';
   ivBackToFeed();
+  if(document.getElementById('iv-ed-split').classList.contains('split'))_ivRenderPreview();
   document.getElementById('iv-ed-title').focus();
 }
 
@@ -924,21 +928,18 @@ function ivRenderFeed(){
     return ivCardHTML(e,LN[layer]);
   }).join('');
 }
+function _ivRenderPreview(){const pv=document.getElementById('iv-ed-preview'),ta=document.getElementById('iv-ed-content');if(pv&&ta)pv.innerHTML=ivRenderContent(ta.value);}
+let _ivPvTimer;
+function ivPreviewLive(){const split=document.getElementById('iv-ed-split');if(!split||!split.classList.contains('split'))return;clearTimeout(_ivPvTimer);_ivPvTimer=setTimeout(_ivRenderPreview,120);}
 function ivTogglePreview(){
-  const ta=document.getElementById('iv-ed-content');
-  const pv=document.getElementById('iv-ed-preview');
-  const btn=document.getElementById('iv-preview-tog');
-  if(!ta||!pv)return;
-  const showing=pv.style.display==='block';
-  if(showing){
-    pv.style.display='none';ta.style.display='';
-    if(btn)btn.classList.remove('active');
-  }else{
-    pv.innerHTML=ivRenderContent(ta.value);
-    pv.style.display='block';ta.style.display='none';
-    if(btn)btn.classList.add('active');
-  }
+  const split=document.getElementById('iv-ed-split');const btn=document.getElementById('iv-preview-tog');
+  if(!split)return;
+  const on=split.classList.toggle('split');
+  if(btn)btn.classList.toggle('active',on);
+  if(on)_ivRenderPreview();
+  try{localStorage.setItem('iv_pv_split',on?'1':'0');}catch(e){}
 }
+function ivInitPreview(){try{if(localStorage.getItem('iv_pv_split')==='1'){const split=document.getElementById('iv-ed-split');if(split&&!split.classList.contains('split')){split.classList.add('split');const btn=document.getElementById('iv-preview-tog');if(btn)btn.classList.add('active');_ivRenderPreview();}}}catch(e){}}
 function ivRenderContent(src){
   src=src||'';
   const math=[];
@@ -1256,7 +1257,7 @@ function ivRestoreDraft(){
   });
 })();
 ivRestoreDraft();
-ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();ivApplyFontSize();
+ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();ivApplyFontSize();ivInitPreview();
 </script>
 </body>
 </html>
