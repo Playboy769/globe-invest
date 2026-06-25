@@ -455,7 +455,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
   </div>
   <span id="cf-count" class="cf-count" style="position:absolute;bottom:54px;left:24px;z-index:10"></span>
   <div id="cf-watermark" title="點兩下重新命名"></div>
-  <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · 1–6: color · P: trace · ?: help</div>
+  <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · Ctrl+N: center · 1–6: color · P: trace · ?: help</div>
   <div id="cf-zoom-ctrl">
     <button class="cf-zoom-btn" onclick="cfZoom(0.8)" title="縮小 (-)">−</button>
     <button class="cf-zoom-btn" onclick="cfZoom(1.25)" title="放大 (+)">+</button>
@@ -484,6 +484,7 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Copy / Paste nodes</div><div class="cf-shortcuts-key">Ctrl C / V</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Undo / Redo</div><div class="cf-shortcuts-key">Ctrl Z / Y</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Align left / right / top / bottom</div><div class="cf-shortcuts-key">Ctrl ← → ↑ ↓</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Center to viewport horizontally</div><div class="cf-shortcuts-key">Ctrl N</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Delete selected</div><div class="cf-shortcuts-key">Del / Backspace</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Color node (yellow → cyan)</div><div class="cf-shortcuts-key">1 – 6</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Remove node color</div><div class="cf-shortcuts-key">0</div></div>
@@ -1543,6 +1544,20 @@ document.addEventListener('keydown', e => {
     document.getElementById('cf-add-text').classList.toggle('active',_textMode);
   }
   else if(ctrl&&(e.key==='b'||e.key==='B')){e.preventDefault();fitAllNodes();}
+  else if(ctrl&&(e.key==='n'||e.key==='N')){
+    e.preventDefault();
+    const ids=_multiSel.size>0?Array.from(_multiSel):(_sel&&_sel.type==='node'?[_sel.id]:[]);
+    if(!ids.length)return;
+    snapshot();
+    const r=canvas.getBoundingClientRect();
+    const viewCX=(r.width/2-vt.x)/vt.s;
+    const ns=ids.map(id=>byNode(id)).filter(Boolean);
+    const minX=Math.min(...ns.map(n=>n.x));
+    const maxX=Math.max(...ns.map(n=>n.x+(n._w||80)));
+    const shift=viewCX-(minX+maxX)/2;
+    ns.forEach(n=>{n.x+=shift;const el=_els[n.id];if(el)el.style.left=n.x+'px';});
+    drawEdges();placeTools();save();
+  }
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
   else if((e.key==='f'||e.key==='F')&&!ctrl){e.preventDefault();togglePresentation();}
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
