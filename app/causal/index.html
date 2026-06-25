@@ -938,7 +938,12 @@ function setNodeColor(id, c) {
 }
 function fitAllNodes() {
   snapshot();
-  G.nodes.forEach(n=>{
+  const targets = _multiSel.size>0
+    ? G.nodes.filter(n=>_multiSel.has(n.id))
+    : (_sel&&_sel.type==='node')
+      ? G.nodes.filter(n=>n.id===_sel.id)
+      : G.nodes;
+  targets.forEach(n=>{
     if(n.isBox||n.isText)return;
     const el=_els[n.id]; if(!el)return;
     const sp=el.querySelector('.cf-node-text'); if(!sp)return;
