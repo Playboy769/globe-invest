@@ -267,11 +267,11 @@ body.dark .cf-node.box-node{background:rgba(25,40,70,0.35);border-color:#3a5a8a}
 body.dark .cf-node.box-node:hover{border-color:#5a80be;background:rgba(35,55,100,0.4)}
 body.dark .cf-node.box-node.sel{border-color:#5a88dd}
 body.dark .cf-box-handle{background:#4a6a8a}
-.cf-node.html-node{background:#fff;border:1.5px solid #c8d4e0;border-radius:10px;padding:0;overflow:visible;min-width:200px;min-height:120px}
-.cf-node.html-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.18)}
-.cf-node.html-node:hover .cf-box-handle,.cf-node.html-node.sel .cf-box-handle{opacity:1}
-.cf-node.html-node>.html-iframe{width:100%;height:100%;border:none;display:block;border-radius:9px;pointer-events:none;overflow:hidden}
-body.dark .cf-node.html-node{background:#1a1a1a;border-color:#3a5070}
+.cf-node.img-node{background:#f8f8f8;border:1.5px solid #c8d4e0;border-radius:10px;padding:0;overflow:hidden;min-width:80px;min-height:60px}
+.cf-node.img-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.18)}
+.cf-node.img-node:hover .cf-box-handle,.cf-node.img-node.sel .cf-box-handle{opacity:1}
+.cf-node.img-node>img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:9px}
+body.dark .cf-node.img-node{background:#1e1e1e;border-color:#3a5070}
 body.dark .cf-node.box-node[data-color="1"]{background:rgba(44,40,20,0.55);border-color:#8a6a10}
 body.dark .cf-node.box-node[data-color="2"]{background:rgba(24,40,26,0.55);border-color:#307040}
 body.dark .cf-node.box-node[data-color="3"]{background:rgba(44,24,24,0.55);border-color:#803030}
@@ -397,8 +397,8 @@ body.dark .cf-shortcuts-close:hover{color:#ccc;border-color:#555;background:#252
     <button class="cf-btn" id="cf-add">+ Node</button>
     <button class="cf-btn" id="cf-add-box">+ Box</button>
     <button class="cf-btn" id="cf-add-text">+ Text</button>
-    <button class="cf-btn" id="cf-add-html" title="Upload HTML diagram">+ HTML</button>
-    <input type="file" id="cf-html-input" accept=".html,.htm" style="display:none">
+    <button class="cf-btn" id="cf-add-img" title="Upload image">+ Image</button>
+    <input type="file" id="cf-img-input" accept="image/*" style="display:none">
     <button class="cf-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">Fit</button>
     <button class="cf-btn danger" id="cf-clear">Clear</button>
     <div class="cf-top-sep"></div>
@@ -782,7 +782,7 @@ function edgeMid(e) {
 function buildNodes() {
   nodesLayer.innerHTML=''; _els={};
   // Box nodes first so they render behind regular nodes
-  const sorted = [...G.nodes].sort((a,b)=>((a.isBox||a.isHtml)?0:1)-((b.isBox||b.isHtml)?0:1));
+  const sorted = [...G.nodes].sort((a,b)=>((a.isBox||a.isImage)?0:1)-((b.isBox||b.isImage)?0:1));
   sorted.forEach(n => {
     const isSel = _sel&&_sel.type==='node'&&_sel.id===n.id;
     const isMulti = _multiSel.has(n.id);
@@ -795,17 +795,15 @@ function buildNodes() {
       if (n.color) d.dataset.color=n.color;
       const boxHandles=[{cls:'bh-nw',dir:{n:1,w:1}},{cls:'bh-n',dir:{n:1}},{cls:'bh-ne',dir:{n:1,e:1}},{cls:'bh-e',dir:{e:1}},{cls:'bh-se',dir:{s:1,e:1}},{cls:'bh-s',dir:{s:1}},{cls:'bh-sw',dir:{s:1,w:1}},{cls:'bh-w',dir:{w:1}}];
       boxHandles.forEach(h=>{const bh=document.createElement('div');bh.className='cf-box-handle '+h.cls;bh.addEventListener('pointerdown',ev=>startBoxResize(n.id,h.dir,ev));d.appendChild(bh);});
-    } else if (n.isHtml) {
-      d.className='cf-node html-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
-      d.style.width=(n.w||420)+'px'; d.style.height=(n.bh||300)+'px';
+    } else if (n.isImage) {
+      d.className='cf-node img-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
+      d.style.width=(n.w||280)+'px'; d.style.height=(n.bh||200)+'px';
       const BH=[{cls:'bh-nw',dir:{n:1,w:1}},{cls:'bh-n',dir:{n:1}},{cls:'bh-ne',dir:{n:1,e:1}},{cls:'bh-e',dir:{e:1}},{cls:'bh-se',dir:{s:1,e:1}},{cls:'bh-s',dir:{s:1}},{cls:'bh-sw',dir:{s:1,w:1}},{cls:'bh-w',dir:{w:1}}];
       BH.forEach(h=>{const bh=document.createElement('div');bh.className='cf-box-handle '+h.cls;bh.addEventListener('pointerdown',ev=>startBoxResize(n.id,h.dir,ev));d.appendChild(bh);});
-      const ifr=document.createElement('iframe');
-      ifr.setAttribute('srcdoc',n.htmlContent||'');
-      ifr.setAttribute('sandbox','allow-scripts');
-      ifr.className='html-iframe';
-      ifr.style.cssText='width:100%;height:100%;border:none;display:block;border-radius:9px;pointer-events:none';
-      d.appendChild(ifr);
+      const img=document.createElement('img');
+      img.src=n.src||'';
+      img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:9px';
+      d.appendChild(img);
       ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     } else {
       d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'');
@@ -915,9 +913,9 @@ function addTextLabel(x, y) {
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); editNode(n.id); save();
   return n;
 }
-function addHtmlNode(x, y, htmlContent) {
+function addImageNode(x, y, src) {
   snapshot();
-  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isHtml:true,htmlContent:htmlContent,w:420,bh:300};
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isImage:true,src:src,w:280,bh:200};
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
@@ -1452,16 +1450,23 @@ document.getElementById('cf-add-text').addEventListener('click',()=>{
   _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
   document.getElementById('cf-add-text').classList.toggle('active',_textMode);
 });
-document.getElementById('cf-add-html').addEventListener('click',()=>document.getElementById('cf-html-input').click());
-document.getElementById('cf-html-input').addEventListener('change',e=>{
+document.getElementById('cf-add-img').addEventListener('click',()=>document.getElementById('cf-img-input').click());
+document.getElementById('cf-img-input').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
   const rd=new FileReader();
-  rd.onload=ev=>{
+  rd.onload=async ev=>{
+    const dataUrl=ev.target.result;
     const r=canvas.getBoundingClientRect();
     const cx=(r.width/2-vt.x)/vt.s, cy=(r.height/2-vt.y)/vt.s;
-    addHtmlNode(cx-210,cy-150,ev.target.result);
+    const ext=(f.name.split('.').pop()||'png').toLowerCase();
+    // Try Railway upload; fallback to inline base64
+    try{
+      const res=await fetch('/api/upload-asset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:dataUrl,ext})});
+      if(res.ok){const {url}=await res.json();addImageNode(cx-140,cy-100,url);return;}
+    }catch(_){}
+    addImageNode(cx-140,cy-100,dataUrl);
   };
-  rd.readAsText(f);
+  rd.readAsDataURL(f);
   e.target.value='';
 });
 document.getElementById('cf-clear').addEventListener('click',()=>{

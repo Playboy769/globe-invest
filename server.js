@@ -3,6 +3,7 @@ const https = require('https');
 const zlib = require('zlib');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const PORT = process.env.PORT || 8080;
 const DATA_DIR = '/data';
@@ -173,6 +174,45 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ error: e.message }));
       }
     });
+    return;
+  }
+
+  // Image asset upload
+  if (req.url === '/api/upload-asset' && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => { if (body.length < 20e6) body += c; });
+    req.on('end', () => {
+      try {
+        const { data, ext } = JSON.parse(body);
+        const base64 = data.includes(',') ? data.split(',')[1] : data;
+        const buf = Buffer.from(base64, 'base64');
+        const safeExt = (ext||'png').replace(/[^a-z0-9]/gi,'').slice(0,8)||'png';
+        const id = crypto.randomUUID();
+        const assetsDir = path.join(DATA_DIR, 'assets');
+        if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir, { recursive: true });
+        const filename = id + '.' + safeExt;
+        fs.writeFileSync(path.join(assetsDir, filename), buf);
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end(JSON.stringify({ url: '/api/asset/' + filename }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json', ...CORS });
+        res.end(JSON.stringify({ error: e.message }));
+      }
+    });
+    return;
+  }
+
+  // Image asset serve
+  if (req.url.startsWith('/api/asset/') && req.method === 'GET') {
+    const filename = path.basename(req.url.replace('/api/asset/', '')).replace(/[^a-zA-Z0-9._-]/g, '');
+    const assetPath = path.join(DATA_DIR, 'assets', filename);
+    try {
+      const content = fs.readFileSync(assetPath);
+      const ext = path.extname(filename).slice(1).toLowerCase();
+      const mime = { png:'image/png', jpg:'image/jpeg', jpeg:'image/jpeg', gif:'image/gif', webp:'image/webp', svg:'image/svg+xml', bmp:'image/bmp' }[ext] || 'application/octet-stream';
+      res.writeHead(200, { 'Content-Type': mime, 'Cache-Control': 'public,max-age=31536000', ...CORS });
+      res.end(content);
+    } catch (e) { res.writeHead(404); res.end('Not found'); }
     return;
   }
 
