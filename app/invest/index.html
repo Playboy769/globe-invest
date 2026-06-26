@@ -1462,7 +1462,7 @@ function ivShowStats(){
 function ivCloseStats(){document.getElementById('iv-stats-overlay').style.display='none';}
 
 /* ── Feature 4: Watch List ── */
-let _ivWL=[];try{_ivWL=JSON.parse(localStorage.getItem('iv_wl')||'[]');}catch(e){_ivWL=[];}
+window._ivWL=[];try{window._ivWL=JSON.parse(localStorage.getItem('iv_wl')||'[]');}catch(e){window._ivWL=[];}
 const _ivWLColors=['#ced4c6','#c6ccd6','#d6ccba','#d0b4a6','#c0aab8','#ddd'];
 function _ivWLSave(){try{localStorage.setItem('iv_wl',JSON.stringify(_ivWL));}catch(e){}}
 function ivWLAdd(){
@@ -1471,17 +1471,35 @@ function ivWLAdd(){
   _ivWL.push({id:_ivId(),text:txt,color:'#ddd'});
   _ivWLSave();ivWLRender();
 }
-function ivWLCycleColor(id){
-  const item=_ivWL.find(x=>x.id===id);if(!item)return;
-  const idx=_ivWLColors.indexOf(item.color);
-  item.color=_ivWLColors[(idx+1)%_ivWLColors.length];
-  _ivWLSave();ivWLRender();
-}
-function ivWLDel(id){_ivWL=_ivWL.filter(x=>x.id!==id);_ivWLSave();ivWLRender();}
 function ivWLRender(){
   const el=document.getElementById('iv-wl-list');if(!el)return;
-  if(!_ivWL.length){el.innerHTML='';return;}
-  el.innerHTML=_ivWL.map(item=>`<div class="iv-wl-item"><span class="iv-wl-dot" style="background:${item.color}" onclick="ivWLCycleColor('${item.id}')"></span><span class="iv-wl-text" title="${_ivEscHtml(item.text)}">${_ivEscHtml(item.text)}</span><span class="iv-wl-del" onclick="ivWLDel('${item.id}')">×</span></div>`).join('');
+  el.innerHTML='';
+  _ivWL.forEach(item=>{
+    const row=document.createElement('div');
+    row.className='iv-wl-item';
+    const dot=document.createElement('span');
+    dot.className='iv-wl-dot';dot.style.background=item.color;
+    dot.title='點擊換色';
+    dot.addEventListener('click',()=>{
+      const idx=_ivWLColors.indexOf(item.color);
+      item.color=_ivWLColors[(idx+1)%_ivWLColors.length];
+      _ivWLSave();ivWLRender();
+    });
+    const txt=document.createElement('span');
+    txt.className='iv-wl-text';txt.title='點擊編輯';
+    txt.textContent=item.text;
+    txt.addEventListener('click',()=>{
+      const nv=prompt('編輯 Watch 條目：',item.text);
+      if(nv===null)return;
+      const t=nv.trim();if(!t)return;
+      item.text=t;_ivWLSave();ivWLRender();
+    });
+    const del=document.createElement('span');
+    del.className='iv-wl-del';del.textContent='×';del.title='刪除';
+    del.addEventListener('click',()=>{_ivWL=_ivWL.filter(x=>x.id!==item.id);_ivWLSave();ivWLRender();});
+    row.appendChild(dot);row.appendChild(txt);row.appendChild(del);
+    el.appendChild(row);
+  });
 }
 ivWLRender();
 
