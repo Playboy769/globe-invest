@@ -1623,15 +1623,13 @@ document.addEventListener('keydown', e => {
   else if(ctrl&&e.code==='KeyM'){
     e.preventDefault();
     const ids=_multiSel.size>0?Array.from(_multiSel):(_sel&&_sel.type==='node'?[_sel.id]:[]);
-    if(!ids.length)return;
+    if(ids.length<2)return;
     snapshot();
-    const r=canvas.getBoundingClientRect();
-    const viewCX=(r.width/2-vt.x)/vt.s;
     const ns=ids.map(id=>byNode(id)).filter(Boolean);
     const minX=Math.min(...ns.map(n=>n.x));
     const maxX=Math.max(...ns.map(n=>n.x+(n._w||80)));
-    const shift=viewCX-(minX+maxX)/2;
-    ns.forEach(n=>{n.x+=shift;const el=_els[n.id];if(el)el.style.left=n.x+'px';});
+    const midX=(minX+maxX)/2;
+    ns.forEach(n=>{n.x=midX-(n._w||80)/2;const el=_els[n.id];if(el)el.style.left=n.x+'px';});
     drawEdges();placeTools();save();
   }
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
