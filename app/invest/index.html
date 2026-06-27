@@ -169,9 +169,18 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-fd-meta{margin-top:16px;font-size:12px;color:#555;font-weight:600;font-family:'Calibri',sans-serif;letter-spacing:.01em}
 .iv-fd-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .iv-fd-body{user-select:text}
-.iv-hl{background:#ffe566;border-radius:2px;padding:0 1px;cursor:pointer;transition:background .12s}
-.iv-hl:hover{background:#ffd000}
-#iv-hl-popup{position:fixed;z-index:999;background:#ffe566;color:#0a0a0a;border:1px solid #e8c800;border-radius:7px;padding:5px 13px;cursor:pointer;font-size:11px;font-family:'Calibri',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,0.14);display:none;user-select:none;letter-spacing:.04em;white-space:nowrap}
+.iv-hl{background:#ffe566;border-radius:2px;padding:0 1px;cursor:pointer;transition:filter .12s}
+.iv-hl:hover{filter:brightness(.88)}
+.iv-hl[data-color="g"]{background:#b8e8b0}
+.iv-hl[data-color="b"]{background:#b3d4f0}
+.iv-hl[data-color="p"]{background:#f5c6d8}
+#iv-hl-popup{position:fixed;z-index:999;background:#fff;border:1px solid #e4e4e4;border-radius:10px;padding:6px 9px;display:none;flex-direction:row;align-items:center;gap:5px;box-shadow:0 4px 16px rgba(0,0,0,0.11);user-select:none}
+.iv-hl-dot{width:19px;height:19px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .12s,border-color .12s;flex-shrink:0;box-sizing:border-box}
+.iv-hl-dot:hover{transform:scale(1.2)}
+.iv-hl-dot.active{border-color:#333}
+.iv-hl-sep{width:1px;height:14px;background:#e4e4e4;flex-shrink:0;margin:0 1px}
+.iv-hl-rm{font-size:11px;color:#bbb;cursor:pointer;padding:0 2px;line-height:1;transition:color .12s;font-family:'Calibri',sans-serif}
+.iv-hl-rm:hover{color:#c44}
 .iv-fd-img{max-width:100%;border-radius:10px;cursor:zoom-in;transition:opacity .18s ease,transform .18s ease}
 .iv-fd-img:hover{opacity:.88;transform:scale(1.01)}
 
@@ -384,7 +393,14 @@ body.dark .iv-wl-text{color:#aaa}
       <div class="iv-feed-empty">Select a tag to view entries</div>
     </div>
     <div id="iv-feed-detail" class="iv-feed-detail"></div>
-    <div id="iv-hl-popup" onmousedown="event.preventDefault()" onclick="ivDoHighlight()">✎ 畫重點</div>
+    <div id="iv-hl-popup" onmousedown="event.preventDefault()">
+      <div class="iv-hl-dot" style="background:#ffe566" data-color="y" onclick="ivDoHighlight('y')"></div>
+      <div class="iv-hl-dot" style="background:#b8e8b0" data-color="g" onclick="ivDoHighlight('g')"></div>
+      <div class="iv-hl-dot" style="background:#b3d4f0" data-color="b" onclick="ivDoHighlight('b')"></div>
+      <div class="iv-hl-dot" style="background:#f5c6d8" data-color="p" onclick="ivDoHighlight('p')"></div>
+      <div class="iv-hl-sep"></div>
+      <div class="iv-hl-rm" onclick="ivRemoveHighlight()">✕</div>
+    </div>
   </div>
   <div class="iv-resize-handle" id="iv-rh2"></div>
   <div id="iv-editor">
@@ -573,7 +589,7 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
 })();
 
 let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null,_ivSearch='';
-let _ivHlEntry=null,_ivHlSel='';
+let _ivHlEntry=null,_ivHlSel='',_ivHlMark=null;
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
 let _ivPendingImages=[];
@@ -1062,12 +1078,13 @@ function ivShowDetail(id){
   if(e.highlights&&e.highlights.length)ivApplyHighlights(det.querySelector('.iv-fd-body'),e.highlights);
   det.addEventListener('click',e2=>{
     const m=e2.target.closest('.iv-hl');if(!m)return;
-    const txt=m.dataset.hl;if(!txt||!_ivHlEntry)return;
-    _ivHlEntry.highlights=(_ivHlEntry.highlights||[]).filter(h=>h!==txt);
-    _ivSave();ivShowDetail(_ivHlEntry.id);
-  },{once:true});
+    e2.stopPropagation();
+    _ivHlSel=m.dataset.hl;_ivHlMark=m;
+    const r=m.getBoundingClientRect();
+    ivShowHlPopup(r.left+r.width/2,r.top,m.dataset.color||'y');
+  });
 }
-function ivBackToFeed(){_ivHlEntry=null;document.getElementById('iv-hl-popup').style.display='none';document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
+function ivBackToFeed(){_ivHlEntry=null;_ivHlSel='';_ivHlMark=null;ivHideHlPopup();document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 function ivLinkDiagram(id){
   const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
   const e=all.find(x=>x.id===id);if(!e)return;
@@ -1081,17 +1098,20 @@ function ivOpenDiagram(id){
   const e=all.find(x=>x.id===id);if(!e||!e.causalFileId)return;
   window.open(_IV_CAUSAL_BASE+'?file='+encodeURIComponent(e.causalFileId),'_blank');
 }
+function ivHlNorm(arr){return(arr||[]).map(h=>typeof h==='string'?{t:h,c:'y'}:h);}
 function ivApplyHighlights(container,highlights){
   if(!container||!highlights||!highlights.length)return;
+  const items=ivHlNorm(highlights);
   const walk=el=>{
     Array.from(el.childNodes).forEach(node=>{
       if(node.nodeType===3){
         let html=node.textContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         let changed=false;
-        highlights.forEach(hl=>{
-          const esc=hl.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+        items.forEach(({t,c})=>{
+          const esc=t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
           if(new RegExp(esc).test(html)){
-            html=html.replace(new RegExp(esc,'g'),`<mark class="iv-hl" data-hl="${hl.replace(/"/g,'&quot;')}" title="點擊移除螢光筆">${hl.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</mark>`);
+            const safe=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            html=html.replace(new RegExp(esc,'g'),`<mark class="iv-hl" data-hl="${t.replace(/"/g,'&quot;')}" data-color="${c}" title="點擊編輯螢光筆">${safe}</mark>`);
             changed=true;
           }
         });
@@ -1103,31 +1123,52 @@ function ivApplyHighlights(container,highlights){
   };
   walk(container);
 }
-function ivDoHighlight(){
+function ivShowHlPopup(x,y,activeColor){
+  const p=document.getElementById('iv-hl-popup');
+  p.querySelectorAll('.iv-hl-dot').forEach(d=>d.classList.toggle('active',d.dataset.color===activeColor));
+  p.style.left=Math.max(4,x-64)+'px';
+  p.style.top=(y-48)+'px';
+  p.style.display='flex';
+}
+function ivHideHlPopup(){document.getElementById('iv-hl-popup').style.display='none';}
+function ivDoHighlight(color){
   if(!_ivHlEntry||!_ivHlSel)return;
-  if(!_ivHlEntry.highlights)_ivHlEntry.highlights=[];
-  if(!_ivHlEntry.highlights.includes(_ivHlSel))_ivHlEntry.highlights.push(_ivHlSel);
-  _ivSave();
-  document.getElementById('iv-hl-popup').style.display='none';
-  window.getSelection().removeAllRanges();
+  let items=ivHlNorm(_ivHlEntry.highlights);
+  const idx=items.findIndex(h=>h.t===_ivHlSel);
+  if(idx>=0){
+    if(items[idx].c===color){items.splice(idx,1);}  // same color = remove
+    else{items[idx].c=color;}                        // different color = change
+  } else {
+    items.push({t:_ivHlSel,c:color});
+  }
+  _ivHlEntry.highlights=items;
+  _ivSave();ivHideHlPopup();
+  window.getSelection()?.removeAllRanges();
   const body=document.querySelector('#iv-feed-detail .iv-fd-body');
   if(body){body.innerHTML=ivRenderContent(_ivHlEntry.content||'');ivApplyHighlights(body,_ivHlEntry.highlights);}
-  _ivHlSel='';
+  _ivHlSel='';_ivHlMark=null;
+}
+function ivRemoveHighlight(){
+  if(!_ivHlEntry||!_ivHlSel)return;
+  _ivHlEntry.highlights=ivHlNorm(_ivHlEntry.highlights).filter(h=>h.t!==_ivHlSel);
+  _ivSave();ivHideHlPopup();
+  const body=document.querySelector('#iv-feed-detail .iv-fd-body');
+  if(body){body.innerHTML=ivRenderContent(_ivHlEntry.content||'');ivApplyHighlights(body,_ivHlEntry.highlights);}
+  _ivHlSel='';_ivHlMark=null;
 }
 document.addEventListener('mouseup',e=>{
-  const popup=document.getElementById('iv-hl-popup');if(!popup)return;
   if(e.target.closest('#iv-hl-popup'))return;
-  if(!_ivHlEntry){popup.style.display='none';return;}
+  if(!_ivHlEntry){ivHideHlPopup();return;}
+  if(e.target.closest('.iv-hl'))return; // handled by det click listener
   const sel=window.getSelection();
   const txt=sel?sel.toString().trim():'';
-  if(!txt||!sel.rangeCount){popup.style.display='none';return;}
+  if(!txt||!sel.rangeCount){ivHideHlPopup();return;}
   const body=document.querySelector('#iv-feed-detail .iv-fd-body');
-  if(!body||!body.contains(sel.anchorNode)){popup.style.display='none';return;}
-  _ivHlSel=txt;
+  if(!body||!body.contains(sel.anchorNode)){ivHideHlPopup();return;}
+  _ivHlSel=txt;_ivHlMark=null;
   const r=sel.getRangeAt(0).getBoundingClientRect();
-  popup.style.left=Math.max(4,r.left+r.width/2-44)+'px';
-  popup.style.top=(r.top-40)+'px';
-  popup.style.display='block';
+  const existing=ivHlNorm(_ivHlEntry.highlights||[]).find(h=>h.t===txt);
+  ivShowHlPopup(r.left+r.width/2,r.top,existing?existing.c:null);
 });
 function ivDeleteEntry(id){
   if(!confirm('Delete this entry permanently?'))return;
