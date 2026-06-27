@@ -538,11 +538,20 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
     const d=await r.json();
     if(!Array.isArray(d.macro)||!Array.isArray(d.risk)||!Array.isArray(d.industry))return;
     let changed=false;
-    /* union by id — keep both local-only and server-only entries */
+    /* union by id — keep both local-only and server-only entries; sync highlights from server */
     ['macro','risk','industry'].forEach(layer=>{
       const map=new Map();
       _ivStore[layer].forEach(e=>{if(e&&e.id)map.set(e.id,e);});
-      d[layer].forEach(e=>{if(e&&e.id&&!map.has(e.id)){map.set(e.id,e);changed=true;}});
+      d[layer].forEach(e=>{
+        if(!e||!e.id)return;
+        if(!map.has(e.id)){map.set(e.id,e);changed=true;}
+        else{
+          const loc=map.get(e.id);
+          const srvHl=JSON.stringify(e.highlights||null);
+          const locHl=JSON.stringify(loc.highlights||null);
+          if(srvHl!==locHl){loc.highlights=e.highlights;changed=true;}
+        }
+      });
       if(map.size!==_ivStore[layer].length){_ivStore[layer]=[...map.values()];changed=true;}
     });
     /* adopt server-only daily notes */
