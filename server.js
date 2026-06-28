@@ -239,6 +239,66 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Price change for disposal stocks (Yahoo Finance .TW / .TWO)
+  if (req.url.startsWith('/api/warning/price-change') && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const market    = urlObj.searchParams.get('market')    || '';
+      const code      = urlObj.searchParams.get('code')      || '';
+      const startDate = urlObj.searchParams.get('startDate') || ''; // YYYYMMDD western
+      if (!market || !code || !startDate) throw new Error('missing params');
+
+      const cacheKey = `price_${market}_${code}_${startDate}`;
+      if (_warnCache[cacheKey] !== undefined && Date.now() - (_warnTime[cacheKey] || 0) < 30 * 60 * 1000) {
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end(JSON.stringify(_warnCache[cacheKey]));
+        return;
+      }
+
+      const suffix = market === 'twse' ? '.TW' : '.TWO';
+      const sym    = encodeURIComponent(code + suffix);
+      const yUrl   = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=3mo&includePrePost=false`;
+      const raw    = await fetchUrl(yUrl);
+      const yData  = JSON.parse(raw);
+      const result = yData.chart && yData.chart.result && yData.chart.result[0];
+
+      if (!result) {
+        _warnCache[cacheKey] = null; _warnTime[cacheKey] = Date.now();
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end('null'); return;
+      }
+
+      const timestamps = result.timestamp || [];
+      const closes     = (result.indicators.quote[0] || {}).close || [];
+      // start of disposal date in Taiwan timezone offset (UTC+8)
+      const sd  = startDate;
+      const startTs = Math.floor(new Date(`${sd.slice(0,4)}-${sd.slice(4,6)}-${sd.slice(6,8)}T00:00:00+08:00`).getTime() / 1000);
+
+      let startPrice = null, currentPrice = null;
+      for (let i = 0; i < timestamps.length; i++) {
+        if (closes[i] == null) continue;
+        if (startPrice === null && timestamps[i] >= startTs) startPrice = closes[i];
+        currentPrice = closes[i];
+      }
+
+      if (!startPrice || !currentPrice) {
+        _warnCache[cacheKey] = null; _warnTime[cacheKey] = Date.now();
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end('null'); return;
+      }
+
+      const changePct = (currentPrice - startPrice) / startPrice * 100;
+      const payload   = { startPrice: +startPrice.toFixed(2), currentPrice: +currentPrice.toFixed(2), changePct: +changePct.toFixed(2) };
+      _warnCache[cacheKey] = payload; _warnTime[cacheKey] = Date.now();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(payload));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   // Warning API proxy
   const warnKey = {
     '/api/warning/twse-notice':  'twse-notice',

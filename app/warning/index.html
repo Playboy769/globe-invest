@@ -188,9 +188,18 @@ header {
                 text-align:center; line-height:1.6; }
 
 /* ── GRID TEMPLATES ── */
-.grid-warn { grid-template-columns:28px 68px minmax(90px,1fr) 64px 88px 90px minmax(100px,1.3fr); }
+.grid-warn { grid-template-columns:28px 68px minmax(90px,1fr) 64px 110px 52px 92px 68px; }
 .grid-inst { grid-template-columns:28px 68px minmax(90px,1fr) 90px 90px 90px 100px 68px; }
 .grid-exdv { grid-template-columns:28px 68px minmax(90px,1fr) 64px 96px 80px 80px 76px; }
+
+/* auction interval chip */
+.auction-badge { display:inline-block; padding:2px 8px; border-radius:4px;
+  background:var(--surface); border:1px solid var(--border);
+  font-family:'Calibri',sans-serif; font-size:11px; color:var(--ink-soft);
+  letter-spacing:0.05em; }
+.r-reason { font-family:'Noto Sans TC',sans-serif; font-size:10.5px;
+  color:var(--ink-faint); margin-top:2px; line-height:1.4;
+  overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 
 /* ── SECTION PANEL ── */
 .sec-panel[hidden] { display:none; }
@@ -209,8 +218,8 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   .tbl-head.grid-inst .th:nth-child(8),.tbl-row.grid-inst .r-dots { display:none; }
   .grid-exdv { grid-template-columns:24px 56px 1fr 56px 88px 70px 70px; }
   .tbl-head.grid-exdv .th:last-child,.tbl-row.grid-exdv *:last-child { display:none; }
-  .grid-warn { grid-template-columns:24px 60px 1fr 60px 84px 84px; }
-  .tbl-head.grid-warn .th:last-child,.tbl-row.grid-warn .r-note { display:none; }
+  .grid-warn { grid-template-columns:24px 56px 1fr 56px 96px 44px 84px; }
+  .tbl-head.grid-warn .th:last-child,.tbl-row.grid-warn .r-change { display:none; }
 }
 @media (max-width:600px) {
   header { padding:0 20px; } .h-sub { display:none; }
@@ -284,8 +293,10 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
     <div class="tbl-head grid-warn">
       <div class="th en">#</div><div class="th en">Code</div>
       <div class="th zh">名稱</div><div class="th en">Market</div>
-      <div class="th zh">狀態</div><div class="th en">Date</div>
-      <div class="th zh">備註</div>
+      <div class="th zh">狀態</div>
+      <div class="th zh">撮合</div>
+      <div class="th zh">迄日</div>
+      <div class="th r zh">漲跌</div>
     </div>
     <div id="warnBody"><div class="state-wrap"><div class="state-dots">
       <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
@@ -438,6 +449,26 @@ function daysUntil(d){
   dd.setHours(0,0,0,0);
   return Math.round((dd - TODAY) / 86400000);
 }
+function fmtPct(p){
+  if(p === null || p === undefined) return '';
+  return (p > 0 ? '+' : '') + p.toFixed(1) + '%';
+}
+function parseAuctionMins(text){
+  if(!text) return null;
+  const m = text.match(/每([一二三四五六七八九十]+|\d+)分鐘/);
+  if(!m) return null;
+  const v = m[1];
+  if(/^\d+$/.test(v)) return parseInt(v);
+  const cn = {'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10,'二十':20,'三十':30};
+  return cn[v] || null;
+}
+function parseDisposalPeriod(str){
+  if(!str) return {start:null,end:null};
+  const sep = str.includes('～') ? '～' : '~';
+  const parts = str.split(sep);
+  if(parts.length < 2) return {start:null,end:null};
+  return { start: fmtDate(parts[0].trim()), end: fmtDate(parts[1].trim()) };
+}
 function countdownBadge(days){
   if(days===null)    return '';
   if(days<0)         return `<span class="cd-past zh">已除息</span>`;
@@ -500,9 +531,23 @@ function normWarn(raw, market, status){
   const code = pick(raw,'Code','SecuritiesCode','StockCode','code','公司代號','股票代號','代號');
   const name = pick(raw,'Name','CompanyName','StockName','name','公司名稱','股票名稱','名稱');
   const date = pick(raw,'Date','PublishDate','AnnounceDate','AnnouncementDate','StartDate','WarningDate','date','日期','公布日期');
-  const note = pick(raw,'Reason','Note','Content','Description','DisposalReason','DisposalPeriod','Period','Remark','remark','原因','備註','說明','處置期間');
+  const note = pick(raw,'Reason','Note','Content','Description','ReasonsOfDisposition','DispositionReasons','Period','Remark','remark','原因','備註','說明');
   if(!code&&!name) return null;
-  return {code,name,market,status,date:fmtDate(date),note};
+
+  let auctionMins = null, startDate = null, endDate = null, endDays = null;
+  if(status === 'dispose'){
+    const detail = pick(raw,'Detail','DisposalCondition','DispositionMeasures');
+    auctionMins = parseAuctionMins(detail);
+    const period = parseDisposalPeriod(pick(raw,'DispositionPeriod'));
+    startDate = period.start;
+    endDate   = period.end;
+    endDays   = daysUntil(parseDate(endDate));
+  }
+  return {
+    code, name, market, status, date: fmtDate(date), note,
+    auctionMins, startDate, endDate, endDays,
+    startPrice: null, currentPrice: null, priceChangePct: null,
+  };
 }
 
 async function loadWarn(){
@@ -526,6 +571,25 @@ async function loadWarn(){
   document.getElementById('scnt-warning').textContent = total||'';
   S.warn.loaded=true; setSpin(false); document.getElementById('updTime').textContent=nowStr();
   renderWarn();
+  loadDisposalPrices(); // async background fill
+}
+
+async function loadDisposalPrices(){
+  const rows = S.warn.rows.filter(r => r.status === 'dispose' && r.startDate);
+  if(!rows.length) return;
+  await Promise.allSettled(rows.map(async row => {
+    try {
+      const ymd = row.startDate.replace(/-/g,'');
+      const r = await fetch(`/api/warning/price-change?market=${row.market}&code=${encodeURIComponent(row.code)}&startDate=${ymd}`);
+      if(!r.ok) return;
+      const data = await r.json();
+      if(!data || data.error) return;
+      row.startPrice     = data.startPrice;
+      row.currentPrice   = data.currentPrice;
+      row.priceChangePct = data.changePct;
+    } catch {}
+  }));
+  renderWarn();
 }
 
 function warnFilter(f){
@@ -540,18 +604,35 @@ function renderWarn(){
   const body = document.getElementById('warnBody');
   if(!rows.length){ empty('warnBody', S.warn.rows.length?'此分類目前無資料':'目前無警示資料',
     S.warn.rows.length?'':'No data returned. This may be a non-trading day.'); return; }
-  body.innerHTML = rows.map((r,i)=>`
+  body.innerHTML = rows.map((r,i)=>{
+    const isDispose = r.status === 'dispose';
+    const pct = r.priceChangePct;
+    const pctClass = pct === null ? 'zero' : pct > 0 ? 'pos' : pct < 0 ? 'neg' : 'zero';
+    const pctLabel = isDispose
+      ? (pct === null ? '<span style="color:var(--ink-ghost);font-size:11px">…</span>' : `<span class="r-num ${pctClass} en" style="font-size:13px;font-weight:600">${fmtPct(pct)}</span>`)
+      : '';
+    return `
     <div class="tbl-row grid-warn">
       <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>
       <div class="r-code en">${esc(r.code)}</div>
-      <div class="r-name zh">${esc(r.name)}</div>
+      <div>
+        <div class="r-name zh">${esc(r.name)}</div>
+        ${!isDispose && r.note ? `<div class="r-reason zh">${esc(r.note.slice(0,50)+(r.note.length>50?'…':''))}</div>` : ''}
+      </div>
       <div><span class="mkt ${r.market==='twse'?'mkt-twse':'mkt-tpex'} en">${r.market==='twse'?'TWSE':'TPEx'}</span></div>
-      <div><span class="sts ${r.status==='notice'?'sts-notice':'sts-dispose'}">
-        <span class="sts-dot"></span><span class="zh">${r.status==='notice'?'注意':'處置'}</span>
+      <div><span class="sts ${isDispose?'sts-dispose':'sts-notice'}">
+        <span class="sts-dot"></span><span class="zh">${isDispose?'處置':'注意'}</span>
       </span></div>
-      <div class="r-date en">${esc(r.date)}</div>
-      <div class="r-note zh">${esc(r.note)}</div>
-    </div>`).join('');
+      <div>${r.auctionMins ? `<span class="auction-badge en">${r.auctionMins}分</span>` : ''}</div>
+      <div>
+        ${isDispose && r.endDate ? `
+          <div class="r-date en" style="font-size:11.5px">${esc(r.endDate)}</div>
+          <div style="margin-top:3px">${countdownBadge(r.endDays)}</div>
+        ` : `<div class="r-date en">${esc(r.date)}</div>`}
+      </div>
+      <div class="r-change" style="display:flex;align-items:center;justify-content:flex-end">${pctLabel}</div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════
