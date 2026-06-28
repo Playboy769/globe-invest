@@ -33,6 +33,25 @@ let _oilCache = null;
 let _oilCacheTime = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+// Warning alerts cache (5 min TTL — intraday market alerts)
+const _warnCache = {};
+const _warnTime  = {};
+const WARN_APIS  = {
+  'twse-notice': 'https://openapi.twse.com.tw/v1/announcement/notice',
+  'twse-punish':  'https://openapi.twse.com.tw/v1/announcement/punish',
+  'tpex-notice':  'https://www.tpex.org.tw/openapi/v1/tpex_trading_warning_information',
+  'tpex-dispose': 'https://www.tpex.org.tw/openapi/v1/tpex_disposal_information',
+};
+
+async function getWarnData(key) {
+  if (_warnCache[key] && Date.now() - (_warnTime[key] || 0) < CACHE_TTL) return _warnCache[key];
+  const raw  = await fetchUrl(WARN_APIS[key]);
+  const data = JSON.parse(raw);
+  _warnCache[key] = Array.isArray(data) ? data : [];
+  _warnTime[key]  = Date.now();
+  return _warnCache[key];
+}
+
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, { headers: BROWSER_HEADERS }, res => {
@@ -216,11 +235,27 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Warning API proxy
+  const warnKey = { '/api/warning/twse-notice': 'twse-notice', '/api/warning/twse-punish': 'twse-punish',
+                    '/api/warning/tpex-notice': 'tpex-notice', '/api/warning/tpex-dispose': 'tpex-dispose' }[req.url];
+  if (warnKey && req.method === 'GET') {
+    try {
+      const data = await getWarnData(warnKey);
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(data));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   let fp;
   const url = req.url.split('?')[0];
-  if (url === '/globe' || url === '/globe/') fp = path.join(APP_DIR, 'globe', 'index.html');
-  else if (url === '/invest' || url === '/invest/') fp = path.join(APP_DIR, 'invest', 'index.html');
-  else if (url === '/causal' || url === '/causal/') fp = path.join(APP_DIR, 'causal', 'index.html');
+  if (url === '/globe' || url === '/globe/')     fp = path.join(APP_DIR, 'globe',   'index.html');
+  else if (url === '/invest' || url === '/invest/')   fp = path.join(APP_DIR, 'invest',  'index.html');
+  else if (url === '/causal' || url === '/causal/')   fp = path.join(APP_DIR, 'causal',  'index.html');
+  else if (url === '/warning' || url === '/warning/') fp = path.join(APP_DIR, 'warning', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 

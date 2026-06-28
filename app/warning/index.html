@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Warning Radar</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:          #ffffff;
+  --ink:         #0a0a0a;
+  --ink-mid:     #555;
+  --ink-soft:    #999;
+  --ink-faint:   #bbb;
+  --ink-ghost:   #ddd;
+  --border:      #eeeeee;
+  --border-lite: #f5f5f5;
+  --surface:     #fafafa;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Calibri', 'Noto Sans TC', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.zh { font-family: 'Noto Sans TC', 'Calibri', sans-serif; }
+.en { font-family: 'Calibri', sans-serif; }
+
+::selection { background: var(--ink); color: #fff; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #fff; }
+::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #ccc; }
+
+/* ── HEADER ── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.h-brand { display: flex; align-items: baseline; gap: 14px; }
+.h-title {
+  font-family: 'Calibri', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.h-sub {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+.h-right { display: flex; align-items: center; gap: 20px; }
+
+.update-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.update-label {
+  font-family: 'Calibri', sans-serif;
+  font-size: 10px;
+  color: var(--ink-ghost);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.update-time {
+  font-family: 'Calibri', sans-serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  font-family: 'Calibri', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  white-space: nowrap;
+}
+.refresh-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+.refresh-btn:disabled { opacity: 0.5; cursor: default; }
+.refresh-btn svg {
+  width: 12px; height: 12px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.refresh-btn.spinning svg { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── STAT STRIP ── */
+.stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+}
+.stat-cell {
+  flex: 1 1 140px;
+  padding: 24px 32px 22px 0;
+  border-right: 1px solid var(--border);
+  margin-right: 32px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  min-width: 120px;
+}
+.stat-cell:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.stat-cell:hover { opacity: 0.65; }
+
+.stat-label {
+  font-family: 'Calibri', sans-serif;
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.stat-num {
+  font-family: 'Calibri', sans-serif;
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.stat-cell.s-notice .stat-num  { color: #b45309; }
+.stat-cell.s-dispose .stat-num { color: #dc2626; }
+
+/* ── TAB BAR ── */
+.tab-bar {
+  display: flex;
+  align-items: stretch;
+  padding: 0 48px;
+  border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  padding: 16px 0;
+  margin-right: 32px;
+  border: none; background: none;
+  font-family: 'Noto Sans TC', 'Calibri', sans-serif;
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-bottom: 1.5px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+}
+.tab-btn:last-child { margin-right: 0; }
+.tab-btn:hover { color: var(--ink-soft); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── TABLE ── */
+.table-wrap { padding: 0 48px 80px; }
+
+.tbl-head {
+  display: grid;
+  grid-template-columns: 32px 72px minmax(100px,1fr) 68px 92px 96px minmax(120px,1.4fr);
+  gap: 0 20px;
+  padding: 14px 10px;
+  border-bottom: 1px solid var(--border);
+  margin-top: 28px;
+}
+.th {
+  font-family: 'Calibri', sans-serif;
+  font-size: 9.5px;
+  color: var(--ink-ghost);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tbl-row {
+  display: grid;
+  grid-template-columns: 32px 72px minmax(100px,1fr) 68px 92px 96px minmax(120px,1.4fr);
+  gap: 0 20px;
+  padding: 15px 10px;
+  border-bottom: 1px solid var(--border-lite);
+  align-items: center;
+  transition: background 0.12s ease, transform 0.2s cubic-bezier(.4,0,.2,1);
+}
+.tbl-row:hover { background: var(--surface); transform: translateX(3px); }
+.tbl-row:last-child { border-bottom: none; }
+
+.r-idx {
+  font-family: 'Calibri', sans-serif;
+  font-size: 10px; color: var(--ink-ghost);
+  font-variant-numeric: tabular-nums; text-align: right;
+}
+.r-code {
+  font-family: 'Calibri', monospace;
+  font-size: 13.5px; font-weight: 600; color: var(--ink); letter-spacing: 0.06em;
+}
+.r-name {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13.5px; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.mkt {
+  display: inline-flex; align-items: center;
+  padding: 3px 7px; border-radius: 4px;
+  font-family: 'Calibri', sans-serif;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.mkt-twse { background: #eff6ff; color: #1d4ed8; }
+.mkt-tpex { background: #f0fdf4; color: #15803d; }
+
+.sts {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 100px;
+  font-family: 'Noto Sans TC', sans-serif; font-size: 11px;
+}
+.sts-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.sts-notice { background: #fef3c7; color: #92400e; }
+.sts-notice .sts-dot { background: #d97706; }
+.sts-dispose { background: #fee2e2; color: #991b1b; }
+.sts-dispose .sts-dot { background: #dc2626; }
+
+.r-date {
+  font-family: 'Calibri', sans-serif; font-size: 12px;
+  color: var(--ink-soft); font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em; white-space: nowrap;
+}
+.r-note {
+  font-family: 'Noto Sans TC', sans-serif; font-size: 11.5px;
+  color: var(--ink-soft); line-height: 1.5;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+
+/* ── STATES ── */
+.state-wrap {
+  padding: 64px 0 48px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.state-dots { display: flex; gap: 7px; }
+.state-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--border);
+  animation: blink 1.3s ease-in-out infinite;
+}
+.state-dot:nth-child(2) { animation-delay: 0.2s; }
+.state-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,100%{opacity:0.25} 50%{opacity:1} }
+
+.state-msg  { font-family: 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--ink-faint); letter-spacing: 0.04em; }
+.state-detail { font-family: 'Calibri', sans-serif; font-size: 11px; color: var(--ink-ghost); letter-spacing: 0.06em; text-align: center; line-height: 1.6; }
+
+/* Error banner */
+.err-banner {
+  display: none; margin: 16px 48px 0;
+  padding: 12px 18px; border: 1px solid #fde68a; border-radius: 8px; background: #fffbeb;
+  align-items: flex-start; gap: 10px;
+}
+.err-banner.show { display: flex; }
+.err-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.err-text { font-family: 'Noto Sans TC', sans-serif; font-size: 12px; color: #92400e; line-height: 1.7; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 48px;
+  display: flex; justify-content: space-between; align-items: center; gap: 20px;
+}
+.ft-src  { font-family: 'Calibri', sans-serif; font-size: 10.5px; color: var(--ink-ghost); letter-spacing: 0.08em; text-transform: uppercase; }
+.ft-note { font-family: 'Noto Sans TC', sans-serif; font-size: 11px; color: var(--ink-ghost); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  header, .stat-strip, .tab-bar, .table-wrap, footer { padding-left: 24px; padding-right: 24px; }
+  .err-banner { margin-left: 24px; margin-right: 24px; }
+  .tbl-head, .tbl-row { grid-template-columns: 28px 60px 1fr 64px 88px 88px; }
+  .th:last-child, .r-note { display: none; }
+}
+@media (max-width: 600px) {
+  header { padding: 0 20px; }
+  .h-sub { display: none; }
+  .stat-strip, .tab-bar, .table-wrap, footer { padding-left: 20px; padding-right: 20px; }
+  .err-banner { margin-left: 20px; margin-right: 20px; }
+  .tab-bar { overflow-x: auto; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-brand">
+    <span class="h-title en">Market Warning Radar</span>
+    <span class="h-sub zh">市場警示雷達</span>
+  </div>
+  <div class="h-right">
+    <div class="update-wrap">
+      <span class="update-label en">Last Update</span>
+      <span class="update-time en" id="updateTime">—</span>
+    </div>
+    <button class="refresh-btn en" id="refreshBtn" onclick="loadAll()">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Refresh
+    </button>
+  </div>
+</header>
+
+<div class="err-banner" id="errBanner">
+  <span class="err-icon">⚠</span>
+  <div class="err-text zh" id="errText">資料載入失敗，請稍後再試。</div>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-cell s-notice"  onclick="setFilter('twse-notice')"  title="點擊篩選">
+    <div class="stat-label en">TWSE Notice</div>
+    <div class="stat-num en" id="cnt-tn">—</div>
+  </div>
+  <div class="stat-cell s-dispose" onclick="setFilter('twse-dispose')" title="點擊篩選">
+    <div class="stat-label en">TWSE Disposal</div>
+    <div class="stat-num en" id="cnt-td">—</div>
+  </div>
+  <div class="stat-cell s-notice"  onclick="setFilter('tpex-notice')"  title="點擊篩選">
+    <div class="stat-label en">TPEx Notice</div>
+    <div class="stat-num en" id="cnt-pn">—</div>
+  </div>
+  <div class="stat-cell s-dispose" onclick="setFilter('tpex-dispose')" title="點擊篩選">
+    <div class="stat-label en">TPEx Disposal</div>
+    <div class="stat-num en" id="cnt-pd">—</div>
+  </div>
+  <div class="stat-cell s-total"   onclick="setFilter('all')"          title="顯示全部">
+    <div class="stat-label en">Total</div>
+    <div class="stat-num en" id="cnt-all">—</div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn zh active" data-filter="all"          onclick="setFilter('all')">全部</button>
+  <button class="tab-btn zh"        data-filter="twse-notice"  onclick="setFilter('twse-notice')">上市注意</button>
+  <button class="tab-btn zh"        data-filter="twse-dispose" onclick="setFilter('twse-dispose')">上市處置</button>
+  <button class="tab-btn zh"        data-filter="tpex-notice"  onclick="setFilter('tpex-notice')">上櫃注意</button>
+  <button class="tab-btn zh"        data-filter="tpex-dispose" onclick="setFilter('tpex-dispose')">上櫃處置</button>
+</div>
+
+<div class="table-wrap">
+  <div class="tbl-head">
+    <div class="th en">#</div>
+    <div class="th en">Code</div>
+    <div class="th zh">名稱</div>
+    <div class="th en">Market</div>
+    <div class="th zh">狀態</div>
+    <div class="th en">Date</div>
+    <div class="th zh">備註</div>
+  </div>
+  <div id="tblBody">
+    <div class="state-wrap">
+      <div class="state-dots">
+        <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+      </div>
+      <div class="state-msg zh">正在載入市場警示資料…</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="ft-src en">Data — TWSE openapi.twse.com.tw &middot; TPEx tpex.org.tw/openapi</span>
+  <span class="ft-note zh">資料來源：台灣證券交易所 &amp; 證券櫃檯買賣中心 Open API｜非投資建議</span>
+</footer>
+
+<script>
+// Proxy routes served by globe-invest server.js
+const API = {
+  twseNotice:  '/api/warning/twse-notice',
+  twsePunish:  '/api/warning/twse-punish',
+  tpexNotice:  '/api/warning/tpex-notice',
+  tpexDispose: '/api/warning/tpex-dispose',
+};
+
+let allRows   = [];
+let curFilter = 'all';
+
+// ── Field normalizer ──
+function pick(obj, ...keys) {
+  for (const k of keys) {
+    const v = obj[k];
+    if (v !== undefined && v !== null && String(v).trim() !== '') return String(v).trim();
+  }
+  return '';
+}
+
+function normalize(raw, market, status) {
+  const code = pick(raw, 'Code','SecuritiesCode','StockCode','code','公司代號','股票代號','代號');
+  const name = pick(raw, 'Name','CompanyName','StockName','name','公司名稱','股票名稱','名稱');
+  const date = pick(raw, 'Date','PublishDate','AnnounceDate','AnnouncementDate','StartDate','WarningDate','date','日期','公布日期');
+  const note = pick(raw, 'Reason','Note','Content','Description','DisposalReason','DisposalPeriod','Period','Remark','remark','原因','備註','說明','處置期間');
+  if (!code && !name) return null;
+  return { code, name, date: fmtDate(date), note, market, status };
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  d = String(d).trim();
+  if (/^\d{8}$/.test(d)) return `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
+  const roc = d.match(/^(\d{2,3})\/(\d{1,2})\/(\d{1,2})$/);
+  if (roc) return `${+roc[1]+1911}-${roc[2].padStart(2,'0')}-${roc[3].padStart(2,'0')}`;
+  return d.slice(0,10).replace(/\//g,'-');
+}
+
+// ── Fetch ──
+async function safeFetch(url) {
+  try {
+    const ctrl = new AbortController();
+    const tid  = setTimeout(() => ctrl.abort(), 12000);
+    const res  = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(tid);
+    if (!res.ok) { console.warn(`HTTP ${res.status}: ${url}`); return { data: [], err: `HTTP ${res.status}` }; }
+    const data = await res.json();
+    return { data: Array.isArray(data) ? data : [], err: null };
+  } catch (e) {
+    console.warn('Fetch error:', url, e.message);
+    return { data: [], err: e.message };
+  }
+}
+
+// ── Load ──
+async function loadAll() {
+  document.getElementById('errBanner').classList.remove('show');
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  btn.disabled = true;
+  setBodyLoading();
+
+  const [tn, td, pn, pd] = await Promise.all([
+    safeFetch(API.twseNotice),
+    safeFetch(API.twsePunish),
+    safeFetch(API.tpexNotice),
+    safeFetch(API.tpexDispose),
+  ]);
+
+  const errors = [tn, td, pn, pd].filter(r => r.err).map(r => r.err);
+  if (errors.length > 0) {
+    document.getElementById('errBanner').classList.add('show');
+    document.getElementById('errText').textContent = `部分資料載入失敗（${errors[0]}），顯示已取得的資料。`;
+  }
+
+  document.getElementById('cnt-tn').textContent  = tn.data.length;
+  document.getElementById('cnt-td').textContent  = td.data.length;
+  document.getElementById('cnt-pn').textContent  = pn.data.length;
+  document.getElementById('cnt-pd').textContent  = pd.data.length;
+
+  allRows = [
+    ...tn.data.map(r => normalize(r, 'twse', 'notice')),
+    ...td.data.map(r => normalize(r, 'twse', 'dispose')),
+    ...pn.data.map(r => normalize(r, 'tpex', 'notice')),
+    ...pd.data.map(r => normalize(r, 'tpex', 'dispose')),
+  ].filter(Boolean);
+
+  document.getElementById('cnt-all').textContent = allRows.length;
+
+  const now = new Date();
+  document.getElementById('updateTime').textContent =
+    `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+
+  btn.classList.remove('spinning');
+  btn.disabled = false;
+  render();
+}
+
+// ── Filter ──
+function setFilter(f) {
+  curFilter = f;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  render();
+}
+
+// ── Render ──
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  const rows = curFilter === 'all' ? allRows : allRows.filter(r => `${r.market}-${r.status}` === curFilter);
+  const body = document.getElementById('tblBody');
+
+  if (rows.length === 0) {
+    body.innerHTML = `
+      <div class="state-wrap">
+        <div class="state-msg zh">${allRows.length === 0 ? '目前無警示資料' : '此分類目前無資料'}</div>
+        ${allRows.length === 0 ? '<div class="state-detail en">No data returned. This may be a non-trading day,<br>or the data has not yet been published today.</div>' : ''}
+      </div>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((r, i) => `
+    <div class="tbl-row">
+      <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>
+      <div class="r-code en">${esc(r.code)}</div>
+      <div class="r-name zh">${esc(r.name)}</div>
+      <div><span class="mkt ${r.market==='twse'?'mkt-twse':'mkt-tpex'} en">${r.market==='twse'?'TWSE':'TPEx'}</span></div>
+      <div>
+        <span class="sts ${r.status==='notice'?'sts-notice':'sts-dispose'}">
+          <span class="sts-dot"></span>
+          <span class="zh">${r.status==='notice'?'注意':'處置'}</span>
+        </span>
+      </div>
+      <div class="r-date en">${esc(r.date)}</div>
+      <div class="r-note zh">${esc(r.note)}</div>
+    </div>`).join('');
+}
+
+function setBodyLoading() {
+  document.getElementById('tblBody').innerHTML = `
+    <div class="state-wrap">
+      <div class="state-dots">
+        <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+      </div>
+      <div class="state-msg zh">正在載入市場警示資料…</div>
+    </div>`;
+  ['cnt-tn','cnt-td','cnt-pn','cnt-pd','cnt-all'].forEach(id => {
+    document.getElementById(id).textContent = '—';
+  });
+}
+
+loadAll();
+</script>
+</body>
+</html>
