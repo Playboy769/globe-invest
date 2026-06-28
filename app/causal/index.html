@@ -92,6 +92,27 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 }
 .cf-file-card:hover .cf-file-del{opacity:1}
 .cf-file-del:hover{color:#b3564a;background:#f7ecea}
+/* ── Folder system ─────────────────────────────────────── */
+.cf-folder-row{display:flex;align-items:center;gap:5px;padding:7px 8px;border-radius:8px;margin:5px 0 2px;border:1px solid transparent;position:relative;user-select:none}
+.cf-folder-row:hover{background:#f5f5f5;border-color:#eee}
+.cf-folder-toggle{background:none;border:none;cursor:pointer;font-size:9px;color:#c0c0c0;padding:2px 3px;line-height:1;flex-shrink:0;font-family:inherit;transition:color .12s}
+.cf-folder-toggle:hover{color:#666}
+.cf-folder-name{flex:1;font-size:11.5px;color:#888;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;outline:none;cursor:default;letter-spacing:.01em}
+.cf-folder-name[contenteditable="true"]{cursor:text;background:#fff;border-radius:4px;padding:0 3px;margin-left:-3px}
+.cf-folder-count{font-size:9.5px;color:#ccc;background:#f3f3f3;border-radius:10px;padding:1px 7px;flex-shrink:0}
+.cf-folder-del{opacity:0;background:none;border:none;cursor:pointer;font-size:10px;color:#ccc;padding:2px 5px;border-radius:4px;transition:opacity .12s,color .12s,background .12s;line-height:1;font-family:inherit;flex-shrink:0}
+.cf-folder-row:hover .cf-folder-del{opacity:1}
+.cf-folder-del:hover{color:#b3564a;background:#f7ecea}
+.cf-folder-files{margin-left:8px;border-left:2px solid #f0f0f0;padding-left:6px;margin-bottom:2px}
+.cf-file-card.in-folder{border-radius:8px}
+.cf-file-move{position:absolute;top:9px;right:54px;opacity:0;font-size:11px;color:#ccc;background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:5px;transition:opacity .12s,color .12s,background .12s;font-family:inherit;line-height:1}
+.cf-file-card:hover .cf-file-move{opacity:1}
+.cf-file-move:hover{color:#0a0a0a;background:#ebebeb}
+.cf-folder-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;min-width:155px;padding:5px;overflow:hidden}
+.cf-folder-picker-item{padding:7px 12px;border-radius:7px;cursor:pointer;font-size:12px;color:#444;white-space:nowrap}
+.cf-folder-picker-item:hover{background:#f5f5f5}
+.cf-folder-picker-item.active{color:#bbb;pointer-events:none}
+.cf-folder-picker-sep{height:1px;background:#f0f0f0;margin:4px 2px}
 
 /* ── Canvas ──────────────────────────────────────────────── */
 #cf-canvas{position:absolute;top:56px;left:0;right:0;bottom:0;overflow:hidden;background:#fff;background-image:radial-gradient(circle,#ededed 1px,transparent 1px);background-size:22px 22px;user-select:none;touch-action:none}
@@ -319,6 +340,18 @@ body.dark .cf-file-stats{color:#555}
 body.dark .cf-file-date{color:#444}
 body.dark .cf-file-del{color:#555}
 body.dark .cf-file-del:hover{color:#c05050;background:#2a1a1a}
+body.dark .cf-folder-row:hover{background:#222;border-color:#2a2a2a}
+body.dark .cf-folder-name{color:#666}
+body.dark .cf-folder-name[contenteditable="true"]{background:#1a1a1a}
+body.dark .cf-folder-count{background:#282828;color:#555}
+body.dark .cf-folder-del{color:#444}
+body.dark .cf-folder-files{border-left-color:#2a2a2a}
+body.dark .cf-file-move{color:#444}
+body.dark .cf-file-move:hover{color:#aaa;background:#2a2a2a}
+body.dark .cf-folder-picker{background:#1a1a1a;border-color:#2a2a2a;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+body.dark .cf-folder-picker-item{color:#aaa}
+body.dark .cf-folder-picker-item:hover{background:#252525}
+body.dark .cf-folder-picker-sep{background:#2a2a2a}
 body.dark #cf-zoom-ctrl{background:rgba(20,20,20,0.92);border-color:#333}
 body.dark .cf-zoom-btn{color:#606060}
 body.dark .cf-zoom-btn:hover{background:#2a2a2a;color:#ccc}
@@ -455,7 +488,10 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
 <div id="cf-feed">
   <div class="cf-feed-header">
     <span class="cf-feed-title">Diagrams</span>
-    <button class="cf-feed-new" id="cf-new-file">+ New</button>
+    <div style="display:flex;gap:6px">
+      <button class="cf-feed-new" id="cf-new-folder">+ Folder</button>
+      <button class="cf-feed-new" id="cf-new-file">+ New</button>
+    </div>
   </div>
   <button class="cf-tpl-bar" id="cf-tpl-btn">+ From template</button>
   <div class="cf-feed-list" id="cf-feed-list"></div>
@@ -642,14 +678,84 @@ function updateFilename() {
   if (wm) wm.textContent = name;
 }
 
+// ── Folder system ──────────────────────────────────────────────────
+const CF_FOLDERS_KEY = 'causal_folders_v1';
+let folders = [];
+function fdid(){ return 'fd'+Date.now()+Math.random().toString(36).slice(2,5); }
+function loadFolders(){ try{const r=localStorage.getItem(CF_FOLDERS_KEY);if(r)folders=JSON.parse(r);}catch(e){} }
+function saveFolders(){ try{localStorage.setItem(CF_FOLDERS_KEY,JSON.stringify(folders));}catch(e){} }
+function newFolder(){
+  const fd={id:fdid(),name:folders.length?'Folder '+(folders.length+1):'New Folder',expanded:true};
+  folders.push(fd); saveFolders(); renderFeed();
+  setTimeout(()=>{const el=document.querySelector(`.cf-folder-name[data-fdid="${fd.id}"]`);if(el)startFolderRename(el,fd.id);},0);
+}
+function deleteFolder(id){
+  const fd=folders.find(x=>x.id===id); if(!fd)return;
+  const cnt=files.filter(f=>f.folderId===id).length;
+  if(cnt>0&&!confirm(`Delete "${fd.name}"? ${cnt} diagram${cnt>1?'s':''} will be moved out.`))return;
+  files.forEach(f=>{if(f.folderId===id)delete f.folderId;});
+  folders=folders.filter(x=>x.id!==id); saveFolders(); saveFiles(); renderFeed();
+}
+function renameFolder(id,name){
+  const fd=folders.find(x=>x.id===id);
+  if(fd){fd.name=name.trim()||'Untitled';saveFolders();}
+}
+function moveFileToFolder(fileId,folderId){
+  const f=files.find(x=>x.id===fileId); if(!f)return;
+  if(folderId===null){delete f.folderId;}
+  else{f.folderId=folderId;const fd=folders.find(x=>x.id===folderId);if(fd)fd.expanded=true;}
+  saveFiles(); saveFolders(); renderFeed();
+}
+function startFolderRename(nameEl,id){
+  nameEl.contentEditable='true'; nameEl.focus();
+  const rng=document.createRange(); rng.selectNodeContents(nameEl);
+  const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(rng);
+  function done(){nameEl.contentEditable='false';renameFolder(id,nameEl.textContent);renderFeed();}
+  nameEl.addEventListener('blur',done,{once:true});
+  nameEl.addEventListener('keydown',ev=>{
+    if(ev.key==='Enter'){ev.preventDefault();nameEl.blur();}
+    else if(ev.key==='Escape'){nameEl.textContent=folders.find(f=>f.id===id)?.name||'';nameEl.blur();}
+    ev.stopPropagation();
+  });
+}
+function showFolderPicker(fileId,anchorEl){
+  document.querySelector('.cf-folder-picker')?.remove();
+  const file=files.find(x=>x.id===fileId); if(!file)return;
+  const pk=document.createElement('div'); pk.className='cf-folder-picker';
+  const addItem=(text,active,onClick)=>{
+    const it=document.createElement('div');
+    it.className='cf-folder-picker-item'+(active?' active':'');
+    it.textContent=text;
+    it.addEventListener('click',()=>{onClick();pk.remove();});
+    pk.appendChild(it);
+  };
+  addItem('— 無資料夾',!file.folderId,()=>moveFileToFolder(fileId,null));
+  if(folders.length){
+    const sep=document.createElement('div');sep.className='cf-folder-picker-sep';pk.appendChild(sep);
+    folders.forEach(fd=>addItem(fd.name,file.folderId===fd.id,()=>moveFileToFolder(fileId,fd.id)));
+  }
+  document.body.appendChild(pk);
+  const rect=anchorEl.getBoundingClientRect();
+  pk.style.cssText=`position:fixed;right:${window.innerWidth-rect.right}px;top:${rect.bottom+4}px`;
+  requestAnimationFrame(()=>{
+    const pr=pk.getBoundingClientRect();
+    if(pr.bottom>window.innerHeight-8){pk.style.top='';pk.style.bottom=(window.innerHeight-rect.top+4)+'px';}
+  });
+  setTimeout(()=>document.addEventListener('click',function h(e){
+    if(!pk.contains(e.target)){pk.remove();document.removeEventListener('click',h,{capture:true});}
+  },{capture:true}),10);
+}
+
 // ── Feed render ────────────────────────────────────────────
 function renderFeed() {
   const list = document.getElementById('cf-feed-list');
   if (!list) return;
   list.innerHTML = '';
-  files.forEach(f => {
+  const validFdIds = new Set(folders.map(fd => fd.id));
+
+  function mkCard(f, inFolder) {
     const card = document.createElement('div');
-    card.className = 'cf-file-card'+(f.id===activeId?' active':'');
+    card.className = 'cf-file-card'+(f.id===activeId?' active':'')+(inFolder?' in-folder':'');
     card.dataset.fid = f.id;
     const d = new Date(f.modified);
     const dateStr = (d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
@@ -663,26 +769,51 @@ function renderFeed() {
           <div class="cf-file-date">${dateStr}</div>
         </div>
       </div>
+      <button class="cf-file-move" data-mv="${f.id}" title="Move to folder">⊞</button>
       <button class="cf-file-rename" data-ren="${f.id}" title="Rename">✎</button>
       <button class="cf-file-del" data-del="${f.id}" title="Delete">✕</button>`;
-    list.appendChild(card);
+    return card;
+  }
+
+  files.filter(f => !f.folderId || !validFdIds.has(f.folderId))
+    .forEach(f => list.appendChild(mkCard(f, false)));
+
+  folders.forEach(fd => {
+    const fdFiles = files.filter(f => f.folderId === fd.id);
+    const row = document.createElement('div');
+    row.className = 'cf-folder-row';
+    row.dataset.fdid = fd.id;
+    row.innerHTML = `
+      <button class="cf-folder-toggle">${fd.expanded?'▾':'▸'}</button>
+      <span class="cf-folder-name" data-fdid="${fd.id}">${esc(fd.name)}</span>
+      <span class="cf-folder-count">${fdFiles.length}</span>
+      <button class="cf-folder-del" data-fddel="${fd.id}" title="Delete folder">✕</button>`;
+    list.appendChild(row);
+    if (fd.expanded) {
+      const inner = document.createElement('div');
+      inner.className = 'cf-folder-files';
+      fdFiles.forEach(f => inner.appendChild(mkCard(f, true)));
+      list.appendChild(inner);
+    }
   });
+
   list.querySelectorAll('.cf-file-card').forEach(card => {
     card.addEventListener('click', e => {
-      if (e.target.closest('[data-del]')) return;
-      if (e.target.closest('[data-ren]')) return;
+      if (e.target.closest('[data-del],[data-ren],[data-mv]')) return;
       if (e.target.closest('[contenteditable="true"]')) return;
       openFile(card.dataset.fid);
     });
   });
-  list.querySelectorAll('[data-del]').forEach(btn => {
-    btn.addEventListener('click', e => { e.stopPropagation(); deleteFile(btn.dataset.del); });
-  });
+  list.querySelectorAll('[data-del]').forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); deleteFile(btn.dataset.del); }));
+  list.querySelectorAll('[data-mv]').forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); showFolderPicker(btn.dataset.mv, btn); }));
+
   function startRename(nameEl) {
     const id = nameEl.dataset.fid;
     nameEl.contentEditable = 'true'; nameEl.focus();
-    const range = document.createRange(); range.selectNodeContents(nameEl);
-    const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    const rng = document.createRange(); rng.selectNodeContents(nameEl);
+    const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(rng);
     function done() { nameEl.contentEditable='false'; renameFile(id,nameEl.textContent); renderFeed(); }
     nameEl.addEventListener('blur', done, { once:true });
     nameEl.addEventListener('keydown', ev => {
@@ -691,16 +822,24 @@ function renderFeed() {
       ev.stopPropagation();
     });
   }
-  list.querySelectorAll('.cf-file-name').forEach(nameEl => {
-    nameEl.addEventListener('dblclick', e => { e.stopPropagation(); startRename(nameEl); });
-  });
-  list.querySelectorAll('[data-ren]').forEach(btn => {
+  list.querySelectorAll('.cf-file-name').forEach(nameEl =>
+    nameEl.addEventListener('dblclick', e => { e.stopPropagation(); startRename(nameEl); }));
+  list.querySelectorAll('[data-ren]').forEach(btn =>
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const nameEl = btn.closest('.cf-file-card').querySelector('.cf-file-name');
       if (nameEl) startRename(nameEl);
-    });
-  });
+    }));
+  list.querySelectorAll('.cf-folder-toggle').forEach(btn =>
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const fd = folders.find(x => x.id === btn.closest('.cf-folder-row').dataset.fdid);
+      if (fd) { fd.expanded = !fd.expanded; saveFolders(); renderFeed(); }
+    }));
+  list.querySelectorAll('.cf-folder-name').forEach(nameEl =>
+    nameEl.addEventListener('dblclick', e => { e.stopPropagation(); startFolderRename(nameEl, nameEl.dataset.fdid); }));
+  list.querySelectorAll('[data-fddel]').forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); deleteFolder(btn.dataset.fddel); }));
 }
 
 function toggleFeed() {
@@ -1553,6 +1692,7 @@ document.getElementById('cf-clear').addEventListener('click',()=>{
 });
 document.getElementById('cf-toggle-feed').addEventListener('click',toggleFeed);
 document.getElementById('cf-new-file').addEventListener('click',newFile);
+document.getElementById('cf-new-folder').addEventListener('click',newFolder);
 document.getElementById('cf-undo').addEventListener('click',undo);
 document.getElementById('cf-redo').addEventListener('click',redo);
 document.getElementById('cf-loops').addEventListener('click',detectFeedbackLoops);
@@ -1932,6 +2072,7 @@ function createFromTemplate(tpl) {
 
 // ── Init ───────────────────────────────────────────────────
 loadFiles();
+loadFolders();
 G = JSON.parse(JSON.stringify(activeFile().data));
 if(localStorage.getItem('cf_dark')){ document.body.classList.add('dark'); document.getElementById('cf-dark-btn').classList.add('active'); }
 renderAll();
