@@ -419,6 +419,9 @@ function pick(obj,...keys){
 function fmtDate(d){
   if(!d) return '';
   d = String(d).trim();
+  // 7-digit ROC: YYYMMDD (e.g. 1150709 → 2026-07-09)
+  if(/^\d{7}$/.test(d)) return `${+d.slice(0,3)+1911}-${d.slice(3,5)}-${d.slice(5,7)}`;
+  // 8-digit western: YYYYMMDD
   if(/^\d{8}$/.test(d)) return `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
   const roc = d.match(/^(\d{2,3})\/(\d{1,2})\/(\d{1,2})$/);
   if(roc) return `${+roc[1]+1911}-${roc[2].padStart(2,'0')}-${roc[3].padStart(2,'0')}`;
@@ -555,27 +558,28 @@ function renderWarn(){
 // INSTITUTIONAL SECTION
 // ═══════════════════════════════════════════
 function normInst(raw, market){
-  const code = pick(raw,'SecuritiesCode','Code','code','代號','股票代號');
+  const code = pick(raw,'SecuritiesCompanyCode','SecuritiesCode','Code','code','代號','股票代號');
   const name = pick(raw,'CompanyName','Name','name','名稱','公司名稱');
   if(!code&&!name) return null;
 
-  // Net buy/sell in thousands of shares; try direct net field first
-  const foreign = num(pick(raw,
-    'ForeignInvestorsNetBuyShares','ForeignNetBuySharesInThousands','QFII_NET',
-    '外陸資買賣超股數(千股)','外陸資買賣超股數','外資及陸資買賣超股數(千股)','外資買賣超股數'))
-    || num(pick(raw,'外陸資買進股數(千股)','ForeignBuyShares'))-num(pick(raw,'外陸資賣出股數(千股)','ForeignSellShares'));
+  // TPEx fields have spaces/parens in key names — must use bracket access
+  // Values are in shares (股); divide by 1000 → 千股 for display
+  const foreignRaw = num(
+    raw['Foreign Investors include Mainland Area Investors (Foreign Dealers excluded)-Difference'] ||
+    raw['ForeignInvestorsInclude MainlandAreaInvestors-Difference'] ||
+    raw['ForeignInvestorsIncludeMainlandAreaInvestors-Difference'] || 0
+  );
+  const trustRaw = num(
+    raw['SecuritiesInvestmentTrustCompanies-Difference'] || 0
+  );
+  const dealerRaw = num(
+    raw['Dealers-Difference'] || 0
+  );
 
-  const trust = num(pick(raw,
-    'InvestmentTrustNetBuyShares','TrustNetBuySharesInThousands','TRUST_NET',
-    '投信買賣超股數(千股)','投信買賣超股數'))
-    || num(pick(raw,'投信買進股數(千股)','TrustBuyShares'))-num(pick(raw,'投信賣出股數(千股)','TrustSellShares'));
-
-  const dealer = num(pick(raw,
-    'DealerNetBuyShares','DealerNetBuySharesInThousands','DEALER_NET',
-    '自營商買賣超股數(千股)','自營商買賣超股數'))
-    || num(pick(raw,'自營商買進股數(千股)','DealerBuyShares'))-num(pick(raw,'自營商賣出股數(千股)','DealerSellShares'));
-
-  const total = foreign + trust + dealer;
+  const foreign = Math.round(foreignRaw / 1000);
+  const trust   = Math.round(trustRaw   / 1000);
+  const dealer  = Math.round(dealerRaw  / 1000);
+  const total   = foreign + trust + dealer;
   const buyCount = (foreign>0?1:0)+(trust>0?1:0)+(dealer>0?1:0);
   return {code,name,market,foreign,trust,dealer,total,buyCount};
 }
@@ -641,17 +645,18 @@ function renderInst(){
 // EX-DIVIDEND SECTION
 // ═══════════════════════════════════════════
 function normExDiv(raw, market){
-  const code = pick(raw,'Code','SecuritiesCode','code','公司代號','股票代號');
+  // TWSE TWT48U_ALL:  Code, Name, Date(YYYMMDD), CashDividend, StockDividendRatio
+  // TPEx tpex_exright_prepost: SecuritiesCompanyCode, CompanyName, ExRrightsExDividendDate(YYYMMDD), CashDividend, StockDividendRatio
+  const code = pick(raw,'Code','SecuritiesCompanyCode','SecuritiesCode','code','公司代號','股票代號');
   const name = pick(raw,'Name','CompanyName','name','公司名稱','股票名稱');
   if(!code&&!name) return null;
-  const exDivRaw  = pick(raw,'ExDividendDate','CashDividendDate','ExDivDate','除息交易日','除息日','現金股利基準日');
-  const exRightRaw= pick(raw,'ExRightDate','StockDividendDate','ExRightDay','除權交易日','除權日','股票股利基準日');
-  const cash  = num(pick(raw,'CashDividend','CashEarningsDistribution','CashPerShare','現金股利(元)','每股配息','現金股利','盈餘配息'));
-  const stock = num(pick(raw,'StockDividend','StockEarningsDistribution','StockPerShare','無償配股率','股票股利(元)','每股配股','股票股利'));
-  const exDate = exDivRaw || exRightRaw;
-  if(!exDate) return null;
-  const dateStr = fmtDate(exDate);
+  // Date field differs by source; both use 7-digit ROC YYYMMDD format
+  const dateRaw = pick(raw,'ExRrightsExDividendDate','Date','ExDividendDate','ExDivDate','除息日','除權日');
+  if(!dateRaw) return null;
+  const dateStr = fmtDate(dateRaw);
   const dateObj = parseDate(dateStr);
+  const cash  = num(raw['CashDividend'] || 0);
+  const stock = num(raw['StockDividendRatio'] || 0);
   return {code,name,market,dateStr,dateObj,cash,stock,days:daysUntil(dateObj)};
 }
 
