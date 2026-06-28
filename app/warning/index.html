@@ -201,6 +201,11 @@ header {
   color:var(--ink-faint); margin-top:2px; line-height:1.4;
   overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
 
+/* sortable headers */
+.th.sort-btn { cursor:pointer; user-select:none; transition:opacity .15s; }
+.th.sort-btn:hover { opacity:.6; }
+.sort-ind { display:inline-block; margin-left:3px; font-size:9px; opacity:.5; }
+
 /* ── SECTION PANEL ── */
 .sec-panel[hidden] { display:none; }
 
@@ -291,12 +296,14 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
   <div class="tbl-wrap">
     <div class="tbl-head grid-warn">
-      <div class="th en">#</div><div class="th en">Code</div>
-      <div class="th zh">名稱</div><div class="th en">Market</div>
-      <div class="th zh">狀態</div>
-      <div class="th zh">撮合</div>
-      <div class="th zh">迄日</div>
-      <div class="th r zh">漲跌</div>
+      <div class="th en">#</div>
+      <div class="th sort-btn en" onclick="handleSort('warn','code')">Code<span class="sort-ind" id="ws-code"></span></div>
+      <div class="th sort-btn zh" onclick="handleSort('warn','name')">名稱<span class="sort-ind" id="ws-name"></span></div>
+      <div class="th sort-btn en" onclick="handleSort('warn','market')">Market<span class="sort-ind" id="ws-market"></span></div>
+      <div class="th sort-btn zh" onclick="handleSort('warn','status')">狀態<span class="sort-ind" id="ws-status"></span></div>
+      <div class="th sort-btn zh" onclick="handleSort('warn','auction')">撮合<span class="sort-ind" id="ws-auction"></span></div>
+      <div class="th sort-btn zh" onclick="handleSort('warn','enddate')">迄日<span class="sort-ind" id="ws-enddate"></span></div>
+      <div class="th sort-btn r zh" onclick="handleSort('warn','pct')">漲跌<span class="sort-ind" id="ws-pct"></span></div>
     </div>
     <div id="warnBody"><div class="state-wrap"><div class="state-dots">
       <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
@@ -334,13 +341,14 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
   <div class="tbl-wrap">
     <div class="tbl-head grid-inst">
-      <div class="th en">#</div><div class="th en">Code</div>
-      <div class="th zh">名稱</div>
-      <div class="th r en">外資(千股)</div>
-      <div class="th r en">投信(千股)</div>
-      <div class="th r en">自營(千股)</div>
-      <div class="th r en">合計(千股)</div>
-      <div class="th en">強度</div>
+      <div class="th en">#</div>
+      <div class="th sort-btn en" onclick="handleSort('inst','code')">Code<span class="sort-ind" id="is-code"></span></div>
+      <div class="th sort-btn zh" onclick="handleSort('inst','name')">名稱<span class="sort-ind" id="is-name"></span></div>
+      <div class="th sort-btn r en" onclick="handleSort('inst','foreign')">外資(千股)<span class="sort-ind" id="is-foreign"></span></div>
+      <div class="th sort-btn r en" onclick="handleSort('inst','trust')">投信(千股)<span class="sort-ind" id="is-trust"></span></div>
+      <div class="th sort-btn r en" onclick="handleSort('inst','dealer')">自營(千股)<span class="sort-ind" id="is-dealer"></span></div>
+      <div class="th sort-btn r en" onclick="handleSort('inst','total')">合計(千股)<span class="sort-ind" id="is-total">↓</span></div>
+      <div class="th sort-btn en" onclick="handleSort('inst','strength')">強度<span class="sort-ind" id="is-strength"></span></div>
     </div>
     <div id="instBody"><div class="state-wrap"><div class="state-dots">
       <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
@@ -383,12 +391,14 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
   <div class="tbl-wrap">
     <div class="tbl-head grid-exdv">
-      <div class="th en">#</div><div class="th en">Code</div>
-      <div class="th zh">名稱</div><div class="th en">Market</div>
-      <div class="th en">Ex-Date</div>
-      <div class="th r en">現金(元)</div>
-      <div class="th r en">股票(%)</div>
-      <div class="th en">倒數</div>
+      <div class="th en">#</div>
+      <div class="th sort-btn en" onclick="handleSort('exdiv','code')">Code<span class="sort-ind" id="es-code"></span></div>
+      <div class="th sort-btn zh" onclick="handleSort('exdiv','name')">名稱<span class="sort-ind" id="es-name"></span></div>
+      <div class="th sort-btn en" onclick="handleSort('exdiv','market')">Market<span class="sort-ind" id="es-market"></span></div>
+      <div class="th sort-btn en" onclick="handleSort('exdiv','date')">Ex-Date<span class="sort-ind" id="es-date">↑</span></div>
+      <div class="th sort-btn r en" onclick="handleSort('exdiv','cash')">現金(元)<span class="sort-ind" id="es-cash"></span></div>
+      <div class="th sort-btn r en" onclick="handleSort('exdiv','stock')">股票(%)<span class="sort-ind" id="es-stock"></span></div>
+      <div class="th sort-btn en" onclick="handleSort('exdiv','days')">倒數<span class="sort-ind" id="es-days"></span></div>
     </div>
     <div id="exdivBody"><div class="state-wrap"><div class="state-dots">
       <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
@@ -412,6 +422,9 @@ const S = {
   warn:  { rows:[], loaded:false },
   inst:  { rows:[], loaded:false },
   exdiv: { rows:[], loaded:false },
+  warnSort:  { col: null,    dir: 'asc' },
+  instSort:  { col: 'total', dir: 'desc' },
+  exdivSort: { col: 'date',  dir: 'asc'  },
 };
 const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
 
@@ -449,6 +462,47 @@ function daysUntil(d){
   dd.setHours(0,0,0,0);
   return Math.round((dd - TODAY) / 86400000);
 }
+// ─── Sort engine ──────────────────────────────────────────────────────
+const SORT_IDS = {
+  warn:  ['ws-code','ws-name','ws-market','ws-status','ws-auction','ws-enddate','ws-pct'],
+  inst:  ['is-code','is-name','is-foreign','is-trust','is-dealer','is-total','is-strength'],
+  exdiv: ['es-code','es-name','es-market','es-date','es-cash','es-stock','es-days'],
+};
+function updateSortIndicators(sec){
+  const st = S[sec+'Sort'];
+  SORT_IDS[sec].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const col = id.split('-')[1];
+    el.textContent = st.col === col ? (st.dir==='asc' ? ' ↑' : ' ↓') : '';
+  });
+}
+function handleSort(sec, col){
+  const st = S[sec+'Sort'];
+  if(st.col === col){
+    st.dir = st.dir === 'asc' ? 'desc' : 'asc';
+  } else {
+    st.col = col;
+    // numeric columns: default desc (largest first); text/date: default asc
+    st.dir = ['code','name','market','status','enddate','date'].includes(col) ? 'asc' : 'desc';
+  }
+  if(sec==='warn')  renderWarn();
+  if(sec==='inst')  renderInst();
+  if(sec==='exdiv') renderExDiv();
+}
+function applySort(rows, st, getters){
+  if(!st.col || !getters[st.col]) return rows;
+  const get = getters[st.col];
+  return [...rows].sort((a,b) => {
+    const va = get(a), vb = get(b);
+    const na = va === null || va === undefined || (typeof va==='number' && isNaN(va));
+    const nb = vb === null || vb === undefined || (typeof vb==='number' && isNaN(vb));
+    if(na && nb) return 0; if(na) return 1; if(nb) return -1;
+    const cmp = typeof va==='string' ? va.localeCompare(vb,'zh-TW') : (va < vb ? -1 : va > vb ? 1 : 0);
+    return st.dir==='asc' ? cmp : -cmp;
+  });
+}
+
 function fmtPct(p){
   if(p === null || p === undefined) return '';
   return (p > 0 ? '+' : '') + p.toFixed(1) + '%';
@@ -599,8 +653,19 @@ function warnFilter(f){
 }
 
 function renderWarn(){
-  const rows = S.warnFilter==='all' ? S.warn.rows
+  const wGetters = {
+    code:    r => r.code,
+    name:    r => r.name,
+    market:  r => r.market,
+    status:  r => r.status,
+    auction: r => r.auctionMins ?? -1,
+    enddate: r => r.endDate ?? r.date ?? '',
+    pct:     r => r.priceChangePct ?? -Infinity,
+  };
+  let rows = S.warnFilter==='all' ? S.warn.rows
     : S.warn.rows.filter(r=>`${r.market}-${r.status}`===S.warnFilter);
+  rows = applySort(rows, S.warnSort, wGetters);
+  updateSortIndicators('warn');
   const body = document.getElementById('warnBody');
   if(!rows.length){ empty('warnBody', S.warn.rows.length?'此分類目前無資料':'目前無警示資料',
     S.warn.rows.length?'':'No data returned. This may be a non-trading day.'); return; }
@@ -696,12 +761,23 @@ function instFilter(f){
 }
 
 function renderInst(){
+  const iGetters = {
+    code:     r => r.code,
+    name:     r => r.name,
+    foreign:  r => r.foreign,
+    trust:    r => r.trust,
+    dealer:   r => r.dealer,
+    total:    r => r.total,
+    strength: r => r.buyCount,
+  };
   const f = S.instFilter;
   let rows = S.inst.rows;
   if(f==='triple')      rows=rows.filter(r=>r.buyCount===3);
   else if(f==='net-buy')      rows=rows.filter(r=>r.total>0);
   else if(f==='foreign-lead') rows=rows.filter(r=>r.foreign>0&&r.foreign>=Math.max(Math.abs(r.trust),Math.abs(r.dealer)));
   else if(f==='trust-lead')   rows=rows.filter(r=>r.trust>0&&r.trust>=Math.max(Math.abs(r.foreign),Math.abs(r.dealer)));
+  rows = applySort(rows, S.instSort, iGetters);
+  updateSortIndicators('inst');
   const body = document.getElementById('instBody');
   if(!rows.length){ empty('instBody', S.inst.rows.length?'此分類目前無資料':'目前無法人資料',
     S.inst.rows.length?'':'No institutional data available. May be a non-trading day.'); return; }
@@ -791,6 +867,15 @@ function exdivFilter(f){
 }
 
 function renderExDiv(){
+  const eGetters = {
+    code:   r => r.code,
+    name:   r => r.name,
+    market: r => r.market,
+    date:   r => r.dateObj ? r.dateObj.getTime() : Infinity,
+    cash:   r => r.cash,
+    stock:  r => r.stock,
+    days:   r => r.days ?? Infinity,
+  };
   const f=S.exdivFilter;
   let rows=S.exdiv.rows;
   const thisWk=weekRange(0), nextWk=weekRange(1), thisMo=monthRange();
@@ -799,6 +884,8 @@ function renderExDiv(){
   else if(f==='next-week')  rows=rows.filter(r=>inR(r.dateObj,nextWk));
   else if(f==='this-month') rows=rows.filter(r=>inR(r.dateObj,thisMo));
   else if(f==='cash-only')  rows=rows.filter(r=>r.cash>0);
+  rows = applySort(rows, S.exdivSort, eGetters);
+  updateSortIndicators('exdiv');
   const body=document.getElementById('exdivBody');
   if(!rows.length){ empty('exdivBody',S.exdiv.rows.length?'此期間無除息資料':'目前無除息資料',
     S.exdiv.rows.length?'':'No data. May be a non-trading period.'); return; }
