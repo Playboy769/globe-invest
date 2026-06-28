@@ -3,551 +3,734 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market Warning Radar</title>
+<title>Market Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --bg:          #ffffff;
-  --ink:         #0a0a0a;
-  --ink-mid:     #555;
-  --ink-soft:    #999;
-  --ink-faint:   #bbb;
-  --ink-ghost:   #ddd;
-  --border:      #eeeeee;
-  --border-lite: #f5f5f5;
-  --surface:     #fafafa;
+  --bg:         #ffffff;
+  --ink:        #0a0a0a;
+  --ink-soft:   #999;
+  --ink-faint:  #bbb;
+  --ink-ghost:  #ddd;
+  --border:     #eeeeee;
+  --border-lt:  #f5f5f5;
+  --surface:    #fafafa;
+  --green-bg:   #f0fdf4;
+  --green-ink:  #15803d;
+  --red-bg:     #fee2e2;
+  --red-ink:    #dc2626;
+  --amber-bg:   #fef3c7;
+  --amber-ink:  #92400e;
+  --blue-bg:    #eff6ff;
+  --blue-ink:   #1d4ed8;
+  --teal-bg:    #f0fdfa;
+  --teal-ink:   #0f766e;
 }
 
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Calibri', 'Noto Sans TC', -apple-system, sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-}
-
-.zh { font-family: 'Noto Sans TC', 'Calibri', sans-serif; }
-.en { font-family: 'Calibri', sans-serif; }
-
-::selection { background: var(--ink); color: #fff; }
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #fff; }
-::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #ccc; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--ink); font-family:'Calibri','Noto Sans TC',sans-serif;
+       font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100vh; }
+.zh { font-family:'Noto Sans TC','Calibri',sans-serif; }
+.en { font-family:'Calibri',sans-serif; }
+::selection { background:var(--ink); color:#fff; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:#e0e0e0; border-radius:3px; }
 
 /* ── HEADER ── */
 header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 48px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position:sticky; top:0; z-index:100;
+  background:rgba(255,255,255,0.92); backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  padding:0 48px; height:64px;
+  display:flex; align-items:center; justify-content:space-between;
 }
-
-.h-brand { display: flex; align-items: baseline; gap: 14px; }
-.h-title {
-  font-family: 'Calibri', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink);
-}
-.h-sub {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: 0.06em;
-}
-.h-right { display: flex; align-items: center; gap: 20px; }
-
-.update-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
-.update-label {
-  font-family: 'Calibri', sans-serif;
-  font-size: 10px;
-  color: var(--ink-ghost);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.update-time {
-  font-family: 'Calibri', sans-serif;
-  font-size: 13px;
-  color: var(--ink-soft);
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
+.h-brand { display:flex; align-items:baseline; gap:14px; }
+.h-title { font-family:'Calibri',sans-serif; font-size:14px; font-weight:600;
+           letter-spacing:0.14em; text-transform:uppercase; }
+.h-sub   { font-family:'Noto Sans TC',sans-serif; font-size:11px;
+           color:var(--ink-faint); letter-spacing:0.06em; }
+.h-right { display:flex; align-items:center; gap:20px; }
+.upd-wrap { display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
+.upd-label { font-family:'Calibri',sans-serif; font-size:10px; color:var(--ink-ghost);
+             letter-spacing:0.1em; text-transform:uppercase; }
+.upd-time  { font-family:'Calibri',sans-serif; font-size:13px; color:var(--ink-soft);
+             font-variant-numeric:tabular-nums; }
 .refresh-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 20px;
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  background: transparent;
-  font-family: 'Calibri', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-  white-space: nowrap;
+  display:inline-flex; align-items:center; gap:8px; padding:8px 20px;
+  border:1px solid var(--border); border-radius:100px; background:transparent;
+  font-family:'Calibri',sans-serif; font-size:11px; letter-spacing:0.1em;
+  text-transform:uppercase; cursor:pointer; white-space:nowrap;
+  transition:background .25s,color .25s,border-color .25s;
 }
-.refresh-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
-.refresh-btn:disabled { opacity: 0.5; cursor: default; }
-.refresh-btn svg {
-  width: 12px; height: 12px;
-  stroke: currentColor; fill: none;
-  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-  flex-shrink: 0;
+.refresh-btn:hover { background:var(--ink); color:#fff; border-color:var(--ink); }
+.refresh-btn:disabled { opacity:.45; cursor:default; }
+.refresh-btn svg { width:12px; height:12px; stroke:currentColor; fill:none;
+                   stroke-width:2; stroke-linecap:round; flex-shrink:0; }
+.refresh-btn.spinning svg { animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── SECTION NAV ── */
+.sec-nav {
+  display:flex; padding:0 48px;
+  border-bottom:1px solid var(--border); background:var(--bg);
 }
-.refresh-btn.spinning svg { animation: spin 0.7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.sec-btn {
+  padding:18px 0; margin-right:40px; border:none; background:none;
+  font-family:'Calibri','Noto Sans TC',sans-serif; font-size:12px;
+  letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-faint);
+  cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px;
+  transition:color .2s,border-color .2s; white-space:nowrap;
+}
+.sec-btn:last-child { margin-right:0; }
+.sec-btn:hover { color:var(--ink-soft); }
+.sec-btn.active { color:var(--ink); border-bottom-color:var(--ink); }
+.sec-btn .sec-cnt { font-size:10px; color:var(--ink-ghost); margin-left:6px;
+                    font-variant-numeric:tabular-nums; }
+.sec-btn.active .sec-cnt { color:var(--ink-soft); }
 
 /* ── STAT STRIP ── */
-.stat-strip {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  border-bottom: 1px solid var(--border);
-  padding: 0 48px;
-}
-.stat-cell {
-  flex: 1 1 140px;
-  padding: 24px 32px 22px 0;
-  border-right: 1px solid var(--border);
-  margin-right: 32px;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  min-width: 120px;
-}
-.stat-cell:last-child { border-right: none; margin-right: 0; padding-right: 0; }
-.stat-cell:hover { opacity: 0.65; }
+.stat-strip { display:flex; flex-wrap:wrap; border-bottom:1px solid var(--border); padding:0 48px; }
+.stat-cell { flex:1 1 140px; padding:22px 32px 20px 0; border-right:1px solid var(--border);
+             margin-right:32px; cursor:pointer; transition:opacity .2s; min-width:110px; }
+.stat-cell:last-child { border-right:none; margin-right:0; padding-right:0; }
+.stat-cell:hover { opacity:.65; }
+.stat-label { font-family:'Calibri',sans-serif; font-size:10px; color:var(--ink-faint);
+              letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; }
+.stat-num { font-family:'Calibri',sans-serif; font-size:34px; font-weight:300; color:var(--ink);
+            line-height:1; letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+.stat-cell.s-notice  .stat-num { color:#b45309; }
+.stat-cell.s-dispose .stat-num { color:#dc2626; }
+.stat-cell.s-green   .stat-num { color:var(--green-ink); }
+.stat-cell.s-blue    .stat-num { color:var(--blue-ink); }
+.stat-cell.s-teal    .stat-num { color:var(--teal-ink); }
 
-.stat-label {
-  font-family: 'Calibri', sans-serif;
-  font-size: 10px;
-  color: var(--ink-faint);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.stat-num {
-  font-family: 'Calibri', sans-serif;
-  font-size: 36px;
-  font-weight: 300;
-  color: var(--ink);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-}
-.stat-cell.s-notice .stat-num  { color: #b45309; }
-.stat-cell.s-dispose .stat-num { color: #dc2626; }
-
-/* ── TAB BAR ── */
-.tab-bar {
-  display: flex;
-  align-items: stretch;
-  padding: 0 48px;
-  border-bottom: 1px solid var(--border);
-}
-.tab-btn {
-  padding: 16px 0;
-  margin-right: 32px;
-  border: none; background: none;
-  font-family: 'Noto Sans TC', 'Calibri', sans-serif;
-  font-size: 13px;
-  color: var(--ink-faint);
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  border-bottom: 1.5px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.2s ease, border-color 0.2s ease;
-  white-space: nowrap;
-}
-.tab-btn:last-child { margin-right: 0; }
-.tab-btn:hover { color: var(--ink-soft); }
-.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
+/* ── FILTER TABS ── */
+.tab-bar { display:flex; padding:0 48px; border-bottom:1px solid var(--border); }
+.tab-btn { padding:14px 0; margin-right:28px; border:none; background:none;
+           font-family:'Noto Sans TC','Calibri',sans-serif; font-size:13px;
+           color:var(--ink-faint); cursor:pointer;
+           border-bottom:1.5px solid transparent; margin-bottom:-1px;
+           transition:color .2s,border-color .2s; white-space:nowrap; }
+.tab-btn:last-child { margin-right:0; }
+.tab-btn:hover { color:var(--ink-soft); }
+.tab-btn.active { color:var(--ink); border-bottom-color:var(--ink); }
 
 /* ── TABLE ── */
-.table-wrap { padding: 0 48px 80px; }
+.tbl-wrap { padding:0 48px 80px; }
+.tbl-head { display:grid; gap:0 16px; padding:12px 10px;
+            border-bottom:1px solid var(--border); margin-top:24px; }
+.th { font-family:'Calibri',sans-serif; font-size:9.5px; color:var(--ink-ghost);
+      letter-spacing:0.14em; text-transform:uppercase; }
+.th.r { text-align:right; }
+.tbl-row { display:grid; gap:0 16px; padding:14px 10px;
+           border-bottom:1px solid var(--border-lt); align-items:center;
+           transition:background .12s,transform .2s cubic-bezier(.4,0,.2,1); }
+.tbl-row:hover { background:var(--surface); transform:translateX(3px); }
+.tbl-row:last-child { border-bottom:none; }
+.r-idx  { font-family:'Calibri',sans-serif; font-size:10px; color:var(--ink-ghost);
+          font-variant-numeric:tabular-nums; text-align:right; }
+.r-code { font-family:'Calibri',monospace; font-size:13px; font-weight:600;
+          letter-spacing:0.06em; }
+.r-name { font-family:'Noto Sans TC',sans-serif; font-size:13px;
+          white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.r-date { font-family:'Calibri',sans-serif; font-size:12px; color:var(--ink-soft);
+          font-variant-numeric:tabular-nums; white-space:nowrap; }
+.r-note { font-family:'Noto Sans TC',sans-serif; font-size:11.5px; color:var(--ink-soft);
+          line-height:1.5; overflow:hidden; display:-webkit-box;
+          -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.r-num  { font-family:'Calibri',sans-serif; font-size:12.5px;
+          font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+.r-num.pos { color:var(--green-ink); }
+.r-num.neg { color:var(--red-ink); }
+.r-num.zero { color:var(--ink-ghost); }
 
-.tbl-head {
-  display: grid;
-  grid-template-columns: 32px 72px minmax(100px,1fr) 68px 92px 96px minmax(120px,1.4fr);
-  gap: 0 20px;
-  padding: 14px 10px;
-  border-bottom: 1px solid var(--border);
-  margin-top: 28px;
-}
-.th {
-  font-family: 'Calibri', sans-serif;
-  font-size: 9.5px;
-  color: var(--ink-ghost);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
+/* Badges */
+.mkt  { display:inline-flex; align-items:center; padding:3px 7px; border-radius:4px;
+        font-family:'Calibri',sans-serif; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; }
+.mkt-twse { background:var(--blue-bg);  color:var(--blue-ink); }
+.mkt-tpex { background:var(--green-bg); color:var(--green-ink); }
+.sts  { display:inline-flex; align-items:center; gap:5px; padding:4px 10px;
+        border-radius:100px; font-family:'Noto Sans TC',sans-serif; font-size:11px; }
+.sts-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.sts-notice  { background:var(--amber-bg); color:var(--amber-ink); }
+.sts-notice .sts-dot  { background:#d97706; }
+.sts-dispose { background:var(--red-bg);   color:var(--red-ink); }
+.sts-dispose .sts-dot { background:var(--red-ink); }
 
-.tbl-row {
-  display: grid;
-  grid-template-columns: 32px 72px minmax(100px,1fr) 68px 92px 96px minmax(120px,1.4fr);
-  gap: 0 20px;
-  padding: 15px 10px;
-  border-bottom: 1px solid var(--border-lite);
-  align-items: center;
-  transition: background 0.12s ease, transform 0.2s cubic-bezier(.4,0,.2,1);
-}
-.tbl-row:hover { background: var(--surface); transform: translateX(3px); }
-.tbl-row:last-child { border-bottom: none; }
+/* Institutional strength dots */
+.dots { display:inline-flex; gap:4px; align-items:center; }
+.dot  { width:7px; height:7px; border-radius:50%; background:var(--border); }
+.dot.on-f { background:#1d4ed8; }
+.dot.on-t { background:#d97706; }
+.dot.on-d { background:var(--green-ink); }
 
-.r-idx {
-  font-family: 'Calibri', sans-serif;
-  font-size: 10px; color: var(--ink-ghost);
-  font-variant-numeric: tabular-nums; text-align: right;
-}
-.r-code {
-  font-family: 'Calibri', monospace;
-  font-size: 13.5px; font-weight: 600; color: var(--ink); letter-spacing: 0.06em;
-}
-.r-name {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 13.5px; color: var(--ink);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-.mkt {
-  display: inline-flex; align-items: center;
-  padding: 3px 7px; border-radius: 4px;
-  font-family: 'Calibri', sans-serif;
-  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
-}
-.mkt-twse { background: #eff6ff; color: #1d4ed8; }
-.mkt-tpex { background: #f0fdf4; color: #15803d; }
-
-.sts {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 10px; border-radius: 100px;
-  font-family: 'Noto Sans TC', sans-serif; font-size: 11px;
-}
-.sts-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.sts-notice { background: #fef3c7; color: #92400e; }
-.sts-notice .sts-dot { background: #d97706; }
-.sts-dispose { background: #fee2e2; color: #991b1b; }
-.sts-dispose .sts-dot { background: #dc2626; }
-
-.r-date {
-  font-family: 'Calibri', sans-serif; font-size: 12px;
-  color: var(--ink-soft); font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em; white-space: nowrap;
-}
-.r-note {
-  font-family: 'Noto Sans TC', sans-serif; font-size: 11.5px;
-  color: var(--ink-soft); line-height: 1.5;
-  overflow: hidden; display: -webkit-box;
-  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-}
+/* Ex-dividend countdown */
+.countdown { display:inline-block; padding:3px 8px; border-radius:100px;
+             font-family:'Calibri',sans-serif; font-size:11px; font-variant-numeric:tabular-nums; }
+.cd-today  { background:#fef3c7; color:#92400e; }
+.cd-near   { background:var(--red-bg); color:var(--red-ink); }
+.cd-soon   { background:var(--blue-bg); color:var(--blue-ink); }
+.cd-far    { background:var(--surface); color:var(--ink-soft); }
+.cd-past   { color:var(--ink-ghost); font-size:11px; font-family:'Calibri',sans-serif; }
 
 /* ── STATES ── */
-.state-wrap {
-  padding: 64px 0 48px;
-  display: flex; flex-direction: column; align-items: center; gap: 14px;
-}
-.state-dots { display: flex; gap: 7px; }
-.state-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--border);
-  animation: blink 1.3s ease-in-out infinite;
-}
-.state-dot:nth-child(2) { animation-delay: 0.2s; }
-.state-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes blink { 0%,100%{opacity:0.25} 50%{opacity:1} }
+.state-wrap { padding:56px 0 40px; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.state-dots { display:flex; gap:7px; }
+.state-dot  { width:6px; height:6px; border-radius:50%; background:var(--border);
+              animation:blink 1.3s ease-in-out infinite; }
+.state-dot:nth-child(2) { animation-delay:.2s; }
+.state-dot:nth-child(3) { animation-delay:.4s; }
+@keyframes blink { 0%,100%{opacity:.25} 50%{opacity:1} }
+.state-msg    { font-family:'Noto Sans TC',sans-serif; font-size:13px; color:var(--ink-faint); }
+.state-detail { font-family:'Calibri',sans-serif; font-size:11px; color:var(--ink-ghost);
+                text-align:center; line-height:1.6; }
 
-.state-msg  { font-family: 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--ink-faint); letter-spacing: 0.04em; }
-.state-detail { font-family: 'Calibri', sans-serif; font-size: 11px; color: var(--ink-ghost); letter-spacing: 0.06em; text-align: center; line-height: 1.6; }
+/* ── GRID TEMPLATES ── */
+.grid-warn { grid-template-columns:28px 68px minmax(90px,1fr) 64px 88px 90px minmax(100px,1.3fr); }
+.grid-inst { grid-template-columns:28px 68px minmax(90px,1fr) 90px 90px 90px 100px 68px; }
+.grid-exdv { grid-template-columns:28px 68px minmax(90px,1fr) 64px 96px 80px 80px 76px; }
 
-/* Error banner */
-.err-banner {
-  display: none; margin: 16px 48px 0;
-  padding: 12px 18px; border: 1px solid #fde68a; border-radius: 8px; background: #fffbeb;
-  align-items: flex-start; gap: 10px;
-}
-.err-banner.show { display: flex; }
-.err-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-.err-text { font-family: 'Noto Sans TC', sans-serif; font-size: 12px; color: #92400e; line-height: 1.7; }
+/* ── SECTION PANEL ── */
+.sec-panel[hidden] { display:none; }
 
 /* ── FOOTER ── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 20px 48px;
-  display: flex; justify-content: space-between; align-items: center; gap: 20px;
-}
-.ft-src  { font-family: 'Calibri', sans-serif; font-size: 10.5px; color: var(--ink-ghost); letter-spacing: 0.08em; text-transform: uppercase; }
-.ft-note { font-family: 'Noto Sans TC', sans-serif; font-size: 11px; color: var(--ink-ghost); }
+footer { border-top:1px solid var(--border); padding:18px 48px;
+         display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.ft-src  { font-family:'Calibri',sans-serif; font-size:10.5px; color:var(--ink-ghost);
+           letter-spacing:0.08em; text-transform:uppercase; }
+.ft-note { font-family:'Noto Sans TC',sans-serif; font-size:11px; color:var(--ink-ghost); }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 960px) {
-  header, .stat-strip, .tab-bar, .table-wrap, footer { padding-left: 24px; padding-right: 24px; }
-  .err-banner { margin-left: 24px; margin-right: 24px; }
-  .tbl-head, .tbl-row { grid-template-columns: 28px 60px 1fr 64px 88px 88px; }
-  .th:last-child, .r-note { display: none; }
+@media (max-width:960px) {
+  header,.sec-nav,.stat-strip,.tab-bar,.tbl-wrap,footer { padding-left:24px; padding-right:24px; }
+  .grid-inst { grid-template-columns:24px 56px 1fr 72px 72px 72px 80px; }
+  .tbl-head.grid-inst .th:nth-child(8),.tbl-row.grid-inst .r-dots { display:none; }
+  .grid-exdv { grid-template-columns:24px 56px 1fr 56px 88px 70px 70px; }
+  .tbl-head.grid-exdv .th:last-child,.tbl-row.grid-exdv *:last-child { display:none; }
+  .grid-warn { grid-template-columns:24px 60px 1fr 60px 84px 84px; }
+  .tbl-head.grid-warn .th:last-child,.tbl-row.grid-warn .r-note { display:none; }
 }
-@media (max-width: 600px) {
-  header { padding: 0 20px; }
-  .h-sub { display: none; }
-  .stat-strip, .tab-bar, .table-wrap, footer { padding-left: 20px; padding-right: 20px; }
-  .err-banner { margin-left: 20px; margin-right: 20px; }
-  .tab-bar { overflow-x: auto; }
+@media (max-width:600px) {
+  header { padding:0 20px; } .h-sub { display:none; }
+  .sec-nav,.stat-strip,.tab-bar,.tbl-wrap,footer { padding-left:20px; padding-right:20px; }
+  .sec-nav,.tab-bar { overflow-x:auto; }
 }
 </style>
 </head>
 <body>
 
+<!-- ── Header ── -->
 <header>
   <div class="h-brand">
-    <span class="h-title en">Market Warning Radar</span>
-    <span class="h-sub zh">市場警示雷達</span>
+    <span class="h-title en">Market Intelligence</span>
+    <span class="h-sub zh">市場情報中心</span>
   </div>
   <div class="h-right">
-    <div class="update-wrap">
-      <span class="update-label en">Last Update</span>
-      <span class="update-time en" id="updateTime">—</span>
+    <div class="upd-wrap">
+      <span class="upd-label en">Updated</span>
+      <span class="upd-time en" id="updTime">—</span>
     </div>
-    <button class="refresh-btn en" id="refreshBtn" onclick="loadAll()">
+    <button class="refresh-btn en" id="refreshBtn" onclick="refresh()">
       <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       Refresh
     </button>
   </div>
 </header>
 
-<div class="err-banner" id="errBanner">
-  <span class="err-icon">⚠</span>
-  <div class="err-text zh" id="errText">資料載入失敗，請稍後再試。</div>
-</div>
+<!-- ── Section Nav ── -->
+<nav class="sec-nav">
+  <button class="sec-btn active en" data-sec="warning" onclick="switchSec('warning')">
+    Warning Radar <span class="sec-cnt" id="scnt-warning"></span>
+  </button>
+  <button class="sec-btn zh" data-sec="inst" onclick="switchSec('inst')">
+    法人籌碼 <span class="sec-cnt" id="scnt-inst"></span>
+  </button>
+  <button class="sec-btn zh" data-sec="exdiv" onclick="switchSec('exdiv')">
+    除息日曆 <span class="sec-cnt" id="scnt-exdiv"></span>
+  </button>
+</nav>
 
-<div class="stat-strip">
-  <div class="stat-cell s-notice"  onclick="setFilter('twse-notice')"  title="點擊篩選">
-    <div class="stat-label en">TWSE Notice</div>
-    <div class="stat-num en" id="cnt-tn">—</div>
-  </div>
-  <div class="stat-cell s-dispose" onclick="setFilter('twse-dispose')" title="點擊篩選">
-    <div class="stat-label en">TWSE Disposal</div>
-    <div class="stat-num en" id="cnt-td">—</div>
-  </div>
-  <div class="stat-cell s-notice"  onclick="setFilter('tpex-notice')"  title="點擊篩選">
-    <div class="stat-label en">TPEx Notice</div>
-    <div class="stat-num en" id="cnt-pn">—</div>
-  </div>
-  <div class="stat-cell s-dispose" onclick="setFilter('tpex-dispose')" title="點擊篩選">
-    <div class="stat-label en">TPEx Disposal</div>
-    <div class="stat-num en" id="cnt-pd">—</div>
-  </div>
-  <div class="stat-cell s-total"   onclick="setFilter('all')"          title="顯示全部">
-    <div class="stat-label en">Total</div>
-    <div class="stat-num en" id="cnt-all">—</div>
-  </div>
-</div>
-
-<div class="tab-bar">
-  <button class="tab-btn zh active" data-filter="all"          onclick="setFilter('all')">全部</button>
-  <button class="tab-btn zh"        data-filter="twse-notice"  onclick="setFilter('twse-notice')">上市注意</button>
-  <button class="tab-btn zh"        data-filter="twse-dispose" onclick="setFilter('twse-dispose')">上市處置</button>
-  <button class="tab-btn zh"        data-filter="tpex-notice"  onclick="setFilter('tpex-notice')">上櫃注意</button>
-  <button class="tab-btn zh"        data-filter="tpex-dispose" onclick="setFilter('tpex-dispose')">上櫃處置</button>
-</div>
-
-<div class="table-wrap">
-  <div class="tbl-head">
-    <div class="th en">#</div>
-    <div class="th en">Code</div>
-    <div class="th zh">名稱</div>
-    <div class="th en">Market</div>
-    <div class="th zh">狀態</div>
-    <div class="th en">Date</div>
-    <div class="th zh">備註</div>
-  </div>
-  <div id="tblBody">
-    <div class="state-wrap">
-      <div class="state-dots">
-        <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
-      </div>
-      <div class="state-msg zh">正在載入市場警示資料…</div>
+<!-- ══════════════════════════════════════════
+     SECTION 1 — WARNING RADAR
+═══════════════════════════════════════════ -->
+<div id="sec-warning" class="sec-panel">
+  <div class="stat-strip">
+    <div class="stat-cell s-notice"  onclick="warnFilter('twse-notice')"  title="點擊篩選">
+      <div class="stat-label en">TWSE Notice</div><div class="stat-num en" id="w-cnt-tn">—</div>
+    </div>
+    <div class="stat-cell s-dispose" onclick="warnFilter('twse-dispose')" title="點擊篩選">
+      <div class="stat-label en">TWSE Disposal</div><div class="stat-num en" id="w-cnt-td">—</div>
+    </div>
+    <div class="stat-cell s-notice"  onclick="warnFilter('tpex-notice')"  title="點擊篩選">
+      <div class="stat-label en">TPEx Notice</div><div class="stat-num en" id="w-cnt-pn">—</div>
+    </div>
+    <div class="stat-cell s-dispose" onclick="warnFilter('tpex-dispose')" title="點擊篩選">
+      <div class="stat-label en">TPEx Disposal</div><div class="stat-num en" id="w-cnt-pd">—</div>
+    </div>
+    <div class="stat-cell" onclick="warnFilter('all')" title="顯示全部">
+      <div class="stat-label en">Total</div><div class="stat-num en" id="w-cnt-all">—</div>
     </div>
   </div>
+  <div class="tab-bar" id="warnTabs">
+    <button class="tab-btn zh active" data-f="all"          onclick="warnFilter('all')">全部</button>
+    <button class="tab-btn zh"        data-f="twse-notice"  onclick="warnFilter('twse-notice')">上市注意</button>
+    <button class="tab-btn zh"        data-f="twse-dispose" onclick="warnFilter('twse-dispose')">上市處置</button>
+    <button class="tab-btn zh"        data-f="tpex-notice"  onclick="warnFilter('tpex-notice')">上櫃注意</button>
+    <button class="tab-btn zh"        data-f="tpex-dispose" onclick="warnFilter('tpex-dispose')">上櫃處置</button>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-head grid-warn">
+      <div class="th en">#</div><div class="th en">Code</div>
+      <div class="th zh">名稱</div><div class="th en">Market</div>
+      <div class="th zh">狀態</div><div class="th en">Date</div>
+      <div class="th zh">備註</div>
+    </div>
+    <div id="warnBody"><div class="state-wrap"><div class="state-dots">
+      <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+    </div><div class="state-msg zh">載入中…</div></div></div>
+  </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SECTION 2 — INSTITUTIONAL FLOW
+═══════════════════════════════════════════ -->
+<div id="sec-inst" class="sec-panel" hidden>
+  <div class="stat-strip">
+    <div class="stat-cell s-green" onclick="instFilter('triple')" title="三方合力">
+      <div class="stat-label zh">三方合力</div><div class="stat-num en" id="i-cnt-tri">—</div>
+    </div>
+    <div class="stat-cell s-blue" onclick="instFilter('foreign-lead')" title="外資主導">
+      <div class="stat-label zh">外資主導</div><div class="stat-num en" id="i-cnt-fgn">—</div>
+    </div>
+    <div class="stat-cell s-teal" onclick="instFilter('trust-lead')" title="投信主導">
+      <div class="stat-label zh">投信主導</div><div class="stat-num en" id="i-cnt-tst">—</div>
+    </div>
+    <div class="stat-cell s-notice" onclick="instFilter('net-buy')" title="合計買超">
+      <div class="stat-label zh">合計買超</div><div class="stat-num en" id="i-cnt-buy">—</div>
+    </div>
+    <div class="stat-cell" onclick="instFilter('all')" title="全部股票">
+      <div class="stat-label en">Total</div><div class="stat-num en" id="i-cnt-all">—</div>
+    </div>
+  </div>
+  <div class="tab-bar" id="instTabs">
+    <button class="tab-btn zh active" data-f="all"          onclick="instFilter('all')">全部</button>
+    <button class="tab-btn zh"        data-f="triple"       onclick="instFilter('triple')">三方合力</button>
+    <button class="tab-btn zh"        data-f="net-buy"      onclick="instFilter('net-buy')">合計買超</button>
+    <button class="tab-btn zh"        data-f="foreign-lead" onclick="instFilter('foreign-lead')">外資主導</button>
+    <button class="tab-btn zh"        data-f="trust-lead"   onclick="instFilter('trust-lead')">投信主導</button>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-head grid-inst">
+      <div class="th en">#</div><div class="th en">Code</div>
+      <div class="th zh">名稱</div>
+      <div class="th r en">外資(千股)</div>
+      <div class="th r en">投信(千股)</div>
+      <div class="th r en">自營(千股)</div>
+      <div class="th r en">合計(千股)</div>
+      <div class="th en">強度</div>
+    </div>
+    <div id="instBody"><div class="state-wrap"><div class="state-dots">
+      <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+    </div><div class="state-msg zh">載入中…</div></div></div>
+  </div>
+  <div style="padding:0 48px 12px">
+    <span style="font-family:'Noto Sans TC',sans-serif;font-size:11px;color:var(--ink-ghost)">
+      資料範圍：TPEx 上櫃股票（TWSE 上市三大法人資料待 TWSE OpenAPI 開放）
+    </span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — EX-DIVIDEND CALENDAR
+═══════════════════════════════════════════ -->
+<div id="sec-exdiv" class="sec-panel" hidden>
+  <div class="stat-strip">
+    <div class="stat-cell s-green" onclick="exdivFilter('this-week')" title="本週">
+      <div class="stat-label zh">本週除息</div><div class="stat-num en" id="e-cnt-wk">—</div>
+    </div>
+    <div class="stat-cell s-blue" onclick="exdivFilter('next-week')" title="下週">
+      <div class="stat-label zh">下週除息</div><div class="stat-num en" id="e-cnt-nwk">—</div>
+    </div>
+    <div class="stat-cell s-teal" onclick="exdivFilter('this-month')" title="本月">
+      <div class="stat-label zh">本月除息</div><div class="stat-num en" id="e-cnt-mo">—</div>
+    </div>
+    <div class="stat-cell s-notice" onclick="exdivFilter('cash-only')" title="純現金股利">
+      <div class="stat-label zh">現金配息</div><div class="stat-num en" id="e-cnt-cash">—</div>
+    </div>
+    <div class="stat-cell" onclick="exdivFilter('all')" title="全部">
+      <div class="stat-label en">Total</div><div class="stat-num en" id="e-cnt-all">—</div>
+    </div>
+  </div>
+  <div class="tab-bar" id="exdivTabs">
+    <button class="tab-btn zh active" data-f="all"        onclick="exdivFilter('all')">全部</button>
+    <button class="tab-btn zh"        data-f="this-week"  onclick="exdivFilter('this-week')">本週</button>
+    <button class="tab-btn zh"        data-f="next-week"  onclick="exdivFilter('next-week')">下週</button>
+    <button class="tab-btn zh"        data-f="this-month" onclick="exdivFilter('this-month')">本月</button>
+    <button class="tab-btn zh"        data-f="cash-only"  onclick="exdivFilter('cash-only')">純現金</button>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-head grid-exdv">
+      <div class="th en">#</div><div class="th en">Code</div>
+      <div class="th zh">名稱</div><div class="th en">Market</div>
+      <div class="th en">Ex-Date</div>
+      <div class="th r en">現金(元)</div>
+      <div class="th r en">股票(%)</div>
+      <div class="th en">倒數</div>
+    </div>
+    <div id="exdivBody"><div class="state-wrap"><div class="state-dots">
+      <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+    </div><div class="state-msg zh">載入中…</div></div></div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
 <footer>
-  <span class="ft-src en">Data — TWSE openapi.twse.com.tw &middot; TPEx tpex.org.tw/openapi</span>
-  <span class="ft-note zh">資料來源：台灣證券交易所 &amp; 證券櫃檯買賣中心 Open API｜非投資建議</span>
+  <span class="ft-src en">TWSE openapi.twse.com.tw &nbsp;&middot;&nbsp; TPEx tpex.org.tw/openapi</span>
+  <span class="ft-note zh">台灣證券交易所 &amp; 證券櫃檯買賣中心 Open API｜非投資建議</span>
 </footer>
 
 <script>
-// Proxy routes served by globe-invest server.js
-const API = {
-  twseNotice:  '/api/warning/twse-notice',
-  twsePunish:  '/api/warning/twse-punish',
-  tpexNotice:  '/api/warning/tpex-notice',
-  tpexDispose: '/api/warning/tpex-dispose',
+// ─── State ────────────────────────────────────────────────────────────
+const S = {
+  activeSec:   'warning',
+  warnFilter:  'all',
+  instFilter:  'all',
+  exdivFilter: 'all',
+  warn:  { rows:[], loaded:false },
+  inst:  { rows:[], loaded:false },
+  exdiv: { rows:[], loaded:false },
 };
+const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
 
-let allRows   = [];
-let curFilter = 'all';
-
-// ── Field normalizer ──
-function pick(obj, ...keys) {
-  for (const k of keys) {
-    const v = obj[k];
-    if (v !== undefined && v !== null && String(v).trim() !== '') return String(v).trim();
-  }
+// ─── Utils ────────────────────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function num(v){ return parseFloat(String(v||'0').replace(/,/g,''))||0; }
+function fmtN(n, dp=0){
+  if(n===0) return '0';
+  const s = Math.abs(n).toFixed(dp).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  return (n>0?'+':'-') + s;
+}
+function pick(obj,...keys){
+  for(const k of keys){ const v=obj[k]; if(v!==undefined&&v!==null&&String(v).trim()!=='') return String(v).trim(); }
   return '';
 }
-
-function normalize(raw, market, status) {
-  const code = pick(raw, 'Code','SecuritiesCode','StockCode','code','公司代號','股票代號','代號');
-  const name = pick(raw, 'Name','CompanyName','StockName','name','公司名稱','股票名稱','名稱');
-  const date = pick(raw, 'Date','PublishDate','AnnounceDate','AnnouncementDate','StartDate','WarningDate','date','日期','公布日期');
-  const note = pick(raw, 'Reason','Note','Content','Description','DisposalReason','DisposalPeriod','Period','Remark','remark','原因','備註','說明','處置期間');
-  if (!code && !name) return null;
-  return { code, name, date: fmtDate(date), note, market, status };
-}
-
-function fmtDate(d) {
-  if (!d) return '';
+function fmtDate(d){
+  if(!d) return '';
   d = String(d).trim();
-  if (/^\d{8}$/.test(d)) return `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
+  if(/^\d{8}$/.test(d)) return `${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`;
   const roc = d.match(/^(\d{2,3})\/(\d{1,2})\/(\d{1,2})$/);
-  if (roc) return `${+roc[1]+1911}-${roc[2].padStart(2,'0')}-${roc[3].padStart(2,'0')}`;
+  if(roc) return `${+roc[1]+1911}-${roc[2].padStart(2,'0')}-${roc[3].padStart(2,'0')}`;
   return d.slice(0,10).replace(/\//g,'-');
 }
+function parseDate(s){
+  const d = new Date(fmtDate(s)||s);
+  return isNaN(d)?null:d;
+}
+function daysUntil(d){
+  if(!d) return null;
+  const dd = d instanceof Date ? d : parseDate(d);
+  if(!dd) return null;
+  dd.setHours(0,0,0,0);
+  return Math.round((dd - TODAY) / 86400000);
+}
+function countdownBadge(days){
+  if(days===null)    return '';
+  if(days<0)         return `<span class="cd-past zh">已除息</span>`;
+  if(days===0)       return `<span class="countdown cd-today zh">今日</span>`;
+  if(days===1)       return `<span class="countdown cd-near zh">明日</span>`;
+  if(days<=7)        return `<span class="countdown cd-near en">${days}d</span>`;
+  if(days<=21)       return `<span class="countdown cd-soon en">${days}d</span>`;
+  return              `<span class="countdown cd-far  en">${days}d</span>`;
+}
+function loading(bodyId){
+  document.getElementById(bodyId).innerHTML = `<div class="state-wrap">
+    <div class="state-dots"><div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div></div>
+    <div class="state-msg zh">載入中…</div></div>`;
+}
+function empty(bodyId, msg='此分類目前無資料', sub=''){
+  document.getElementById(bodyId).innerHTML = `<div class="state-wrap">
+    <div class="state-msg zh">${esc(msg)}</div>
+    ${sub?`<div class="state-detail en">${esc(sub)}</div>`:''}
+  </div>`;
+}
+function nowStr(){
+  const n=new Date();
+  return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
+}
+function setSpin(on){ const b=document.getElementById('refreshBtn'); b.classList.toggle('spinning',on); b.disabled=on; }
 
-// ── Fetch ──
-async function safeFetch(url) {
-  try {
-    const ctrl = new AbortController();
-    const tid  = setTimeout(() => ctrl.abort(), 12000);
-    const res  = await fetch(url, { signal: ctrl.signal });
+// ─── Fetch ────────────────────────────────────────────────────────────
+async function apiFetch(key){
+  try{
+    const ctrl=new AbortController();
+    const tid=setTimeout(()=>ctrl.abort(),12000);
+    const r=await fetch('/api/warning/'+key,{signal:ctrl.signal});
     clearTimeout(tid);
-    if (!res.ok) { console.warn(`HTTP ${res.status}: ${url}`); return { data: [], err: `HTTP ${res.status}` }; }
-    const data = await res.json();
-    return { data: Array.isArray(data) ? data : [], err: null };
-  } catch (e) {
-    console.warn('Fetch error:', url, e.message);
-    return { data: [], err: e.message };
-  }
+    if(!r.ok) return [];
+    const d=await r.json();
+    return Array.isArray(d)?d:[];
+  }catch(e){ console.warn(key,e.message); return []; }
 }
 
-// ── Load ──
-async function loadAll() {
-  document.getElementById('errBanner').classList.remove('show');
-  const btn = document.getElementById('refreshBtn');
-  btn.classList.add('spinning');
-  btn.disabled = true;
-  setBodyLoading();
+// ─── Section switch ───────────────────────────────────────────────────
+function switchSec(id){
+  S.activeSec = id;
+  document.querySelectorAll('.sec-btn').forEach(b=>b.classList.toggle('active',b.dataset.sec===id));
+  document.querySelectorAll('.sec-panel').forEach(p=>{ p.hidden = p.id!=='sec-'+id; });
+  if(id==='inst'  && !S.inst.loaded)  loadInst();
+  if(id==='exdiv' && !S.exdiv.loaded) loadExDiv();
+}
 
-  const [tn, td, pn, pd] = await Promise.all([
-    safeFetch(API.twseNotice),
-    safeFetch(API.twsePunish),
-    safeFetch(API.tpexNotice),
-    safeFetch(API.tpexDispose),
+function refresh(){
+  const s=S.activeSec;
+  if(s==='warning'){ S.warn.loaded=false;  loadWarn(); }
+  if(s==='inst')   { S.inst.loaded=false;  loadInst(); }
+  if(s==='exdiv')  { S.exdiv.loaded=false; loadExDiv(); }
+}
+
+// ═══════════════════════════════════════════
+// WARNING SECTION
+// ═══════════════════════════════════════════
+function normWarn(raw, market, status){
+  const code = pick(raw,'Code','SecuritiesCode','StockCode','code','公司代號','股票代號','代號');
+  const name = pick(raw,'Name','CompanyName','StockName','name','公司名稱','股票名稱','名稱');
+  const date = pick(raw,'Date','PublishDate','AnnounceDate','AnnouncementDate','StartDate','WarningDate','date','日期','公布日期');
+  const note = pick(raw,'Reason','Note','Content','Description','DisposalReason','DisposalPeriod','Period','Remark','remark','原因','備註','說明','處置期間');
+  if(!code&&!name) return null;
+  return {code,name,market,status,date:fmtDate(date),note};
+}
+
+async function loadWarn(){
+  setSpin(true); loading('warnBody');
+  const [tn,td,pn,pd] = await Promise.all([
+    apiFetch('twse-notice'), apiFetch('twse-punish'),
+    apiFetch('tpex-notice'), apiFetch('tpex-dispose'),
   ]);
-
-  const errors = [tn, td, pn, pd].filter(r => r.err).map(r => r.err);
-  if (errors.length > 0) {
-    document.getElementById('errBanner').classList.add('show');
-    document.getElementById('errText').textContent = `部分資料載入失敗（${errors[0]}），顯示已取得的資料。`;
-  }
-
-  document.getElementById('cnt-tn').textContent  = tn.data.length;
-  document.getElementById('cnt-td').textContent  = td.data.length;
-  document.getElementById('cnt-pn').textContent  = pn.data.length;
-  document.getElementById('cnt-pd').textContent  = pd.data.length;
-
-  allRows = [
-    ...tn.data.map(r => normalize(r, 'twse', 'notice')),
-    ...td.data.map(r => normalize(r, 'twse', 'dispose')),
-    ...pn.data.map(r => normalize(r, 'tpex', 'notice')),
-    ...pd.data.map(r => normalize(r, 'tpex', 'dispose')),
+  document.getElementById('w-cnt-tn').textContent  = tn.length;
+  document.getElementById('w-cnt-td').textContent  = td.length;
+  document.getElementById('w-cnt-pn').textContent  = pn.length;
+  document.getElementById('w-cnt-pd').textContent  = pd.length;
+  S.warn.rows = [
+    ...tn.map(r=>normWarn(r,'twse','notice')),
+    ...td.map(r=>normWarn(r,'twse','dispose')),
+    ...pn.map(r=>normWarn(r,'tpex','notice')),
+    ...pd.map(r=>normWarn(r,'tpex','dispose')),
   ].filter(Boolean);
-
-  document.getElementById('cnt-all').textContent = allRows.length;
-
-  const now = new Date();
-  document.getElementById('updateTime').textContent =
-    `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-
-  btn.classList.remove('spinning');
-  btn.disabled = false;
-  render();
+  const total = S.warn.rows.length;
+  document.getElementById('w-cnt-all').textContent = total;
+  document.getElementById('scnt-warning').textContent = total||'';
+  S.warn.loaded=true; setSpin(false); document.getElementById('updTime').textContent=nowStr();
+  renderWarn();
 }
 
-// ── Filter ──
-function setFilter(f) {
-  curFilter = f;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
-  render();
+function warnFilter(f){
+  S.warnFilter=f;
+  document.querySelectorAll('#warnTabs .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  renderWarn();
 }
 
-// ── Render ──
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function render() {
-  const rows = curFilter === 'all' ? allRows : allRows.filter(r => `${r.market}-${r.status}` === curFilter);
-  const body = document.getElementById('tblBody');
-
-  if (rows.length === 0) {
-    body.innerHTML = `
-      <div class="state-wrap">
-        <div class="state-msg zh">${allRows.length === 0 ? '目前無警示資料' : '此分類目前無資料'}</div>
-        ${allRows.length === 0 ? '<div class="state-detail en">No data returned. This may be a non-trading day,<br>or the data has not yet been published today.</div>' : ''}
-      </div>`;
-    return;
-  }
-
-  body.innerHTML = rows.map((r, i) => `
-    <div class="tbl-row">
+function renderWarn(){
+  const rows = S.warnFilter==='all' ? S.warn.rows
+    : S.warn.rows.filter(r=>`${r.market}-${r.status}`===S.warnFilter);
+  const body = document.getElementById('warnBody');
+  if(!rows.length){ empty('warnBody', S.warn.rows.length?'此分類目前無資料':'目前無警示資料',
+    S.warn.rows.length?'':'No data returned. This may be a non-trading day.'); return; }
+  body.innerHTML = rows.map((r,i)=>`
+    <div class="tbl-row grid-warn">
       <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>
       <div class="r-code en">${esc(r.code)}</div>
       <div class="r-name zh">${esc(r.name)}</div>
       <div><span class="mkt ${r.market==='twse'?'mkt-twse':'mkt-tpex'} en">${r.market==='twse'?'TWSE':'TPEx'}</span></div>
-      <div>
-        <span class="sts ${r.status==='notice'?'sts-notice':'sts-dispose'}">
-          <span class="sts-dot"></span>
-          <span class="zh">${r.status==='notice'?'注意':'處置'}</span>
-        </span>
-      </div>
+      <div><span class="sts ${r.status==='notice'?'sts-notice':'sts-dispose'}">
+        <span class="sts-dot"></span><span class="zh">${r.status==='notice'?'注意':'處置'}</span>
+      </span></div>
       <div class="r-date en">${esc(r.date)}</div>
       <div class="r-note zh">${esc(r.note)}</div>
     </div>`).join('');
 }
 
-function setBodyLoading() {
-  document.getElementById('tblBody').innerHTML = `
-    <div class="state-wrap">
-      <div class="state-dots">
-        <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
-      </div>
-      <div class="state-msg zh">正在載入市場警示資料…</div>
-    </div>`;
-  ['cnt-tn','cnt-td','cnt-pn','cnt-pd','cnt-all'].forEach(id => {
-    document.getElementById(id).textContent = '—';
-  });
+// ═══════════════════════════════════════════
+// INSTITUTIONAL SECTION
+// ═══════════════════════════════════════════
+function normInst(raw, market){
+  const code = pick(raw,'SecuritiesCode','Code','code','代號','股票代號');
+  const name = pick(raw,'CompanyName','Name','name','名稱','公司名稱');
+  if(!code&&!name) return null;
+
+  // Net buy/sell in thousands of shares; try direct net field first
+  const foreign = num(pick(raw,
+    'ForeignInvestorsNetBuyShares','ForeignNetBuySharesInThousands','QFII_NET',
+    '外陸資買賣超股數(千股)','外陸資買賣超股數','外資及陸資買賣超股數(千股)','外資買賣超股數'))
+    || num(pick(raw,'外陸資買進股數(千股)','ForeignBuyShares'))-num(pick(raw,'外陸資賣出股數(千股)','ForeignSellShares'));
+
+  const trust = num(pick(raw,
+    'InvestmentTrustNetBuyShares','TrustNetBuySharesInThousands','TRUST_NET',
+    '投信買賣超股數(千股)','投信買賣超股數'))
+    || num(pick(raw,'投信買進股數(千股)','TrustBuyShares'))-num(pick(raw,'投信賣出股數(千股)','TrustSellShares'));
+
+  const dealer = num(pick(raw,
+    'DealerNetBuyShares','DealerNetBuySharesInThousands','DEALER_NET',
+    '自營商買賣超股數(千股)','自營商買賣超股數'))
+    || num(pick(raw,'自營商買進股數(千股)','DealerBuyShares'))-num(pick(raw,'自營商賣出股數(千股)','DealerSellShares'));
+
+  const total = foreign + trust + dealer;
+  const buyCount = (foreign>0?1:0)+(trust>0?1:0)+(dealer>0?1:0);
+  return {code,name,market,foreign,trust,dealer,total,buyCount};
 }
 
-loadAll();
+async function loadInst(){
+  setSpin(true); loading('instBody');
+  const [tpexRaw, twseRaw] = await Promise.all([
+    apiFetch('tpex-3insti'), apiFetch('twse-3insti'),
+  ]);
+  S.inst.rows = [
+    ...tpexRaw.map(r=>normInst(r,'tpex')),
+    ...twseRaw.map(r=>normInst(r,'twse')),
+  ].filter(Boolean).sort((a,b)=>b.total-a.total);
+
+  const tripleCount = S.inst.rows.filter(r=>r.buyCount===3).length;
+  const foreignLead = S.inst.rows.filter(r=>r.foreign>0&&r.foreign>=Math.max(r.trust,r.dealer)&&r.foreign>0).length;
+  const trustLead   = S.inst.rows.filter(r=>r.trust>0&&r.trust>=Math.max(r.foreign,r.dealer)&&r.trust>0).length;
+  const netBuy      = S.inst.rows.filter(r=>r.total>0).length;
+  document.getElementById('i-cnt-tri').textContent = tripleCount;
+  document.getElementById('i-cnt-fgn').textContent = foreignLead;
+  document.getElementById('i-cnt-tst').textContent = trustLead;
+  document.getElementById('i-cnt-buy').textContent = netBuy;
+  document.getElementById('i-cnt-all').textContent = S.inst.rows.length;
+  document.getElementById('scnt-inst').textContent  = netBuy||'';
+  S.inst.loaded=true; setSpin(false); document.getElementById('updTime').textContent=nowStr();
+  renderInst();
+}
+
+function instFilter(f){
+  S.instFilter=f;
+  document.querySelectorAll('#instTabs .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  renderInst();
+}
+
+function renderInst(){
+  const f = S.instFilter;
+  let rows = S.inst.rows;
+  if(f==='triple')      rows=rows.filter(r=>r.buyCount===3);
+  else if(f==='net-buy')      rows=rows.filter(r=>r.total>0);
+  else if(f==='foreign-lead') rows=rows.filter(r=>r.foreign>0&&r.foreign>=Math.max(Math.abs(r.trust),Math.abs(r.dealer)));
+  else if(f==='trust-lead')   rows=rows.filter(r=>r.trust>0&&r.trust>=Math.max(Math.abs(r.foreign),Math.abs(r.dealer)));
+  const body = document.getElementById('instBody');
+  if(!rows.length){ empty('instBody', S.inst.rows.length?'此分類目前無資料':'目前無法人資料',
+    S.inst.rows.length?'':'No institutional data available. May be a non-trading day.'); return; }
+  body.innerHTML = rows.map((r,i)=>`
+    <div class="tbl-row grid-inst">
+      <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>
+      <div class="r-code en">${esc(r.code)}</div>
+      <div class="r-name zh">${esc(r.name)}</div>
+      <div class="r-num ${r.foreign>0?'pos':r.foreign<0?'neg':'zero'} en">${fmtN(r.foreign)}</div>
+      <div class="r-num ${r.trust>0?'pos':r.trust<0?'neg':'zero'} en">${fmtN(r.trust)}</div>
+      <div class="r-num ${r.dealer>0?'pos':r.dealer<0?'neg':'zero'} en">${fmtN(r.dealer)}</div>
+      <div class="r-num ${r.total>0?'pos':r.total<0?'neg':'zero'} en" style="font-weight:600">${fmtN(r.total)}</div>
+      <div class="r-dots dots">
+        <span class="dot ${r.foreign>0?'on-f':''}" title="外資"></span>
+        <span class="dot ${r.trust>0?'on-t':''}"   title="投信"></span>
+        <span class="dot ${r.dealer>0?'on-d':''}"  title="自營"></span>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// EX-DIVIDEND SECTION
+// ═══════════════════════════════════════════
+function normExDiv(raw, market){
+  const code = pick(raw,'Code','SecuritiesCode','code','公司代號','股票代號');
+  const name = pick(raw,'Name','CompanyName','name','公司名稱','股票名稱');
+  if(!code&&!name) return null;
+  const exDivRaw  = pick(raw,'ExDividendDate','CashDividendDate','ExDivDate','除息交易日','除息日','現金股利基準日');
+  const exRightRaw= pick(raw,'ExRightDate','StockDividendDate','ExRightDay','除權交易日','除權日','股票股利基準日');
+  const cash  = num(pick(raw,'CashDividend','CashEarningsDistribution','CashPerShare','現金股利(元)','每股配息','現金股利','盈餘配息'));
+  const stock = num(pick(raw,'StockDividend','StockEarningsDistribution','StockPerShare','無償配股率','股票股利(元)','每股配股','股票股利'));
+  const exDate = exDivRaw || exRightRaw;
+  if(!exDate) return null;
+  const dateStr = fmtDate(exDate);
+  const dateObj = parseDate(dateStr);
+  return {code,name,market,dateStr,dateObj,cash,stock,days:daysUntil(dateObj)};
+}
+
+function weekRange(offset=0){
+  const dow   = TODAY.getDay()===0?6:TODAY.getDay()-1; // Mon=0
+  const mon   = new Date(TODAY); mon.setDate(TODAY.getDate()-dow+offset*7);
+  const fri   = new Date(mon);   fri.setDate(mon.getDate()+4);
+  return {start:mon, end:fri};
+}
+function monthRange(){
+  const start = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+  const end   = new Date(TODAY.getFullYear(), TODAY.getMonth()+1, 0);
+  return {start,end};
+}
+
+async function loadExDiv(){
+  setSpin(true); loading('exdivBody');
+  const [twseRaw, tpexRaw] = await Promise.all([
+    apiFetch('twse-exdiv'), apiFetch('tpex-exdiv'),
+  ]);
+  S.exdiv.rows = [
+    ...twseRaw.map(r=>normExDiv(r,'twse')),
+    ...tpexRaw.map(r=>normExDiv(r,'tpex')),
+  ].filter(Boolean).sort((a,b)=>{
+    if(a.dateObj&&b.dateObj) return a.dateObj-b.dateObj;
+    if(!a.dateObj) return 1;
+    if(!b.dateObj) return -1;
+    return 0;
+  });
+
+  const thisWk = weekRange(0); const nextWk = weekRange(1); const thisMo = monthRange();
+  const inRange = (d,r)=>d&&r&&d>=r.start&&d<=r.end;
+  const wk  = S.exdiv.rows.filter(r=>inRange(r.dateObj,thisWk)).length;
+  const nwk = S.exdiv.rows.filter(r=>inRange(r.dateObj,nextWk)).length;
+  const mo  = S.exdiv.rows.filter(r=>inRange(r.dateObj,thisMo)).length;
+  const csh = S.exdiv.rows.filter(r=>r.cash>0).length;
+  document.getElementById('e-cnt-wk').textContent   = wk;
+  document.getElementById('e-cnt-nwk').textContent  = nwk;
+  document.getElementById('e-cnt-mo').textContent   = mo;
+  document.getElementById('e-cnt-cash').textContent = csh;
+  document.getElementById('e-cnt-all').textContent  = S.exdiv.rows.length;
+  document.getElementById('scnt-exdiv').textContent = wk ? `${wk} this wk` : S.exdiv.rows.length||'';
+  S.exdiv.loaded=true; setSpin(false); document.getElementById('updTime').textContent=nowStr();
+  renderExDiv();
+}
+
+function exdivFilter(f){
+  S.exdivFilter=f;
+  document.querySelectorAll('#exdivTabs .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  renderExDiv();
+}
+
+function renderExDiv(){
+  const f=S.exdivFilter;
+  let rows=S.exdiv.rows;
+  const thisWk=weekRange(0), nextWk=weekRange(1), thisMo=monthRange();
+  const inR=(d,r)=>d&&r&&d>=r.start&&d<=r.end;
+  if(f==='this-week')  rows=rows.filter(r=>inR(r.dateObj,thisWk));
+  else if(f==='next-week')  rows=rows.filter(r=>inR(r.dateObj,nextWk));
+  else if(f==='this-month') rows=rows.filter(r=>inR(r.dateObj,thisMo));
+  else if(f==='cash-only')  rows=rows.filter(r=>r.cash>0);
+  const body=document.getElementById('exdivBody');
+  if(!rows.length){ empty('exdivBody',S.exdiv.rows.length?'此期間無除息資料':'目前無除息資料',
+    S.exdiv.rows.length?'':'No data. May be a non-trading period.'); return; }
+  body.innerHTML = rows.map((r,i)=>`
+    <div class="tbl-row grid-exdv">
+      <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>
+      <div class="r-code en">${esc(r.code)}</div>
+      <div class="r-name zh">${esc(r.name)}</div>
+      <div><span class="mkt ${r.market==='twse'?'mkt-twse':'mkt-tpex'} en">${r.market==='twse'?'TWSE':'TPEx'}</span></div>
+      <div class="r-date en">${esc(r.dateStr)}</div>
+      <div class="r-num ${r.cash>0?'pos':'zero'} en">${r.cash>0?r.cash.toFixed(2):'—'}</div>
+      <div class="r-num ${r.stock>0?'pos':'zero'} en">${r.stock>0?r.stock.toFixed(2)+'%':'—'}</div>
+      <div>${countdownBadge(r.days)}</div>
+    </div>`).join('');
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────
+loadWarn();
 </script>
 </body>
 </html>

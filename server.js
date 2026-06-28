@@ -37,10 +37,14 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const _warnCache = {};
 const _warnTime  = {};
 const WARN_APIS  = {
-  'twse-notice': 'https://openapi.twse.com.tw/v1/announcement/notice',
+  'twse-notice':  'https://openapi.twse.com.tw/v1/announcement/notice',
   'twse-punish':  'https://openapi.twse.com.tw/v1/announcement/punish',
   'tpex-notice':  'https://www.tpex.org.tw/openapi/v1/tpex_trading_warning_information',
   'tpex-dispose': 'https://www.tpex.org.tw/openapi/v1/tpex_disposal_information',
+  'tpex-3insti':  'https://www.tpex.org.tw/openapi/v1/tpex_3insti_daily_trading',
+  'twse-3insti':  'https://openapi.twse.com.tw/v1/exchangeReport/MI_3INSTI',
+  'twse-exdiv':   'https://openapi.twse.com.tw/v1/exchangeReport/TWT48U_ALL',
+  'tpex-exdiv':   'https://www.tpex.org.tw/openapi/v1/tpex_exright_prepost',
 };
 
 async function getWarnData(key) {
@@ -236,8 +240,16 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Warning API proxy
-  const warnKey = { '/api/warning/twse-notice': 'twse-notice', '/api/warning/twse-punish': 'twse-punish',
-                    '/api/warning/tpex-notice': 'tpex-notice', '/api/warning/tpex-dispose': 'tpex-dispose' }[req.url];
+  const warnKey = {
+    '/api/warning/twse-notice':  'twse-notice',
+    '/api/warning/twse-punish':  'twse-punish',
+    '/api/warning/tpex-notice':  'tpex-notice',
+    '/api/warning/tpex-dispose': 'tpex-dispose',
+    '/api/warning/tpex-3insti':  'tpex-3insti',
+    '/api/warning/twse-3insti':  'twse-3insti',
+    '/api/warning/twse-exdiv':   'twse-exdiv',
+    '/api/warning/tpex-exdiv':   'tpex-exdiv',
+  }[req.url];
   if (warnKey && req.method === 'GET') {
     try {
       const data = await getWarnData(warnKey);
