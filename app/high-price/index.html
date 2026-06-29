@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<title>高價股追蹤 — Globe Invest</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --ink:#0a0a0a; --ink-soft:#555; --ink-faint:#888;
+  --ink-ghost:#ccc; --border:#e8e8e8; --surface:#f8f8f7;
+  --red:#dc2626; --green:#15803d; --teal:#0f766e; --amber:#b45309;
+  --font-cal:'Calibri','Candara',sans-serif;
+  --font-tc:'Noto Sans TC',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-cal);background:var(--bg);color:var(--ink);min-height:100vh}
+.wrap{max-width:1440px;margin:0 auto;padding:32px 24px 64px}
+
+/* header */
+.pg-eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-ghost);margin-bottom:6px}
+.pg-title{font-family:var(--font-tc);font-size:22px;font-weight:600;margin-bottom:3px}
+.pg-sub{font-size:11.5px;color:var(--ink-faint);letter-spacing:.04em;margin-bottom:28px}
+
+/* stat bar */
+.stat-bar{display:flex;gap:36px;border:1px solid var(--border);border-radius:4px;padding:13px 20px;margin-bottom:22px;background:var(--surface);flex-wrap:wrap}
+.stat-item{display:flex;flex-direction:column;gap:1px}
+.stat-lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+.stat-val{font-family:var(--font-cal);font-size:17px;font-weight:600;color:var(--ink)}
+
+/* controls */
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.filter-grp{display:flex;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.fbtn{font-family:var(--font-cal);font-size:11.5px;letter-spacing:.04em;padding:6px 13px;background:var(--bg);border:none;cursor:pointer;color:var(--ink-soft);transition:background .1s,color .1s;white-space:nowrap}
+.fbtn:not(:last-child){border-right:1px solid var(--border)}
+.fbtn.active{background:var(--ink);color:#fff}
+.search-wrap{position:relative}
+.search-inp{font-family:var(--font-cal);font-size:12px;border:1px solid var(--border);border-radius:4px;padding:6px 28px 6px 10px;width:140px;color:var(--ink);outline:none;background:var(--bg)}
+.search-inp:focus{border-color:var(--ink-ghost)}
+.search-clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--ink-ghost);font-size:14px;display:none;line-height:1}
+.cnt-badge{font-size:11px;color:var(--ink-faint)}
+
+/* industry pills */
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.pill{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:var(--bg);cursor:pointer;color:var(--ink-soft);transition:all .1s;white-space:nowrap}
+.pill:hover{border-color:var(--ink-ghost);color:var(--ink)}
+.pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* table */
+.tbl-wrap{border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.tbl-head{background:var(--surface);border-bottom:1px solid var(--border)}
+.tbl-body .tbl-row:not(:last-child){border-bottom:1px solid var(--border)}
+.tbl-row{
+  display:grid;
+  grid-template-columns:28px 68px minmax(110px,1fr) 96px 80px 78px 78px 80px minmax(80px,150px) 70px;
+  align-items:center;padding:0 8px;gap:0
+}
+.tbl-head .tbl-row{padding-top:9px;padding-bottom:9px}
+.tbl-body .tbl-row{padding-top:7px;padding-bottom:7px;transition:background .1s}
+.tbl-body .tbl-row:hover{background:var(--surface)}
+.th{font-family:var(--font-cal);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink)}
+.th.sb{cursor:pointer;user-select:none}
+.th.sb:hover{opacity:.6}
+.si{font-size:9px;opacity:.5;margin-left:2px}
+
+/* cells */
+.r-idx{font-size:11px;color:var(--ink-ghost);text-align:right;padding-right:6px}
+.r-code{font-family:var(--font-cal);font-size:13px;font-weight:600;letter-spacing:.02em}
+.r-mkt{display:inline-block;font-size:9px;letter-spacing:.07em;padding:1px 5px;border-radius:2px;border:1px solid var(--border);color:var(--ink-faint);margin-top:3px}
+.r-name{font-family:var(--font-tc);font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.r-price{font-family:var(--font-cal);font-size:15px;font-weight:600;text-align:right}
+.r-pct{font-family:var(--font-cal);font-size:13px;font-weight:600;text-align:right}
+.r-ind{font-family:var(--font-tc);font-size:11.5px;color:var(--ink-soft)}
+.r-sub{font-family:var(--font-tc);font-size:11px;color:var(--ink-faint)}
+.r-beta{font-family:var(--font-cal);font-size:13px;text-align:right}
+/* Taiwan convention: red=up, green=down */
+.pos{color:var(--red)}
+.neg{color:var(--green)}
+.zero{color:var(--ink-ghost)}
+.loading-row{padding:36px 20px;text-align:center;font-size:12px;color:var(--ink-faint);letter-spacing:.08em;text-transform:uppercase}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin-icon{display:inline-block;animation:spin .7s linear infinite;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="pg-eyebrow">Globe Invest</div>
+<div class="pg-title">高價股追蹤</div>
+<div class="pg-sub">TWSE + TPEx &nbsp;·&nbsp; 收盤價 &gt; 250 元 &nbsp;·&nbsp; 每 10 分鐘更新</div>
+
+<div class="stat-bar">
+  <div class="stat-item"><div class="stat-lbl">篩選數量</div><div class="stat-val" id="s-count">—</div></div>
+  <div class="stat-item"><div class="stat-lbl">均股價</div><div class="stat-val" id="s-avg">—</div></div>
+  <div class="stat-item"><div class="stat-lbl">最高股價</div><div class="stat-val" id="s-top">—</div></div>
+  <div class="stat-item"><div class="stat-lbl">最大族群</div><div class="stat-val" id="s-sector">—</div></div>
+</div>
+
+<div class="controls">
+  <div class="filter-grp">
+    <button class="fbtn active" data-mkt="all">全部</button>
+    <button class="fbtn" data-mkt="twse">TWSE</button>
+    <button class="fbtn" data-mkt="tpex">TPEx</button>
+  </div>
+  <div class="search-wrap">
+    <input class="search-inp" id="searchInp" type="text" placeholder="代號 / 名稱">
+    <span class="search-clr" id="searchClr">×</span>
+  </div>
+  <span class="cnt-badge" id="cntBadge"></span>
+</div>
+
+<div class="pills" id="pills">
+  <div class="pill active" data-ind="all">全部</div>
+  <div class="pill" data-ind="電子">電子</div>
+  <div class="pill" data-ind="傳產">傳產</div>
+  <div class="pill" data-ind="金融">金融</div>
+  <div class="pill" data-ind="生技">生技</div>
+  <div class="pill" data-ind="建材">建材</div>
+  <div class="pill" data-ind="航運">航運</div>
+  <div class="pill" data-ind="服務">服務</div>
+  <div class="pill" data-ind="能源">能源</div>
+  <div class="pill" data-ind="其他">其他</div>
+</div>
+
+<div class="tbl-wrap">
+  <div class="tbl-head">
+    <div class="tbl-row">
+      <div class="th">#</div>
+      <div class="th sb" id="hc-code">代號<span class="si" id="si-code"></span></div>
+      <div class="th sb" id="hc-name">名稱<span class="si" id="si-name"></span></div>
+      <div class="th sb" id="hc-price" style="text-align:right">股價<span class="si" id="si-price"></span></div>
+      <div class="th sb" id="hc-chg" style="text-align:right">今日<span class="si" id="si-chg"></span></div>
+      <div class="th sb" id="hc-d5" style="text-align:right">5日%<span class="si" id="si-d5"></span></div>
+      <div class="th sb" id="hc-d30" style="text-align:right">30日%<span class="si" id="si-d30"></span></div>
+      <div class="th sb" id="hc-ind">產業<span class="si" id="si-ind"></span></div>
+      <div class="th sb" id="hc-sub">子產業<span class="si" id="si-sub"></span></div>
+      <div class="th sb" id="hc-beta" style="text-align:right">Beta<span class="si" id="si-beta"></span></div>
+    </div>
+  </div>
+  <div class="tbl-body" id="tblBody">
+    <div class="loading-row"><span class="spin-icon">⟳</span>載入中…</div>
+  </div>
+</div>
+
+</div>
+<script>
+const $  = id => document.getElementById(id);
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const fmtP = p => p == null ? '—' : (+p).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtPct = p => p == null ? '' : (p>0?'+':'')+p.toFixed(2)+'%';
+const pcls = p => p == null ? 'zero' : p > 0 ? 'pos' : p < 0 ? 'neg' : 'zero';
+const pending = () => `<span style="color:var(--ink-ghost);font-size:10px">…</span>`;
+
+const S = {
+  rows: [], fltMkt:'all', fltInd:'all', search:'',
+  sort:{ col:'price', dir:'desc' },
+};
+
+/* ── sparkline ──────────────────────────────────────────── */
+function spark(hist, d30){
+  if(!hist||hist.length<2) return '';
+  const W=80,H=26,pad=2,vals=hist.filter(v=>v!=null);
+  if(vals.length<2) return '';
+  const lo=Math.min(...vals),hi=Math.max(...vals),rng=hi-lo||1;
+  const pts=vals.map((v,i)=>{
+    const x=pad+(i/(vals.length-1))*(W-pad*2);
+    const y=(H-pad)-((v-lo)/rng)*(H-pad*2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const col=d30>0?'#dc2626':d30<0?'#15803d':'#aaa';
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="flex-shrink:0;display:block">
+    <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ── sort ───────────────────────────────────────────────── */
+const COLS=['code','name','price','chg','d5','d30','ind','sub','beta'];
+const GET={
+  code:r=>r.code, name:r=>r.name, price:r=>r.price, chg:r=>r.changePct,
+  d5:r=>r.d5, d30:r=>r.d30, ind:r=>r.industry, sub:r=>r.subIndustry, beta:r=>r.beta,
+};
+function sortRows(rows){
+  const {col,dir}=S.sort;
+  if(!GET[col]) return rows;
+  const g=GET[col];
+  return [...rows].sort((a,b)=>{
+    const va=g(a),vb=g(b);
+    const na=va==null||(typeof va==='number'&&isNaN(va));
+    const nb=vb==null||(typeof vb==='number'&&isNaN(vb));
+    if(na&&nb)return 0;if(na)return 1;if(nb)return -1;
+    const c=typeof va==='string'?va.localeCompare(vb,'zh-TW'):va<vb?-1:va>vb?1:0;
+    return dir==='asc'?c:-c;
+  });
+}
+function updSI(){
+  COLS.forEach(c=>{
+    const el=$(`si-${c}`);
+    if(el) el.textContent=S.sort.col===c?(S.sort.dir==='asc'?' ↑':' ↓'):'';
+  });
+}
+function doSort(col){
+  if(S.sort.col===col)S.sort.dir=S.sort.dir==='asc'?'desc':'asc';
+  else{S.sort.col=col;S.sort.dir=['code','name','ind','sub'].includes(col)?'asc':'desc';}
+  updSI();render();
+}
+
+/* ── filter ─────────────────────────────────────────────── */
+function filtered(){
+  let r=S.rows;
+  if(S.fltMkt!=='all') r=r.filter(x=>x.market===S.fltMkt);
+  if(S.fltInd!=='all') r=r.filter(x=>x.industry===S.fltInd);
+  if(S.search){
+    const q=S.search.toLowerCase();
+    r=r.filter(x=>x.code.toLowerCase().includes(q)||x.name.toLowerCase().includes(q));
+  }
+  return r;
+}
+
+/* ── stats ──────────────────────────────────────────────── */
+function updStats(rows){
+  $('s-count').textContent=rows.length+' 檔';
+  if(!rows.length){$('s-avg').textContent='—';$('s-top').textContent='—';$('s-sector').textContent='—';return;}
+  const avg=rows.reduce((a,r)=>a+r.price,0)/rows.length;
+  $('s-avg').textContent=Math.round(avg).toLocaleString('en')+' 元';
+  const top=rows.reduce((m,r)=>r.price>m.price?r:m,rows[0]);
+  $('s-top').textContent=`${top.code} ${Math.round(top.price).toLocaleString('en')}`;
+  const ic={};rows.forEach(r=>{if(r.industry)ic[r.industry]=(ic[r.industry]||0)+1;});
+  const ti=Object.entries(ic).sort((a,b)=>b[1]-a[1])[0];
+  $('s-sector').textContent=ti?`${ti[0]} (${ti[1]})` :'—';
+}
+
+/* ── render ─────────────────────────────────────────────── */
+function render(){
+  const rows=sortRows(filtered());
+  $('cntBadge').textContent=`共 ${rows.length} 檔`;
+  updStats(rows);
+  const body=$('tblBody');
+  if(!rows.length){body.innerHTML='<div class="loading-row">無符合條件的股票</div>';return;}
+  body.innerHTML=rows.map((r,i)=>`
+    <div class="tbl-row">
+      <div class="r-idx">${i+1}</div>
+      <div>
+        <div class="r-code">${esc(r.code)}</div>
+        <div><span class="r-mkt">${r.market==='twse'?'TWSE':'TPEx'}</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;overflow:hidden;min-width:0">
+        <div class="r-name">${esc(r.name)}</div>
+        ${spark(r.hist30,r.d30)}
+      </div>
+      <div class="r-price">${fmtP(r.price)}</div>
+      <div class="r-pct ${pcls(r.changePct)}" style="text-align:right">
+        ${r.changePct==null?pending():fmtPct(r.changePct)}
+      </div>
+      <div class="r-pct ${pcls(r.d5)}" style="text-align:right">
+        ${r.d5==null?pending():fmtPct(r.d5)}
+      </div>
+      <div class="r-pct ${pcls(r.d30)}" style="text-align:right">
+        ${r.d30==null?pending():fmtPct(r.d30)}
+      </div>
+      <div class="r-ind zh">${esc(r.industry)}</div>
+      <div class="r-sub zh">${esc(r.subIndustry)}</div>
+      <div class="r-beta ${r.beta==null?'zero':''}" style="text-align:right">
+        ${r.beta==null?pending():r.beta.toFixed(2)}
+      </div>
+    </div>`).join('');
+}
+
+/* ── load ───────────────────────────────────────────────── */
+async function loadList(){
+  try{
+    const res=await fetch('/api/high-price/list');
+    if(!res.ok) throw new Error(res.status);
+    const data=await res.json();
+    S.rows=data.map(d=>({...d,d5:null,d30:null,beta:null,hist30:null}));
+    render();
+    loadMetrics();
+  }catch(e){
+    $('tblBody').innerHTML='<div class="loading-row">載入失敗，請重新整理</div>';
+  }
+}
+
+async function loadMetrics(){
+  const rows=S.rows.filter(r=>r.code&&r.code.length===4);
+  if(!rows.length) return;
+  const BATCH=8;
+  for(let i=0;i<rows.length;i+=BATCH){
+    const batch=rows.slice(i,i+BATCH);
+    await Promise.allSettled(batch.map(async row=>{
+      try{
+        const res=await fetch(`/api/high-price/metrics?market=${row.market}&code=${encodeURIComponent(row.code)}`);
+        if(!res.ok) return;
+        const d=await res.json();
+        if(!d||d.error) return;
+        row.d5=d.change5d; row.d30=d.change30d;
+        row.beta=d.beta;   row.hist30=d.hist30||null;
+      }catch{}
+    }));
+    render();
+    if(i+BATCH<rows.length) await new Promise(r=>setTimeout(r,450));
+  }
+}
+
+/* ── events ─────────────────────────────────────────────── */
+document.querySelectorAll('[data-mkt]').forEach(b=>b.addEventListener('click',()=>{
+  S.fltMkt=b.dataset.mkt;
+  document.querySelectorAll('[data-mkt]').forEach(x=>x.classList.toggle('active',x===b));
+  render();
+}));
+$('pills').addEventListener('click',e=>{
+  const p=e.target.closest('.pill');if(!p)return;
+  S.fltInd=p.dataset.ind;
+  document.querySelectorAll('.pill').forEach(x=>x.classList.toggle('active',x===p));
+  render();
+});
+const si=$('searchInp');
+si.addEventListener('input',()=>{
+  S.search=si.value.trim();
+  $('searchClr').style.display=S.search?'block':'none';
+  render();
+});
+$('searchClr').addEventListener('click',()=>{
+  si.value='';S.search='';$('searchClr').style.display='none';render();
+});
+COLS.forEach(c=>{
+  const el=$(`hc-${c}`);
+  if(el) el.addEventListener('click',()=>doSort(c));
+});
+
+updSI();
+loadList();
+</script>
+</body>
+</html>

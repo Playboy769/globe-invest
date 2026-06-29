@@ -33,6 +33,20 @@ let _oilCache = null;
 let _oilCacheTime = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+// Sub-industry → broad sector mapping (for 高價股 page)
+const SECTOR_MAP = {
+  '半導體業':'電子','電腦及週邊設備業':'電子','光電業':'電子','通訊網路業':'電子',
+  '電子零組件業':'電子','電子通路業':'電子','資訊服務業':'電子','其他電子業':'電子',
+  '數位雲端':'電子','綠能環保':'能源','油電燃氣業':'能源',
+  '水泥工業':'傳產','食品工業':'傳產','塑膠工業':'傳產','紡織纖維':'傳產',
+  '機械工業':'傳產','電機機械':'傳產','電器電纜':'傳產','化學工業':'傳產',
+  '玻璃陶瓷':'傳產','造紙工業':'傳產','鋼鐵工業':'傳產','橡膠工業':'傳產','汽車工業':'傳產',
+  '金融保險':'金融','建材營造':'建材','建設業':'建材','航運業':'航運',
+  '生技醫療':'生技','化學生技醫療':'生技','農業科技業':'生技',
+  '觀光餐旅':'服務','貿易百貨':'服務','電商業':'服務','文化創意業':'服務',
+  '運動休閒':'服務','居家生活':'服務',
+};
+
 // TPEx industry code → Chinese name (上櫃產業分類)
 const TPEX_INDUSTRY = {
   '01':'食品工業','02':'塑膠工業','03':'紡織纖維','04':'機械工業',
@@ -46,6 +60,82 @@ const TPEX_INDUSTRY = {
   '32':'電商業','33':'綠能環保','34':'數位雲端',
   '35':'運動休閒','36':'居家生活','37':'其他',
 };
+
+// TAIEX index closes cache (30 min) — for beta calculation
+let _taiexCache = null, _taiexTime = 0;
+async function getTaiexCloses() {
+  if (_taiexCache && Date.now() - _taiexTime < 30 * 60 * 1000) return _taiexCache;
+  try {
+    const raw = await fetchUrl('https://query1.finance.yahoo.com/v8/finance/chart/%5ETWII?interval=1d&range=3mo&includePrePost=false');
+    const d   = JSON.parse(raw);
+    const r   = d.chart && d.chart.result && d.chart.result[0];
+    if (!r) return null;
+    _taiexCache = (r.indicators.quote[0]?.close || []).filter(v => v != null);
+    _taiexTime  = Date.now();
+    return _taiexCache;
+  } catch { return null; }
+}
+
+function calcBeta(sCloses, iCloses) {
+  const len = Math.min(sCloses.length, iCloses.length);
+  if (len < 15) return null;
+  const sc = sCloses.slice(-len), ic = iCloses.slice(-len);
+  const sr = [], ir = [];
+  for (let i = 1; i < len; i++) {
+    if (sc[i] == null || sc[i-1] == null || ic[i] == null || ic[i-1] == null) continue;
+    sr.push((sc[i] - sc[i-1]) / sc[i-1]);
+    ir.push((ic[i] - ic[i-1]) / ic[i-1]);
+  }
+  const n = Math.min(sr.length, ir.length);
+  if (n < 10) return null;
+  const mS = sr.reduce((a,b)=>a+b,0)/n, mI = ir.reduce((a,b)=>a+b,0)/n;
+  let cov = 0, varI = 0;
+  for (let i = 0; i < n; i++) { cov += (sr[i]-mS)*(ir[i]-mI); varI += (ir[i]-mI)**2; }
+  return varI ? +(cov/varI).toFixed(2) : null;
+}
+
+// High-price stock list cache (10 min)
+let _hpCache = null, _hpTime = 0;
+async function getHighPriceList() {
+  if (_hpCache && Date.now() - _hpTime < 10 * 60 * 1000) return _hpCache;
+  const coInfo = await getCompanyInfo();
+  const [twseRes, tpexRes] = await Promise.allSettled([
+    fetchUrl('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL').then(JSON.parse),
+    fetchUrl('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes').then(JSON.parse),
+  ]);
+  const stocks = [];
+  if (twseRes.status === 'fulfilled' && Array.isArray(twseRes.value)) {
+    for (const r of twseRes.value) {
+      const code  = (r.Code || '').trim();
+      if (code.length !== 4 || !/^\d+$/.test(code)) continue;
+      const price = parseFloat(r.ClosingPrice);
+      if (!price || price <= 250) continue;
+      const chg   = parseFloat(r.Change) || 0;
+      const prev  = price - chg;
+      const info  = coInfo[code] || {};
+      stocks.push({ code, name: (r.Name||'').trim(), market:'twse', price,
+        change: +chg.toFixed(2), changePct: prev ? +(chg/prev*100).toFixed(2) : 0,
+        industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '' });
+    }
+  }
+  if (tpexRes.status === 'fulfilled' && Array.isArray(tpexRes.value)) {
+    for (const r of tpexRes.value) {
+      const code  = (r.SecuritiesCompanyCode || '').trim();
+      if (code.length !== 4 || !/^\d+$/.test(code)) continue;
+      const price = parseFloat(r.Close);
+      if (!price || price <= 250) continue;
+      const chg   = parseFloat(r.Change) || 0;
+      const prev  = price - chg;
+      const info  = coInfo[code] || {};
+      stocks.push({ code, name: (r.CompanyName||'').trim(), market:'tpex', price,
+        change: +chg.toFixed(2), changePct: prev ? +(chg/prev*100).toFixed(2) : 0,
+        industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '' });
+    }
+  }
+  stocks.sort((a,b) => b.price - a.price);
+  _hpCache = stocks; _hpTime = Date.now();
+  return stocks;
+}
 
 // Company info cache (1 hour TTL)
 let _coInfoCache = null;
@@ -282,6 +372,67 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ── High-price stock list ───────────────────────────────────────
+  if (req.url === '/api/high-price/list' && req.method === 'GET') {
+    try {
+      const list = await getHighPriceList();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(list));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
+  // ── High-price metrics: 5d/30d change + beta (Yahoo Finance + ^TWII) ──
+  if (req.url.startsWith('/api/high-price/metrics') && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const market = urlObj.searchParams.get('market') || '';
+      const code   = urlObj.searchParams.get('code')   || '';
+      if (!market || !code) throw new Error('missing params');
+
+      const cacheKey = `hp_${market}_${code}`;
+      if (_warnCache[cacheKey] !== undefined && Date.now() - (_warnTime[cacheKey]||0) < 30*60*1000) {
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end(JSON.stringify(_warnCache[cacheKey])); return;
+      }
+
+      const suffix = market === 'twse' ? '.TW' : '.TWO';
+      const sym    = encodeURIComponent(code + suffix);
+      const [stockRaw, taiex] = await Promise.all([
+        fetchUrl(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=3mo&includePrePost=false`),
+        getTaiexCloses(),
+      ]);
+      const yData  = JSON.parse(stockRaw);
+      const result = yData.chart && yData.chart.result && yData.chart.result[0];
+      if (!result) {
+        _warnCache[cacheKey] = null; _warnTime[cacheKey] = Date.now();
+        res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+        res.end('null'); return;
+      }
+
+      const closes = (result.indicators.quote[0]?.close || []).filter(v => v != null);
+      const last   = closes[closes.length - 1];
+      const c5ref  = closes.length >= 6  ? closes[closes.length - 6]  : null;
+      const c30ref = closes.length >= 2  ? closes[0]                  : null;
+      const change5d  = c5ref  ? +(((last - c5ref)  / c5ref)  * 100).toFixed(2) : null;
+      const change30d = c30ref ? +(((last - c30ref) / c30ref) * 100).toFixed(2) : null;
+      const beta      = taiex  ? calcBeta(closes, taiex) : null;
+      const hist30    = closes.slice(-30).map(v => +v.toFixed(2));
+
+      const payload = { change5d, change30d, beta, hist30 };
+      _warnCache[cacheKey] = payload; _warnTime[cacheKey] = Date.now();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(payload));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   // Company info (industry classification) — 1h cache
   if (req.url === '/api/warning/company-info' && req.method === 'GET') {
     try {
@@ -390,7 +541,8 @@ const server = http.createServer(async (req, res) => {
   if (url === '/globe' || url === '/globe/')     fp = path.join(APP_DIR, 'globe',   'index.html');
   else if (url === '/invest' || url === '/invest/')   fp = path.join(APP_DIR, 'invest',  'index.html');
   else if (url === '/causal' || url === '/causal/')   fp = path.join(APP_DIR, 'causal',  'index.html');
-  else if (url === '/warning' || url === '/warning/') fp = path.join(APP_DIR, 'warning', 'index.html');
+  else if (url === '/warning'    || url === '/warning/')    fp = path.join(APP_DIR, 'warning',    'index.html');
+  else if (url === '/high-price' || url === '/high-price/') fp = path.join(APP_DIR, 'high-price', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 
