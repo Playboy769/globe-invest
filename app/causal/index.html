@@ -243,6 +243,16 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-node.text-node.editing{border-color:#0a0a0a;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .cf-node.text-node .cf-port{opacity:0!important;pointer-events:none}
 .cf-node.text-node .cf-node-resize{display:none}
+.cf-node.table-node{padding:0;min-width:80px;overflow:hidden;cursor:default;background:#fff;border-radius:9px}
+.cf-node.table-node:hover{border-color:#aaa;box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.cf-node.table-node.sel{border-color:#0a0a0a;box-shadow:0 5px 20px rgba(0,0,0,.13)}
+.cf-tbl{border-collapse:collapse;font-size:12.5px;line-height:1.4;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;width:100%}
+.cf-tbl td{border:1px solid #e4e4e4;padding:5px 10px;min-width:72px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:default;color:#0a0a0a}
+.cf-tbl tr:first-child td{background:#f7f7f7;font-weight:600;font-size:11.5px;border-bottom:2px solid #d8d8d8}
+.cf-tbl tr:first-child td:first-child{border-top-left-radius:8px}
+.cf-tbl tr:first-child td:last-child{border-top-right-radius:8px}
+.cf-tbl td:focus{background:#f0f6ff;outline:none;box-shadow:inset 0 0 0 1.5px #5090d8;cursor:text}
+.cf-tbl-only{display:none!important}
 
 /* ── Zoom controls ───────────────────────────────────────── */
 #cf-zoom-ctrl{
@@ -298,6 +308,10 @@ body.dark .cf-box-handle{background:#4a6a8a}
 .cf-node.img-node:hover .cf-box-handle,.cf-node.img-node.sel .cf-box-handle{opacity:1}
 .cf-node.img-node>img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:9px}
 body.dark .cf-node.img-node{background:#1e1e1e;border-color:#3a5070}
+body.dark .cf-node.table-node{background:#1e1e1e}
+body.dark .cf-tbl td{border-color:#333;color:#e8e8e8}
+body.dark .cf-tbl tr:first-child td{background:#2a2a2a;border-bottom-color:#444}
+body.dark .cf-tbl td:focus{background:#1a2a3a;box-shadow:inset 0 0 0 1.5px #5090d8}
 body.dark .cf-node.box-node[data-color="1"]{background:rgba(44,40,20,0.55);border-color:#8a6a10}
 body.dark .cf-node.box-node[data-color="2"]{background:rgba(24,40,26,0.55);border-color:#307040}
 body.dark .cf-node.box-node[data-color="3"]{background:rgba(44,24,24,0.55);border-color:#803030}
@@ -471,6 +485,7 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
     <button class="cf-btn" id="cf-add-box">+ Box</button>
     <button class="cf-btn" id="cf-add-text">+ Text</button>
     <button class="cf-btn" id="cf-add-img" title="Upload image">+ Image</button>
+    <button class="cf-btn" id="cf-add-table" title="Insert table">+ Table</button>
     <input type="file" id="cf-img-input" accept="image/*" style="display:none">
     <button class="cf-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">Fit</button>
     <button class="cf-btn danger" id="cf-clear">Clear</button>
@@ -515,6 +530,11 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
       <div class="cf-tool trace-btn" data-act="trace" title="Trace paths (P)">⇢</div>
       <div class="cf-tool pulse-btn" data-act="pulse" title="Pulse simulation (S)">⚡</div>
       <div class="cf-tool del" data-act="del" title="Delete node (Del)">✕</div>
+      <div class="cf-tool-sep cf-tbl-only"></div>
+      <div class="cf-tool cf-tbl-only" data-act="add-row" title="Add row">+行</div>
+      <div class="cf-tool cf-tbl-only" data-act="del-row" title="Delete last row">−行</div>
+      <div class="cf-tool cf-tbl-only" data-act="add-col" title="Add column">+列</div>
+      <div class="cf-tool cf-tbl-only" data-act="del-col" title="Delete last column">−列</div>
     </div>
     <div id="cf-edge-tools" class="cf-tools">
       <div class="cf-tool spos" data-pol="++" title="Strong positive (＋＋)">＋＋</div>
@@ -1003,6 +1023,22 @@ function buildNodes() {
       img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:9px';
       d.appendChild(img);
       ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
+    } else if (n.isTable) {
+      d.className='cf-node table-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'');
+      if(n.color)d.dataset.color=n.color;
+      const td=n.td||{r:3,c:3,cells:[]};
+      const tbl=document.createElement('table');tbl.className='cf-tbl';
+      for(let r=0;r<td.r;r++){
+        const tr=document.createElement('tr');
+        for(let c=0;c<td.c;c++){
+          const cell=document.createElement('td');
+          cell.textContent=(td.cells[r]&&td.cells[r][c]!=null)?td.cells[r][c]:'';
+          cell.dataset.r=r; cell.dataset.c=c;
+          tr.appendChild(cell);
+        }
+        tbl.appendChild(tr);
+      }
+      d.appendChild(tbl);
     } else {
       d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'');
       if (n.color) d.dataset.color = n.color;
@@ -1014,12 +1050,13 @@ function buildNodes() {
     }
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
-    const sp=document.createElement('span'); sp.className='cf-node-text'; sp.textContent=n.text; d.appendChild(sp);
+    if(!n.isTable&&!n.isImage){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
     if (!n.isBox) {
       ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     }
     d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
-    d.addEventListener('dblclick',ev=>{ev.stopPropagation();editNode(n.id);});
+    if(n.isTable){d.addEventListener('dblclick',ev=>{ev.stopPropagation();const cell=ev.target.closest('.cf-tbl td');if(cell)editTableCell(n.id,+cell.dataset.r,+cell.dataset.c);});}
+    else{d.addEventListener('dblclick',ev=>{ev.stopPropagation();editNode(n.id);});}
     nodesLayer.appendChild(d); _els[n.id]=d;
   });
   measureAll();
@@ -1086,8 +1123,9 @@ function placeTools(){
   if(_sel.type==='node'){
     const n=byNode(_sel.id); if(!n)return;
     nt.style.left=(n.x+(_w(n)/2))+'px'; nt.style.top=(n.y-17)+'px'; nt.classList.add('on');
-    // sync trace button state
     nt.querySelector('.trace-btn').classList.toggle('active',_traceOrigin===_sel.id);
+    const isTbl=!!n.isTable;
+    nt.querySelectorAll('.cf-tbl-only').forEach(el=>el.style.setProperty('display',isTbl?'flex':'none','important'));
   } else {
     const e=byEdge(_sel.id); if(!e)return;
     const m=edgeMid(e); et.style.left=m.x+'px'; et.style.top=(m.y-19)+'px'; et.classList.add('on');
@@ -1125,6 +1163,17 @@ function addBoxNode(x, y) {
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
+function addTableNode(x, y) {
+  snapshot();
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isTable:true,
+    td:{r:3,c:3,cells:[['','',''],['','',''],['','','']]}};
+  G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+  return n;
+}
+function tableAddRow(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();n.td.cells.push(Array(n.td.c).fill(''));n.td.r++;renderAll();save();}
+function tableDelRow(id){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(n.td.r-1,1);n.td.r--;renderAll();save();}
+function tableAddCol(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();for(let r=0;r<n.td.r;r++){if(!n.td.cells[r])n.td.cells[r]=[];while(n.td.cells[r].length<n.td.c)n.td.cells[r].push('');n.td.cells[r].push('');}n.td.c++;renderAll();save();}
+function tableDelCol(id){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(n.td.c-1,1);}n.td.c--;renderAll();save();}
 function addEdge(from, to, fromSide, toSide) {
   const ex=G.edges.find(e=>e.from===from&&e.to===to);
   if(ex){select({type:'edge',id:ex.id});return;}
@@ -1314,6 +1363,38 @@ function editNode(id) {
   function onkey(ev){if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();sp.blur();}else if(ev.key==='Escape'){sp.textContent=n.text;sp.blur();}ev.stopPropagation();}
   function cu(){sp.removeEventListener('blur',done);sp.removeEventListener('keydown',onkey);}
   sp.addEventListener('blur',done); sp.addEventListener('keydown',onkey);
+}
+function editTableCell(nodeId, row, col) {
+  const el=_els[nodeId]; if(!el)return;
+  const cell=el.querySelector('.cf-tbl td[data-r="'+row+'"][data-c="'+col+'"]');
+  if(!cell)return;
+  const n=byNode(nodeId); snapshot();
+  _editing=true; el.classList.add('editing');
+  cell.contentEditable='true'; cell.focus();
+  const range=document.createRange(); range.selectNodeContents(cell);
+  const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  function done(){
+    _editing=false; el.classList.remove('editing'); cell.contentEditable='false';
+    if(!n.td.cells[row])n.td.cells[row]=[];
+    n.td.cells[row][col]=cell.textContent;
+    n._w=el.offsetWidth; n._h=el.offsetHeight;
+    drawEdges(); placeTools(); save(); cu();
+  }
+  function onkey(ev){
+    if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();cell.blur();}
+    else if(ev.key==='Tab'){
+      ev.preventDefault(); cell.blur();
+      const nc=ev.shiftKey?col-1:col+1;
+      if(!ev.shiftKey&&nc<n.td.c)setTimeout(()=>editTableCell(nodeId,row,nc),10);
+      else if(!ev.shiftKey&&row+1<n.td.r)setTimeout(()=>editTableCell(nodeId,row+1,0),10);
+      else if(ev.shiftKey&&nc>=0)setTimeout(()=>editTableCell(nodeId,row,nc),10);
+      else if(ev.shiftKey&&row>0)setTimeout(()=>editTableCell(nodeId,row-1,n.td.c-1),10);
+    }
+    else if(ev.key==='Escape'){cell.textContent=(n.td.cells[row]&&n.td.cells[row][col])||'';cell.blur();}
+    ev.stopPropagation();
+  }
+  function cu(){cell.removeEventListener('blur',done);cell.removeEventListener('keydown',onkey);}
+  cell.addEventListener('blur',done); cell.addEventListener('keydown',onkey);
 }
 function editEdgeLabel(id) {
   const e=byEdge(id); if(!e)return;
@@ -1652,6 +1733,10 @@ document.getElementById('cf-node-tools').addEventListener('click', e => {
   else if(b.dataset.act==='trace')traceNode(_sel.id);
   else if(b.dataset.act==='pulse')pulseFrom(_sel.id);
   else if(b.dataset.act==='del')removeNode(_sel.id);
+  else if(b.dataset.act==='add-row')tableAddRow(_sel.id);
+  else if(b.dataset.act==='del-row')tableDelRow(_sel.id);
+  else if(b.dataset.act==='add-col')tableAddCol(_sel.id);
+  else if(b.dataset.act==='del-col')tableDelCol(_sel.id);
 });
 
 document.getElementById('cf-add').addEventListener('click',()=>{
@@ -1662,6 +1747,10 @@ document.getElementById('cf-add').addEventListener('click',()=>{
 document.getElementById('cf-add-box').addEventListener('click',()=>{
   const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
   addBoxNode(cx-100,cy-60);
+});
+document.getElementById('cf-add-table').addEventListener('click',()=>{
+  const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
+  addTableNode(cx-120,cy-55);
 });
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
