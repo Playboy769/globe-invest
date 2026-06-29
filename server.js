@@ -113,9 +113,11 @@ async function getHighPriceList() {
       const chg   = parseFloat(r.Change) || 0;
       const prev  = price - chg;
       const info  = coInfo[code] || {};
+      const mcap  = info.shares > 0 ? Math.round(info.shares * price / 1e8) : null;
       stocks.push({ code, name: (r.Name||'').trim(), market:'twse', price,
         change: +chg.toFixed(2), changePct: prev ? +(chg/prev*100).toFixed(2) : 0,
-        industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '' });
+        industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '',
+        marketCapYi: mcap });
     }
   }
   if (tpexRes.status === 'fulfilled' && Array.isArray(tpexRes.value)) {
@@ -127,9 +129,11 @@ async function getHighPriceList() {
       const chg   = parseFloat(r.Change) || 0;
       const prev  = price - chg;
       const info  = coInfo[code] || {};
+      const mcap  = info.shares > 0 ? Math.round(info.shares * price / 1e8) : null;
       stocks.push({ code, name: (r.CompanyName||'').trim(), market:'tpex', price,
         change: +chg.toFixed(2), changePct: prev ? +(chg/prev*100).toFixed(2) : 0,
-        industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '' });
+        industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '',
+        marketCapYi: mcap });
     }
   }
   stocks.sort((a,b) => b.price - a.price);
@@ -144,21 +148,32 @@ let _coInfoTime  = 0;
 async function getCompanyInfo() {
   if (_coInfoCache && Date.now() - _coInfoTime < 60 * 60 * 1000) return _coInfoCache;
   const info = {};
-  const [twseRes, tpexRes] = await Promise.allSettled([
+  const [twseIndRes, tpexRes, twseCorpRes] = await Promise.allSettled([
     fetchUrl('https://openapi.twse.com.tw/v1/opendata/t187ap14_L').then(JSON.parse),
     fetchUrl('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O').then(JSON.parse),
+    fetchUrl('https://openapi.twse.com.tw/v1/opendata/t187ap03_L').then(JSON.parse),
   ]);
-  if (twseRes.status === 'fulfilled' && Array.isArray(twseRes.value)) {
-    for (const r of twseRes.value) {
+  if (twseIndRes.status === 'fulfilled' && Array.isArray(twseIndRes.value)) {
+    for (const r of twseIndRes.value) {
       const code = r['公司代號'] || '';
-      if (code) info[code] = { industry: r['產業別'] || '', market: 'twse' };
+      if (code) info[code] = { industry: r['產業別'] || '', market: 'twse', shares: 0 };
     }
   }
   if (tpexRes.status === 'fulfilled' && Array.isArray(tpexRes.value)) {
     for (const r of tpexRes.value) {
-      const code = r['SecuritiesCompanyCode'] || '';
-      const ind  = TPEX_INDUSTRY[r['SecuritiesIndustryCode']] || '';
-      if (code) info[code] = { industry: ind, market: 'tpex' };
+      const code   = r['SecuritiesCompanyCode'] || '';
+      const ind    = TPEX_INDUSTRY[r['SecuritiesIndustryCode']] || '';
+      const shares = parseInt(r['IssueShares'] || '0') || 0;
+      if (code) info[code] = { industry: ind, market: 'tpex', shares };
+    }
+  }
+  // Overwrite TWSE shares from t187ap03_L (has 已發行普通股數)
+  if (twseCorpRes.status === 'fulfilled' && Array.isArray(twseCorpRes.value)) {
+    for (const r of twseCorpRes.value) {
+      const code   = r['公司代號'] || '';
+      const shares = parseInt(r['已發行普通股數或TDR原股發行股數'] || '0') || 0;
+      if (code && info[code]) info[code].shares = shares;
+      else if (code)          info[code] = { industry: '', market: 'twse', shares };
     }
   }
   _coInfoCache = info;
@@ -422,7 +437,31 @@ const server = http.createServer(async (req, res) => {
       const beta      = taiex  ? calcBeta(closes, taiex) : null;
       const hist30    = closes.slice(-30).map(v => +v.toFixed(2));
 
-      const payload = { change5d, change30d, beta, hist30 };
+      // ── Extra analytics ──────────────────────────────────────────────
+      // Consecutive down days (from today backwards)
+      let consecutiveDown = 0;
+      for (let i = closes.length - 1; i > 0; i--) {
+        if (closes[i] < closes[i - 1]) consecutiveDown++;
+        else break;
+      }
+      // Down days in last 5 trading days
+      let downDays5 = 0;
+      for (let i = Math.max(1, closes.length - 5); i < closes.length; i++) {
+        if (closes[i] < closes[i - 1]) downDays5++;
+      }
+      // Down days in last ~22 trading days (1 month)
+      let downDays22 = 0;
+      const m22start = Math.max(1, closes.length - 22);
+      for (let i = m22start; i < closes.length; i++) {
+        if (closes[i] < closes[i - 1]) downDays22++;
+      }
+      const tradeDays22 = closes.length - m22start; // actual trading days in window
+      // Drawdown from 3-month high
+      const highPrice  = Math.max(...closes);
+      const ddFromHigh = highPrice > 0 ? +(((last - highPrice) / highPrice) * 100).toFixed(2) : null;
+
+      const payload = { change5d, change30d, beta, hist30,
+        consecutiveDown, downDays5, downDays22, tradeDays22, ddFromHigh, highPrice: +highPrice.toFixed(2) };
       _warnCache[cacheKey] = payload; _warnTime[cacheKey] = Date.now();
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify(payload));
