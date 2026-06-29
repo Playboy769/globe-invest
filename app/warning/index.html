@@ -216,6 +216,34 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
            letter-spacing:0.08em; text-transform:uppercase; }
 .ft-note { font-family:'Noto Sans TC',sans-serif; font-size:11px; color:var(--ink-ghost); }
 
+/* ── HIGH-PRICE TABLE ── */
+.hp-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:13px; }
+.hp-th {
+  font-family:'Calibri',sans-serif; font-size:9.5px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  padding:9px 10px; border-bottom:1px solid var(--border);
+  text-align:right; white-space:nowrap;
+}
+.hp-th.hp-sort { cursor:pointer; user-select:none; }
+.hp-th.hp-sort:hover { opacity:.6; }
+.hp-td {
+  padding:6px 10px; border-bottom:1px solid var(--border);
+  vertical-align:middle; white-space:nowrap; text-align:right;
+}
+.hp-table tbody tr:hover td { background:var(--surface); }
+.hp-td.l { text-align:left; }
+.hp-code { font-family:'Calibri',monospace; font-size:13px; font-weight:700; }
+.hp-mkt  { font-size:9px; letter-spacing:.06em; color:var(--ink-faint); display:block; margin-top:1px; }
+.hp-nm   { font-family:'Noto Sans TC',sans-serif; font-size:13px; font-weight:500; }
+.hp-pr   { font-family:'Calibri',sans-serif; font-size:14px; font-weight:700; }
+.hp-pct  { font-family:'Calibri',sans-serif; font-size:12.5px; font-weight:600; }
+.hp-beta { font-family:'Calibri',sans-serif; font-size:12.5px; }
+.hp-ind  { font-family:'Noto Sans TC',sans-serif; font-size:11.5px; color:var(--ink-soft); }
+.hp-sub  { font-family:'Noto Sans TC',sans-serif; font-size:11px; color:var(--teal-ink); }
+.hp-pct.up   { color:var(--red-ink); }
+.hp-pct.dn   { color:var(--green-ink); }
+.hp-pct.flat { color:var(--ink-ghost); }
+
 /* ── RESPONSIVE ── */
 @media (max-width:960px) {
   header,.sec-nav,.stat-strip,.tab-bar,.tbl-wrap,footer { padding-left:24px; padding-right:24px; }
@@ -263,6 +291,9 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </button>
   <button class="sec-btn zh" data-sec="exdiv" onclick="switchSec('exdiv')">
     除息日曆 <span class="sec-cnt" id="scnt-exdiv"></span>
+  </button>
+  <button class="sec-btn zh" data-sec="hp" onclick="switchSec('hp')">
+    高價股 <span class="sec-cnt" id="scnt-hp"></span>
   </button>
 </nav>
 
@@ -406,6 +437,56 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SECTION 4 — HIGH-PRICE STOCKS
+═══════════════════════════════════════════ -->
+<div id="sec-hp" class="sec-panel" hidden>
+  <div class="stat-strip">
+    <div class="stat-cell">
+      <div class="stat-label zh">符合條件</div><div class="stat-num en" id="hp-cnt">—</div>
+    </div>
+    <div class="stat-cell s-teal">
+      <div class="stat-label en">TWSE</div><div class="stat-num en" id="hp-tw">—</div>
+    </div>
+    <div class="stat-cell s-blue">
+      <div class="stat-label en">TPEx</div><div class="stat-num en" id="hp-tp">—</div>
+    </div>
+    <div class="stat-cell s-green">
+      <div class="stat-label zh">均股價</div><div class="stat-num en" id="hp-avg">—</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label zh">指標載入</div><div class="stat-num en" id="hp-prog">—</div>
+    </div>
+  </div>
+  <!-- progress bar -->
+  <div style="height:2px;background:var(--border)"><div id="hp-bar" style="height:100%;background:var(--ink);width:0;transition:width .25s"></div></div>
+  <!-- industry pills -->
+  <div class="tab-bar" id="hp-pills" style="flex-wrap:wrap;gap:4px 0;padding-top:12px;padding-bottom:12px">
+    <button class="tab-btn zh active" data-hp-f="all" onclick="hpSetFilter(this,'all')">全部</button>
+  </div>
+  <!-- table -->
+  <div class="tbl-wrap" style="padding-top:0">
+    <table class="hp-table">
+      <thead>
+        <tr>
+          <th class="hp-th" style="width:28px">#</th>
+          <th class="hp-th hp-sort" onclick="hpSort('code')">代號<span class="sort-ind" id="hp-si-code"></span></th>
+          <th class="hp-th hp-sort" onclick="hpSort('name')" style="text-align:left">名稱<span class="sort-ind" id="hp-si-name"></span></th>
+          <th class="hp-th" style="width:80px">走勢</th>
+          <th class="hp-th hp-sort r" onclick="hpSort('price')">股價<span class="sort-ind" id="hp-si-price"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('changePct')">今日%<span class="sort-ind" id="hp-si-changePct"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('c5')">5日%<span class="sort-ind" id="hp-si-c5"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('c30')">30日%<span class="sort-ind" id="hp-si-c30"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('beta')">Beta<span class="sort-ind" id="hp-si-beta"></span></th>
+          <th class="hp-th hp-sort" onclick="hpSort('industry')" style="text-align:left">產業<span class="sort-ind" id="hp-si-industry"></span></th>
+          <th class="hp-th hp-sort" onclick="hpSort('sub')" style="text-align:left">子產業<span class="sort-ind" id="hp-si-sub"></span></th>
+        </tr>
+      </thead>
+      <tbody id="hp-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
 <!-- ── Footer ── -->
 <footer>
   <span class="ft-src en">TWSE openapi.twse.com.tw &nbsp;&middot;&nbsp; TPEx tpex.org.tw/openapi</span>
@@ -424,6 +505,7 @@ const S = {
   warn:  { rows:[], loaded:false },
   inst:  { rows:[], loaded:false },
   exdiv: { rows:[], loaded:false },
+  hp:    { rows:[], metrics:{}, loaded:false, filter:'all', sortCol:'price', sortDir:'desc', done:0, total:0 },
   warnSort:  { col: null,    dir: 'asc' },
   instSort:  { col: 'total', dir: 'desc' },
   exdivSort: { col: 'date',  dir: 'asc'  },
@@ -589,6 +671,7 @@ function switchSec(id){
   document.querySelectorAll('.sec-panel').forEach(p=>{ p.hidden = p.id!=='sec-'+id; });
   if(id==='inst'  && !S.inst.loaded)  loadInst();
   if(id==='exdiv' && !S.exdiv.loaded) loadExDiv();
+  if(id==='hp'    && !S.hp.loaded)    loadHP();
 }
 
 function refresh(){
@@ -596,6 +679,7 @@ function refresh(){
   if(s==='warning'){ S.warn.loaded=false;  loadWarn(); }
   if(s==='inst')   { S.inst.loaded=false;  loadInst(); }
   if(s==='exdiv')  { S.exdiv.loaded=false; loadExDiv(); }
+  if(s==='hp')     { S.hp.loaded=false; S.hp.rows=[]; S.hp.metrics={}; loadHP(); }
 }
 
 // ═══════════════════════════════════════════
@@ -946,6 +1030,160 @@ function renderExDiv(){
       <div class="r-num ${r.stock>0?'pos':'zero'} en">${r.stock>0?r.stock.toFixed(2)+'%':'—'}</div>
       <div>${countdownBadge(r.days)}</div>
     </div>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// HIGH-PRICE SECTION
+// ═══════════════════════════════════════════
+function hpSpark(hist, c30){
+  if(!hist||hist.length<2) return '<span style="color:#e0e0e0">—</span>';
+  const W=84,H=26,pad=2;
+  const vals=hist.filter(v=>v!=null);
+  if(vals.length<2) return '<span style="color:#e0e0e0">—</span>';
+  const mn=Math.min(...vals),mx=Math.max(...vals),rng=mx-mn||1;
+  const pts=vals.map((v,i)=>{
+    const x=pad+(i/(vals.length-1))*(W-pad*2);
+    const y=(H-pad)-((v-mn)/rng)*(H-pad*2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const col=c30==null?'#bbb':c30>0?'var(--red-ink)':'var(--green-ink)';
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block">
+<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+
+function hpPctCls(v){ return v==null?'flat':v>0?'up':v<0?'dn':'flat'; }
+function hpFmt(v){
+  if(v==null||isNaN(v)) return '—';
+  return (v>0?'+':'')+v.toFixed(2)+'%';
+}
+
+function hpBuildPills(){
+  const inds=[...new Set(S.hp.rows.map(r=>r.industry).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-TW'));
+  const bar=document.getElementById('hp-pills');
+  bar.querySelectorAll('[data-hp-f]:not([data-hp-f="all"])').forEach(b=>b.remove());
+  inds.forEach(ind=>{
+    const b=document.createElement('button');
+    b.className='tab-btn zh'; b.dataset.hpF=ind; b.textContent=ind;
+    b.onclick=()=>hpSetFilter(b,ind);
+    bar.appendChild(b);
+  });
+}
+
+function hpSetFilter(btn,f){
+  document.querySelectorAll('#hp-pills .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  S.hp.filter=f; hpRender();
+}
+
+function hpSort(col){
+  if(S.hp.sortCol===col) S.hp.sortDir=S.hp.sortDir==='asc'?'desc':'asc';
+  else{ S.hp.sortCol=col; S.hp.sortDir=['code','name','industry','sub'].includes(col)?'asc':'desc'; }
+  hpRender();
+}
+
+function hpUpdateSI(){
+  ['code','name','price','changePct','c5','c30','beta','industry','sub'].forEach(c=>{
+    const el=document.getElementById('hp-si-'+c);
+    if(el) el.textContent=S.hp.sortCol===c?(S.hp.sortDir==='asc'?' ↑':' ↓'):'';
+  });
+}
+
+function hpFilteredSorted(){
+  let rows=S.hp.filter==='all'?S.hp.rows:S.hp.rows.filter(r=>r.industry===S.hp.filter);
+  const col=S.hp.sortCol, dir=S.hp.sortDir;
+  const getters={
+    code:r=>r.code, name:r=>r.name, price:r=>r.price, changePct:r=>r.changePct,
+    c5:r=>(S.hp.metrics[r.code]||{}).c5,
+    c30:r=>(S.hp.metrics[r.code]||{}).c30,
+    beta:r=>(S.hp.metrics[r.code]||{}).beta,
+    industry:r=>r.industry, sub:r=>r.subIndustry,
+  };
+  const get=getters[col];
+  if(!get) return rows;
+  return [...rows].sort((a,b)=>{
+    const va=get(a),vb=get(b);
+    const na=va==null||(typeof va==='number'&&isNaN(va));
+    const nb=vb==null||(typeof vb==='number'&&isNaN(vb));
+    if(na&&nb)return 0; if(na)return 1; if(nb)return-1;
+    const c=typeof va==='string'?va.localeCompare(vb,'zh-TW'):(va<vb?-1:va>vb?1:0);
+    return dir==='asc'?c:-c;
+  });
+}
+
+function hpRender(){
+  const rows=hpFilteredSorted();
+  const tb=document.getElementById('hp-tbody');
+  if(!rows.length){ tb.innerHTML=`<tr><td colspan="11" style="padding:40px;text-align:center;color:var(--ink-ghost)">無符合條件資料</td></tr>`; hpUpdateSI(); return; }
+  const LD='<span style="color:#ddd;font-size:11px">…</span>';
+  tb.innerHTML=rows.map((r,i)=>{
+    const m=S.hp.metrics[r.code], loaded=m!==undefined;
+    const c5=m?.c5, c30=m?.c30, beta=m?.beta, hist=m?.hist30;
+    return `<tr>
+<td class="hp-td l" style="width:28px;color:var(--ink-ghost);font-size:10px">${i+1}</td>
+<td class="hp-td l">
+  <div class="hp-code">${esc(r.code)}</div>
+  <span class="hp-mkt">${r.market==='twse'?'TWSE':'TPEx'}</span>
+</td>
+<td class="hp-td l"><span class="hp-nm">${esc(r.name)}</span></td>
+<td class="hp-td" style="width:90px;padding:4px 8px">${hpSpark(hist, loaded?c30:null)}</td>
+<td class="hp-td"><span class="hp-pr">${r.price.toLocaleString()}</span></td>
+<td class="hp-td"><span class="hp-pct ${hpPctCls(r.changePct)}">${hpFmt(r.changePct)}</span></td>
+<td class="hp-td"><span class="hp-pct ${hpPctCls(c5)}">${loaded?hpFmt(c5):LD}</span></td>
+<td class="hp-td"><span class="hp-pct ${hpPctCls(c30)}">${loaded?hpFmt(c30):LD}</span></td>
+<td class="hp-td"><span class="hp-beta">${loaded?(beta!=null?beta.toFixed(2):'—'):LD}</span></td>
+<td class="hp-td l"><span class="hp-ind">${esc(r.industry)}</span></td>
+<td class="hp-td l"><span class="hp-sub">${esc(r.subIndustry)}</span></td>
+</tr>`;
+  }).join('');
+  hpUpdateSI();
+}
+
+async function loadHPMetrics(){
+  const rows=[...S.hp.rows];
+  S.hp.total=rows.length; S.hp.done=0;
+  const bar=document.getElementById('hp-bar');
+  const prog=document.getElementById('hp-prog');
+  const CONC=8; let idx=0;
+  const work=async()=>{
+    while(idx<rows.length){
+      const r=rows[idx++];
+      try{
+        const res=await fetch(`/api/high-price/metrics?code=${encodeURIComponent(r.code)}&market=${r.market}`);
+        const d=res.ok?await res.json():null;
+        S.hp.metrics[r.code]=d?{c5:d.change5d,c30:d.change30d,beta:d.beta,hist30:d.hist30}:{};
+      }catch{ S.hp.metrics[r.code]={}; }
+      S.hp.done++;
+      const pct=Math.round(S.hp.done/S.hp.total*100);
+      bar.style.width=pct+'%';
+      prog.textContent=pct+'%';
+      if(S.hp.done%10===0||S.hp.done===S.hp.total) hpRender();
+    }
+  };
+  await Promise.all(Array.from({length:CONC},work));
+  bar.style.width='100%'; prog.textContent='完成';
+  hpRender();
+}
+
+async function loadHP(){
+  if(S.hp.loaded) return;
+  try{
+    const res=await fetch('/api/high-price/list');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    S.hp.rows=Array.isArray(data)?data:[];
+    S.hp.metrics={};
+    S.hp.loaded=true;
+    document.getElementById('hp-cnt').textContent=S.hp.rows.length;
+    document.getElementById('hp-tw').textContent=S.hp.rows.filter(r=>r.market==='twse').length;
+    document.getElementById('hp-tp').textContent=S.hp.rows.filter(r=>r.market==='tpex').length;
+    const avg=S.hp.rows.length?Math.round(S.hp.rows.reduce((a,r)=>a+r.price,0)/S.hp.rows.length):0;
+    document.getElementById('hp-avg').textContent=avg.toLocaleString();
+    document.getElementById('scnt-hp').textContent=S.hp.rows.length;
+    hpBuildPills(); hpRender();
+    loadHPMetrics();
+  }catch(e){
+    document.getElementById('hp-tbody').innerHTML=`<tr><td colspan="11" style="padding:40px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)}</td></tr>`;
+  }
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────
