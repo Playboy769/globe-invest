@@ -413,6 +413,8 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
 </footer>
 
 <script>
+const _coInfo = {}; // code → {industry}
+
 // ─── State ────────────────────────────────────────────────────────────
 const S = {
   activeSec:   'warning',
@@ -501,6 +503,24 @@ function applySort(rows, st, getters){
     const cmp = typeof va==='string' ? va.localeCompare(vb,'zh-TW') : (va < vb ? -1 : va > vb ? 1 : 0);
     return st.dir==='asc' ? cmp : -cmp;
   });
+}
+
+function sparklineSvg(hist, changePct){
+  if(!hist || hist.length < 2) return '';
+  const W=80, H=28, pad=2;
+  const vals = hist.filter(v => v != null);
+  if(vals.length < 2) return '';
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const rng = hi - lo || 1;
+  const pts = vals.map((v,i)=>{
+    const x = pad + (i/(vals.length-1))*(W-pad*2);
+    const y = (H-pad) - ((v-lo)/rng)*(H-pad*2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const col = changePct > 0 ? '#15803d' : changePct < 0 ? '#dc2626' : '#aaa';
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="flex-shrink:0;display:block">
+    <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
 }
 
 function fmtPct(p){
@@ -625,7 +645,8 @@ async function loadWarn(){
   document.getElementById('scnt-warning').textContent = total||'';
   S.warn.loaded=true; setSpin(false); document.getElementById('updTime').textContent=nowStr();
   renderWarn();
-  loadDisposalPrices(); // async background fill
+  loadDisposalPrices(); // async — fills sparkHist + priceChangePct
+  loadCompanyInfo();    // async — fills _coInfo
 }
 
 async function loadDisposalPrices(){
@@ -641,9 +662,20 @@ async function loadDisposalPrices(){
       row.startPrice     = data.startPrice;
       row.currentPrice   = data.currentPrice;
       row.priceChangePct = data.changePct;
+      row.sparkHist      = data.hist || [];
     } catch {}
   }));
   renderWarn();
+}
+
+async function loadCompanyInfo(){
+  try {
+    const r = await fetch('/api/warning/company-info');
+    if(!r.ok) return;
+    const data = await r.json();
+    Object.assign(_coInfo, data);
+    renderWarn();
+  } catch {}
 }
 
 function warnFilter(f){
@@ -674,15 +706,22 @@ function renderWarn(){
     const pct = r.priceChangePct;
     const pctClass = pct === null ? 'zero' : pct > 0 ? 'pos' : pct < 0 ? 'neg' : 'zero';
     const pctLabel = isDispose
-      ? (pct === null ? '<span style="color:var(--ink-ghost);font-size:11px">…</span>' : `<span class="r-num ${pctClass} en" style="font-size:13px;font-weight:600">${fmtPct(pct)}</span>`)
+      ? (pct === null ? '<span style="color:var(--ink-ghost);font-size:11px">…</span>'
+                      : `<span class="r-num ${pctClass} en" style="font-size:13px;font-weight:600">${fmtPct(pct)}</span>`)
       : '';
+    const industry = isDispose ? ((_coInfo[r.code] || {}).industry || '') : '';
+    const spark = isDispose ? sparklineSvg(r.sparkHist, pct) : '';
     return `
     <div class="tbl-row grid-warn">
       <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>
       <div class="r-code en">${esc(r.code)}</div>
-      <div>
-        <div class="r-name zh">${esc(r.name)}</div>
-        ${!isDispose && r.note ? `<div class="r-reason zh">${esc(r.note.slice(0,50)+(r.note.length>50?'…':''))}</div>` : ''}
+      <div style="display:flex;align-items:center;gap:10px;overflow:hidden;min-width:0">
+        <div style="min-width:0;flex:1">
+          <div class="r-name zh">${esc(r.name)}</div>
+          ${industry ? `<div class="r-reason" style="color:var(--teal-ink);font-size:10px;margin-top:1px">${esc(industry)}</div>` : ''}
+          ${!isDispose && r.note ? `<div class="r-reason zh">${esc(r.note.slice(0,50)+(r.note.length>50?'…':''))}</div>` : ''}
+        </div>
+        ${spark}
       </div>
       <div><span class="mkt ${r.market==='twse'?'mkt-twse':'mkt-tpex'} en">${r.market==='twse'?'TWSE':'TPEx'}</span></div>
       <div><span class="sts ${isDispose?'sts-dispose':'sts-notice'}">

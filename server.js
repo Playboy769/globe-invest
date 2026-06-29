@@ -33,6 +33,49 @@ let _oilCache = null;
 let _oilCacheTime = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+// TPEx industry code → Chinese name (上櫃產業分類)
+const TPEX_INDUSTRY = {
+  '01':'食品工業','02':'塑膠工業','03':'紡織纖維','04':'機械工業',
+  '05':'電機機械','06':'電器電纜','08':'化學生技醫療','09':'玻璃陶瓷',
+  '10':'造紙工業','11':'鋼鐵工業','12':'橡膠工業','14':'建材營造',
+  '15':'航運業','16':'觀光餐旅','17':'金融保險','18':'貿易百貨',
+  '20':'油電燃氣業','21':'半導體業','22':'電腦及週邊設備業',
+  '23':'光電業','24':'通訊網路業','25':'電子零組件業',
+  '26':'電子通路業','27':'資訊服務業','28':'其他電子業',
+  '29':'建設業','30':'文化創意業','31':'農業科技業',
+  '32':'電商業','33':'綠能環保','34':'數位雲端',
+  '35':'運動休閒','36':'居家生活','37':'其他',
+};
+
+// Company info cache (1 hour TTL)
+let _coInfoCache = null;
+let _coInfoTime  = 0;
+
+async function getCompanyInfo() {
+  if (_coInfoCache && Date.now() - _coInfoTime < 60 * 60 * 1000) return _coInfoCache;
+  const info = {};
+  const [twseRes, tpexRes] = await Promise.allSettled([
+    fetchUrl('https://openapi.twse.com.tw/v1/opendata/t187ap14_L').then(JSON.parse),
+    fetchUrl('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O').then(JSON.parse),
+  ]);
+  if (twseRes.status === 'fulfilled' && Array.isArray(twseRes.value)) {
+    for (const r of twseRes.value) {
+      const code = r['公司代號'] || '';
+      if (code) info[code] = { industry: r['產業別'] || '', market: 'twse' };
+    }
+  }
+  if (tpexRes.status === 'fulfilled' && Array.isArray(tpexRes.value)) {
+    for (const r of tpexRes.value) {
+      const code = r['SecuritiesCompanyCode'] || '';
+      const ind  = TPEX_INDUSTRY[r['SecuritiesIndustryCode']] || '';
+      if (code) info[code] = { industry: ind, market: 'tpex' };
+    }
+  }
+  _coInfoCache = info;
+  _coInfoTime  = Date.now();
+  return info;
+}
+
 // Warning alerts cache (5 min TTL — intraday market alerts)
 const _warnCache = {};
 const _warnTime  = {};
@@ -239,6 +282,19 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Company info (industry classification) — 1h cache
+  if (req.url === '/api/warning/company-info' && req.method === 'GET') {
+    try {
+      const info = await getCompanyInfo();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(info));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   // Price change for disposal stocks (Yahoo Finance .TW / .TWO)
   if (req.url.startsWith('/api/warning/price-change') && req.method === 'GET') {
     try {
@@ -288,7 +344,9 @@ const server = http.createServer(async (req, res) => {
       }
 
       const changePct = (currentPrice - startPrice) / startPrice * 100;
-      const payload   = { startPrice: +startPrice.toFixed(2), currentPrice: +currentPrice.toFixed(2), changePct: +changePct.toFixed(2) };
+      // last 30 daily closes for sparkline (filter nulls, cap at 30 points)
+      const hist = closes.filter(v => v != null).slice(-30).map(v => +v.toFixed(2));
+      const payload   = { startPrice: +startPrice.toFixed(2), currentPrice: +currentPrice.toFixed(2), changePct: +changePct.toFixed(2), hist };
       _warnCache[cacheKey] = payload; _warnTime[cacheKey] = Date.now();
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify(payload));
