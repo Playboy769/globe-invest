@@ -650,12 +650,14 @@ async function loadWarn(){
 }
 
 async function loadDisposalPrices(){
-  const rows = S.warn.rows.filter(r => r.status === 'dispose' && r.startDate);
+  const rows = S.warn.rows;
   if(!rows.length) return;
   await Promise.allSettled(rows.map(async row => {
     try {
-      const ymd = row.startDate.replace(/-/g,'');
-      const r = await fetch(`/api/warning/price-change?market=${row.market}&code=${encodeURIComponent(row.code)}&startDate=${ymd}`);
+      const ymd = row.startDate ? row.startDate.replace(/-/g,'') : '';
+      const url = `/api/warning/price-change?market=${row.market}&code=${encodeURIComponent(row.code)}` +
+                  (ymd ? `&startDate=${ymd}` : '');
+      const r = await fetch(url);
       if(!r.ok) return;
       const data = await r.json();
       if(!data || data.error) return;
@@ -705,12 +707,11 @@ function renderWarn(){
     const isDispose = r.status === 'dispose';
     const pct = r.priceChangePct;
     const pctClass = pct === null ? 'zero' : pct > 0 ? 'pos' : pct < 0 ? 'neg' : 'zero';
-    const pctLabel = isDispose
-      ? (pct === null ? '<span style="color:var(--ink-ghost);font-size:11px">…</span>'
-                      : `<span class="r-num ${pctClass} en" style="font-size:13px;font-weight:600">${fmtPct(pct)}</span>`)
-      : '';
-    const industry = isDispose ? ((_coInfo[r.code] || {}).industry || '') : '';
-    const spark = isDispose ? sparklineSvg(r.sparkHist, pct) : '';
+    const pctLabel = pct === null
+      ? '<span style="color:var(--ink-ghost);font-size:11px">…</span>'
+      : `<span class="r-num ${pctClass} en" style="font-size:13px;font-weight:600">${fmtPct(pct)}</span>`;
+    const industry = (_coInfo[r.code] || {}).industry || '';
+    const spark = sparklineSvg(r.sparkHist, r.priceChangePct);
     return `
     <div class="tbl-row grid-warn">
       <div class="r-idx en">${String(i+1).padStart(2,'0')}</div>

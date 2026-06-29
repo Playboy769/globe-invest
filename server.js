@@ -295,14 +295,15 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Price change for disposal stocks (Yahoo Finance .TW / .TWO)
+  // Price change for all warning stocks (Yahoo Finance .TW / .TWO)
+  // startDate is optional — when absent, changePct = last-30d change
   if (req.url.startsWith('/api/warning/price-change') && req.method === 'GET') {
     try {
       const urlObj = new URL(req.url, 'http://localhost');
-      const market    = urlObj.searchParams.get('market')    || '';
-      const code      = urlObj.searchParams.get('code')      || '';
-      const startDate = urlObj.searchParams.get('startDate') || ''; // YYYYMMDD western
-      if (!market || !code || !startDate) throw new Error('missing params');
+      const market    = urlObj.searchParams.get('market') || '';
+      const code      = urlObj.searchParams.get('code')   || '';
+      const startDate = urlObj.searchParams.get('startDate') || ''; // YYYYMMDD, optional
+      if (!market || !code) throw new Error('missing params');
 
       const cacheKey = `price_${market}_${code}_${startDate}`;
       if (_warnCache[cacheKey] !== undefined && Date.now() - (_warnTime[cacheKey] || 0) < 30 * 60 * 1000) {
@@ -326,15 +327,21 @@ const server = http.createServer(async (req, res) => {
 
       const timestamps = result.timestamp || [];
       const closes     = (result.indicators.quote[0] || {}).close || [];
-      // start of disposal date in Taiwan timezone offset (UTC+8)
-      const sd  = startDate;
-      const startTs = Math.floor(new Date(`${sd.slice(0,4)}-${sd.slice(4,6)}-${sd.slice(6,8)}T00:00:00+08:00`).getTime() / 1000);
+      const hist30     = closes.filter(v => v != null).slice(-30).map(v => +v.toFixed(2));
 
       let startPrice = null, currentPrice = null;
-      for (let i = 0; i < timestamps.length; i++) {
-        if (closes[i] == null) continue;
-        if (startPrice === null && timestamps[i] >= startTs) startPrice = closes[i];
-        currentPrice = closes[i];
+      if (startDate) {
+        const sd = startDate;
+        const startTs = Math.floor(new Date(`${sd.slice(0,4)}-${sd.slice(4,6)}-${sd.slice(6,8)}T00:00:00+08:00`).getTime() / 1000);
+        for (let i = 0; i < timestamps.length; i++) {
+          if (closes[i] == null) continue;
+          if (startPrice === null && timestamps[i] >= startTs) startPrice = closes[i];
+          currentPrice = closes[i];
+        }
+      } else {
+        // No startDate: use first and last valid close in the 30-day window
+        startPrice   = hist30[0]            || null;
+        currentPrice = hist30[hist30.length - 1] || null;
       }
 
       if (!startPrice || !currentPrice) {
@@ -344,9 +351,7 @@ const server = http.createServer(async (req, res) => {
       }
 
       const changePct = (currentPrice - startPrice) / startPrice * 100;
-      // last 30 daily closes for sparkline (filter nulls, cap at 30 points)
-      const hist = closes.filter(v => v != null).slice(-30).map(v => +v.toFixed(2));
-      const payload   = { startPrice: +startPrice.toFixed(2), currentPrice: +currentPrice.toFixed(2), changePct: +changePct.toFixed(2), hist };
+      const payload   = { startPrice: +startPrice.toFixed(2), currentPrice: +currentPrice.toFixed(2), changePct: +changePct.toFixed(2), hist: hist30 };
       _warnCache[cacheKey] = payload; _warnTime[cacheKey] = Date.now();
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify(payload));
