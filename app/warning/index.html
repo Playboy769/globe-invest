@@ -602,7 +602,7 @@ function refresh(){
 // WARNING SECTION
 // ═══════════════════════════════════════════
 function normWarn(raw, market, status){
-  const code = pick(raw,'Code','SecuritiesCode','StockCode','code','公司代號','股票代號','代號');
+  const code = pick(raw,'SecuritiesCompanyCode','Code','SecuritiesCode','StockCode','code','公司代號','股票代號','代號');
   const name = pick(raw,'Name','CompanyName','StockName','name','公司名稱','股票名稱','名稱');
   const date = pick(raw,'Date','PublishDate','AnnounceDate','AnnouncementDate','StartDate','WarningDate','date','日期','公布日期');
   const note = pick(raw,'Reason','Note','Content','Description','ReasonsOfDisposition','DispositionReasons','Period','Remark','remark','原因','備註','說明');
@@ -650,24 +650,30 @@ async function loadWarn(){
 }
 
 async function loadDisposalPrices(){
-  const rows = S.warn.rows;
+  // Only fetch for standard 4-digit codes (warrants/rights have 5-6 digits, no Yahoo data)
+  const rows = S.warn.rows.filter(r => r.code && r.code.length === 4);
   if(!rows.length) return;
-  await Promise.allSettled(rows.map(async row => {
-    try {
-      const ymd = row.startDate ? row.startDate.replace(/-/g,'') : '';
-      const url = `/api/warning/price-change?market=${row.market}&code=${encodeURIComponent(row.code)}` +
-                  (ymd ? `&startDate=${ymd}` : '');
-      const r = await fetch(url);
-      if(!r.ok) return;
-      const data = await r.json();
-      if(!data || data.error) return;
-      row.startPrice     = data.startPrice;
-      row.currentPrice   = data.currentPrice;
-      row.priceChangePct = data.changePct;
-      row.sparkHist      = data.hist || [];
-    } catch {}
-  }));
-  renderWarn();
+  const BATCH = 8;
+  for(let i = 0; i < rows.length; i += BATCH){
+    const batch = rows.slice(i, i + BATCH);
+    await Promise.allSettled(batch.map(async row => {
+      try {
+        const ymd = row.startDate ? row.startDate.replace(/-/g,'') : '';
+        const url = `/api/warning/price-change?market=${row.market}&code=${encodeURIComponent(row.code)}` +
+                    (ymd ? `&startDate=${ymd}` : '');
+        const r = await fetch(url);
+        if(!r.ok) return;
+        const data = await r.json();
+        if(!data || data.error) return;
+        row.startPrice     = data.startPrice;
+        row.currentPrice   = data.currentPrice;
+        row.priceChangePct = data.changePct;
+        row.sparkHist      = data.hist || [];
+      } catch {}
+    }));
+    renderWarn();
+    if(i + BATCH < rows.length) await new Promise(res => setTimeout(res, 400));
+  }
 }
 
 async function loadCompanyInfo(){
@@ -710,7 +716,7 @@ function renderWarn(){
     const pctLabel = pct === null
       ? '<span style="color:var(--ink-ghost);font-size:11px">…</span>'
       : `<span class="r-num ${pctClass} en" style="font-size:13px;font-weight:600">${fmtPct(pct)}</span>`;
-    const industry = (_coInfo[r.code] || {}).industry || '';
+    const industry = ((_coInfo[r.code] || _coInfo[(r.code||'').slice(0,4)] || {}).industry) || '';
     const spark = sparklineSvg(r.sparkHist, r.priceChangePct);
     return `
     <div class="tbl-row grid-warn">
