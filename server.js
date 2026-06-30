@@ -432,7 +432,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ── High-price real-time quotes (mis.twse.com.tw, 20 s cache) ──────
+  // ── High-price real-time quotes (Yahoo Finance meta.regularMarketPrice, 20 s cache) ──
   if (req.url === '/api/high-price/realtime' && req.method === 'GET') {
     if (_rtCache && Date.now() - _rtTime < 20000) {
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
@@ -440,35 +440,36 @@ const server = http.createServer(async (req, res) => {
     }
     try {
       const stocks = await getHighPriceList();
-      const BATCH = 50;
       const result = {};
-      for (let i = 0; i < stocks.length; i += BATCH) {
-        const batch = stocks.slice(i, i + BATCH);
-        const exch  = batch.map(s => `${s.market === 'twse' ? 'tse' : 'otc'}_${s.code}.tw`).join('|');
-        const url   = `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exch)}&_=${Date.now()}`;
-        try {
-          const raw  = await fetchMis(url);
-          const data = JSON.parse(raw);
-          for (const item of (data.msgArray || [])) {
-            const code = (item.c || '').trim();
-            const rawZ = item.z;
-            const price = rawZ && rawZ !== '-' ? parseFloat(rawZ) : null;
-            const prev  = parseFloat(item.y) || null;
-            if (code && price && prev) {
-              result[code] = {
-                price,
-                change:    +(price - prev).toFixed(2),
-                changePct: +((price - prev) / prev * 100).toFixed(2),
-                high: item.h && item.h !== '-' ? parseFloat(item.h) : null,
-                low:  item.l && item.l !== '-' ? parseFloat(item.l) : null,
-                open: item.o && item.o !== '-' ? parseFloat(item.o) : null,
-                vol:  item.v ? parseInt(item.v) : null,
-                time: item.t || null,
-              };
-            }
-          }
-        } catch (_) { /* skip failed batch */ }
-      }
+      let idx = 0;
+      const CONC = 20;
+      const worker = async () => {
+        while (idx < stocks.length) {
+          const s = stocks[idx++];
+          const sym = s.market === 'twse' ? `${s.code}.TW` : `${s.code}.TWO`;
+          try {
+            const url  = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d`;
+            const raw  = await fetchUrl(url);
+            const data = JSON.parse(raw);
+            const meta = data.chart?.result?.[0]?.meta;
+            if (!meta?.regularMarketPrice) continue;
+            const price = meta.regularMarketPrice;
+            const prev  = meta.chartPreviousClose || meta.previousClose;
+            if (!prev) continue;
+            // Taiwan local time from regularMarketTime (UTC+8)
+            const t   = new Date((meta.regularMarketTime || 0) * 1000 + 8 * 3600 * 1000);
+            const hh  = String(t.getUTCHours()).padStart(2, '0');
+            const mm  = String(t.getUTCMinutes()).padStart(2, '0');
+            result[s.code] = {
+              price:     +price.toFixed(2),
+              change:    +(price - prev).toFixed(2),
+              changePct: +((price - prev) / prev * 100).toFixed(2),
+              time: `${hh}:${mm}`,
+            };
+          } catch (_) { /* skip failed stock */ }
+        }
+      };
+      await Promise.all(Array.from({ length: CONC }, worker));
       _rtCache = result; _rtTime = Date.now();
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify(result));
