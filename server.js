@@ -690,6 +690,7 @@ const server = http.createServer(async (req, res) => {
   else if (url === '/causal' || url === '/causal/')   fp = path.join(APP_DIR, 'causal',  'index.html');
   else if (url === '/warning'    || url === '/warning/')    fp = path.join(APP_DIR, 'warning',    'index.html');
   else if (url === '/high-price' || url === '/high-price/') fp = path.join(APP_DIR, 'high-price', 'index.html');
+  else if (url === '/options'    || url === '/options/')    fp = path.join(APP_DIR, 'options',    'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 

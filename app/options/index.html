@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Options Strategy Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;
+  --bg1:rgba(255,255,255,0.018);
+  --bg2:rgba(255,255,255,0.032);
+  --bd:rgba(255,255,255,0.07);
+  --bd2:rgba(255,255,255,0.13);
+  --bd3:rgba(255,255,255,0.22);
+  --t1:#f0f0f0;
+  --t2:#c0c0c0;
+  --t3:#888;
+  --t4:#555;
+  --gold:#c4903a;
+  --green:#4a9868;
+  --red:#b05050;
+  --blue:#5080a8;
+  --fam:'Calibri','Noto Sans TC',sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--fam);font-weight:400;-webkit-font-smoothing:antialiased}
+::selection{background:#e2e2e2;color:#0a0a0a}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:#1e1e1e;border-radius:3px}
+
+/* ─── TOP BAR ─── */
+#top{position:fixed;top:0;left:0;right:0;height:48px;border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 28px;gap:16px;z-index:100;background:rgba(10,10,10,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.top-brand{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif;white-space:nowrap}
+.top-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0}
+.top-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);font-family:'Calibri',sans-serif}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.top-tag{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);padding:3px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Calibri',sans-serif}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:48px;left:0;bottom:0;width:188px;border-right:1px solid var(--bd);overflow-y:auto;padding:20px 0 32px}
+.nav-section{font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--t4);padding:20px 18px 6px;font-family:'Calibri',sans-serif}
+.nav-section:first-child{padding-top:12px}
+nav a{display:block;padding:5px 18px;font-size:11px;letter-spacing:.03em;color:var(--t3);text-decoration:none;font-family:'Calibri',sans-serif;transition:color .15s;border-left:1px solid transparent;line-height:1.5}
+nav a:hover{color:var(--t2)}
+nav a.active{color:var(--t1);border-left-color:var(--bd2)}
+
+/* ─── MAIN ─── */
+main{margin-left:188px;padding-top:48px}
+.wrap{max-width:980px;margin:0 auto;padding:44px 52px 96px}
+section{margin-bottom:72px;scroll-margin-top:68px}
+
+/* ─── SECTION HEADER ─── */
+.sec-hd{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--bd)}
+.sec-label{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif}
+.sec-sub{font-size:12px;color:var(--t3);font-family:'Calibri','Noto Sans TC',sans-serif}
+
+/* ─── HERO ─── */
+.hero{padding:40px 0 48px}
+.hero-eyebrow{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif;margin-bottom:18px}
+.hero-title{font-size:28px;letter-spacing:.06em;font-weight:300;color:var(--t1);font-family:'Calibri',sans-serif;line-height:1.3;margin-bottom:16px}
+.hero-title em{font-style:normal;color:var(--t2)}
+.hero-desc{font-size:13px;color:var(--t2);line-height:1.85;max-width:600px;font-family:'Calibri','Noto Sans TC',sans-serif;margin-bottom:28px}
+.hero-pills{display:flex;gap:7px;flex-wrap:wrap}
+.hero-pill{font-size:10px;letter-spacing:.06em;color:var(--t3);padding:4px 12px;border:1px solid var(--bd);border-radius:20px;font-family:'Calibri',sans-serif;transition:border-color .15s,color .15s}
+.hero-pill:hover{border-color:var(--bd2);color:var(--t2)}
+
+/* ─── RING CARD (InvestFrame .iv-ring) ─── */
+.ring{border:1px solid var(--bd);border-radius:14px;padding:22px 24px;margin-bottom:12px;transition:border-color .2s cubic-bezier(.4,0,.2,1);background:var(--bg1)}
+.ring:hover{border-color:var(--bd2)}
+.ring-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.ring-label span{color:var(--t4);font-size:9px}
+.ring-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ring-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.ring-inner{border:1px solid var(--bd);border-radius:10px;padding:16px 18px;background:var(--bg2);transition:border-color .18s}
+.ring-inner:hover{border-color:var(--bd2)}
+.ring-inner-label{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif;margin-bottom:10px}
+.ring-inner p{font-size:12px;color:var(--t2);line-height:1.8;font-family:'Calibri','Noto Sans TC',sans-serif}
+.ring-inner p strong{color:var(--t1);font-weight:500}
+.formula{margin-top:10px;font-size:11px;font-family:'Calibri',monospace;color:var(--gold);letter-spacing:.02em;padding:7px 11px;border-left:1px solid var(--gold);background:rgba(196,144,58,0.04)}
+
+/* ─── TABLE ─── */
+.tbl{width:100%;border-collapse:collapse;font-family:'Calibri','Noto Sans TC',sans-serif}
+.tbl th{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);font-weight:400;padding:9px 12px;border-bottom:1px solid var(--bd);text-align:left}
+.tbl td{font-size:12px;color:var(--t2);padding:9px 12px;border-bottom:1px solid var(--t4);line-height:1.6;vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg1)}
+.tbl .sym{font-size:17px;color:var(--gold);font-weight:300;font-family:'Calibri',sans-serif;letter-spacing:0}
+.tbl .pos{color:var(--green)}
+.tbl .neg{color:var(--red)}
+.tbl .neu{color:var(--t2)}
+
+/* ─── STRATEGY CARDS ─── */
+.s-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.s-card{border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--bg1);transition:border-color .2s cubic-bezier(.4,0,.2,1)}
+.s-card:hover{border-color:var(--bd2)}
+.s-card.wide{grid-column:1/-1}
+.s-head{padding:16px 20px 14px;border-bottom:1px solid var(--bd)}
+.s-layer{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.s-title{font-size:14px;letter-spacing:.03em;font-weight:700;color:var(--t1);font-family:'Calibri',sans-serif}
+.s-sub{font-size:11px;font-weight:700;color:var(--t3);font-family:'Calibri','Noto Sans TC',sans-serif;margin-top:3px}
+.s-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.s-tag{font-size:9px;letter-spacing:.07em;padding:3px 9px;border-radius:6px;border:1px solid var(--bd);font-family:'Calibri',sans-serif;transition:border-color .15s}
+.s-tag.bull{color:#4a9868;border-color:rgba(74,152,104,.25)}
+.s-tag.bear{color:#b05050;border-color:rgba(176,80,80,.25)}
+.s-tag.neu{color:#5080a8;border-color:rgba(80,128,168,.25)}
+.s-tag.lim{color:#8878c4;border-color:rgba(136,120,196,.25)}
+.s-tag.unl{color:#b05050;border-color:rgba(176,80,80,.2)}
+.s-tag.def{color:var(--t3);border-color:var(--bd)}
+.s-body{display:grid;grid-template-columns:148px 1fr}
+.s-chart{padding:16px;border-right:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--bg2)}
+.s-chart svg{width:124px;height:70px}
+.s-chart-label{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);font-family:'Calibri',sans-serif}
+.s-stats{padding:14px 18px}
+.sr{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:5px 0;border-bottom:1px solid var(--t4)}
+.sr:last-child{border-bottom:none}
+.sr-k{font-size:10px;letter-spacing:.04em;color:var(--t3);font-family:'Calibri',sans-serif;flex-shrink:0}
+.sr-v{font-size:11px;color:var(--t2);font-family:'Calibri','Noto Sans TC',sans-serif;text-align:right}
+.sr-v.g{color:var(--green)}
+.sr-v.r{color:var(--red)}
+.sr-v.o{color:var(--gold)}
+.s-greeks{display:flex;gap:14px;padding:10px 18px;border-top:1px solid var(--bd)}
+.sg{font-size:9px;display:flex;gap:4px;align-items:center;font-family:'Calibri',sans-serif}
+.sg-k{color:var(--t4)}
+.sg-v{font-size:10px}
+.sg-p{color:var(--green)}
+.sg-n{color:var(--red)}
+.sg-u{color:var(--t3)}
+.s-note{padding:12px 18px;border-top:1px solid var(--bd)}
+.s-note p{font-size:11px;color:var(--t3);line-height:1.72;font-family:'Calibri','Noto Sans TC',sans-serif}
+.s-note p strong{color:var(--t2);font-weight:500}
+
+/* ─── PAYOFF SVG ─── */
+.pf-be{stroke:rgba(255,255,255,0.06);stroke-width:1;stroke-dasharray:3,3}
+.pf-line{stroke:rgba(220,220,220,0.65);stroke-width:1.5;fill:none;stroke-linejoin:round}
+.pf-fill-g{fill:rgba(74,152,104,0.1)}
+.pf-fill-r{fill:rgba(176,80,80,0.1)}
+
+/* ─── FRAMEWORK FLOW ─── */
+.flow{display:flex;flex-direction:column;gap:0}
+.flow-step{display:grid;grid-template-columns:34px 1fr;gap:14px;position:relative}
+.flow-step::before{content:'';position:absolute;left:16px;top:34px;bottom:-8px;width:1px;background:var(--t4)}
+.flow-step:last-child::before{display:none}
+.flow-num{width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'Calibri',sans-serif;color:var(--t3);flex-shrink:0}
+.flow-body{padding:6px 0 28px}
+.flow-body h4{font-size:12px;font-weight:500;font-family:'Calibri','Noto Sans TC',sans-serif;color:var(--t1);margin-bottom:6px;letter-spacing:.01em}
+.flow-body p{font-size:11px;color:var(--t3);line-height:1.75;font-family:'Calibri','Noto Sans TC',sans-serif}
+
+/* ─── RISK CARDS ─── */
+.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.risk-card{border:1px solid var(--bd);border-radius:12px;padding:18px 20px;background:var(--bg1)}
+.risk-lbl{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;font-family:'Calibri',sans-serif;margin-bottom:12px}
+.risk-lbl.r{color:var(--red)}
+.risk-lbl.g{color:var(--green)}
+.risk-lbl.o{color:var(--gold)}
+.risk-lbl.b{color:var(--blue)}
+.risk-card ul{list-style:none;padding:0}
+.risk-card ul li{font-size:11px;color:var(--t3);padding:5px 0;border-bottom:1px solid var(--t4);line-height:1.65;font-family:'Calibri','Noto Sans TC',sans-serif}
+.risk-card ul li:last-child{border-bottom:none}
+.risk-card ul li::before{content:'—  ';color:var(--t4)}
+
+/* ─── MATRIX ─── */
+.matrix-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.mx{border:1px solid var(--bd);border-radius:10px;padding:16px 18px;background:var(--bg1)}
+.mx-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);font-family:'Calibri',sans-serif;margin-bottom:12px}
+.mx ul{list-style:none;padding:0}
+.mx ul li{font-size:11px;color:var(--t3);padding:4px 0;border-bottom:1px solid var(--t4);font-family:'Calibri','Noto Sans TC',sans-serif;line-height:1.5}
+.mx ul li:last-child{border-bottom:none}
+.mx ul li::before{content:'· ';color:var(--t4)}
+
+/* ─── GLOSSARY ─── */
+.glos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gi{border:1px solid var(--bd);border-radius:10px;padding:14px 18px;background:var(--bg1);transition:border-color .15s}
+.gi:hover{border-color:var(--bd2)}
+.gi dt{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-family:'Calibri',sans-serif;margin-bottom:5px;font-weight:400}
+.gi dd{font-size:11px;color:var(--t3);line-height:1.72;font-family:'Calibri','Noto Sans TC',sans-serif}
+
+/* ─── MISC ─── */
+p{font-size:12px;color:var(--t2);line-height:1.85;font-family:'Calibri','Noto Sans TC',sans-serif;margin-bottom:10px}
+strong{font-weight:500;color:var(--t1)}
+.divider{height:1px;background:var(--bd);margin:28px 0}
+.tag-row{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+.pill{font-size:9.5px;letter-spacing:.06em;padding:4px 11px;border-radius:20px;border:1px solid var(--bd);color:var(--t3);font-family:'Calibri',sans-serif}
+.pill.gold{color:var(--gold);border-color:rgba(196,144,58,.3)}
+.pill.green{color:var(--green);border-color:rgba(74,152,104,.3)}
+.pill.red{color:var(--red);border-color:rgba(176,80,80,.3)}
+</style>
+</head>
+<body>
+
+<!-- ─── TOP BAR ─── -->
+<header id="top">
+  <div class="top-brand">RR5</div>
+  <div class="top-sep"></div>
+  <div class="top-title">Options Strategy Guide</div>
+  <div class="top-right">
+    <span class="top-tag">15 Strategies</span>
+    <span class="top-tag">Greeks</span>
+    <span class="top-tag">Risk</span>
+  </div>
+</header>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-section">Basics</div>
+  <a href="#fundamentals">基礎概念</a>
+  <a href="#greeks">Greeks</a>
+  <div class="nav-section">Directional</div>
+  <a href="#directional">Long Call / Put</a>
+  <a href="#spread">Vertical Spread</a>
+  <div class="nav-section">Volatility</div>
+  <a href="#straddle">Straddle / Strangle</a>
+  <div class="nav-section">Income</div>
+  <a href="#income">Covered / Iron Condor</a>
+  <div class="nav-section">Advanced</div>
+  <a href="#advanced">Butterfly / Calendar</a>
+  <div class="nav-section">Reference</div>
+  <a href="#framework">策略選擇框架</a>
+  <a href="#iv">隱含波動率</a>
+  <a href="#risk">風險管理</a>
+  <a href="#glossary">名詞解釋</a>
+</nav>
+
+<!-- ─── MAIN ─── -->
+<main>
+<div class="wrap">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero">
+    <div class="hero-eyebrow">Options Strategy — Complete Reference</div>
+    <h1 class="hero-title">選擇權策略<em>完全指南</em></h1>
+    <p class="hero-desc">選擇權是以「保險費」概念交換未來履約權利的衍生性商品。本指南涵蓋從基礎概念到進階多腳策略的完整邏輯，搭配損益圖與 Greeks 偏向分析，協助你根據市場觀點選擇最適策略。</p>
+    <div class="hero-pills">
+      <span class="hero-pill">15 種策略</span>
+      <span class="hero-pill">損益圖解</span>
+      <span class="hero-pill">Greeks 分析</span>
+      <span class="hero-pill">IV 須知</span>
+      <span class="hero-pill">風險管理</span>
+      <span class="hero-pill">名詞解釋</span>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDAMENTALS -->
+<section id="fundamentals">
+  <div class="sec-hd">
+    <span class="sec-label">Fundamentals</span>
+    <span class="sec-sub">基礎概念</span>
+  </div>
+
+  <div class="ring-2col" style="margin-bottom:12px">
+    <div class="ring-inner">
+      <div class="ring-inner-label">Call — 買權</div>
+      <p>賦予持有人在到期日前以<strong>履約價（Strike）</strong>買進標的資產的<strong>權利</strong>（非義務）。看漲時買 Call；看漲但願意讓利時賣 Call。</p>
+      <div class="formula">損益 = max(S − K, 0) − Premium</div>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label">Put — 賣權</div>
+      <p>賦予持有人在到期日前以<strong>履約價</strong>賣出標的資產的<strong>權利</strong>。看跌時買 Put；想低接持股時賣 Put 收取權利金。</p>
+      <div class="formula">損益 = max(K − S, 0) − Premium</div>
+    </div>
+  </div>
+
+  <div class="ring-2col" style="margin-bottom:12px">
+    <div class="ring-inner">
+      <div class="ring-inner-label">Long — 買方（權利方）</div>
+      <p>支付<strong>權利金（Premium）</strong>取得選擇權。最大虧損限於權利金，最大獲利理論無限（Call）或至標的跌到 0（Put）。Theta 為負：時間流逝侵蝕價值。</p>
+      <div class="formula">最大虧損 = Premium × Multiplier × 口數</div>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label">Short — 賣方（義務方）</div>
+      <p>收取<strong>權利金</strong>但承擔履約義務。最大獲利限於收到的權利金，裸賣 Call 損失可能無限。Theta 為正：每天時間流逝都是獲利。</p>
+      <div class="formula">最大獲利 = Premium × Multiplier × 口數</div>
+    </div>
+  </div>
+
+  <div class="ring">
+    <div class="ring-label">Price Status — ITM / ATM / OTM</div>
+    <table class="tbl">
+      <thead><tr><th>狀態</th><th>英文</th><th>Call 條件</th><th>Put 條件</th><th>特性</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--green)">價內</td><td>In The Money</td><td>S &gt; K</td><td>S &lt; K</td><td>有內含價值，Delta 較大（Call &gt;0.5）</td></tr>
+        <tr><td style="color:var(--gold)">價平</td><td>At The Money</td><td>S ≈ K</td><td>S ≈ K</td><td>時間價值最大，Delta ≈ ±0.5，Gamma 最高</td></tr>
+        <tr><td style="color:var(--red)">價外</td><td>Out of The Money</td><td>S &lt; K</td><td>S &gt; K</td><td>純時間價值，到期有機率全損，成本低</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ring-2col">
+    <div class="ring-inner">
+      <div class="ring-inner-label">內含價值 Intrinsic Value</div>
+      <p>選擇權立即執行可得的獲利。Call：max(S−K, 0)；Put：max(K−S, 0)。只有 ITM 選擇權有內含價值，到期時全數以內含價值結算。</p>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label">時間價值 Time Value</div>
+      <p>超出內含價值的部分，反映未來不確定性的溢酬。到期時歸零（Theta decay）。波動率越高、剩餘時間越長，時間價值越大。ATM 選擇權時間價值最大。</p>
+    </div>
+  </div>
+</section>
+
+<!-- GREEKS -->
+<section id="greeks">
+  <div class="sec-hd">
+    <span class="sec-label">Greeks</span>
+    <span class="sec-sub">希臘字母敏感度指標</span>
+  </div>
+
+  <div class="ring" style="margin-bottom:12px">
+    <div class="ring-label">Sensitivity Matrix</div>
+    <table class="tbl">
+      <thead><tr><th>符號</th><th>名稱</th><th>意義</th><th>Long Call</th><th>Short Call</th><th>Long Put</th><th>Short Put</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sym">Δ</span></td><td>Delta</td><td>標的價格每漲 1 元，選擇權價值變化量。Call=0~+1，Put=−1~0</td><td class="pos">+(0~1)</td><td class="neg">−(0~−1)</td><td class="neg">−(−1~0)</td><td class="pos">+(0~1)</td></tr>
+        <tr><td><span class="sym">Γ</span></td><td>Gamma</td><td>Delta 對標的價格的變化速率，衡量 Delta 非線性風險</td><td class="pos">+</td><td class="neg">−</td><td class="pos">+</td><td class="neg">−</td></tr>
+        <tr><td><span class="sym">Θ</span></td><td>Theta</td><td>每過一天，選擇權價值減少的金額（時間衰減）</td><td class="neg">−（不利）</td><td class="pos">+（有利）</td><td class="neg">−（不利）</td><td class="pos">+（有利）</td></tr>
+        <tr><td><span class="sym">V</span></td><td>Vega</td><td>隱含波動率 IV 每上升 1%，選擇權價格變化量</td><td class="pos">+</td><td class="neg">−</td><td class="pos">+</td><td class="neg">−</td></tr>
+        <tr><td><span class="sym">ρ</span></td><td>Rho</td><td>無風險利率每升 1%，選擇權價格變化量</td><td class="pos">+</td><td class="neg">−</td><td class="neg">−</td><td class="pos">+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ring-2col">
+    <div class="ring-inner">
+      <div class="ring-inner-label">Gamma vs Theta — 核心對立</div>
+      <p>買方（Long）= 正 Gamma + 負 Theta：每天侵蝕、但若大幅波動可快速獲利。<br>賣方（Short）= 負 Gamma + 正 Theta：每天收租、但大波動爆虧。<br><strong>兩者天然對立</strong>：高波動有利買方，盤整有利賣方。</p>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label">IV Crush — 波動率崩塌</div>
+      <p>財報後 IV 可能從 50% 崩跌至 20%，即使方向預測正確，Vega 損失也可能超過 Delta 獲利。事件前評估 <strong>IV Percentile（IVP）</strong>：IVP &gt; 80% 偏向賣策略，IVP &lt; 20% 偏向買策略。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTIONAL -->
+<section id="directional">
+  <div class="sec-hd">
+    <span class="sec-label">Directional — Single Leg</span>
+    <span class="sec-sub">方向性策略・單腳</span>
+  </div>
+
+  <div class="s-grid">
+    <!-- Long Call -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Directional <span>· Long · 1 Leg</span></div>
+        <div class="s-title">Long Call</div>
+        <div class="s-sub">買進買權・強烈看漲</div>
+        <div class="s-tags">
+          <span class="s-tag bull">Bullish</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag def">Unlimited Profit</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,56 66,56 88,44 124,16 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="88,44 124,16 124,0 88,0" class="pf-fill-g"/>
+            <polyline points="0,56 66,56 88,44 124,16" class="pf-line"/>
+          </svg>
+          <div class="s-chart-label">Payoff at Expiry</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy Call</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">理論無限</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">支付的 Premium</span></div>
+          <div class="sr"><span class="sr-k">損益兩平</span><span class="sr-v">Strike + Premium</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">強烈看漲、財報前、突破前</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-p">+ 正</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-p">+ 正</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-n">− 不利</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ 正</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>注意：</strong>財報後 IV 崩塌可能讓方向正確卻虧損。建議選到期日 &gt;45 天以減緩 Theta 侵蝕。ITM Call Delta 大但成本高，OTM Call 便宜但需更大漲幅。</p>
+      </div>
+    </div>
+
+    <!-- Long Put -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Directional <span>· Long · 1 Leg</span></div>
+        <div class="s-title">Long Put</div>
+        <div class="s-sub">買進賣權・看跌 / 持股保護</div>
+        <div class="s-tags">
+          <span class="s-tag bear">Bearish</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag def">High Profit</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,18 34,44 60,56 124,56 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="0,0 0,18 34,44 0,44" class="pf-fill-g"/>
+            <polyline points="0,18 34,44 60,56 124,56" class="pf-line"/>
+          </svg>
+          <div class="s-chart-label">Payoff at Expiry</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy Put</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">Strike − Premium（標的跌至 0）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">支付的 Premium</span></div>
+          <div class="sr"><span class="sr-k">損益兩平</span><span class="sr-v">Strike − Premium</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">看跌、持股對沖</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-n">− 負</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-p">+ 正</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-n">− 不利</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ 正</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Protective Put：</strong>持有股票同時買入 Put，等同為持股購買保險。成本 = 權利金，保護下方風險的同時保留上漲空間。適合持股已大漲、擔心回調的情境。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPREAD -->
+<section id="spread">
+  <div class="sec-hd">
+    <span class="sec-label">Directional — Vertical Spread</span>
+    <span class="sec-sub">方向性策略・垂直價差</span>
+  </div>
+
+  <div class="s-grid">
+    <!-- Bull Call Spread -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Directional <span>· Net Long · 2 Legs</span></div>
+        <div class="s-title">Bull Call Spread</div>
+        <div class="s-sub">牛市看漲價差・溫和看漲</div>
+        <div class="s-tags">
+          <span class="s-tag bull">Bullish</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag lim">Limited Profit</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,58 48,58 74,44 124,26 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="74,44 124,26 124,0 74,0" class="pf-fill-g"/>
+            <polyline points="0,58 48,58 74,44 124,26 124,26" class="pf-line"/>
+            <line x1="48" y1="2" x2="48" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="116" y1="2" x2="116" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="42" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">K1</text>
+            <text x="108" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">K2</text>
+          </svg>
+          <div class="s-chart-label">Payoff at Expiry</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy K1 Call + Sell K2 Call</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">K2 − K1 − 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">淨支付的 Premium</span></div>
+          <div class="sr"><span class="sr-k">損益兩平</span><span class="sr-v">K1 + 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">溫和看漲、降低 Long Call 成本</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-p">+ 淨正</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-u">± 中性</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-u">± 依價位</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ 淨正</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>優勢：</strong>比單純 Long Call 成本低 30~50%。<strong>缺點：</strong>上漲超過 K2 後不再獲利。<strong>履約價選擇：</strong>K1 在 ATM 附近，K2 設在目標價或阻力位。</p>
+      </div>
+    </div>
+
+    <!-- Bear Put Spread -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Directional <span>· Net Long · 2 Legs</span></div>
+        <div class="s-title">Bear Put Spread</div>
+        <div class="s-sub">熊市看跌價差・溫和看跌</div>
+        <div class="s-tags">
+          <span class="s-tag bear">Bearish</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag lim">Limited Profit</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,24 0,0 8,0 48,44 76,58 124,58 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="0,0 0,24 48,44 48,0" class="pf-fill-g"/>
+            <polyline points="0,24 48,44 76,58 124,58" class="pf-line"/>
+            <line x1="8" y1="2" x2="8" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="76" y1="2" x2="76" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="2" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">K1</text>
+            <text x="68" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">K2</text>
+          </svg>
+          <div class="s-chart-label">Payoff at Expiry</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy K2 Put + Sell K1 Put</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">K2 − K1 − 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">淨支付的 Premium</span></div>
+          <div class="sr"><span class="sr-k">損益兩平</span><span class="sr-v">K2 − 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">延伸</span><span class="sr-v">Bull Put Spread = 鏡像收租版（淨賣方）</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-n">− 淨負</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-u">± 中性</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-u">± 依價位</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ 淨正</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Bull Put Spread：</strong>Sell 高履約 Put + Buy 低履約 Put，收取淨 Premium（淨賣方），適合溫和看漲或認為標的不會跌破 K2 的情境，與 Bear Put Spread 互為鏡像。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRADDLE -->
+<section id="straddle">
+  <div class="sec-hd">
+    <span class="sec-label">Volatility</span>
+    <span class="sec-sub">波動率策略</span>
+  </div>
+
+  <div class="s-grid">
+    <!-- Long Straddle -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Volatility <span>· Long · 2 Legs · ATM</span></div>
+        <div class="s-title">Long Straddle</div>
+        <div class="s-sub">買進跨式・預期大波動</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag lim">Limited Loss</span>
+          <span class="s-tag def">Unlimited Profit</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,14 30,44 62,60 94,44 124,14 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="0,0 0,14 30,44 62,44" class="pf-fill-g"/>
+            <polygon points="62,44 94,44 124,14 124,0 62,0" class="pf-fill-g"/>
+            <polyline points="0,14 30,44 62,60 94,44 124,14" class="pf-line"/>
+          </svg>
+          <div class="s-chart-label">V-Shape Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy ATM Call + Buy ATM Put</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">理論無限（任一方向大幅波動）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">Call + Put Premium（到期在 Strike）</span></div>
+          <div class="sr"><span class="sr-k">上方 BEP</span><span class="sr-v">Strike + 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">下方 BEP</span><span class="sr-v">Strike − 淨 Premium</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 中性</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-p">+ 高</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-n">− 大</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ 高</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>IV Crush 風險：</strong>財報後 IV 崩塌，即使股票有 5% 漲跌，也可能因 Vega 虧損而整體持倉虧損。選擇 IVP &lt; 30% 時建倉更有利。</p>
+      </div>
+    </div>
+
+    <!-- Short Straddle -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Volatility <span>· Short · 2 Legs · ATM</span></div>
+        <div class="s-title">Short Straddle</div>
+        <div class="s-sub">賣出跨式・盤整收租</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag unl">Unlimited Risk</span>
+          <span class="s-tag def">Limited Profit</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,60 30,44 62,14 94,44 124,60 124,0 62,0" class="pf-fill-g"/>
+            <polygon points="0,70 0,60 30,44 62,14 94,44 124,60 124,70" class="pf-fill-r"/>
+            <polyline points="0,66 30,44 62,14 94,44 124,66" class="pf-line"/>
+          </svg>
+          <div class="s-chart-label">Inverted V Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Sell ATM Call + Sell ATM Put</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">收到的 Call + Put Premium</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">理論無限（Call 方向無上限）</span></div>
+          <div class="sr"><span class="sr-k">獲利條件</span><span class="sr-v">到期在兩側 BEP 之間</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">強烈預期盤整、IVP 高位</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 中性</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-n">− 高</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 大</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 高</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>高風險策略：</strong>裸空 Call 理論損失無限，需要高保證金。散戶應優先考慮 Iron Condor（有限風險版本）。嚴格設定止損：虧損達淨收 Premium 的 1.5~2 倍時出場。</p>
+      </div>
+    </div>
+
+    <!-- Long Strangle -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Volatility <span>· Long · 2 Legs · OTM</span></div>
+        <div class="s-title">Long Strangle</div>
+        <div class="s-sub">買進勒式・低成本大波動</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag lim">Limited Loss</span>
+          <span class="s-tag def">Cheaper than Straddle</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,14 22,44 40,60 84,60 102,44 124,14 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="0,0 0,14 22,44 40,44" class="pf-fill-g"/>
+            <polygon points="84,44 102,44 124,14 124,0 84,0" class="pf-fill-g"/>
+            <polyline points="0,14 22,44 40,60 84,60 102,44 124,14" class="pf-line"/>
+            <line x1="40" y1="2" x2="40" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="84" y1="2" x2="84" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="33" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">Kp</text>
+            <text x="77" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">Kc</text>
+          </svg>
+          <div class="s-chart-label">Wide V Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy OTM Call + Buy OTM Put</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">理論無限（大幅波動即可）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">Call + Put Premium（在 K1~K2 區間）</span></div>
+          <div class="sr"><span class="sr-k">vs Straddle</span><span class="sr-v">成本低 30~50%，但需更大波動</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">預期極端事件但 IV 已偏高</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 初始</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-p">+ 正</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-n">− 負</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ 正</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Strangle vs Straddle：</strong>Strangle 使用 OTM 選擇權，成本較低，但損益兩平區間更寬。適合預期大幅波動但不確定時間點的情境。</p>
+      </div>
+    </div>
+
+    <!-- Short Strangle -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Volatility <span>· Short · 2 Legs · OTM</span></div>
+        <div class="s-title">Short Strangle</div>
+        <div class="s-sub">賣出勒式・寬區間盤整收租</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag unl">Unlimited Risk</span>
+          <span class="s-tag def">Wide Profit Band</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,70 0,62 22,44 40,22 84,22 102,44 124,62 124,70" class="pf-fill-r"/>
+            <polygon points="0,0 0,62 22,44 40,22 84,22 102,44 124,62 124,0" class="pf-fill-g"/>
+            <polyline points="0,68 22,44 40,22 84,22 102,44 124,68" class="pf-line"/>
+            <text x="48" y="18" fill="rgba(74,152,104,0.5)" font-size="8" font-family="Calibri">Profit Zone</text>
+          </svg>
+          <div class="s-chart-label">Wide Flat Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Sell OTM Call + Sell OTM Put</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">收取的 Call + Put Premium</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">理論無限（Call 方向）</span></div>
+          <div class="sr"><span class="sr-k">獲利區間</span><span class="sr-v">K_put − Prem ~ K_call + Prem</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">中性偏盤整、IV 高位、寬緩衝</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 初始</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-n">− 負</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 大</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 負</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Iron Condor 化：</strong>在更遠的履約價買入 Call/Put，將無限風險轉為有限風險，為散戶首選的中性收租結構。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INCOME -->
+<section id="income">
+  <div class="sec-hd">
+    <span class="sec-label">Income — Theta Strategies</span>
+    <span class="sec-sub">收益策略・吃時間價值</span>
+  </div>
+
+  <div class="s-grid">
+    <!-- Covered Call -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Income <span>· Sell · 2 Legs</span></div>
+        <div class="s-title">Covered Call</div>
+        <div class="s-sub">保護性買權・持股每月收租</div>
+        <div class="s-tags">
+          <span class="s-tag bull">Mild Bullish</span>
+          <span class="s-tag lim">Capped Profit</span>
+          <span class="s-tag def">Theta+</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,70 0,68 56,44 88,22 124,22 124,70" class="pf-fill-r"/>
+            <polygon points="56,44 88,22 124,22 124,0 56,0" class="pf-fill-g"/>
+            <polyline points="0,68 56,44 88,22 124,22" class="pf-line"/>
+            <line x1="88" y1="2" x2="88" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="80" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">K</text>
+          </svg>
+          <div class="s-chart-label">Capped Upside</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">持股 100 股 + Sell OTM Call</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">（Strike − 成本價）+ Premium</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">（持股成本 − Premium）股票歸零</span></div>
+          <div class="sr"><span class="sr-k">損益兩平</span><span class="sr-v">持股成本 − 收到的 Premium</span></div>
+          <div class="sr"><span class="sr-k">月度估算</span><span class="sr-v">Delta≈0.25~0.30 約收 0.5~1.5%</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-p">+ 降低淨 Δ</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 有利</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 不利</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>執行風險：</strong>股價大幅超過 Strike 時股票可能被 Call 走（Assignment），造成踏空。<strong>Wheel Strategy：</strong>Sell Put → 被行使持股 → Sell Call → 被行使現金 → 循環，實現持續收租。</p>
+      </div>
+    </div>
+
+    <!-- Cash-Secured Put -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Income <span>· Sell · 1 Leg</span></div>
+        <div class="s-title">Cash-Secured Put</div>
+        <div class="s-sub">現金擔保賣出賣權</div>
+        <div class="s-tags">
+          <span class="s-tag bull">Bullish / Neutral</span>
+          <span class="s-tag lim">Limited Downside</span>
+          <span class="s-tag def">Fixed Income</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,70 0,66 40,44 64,24 124,24 124,70" class="pf-fill-r"/>
+            <polygon points="40,44 64,24 124,24 124,0 40,0" class="pf-fill-g"/>
+            <polyline points="0,68 40,44 64,24 124,24" class="pf-line"/>
+            <line x1="64" y1="2" x2="64" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="56" y="8" fill="rgba(255,255,255,0.22)" font-size="7" font-family="Calibri">K</text>
+          </svg>
+          <div class="s-chart-label">Fixed Premium Income</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Sell OTM Put（備妥現金）</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">收到的 Premium（到期 &gt; Strike）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">Strike − Premium（標的歸零）</span></div>
+          <div class="sr"><span class="sr-k">損益兩平</span><span class="sr-v">Strike − Premium</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">願意以特定價格買入標的</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-p">+ 類持股</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 有利</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 不利</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Wheel Strategy：</strong>Sell Put → 若被行使 → 持股 → Sell Covered Call → 若被行使 → 現金 → 再 Sell Put，形成循環收租。適合長期看好的標的，以較低成本建倉。</p>
+      </div>
+    </div>
+
+    <!-- Iron Condor -->
+    <div class="s-card wide">
+      <div class="s-head">
+        <div class="s-layer">Income <span>· Sell · 4 Legs · Most Popular</span></div>
+        <div class="s-title">Iron Condor</div>
+        <div class="s-sub">鐵禿鷹・最受歡迎的中性收益策略，有限風險</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag def">Theta+</span>
+          <span class="s-tag def">Vega−</span>
+          <span class="s-tag def">Win Rate 60~70%</span>
+        </div>
+      </div>
+      <div class="s-body" style="grid-template-columns:180px 1fr">
+        <div class="s-chart" style="width:180px">
+          <svg viewBox="0 0 168 70">
+            <line x1="0" y1="44" x2="168" y2="44" class="pf-be"/>
+            <polygon points="0,70 0,62 26,62 52,28 116,28 142,62 168,62 168,70" class="pf-fill-r"/>
+            <polygon points="26,62 52,28 116,28 142,62 142,0 26,0" class="pf-fill-g"/>
+            <polyline points="0,68 26,62 52,28 116,28 142,62 168,68" class="pf-line"/>
+            <line x1="26" y1="2" x2="26" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="52" y1="2" x2="52" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="116" y1="2" x2="116" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="142" y1="2" x2="142" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="18" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K1</text>
+            <text x="44" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K2</text>
+            <text x="108" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K3</text>
+            <text x="134" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K4</text>
+            <text x="68" y="22" fill="rgba(74,152,104,0.45)" font-size="8" font-family="Calibri">Max Profit Zone</text>
+          </svg>
+          <div class="s-chart-label">Trapezoid Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Sell K2 Put + Buy K1 Put + Sell K3 Call + Buy K4 Call</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">淨收取的 Premium（到期在 K2~K3 之間）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">（K2−K1）或（K4−K3）的價差 − 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">上方 BEP</span><span class="sr-v">K3 + 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">下方 BEP</span><span class="sr-v">K2 − 淨 Premium</span></div>
+          <div class="sr"><span class="sr-k">履約價選擇</span><span class="sr-v">Short 腳 Delta ≈ 0.15~0.20，Long 腳往外 5~10 點</span></div>
+          <div class="sr"><span class="sr-k">管理規則</span><span class="sr-v">單邊虧損達最大損失 50% 時考慮平倉或 Roll</span></div>
+          <div class="sr"><span class="sr-k">月度報酬</span><span class="sr-v">保證金的 2~5%，年化 25~60%（含虧損月）</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 中性</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-n">− 負</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 大正・每日收租</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 負・IV 升不利</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVANCED -->
+<section id="advanced">
+  <div class="sec-hd">
+    <span class="sec-label">Advanced</span>
+    <span class="sec-sub">進階策略</span>
+  </div>
+
+  <div class="s-grid">
+    <!-- Butterfly -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Advanced <span>· 3 Legs · Precision</span></div>
+        <div class="s-title">Long Butterfly</div>
+        <div class="s-sub">蝴蝶價差・精準到期預測</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag def">High R/R</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,60 22,60 62,16 102,60 124,60 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="22,60 62,16 102,60" class="pf-fill-g"/>
+            <polyline points="0,60 22,60 62,16 102,60 124,60" class="pf-line"/>
+            <line x1="22" y1="2" x2="22" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="62" y1="2" x2="62" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="102" y1="2" x2="102" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="14" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K1</text>
+            <text x="54" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K2</text>
+            <text x="94" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K3</text>
+          </svg>
+          <div class="s-chart-label">Triangle Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation (Call Fly)</span><span class="sr-v o">Buy K1 + Sell 2×K2 + Buy K3</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">（K2−K1）− 淨 Premium（到期恰在 K2）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">淨支付的 Premium（成本極低）</span></div>
+          <div class="sr"><span class="sr-k">特色</span><span class="sr-v">極高風報比，但勝率低，需精準預測</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 在 K2</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-n">− 在 K2</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 靠近 K2</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 低 IV 有利</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Iron Butterfly：</strong>在 K2 同時 Sell ATM Call + Sell ATM Put，並在外側 Buy Call + Buy Put，為 Butterfly 的收租版，特性與 Iron Condor 類似但獲利帶更窄、Premium 更高。</p>
+      </div>
+    </div>
+
+    <!-- Calendar Spread -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Advanced <span>· 2 Legs · Time Arbitrage</span></div>
+        <div class="s-title">Calendar Spread</div>
+        <div class="s-sub">日曆價差・利用 Theta 衰減速率差</div>
+        <div class="s-tags">
+          <span class="s-tag neu">Neutral</span>
+          <span class="s-tag lim">Limited Risk</span>
+          <span class="s-tag def">Vega+</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="14,54 46,44 62,22 78,44 110,54 124,60 124,70 0,70 14,54" class="pf-fill-r"/>
+            <polygon points="46,44 62,22 78,44" class="pf-fill-g"/>
+            <polyline points="0,58 14,54 46,44 62,22 78,44 110,54 124,58" class="pf-line"/>
+            <line x1="62" y1="2" x2="62" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="54" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">Strike</text>
+          </svg>
+          <div class="s-chart-label">Near-Month Expiry</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Sell 近月 ATM + Buy 遠月 ATM</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">近月到期時標的停在 Strike 附近</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">淨支付的 Premium（遠月貴近月便宜）</span></div>
+          <div class="sr"><span class="sr-k">核心邏輯</span><span class="sr-v">近月 Theta 衰減快，遠月保留時間價值</span></div>
+          <div class="sr"><span class="sr-k">延伸</span><span class="sr-v">Diagonal Spread = 不同履約價的日曆</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-u">≈0 中性</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 近月衰快</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-p">+ IV 升有利</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>Roll 策略：</strong>近月到期後繼續 Sell 次月同履約價的 Call，將遠月 Long Call 的成本逐步攤提。適合低波動盤整期或事件後 IV 回落時建倉。</p>
+      </div>
+    </div>
+
+    <!-- Ratio Spread -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Advanced <span>· 2 Legs · Asymmetric</span></div>
+        <div class="s-title">Ratio Call Spread</div>
+        <div class="s-sub">比率價差・溫和看漲但上方有裸空</div>
+        <div class="s-tags">
+          <span class="s-tag bull">Mild Bullish</span>
+          <span class="s-tag unl">Upper Risk</span>
+          <span class="s-tag def">Low/Zero Cost</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,54 40,54 72,22 100,44 124,62 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="40,54 72,22 72,0 40,0" class="pf-fill-g"/>
+            <polyline points="0,54 40,54 72,22 100,44 124,62" class="pf-line"/>
+            <line x1="40" y1="2" x2="40" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="72" y1="2" x2="72" y2="68" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2,3"/>
+            <text x="32" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K1</text>
+            <text x="64" y="8" fill="rgba(255,255,255,0.2)" font-size="7" font-family="Calibri">K2</text>
+          </svg>
+          <div class="s-chart-label">Asymmetric Payoff</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">Operation</span><span class="sr-v o">Buy 1 ATM Call + Sell 2 OTM Call</span></div>
+          <div class="sr"><span class="sr-k">最大獲利</span><span class="sr-v g">（K2−K1）+ 淨 Premium（若有）</span></div>
+          <div class="sr"><span class="sr-k">下方虧損</span><span class="sr-v r">淨 Premium（若淨成本為正）</span></div>
+          <div class="sr"><span class="sr-k">上方虧損</span><span class="sr-v r">理論無限（裸空 Call net）</span></div>
+          <div class="sr"><span class="sr-k">適用情境</span><span class="sr-v">溫和看漲、預期漲至 K2 後停滯</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-p">+ 溫和正</span></span>
+        <span class="sg"><span class="sg-k">Γ</span><span class="sg-v sg-n">− 淨負</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-p">+ 有利</span></span>
+        <span class="sg"><span class="sg-k">V</span><span class="sg-v sg-n">− 淨負</span></span>
+      </div>
+      <div class="s-note">
+        <p><strong>風險警示：</strong>若標的大幅超過 K2，裸空的那口 Call 將造成無限損失。必須設定上方止損。可搭配 Buy 更遠的 Call 封頂（形成 1:2:1 Butterfly 變形），消除上方風險。</p>
+      </div>
+    </div>
+
+    <!-- LEAPS -->
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer">Advanced <span>· 1 Leg · Long-Term</span></div>
+        <div class="s-title">LEAPS Call</div>
+        <div class="s-sub">長期股權預期證券・股票替代品</div>
+        <div class="s-tags">
+          <span class="s-tag bull">Long-Term Bullish</span>
+          <span class="s-tag lim">Limited Loss</span>
+          <span class="s-tag def">Capital Efficient</span>
+        </div>
+      </div>
+      <div class="s-body">
+        <div class="s-chart">
+          <svg viewBox="0 0 124 70">
+            <line x1="0" y1="44" x2="124" y2="44" class="pf-be"/>
+            <polygon points="0,58 58,58 80,44 124,16 124,70 0,70" class="pf-fill-r"/>
+            <polygon points="80,44 124,16 124,0 80,0" class="pf-fill-g"/>
+            <polyline points="0,58 58,58 80,44 124,16" class="pf-line"/>
+          </svg>
+          <div class="s-chart-label">Long-Term Call</div>
+        </div>
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">定義</span><span class="sr-v">到期日超過 1 年的 Call（通常 2~3 年）</span></div>
+          <div class="sr"><span class="sr-k">推薦 Delta</span><span class="sr-v o">0.70~0.85（深度 ITM，類股票行為）</span></div>
+          <div class="sr"><span class="sr-k">最大虧損</span><span class="sr-v r">支付的 Premium（遠低於買股成本）</span></div>
+          <div class="sr"><span class="sr-k">資金效率</span><span class="sr-v">以股票 1/3~1/2 資金取得相近漲幅暴露</span></div>
+          <div class="sr"><span class="sr-k">Roll 策略</span><span class="sr-v">剩餘時間 &lt;6 個月時 Roll 到更遠到期日</span></div>
+        </div>
+      </div>
+      <div class="s-greeks">
+        <span class="sg"><span class="sg-k">Δ</span><span class="sg-v sg-p">+0.70~0.85</span></span>
+        <span class="sg"><span class="sg-k">Θ</span><span class="sg-v sg-n">− 緩慢</span></span>
+        <span class="sg"><span class="sg-k">ρ</span><span class="sg-v sg-p">+ 利率敏感</span></span>
+      </div>
+      <div class="s-note">
+        <p>Buy 深 ITM LEAPS Call（Delta≈0.80）取代持股，節省的資金可放定存或做其他投資。最大虧損已知，不像持股可能虧損 100%（股票歸零）。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FRAMEWORK -->
+<section id="framework">
+  <div class="sec-hd">
+    <span class="sec-label">Selection Framework</span>
+    <span class="sec-sub">策略選擇框架</span>
+  </div>
+
+  <div class="ring" style="margin-bottom:16px">
+    <div class="ring-label">Decision Flow</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>確定方向性觀點</h4>
+          <p>看漲（Bullish）→ Buy Call / Sell Put / 牛市價差<br>看跌（Bearish）→ Buy Put / Sell Call / 熊市價差<br>中性（Neutral）→ Iron Condor / Short Strangle / Calendar Spread</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>評估隱含波動率水位（IVP）</h4>
+          <p>IVP &lt; 20%（低 IV）→ 買方策略（Long Call/Put、Straddle），期待 Vega 收益<br>IVP 20~60%（中等）→ 價差策略（Spread、Iron Condor），平衡風報<br>IVP &gt; 80%（高 IV）→ 賣方策略（Sell Premium），吃 IV 崩塌</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h4>確定時間框架與催化劑</h4>
+          <p>短期 1~4 週 + 高 IV → Short Straddle / Iron Condor<br>中期 1~3 月 + 事件驅動 → Long Straddle / Bull Call Spread<br>長期 1 年以上 + 看漲 → LEAPS Call / Covered Call 滾動</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-body">
+          <h4>確認風險上限</h4>
+          <p>有限風險優先：Spread、Iron Condor、Long Options（散戶首選）<br>接受無限風險：Short Straddle / Short Strangle（需高保證金，嚴格止損）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="matrix-grid">
+    <div class="mx">
+      <div class="mx-label">Bullish — 看漲</div>
+      <ul>
+        <li>強烈看漲：Long Call</li>
+        <li>溫和看漲：Bull Call Spread</li>
+        <li>持股收租：Covered Call</li>
+        <li>長期看漲：LEAPS Call</li>
+        <li>等待買入：Cash-Secured Put</li>
+      </ul>
+    </div>
+    <div class="mx">
+      <div class="mx-label">Bearish — 看跌</div>
+      <ul>
+        <li>強烈看跌：Long Put</li>
+        <li>溫和看跌：Bear Put Spread</li>
+        <li>對沖持股：Protective Put</li>
+        <li>收租版：Bull Put Spread</li>
+      </ul>
+    </div>
+    <div class="mx">
+      <div class="mx-label">Neutral — 中性</div>
+      <ul>
+        <li>低成本大波動：Long Straddle</li>
+        <li>高 IV 收租：Short Straddle</li>
+        <li>安全收租：Iron Condor</li>
+        <li>精準到期：Butterfly</li>
+        <li>時間套利：Calendar Spread</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- IV -->
+<section id="iv">
+  <div class="sec-hd">
+    <span class="sec-label">Implied Volatility</span>
+    <span class="sec-sub">隱含波動率完全須知</span>
+  </div>
+
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-lbl b">What is IV？</div>
+      <ul>
+        <li>IV（Implied Volatility）從選擇權市場價格反推出的波動率預期，反映市場對未來波動的定價</li>
+        <li>IV 上升 → 選擇權更貴（買方有利）；IV 下降 → 更便宜（賣方有利）</li>
+        <li>IV ≠ 實際波動率（Realized Vol），差異稱為 Variance Risk Premium（VRP）</li>
+        <li>VRP 通常為正（IV &gt; Realized Vol），賣方策略長期有正期望值的理論基礎</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl o">IV Percentile（IVP）</div>
+      <ul>
+        <li>IVP = 過去 1 年中，當前 IV 低於的天數佔比</li>
+        <li>IVP = 85% → 當前 IV 比過去 85% 的時間都高 → 賣方有利</li>
+        <li>IVP = 15% → 當前 IV 處於歷史低位 → 買方有利</li>
+        <li>財報前 IV 通常衝高，財報後 IV 崩塌（IV Crush）</li>
+        <li>一般門檻：IVP &gt; 50% 才考慮賣方策略</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl r">IV Crush — 崩塌</div>
+      <ul>
+        <li>財報 / 聯準會 / 重大事件後，IV 可能 1 天內從 50% 跌至 20%</li>
+        <li>即使方向猜對，IV 崩塌帶來的 Vega 損失可能超過 Delta 獲利</li>
+        <li>範例：股票漲 5%，但 IV 從 60% 跌至 20%，Long Call 可能仍虧損</li>
+        <li>對策：改用 Price Spread 降低 Vega 暴露，或直接賣 Straddle 吃崩塌</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl g">Volatility Skew</div>
+      <ul>
+        <li>通常 OTM Put 比 OTM Call 的 IV 更高（Put Skew），反映市場下跌恐懼</li>
+        <li>個股有明顯正偏，可利用套利：賣高 IV 的 Put</li>
+        <li>指數（台指 / SPX）的 Put Skew 更明顯，因機構大量購買保護性 Put</li>
+        <li>Skew 也是 Iron Condor 定價的關鍵：Put 側收到更多 Premium</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- RISK -->
+<section id="risk">
+  <div class="sec-hd">
+    <span class="sec-label">Risk Management</span>
+    <span class="sec-sub">風險管理與操作紀律</span>
+  </div>
+
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-lbl r">致命錯誤</div>
+      <ul>
+        <li>裸賣 Call（Short Naked Call）：理論無限虧損，一次黑天鵝即可爆倉</li>
+        <li>到期前不主動管理：最後一周 Gamma 急劇放大，小波動造成大損失</li>
+        <li>忽略 IV 水位：在 IV 歷史低位賣方策略，收到的 Premium 不足 cover 風險</li>
+        <li>過度槓桿：單筆倉位超過總資本 5% 是常見錯誤</li>
+        <li>把每月 Premium 視為「穩定收入」而忽略尾部風險</li>
+        <li>不了解 Pin Risk：到期恰好在 Strike 附近，被迫承擔意外倉位</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl g">正確原則</div>
+      <ul>
+        <li>單筆最大風險 ≤ 總資本的 2~5%</li>
+        <li>賣方止損：虧損達收到 Premium 的 1.5~2 倍時平倉</li>
+        <li>Iron Condor：當單邊 Delta 達整體 ±15 時調整部位</li>
+        <li>避免持有至最後一週，到期前 7~14 天提前平倉（Gamma 風險最大）</li>
+        <li>分散到期月份，避免集中在同一到期日</li>
+        <li>保留至少 30% 資金作為 Black Swan 緩衝</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl o">部位管理</div>
+      <ul>
+        <li>標的向不利方向移動，考慮 Roll 而非死扛</li>
+        <li>Roll Out 通常可在不增加資本下換到更多時間</li>
+        <li>監控整體 Net Delta，必要時用標的對沖</li>
+        <li>事件前（財報 / FOMC）考慮主動減倉，事件後重建</li>
+        <li>盈利達 50~75% 可提前獲利了結，不必等到到期</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl b">保證金須知</div>
+      <ul>
+        <li>Short Option 需要保證金，通常為潛在最大損失的一定比例</li>
+        <li>Iron Condor 保證金 = Call 側或 Put 側取最大值（非兩個加總）</li>
+        <li>Long Option 只需支付 Premium，無額外保證金</li>
+        <li>SPAN Margin 會根據市場波動動態調整，波動放大時保證金需求增加</li>
+        <li>避免使用超過 80% 帳戶資金作為保證金（留緩衝應對追繳）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+  <div class="sec-hd">
+    <span class="sec-label">Glossary</span>
+    <span class="sec-sub">名詞解釋</span>
+  </div>
+  <dl class="glos-grid">
+    <div class="gi"><dt>Strike Price</dt><dd>履約價 / 行使價。選擇權合約中約定的買賣標的資產的價格，是損益計算的核心參數。</dd></div>
+    <div class="gi"><dt>Premium</dt><dd>權利金。買方支付給賣方的選擇權價格，由內含價值與時間價值組成。</dd></div>
+    <div class="gi"><dt>Expiration Date</dt><dd>到期日。選擇權失效的日期。到期時以內含價值結算，時間價值歸零。</dd></div>
+    <div class="gi"><dt>Assignment</dt><dd>被行使 / 指派。賣方被迫履行義務：Sell Call 被行使須賣出標的；Sell Put 被行使須買入標的。</dd></div>
+    <div class="gi"><dt>Net Premium</dt><dd>淨權利金。多腳策略中收到的 Premium 減去支付的 Premium。為正代表淨賣方，為負代表淨買方。</dd></div>
+    <div class="gi"><dt>Roll</dt><dd>展延。平倉當前部位並在更遠的到期日重建相同或調整後的部位，用於延長時間或調整履約價。</dd></div>
+    <div class="gi"><dt>IV Rank / IVP</dt><dd>隱含波動率排名。當前 IV 相對於過去 52 週範圍 / 分佈的位置，判斷 IV 是否偏高或偏低。</dd></div>
+    <div class="gi"><dt>Buying Power Reduction</dt><dd>BPR。開立選擇權部位後帳戶可用保證金的減少量，決定最多能建立多少部位。</dd></div>
+    <div class="gi"><dt>Pin Risk</dt><dd>釘選風險。到期時標的價格恰好在 Strike 附近，不確定是否會被行使，造成部位不確定性。</dd></div>
+    <div class="gi"><dt>Bid-Ask Spread</dt><dd>買賣價差。市場上最高買價與最低賣價的差距，是交易成本的一部分。流動性差時可達數十點。</dd></div>
+    <div class="gi"><dt>American vs European</dt><dd>美式可在到期前任意行使；歐式只能在到期日行使。台灣指數選擇權為歐式。</dd></div>
+    <div class="gi"><dt>Multiplier</dt><dd>乘數。合約規模的放大倍數。台指選擇權每點 50 元；美股個股選擇權通常 100 股 / 合約。</dd></div>
+    <div class="gi"><dt>Variance Risk Premium</dt><dd>VRP。IV 高於 Realized Vol 的部分，為賣方策略長期正期望值的理論來源。</dd></div>
+    <div class="gi"><dt>Breakeven Point</dt><dd>損益兩平點。到期時標的需要達到的價格，使整體損益剛好為零，評估策略可行性的重要參考。</dd></div>
+    <div class="gi"><dt>Diagonal Spread</dt><dd>對角價差。日曆價差的變形，近月與遠月使用不同履約價，可引入輕微方向性偏斜。</dd></div>
+    <div class="gi"><dt>Wheel Strategy</dt><dd>車輪策略。Sell Put → 被行使持股 → Sell Covered Call → 被行使換現金 → 再 Sell Put，形成循環收租。</dd></div>
+  </dl>
+</section>
+
+</div>
+</main>
+
+<script>
+const links=document.querySelectorAll('nav a');
+const secs=document.querySelectorAll('section');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const a=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(a)a.classList.add('active');
+    }
+  });
+},{threshold:0.25,rootMargin:'-48px 0px 0px 0px'});
+secs.forEach(s=>io.observe(s));
+links.forEach(l=>l.addEventListener('click',e=>{
+  e.preventDefault();
+  const id=l.getAttribute('href').slice(1);
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+}));
+</script>
+</body>
+</html>
