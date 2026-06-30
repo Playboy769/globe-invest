@@ -481,6 +481,11 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
           <th class="hp-th hp-sort r" onclick="hpSort('consecutiveDown')" title="連續下跌天數">連跌<span class="sort-ind" id="hp-si-consecutiveDown"></span></th>
           <th class="hp-th hp-sort r" onclick="hpSort('downDays22')" title="近一個月下跌天數/交易天數">月↓<span class="sort-ind" id="hp-si-downDays22"></span></th>
           <th class="hp-th hp-sort r" onclick="hpSort('ddFromHigh')" title="近3個月最高點回撤">DD%<span class="sort-ind" id="hp-si-ddFromHigh"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('ma20dev')" title="股價距20日均線偏離%">20MA偏<span class="sort-ind" id="hp-si-ma20dev"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('relStrength')" title="30日漲跌 減去 TWII 30日漲跌">相對強弱<span class="sort-ind" id="hp-si-relStrength"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('hv')" title="歷史波動度(年化)">波動度<span class="sort-ind" id="hp-si-hv"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('pe')" title="本益比(P/E)">P/E<span class="sort-ind" id="hp-si-pe"></span></th>
+          <th class="hp-th hp-sort r" onclick="hpSort('pb')" title="股價淨值比(P/B)">P/B<span class="sort-ind" id="hp-si-pb"></span></th>
           <th class="hp-th hp-sort r" onclick="hpSort('marketCapYi')" title="市值(億元)">市值億<span class="sort-ind" id="hp-si-marketCapYi"></span></th>
           <th class="hp-th hp-sort" onclick="hpSort('industry')" style="text-align:left">產業<span class="sort-ind" id="hp-si-industry"></span></th>
           <th class="hp-th hp-sort" onclick="hpSort('sub')" style="text-align:left">子產業<span class="sort-ind" id="hp-si-sub"></span></th>
@@ -1086,7 +1091,7 @@ function hpSort(col){
 }
 
 function hpUpdateSI(){
-  ['code','name','price','changePct','c5','c30','beta','consecutiveDown','downDays22','ddFromHigh','marketCapYi','industry','sub'].forEach(c=>{
+  ['code','name','price','changePct','c5','c30','beta','consecutiveDown','downDays22','ddFromHigh','ma20dev','relStrength','hv','pe','pb','marketCapYi','industry','sub'].forEach(c=>{
     const el=document.getElementById('hp-si-'+c);
     if(el) el.textContent=S.hp.sortCol===c?(S.hp.sortDir==='asc'?' ↑':' ↓'):'';
   });
@@ -1103,6 +1108,10 @@ function hpFilteredSorted(){
     consecutiveDown:r=>(S.hp.metrics[r.code]||{}).consecutiveDown,
     downDays22:r=>(S.hp.metrics[r.code]||{}).downDays22,
     ddFromHigh:r=>(S.hp.metrics[r.code]||{}).ddFromHigh,
+    ma20dev:r=>(S.hp.metrics[r.code]||{}).ma20dev,
+    relStrength:r=>(S.hp.metrics[r.code]||{}).relStrength,
+    hv:r=>(S.hp.metrics[r.code]||{}).hv,
+    pe:r=>r.pe, pb:r=>r.pb,
     marketCapYi:r=>r.marketCapYi,
     industry:r=>r.industry, sub:r=>r.subIndustry,
   };
@@ -1121,16 +1130,18 @@ function hpFilteredSorted(){
 function hpRender(){
   const rows=hpFilteredSorted();
   const tb=document.getElementById('hp-tbody');
-  if(!rows.length){ tb.innerHTML=`<tr><td colspan="15" style="padding:40px;text-align:center;color:var(--ink-ghost)">無符合條件資料</td></tr>`; hpUpdateSI(); return; }
+  if(!rows.length){ tb.innerHTML=`<tr><td colspan="20" style="padding:40px;text-align:center;color:var(--ink-ghost)">無符合條件資料</td></tr>`; hpUpdateSI(); return; }
   const LD='<span style="color:#ddd;font-size:11px">…</span>';
   tb.innerHTML=rows.map((r,i)=>{
     const m=S.hp.metrics[r.code], loaded=m!==undefined;
     const c5=m?.c5, c30=m?.c30, beta=m?.beta, hist=m?.hist30;
     const cd=m?.consecutiveDown, d22=m?.downDays22, td22=m?.tradeDays22, dd=m?.ddFromHigh;
-    // consecutive down badge colour
-    const cdCol = !loaded?'':cd>=5?'var(--red-ink)':cd>=3?'#b45309':'var(--ink-ghost)';
-    // drawdown colour
-    const ddCol = !loaded?'':dd==null?'var(--ink-ghost)':dd<=-20?'var(--red-ink)':dd<=-10?'#b45309':'var(--ink-ghost)';
+    const ma20d=m?.ma20dev, rs=m?.relStrength, hvv=m?.hv;
+    // colour helpers
+    const cdCol  = !loaded?'':cd>=5?'var(--red-ink)':cd>=3?'#b45309':'var(--ink-ghost)';
+    const ddCol  = !loaded?'':dd==null?'var(--ink-ghost)':dd<=-20?'var(--red-ink)':dd<=-10?'#b45309':'var(--ink-ghost)';
+    const maCol  = !loaded||ma20d==null?'var(--ink-ghost)':ma20d>=10?'var(--red-ink)':ma20d<=-5?'var(--green-ink)':'var(--ink-soft)';
+    const rsCol  = !loaded||rs==null?'var(--ink-ghost)':rs>=5?'var(--red-ink)':rs<=-5?'var(--green-ink)':'var(--ink-soft)';
     // market cap formatting
     const mcap = r.marketCapYi!=null ? (r.marketCapYi>=10000 ? (r.marketCapYi/10000).toFixed(1)+'兆' : r.marketCapYi.toLocaleString()+'億') : '—';
     return `<tr>
@@ -1146,10 +1157,15 @@ function hpRender(){
 <td class="hp-td"><span class="hp-pct ${hpPctCls(c5)}">${loaded?hpFmt(c5):LD}</span></td>
 <td class="hp-td"><span class="hp-pct ${hpPctCls(c30)}">${loaded?hpFmt(c30):LD}</span></td>
 <td class="hp-td"><span class="hp-beta">${loaded?(beta!=null?beta.toFixed(2):'—'):LD}</span></td>
-<td class="hp-td" style="font-family:'Calibri',sans-serif;font-size:13px;font-weight:600;color:${cdCol}">${loaded?(cd>0?cd+'天':'—'):LD}</td>
-<td class="hp-td" style="font-family:'Calibri',sans-serif;font-size:12px;color:var(--ink-soft)">${loaded?(d22!=null?d22+'/'+(td22||22):' —'):LD}</td>
-<td class="hp-td" style="font-family:'Calibri',sans-serif;font-size:13px;font-weight:600;color:${ddCol}">${loaded?(dd!=null?dd.toFixed(1)+'%':'—'):LD}</td>
-<td class="hp-td" style="font-family:'Calibri',sans-serif;font-size:12px;color:var(--ink-soft)">${mcap}</td>
+<td class="hp-td" style="font-size:13px;font-weight:600;color:${cdCol}">${loaded?(cd>0?cd+'天':'—'):LD}</td>
+<td class="hp-td" style="font-size:12px;color:var(--ink-soft)">${loaded?(d22!=null?d22+'/'+(td22||22):'—'):LD}</td>
+<td class="hp-td" style="font-size:13px;font-weight:600;color:${ddCol}">${loaded?(dd!=null?dd.toFixed(1)+'%':'—'):LD}</td>
+<td class="hp-td" style="font-size:12px;font-weight:600;color:${maCol}">${loaded?(ma20d!=null?(ma20d>0?'+':'')+ma20d.toFixed(1)+'%':'—'):LD}</td>
+<td class="hp-td" style="font-size:12px;font-weight:600;color:${rsCol}">${loaded?(rs!=null?(rs>0?'+':'')+rs.toFixed(1)+'%':'—'):LD}</td>
+<td class="hp-td" style="font-size:12px;color:var(--ink-soft)">${loaded?(hvv!=null?hvv.toFixed(1)+'%':'—'):LD}</td>
+<td class="hp-td" style="font-size:12px;color:var(--ink-soft)">${r.pe!=null?r.pe.toFixed(1):'—'}</td>
+<td class="hp-td" style="font-size:12px;color:var(--ink-soft)">${r.pb!=null?r.pb.toFixed(2):'—'}</td>
+<td class="hp-td" style="font-size:12px;color:var(--ink-soft)">${mcap}</td>
 <td class="hp-td l"><span class="hp-ind">${esc(r.industry)}</span></td>
 <td class="hp-td l"><span class="hp-sub">${esc(r.subIndustry)}</span></td>
 </tr>`;
@@ -1201,7 +1217,7 @@ async function loadHP(){
     hpBuildPills(); hpRender();
     loadHPMetrics();
   }catch(e){
-    document.getElementById('hp-tbody').innerHTML=`<tr><td colspan="15" style="padding:40px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)}</td></tr>`;
+    document.getElementById('hp-tbody').innerHTML=`<tr><td colspan="20" style="padding:40px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)}</td></tr>`;
   }
 }
 

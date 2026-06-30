@@ -99,10 +99,19 @@ let _hpCache = null, _hpTime = 0;
 async function getHighPriceList() {
   if (_hpCache && Date.now() - _hpTime < 10 * 60 * 1000) return _hpCache;
   const coInfo = await getCompanyInfo();
-  const [twseRes, tpexRes] = await Promise.allSettled([
+  const [twseRes, tpexRes, bwibRes] = await Promise.allSettled([
     fetchUrl('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL').then(JSON.parse),
     fetchUrl('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes').then(JSON.parse),
+    fetchUrl('https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL').then(JSON.parse),
   ]);
+  // Build P/E & P/B map for TWSE stocks
+  const pemap = {};
+  if (bwibRes.status === 'fulfilled' && Array.isArray(bwibRes.value)) {
+    for (const r of bwibRes.value) {
+      const c = (r.Code||'').trim();
+      if (c) pemap[c] = { pe: parseFloat(r.PEratio)||null, pb: parseFloat(r.PBratio)||null };
+    }
+  }
   const stocks = [];
   if (twseRes.status === 'fulfilled' && Array.isArray(twseRes.value)) {
     for (const r of twseRes.value) {
@@ -114,10 +123,11 @@ async function getHighPriceList() {
       const prev  = price - chg;
       const info  = coInfo[code] || {};
       const mcap  = info.shares > 0 ? Math.round(info.shares * price / 1e8) : null;
+      const valu  = pemap[code] || { pe: null, pb: null };
       stocks.push({ code, name: (r.Name||'').trim(), market:'twse', price,
         change: +chg.toFixed(2), changePct: prev ? +(chg/prev*100).toFixed(2) : 0,
         industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '',
-        marketCapYi: mcap });
+        marketCapYi: mcap, pe: valu.pe, pb: valu.pb });
     }
   }
   if (tpexRes.status === 'fulfilled' && Array.isArray(tpexRes.value)) {
@@ -133,7 +143,7 @@ async function getHighPriceList() {
       stocks.push({ code, name: (r.CompanyName||'').trim(), market:'tpex', price,
         change: +chg.toFixed(2), changePct: prev ? +(chg/prev*100).toFixed(2) : 0,
         industry: SECTOR_MAP[info.industry] || '其他', subIndustry: info.industry || '',
-        marketCapYi: mcap });
+        marketCapYi: mcap, pe: null, pb: null });
     }
   }
   stocks.sort((a,b) => b.price - a.price);
@@ -460,8 +470,36 @@ const server = http.createServer(async (req, res) => {
       const highPrice  = Math.max(...closes);
       const ddFromHigh = highPrice > 0 ? +(((last - highPrice) / highPrice) * 100).toFixed(2) : null;
 
+      // ── 20MA 偏離度% ─────────────────────────────────────────────────
+      const ma20arr = closes.slice(-20);
+      const ma20    = ma20arr.reduce((a, b) => a + b, 0) / ma20arr.length;
+      const ma20dev = +((last - ma20) / ma20 * 100).toFixed(2);
+
+      // ── 相對強弱 vs 大盤 (stock 30d - TWII 30d) ────────────────────
+      let relStrength = null;
+      if (taiex && taiex.length >= 2 && change30d !== null) {
+        const twiLast  = taiex[taiex.length - 1];
+        const twiFirst = taiex[0];
+        const twi30d   = +((twiLast - twiFirst) / twiFirst * 100).toFixed(2);
+        relStrength = +(change30d - twi30d).toFixed(2);
+      }
+
+      // ── 歷史波動度 (年化, log returns ×√252) ────────────────────────
+      let hv = null;
+      const retArr = [];
+      for (let i = Math.max(1, closes.length - 30); i < closes.length; i++) {
+        if (closes[i] > 0 && closes[i - 1] > 0)
+          retArr.push(Math.log(closes[i] / closes[i - 1]));
+      }
+      if (retArr.length >= 10) {
+        const mean = retArr.reduce((a, b) => a + b, 0) / retArr.length;
+        const variance = retArr.reduce((a, b) => a + (b - mean) ** 2, 0) / (retArr.length - 1);
+        hv = +(Math.sqrt(variance * 252) * 100).toFixed(1);
+      }
+
       const payload = { change5d, change30d, beta, hist30,
-        consecutiveDown, downDays5, downDays22, tradeDays22, ddFromHigh, highPrice: +highPrice.toFixed(2) };
+        consecutiveDown, downDays5, downDays22, tradeDays22, ddFromHigh, highPrice: +highPrice.toFixed(2),
+        ma20dev, relStrength, hv };
       _warnCache[cacheKey] = payload; _warnTime[cacheKey] = Date.now();
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify(payload));
