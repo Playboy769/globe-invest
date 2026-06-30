@@ -70,7 +70,17 @@ header {
                    stroke-width:2; stroke-linecap:round; flex-shrink:0; }
 .refresh-btn.spinning svg { animation:spin .7s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
-@keyframes rtPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+/* ── Real-time status animations ── */
+.rt-wrap      { display:inline-flex;align-items:center;gap:8px;white-space:nowrap }
+.rt-dot-wrap  { position:relative;width:18px;height:18px;flex-shrink:0 }
+.rt-ring-svg  { position:absolute;top:0;left:0;transform:rotate(-90deg) }
+.rt-core      { position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;background:#e5322d;transform:translate(-50%,-50%) }
+.rt-wave      { position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;border:1px solid #e5322d;transform:translate(-50%,-50%);animation:rtWave 1.9s ease-out infinite }
+.rt-live-text { font-size:11px;font-weight:700;letter-spacing:.5px;background:linear-gradient(90deg,#e5322d,#ff8a80,#e5322d);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:rtShimmer 2.5s ease infinite }
+.rt-ago       { font-size:10px;color:var(--ink-ghost);font-variant-numeric:tabular-nums }
+@keyframes rtWave    { 0%{transform:translate(-50%,-50%) scale(1);opacity:.8} 100%{transform:translate(-50%,-50%) scale(4.2);opacity:0} }
+@keyframes rtShimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+@keyframes rtFill    { from{stroke-dashoffset:34.6} to{stroke-dashoffset:0} }
 
 /* ── SECTION NAV ── */
 .sec-nav {
@@ -1222,21 +1232,51 @@ function isTWMarketOpen(){
   return m>=540 && m<810; // 09:00–13:30
 }
 
+let _hpPollTimer=null, _hpElapsedTimer=null, _hpLastUpdatedAt=null, _hpStatusBuilt=false;
+
 function hpUpdateStatus(updatedAt){
+  if(updatedAt) _hpLastUpdatedAt=updatedAt;
   const el=document.getElementById('hp-rt-status');
   if(!el) return;
-  if(isTWMarketOpen()&&updatedAt){
-    const t=new Date(updatedAt);
-    const hh=String(t.getHours()).padStart(2,'0');
-    const mm=String(t.getMinutes()).padStart(2,'0');
-    const ss=String(t.getSeconds()).padStart(2,'0');
-    el.innerHTML=`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red-ink);margin-right:5px;vertical-align:middle;animation:rtPulse 1.5s infinite"></span><span style="color:var(--red-ink);font-weight:600">即時</span>&ensp;<span style="color:var(--ink-ghost)">${hh}:${mm}:${ss} 更新</span>`;
-  } else {
-    el.innerHTML=`<span style="color:var(--ink-ghost)">收盤資料</span>`;
+  if(!isTWMarketOpen()||!_hpLastUpdatedAt){
+    if(_hpElapsedTimer){clearInterval(_hpElapsedTimer);_hpElapsedTimer=null;}
+    _hpStatusBuilt=false;
+    el.innerHTML=`<span style="font-size:11px;color:var(--ink-ghost)">收盤資料</span>`;
+    return;
   }
+  // Build DOM structure once; only restart ring animation on each data refresh
+  if(!_hpStatusBuilt){
+    el.innerHTML=`<div class="rt-wrap">
+      <div class="rt-dot-wrap">
+        <svg class="rt-ring-svg" width="18" height="18" viewBox="0 0 18 18">
+          <circle cx="9" cy="9" r="5.5" fill="none" stroke="#e5322d" stroke-width="1.2" opacity=".15"/>
+          <circle id="hp-rt-ring" cx="9" cy="9" r="5.5" fill="none" stroke="#e5322d" stroke-width="1.2"
+            stroke-dasharray="34.6" stroke-dashoffset="34.6" stroke-linecap="round"/>
+        </svg>
+        <div class="rt-core"></div>
+        <div class="rt-wave"></div>
+        <div class="rt-wave" style="animation-delay:.95s"></div>
+      </div>
+      <span class="rt-live-text">即時</span>
+      <span id="hp-rt-elapsed" class="rt-ago">—</span>
+    </div>`;
+    _hpStatusBuilt=true;
+  }
+  // Restart fill ring animation (resets every time new data arrives)
+  const ring=document.getElementById('hp-rt-ring');
+  if(ring){ring.style.animation='none';ring.getBoundingClientRect();ring.style.animation='rtFill 20s linear forwards';}
+  // Tick elapsed text every second
+  if(_hpElapsedTimer) clearInterval(_hpElapsedTimer);
+  function tick(){
+    const txt=document.getElementById('hp-rt-elapsed');
+    if(!txt||!_hpLastUpdatedAt) return;
+    const s=Math.floor((Date.now()-_hpLastUpdatedAt)/1000);
+    txt.textContent=s<3?'剛剛':s<60?s+'秒前':Math.floor(s/60)+'分前';
+  }
+  tick();
+  _hpElapsedTimer=setInterval(tick,1000);
 }
 
-let _hpPollTimer=null;
 async function loadHPRealtime(){
   try{
     const r=await fetch('/api/high-price/realtime');
@@ -1249,8 +1289,7 @@ async function loadHPRealtime(){
 
 function startHPPoll(){
   if(_hpPollTimer){ clearInterval(_hpPollTimer); _hpPollTimer=null; }
-  loadHPRealtime(); // immediate
-  hpUpdateStatus(null);
+  loadHPRealtime(); // immediate first fetch; hpUpdateStatus called inside
   if(isTWMarketOpen()){
     _hpPollTimer=setInterval(()=>{
       if(isTWMarketOpen()) loadHPRealtime();
@@ -1260,7 +1299,9 @@ function startHPPoll(){
 }
 
 function stopHPPoll(){
-  if(_hpPollTimer){ clearInterval(_hpPollTimer); _hpPollTimer=null; }
+  if(_hpPollTimer){  clearInterval(_hpPollTimer);  _hpPollTimer=null;  }
+  if(_hpElapsedTimer){ clearInterval(_hpElapsedTimer); _hpElapsedTimer=null; }
+  _hpStatusBuilt=false;
 }
 
 async function loadHP(){
