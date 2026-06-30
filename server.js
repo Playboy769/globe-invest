@@ -96,6 +96,8 @@ function calcBeta(sCloses, iCloses) {
 
 // High-price stock list cache (10 min)
 let _hpCache = null, _hpTime = 0;
+// Real-time quote cache (20 s)
+let _rtCache = null, _rtTime = 0;
 async function getHighPriceList() {
   if (_hpCache && Date.now() - _hpTime < 10 * 60 * 1000) return _hpCache;
   const coInfo = await getCompanyInfo();
@@ -212,6 +214,26 @@ async function getWarnData(key) {
   _warnCache[key] = Array.isArray(data) ? data : [];
   _warnTime[key]  = Date.now();
   return _warnCache[key];
+}
+
+function fetchMis(url) {
+  return new Promise((resolve, reject) => {
+    const hdrs = { ...BROWSER_HEADERS, 'Referer': 'https://mis.twse.com.tw/' };
+    const req = https.get(url, { headers: hdrs }, res => {
+      if (res.statusCode !== 200) { res.resume(); return reject(new Error('HTTP ' + res.statusCode)); }
+      const enc = res.headers['content-encoding'] || '';
+      let stream = res;
+      if (enc.includes('br'))      stream = res.pipe(zlib.createBrotliDecompress());
+      else if (enc.includes('gzip')) stream = res.pipe(zlib.createGunzip());
+      else if (enc.includes('deflate')) stream = res.pipe(zlib.createInflate());
+      const chunks = [];
+      stream.on('data', c => chunks.push(c));
+      stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+      stream.on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(8000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
 }
 
 function fetchUrl(url) {
@@ -403,6 +425,53 @@ const server = http.createServer(async (req, res) => {
       const list = await getHighPriceList();
       res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify(list));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
+  // ── High-price real-time quotes (mis.twse.com.tw, 20 s cache) ──────
+  if (req.url === '/api/high-price/realtime' && req.method === 'GET') {
+    if (_rtCache && Date.now() - _rtTime < 20000) {
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      return res.end(JSON.stringify(_rtCache));
+    }
+    try {
+      const stocks = await getHighPriceList();
+      const BATCH = 50;
+      const result = {};
+      for (let i = 0; i < stocks.length; i += BATCH) {
+        const batch = stocks.slice(i, i + BATCH);
+        const exch  = batch.map(s => `${s.market === 'twse' ? 'tse' : 'otc'}_${s.code}.tw`).join('|');
+        const url   = `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=${encodeURIComponent(exch)}&_=${Date.now()}`;
+        try {
+          const raw  = await fetchMis(url);
+          const data = JSON.parse(raw);
+          for (const item of (data.msgArray || [])) {
+            const code = (item.c || '').trim();
+            const rawZ = item.z;
+            const price = rawZ && rawZ !== '-' ? parseFloat(rawZ) : null;
+            const prev  = parseFloat(item.y) || null;
+            if (code && price && prev) {
+              result[code] = {
+                price,
+                change:    +(price - prev).toFixed(2),
+                changePct: +((price - prev) / prev * 100).toFixed(2),
+                high: item.h && item.h !== '-' ? parseFloat(item.h) : null,
+                low:  item.l && item.l !== '-' ? parseFloat(item.l) : null,
+                open: item.o && item.o !== '-' ? parseFloat(item.o) : null,
+                vol:  item.v ? parseInt(item.v) : null,
+                time: item.t || null,
+              };
+            }
+          }
+        } catch (_) { /* skip failed batch */ }
+      }
+      _rtCache = result; _rtTime = Date.now();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(result));
     } catch (e) {
       res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
       res.end(JSON.stringify({ error: e.message }));

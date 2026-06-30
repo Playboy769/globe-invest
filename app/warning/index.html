@@ -70,6 +70,7 @@ header {
                    stroke-width:2; stroke-linecap:round; flex-shrink:0; }
 .refresh-btn.spinning svg { animation:spin .7s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
+@keyframes rtPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
 
 /* ── SECTION NAV ── */
 .sec-nav {
@@ -460,8 +461,12 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
   <!-- progress bar -->
   <div style="height:2px;background:var(--border)"><div id="hp-bar" style="height:100%;background:var(--ink);width:0;transition:width .25s"></div></div>
+  <!-- real-time status -->
+  <div style="display:flex;align-items:center;gap:12px;padding:6px 16px 2px">
+    <span id="hp-rt-status" style="font-size:11px;color:var(--ink-ghost)">收盤資料</span>
+  </div>
   <!-- industry pills -->
-  <div class="tab-bar" id="hp-pills" style="flex-wrap:wrap;gap:4px 0;padding-top:12px;padding-bottom:12px">
+  <div class="tab-bar" id="hp-pills" style="flex-wrap:wrap;gap:4px 0;padding-top:8px;padding-bottom:12px">
     <button class="tab-btn zh active" data-hp-f="all" onclick="hpSetFilter(this,'all')">全部</button>
   </div>
   <!-- table -->
@@ -514,7 +519,7 @@ const S = {
   warn:  { rows:[], loaded:false },
   inst:  { rows:[], loaded:false },
   exdiv: { rows:[], loaded:false },
-  hp:    { rows:[], metrics:{}, loaded:false, filter:'all', sortCol:'price', sortDir:'desc', done:0, total:0 },
+  hp:    { rows:[], metrics:{}, rt:{}, loaded:false, filter:'all', sortCol:'price', sortDir:'desc', done:0, total:0 },
   warnSort:  { col: null,    dir: 'asc' },
   instSort:  { col: 'total', dir: 'desc' },
   exdivSort: { col: 'date',  dir: 'asc'  },
@@ -688,7 +693,8 @@ function refresh(){
   if(s==='warning'){ S.warn.loaded=false;  loadWarn(); }
   if(s==='inst')   { S.inst.loaded=false;  loadInst(); }
   if(s==='exdiv')  { S.exdiv.loaded=false; loadExDiv(); }
-  if(s==='hp')     { S.hp.loaded=false; S.hp.rows=[]; S.hp.metrics={}; loadHP(); }
+  if(s==='hp')     { S.hp.loaded=false; S.hp.rows=[]; S.hp.metrics={}; S.hp.rt={}; loadHP(); }
+  else             { stopHPPoll(); }
 }
 
 // ═══════════════════════════════════════════
@@ -1137,6 +1143,11 @@ function hpRender(){
     const c5=m?.c5, c30=m?.c30, beta=m?.beta, hist=m?.hist30;
     const cd=m?.consecutiveDown, d22=m?.downDays22, td22=m?.tradeDays22, dd=m?.ddFromHigh;
     const ma20d=m?.ma20dev, rs=m?.relStrength, hvv=m?.hv;
+    // real-time overlay (replaces price + today% when available)
+    const rtq=S.hp.rt[r.code];
+    const dispPrice   = rtq ? rtq.price    : r.price;
+    const dispChgPct  = rtq ? rtq.changePct : r.changePct;
+    const dispTimeTag = rtq?.time ? `<span style="font-size:9px;color:var(--ink-ghost);margin-left:3px">${rtq.time}</span>` : '';
     // colour helpers
     const cdCol  = !loaded?'':cd>=5?'var(--red-ink)':cd>=3?'#b45309':'var(--ink-ghost)';
     const ddCol  = !loaded?'':dd==null?'var(--ink-ghost)':dd<=-20?'var(--red-ink)':dd<=-10?'#b45309':'var(--ink-ghost)';
@@ -1152,8 +1163,8 @@ function hpRender(){
 </td>
 <td class="hp-td l"><span class="hp-nm">${esc(r.name)}</span></td>
 <td class="hp-td" style="width:90px;padding:4px 8px">${hpSpark(hist, loaded?c30:null)}</td>
-<td class="hp-td"><span class="hp-pr">${r.price.toLocaleString()}</span></td>
-<td class="hp-td"><span class="hp-pct ${hpPctCls(r.changePct)}">${hpFmt(r.changePct)}</span></td>
+<td class="hp-td"><span class="hp-pr">${dispPrice.toLocaleString()}</span>${dispTimeTag}</td>
+<td class="hp-td"><span class="hp-pct ${hpPctCls(dispChgPct)}">${hpFmt(dispChgPct)}</span></td>
 <td class="hp-td"><span class="hp-pct ${hpPctCls(c5)}">${loaded?hpFmt(c5):LD}</span></td>
 <td class="hp-td"><span class="hp-pct ${hpPctCls(c30)}">${loaded?hpFmt(c30):LD}</span></td>
 <td class="hp-td"><span class="hp-beta">${loaded?(beta!=null?beta.toFixed(2):'—'):LD}</span></td>
@@ -1199,6 +1210,56 @@ async function loadHPMetrics(){
   hpRender();
 }
 
+// ── Real-time polling ──────────────────────────────────────────────────
+function isTWMarketOpen(){
+  const tw=new Date(Date.now()+8*3600*1000);
+  const d=tw.getUTCDay();
+  if(d===0||d===6) return false;
+  const m=tw.getUTCHours()*60+tw.getUTCMinutes();
+  return m>=540 && m<810; // 09:00–13:30
+}
+
+function hpUpdateStatus(updatedAt){
+  const el=document.getElementById('hp-rt-status');
+  if(!el) return;
+  if(isTWMarketOpen()&&updatedAt){
+    const t=new Date(updatedAt);
+    const hh=String(t.getHours()).padStart(2,'0');
+    const mm=String(t.getMinutes()).padStart(2,'0');
+    const ss=String(t.getSeconds()).padStart(2,'0');
+    el.innerHTML=`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red-ink);margin-right:5px;vertical-align:middle;animation:rtPulse 1.5s infinite"></span><span style="color:var(--red-ink);font-weight:600">即時</span>&ensp;<span style="color:var(--ink-ghost)">${hh}:${mm}:${ss} 更新</span>`;
+  } else {
+    el.innerHTML=`<span style="color:var(--ink-ghost)">收盤資料</span>`;
+  }
+}
+
+let _hpPollTimer=null;
+async function loadHPRealtime(){
+  try{
+    const r=await fetch('/api/high-price/realtime');
+    if(!r.ok) return;
+    S.hp.rt=await r.json();
+    hpRender();
+    hpUpdateStatus(Date.now());
+  }catch(_){}
+}
+
+function startHPPoll(){
+  if(_hpPollTimer){ clearInterval(_hpPollTimer); _hpPollTimer=null; }
+  loadHPRealtime(); // immediate
+  hpUpdateStatus(null);
+  if(isTWMarketOpen()){
+    _hpPollTimer=setInterval(()=>{
+      if(isTWMarketOpen()) loadHPRealtime();
+      else{ clearInterval(_hpPollTimer); _hpPollTimer=null; hpUpdateStatus(null); }
+    },20000);
+  }
+}
+
+function stopHPPoll(){
+  if(_hpPollTimer){ clearInterval(_hpPollTimer); _hpPollTimer=null; }
+}
+
 async function loadHP(){
   if(S.hp.loaded) return;
   try{
@@ -1216,6 +1277,7 @@ async function loadHP(){
     document.getElementById('scnt-hp').textContent=S.hp.rows.length;
     hpBuildPills(); hpRender();
     loadHPMetrics();
+    startHPPoll();
   }catch(e){
     document.getElementById('hp-tbody').innerHTML=`<tr><td colspan="20" style="padding:40px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)}</td></tr>`;
   }
