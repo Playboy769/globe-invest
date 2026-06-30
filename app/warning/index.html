@@ -117,7 +117,7 @@ header {
 .stat-cell.s-blue    .stat-num { color:var(--blue-ink); }
 .stat-cell.s-teal    .stat-num { color:var(--teal-ink); }
 
-/* ── FILTER TABS ── */
+/* ── FILTER TABS (main nav — underline style unchanged) ── */
 .tab-bar { display:flex; padding:0 48px; border-bottom:1px solid var(--border); }
 .tab-btn { padding:14px 0; margin-right:28px; border:none; background:none;
            font-family:'Noto Sans TC','Calibri',sans-serif; font-size:13px;
@@ -127,6 +127,45 @@ header {
 .tab-btn:last-child { margin-right:0; }
 .tab-btn:hover { color:var(--ink-soft); }
 .tab-btn.active { color:var(--ink); border-bottom-color:var(--ink); }
+
+/* ── HP Industry Pills — flowing aesthetic ── */
+#hp-pills { border-bottom:none; padding:10px 16px 6px; gap:6px; }
+#hp-pills .tab-btn {
+  position:relative; overflow:hidden;
+  padding:5px 15px; border-radius:100px; margin:0;
+  border:1.5px solid transparent; font-size:12px;
+  color:var(--ink-faint); background:transparent;
+  /* flowing gradient border via background-clip */
+  background-image: linear-gradient(var(--bg,#fff),var(--bg,#fff)),
+                    linear-gradient(90deg,rgba(180,50,40,.18),rgba(255,120,100,.1),rgba(180,50,40,.18));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100%, 250% 100%;
+  animation: hpPillBorder 5s ease infinite;
+  animation-delay: calc(var(--i,0) * .55s);
+  transition: color .3s, box-shadow .3s;
+}
+#hp-pills .tab-btn::after {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at center, rgba(229,50,45,.1) 0%, transparent 70%);
+  border-radius:100px; opacity:0;
+  transform:scale(0);
+  transition: transform .45s ease, opacity .35s ease;
+}
+#hp-pills .tab-btn:not(.active):hover { color:var(--ink); box-shadow:0 0 0 1px rgba(229,50,45,.2); }
+#hp-pills .tab-btn:not(.active):hover::after { opacity:1; transform:scale(1); }
+#hp-pills .tab-btn.active {
+  color:#fff;
+  background-image: linear-gradient(90deg,#b8201a,#e5322d,#ff7a6e,#e5322d,#b8201a);
+  background-size:300% 100%;
+  background-origin:border-box; background-clip:border-box;
+  border-color:transparent;
+  box-shadow:0 2px 14px rgba(229,50,45,.35), 0 0 0 1px rgba(229,50,45,.18);
+  animation: hpPillActive 3s ease infinite;
+}
+#hp-pills .tab-btn.active::after { display:none; }
+@keyframes hpPillBorder { 0%,100%{background-position:0% 0%,0% 50%} 50%{background-position:0% 0%,100% 50%} }
+@keyframes hpPillActive { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
 
 /* ── TABLE ── */
 .tbl-wrap { padding:0 48px 80px; }
@@ -477,7 +516,7 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
   <!-- industry pills -->
   <div class="tab-bar" id="hp-pills" style="flex-wrap:wrap;gap:4px 0;padding-top:8px;padding-bottom:12px">
-    <button class="tab-btn zh active" data-hp-f="all" onclick="hpSetFilter(this,'all')">全部</button>
+    <button class="tab-btn zh active" data-hp-f="all" onclick="hpSetFilter(this,'all')" style="--i:0">全部</button>
   </div>
   <!-- table -->
   <div class="tbl-wrap" style="padding-top:0">
@@ -1086,9 +1125,10 @@ function hpBuildPills(){
   const inds=[...new Set(S.hp.rows.map(r=>r.industry).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'zh-TW'));
   const bar=document.getElementById('hp-pills');
   bar.querySelectorAll('[data-hp-f]:not([data-hp-f="all"])').forEach(b=>b.remove());
-  inds.forEach(ind=>{
+  inds.forEach((ind,n)=>{
     const b=document.createElement('button');
     b.className='tab-btn zh'; b.dataset.hpF=ind; b.textContent=ind;
+    b.style.setProperty('--i', n+1); // stagger delay (全部 = 0)
     b.onclick=()=>hpSetFilter(b,ind);
     bar.appendChild(b);
   });
