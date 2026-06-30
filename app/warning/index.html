@@ -1196,7 +1196,10 @@ async function loadHPMetrics(){
       try{
         const res=await fetch(`/api/high-price/metrics?code=${encodeURIComponent(r.code)}&market=${r.market}`);
         const d=res.ok?await res.json():null;
-        S.hp.metrics[r.code]=d?{c5:d.change5d,c30:d.change30d,beta:d.beta,hist30:d.hist30}:{};
+        S.hp.metrics[r.code]=d?{c5:d.change5d,c30:d.change30d,beta:d.beta,hist30:d.hist30,
+          consecutiveDown:d.consecutiveDown,downDays5:d.downDays5,downDays22:d.downDays22,
+          tradeDays22:d.tradeDays22,ddFromHigh:d.ddFromHigh,highPrice:d.highPrice,
+          ma20dev:d.ma20dev,relStrength:d.relStrength,hv:d.hv}:{};
       }catch{ S.hp.metrics[r.code]={}; }
       S.hp.done++;
       const pct=Math.round(S.hp.done/S.hp.total*100);
