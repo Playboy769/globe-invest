@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>布朗運動模擬器 · 猜猜下一步</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'%3E%3Cpath d='M4 30 L18 14 L30 22 L44 8 L58 18' stroke='%230a0a0a' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='58' cy='18' r='3.4' fill='%230a0a0a'/%3E%3C/svg%3E">
+<link href="https://fonts.cdnfonts.com/css/orchid" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --ink:#0a0a0a;
+  --up:#4a7a5a;
+  --down:#b5654a;
+  --line:#eee;
+  --line-mid:#ddd;
+  --muted:#999;
+  --muted2:#bbb;
+  --muted3:#ccc;
+}
+body{
+  background:#fff; color:var(--ink);
+  font-family:'Orchid','Noto Serif TC','NSimSun',serif; font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  display:flex; justify-content:center;
+  padding:0 20px;
+}
+::selection{background:#0a0a0a;color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#fff}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+
+.app{width:100%; max-width:600px; padding:72px 0 64px; display:flex; flex-direction:column; gap:40px;}
+
+/* ── Header ── */
+.label{display:flex; align-items:center; gap:9px; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.14em; margin-bottom:22px;}
+.label svg{width:22px; height:14px; flex-shrink:0;}
+.heading{font-size:clamp(30px,5.5vw,48px); font-weight:300; line-height:1.2; letter-spacing:.01em; margin-bottom:18px; font-family:'Orchid','Noto Serif TC',serif;}
+.subtitle{font-size:15px; color:#777; line-height:1.9; max-width:460px; font-weight:400;}
+
+.reveal{opacity:0; transform:translateY(14px); animation:revealIn .7s cubic-bezier(.4,0,.2,1) forwards;}
+.reveal-delay-1{animation-delay:.08s}
+.reveal-delay-2{animation-delay:.16s}
+.reveal-delay-3{animation-delay:.24s}
+@keyframes revealIn{to{opacity:1; transform:translateY(0)}}
+
+/* ── Stats ── */
+.stats-row{display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+.stat-item{padding:22px 4px; text-align:center; border-right:1px solid var(--line); display:flex; flex-direction:column; align-items:center; gap:8px;}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Noto Serif TC',Georgia,serif; font-size:1.6rem; font-weight:500; font-variant-numeric:tabular-nums; line-height:1;}
+.stat-label{font-size:10.5px; color:var(--muted2); text-transform:uppercase; letter-spacing:.08em;}
+
+.ring-wrap{position:relative; width:38px; height:38px;}
+.ring-svg{width:38px; height:38px; transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:#f0f0f0; stroke-width:2.4; stroke-dasharray:3 4;}
+.ring-fg{fill:none; stroke:var(--ink); stroke-width:2.4; stroke-linecap:round; stroke-dasharray:113.1; stroke-dashoffset:113.1; transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1);}
+.ring-label{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Noto Serif TC',Georgia,serif; font-size:10.5px; font-weight:500; font-variant-numeric:tabular-nums;}
+
+/* ── Chart ── */
+.chart-frame{position:relative; padding:15px;}
+.tick{position:absolute; width:12px; height:12px; border-color:var(--muted3); border-style:solid; border-width:0;}
+.tick.tl{top:0; left:0; border-top-width:1px; border-left-width:1px;}
+.tick.tr{top:0; right:0; border-top-width:1px; border-right-width:1px;}
+.tick.bl{bottom:0; left:0; border-bottom-width:1px; border-left-width:1px;}
+.tick.br{bottom:0; right:0; border-bottom-width:1px; border-right-width:1px;}
+.chart-wrap{position:relative; height:300px; border:1px solid var(--line); overflow:hidden; background:#fff;}
+#chart{width:100%; height:100%; display:block;}
+.live-tag{position:absolute; top:14px; left:16px; z-index:2; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted2); pointer-events:none;}
+.flash-overlay{position:absolute; inset:0; pointer-events:none; opacity:0;}
+.flash-overlay.flash-correct{background:rgba(74,122,90,0.07); opacity:1; transition:opacity .8s ease;}
+.flash-overlay.flash-wrong{background:rgba(181,101,74,0.07); opacity:1; transition:opacity .8s ease;}
+.feedback-pop{position:absolute; left:50%; top:34%; transform:translate(-50%,0); font-weight:700; font-size:1.15rem; pointer-events:none; animation:floatUp .9s ease forwards; white-space:nowrap; font-family:'Orchid','Noto Serif TC',serif;}
+.feedback-pop.correct{color:var(--up);}
+.feedback-pop.wrong{color:var(--down);}
+@keyframes floatUp{
+  0%{opacity:0; transform:translate(-50%,10px);}
+  15%{opacity:1; transform:translate(-50%,0);}
+  70%{opacity:1;}
+  100%{opacity:0; transform:translate(-50%,-26px);}
+}
+
+/* ── Controls ── */
+.controls{display:flex; gap:14px;}
+.pill-btn{
+  flex:1; display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  padding:16px 0; background:transparent; color:var(--ink);
+  font-size:14px; font-weight:400; letter-spacing:.12em; text-transform:uppercase;
+  border-radius:100px; border:1px solid var(--ink); cursor:pointer;
+  transition:background .3s ease,color .3s ease;
+  font-family:'Orchid','Noto Serif TC',serif; position:relative; overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.pill-btn:hover{background:var(--ink); color:#fff;}
+.pill-btn:active{transform:scale(0.98);}
+.pill-btn svg{width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; transition:transform .3s ease;}
+.pill-btn.down svg{transform:rotate(45deg);}
+.pill-btn.up svg{transform:rotate(-45deg);}
+.pill-btn.down:hover svg{transform:rotate(45deg) translate(3px,3px);}
+.pill-btn.up:hover svg{transform:rotate(-45deg) translate(3px,-3px);}
+.pill-btn:disabled{opacity:.32; cursor:not-allowed;}
+.pill-btn:disabled:hover{background:transparent; color:var(--ink);}
+.ripple{position:absolute; border-radius:50%; background:rgba(10,10,10,0.1); transform:scale(0); pointer-events:none; animation:rippleAnim .6s ease-out;}
+.pill-btn:hover .ripple{background:rgba(255,255,255,0.3);}
+@keyframes rippleAnim{to{transform:scale(2.4); opacity:0;}}
+
+.hint-key{font-size:12px; color:var(--muted2); text-align:center; letter-spacing:.02em;}
+
+/* ── Footer controls ── */
+.footer-row{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+.text-btn{background:none; border:none; color:var(--muted); font-size:13px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; font-family:'Orchid','Noto Serif TC',serif; padding:0; transition:color .2s ease;}
+.text-btn:hover{color:var(--ink);}
+.sigma-control{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase;}
+.sigma-control input[type=range]{
+  -webkit-appearance:none; appearance:none; width:120px; height:1px; cursor:pointer; outline:none;
+  background:linear-gradient(90deg, var(--muted3) var(--fill,40%), var(--line) var(--fill,40%));
+}
+.sigma-control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:11px; height:11px; border-radius:50%; background:var(--ink); cursor:pointer; margin-top:0;}
+.sigma-control input[type=range]::-moz-range-track{background:var(--line); height:1px;}
+.sigma-control input[type=range]::-moz-range-progress{background:var(--muted3); height:1px;}
+.sigma-control input[type=range]::-moz-range-thumb{width:10px; height:10px; border-radius:50%; background:var(--ink); border:none; cursor:pointer;}
+
+.explain{font-size:13.5px; color:#888; line-height:1.9; font-weight:400; border-top:1px solid var(--line); padding-top:20px;}
+
+/* ── Principle ── */
+.principle{display:flex; flex-direction:column; gap:24px; border-top:1px solid var(--line); padding-top:40px;}
+.principle .label{margin-bottom:0;}
+.principle .heading{font-size:clamp(24px,4vw,34px); margin-bottom:4px;}
+.principle .subtitle{max-width:none; font-family:'Noto Serif TC',Georgia,serif;}
+
+.formula-card{border:1px solid var(--line); border-radius:4px; padding:24px 26px; background:#fafafa; display:flex; flex-direction:column; gap:10px;}
+.formula-label{font-size:11px; color:var(--muted2); text-transform:uppercase; letter-spacing:.1em;}
+.formula{font-family:'Noto Serif TC',Georgia,serif; font-size:1.25rem; font-style:italic; letter-spacing:.02em; color:var(--ink);}
+.formula sub{font-size:.62em;}
+.formula-note{font-size:13px; color:#888; line-height:1.85; font-style:normal; font-family:'Noto Serif TC',Georgia,serif;}
+.formula-note sub{font-size:.75em;}
+
+.principle-items{display:flex; flex-direction:column;}
+.pr-item{display:grid; grid-template-columns:52px 1fr; gap:20px; padding:26px 0; border-top:1px solid var(--line); align-items:start;}
+.pr-num{font-family:'Noto Serif TC',Georgia,serif; font-size:32px; font-weight:300; color:#eee; line-height:1; font-style:italic;}
+.pr-title{font-size:16px; font-weight:700; margin-bottom:9px; letter-spacing:-.01em;}
+.pr-text{font-size:13.5px; color:#777; line-height:1.9; font-weight:400; font-family:'Noto Serif TC',Georgia,serif;}
+.pr-text sub{font-size:.78em;}
+
+.page-footer{display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:24px;}
+.pf-brand{font-size:14px; font-weight:700; letter-spacing:-.01em; font-family:'Orchid','Noto Serif TC',serif;}
+.pf-copy{font-size:11px; color:var(--muted2); letter-spacing:.06em;}
+
+@media (max-width:480px){
+  .app{padding:52px 0 48px; gap:32px;}
+  .stat-item{padding:18px 2px;}
+  .stat-label{font-size:9px;}
+  .stat-num{font-size:1.25rem;}
+  .pill-btn{font-size:12.5px; padding:14px 0;}
+  .footer-row{flex-direction:column; align-items:flex-start;}
+  .pr-item{grid-template-columns:1fr; gap:8px;}
+  .pr-num{font-size:22px;}
+  .formula{font-size:1.05rem;}
+  .formula-card{padding:20px 18px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="label reveal">
+      <svg viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#999" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 30 L18 14 L30 22 L44 8 L58 18"/>
+        <circle cx="58" cy="18" r="2.4" fill="#999" stroke="none"/>
+      </svg>
+      Simulation
+    </div>
+    <h1 class="heading reveal reveal-delay-1">布朗運動模擬器</h1>
+    <p class="subtitle reveal reveal-delay-2">猜猜下一步是漲還是跌 —— 體驗真正「捉摸不定」的感覺。布朗運動的每一步都獨立於過去，完全無法被歷史預測。</p>
+  </header>
+
+  <div class="stats-row reveal reveal-delay-2">
+    <div class="stat-item"><span class="stat-num" id="stat-total">0</span><span class="stat-label">局數</span></div>
+    <div class="stat-item"><span class="stat-num" id="stat-correct">0</span><span class="stat-label">猜對</span></div>
+    <div class="stat-item">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 44 44">
+          <circle class="ring-bg" cx="22" cy="22" r="18"></circle>
+          <circle class="ring-fg" id="ring-fg" cx="22" cy="22" r="18"></circle>
+        </svg>
+        <span class="ring-label" id="stat-winrate">--</span>
+      </div>
+      <span class="stat-label">勝率</span>
+    </div>
+    <div class="stat-item"><span class="stat-num" id="stat-streak">0</span><span class="stat-label">連勝</span></div>
+    <div class="stat-item"><span class="stat-num" id="stat-best">0</span><span class="stat-label">最佳連勝</span></div>
+  </div>
+
+  <div class="chart-frame reveal reveal-delay-3">
+    <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+    <div class="chart-wrap" id="chart-wrap">
+      <span class="live-tag">模擬路徑</span>
+      <canvas id="chart"></canvas>
+      <div class="flash-overlay" id="flash-overlay"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="pill-btn down" id="btn-down">猜跌 <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    <button class="pill-btn up" id="btn-up">猜漲 <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+  <p class="hint-key">也可用鍵盤 ↑ / ↓ 快速猜測</p>
+
+  <div class="footer-row">
+    <button class="text-btn" id="btn-reset">重新開始</button>
+    <label class="sigma-control">震盪幅度
+      <input type="range" id="sigma" min="2" max="20" value="8" step="1">
+    </label>
+  </div>
+
+  <p class="explain" id="explain">布朗運動的每一步都獨立於過去，完全無法被過去的走勢預測。準備好感受隨機的滋味了嗎？</p>
+
+  <div class="principle">
+    <div class="label reveal">Principle</div>
+    <h2 class="heading reveal reveal-delay-1">布朗運動的原理</h2>
+    <p class="subtitle reveal reveal-delay-2">1827 年，植物學家 Robert Brown 觀察到水中花粉顆粒不斷做無規則的抖動；一百年後，愛因斯坦與數學家維納（Norbert Wiener）把這個現象嚴謹地刻劃出來——後世稱為「維納過程」（Wiener process），也就是布朗運動的數學模型，同時也是這個模擬器背後的引擎。</p>
+
+    <div class="formula-card reveal reveal-delay-2">
+      <span class="formula-label">這個模擬器使用的離散公式</span>
+      <div class="formula">X<sub>n+1</sub> = X<sub>n</sub> + ε<sub>n</sub> ， ε<sub>n</sub> ~ N(0, σ²)</div>
+      <p class="formula-note">σ 就是下方可調整的「震盪幅度」；ε<sub>n</sub>（透過 Box–Muller transform 生成）是每一步獨立抽出、平均值為 0 的常態隨機變數——這正是圖表上那條曲線真正的來源。</p>
+    </div>
+
+    <div class="principle-items">
+      <div class="pr-item reveal">
+        <div class="pr-num">01</div>
+        <div class="pr-content">
+          <div class="pr-title">獨立增量</div>
+          <div class="pr-text">對任意時間點 s &lt; t，增量 W(t) − W(s) 都與 s 之前發生過的一切互相獨立。這正是遊戲「猜不準」的根源——不管你盯著線圖研究出什麼規律，歷史都不會透露下一步的方向。</div>
+        </div>
+      </div>
+      <div class="pr-item reveal reveal-delay-1">
+        <div class="pr-num">02</div>
+        <div class="pr-content">
+          <div class="pr-title">常態分布的增量</div>
+          <div class="pr-text">W(t) − W(s) ~ N(0, t − s)：每一段時間的變化量服從平均值 0、變異數等於時間長度的常態分布。時間拉得越長，可能擺動的「幅度」越大，但「方向」永遠是對稱的隨機。</div>
+        </div>
+      </div>
+      <div class="pr-item reveal reveal-delay-2">
+        <div class="pr-num">03</div>
+        <div class="pr-content">
+          <div class="pr-title">鞅性質 —— 為什麼永遠是 50%</div>
+          <div class="pr-text">E[X<sub>n+1</sub> | X<sub>n</sub>] = X<sub>n</sub>：下一步的期望位置，就是現在的位置。這代表無論你連續猜對幾次，下一局的勝率都會重新回到 50%，不會因為「手感正熱」而改變——這就是布朗運動「沒有記憶」的數學意義。</div>
+        </div>
+      </div>
+      <div class="pr-item reveal reveal-delay-3">
+        <div class="pr-num">04</div>
+        <div class="pr-content">
+          <div class="pr-title">大數法則 —— 為什麼玩越多局，勝率越準</div>
+          <div class="pr-text">大數法則（Law of Large Numbers）是機率論最基本的定理之一：把每一局的結果看成一個獨立且分布相同的隨機變數 X<sub>i</sub>（猜對記 1、猜錯記 0），那麼當局數 n 越大，樣本平均 (X<sub>1</sub> + X<sub>2</sub> + ⋯ + X<sub>n</sub>) / n 就會依機率收斂到真正的期望值 E[X]。單局猜對的機率理論上是 50%，但你玩 5 局可能出現 3 勝 2 負（60%）；玩到 500 局，勝率幾乎一定會落在 50% 附近極窄的範圍內——樣本數越多，運氣造成的偏差就被稀釋得越小。這也是為什麼上一點的「連勝」完全不代表你找到了規律，只有長期勝率才會忠實反映這個遊戲真正的隨機本質。</div>
+        </div>
+      </div>
+      <div class="pr-item reveal reveal-delay-3">
+        <div class="pr-num">05</div>
+        <div class="pr-content">
+          <div class="pr-title">與蒙地卡羅方法的關係</div>
+          <div class="pr-text">蒙地卡羅分析（Monte Carlo）就是「用大量隨機抽樣去估計答案」的方法——你玩的每一局，其實就是蒙地卡羅方法的一次試驗（trial）。金融上的選擇權定價、風險值（VaR）估計做的是同一件事，只是不只跑一條路徑，而是平行模擬成千上萬條像上面這樣的隨機路徑，再對所有結果取平均或看分布，藉此估計沒有解析解的期望報酬與風險機率。它之所以成立，靠的正是上一點的大數法則——路徑（樣本）數越多，估計就越準。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="pf-brand">Brownian Motion</span>
+    <span class="pf-copy">Outside FrameWork · Simulation</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const VISIBLE = 26;
+  const START_VALUE = 500;
+
+  const canvas = document.getElementById('chart');
+  const ctx = canvas.getContext('2d');
+  const wrap = document.getElementById('chart-wrap');
+  const flashOverlay = document.getElementById('flash-overlay');
+  const btnUp = document.getElementById('btn-up');
+  const btnDown = document.getElementById('btn-down');
+  const btnReset = document.getElementById('btn-reset');
+  const sigmaInput = document.getElementById('sigma');
+  const explainEl = document.getElementById('explain');
+  const statTotal = document.getElementById('stat-total');
+  const statCorrect = document.getElementById('stat-correct');
+  const statWinrate = document.getElementById('stat-winrate');
+  const statStreak = document.getElementById('stat-streak');
+  const statBest = document.getElementById('stat-best');
+  const ringFg = document.getElementById('ring-fg');
+  const RING_CIRC = 2 * Math.PI * 18;
+  ringFg.setAttribute('stroke-dasharray', RING_CIRC.toFixed(2));
+  ringFg.style.strokeDashoffset = RING_CIRC.toFixed(2);
+
+  let sigma = parseFloat(sigmaInput.value);
+  let points = [{y: START_VALUE}];
+  let total = 0, correct = 0, streak = 0, best = 0;
+  let busy = false;
+  let raf = null;
+  let lastDisplayed = { total: 0, correct: 0, winrate: 0, streak: 0, best: 0 };
+
+  const NUM_FONT = '"Noto Serif TC", Georgia, serif';
+
+  function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  function gaussianRandom(mean, std){
+    let u = 1 - Math.random();
+    let v = Math.random();
+    let z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    return z * std + mean;
+  }
+
+  function resizeCanvas(){
+    const rect = wrap.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    render();
+  }
+  window.addEventListener('resize', resizeCanvas);
+
+  function render(ghostValue, opts){
+    opts = opts || {};
+    const rect = wrap.getBoundingClientRect();
+    const W = rect.width, H = rect.height;
+    const padX = 20, padRight = 62, padTop = 30, padBottom = 24;
+
+    const hasGhost = (ghostValue !== undefined && ghostValue !== null);
+    let displayPts = points.slice(-(hasGhost ? VISIBLE - 1 : VISIBLE));
+    if (hasGhost && !opts.pulse){
+      displayPts = displayPts.concat([{y: ghostValue}]);
+    }
+
+    const values = displayPts.map(p => p.y).concat(hasGhost && opts.pulse ? [ghostValue] : []);
+    let minV = Math.min.apply(null, values);
+    let maxV = Math.max.apply(null, values);
+    if (maxV - minV < 1e-6){ minV -= 10; maxV += 10; }
+    else { const pad = (maxV - minV) * 0.18; minV -= pad; maxV += pad; }
+
+    const slotWidth = (W - padX - padRight) / (VISIBLE - 1);
+    function X(i){ return padX + i * slotWidth; }
+    function Y(v){ return padTop + (1 - (v - minV) / (maxV - minV)) * (H - padTop - padBottom); }
+
+    ctx.clearRect(0, 0, W, H);
+
+    // dashed grid lines
+    ctx.setLineDash([2, 4]);
+    ctx.strokeStyle = 'rgba(10,10,10,0.10)';
+    ctx.lineWidth = 1;
+    const gridLines = 4;
+    ctx.font = '500 11px ' + NUM_FONT;
+    ctx.fillStyle = 'rgba(10,10,10,0.46)';
+    ctx.textBaseline = 'middle';
+    for (let g = 0; g <= gridLines; g++){
+      const v = minV + (maxV - minV) * (g / gridLines);
+      const y = Y(v);
+      ctx.beginPath();
+      ctx.moveTo(padX, y);
+      ctx.lineTo(W - padRight + 6, y);
+      ctx.stroke();
+      ctx.fillText(v.toFixed(2), W - padRight + 12, y);
+    }
+    ctx.setLineDash([]);
+
+    // start-value dashed reference line
+    if (START_VALUE >= minV && START_VALUE <= maxV){
+      const sy = Y(START_VALUE);
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = 'rgba(10,10,10,0.18)';
+      ctx.beginPath();
+      ctx.moveTo(padX, sy);
+      ctx.lineTo(W - padRight + 6, sy);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ink path (no fill — pure line diagram), smoothed as a Catmull-Rom curve
+    // so it reads as a flowing line rather than a jagged zig-zag
+    if (displayPts.length > 1){
+      const linePts = displayPts.map((p, i) => ({ x: X(i), y: Y(p.y) }));
+      ctx.beginPath();
+      ctx.moveTo(linePts[0].x, linePts[0].y);
+      if (linePts.length === 2){
+        ctx.lineTo(linePts[1].x, linePts[1].y);
+      } else {
+        for (let i = 0; i < linePts.length - 1; i++){
+          const p0 = linePts[i - 1] || linePts[i];
+          const p1 = linePts[i];
+          const p2 = linePts[i + 1];
+          const p3 = linePts[i + 2] || p2;
+          const cp1x = p1.x + (p2.x - p0.x) / 6;
+          const cp1y = p1.y + (p2.y - p0.y) / 6;
+          const cp2x = p2.x - (p3.x - p1.x) / 6;
+          const cp2y = p2.y - (p3.y - p1.y) / 6;
+          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        }
+      }
+      ctx.strokeStyle = '#2a2a2a';
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // reference point just before the one being drawn/animated (for direction color)
+    const dotIdx = displayPts.length - 1;
+    const refPrevY = dotIdx > 0 ? displayPts[dotIdx - 1].y : null;
+    const curDrawnVal = displayPts[dotIdx].y;
+    let dotColor = '#2a2a2a';
+    if (refPrevY != null) dotColor = curDrawnVal >= refPrevY ? '#4a7a5a' : '#b5654a';
+
+    if (!opts.pulse){
+      const dx = X(dotIdx), dy = Y(curDrawnVal);
+      ctx.save();
+      ctx.strokeStyle = dotColor;
+      ctx.globalAlpha = 0.28;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 7, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = dotColor;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 3.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else {
+      // pulsing suspense marker at the next (unknown) slot
+      const dx = X(dotIdx), dy = Y(ghostValue);
+      const alpha = opts.pulseAlpha != null ? opts.pulseAlpha : 0.6;
+      ctx.save();
+      ctx.setLineDash([2, 3]);
+      ctx.strokeStyle = `rgba(10,10,10,${alpha * 0.6})`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(dx, dy, 7 + alpha * 4, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = `rgba(10,10,10,${alpha})`;
+      ctx.font = 'bold 13px ' + NUM_FONT;
+      ctx.textAlign = 'center';
+      ctx.fillText('?', dx, dy - 16);
+      ctx.textAlign = 'left';
+      ctx.restore();
+    }
+
+    // top-right ticker readout (current value) — monochrome
+    const lastReal = points[points.length - 1];
+    const cur = hasGhost ? ghostValue : lastReal.y;
+    const change = cur - START_VALUE;
+    ctx.save();
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 22px ' + NUM_FONT;
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillText(cur.toFixed(2), W - padRight + 6, padTop - 8);
+    ctx.font = '11px ' + NUM_FONT;
+    ctx.fillStyle = 'rgba(10,10,10,0.4)';
+    ctx.fillText((change >= 0 ? '+' : '') + change.toFixed(2) + ' vs 起始', W - padRight + 6, padTop + 10);
+    ctx.restore();
+  }
+
+  function showSuspense(){
+    return new Promise(resolve => {
+      const duration = 300 + Math.random() * 500;
+      const startTime = performance.now();
+      const flatValue = points[points.length - 1].y;
+      function step(now){
+        const elapsed = now - startTime;
+        const pulse = (Math.sin(elapsed / 120) + 1) / 2;
+        render(flatValue, { pulse: true, pulseAlpha: 0.3 + 0.5 * pulse });
+        if (elapsed < duration){ raf = requestAnimationFrame(step); }
+        else resolve();
+      }
+      raf = requestAnimationFrame(step);
+    });
+  }
+
+  function animateReveal(nextValue){
+    return new Promise(resolve => {
+      const duration = 400 + Math.random() * 200;
+      const startTime = performance.now();
+      const startValue = points[points.length - 1].y;
+      function step(now){
+        const t = Math.min(1, (now - startTime) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const ghostVal = startValue + (nextValue - startValue) * eased;
+        render(ghostVal);
+        if (t < 1){ raf = requestAnimationFrame(step); }
+        else resolve();
+      }
+      raf = requestAnimationFrame(step);
+    });
+  }
+
+  function setButtonsEnabled(enabled){
+    btnUp.disabled = !enabled;
+    btnDown.disabled = !enabled;
+  }
+
+  function addRipple(btn, clientX, clientY){
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    const x = (clientX != null ? clientX : rect.left + rect.width / 2) - rect.left - size / 2;
+    const y = (clientY != null ? clientY : rect.top + rect.height / 2) - rect.top - size / 2;
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  function flashFeedback(isCorrect, currentStreak){
+    flashOverlay.className = 'flash-overlay ' + (isCorrect ? 'flash-correct' : 'flash-wrong');
+    requestAnimationFrame(() => {
+      flashOverlay.style.opacity = '0';
+    });
+
+    const pop = document.createElement('div');
+    pop.className = 'feedback-pop ' + (isCorrect ? 'correct' : 'wrong');
+    pop.textContent = isCorrect ? ('猜對了' + (currentStreak >= 3 ? '　連勝 x' + currentStreak : '')) : '猜錯了';
+    wrap.appendChild(pop);
+    setTimeout(() => pop.remove(), 950);
+  }
+
+  function animateNumber(el, from, to, decimals, suffix){
+    const start = performance.now();
+    const duration = 350;
+    function step(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = from + (to - from) * eased;
+      el.textContent = (decimals > 0 ? val.toFixed(decimals) : Math.round(val)) + (suffix || '');
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = (decimals > 0 ? to.toFixed(decimals) : Math.round(to)) + (suffix || '');
+    }
+    requestAnimationFrame(step);
+  }
+
+  function updateStats(){
+    animateNumber(statTotal, lastDisplayed.total, total, 0, '');
+    animateNumber(statCorrect, lastDisplayed.correct, correct, 0, '');
+    animateNumber(statStreak, lastDisplayed.streak, streak, 0, '');
+    animateNumber(statBest, lastDisplayed.best, best, 0, '');
+    lastDisplayed.total = total;
+    lastDisplayed.correct = correct;
+    lastDisplayed.streak = streak;
+    lastDisplayed.best = best;
+
+    if (total === 0){
+      statWinrate.textContent = '--';
+      ringFg.style.strokeDashoffset = RING_CIRC.toFixed(2);
+      lastDisplayed.winrate = 0;
+      explainEl.textContent = '布朗運動的每一步都獨立於過去，完全無法被過去的走勢預測。準備好感受隨機的滋味了嗎？';
+      return;
+    }
+    const winrate = correct / total * 100;
+    animateNumber(statWinrate, lastDisplayed.winrate, winrate, 0, '%');
+    lastDisplayed.winrate = winrate;
+    ringFg.style.strokeDashoffset = (RING_CIRC * (1 - winrate / 100)).toFixed(2);
+
+    let extra = '';
+    if (streak > 0 && streak % 5 === 0){
+      extra = ' 你已連續猜對 ' + streak + ' 次，但下一步依然獨立地是 50/50 —— 布朗運動沒有記憶。';
+    }
+    explainEl.textContent = '已進行 ' + total + ' 局，猜對 ' + correct + ' 局，勝率 ' + winrate.toFixed(1) + '%（長期會趨近 50%）。' + extra;
+  }
+
+  async function handleGuess(dir){
+    if (busy) return;
+    busy = true;
+    setButtonsEnabled(false);
+
+    await showSuspense();
+
+    const inc = gaussianRandom(0, sigma);
+    const nextValue = points[points.length - 1].y + inc;
+    const actualUp = inc > 0;
+
+    await animateReveal(nextValue);
+    points.push({ y: nextValue });
+
+    total++;
+    const isCorrect = (dir === 'up' && actualUp) || (dir === 'down' && !actualUp);
+    if (isCorrect){ correct++; streak++; if (streak > best) best = streak; }
+    else { streak = 0; }
+
+    updateStats();
+    flashFeedback(isCorrect, streak);
+    render();
+
+    await delay(250);
+    busy = false;
+    setButtonsEnabled(true);
+  }
+
+  function resetGame(){
+    if (raf) cancelAnimationFrame(raf);
+    busy = false;
+    setButtonsEnabled(true);
+    points = [{ y: START_VALUE }];
+    total = 0; correct = 0; streak = 0; best = 0;
+    lastDisplayed = { total: 0, correct: 0, winrate: 0, streak: 0, best: 0 };
+    flashOverlay.className = 'flash-overlay';
+    flashOverlay.style.opacity = '0';
+    Array.from(wrap.querySelectorAll('.feedback-pop')).forEach(el => el.remove());
+    updateStats();
+    render();
+  }
+
+  function updateSigmaFill(){
+    const min = parseFloat(sigmaInput.min), max = parseFloat(sigmaInput.max);
+    const pct = (sigma - min) / (max - min) * 100;
+    sigmaInput.style.setProperty('--fill', pct + '%');
+  }
+
+  btnUp.addEventListener('click', (e) => { addRipple(btnUp, e.clientX, e.clientY); handleGuess('up'); });
+  btnDown.addEventListener('click', (e) => { addRipple(btnDown, e.clientX, e.clientY); handleGuess('down'); });
+  btnReset.addEventListener('click', resetGame);
+  sigmaInput.addEventListener('input', () => { sigma = parseFloat(sigmaInput.value); updateSigmaFill(); });
+
+  window.addEventListener('keydown', (e) => {
+    if (busy) return;
+    if (e.key === 'ArrowUp'){ e.preventDefault(); addRipple(btnUp); handleGuess('up'); }
+    else if (e.key === 'ArrowDown'){ e.preventDefault(); addRipple(btnDown); handleGuess('down'); }
+  });
+
+  updateSigmaFill();
+  resizeCanvas();
+  updateStats();
+})();
+</script>
+</body>
+</html>
