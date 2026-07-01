@@ -666,7 +666,7 @@ function loadFiles() {
 
 function saveFiles() {
   try { localStorage.setItem(FILES_KEY, JSON.stringify(files)); } catch(e) {}
-  fetch(CF_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(files) }).catch(()=>{});
+  fetch(CF_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(_buildCloudPayload()) }).catch(()=>{});
 }
 
 function activeFile() { return files.find(f => f.id === activeId) || files[0]; }
@@ -716,9 +716,18 @@ function updateFilename() {
 // ── Folder system ──────────────────────────────────────────────────
 const CF_FOLDERS_KEY = 'causal_folders_v1';
 let folders = [];
+let _folderModified = 0;
 function fdid(){ return 'fd'+Date.now()+Math.random().toString(36).slice(2,5); }
 function loadFolders(){ try{const r=localStorage.getItem(CF_FOLDERS_KEY);if(r)folders=JSON.parse(r);}catch(e){} }
-function saveFolders(){ try{localStorage.setItem(CF_FOLDERS_KEY,JSON.stringify(folders));}catch(e){} }
+function _buildCloudPayload(){
+  const meta={id:'__cf_folders__',_cf_sys:true,folders:JSON.parse(JSON.stringify(folders)),modified:_folderModified||0};
+  return [...files,meta];
+}
+function saveFolders(){
+  _folderModified=Date.now();
+  try{localStorage.setItem(CF_FOLDERS_KEY,JSON.stringify(folders));}catch(e){}
+  fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
+}
 function newFolder(){
   const fd={id:fdid(),name:folders.length?'Folder '+(folders.length+1):'New Folder',expanded:true};
   folders.push(fd); saveFolders(); renderFeed();
@@ -2264,12 +2273,21 @@ if(_CF_URL_FILE){const _uf0=files.find(f=>f.name===_CF_URL_FILE||f.id===_CF_URL_
       if(files.length)fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(files)}).catch(()=>{});
       return;
     }
+    // Extract folder meta from server, then filter system records
+    const folderMeta=sv.find(f=>f.id==='__cf_folders__');
+    const svFiles=sv.filter(f=>!f._cf_sys);
     const map=new Map();
-    sv.forEach(f=>map.set(f.id,f));
+    svFiles.forEach(f=>map.set(f.id,f));
     files.forEach(f=>{const s=map.get(f.id);if(!s||f.modified>s.modified)map.set(f.id,f);});
     files=Array.from(map.values()).sort((a,b)=>b.modified-a.modified);
+    // Restore folders from server if newer than local
+    if(folderMeta&&Array.isArray(folderMeta.folders)&&folderMeta.modified>_folderModified){
+      folders=folderMeta.folders;
+      _folderModified=folderMeta.modified;
+      try{localStorage.setItem(CF_FOLDERS_KEY,JSON.stringify(folders));}catch(e){}
+    }
     try{localStorage.setItem(FILES_KEY,JSON.stringify(files));}catch(e){}
-    fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(files)}).catch(()=>{});
+    fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
     const _uf=_CF_URL_FILE&&files.find(f=>f.name===_CF_URL_FILE||f.id===_CF_URL_FILE);
     openFile(_uf?_uf.id:files[0].id);
   }catch(e){}
