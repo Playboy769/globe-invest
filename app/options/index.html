@@ -219,6 +219,10 @@ strong{font-weight:500;color:var(--t1)}
   <a href="#iv">隱含波動率</a>
   <a href="#risk">風險管理</a>
   <a href="#glossary">名詞解釋</a>
+  <div class="nav-section">Warrants</div>
+  <a href="#warrant-intro">基礎介紹</a>
+  <a href="#warrant-analysis">解析指標</a>
+  <a href="#warrant-plays">打法策略</a>
 </nav>
 
 <!-- ─── MAIN ─── -->
@@ -1233,6 +1237,250 @@ strong{font-weight:500;color:var(--t1)}
     <div class="gi"><dt>Diagonal Spread</dt><dd>對角價差。日曆價差的變形，近月與遠月使用不同履約價，可引入輕微方向性偏斜。</dd></div>
     <div class="gi"><dt>Wheel Strategy</dt><dd>車輪策略。Sell Put → 被行使持股 → Sell Covered Call → 被行使換現金 → 再 Sell Put，形成循環收租。</dd></div>
   </dl>
+</section>
+
+<!-- WARRANT INTRO -->
+<section id="warrant-intro">
+  <div class="sec-hd">
+    <span class="sec-label">Warrants</span>
+    <span class="sec-sub">認購／認售權證 — 基礎介紹</span>
+  </div>
+  <div class="ring" style="margin-bottom:20px">
+    <div class="ring-label">什麼是權證 <span>Covered Warrant</span></div>
+    <p style="font-size:13px;color:var(--t2);line-height:1.85;font-family:'Calibri','Noto Sans TC',sans-serif">
+      權證（Covered Warrant）是由<strong style="color:var(--t1)">證券商（發行商）</strong>發行的衍生性商品，給予持有人在特定期間內，以約定的<strong style="color:var(--t1)">履約價</strong>買入（認購）或賣出（認售）標的股票的<strong style="color:var(--gold)">權利</strong>，但不具義務。到期後以<strong style="color:var(--t1)">現金差額結算</strong>，不需實物交割。台灣市場每張權證 = 1,000 份，最小交易單位為 1 張。
+    </p>
+  </div>
+  <div class="ring-2col" style="margin-bottom:12px">
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--green)">認購權證 Call Warrant</div>
+      <p>看漲標的股。標的股漲價，認購權證增值。類似買 Call Option，但<strong>只有買方角色</strong>，最大損失為支付的權利金（買價）。</p>
+      <div class="formula">獲利 = (標的現價 − 履約價) × 執行比例 − 成本</div>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--red)">認售權證 Put Warrant</div>
+      <p>看跌標的股。標的股跌價，認售權證增值。類似買 Put Option，同樣<strong>只有買方角色</strong>，損失上限為持有成本，無追繳風險。</p>
+      <div class="formula">獲利 = (履約價 − 標的現價) × 執行比例 − 成本</div>
+    </div>
+  </div>
+
+  <div class="ring">
+    <div class="ring-label">權證 vs 選擇權 — 核心差異</div>
+    <table class="tbl">
+      <thead><tr>
+        <th>比較項目</th><th>權證 Warrant</th><th>選擇權 Option</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>發行方</td><td>券商（發行商）做市</td><td>交易所標準化合約</td></tr>
+        <tr><td>交易角色</td><td>只有買方（無法賣空）</td><td>買方 ＋ 賣方皆可</td></tr>
+        <tr><td>流動性來源</td><td>發行商 LP 報價</td><td>市場集中競價</td></tr>
+        <tr><td>結算方式</td><td>現金差額結算</td><td>現金 / 實物（依規格）</td></tr>
+        <tr><td>追繳風險</td><td>無（損失≤買價）</td><td>賣方有無限風險</td></tr>
+        <tr><td>契約規模</td><td>1張 = 1,000份（執行比例彈性）</td><td>台指每點 50 元；個股 2,000 股</td></tr>
+        <tr><td>發行數量</td><td>有限（發行商額度）</td><td>無上限（市場對手方）</td></tr>
+        <tr><td>溢價偏差</td><td>含發行商利差，溢價通常偏高</td><td>理論值接近 B-S 定價</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WARRANT ANALYSIS -->
+<section id="warrant-analysis">
+  <div class="sec-hd">
+    <span class="sec-label">Analysis</span>
+    <span class="sec-sub">權證解析 — 核心指標判讀</span>
+  </div>
+
+  <div class="ring-3col" style="margin-bottom:12px">
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--gold)">執行比例</div>
+      <p><strong>1 份權證對應幾股標的。</strong>常見 0.1、0.5、1.0。比例越小，每張權證動的名目金額越低，價格也較便宜。<br><br>計算時務必乘回執行比例才能比較真實槓桿。</p>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--gold)">溢價率 Premium %</div>
+      <p><strong>標的需漲（跌）多少才能到損益兩平。</strong>溢價越低越划算。</p>
+      <div class="formula">認購溢價 = [(權證價÷執行比例 + 履約價) ÷ 標的現價 − 1] × 100%</div>
+      <p style="margin-top:8px;font-size:11px;color:var(--t3)">溢價 &lt; 10% 相對合理；&gt; 20% 需謹慎</p>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--gold)">有效槓桿 Eff. Gearing</div>
+      <p><strong>標的漲 1%，權證漲幾 %。</strong>真實感受到的放大倍數。</p>
+      <div class="formula">有效槓桿 = 槓桿比率 × Delta</div>
+      <p style="margin-top:8px;font-size:11px;color:var(--t3)">槓桿比率 = 標的現價 × 執行比例 ÷ 權證現價</p>
+    </div>
+  </div>
+
+  <div class="ring-2col" style="margin-bottom:12px">
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--blue)">Delta — 價格敏感度</div>
+      <p>標的漲 1 元，權證漲 <strong>Delta × 執行比例</strong> 元。<br><br>
+      深度價內 Delta → 1；深度價外 Delta → 0；平價附近 ≈ 0.5。<br><br>
+      <strong style="color:var(--t1)">短線首選 Delta &gt; 0.5</strong>，反應明確，不會因 Delta 太小而「買對方向卻沒漲」。</p>
+    </div>
+    <div class="ring-inner">
+      <div class="ring-inner-label" style="color:var(--red)">時間價值耗損 Theta</div>
+      <p>每過一天，時間價值流失。到期日越近，流失越快（非線性加速）。<br><br>
+      <strong style="color:var(--red)">到期前 2 週內</strong>，時間價值急速歸零，深度價外幾乎無法翻身。<br><br>
+      持有超過 2 週的部位需主動評估是否換倉到更遠到期日的同標的權證。</p>
+    </div>
+  </div>
+
+  <div class="ring">
+    <div class="ring-label">隱含波動率 IV — 發行商訂價核心</div>
+    <div class="ring-2col">
+      <div>
+        <p style="font-size:12px;color:var(--t2);line-height:1.8;font-family:'Calibri','Noto Sans TC',sans-serif">
+          發行商以<strong style="color:var(--t1)"> Black-Scholes 模型</strong>為基礎訂價，其中 IV 是最關鍵的假設。IV 越高，期權理論值越高，權證也越貴。<br><br>
+          <strong style="color:var(--gold)">IV Crush 風險：</strong>法說會、財報公布等事件後，IV 可能驟降，即使標的方向做對，因 IV 下滑導致權證反而虧損。
+        </p>
+      </div>
+      <div>
+        <p style="font-size:12px;color:var(--t2);line-height:1.8;font-family:'Calibri','Noto Sans TC',sans-serif">
+          <strong style="color:var(--t1)">發行商報價能力</strong>同樣影響實際成交價：<br><br>
+          • 報價差（Spread）越小越好<br>
+          • 確認發行商<strong>有義務連續報價</strong>（掛牌規定）<br>
+          • 注意發行商是否有<strong>停止報價</strong>（下市前）的跡象<br>
+          • 優先選擇<strong>成交量大、存量多</strong>的流通券商發行的品項
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ring">
+    <div class="ring-label">選券關鍵指標快速核對表</div>
+    <table class="tbl">
+      <thead><tr><th>指標</th><th>理想範圍</th><th>警示信號</th></tr></thead>
+      <tbody>
+        <tr><td>溢價率</td><td class="pos">&lt; 10%</td><td class="neg">&gt; 20% — 標的要漲很多才打平</td></tr>
+        <tr><td>Delta</td><td class="pos">0.5 ~ 0.8（短線）</td><td class="neg">&lt; 0.2 — 深度價外，反應鈍</td></tr>
+        <tr><td>有效槓桿</td><td class="pos">5 ~ 15 倍</td><td class="neg">&gt; 20 倍 — 波動劇烈，易被洗</td></tr>
+        <tr><td>存續天數</td><td class="pos">&gt; 30 天</td><td class="neg">&lt; 14 天 — 時間價值急速流失</td></tr>
+        <tr><td>日均成交量</td><td class="pos">&gt; 500 張</td><td class="neg">流動性差，買賣差大，難出場</td></tr>
+        <tr><td>發行商報價差</td><td class="pos">&lt; 0.02 元</td><td class="neg">報價差大 — 實際成本遠高帳面</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WARRANT PLAYS -->
+<section id="warrant-plays">
+  <div class="sec-hd">
+    <span class="sec-label">Plays</span>
+    <span class="sec-sub">權證打法策略</span>
+  </div>
+
+  <div class="s-grid" style="margin-bottom:12px">
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer"><span style="color:var(--gold)">●</span> 短線打法</div>
+        <div class="s-title">當沖 / 隔日沖</div>
+        <div class="s-sub">搭配技術突破、消息面快速反應</div>
+        <div class="s-tags">
+          <span class="s-tag bull">高 Delta</span>
+          <span class="s-tag def">低溢價</span>
+          <span class="s-tag def">大成交量</span>
+        </div>
+      </div>
+      <div class="s-body" style="display:block">
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">選券條件</span><span class="sr-v">Delta &gt; 0.5、溢價 &lt; 10%、存續 &gt; 30天、量 &gt; 500張</span></div>
+          <div class="sr"><span class="sr-k">進場時機</span><span class="sr-v">突破關鍵壓力、均線翻揚、籌碼集中訊號出現時</span></div>
+          <div class="sr"><span class="sr-k">停損設定</span><span class="sr-v">權證跌破買入成本 15~20% 立即出場，不戀戰</span></div>
+          <div class="sr"><span class="sr-k">出場原則</span><span class="sr-v">達目標獲利或收盤前不持隔夜（避免隔日 Gap 風險）</span></div>
+          <div class="sr"><span class="sr-k">最大陷阱</span><span class="sr-v">追高溢價率高的熱門券 → 即使標的漲，也可能因溢價回落而虧</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-layer"><span style="color:var(--blue)">●</span> 波段打法</div>
+        <div class="s-title">持有 1 ~ 3 週波段</div>
+        <div class="s-sub">搭配基本面催化劑或中期趨勢</div>
+        <div class="s-tags">
+          <span class="s-tag bull">平價/價內</span>
+          <span class="s-tag def">長存續期</span>
+          <span class="s-tag def">低時間耗損</span>
+        </div>
+      </div>
+      <div class="s-body" style="display:block">
+        <div class="s-stats">
+          <div class="sr"><span class="sr-k">選券條件</span><span class="sr-v">平價或輕度價內、存續 &gt; 45天、選大型券商發行</span></div>
+          <div class="sr"><span class="sr-k">進場時機</span><span class="sr-v">法說會前、財報預期期間、籌碼轉強確認後布局</span></div>
+          <div class="sr"><span class="sr-k">轉倉時機</span><span class="sr-v">存續剩 &lt; 2 週時，轉換至下一檔同標的較遠到期日的權證</span></div>
+          <div class="sr"><span class="sr-k">IV 風險</span><span class="sr-v">事件後 IV Crush — 財報當天持有需留意，建議事前評估隱波水位</span></div>
+          <div class="sr"><span class="sr-k">部位控管</span><span class="sr-v">單一標的權證不超過總資金 5%，避免過度集中槓桿</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ring" style="margin-bottom:12px">
+    <div class="ring-label">轉倉策略 Roll — 存續期管理</div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>監控存續期</h4>
+          <p>每週確認持有權證的剩餘天數。當存續期剩 <strong style="color:var(--gold)">14 天以內</strong>，開始評估是否需要轉倉。此時時間價值每日加速流失，對價外或平價的券尤為致命。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>比較新舊券成本效益</h4>
+          <p>找同標的、相近履約價但存續期較長的券，比較兩者的<strong style="color:var(--t1)">溢價率、Delta、有效槓桿</strong>。若新券溢價率明顯高於舊券，先評估是否值得轉換。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h4>執行轉倉</h4>
+          <p>賣出舊券並買入新券，盡量在<strong style="color:var(--t1)">同一盤中執行</strong>，避免方向敞口期間標的出現大幅波動。轉倉後重新設定停損價位。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="risk-grid" style="margin-bottom:12px">
+    <div class="risk-card">
+      <div class="risk-lbl r">五大陷阱 — 必須避開</div>
+      <ul>
+        <li><strong>高溢價率陷阱：</strong>溢價 &gt; 20% 的熱門券，標的漲幅不足以覆蓋溢價回落，極易買了方向對卻虧損</li>
+        <li><strong>深度價外權證：</strong>Delta 極小，標的大漲但權證幾乎沒動，資金效率極低</li>
+        <li><strong>最後 2 週持有：</strong>時間價值以指數速度流失，價外幾乎確定歸零</li>
+        <li><strong>低流動性券：</strong>日成交量 &lt; 100 張，出場時買賣差大，滑價嚴重</li>
+        <li><strong>事件前高 IV 追買：</strong>財報、法說會前 IV 常被推高，事後 IV Crush 導致虧損</li>
+      </ul>
+    </div>
+    <div class="risk-card">
+      <div class="risk-lbl g">五個好習慣 — 建立優勢</div>
+      <ul>
+        <li><strong>先看標的再挑券：</strong>確認標的技術面、籌碼面有信號後，再選對應的權證，不逆向操作</li>
+        <li><strong>比較 3 檔以上同標的券：</strong>同樣看漲，不同券的溢價、槓桿差異可達 30%+，選最划算的</li>
+        <li><strong>設定固定停損比例：</strong>建議權證虧損 15~20% 無條件出場，不因槓桿而加碼攤平</li>
+        <li><strong>記錄每筆交易的 IV 水位：</strong>追蹤自己是否在 IV 高點買入，養成習慣</li>
+        <li><strong>選大券商發行的品項：</strong>元大、凱基、群益等大型券商報價穩定，不易出現停止報價情況</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ring">
+    <div class="ring-label">權證心法 — 核心認知</div>
+    <div class="ring-3col">
+      <div class="ring-inner">
+        <div class="ring-inner-label" style="color:var(--gold)">方向 × 時間 × 幅度</div>
+        <p>買權證需要同時做對<strong>方向</strong>（漲/跌）、<strong>時間</strong>（在到期前到達）、<strong>幅度</strong>（超過損益兩平點），三者缺一不可。這也是為什麼勝率天然低於買股票。</p>
+      </div>
+      <div class="ring-inner">
+        <div class="ring-inner-label" style="color:var(--blue)">槓桿是雙面刃</div>
+        <p>有效槓桿 10 倍代表標的漲 3%，權證漲 30%；但標的跌 3%，權證也跌 30%。<strong>資金控管</strong>比選到好的標的更關鍵，單筆部位過大是初學者最常見的致命傷。</p>
+      </div>
+      <div class="ring-inner">
+        <div class="ring-inner-label" style="color:var(--green)">時間是最大敵人</div>
+        <p>每一天過去都在消耗你的資本。<strong>不要持有超過你有把握的時間</strong>。如果三天內標的沒有如預期移動，重新評估是否出場，而不是等待奇蹟。</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 </div>
