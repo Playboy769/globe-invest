@@ -1684,9 +1684,9 @@ function ivKellyRender(){
     <td>${pct(R.finSum)}${R.cash>0.001?`　<span style="font-weight:400;color:#999">現金 ${pct(R.cash)}</span>`:''}</td><td></td></tr></tfoot></table>`;
   // 勝率分析：損益兩平 p（方法4）＋ 市場隱含 p（方法3）
   h+=`<div class="iv-k-sec">勝率分析 — 損益兩平 &amp; 市場隱含</div>`;
-  h+=`<table class="iv-k-tbl"><thead><tr>
+  h+=`<div style="overflow-x:auto"><table class="iv-k-tbl"><thead><tr>
     <th>部位</th><th>賠率 b</th><th>損益兩平 p<sub>be</sub> = 1/(1+b)</th><th>你的 p</th><th>安全邊際 p − p<sub>be</sub></th>
-    <th>市場隱含 p %</th><th>Edge p − p<sub>mkt</sub></th><th>判定</th></tr></thead><tbody>`;
+    <th>兌現期</th><th>市場隱含 p %</th><th>Edge p − p<sub>mkt</sub></th><th>判定</th></tr></thead><tbody>`;
   R.rows.forEach((r,i)=>{
     const mCls=r.margin<=0?'iv-k-neg':(r.margin<0.05?'iv-k-mid':'iv-k-ok');
     let judge;
@@ -1701,12 +1701,13 @@ function ivKellyRender(){
       <td>${pct(r.pbe)}</td>
       <td>${pct(r.p)}</td>
       <td class="${mCls}"><b>${r.margin>0?'+':''}${(r.margin*100).toFixed(1)}%</b></td>
+      <td><input class="iv-k-inp" style="width:76px;text-align:left" value="${_ivKEsc(_ivK.pos[i].hz||'')}" placeholder="如 3個月" onchange="ivKellySet(${i},'hz',this.value)"></td>
       <td><input class="iv-k-inp" type="number" min="0" max="100" step="1" value="${_ivK.pos[i].mp==null?'':_ivK.pos[i].mp}" placeholder="選填" onchange="ivKellySet(${i},'mp',this.value)"></td>
       <td>${r.edge==null?'<span style="color:#ccc">—</span>':`<b class="${r.edge>0?'iv-k-ok':'iv-k-neg'}">${r.edge>0?'+':''}${(r.edge*100).toFixed(1)}%</b>`}</td>
       <td>${judge}</td></tr>`;
   });
-  h+=`</tbody></table>`;
-  h+=`<div class="iv-k-chain" style="margin-top:8px">方法 4（自動）：p<sub>be</sub> = 1/(1+b) 是讓 f*=0 的勝率門檻——把「p 到底多少」的難題降為「p 有沒有超過門檻」。方法 3（選填）：從選擇權讀市場定價，OTM 期權的 delta ≈ 市場認為到期價落在履約價之外的機率，填入「市場隱含 p」後，Edge = 你的 p − 市場 p 才是真正的 alpha 來源；你和市場看法一致時沒有超額報酬可言。</div>`;
+  h+=`</tbody></table></div>`;
+  h+=`<div class="iv-k-chain" style="margin-top:8px">方法 4（自動）：p<sub>be</sub> = 1/(1+b) 是讓 f*=0 的勝率門檻——把「p 到底多少」的難題降為「p 有沒有超過門檻」。方法 3（選填）：從選擇權讀市場定價——<b>到期日必須對齊「兌現期」</b>：履約價選你的目標價，到期日選論點兌現期之後最近的月選擇權，該 strike 的 delta ≈ 市場認為到期落在該價位之外的機率（嚴格說是 N(d₁)，略高於真實達標機率 N(d₂)；LEAPS 級別建議打 9 折或直接用券商的 Probability ITM）。<b>用短天期 delta 對照長天期論點會系統性高估 edge</b>——市場只是還沒為那段時間定價。填入後 Edge = 你的 p − 市場 p 才是真正的 alpha；你和市場看法一致時沒有超額報酬可言。</div>`;
   // 相關性矩陣
   if(n>1){
     h+=`<div class="iv-k-sec">相關性矩陣 ρ（上三角可編輯，對稱自動同步）</div>`;
@@ -1762,6 +1763,7 @@ function ivKellyDel(i){
 function ivKellySet(i,k,v){
   if(k==='name')_ivK.pos[i].name=String(v).trim()||('部位 '+(i+1));
   else if(k==='mp'){const x=parseFloat(v);_ivK.pos[i].mp=isNaN(x)?null:Math.max(0,Math.min(100,x));}
+  else if(k==='hz'){_ivK.pos[i].hz=String(v).trim();}
   else _ivK.pos[i][k]=parseFloat(v)||0;
   _ivKSave();ivKellyRender();
 }
