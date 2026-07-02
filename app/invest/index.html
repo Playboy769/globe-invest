@@ -336,6 +336,40 @@ body.dark .iv-search-inp{background:#242424;border-color:#333;color:#d0d0d0}
 .iv-stat-btn:hover{color:#0a0a0a}
 body.dark .iv-stat-btn:hover{color:#e0e0e0}
 
+/* ── Kelly Position Sizer ── */
+.iv-k-btn{font-size:11px;cursor:pointer;color:#aaa;user-select:none;transition:all .15s;font-family:'Calibri',sans-serif;font-weight:700;letter-spacing:.03em;border:1px solid #e4e4e4;border-radius:6px;padding:2px 8px;line-height:1.5}
+.iv-k-btn:hover{color:#0a0a0a;border-color:#bbb;background:#f7f7f7}
+.iv-k-tbl{border-collapse:collapse;width:100%;font-family:'Calibri','Noto Sans TC',sans-serif}
+.iv-k-tbl th{font-size:9.5px;color:#aaa;text-transform:uppercase;letter-spacing:.07em;font-weight:600;padding:6px 8px;border-bottom:1px solid #e8e8e8;text-align:right;white-space:nowrap}
+.iv-k-tbl th:first-child{text-align:left}
+.iv-k-tbl td{font-size:12.5px;color:#333;padding:5px 8px;border-bottom:1px solid #f3f3f3;text-align:right;white-space:nowrap}
+.iv-k-tbl td:first-child{text-align:left}
+.iv-k-tbl tfoot td{border-bottom:none;border-top:2px solid #e0e0e0;font-weight:600;color:#555;font-size:11.5px}
+.iv-k-inp{width:60px;padding:3px 6px;border:1px solid #e4e4e4;border-radius:5px;font-size:12px;font-family:'Calibri','Noto Sans TC',sans-serif;text-align:right;outline:none;background:#fafafa;color:#0a0a0a}
+.iv-k-inp:focus{border-color:#8fb3d9;background:#fff}
+.iv-k-inp.name{width:104px;text-align:left}
+.iv-k-lbl{font-size:9.5px;color:#aaa;text-transform:uppercase;letter-spacing:.1em;font-family:'Calibri',sans-serif;margin-bottom:5px;display:block}
+.iv-k-x{color:#ddd;cursor:pointer;font-size:13px;padding:0 4px;user-select:none}
+.iv-k-x:hover{color:#b55}
+.iv-k-bar{display:inline-block;height:8px;border-radius:4px;background:#a8c49a;vertical-align:middle;margin-right:6px}
+.iv-k-warn{font-size:11.5px;color:#a6753a;background:#faf3e8;border:1px solid #eddfc8;border-radius:8px;padding:8px 12px;margin:10px 0;font-family:'Calibri','Noto Sans TC',sans-serif;line-height:1.6}
+.iv-k-chain{font-size:11.5px;color:#777;background:#f7f7f7;border-radius:8px;padding:9px 13px;margin:12px 0 2px;font-family:'Calibri','Noto Sans TC',sans-serif;line-height:1.75}
+.iv-k-corr-inp{width:48px;padding:2px 4px;border:1px solid #e8e8e8;border-radius:4px;font-size:11px;text-align:center;font-family:'Calibri',sans-serif;outline:none;background:#fafafa;color:#0a0a0a}
+.iv-k-corr-inp:focus{border-color:#8fb3d9;background:#fff}
+.iv-k-corr-inp[readonly]{border-color:transparent;background:transparent;color:#c5c5c5;pointer-events:none}
+.iv-k-neg{color:#b55}
+.iv-k-sec{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.12em;font-family:'Calibri',sans-serif;font-weight:600;margin:18px 0 8px}
+body.dark #iv-kelly-box{background:#1e1e1e}
+body.dark .iv-k-btn{border-color:#383838;color:#888}
+body.dark .iv-k-btn:hover{color:#e0e0e0;border-color:#555;background:#252525}
+body.dark .iv-k-tbl th{color:#777;border-color:#333}
+body.dark .iv-k-tbl td{color:#c8c8c8;border-color:#2a2a2a}
+body.dark .iv-k-tbl tfoot td{border-top-color:#444;color:#aaa}
+body.dark .iv-k-inp,body.dark .iv-k-corr-inp{background:#242424;border-color:#333;color:#d0d0d0}
+body.dark .iv-k-corr-inp[readonly]{background:transparent;border-color:transparent;color:#555}
+body.dark .iv-k-warn{background:#2a2318;border-color:#453a24;color:#c89a5e}
+body.dark .iv-k-chain{background:#242424;color:#999}
+
 /* ── Feature 4: Watch List ── */
 .iv-wl{padding:12px 16px 8px;border-bottom:1px solid #f0f0f0}
 .iv-wl-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
@@ -385,6 +419,7 @@ body.dark .iv-wl-text{color:#aaa}
         <span class="iv-fz-ctrl"><span class="iv-fz-btn iv-fz-minus" onclick="ivFontStep(-1)" title="Smaller article text">A−</span><span class="iv-fz-btn iv-fz-plus" onclick="ivFontStep(1)" title="Larger article text">A+</span></span>
         <span class="iv-feed-del" id="iv-feed-del" onclick="ivRemoveActiveTag()">Delete tag</span>
         <span class="iv-feed-count" id="iv-feed-cnt">0 entries</span>
+        <span class="iv-k-btn" onclick="ivShowKelly()" title="Kelly 倉位表">K%</span>
         <span class="iv-stat-btn" onclick="ivShowStats()" title="Statistics">☰</span>
         <span class="iv-dark-btn" onclick="ivToggleDark()" title="Dark mode">◑</span>
       </div>
@@ -509,6 +544,8 @@ body.dark .iv-wl-text{color:#aaa}
 <div id="iv-lightbox" onclick="this.style.display='none'"><img id="iv-lightbox-img"></div>
 
 <div id="iv-stats-overlay" onclick="if(event.target===this)ivCloseStats()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);align-items:center;justify-content:center"><div id="iv-stats-box" style="background:#fff;border-radius:16px;padding:28px 32px;min-width:440px;max-width:620px;box-shadow:0 12px 48px rgba(0,0,0,0.18)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><span style="font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#888;font-family:'Calibri',sans-serif">Article Statistics</span><span onclick="ivCloseStats()" style="cursor:pointer;color:#bbb;font-size:18px;padding:2px 6px">×</span></div><div id="iv-stats-content"></div></div></div>
+
+<div id="iv-kelly-overlay" onclick="if(event.target===this)ivCloseKelly()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);align-items:center;justify-content:center"><div id="iv-kelly-box" style="background:#fff;border-radius:16px;padding:26px 30px;width:min(900px,94vw);max-height:88vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,0.18)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><span style="font-size:14px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#888;font-family:'Calibri','Noto Sans TC',sans-serif">Kelly Position Sizer · 凱利倉位表</span><span onclick="ivCloseKelly()" style="cursor:pointer;color:#bbb;font-size:18px;padding:2px 6px">×</span></div><div id="iv-kelly-content"></div></div></div>
 
 <script>
 if(typeof marked!=='undefined')marked.use({gfm:true,breaks:true});
@@ -1521,6 +1558,154 @@ function ivShowStats(){
   const ov=document.getElementById('iv-stats-overlay');ov.style.display='flex';
 }
 function ivCloseStats(){document.getElementById('iv-stats-overlay').style.display='none';}
+
+/* ── Kelly Position Sizer ─────────────────────────────────
+   管線：f* = p−(1−p)/b → ×fraction → w = Σ⁻¹f（打折重複賭注）
+   → 負值歸零 → 正規化 100% → 單一持倉封頂 → 削出額度回灌 → 最終權重 */
+const _IV_KELLY_KEY='iv_kelly_v1';
+let _ivK=(function(){
+  try{const d=JSON.parse(localStorage.getItem(_IV_KELLY_KEY));if(d&&Array.isArray(d.pos)&&d.pos.length)return d;}catch(e){}
+  return {pos:[{name:'部位 A',p:60,b:2},{name:'部位 B',p:55,b:1.5}],corr:[[1,0],[0,1]],cap:25,frac:0.5};
+})();
+function _ivKSave(){try{localStorage.setItem(_IV_KELLY_KEY,JSON.stringify(_ivK));}catch(e){}}
+function _ivKSyncCorr(){
+  const n=_ivK.pos.length;
+  _ivK.corr=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>
+    i===j?1:((_ivK.corr[i]&&typeof _ivK.corr[i][j]==='number')?_ivK.corr[i][j]:0)));
+}
+function _ivMatInv(A){
+  const n=A.length;
+  const M=A.map((r,i)=>[...r.map(Number),...Array.from({length:n},(_,j)=>i===j?1:0)]);
+  for(let c=0;c<n;c++){
+    let piv=c;
+    for(let r=c+1;r<n;r++)if(Math.abs(M[r][c])>Math.abs(M[piv][c]))piv=r;
+    if(Math.abs(M[piv][c])<1e-10)return null;
+    if(piv!==c){const t=M[piv];M[piv]=M[c];M[c]=t;}
+    const d=M[c][c];
+    for(let j=0;j<2*n;j++)M[c][j]/=d;
+    for(let r=0;r<n;r++){
+      if(r===c)continue;
+      const f=M[r][c];if(!f)continue;
+      for(let j=0;j<2*n;j++)M[r][j]-=f*M[c][j];
+    }
+  }
+  return M.map(r=>r.slice(n));
+}
+function _ivKCompute(){
+  _ivKSyncCorr();
+  const n=_ivK.pos.length, frac=_ivK.frac, cap=Math.max(0.05,Math.min(1,(_ivK.cap||25)/100));
+  const rows=_ivK.pos.map(P=>{
+    const p=Math.max(0,Math.min(100,+P.p||0))/100, b=Math.max(0.01,+P.b||0.01);
+    const fk=p-(1-p)/b;                    // 全凱利
+    return {name:P.name,p,b,fk,fr:Math.max(0,fk)*frac}; // 分數凱利（負值=不下注）
+  });
+  const f=rows.map(r=>r.fr);
+  const fullSum=rows.reduce((s,r)=>s+Math.max(0,r.fk),0);
+  const fracSum=f.reduce((s,x)=>s+x,0);
+  let warn='';
+  let w;
+  const inv=n>1?_ivMatInv(_ivK.corr):[[1]];
+  if(!inv){w=[...f];warn='相關性矩陣不可逆（可能有 ρ 接近 ±1），已跳過逆矩陣調整，直接使用分數凱利。';}
+  else w=f.map((_,i)=>f.reduce((s,fj,j)=>s+inv[i][j]*fj,0)); // w = Σ⁻¹ f
+  const wCl=w.map(x=>Math.max(0,x));       // 負權重＝故事被其他部位覆蓋 → 歸零
+  const squeezed=rows.filter((r,i)=>r.fr>1e-9&&wCl[i]<=1e-9).map(r=>r.name);
+  const invSum=wCl.reduce((s,x)=>s+x,0);
+  const wNorm=invSum>1e-9?wCl.map(x=>x/invSum):wCl.map(()=>0);  // 正規化到 100%
+  // 封頂：超過 cap 者削到 cap，削出額度按比例回灌未封頂部位，迭代至收斂
+  let wFin=[...wNorm];const fixed=new Array(n).fill(false);
+  for(let it=0;it<=n;it++){
+    let excess=0;
+    wFin.forEach((x,i)=>{if(!fixed[i]&&x>cap+1e-12){excess+=x-cap;wFin[i]=cap;fixed[i]=true;}});
+    if(excess<=1e-12)break;
+    const freeSum=wFin.reduce((s,x,i)=>fixed[i]?s:s+x,0);
+    if(freeSum<=1e-12)break;               // 全部封頂 → 剩餘轉現金
+    wFin=wFin.map((x,i)=>fixed[i]?x:x+excess*(x/freeSum));
+  }
+  const finSum=wFin.reduce((s,x)=>s+x,0);
+  return {rows,fullSum,fracSum,w,wCl,invSum,wNorm,wFin,finSum,cash:Math.max(0,1-finSum),warn,squeezed,cap};
+}
+function _ivKEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function ivKellyRender(){
+  const R=_ivKCompute();
+  const n=_ivK.pos.length;
+  const pct=x=>(x*100).toFixed(1)+'%';
+  let h='';
+  h+=`<div style="display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px">
+    <div><span class="iv-k-lbl">凱利分數 Fraction</span>
+      <select class="iv-k-inp" style="width:112px;text-align:left" onchange="ivKellyCfg('frac',this.value)">
+        ${[[1,'Full Kelly'],[0.75,'3/4 Kelly'],[0.5,'Half Kelly'],[0.25,'1/4 Kelly']].map(([v,l])=>`<option value="${v}"${Math.abs(_ivK.frac-v)<1e-9?' selected':''}>${l}</option>`).join('')}
+      </select></div>
+    <div><span class="iv-k-lbl">單一持倉上限 %</span><input class="iv-k-inp" type="number" min="5" max="100" step="1" value="${_ivK.cap}" onchange="ivKellyCfg('cap',this.value)"></div>
+    <span class="iv-k-btn" style="margin-left:auto" onclick="ivKellyAdd()">+ 新增部位</span>
+  </div>`;
+  // 主表：每列走完整管線
+  h+=`<table class="iv-k-tbl"><thead><tr>
+    <th>部位</th><th>勝率 p %</th><th>賠率 b</th><th>全凱利 f*</th><th>×${_ivK.frac}</th>
+    <th>Σ⁻¹ 調整</th><th>正規化</th><th>最終權重</th><th></th></tr></thead><tbody>`;
+  R.rows.forEach((r,i)=>{
+    const dead=r.fk<=0;
+    h+=`<tr>
+      <td><input class="iv-k-inp name" value="${_ivKEsc(r.name)}" onchange="ivKellySet(${i},'name',this.value)"></td>
+      <td><input class="iv-k-inp" type="number" min="0" max="100" step="1" value="${_ivK.pos[i].p}" onchange="ivKellySet(${i},'p',this.value)"></td>
+      <td><input class="iv-k-inp" type="number" min="0.1" step="0.1" value="${_ivK.pos[i].b}" onchange="ivKellySet(${i},'b',this.value)"></td>
+      <td${dead?' class="iv-k-neg"':''}>${dead?pct(r.fk)+'（不下注）':pct(r.fk)}</td>
+      <td>${dead?'—':pct(r.fr)}</td>
+      <td>${dead?'—':(R.wCl[i]<=1e-9&&r.fr>1e-9?'<span class="iv-k-neg">0（被擠出）</span>':pct(R.wCl[i]))}</td>
+      <td>${dead?'—':pct(R.wNorm[i])}</td>
+      <td>${dead?'—':`<span class="iv-k-bar" style="width:${Math.round(R.wFin[i]*140)}px"></span><b>${pct(R.wFin[i])}</b>`}</td>
+      <td><span class="iv-k-x" onclick="ivKellyDel(${i})" title="移除">✕</span></td></tr>`;
+  });
+  h+=`</tbody><tfoot><tr>
+    <td>總曝險</td><td></td><td></td>
+    <td>${pct(R.fullSum)}</td><td>${pct(R.fracSum)}</td><td>${pct(R.invSum)}</td><td>${R.invSum>1e-9?'100.0%':'—'}</td>
+    <td>${pct(R.finSum)}${R.cash>0.001?`　<span style="font-weight:400;color:#999">現金 ${pct(R.cash)}</span>`:''}</td><td></td></tr></tfoot></table>`;
+  // 相關性矩陣
+  if(n>1){
+    h+=`<div class="iv-k-sec">相關性矩陣 ρ（上三角可編輯，對稱自動同步）</div>`;
+    h+=`<div style="overflow-x:auto"><table class="iv-k-tbl" style="width:auto"><thead><tr><th></th>${_ivK.pos.map(P=>`<th style="text-align:center">${_ivKEsc(String(P.name).slice(0,8))}</th>`).join('')}</tr></thead><tbody>`;
+    for(let i=0;i<n;i++){
+      h+=`<tr><td style="font-size:11px;color:#888">${_ivKEsc(String(_ivK.pos[i].name).slice(0,8))}</td>`;
+      for(let j=0;j<n;j++){
+        if(i===j)h+=`<td style="text-align:center;color:#ccc">1</td>`;
+        else if(j>i)h+=`<td style="text-align:center"><input class="iv-k-corr-inp" type="number" min="-0.95" max="0.99" step="0.05" value="${_ivK.corr[i][j]}" onchange="ivKellyCorrSet(${i},${j},this.value)"></td>`;
+        else h+=`<td style="text-align:center"><input class="iv-k-corr-inp" readonly value="${_ivK.corr[i][j]}"></td>`;
+      }
+      h+=`</tr>`;
+    }
+    h+=`</tbody></table></div>`;
+  }
+  if(R.warn)h+=`<div class="iv-k-warn">⚠ ${R.warn}</div>`;
+  if(R.squeezed.length)h+=`<div class="iv-k-warn">⚠ ${R.squeezed.map(_ivKEsc).join('、')} 被逆矩陣擠出（權重 → 0）：它的故事與其他部位高度重複，等於同一注已下過。若你認為它獨立，請調低相關性。</div>`;
+  h+=`<div class="iv-k-chain"><b>管線</b>：f* = p − (1−p)/b 回答「這注該押多重」 → ×${_ivK.frac} 留「我沒那麼準」的緩衝（防過度自信的 p 被凱利照單全收） → w = Σ⁻¹f 用相關性矩陣打折重複賭注、加碼獨立賭注（兩資產時係數 = 1/(1+ρ)） → 正規化收斂到 100%（逆矩陣只解決相對比例，不解決總量） → 單一持倉硬上限 ${_ivK.cap}%（防「過度樂觀＋剛好獨立」把單注膨脹成 Amaranth），削出額度按比例回灌其餘部位再正規化。負 f* 直接不下注；全部封頂時剩餘轉現金。</div>`;
+  document.getElementById('iv-kelly-content').innerHTML=h;
+}
+function ivShowKelly(){ivKellyRender();document.getElementById('iv-kelly-overlay').style.display='flex';}
+function ivCloseKelly(){document.getElementById('iv-kelly-overlay').style.display='none';}
+function ivKellyAdd(){
+  _ivK.pos.push({name:'部位 '+String.fromCharCode(65+(_ivK.pos.length%26)),p:50,b:2});
+  _ivKSyncCorr();_ivKSave();ivKellyRender();
+}
+function ivKellyDel(i){
+  if(_ivK.pos.length<=1)return;
+  _ivK.pos.splice(i,1);_ivK.corr.splice(i,1);_ivK.corr.forEach(r=>r.splice(i,1));
+  _ivKSave();ivKellyRender();
+}
+function ivKellySet(i,k,v){
+  if(k==='name')_ivK.pos[i].name=String(v).trim()||('部位 '+(i+1));
+  else _ivK.pos[i][k]=parseFloat(v)||0;
+  _ivKSave();ivKellyRender();
+}
+function ivKellyCorrSet(i,j,v){
+  let x=parseFloat(v);if(isNaN(x))x=0;
+  x=Math.max(-0.95,Math.min(0.99,x));
+  _ivK.corr[i][j]=x;_ivK.corr[j][i]=x;
+  _ivKSave();ivKellyRender();
+}
+function ivKellyCfg(k,v){
+  _ivK[k]=parseFloat(v)||( k==='cap'?25:0.5);
+  if(k==='cap')_ivK.cap=Math.max(5,Math.min(100,_ivK.cap));
+  _ivKSave();ivKellyRender();
+}
 
 /* ── Feature 4: Watch List ── */
 window._ivWL=[];try{window._ivWL=JSON.parse(localStorage.getItem('iv_wl')||'[]');}catch(e){window._ivWL=[];}
