@@ -1,0 +1,38 @@
+name: CI
+
+# Lightweight sanity check only — does NOT gate or block pushes to main.
+# This repo is iterated on fast and deployed straight from main; the point of this
+# workflow is to surface a broken server.js in the GitHub Actions tab before Railway
+# picks it up, not to require green CI before merging.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  sanity-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Syntax-check server.js
+        run: node --check server.js
+
+      - name: Verify each app entry point is well-formed HTML
+        run: |
+          for f in app/*/index.html; do
+            echo "Checking $f"
+            if ! grep -q "<html" "$f"; then
+              echo "::error file=$f::missing <html> tag"
+              exit 1
+            fi
+          done
+
+      # NOTE: server.js hardcodes DATA_DIR=/data and APP_DIR=/app (Railway container
+      # paths), which standard GitHub-hosted runners can't create without sudo — so we
+      # deliberately don't boot the server here. If those paths ever become configurable
+      # via env vars, add a real /globe smoke test.
