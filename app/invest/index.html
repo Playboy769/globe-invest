@@ -354,6 +354,17 @@ body.dark .iv-stat-btn:hover{color:#e0e0e0}
 .iv-k-bar{display:inline-block;height:8px;border-radius:4px;background:#a8c49a;vertical-align:middle;margin-right:6px}
 .iv-k-warn{font-size:11.5px;color:#a6753a;background:#faf3e8;border:1px solid #eddfc8;border-radius:8px;padding:8px 12px;margin:10px 0;font-family:'Calibri','Noto Sans TC',sans-serif;line-height:1.6}
 .iv-k-chain{font-size:11.5px;color:#777;background:#f7f7f7;border-radius:8px;padding:9px 13px;margin:12px 0 2px;font-family:'Calibri','Noto Sans TC',sans-serif;line-height:1.75}
+.iv-k-step{display:flex;gap:14px;background:#fff;border:1px solid #ececec;border-radius:12px;padding:14px 18px;margin-bottom:10px;transition:border-color .15s,box-shadow .15s}
+.iv-k-step:hover{border-color:#ddd;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.iv-k-step-n{font-size:9px;color:#bbb;letter-spacing:.12em;font-family:'Calibri',sans-serif;font-weight:700;padding-top:3px;flex-shrink:0;white-space:nowrap}
+.iv-k-step-t{font-size:13px;font-weight:600;color:#333;font-family:'Calibri','Noto Sans TC',sans-serif;margin-bottom:7px}
+.iv-k-step-f{font-size:15px;color:#0a0a0a;font-family:'Cambria Math','Cambria','Times New Roman',serif;background:#f7f7f7;border-radius:7px;padding:7px 13px;display:inline-block;margin-bottom:8px;letter-spacing:.02em;line-height:1.5}
+.iv-k-step-d{font-size:11.5px;color:#888;line-height:1.75;font-family:'Calibri','Noto Sans TC',sans-serif}
+body.dark .iv-k-step{background:#1e1e1e;border-color:#2e2e2e}
+body.dark .iv-k-step:hover{border-color:#3a3a3a}
+body.dark .iv-k-step-t{color:#d0d0d0}
+body.dark .iv-k-step-f{background:#252525;color:#d8d8d8}
+body.dark .iv-k-step-d{color:#777}
 .iv-k-corr-inp{width:48px;padding:2px 4px;border:1px solid #e8e8e8;border-radius:4px;font-size:11px;text-align:center;font-family:'Calibri',sans-serif;outline:none;background:#fafafa;color:#0a0a0a}
 .iv-k-corr-inp:focus{border-color:#8fb3d9;background:#fff}
 .iv-k-corr-inp[readonly]{border-color:transparent;background:transparent;color:#c5c5c5;pointer-events:none}
@@ -1676,7 +1687,28 @@ function ivKellyRender(){
   }
   if(R.warn)h+=`<div class="iv-k-warn">⚠ ${R.warn}</div>`;
   if(R.squeezed.length)h+=`<div class="iv-k-warn">⚠ ${R.squeezed.map(_ivKEsc).join('、')} 被逆矩陣擠出（權重 → 0）：它的故事與其他部位高度重複，等於同一注已下過。若你認為它獨立，請調低相關性。</div>`;
-  h+=`<div class="iv-k-chain"><b>管線</b>：f* = p − (1−p)/b 回答「這注該押多重」 → ×${_ivK.frac} 留「我沒那麼準」的緩衝（防過度自信的 p 被凱利照單全收） → w = Σ⁻¹f 用相關性矩陣打折重複賭注、加碼獨立賭注（兩資產時係數 = 1/(1+ρ)） → 正規化收斂到 100%（逆矩陣只解決相對比例，不解決總量） → 單一持倉硬上限 ${_ivK.cap}%（防「過度樂觀＋剛好獨立」把單注膨脹成 Amaranth），削出額度按比例回灌其餘部位再正規化。負 f* 直接不下注；全部封頂時剩餘轉現金。</div>`;
+  h+=`<div class="iv-k-sec">計算管線 Pipeline</div>`;
+  const _steps=[
+    {n:'01',t:'全凱利 — 這注該押多重',
+     f:'f* = p − (1 − p) / b',
+     d:'p = 勝率（你的 conviction），b = 賠率（賺 / 蝕比）。凱利回答的不是「看得準不準」，而是「這一注該押多重」——LTCM 策略是對的，倒在倉位錯。f* ≤ 0 代表期望值不足，直接不下注。'},
+    {n:'02',t:'分數凱利 — 留「我沒那麼準」的緩衝',
+     f:`f = f* × ${_ivK.frac}`,
+     d:'p 是主觀估計，人對自己的判斷系統性過度樂觀，而凱利會把過度自信的 p 照單全收、放大成過重倉位（LTCM 式風險）。打對折（Thorp 的 Half-Kelly）是第一道防線：例如 p=90%、賺 7 倍時，全凱利 89% → Half-Kelly 44%。'},
+    {n:'03',t:'逆矩陣調整 — 打折重複賭注、加碼獨立賭注',
+     f:'w = Σ⁻¹ · f',
+     d:'凱利從不問這注是否跟別注同一個故事，所以各檔 Half-Kelly 加總會膨脹（如 8 檔加總 298%）。Σ 是相關性矩陣：高相關 = 重複下注同一故事，自動打折；獨立賭注自動加碼（Grinold-Kahn：IR = IC × √BR，BR 數的是獨立賭注數）。兩資產時折扣係數 = 1 / (1 + ρ)：ρ=0 → 1.0、ρ=0.75 → 0.57、ρ→1 → 0.5。權重被擠成負值 = 該注的故事已被其他部位完全覆蓋 → 歸零。'},
+    {n:'04',t:'正規化 — 收斂總量到 100%',
+     f:'wᵢ = wᵢ / Σⱼ wⱼ',
+     d:'逆矩陣只解決「相對比例」，不解決總量——加總可能仍大於 100%（如 134.7% 仍是 1.3 倍槓桿）。每檔除以總和：比例不變，合計收斂到 100%。'},
+    {n:'05',t:`單一持倉硬上限 ${_ivK.cap}%`,
+     f:`wᵢ = min(wᵢ, ${_ivK.cap}%)，超額按比例回灌未封頂部位，迭代至收斂`,
+     d:'防「過度樂觀＋剛好獨立」的組合讓逆矩陣持續加碼單注、膨脹到 27.8% 甚至更高（Amaranth 2006：集中押天然氣期貨 → 虧 60 億清盤）。Munger：先圈出會死在哪裡。上限收緊（20–25%）更穩但放棄部分 alpha；放鬆（33%+）回報更高但傷口更大。'},
+    {n:'06',t:'最終產出 — 複利機器',
+     f:'Σ wᵢ ≤ 100%，現金 = 100% − Σ wᵢ',
+     d:'分散且有紀律的組合。全部封頂時剩餘轉現金。三道防線（分數凱利＋分散＋上限）換來的是：一次逆風不會本金歸零、複利不中斷——看得準只贏一把，活得夠久，複利才替你贏下半生。'}
+  ];
+  _steps.forEach(s=>{h+=`<div class="iv-k-step"><div class="iv-k-step-n">STEP ${s.n}</div><div><div class="iv-k-step-t">${s.t}</div><div class="iv-k-step-f">${s.f}</div><div class="iv-k-step-d">${s.d}</div></div></div>`;});
   document.getElementById('iv-kelly-content').innerHTML=h;
 }
 function ivShowKelly(){ivKellyRender();document.getElementById('iv-kelly-overlay').style.display='flex';}
