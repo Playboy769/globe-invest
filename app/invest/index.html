@@ -369,6 +369,15 @@ body.dark .iv-k-step-d{color:#777}
 .iv-k-corr-inp:focus{border-color:#8fb3d9;background:#fff}
 .iv-k-corr-inp[readonly]{border-color:transparent;background:transparent;color:#c5c5c5;pointer-events:none}
 .iv-k-neg{color:#b55}
+.iv-k-ok{color:#5a8a4a}
+.iv-k-mid{color:#b08a3e}
+.iv-k-judge{font-size:10px;padding:2px 8px;border-radius:5px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.03em;white-space:nowrap}
+.iv-k-judge.ok{background:#eef3ea;color:#5a8a4a}
+.iv-k-judge.mid{background:#f7f0e2;color:#b08a3e}
+.iv-k-judge.bad{background:#f8ecec;color:#b55}
+body.dark .iv-k-judge.ok{background:#1e2a1a;color:#8ab87a}
+body.dark .iv-k-judge.mid{background:#2a2416;color:#c8a45e}
+body.dark .iv-k-judge.bad{background:#2a1a1a;color:#d07a7a}
 .iv-k-sec{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.12em;font-family:'Calibri',sans-serif;font-weight:600;margin:18px 0 8px}
 body.dark #iv-kelly-box{background:#1e1e1e}
 body.dark .iv-k-btn{border-color:#383838;color:#888}
@@ -1608,7 +1617,10 @@ function _ivKCompute(){
   const rows=_ivK.pos.map(P=>{
     const p=Math.max(0,Math.min(100,+P.p||0))/100, b=Math.max(0.01,+P.b||0.01);
     const fk=p-(1-p)/b;                    // 全凱利
-    return {name:P.name,p,b,fk,fr:Math.max(0,fk)*frac}; // 分數凱利（負值=不下注）
+    const pbe=1/(1+b);                     // 損益兩平勝率：f*=0 的 p
+    const mp=(P.mp==null||P.mp==='')?null:Math.max(0,Math.min(100,+P.mp||0))/100; // 市場隱含 p（選填）
+    return {name:P.name,p,b,fk,fr:Math.max(0,fk)*frac,
+      pbe,margin:p-pbe,mp,edge:mp==null?null:p-mp};
   });
   const f=rows.map(r=>r.fr);
   const fullSum=rows.reduce((s,r)=>s+Math.max(0,r.fk),0);
@@ -1670,6 +1682,31 @@ function ivKellyRender(){
     <td>總曝險</td><td></td><td></td>
     <td>${pct(R.fullSum)}</td><td>${pct(R.fracSum)}</td><td>${pct(R.invSum)}</td><td>${R.invSum>1e-9?'100.0%':'—'}</td>
     <td>${pct(R.finSum)}${R.cash>0.001?`　<span style="font-weight:400;color:#999">現金 ${pct(R.cash)}</span>`:''}</td><td></td></tr></tfoot></table>`;
+  // 勝率分析：損益兩平 p（方法4）＋ 市場隱含 p（方法3）
+  h+=`<div class="iv-k-sec">勝率分析 — 損益兩平 &amp; 市場隱含</div>`;
+  h+=`<table class="iv-k-tbl"><thead><tr>
+    <th>部位</th><th>賠率 b</th><th>損益兩平 p<sub>be</sub> = 1/(1+b)</th><th>你的 p</th><th>安全邊際 p − p<sub>be</sub></th>
+    <th>市場隱含 p %</th><th>Edge p − p<sub>mkt</sub></th><th>判定</th></tr></thead><tbody>`;
+  R.rows.forEach((r,i)=>{
+    const mCls=r.margin<=0?'iv-k-neg':(r.margin<0.05?'iv-k-mid':'iv-k-ok');
+    let judge;
+    if(r.margin<=0)judge='<span class="iv-k-judge bad">期望值不足，不下注</span>';
+    else if(r.margin<0.05)judge='<span class="iv-k-judge mid">邊際太薄，p 高估 '+(r.margin*100).toFixed(0)+'% 就歸零</span>';
+    else if(r.edge!=null&&r.edge<=0)judge='<span class="iv-k-judge mid">你不比市場樂觀，edge 存疑</span>';
+    else if(r.edge!=null)judge='<span class="iv-k-judge ok">邊際 '+(r.margin*100).toFixed(0)+'%＋領先市場 '+(r.edge*100).toFixed(0)+'%</span>';
+    else judge='<span class="iv-k-judge ok">邊際充足 '+(r.margin*100).toFixed(0)+'%</span>';
+    h+=`<tr>
+      <td>${_ivKEsc(r.name)}</td>
+      <td>${r.b}</td>
+      <td>${pct(r.pbe)}</td>
+      <td>${pct(r.p)}</td>
+      <td class="${mCls}"><b>${r.margin>0?'+':''}${(r.margin*100).toFixed(1)}%</b></td>
+      <td><input class="iv-k-inp" type="number" min="0" max="100" step="1" value="${_ivK.pos[i].mp==null?'':_ivK.pos[i].mp}" placeholder="選填" onchange="ivKellySet(${i},'mp',this.value)"></td>
+      <td>${r.edge==null?'<span style="color:#ccc">—</span>':`<b class="${r.edge>0?'iv-k-ok':'iv-k-neg'}">${r.edge>0?'+':''}${(r.edge*100).toFixed(1)}%</b>`}</td>
+      <td>${judge}</td></tr>`;
+  });
+  h+=`</tbody></table>`;
+  h+=`<div class="iv-k-chain" style="margin-top:8px">方法 4（自動）：p<sub>be</sub> = 1/(1+b) 是讓 f*=0 的勝率門檻——把「p 到底多少」的難題降為「p 有沒有超過門檻」。方法 3（選填）：從選擇權讀市場定價，OTM 期權的 delta ≈ 市場認為到期價落在履約價之外的機率，填入「市場隱含 p」後，Edge = 你的 p − 市場 p 才是真正的 alpha 來源；你和市場看法一致時沒有超額報酬可言。</div>`;
   // 相關性矩陣
   if(n>1){
     h+=`<div class="iv-k-sec">相關性矩陣 ρ（上三角可編輯，對稱自動同步）</div>`;
@@ -1724,6 +1761,7 @@ function ivKellyDel(i){
 }
 function ivKellySet(i,k,v){
   if(k==='name')_ivK.pos[i].name=String(v).trim()||('部位 '+(i+1));
+  else if(k==='mp'){const x=parseFloat(v);_ivK.pos[i].mp=isNaN(x)?null:Math.max(0,Math.min(100,x));}
   else _ivK.pos[i][k]=parseFloat(v)||0;
   _ivKSave();ivKellyRender();
 }
