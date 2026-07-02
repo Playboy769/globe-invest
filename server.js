@@ -27,7 +27,8 @@ const BROWSER_HEADERS = {
 };
 
 // Yahoo Finance symbols
-const SYMBOLS = { wti: 'CL%3DF', brent: 'BZ%3DF', ng: 'NG%3DF', rbob: 'RB%3DF', jet: 'HO%3DF' };
+const SYMBOLS = { wti: 'CL%3DF', brent: 'BZ%3DF', ng: 'NG%3DF', ttf: 'TTF%3DF', rbob: 'RB%3DF', ho: 'HO%3DF' };
+const OIL_STALE_SEC = 20 * 60; // data older than this without a fresh tick is treated as closed
 
 let _oilCache = null;
 let _oilCacheTime = 0;
@@ -258,6 +259,21 @@ function fetchUrl(url) {
   });
 }
 
+// Combines Yahoo's session window (currentTradingPeriod.regular) with tick staleness —
+// futures don't reliably set meta.marketState, so absence of a session window falls back
+// to "closed if the last tick is old".
+function computeMarketClosed(meta) {
+  const nowSec = Date.now() / 1000;
+  const rmt = meta.regularMarketTime || 0;
+  const reg = meta.currentTradingPeriod && meta.currentTradingPeriod.regular;
+  let inSession = null;
+  if (reg && typeof reg.start === 'number' && typeof reg.end === 'number') {
+    inSession = nowSec >= reg.start && nowSec < reg.end;
+  }
+  const stale = rmt > 0 && (nowSec - rmt) > OIL_STALE_SEC;
+  return inSession === false || (inSession === null && stale);
+}
+
 async function fetchSymbol(sym) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=30d&includePrePost=false`;
   const raw = await fetchUrl(url);
@@ -276,6 +292,8 @@ async function fetchSymbol(sym) {
     prev: prevClose,
     hist: closes.slice(-30),
     currency: meta.currency || 'USD',
+    closed: computeMarketClosed(meta),
+    asOf: meta.regularMarketTime || null,
   };
 }
 

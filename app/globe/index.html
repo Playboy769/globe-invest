@@ -266,15 +266,23 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
 #oil-panel{padding:20px}
 .op-head{font-size:10px;color:rgba(255,255,255,0.25);text-transform:uppercase;letter-spacing:.16em;font-weight:300;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .op-live{display:inline-block;width:5px;height:5px;background:#44dd88;border-radius:50%;animation:opBlink 2s infinite}
+.op-live.op-live-err{background:#e44;animation:none}
+.op-live.op-live-off{background:#555;animation:none}
 @keyframes opBlink{0%,100%{opacity:1}50%{opacity:.15}}
+.op-refresh{margin-left:auto;background:none;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);border-radius:4px;width:18px;height:18px;line-height:1;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.op-refresh:hover{color:#fff;border-color:rgba(255,255,255,0.3)}
+.op-refresh:disabled{opacity:.4;cursor:default}
+.op-refresh.spin{animation:opSpin .8s linear infinite}
+@keyframes opSpin{100%{transform:rotate(360deg)}}
 .op-item{padding:14px 0 14px 14px;border-bottom:none;border-left:2px solid transparent}
 .op-item:last-of-type{border-bottom:none}
 .op-item+.op-item{margin-top:0;border-top:1px solid rgba(255,255,255,0.05);padding-top:14px}
 .op-item[data-c="wti"]{border-left-color:#e07030}
 .op-item[data-c="brent"]{border-left-color:#cc5020}
 .op-item[data-c="ng"]{border-left-color:#4a88dd}
+.op-item[data-c="ttf"]{border-left-color:#3fae66}
 .op-item[data-c="rbob"]{border-left-color:#55aacc}
-.op-item[data-c="jet"]{border-left-color:#7788bb}
+.op-item[data-c="ho"]{border-left-color:#7788bb}
 .op-item-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .op-item-bot{display:flex;align-items:center;gap:8px}
 .op-name{font-size:11px;color:rgba(255,255,255,0.45);font-weight:300}
@@ -282,6 +290,9 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
 .op-chg{font-size:11px;font-weight:600;font-family:Consolas,monospace}
 .op-pct{font-size:10px;font-weight:400;font-family:Consolas,monospace}
 .op-label{font-size:8px;color:rgba(255,255,255,0.2);text-transform:uppercase;letter-spacing:.06em;margin-left:auto}
+.op-closed{display:none;font-size:8px;color:#e0a020;text-transform:uppercase;letter-spacing:.06em;padding:1px 5px;border:1px solid rgba(224,160,32,0.4);border-radius:3px}
+.op-item.is-closed .op-closed{display:inline-block}
+.op-item.is-closed .op-label{display:none}
 .op-up{color:#dd4444}.op-down{color:#44dd88}
 .op-spark{width:100%;height:52px;margin-top:8px;border-radius:6px;display:block}
 .op-ts{font-size:8px;color:rgba(255,255,255,0.18);text-align:right;margin-top:12px;font-family:Consolas,monospace;letter-spacing:.04em}
@@ -572,12 +583,13 @@ html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:'No
       <div id="en-right-body">
       <div id="hub-detail"></div>
       <div id="oil-panel">
-        <div class="op-head"><span class="op-live"></span>能源即時報價</div>
-        <div class="op-item" data-c="wti"><div class="op-item-top"><span class="op-name">WTI Crude Oil</span><span class="op-price" id="op-wti">$71.24</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-wti-chg">+0.38</span><span class="op-pct op-up" id="op-wti-pct">(+0.53%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-wti" class="op-spark" width="300" height="52"></canvas></div>
-        <div class="op-item" data-c="brent"><div class="op-item-top"><span class="op-name">Brent Crude Oil</span><span class="op-price" id="op-brent">$75.62</span></div><div class="op-item-bot"><span class="op-chg op-down" id="op-brent-chg">-0.15</span><span class="op-pct op-down" id="op-brent-pct">(-0.20%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-brent" class="op-spark" width="300" height="52"></canvas></div>
-        <div class="op-item" data-c="ng"><div class="op-item-top"><span class="op-name">Henry Hub NG</span><span class="op-price" id="op-ng">$2.87</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-ng-chg">+0.04</span><span class="op-pct op-up" id="op-ng-pct">(+1.41%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ng" class="op-spark" width="300" height="52"></canvas></div>
-        <div class="op-item" data-c="rbob"><div class="op-item-top"><span class="op-name">RBOB Gasoline</span><span class="op-price" id="op-rbob">$2.18</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-rbob-chg">+0.03</span><span class="op-pct op-up" id="op-rbob-pct">(+1.39%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-rbob" class="op-spark" width="300" height="52"></canvas></div>
-        <div class="op-item" data-c="jet"><div class="op-item-top"><span class="op-name">Jet Fuel</span><span class="op-price" id="op-jet">$3.02</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-jet-chg">+0.05</span><span class="op-pct op-up" id="op-jet-pct">(+1.68%)</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-jet" class="op-spark" width="300" height="52"></canvas></div>
+        <div class="op-head"><span class="op-live" id="op-live"></span>能源即時報價<button class="op-refresh" id="op-refresh" onclick="refreshOilPrices()" title="手動刷新">⟳</button></div>
+        <div class="op-item" data-c="wti"><div class="op-item-top"><span class="op-name">WTI Crude Oil</span><span class="op-price" id="op-wti">$71.24</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-wti-chg">+0.38</span><span class="op-pct op-up" id="op-wti-pct">(+0.53%)</span><span class="op-closed" id="op-wti-closed">Market Closed</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-wti" class="op-spark" width="300" height="52"></canvas></div>
+        <div class="op-item" data-c="brent"><div class="op-item-top"><span class="op-name">Brent Crude Oil</span><span class="op-price" id="op-brent">$75.62</span></div><div class="op-item-bot"><span class="op-chg op-down" id="op-brent-chg">-0.15</span><span class="op-pct op-down" id="op-brent-pct">(-0.20%)</span><span class="op-closed" id="op-brent-closed">Market Closed</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-brent" class="op-spark" width="300" height="52"></canvas></div>
+        <div class="op-item" data-c="ng"><div class="op-item-top"><span class="op-name">Henry Hub NG</span><span class="op-price" id="op-ng">$2.87</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-ng-chg">+0.04</span><span class="op-pct op-up" id="op-ng-pct">(+1.41%)</span><span class="op-closed" id="op-ng-closed">Market Closed</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ng" class="op-spark" width="300" height="52"></canvas></div>
+        <div class="op-item" data-c="ttf"><div class="op-item-top"><span class="op-name">TTF (EU Gas)</span><span class="op-price" id="op-ttf">€35.40</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-ttf-chg">+0.82</span><span class="op-pct op-up" id="op-ttf-pct">(+2.37%)</span><span class="op-closed" id="op-ttf-closed">Market Closed</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ttf" class="op-spark" width="300" height="52"></canvas></div>
+        <div class="op-item" data-c="rbob"><div class="op-item-top"><span class="op-name">RBOB Gasoline</span><span class="op-price" id="op-rbob">$2.18</span></div><div class="op-item-bot"><span class="op-chg op-up" id="op-rbob-chg">+0.03</span><span class="op-pct op-up" id="op-rbob-pct">(+1.39%)</span><span class="op-closed" id="op-rbob-closed">Market Closed</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-rbob" class="op-spark" width="300" height="52"></canvas></div>
+        <div class="op-item" data-c="ho"><div class="op-item-top"><span class="op-name">Heating Oil</span><span class="op-price" id="op-ho">$2.42</span></div><div class="op-item-bot"><span class="op-chg op-down" id="op-ho-chg">-0.01</span><span class="op-pct op-down" id="op-ho-pct">(-0.41%)</span><span class="op-closed" id="op-ho-closed">Market Closed</span><span class="op-label">Daily Chg</span></div><canvas id="op-spark-ho" class="op-spark" width="300" height="52"></canvas></div>
         <div class="op-ts" id="op-ts">Updated: --</div>
         <div class="op-ts" id="op-src">Connecting...</div>
       </div>
@@ -3803,12 +3815,14 @@ window.setEnFontScale=setEnFontScale;
 
 (function oilTicker(){
   const items=[
-    {k:'wti', pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
-    {k:'brent',pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
-    {k:'ng',  pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
-    {k:'rbob',pre:'$',hist:[],cur:0,prev:0,live:false,err:''},
-    {k:'jet', pre:'$',hist:[],cur:0,prev:0,live:false,err:''}
+    {k:'wti', pre:'$',hist:[],cur:0,prev:0,live:false,err:'',closed:false},
+    {k:'brent',pre:'$',hist:[],cur:0,prev:0,live:false,err:'',closed:false},
+    {k:'ng',  pre:'$',hist:[],cur:0,prev:0,live:false,err:'',closed:false},
+    {k:'ttf', pre:'€',hist:[],cur:0,prev:0,live:false,err:'',closed:false},
+    {k:'rbob',pre:'$',hist:[],cur:0,prev:0,live:false,err:'',closed:false},
+    {k:'ho',  pre:'$',hist:[],cur:0,prev:0,live:false,err:'',closed:false}
   ];
+  let fetching=false;
 
   function showItemError(it){
     const el=document.getElementById('op-'+it.k);
@@ -3817,6 +3831,8 @@ window.setEnFontScale=setEnFontScale;
     const pctEl=document.getElementById('op-'+it.k+'-pct');
     if(chgEl){chgEl.textContent='--';chgEl.className='op-chg';}
     if(pctEl){pctEl.textContent='';pctEl.className='op-pct';}
+    const itemEl=document.getElementById('op-'+it.k)?.closest('.op-item');
+    if(itemEl)itemEl.classList.remove('is-closed');
     const cv=document.getElementById('op-spark-'+it.k);
     if(cv){const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#e44';ctx.font='11px monospace';ctx.fillText('Error: '+it.err,4,24);}
   }
@@ -3855,17 +3871,28 @@ window.setEnFontScale=setEnFontScale;
       const pct=it.prev?chg/it.prev*100:0;
       if(chgEl){chgEl.textContent=(chg>=0?'+':'')+chg.toFixed(it.cur>=10?2:3);chgEl.className='op-chg '+(chg>=0?'op-up':'op-down');chgEl.style.color='';}
       if(pctEl){pctEl.textContent='('+(pct>=0?'+':'')+pct.toFixed(2)+'%)';pctEl.className='op-pct '+(pct>=0?'op-up':'op-down');pctEl.style.color='';}
+      const itemEl=el.closest('.op-item');
+      if(itemEl)itemEl.classList.toggle('is-closed',!!it.closed);
       drawSpark(it);
     });
     const ts=document.getElementById('op-ts');
     const pad=n=>String(n).padStart(2,'0');
     const now=new Date();
     if(ts)ts.textContent='Updated: '+now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
+    const dot=document.getElementById('op-live');
+    if(dot){
+      const ok=items.filter(it=>it.live).length;
+      dot.className='op-live'+(ok===0?' op-live-err':(ok<items.length?' op-live-off':''));
+    }
   }
 
   async function fetchAll(){
+    if(fetching)return;
+    fetching=true;
     const src=document.getElementById('op-src');
+    const btn=document.getElementById('op-refresh');
     if(src)src.textContent='Fetching...';
+    if(btn){btn.disabled=true;btn.classList.add('spin');}
     try{
       const r=await fetch('/api/oil-prices');
       if(!r.ok)throw new Error('HTTP '+r.status);
@@ -3875,9 +3902,9 @@ window.setEnFontScale=setEnFontScale;
         if(entry&&!entry.error&&entry.price){
           it.cur=entry.price;it.prev=entry.prev||entry.price;
           it.hist=Array.isArray(entry.hist)?entry.hist:[entry.prev,entry.price];
-          it.live=true;it.err='';
+          it.live=true;it.err='';it.closed=!!entry.closed;
         }else{
-          it.live=false;it.err=(entry&&entry.error)||'NO_DATA';
+          it.live=false;it.err=(entry&&entry.error)||'NO_DATA';it.closed=false;
           showItemError(it);
         }
       });
@@ -3889,10 +3916,14 @@ window.setEnFontScale=setEnFontScale;
       }
     }catch(e){
       if(src)src.innerHTML='<span style="color:#e44">連線失敗: '+e.message+'</span>';
+      items.forEach(it=>it.live=false);
     }
     render();
+    fetching=false;
+    if(btn){btn.disabled=false;btn.classList.remove('spin');}
   }
 
+  window.refreshOilPrices=fetchAll;
   fetchAll();
   setInterval(fetchAll,300000);
 })();
