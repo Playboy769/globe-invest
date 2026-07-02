@@ -2264,14 +2264,16 @@ updateFilename();
 const _CF_URL_FILE = new URLSearchParams(location.search).get('file');
 if(_CF_URL_FILE){const _uf0=files.find(f=>f.name===_CF_URL_FILE||f.id===_CF_URL_FILE);if(_uf0)openFile(_uf0.id);}
 // ── Cloud sync (Railway) ───────────────────────────────────
-(async function cfSync(){
+// Pulls files+folders from server, merges by modified-timestamp (newer wins per file/per folder-set),
+// and pushes the merged result back. Returns {filesChanged,foldersChanged} or false on no-op/error.
+async function cfPullSync(){
   try{
     const r=await fetch(CF_API);
-    if(!r.ok)return;
+    if(!r.ok)return false;
     const sv=await r.json();
     if(!Array.isArray(sv)||!sv.length){
       if(files.length)fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
-      return;
+      return false;
     }
     // Extract folder meta from server, then filter system records
     const folderMeta=sv.find(f=>f.id==='__cf_folders__');
@@ -2279,20 +2281,43 @@ if(_CF_URL_FILE){const _uf0=files.find(f=>f.name===_CF_URL_FILE||f.id===_CF_URL_
     const map=new Map();
     svFiles.forEach(f=>map.set(f.id,f));
     files.forEach(f=>{const s=map.get(f.id);if(!s||f.modified>s.modified)map.set(f.id,f);});
-    files=Array.from(map.values()).sort((a,b)=>b.modified-a.modified);
+    const mergedFiles=Array.from(map.values()).sort((a,b)=>b.modified-a.modified);
+    const filesChanged=JSON.stringify(mergedFiles.map(f=>f.id+'@'+f.modified))!==JSON.stringify(files.map(f=>f.id+'@'+f.modified));
+    files=mergedFiles;
     // Restore folders from server if same age or newer (>= so modified=0 case works)
+    let foldersChanged=false;
     if(folderMeta&&Array.isArray(folderMeta.folders)&&folderMeta.modified>=_folderModified){
+      const before=JSON.stringify(folders);
       folders=folderMeta.folders;
       _folderModified=folderMeta.modified||Date.now();
+      foldersChanged=JSON.stringify(folders)!==before;
       try{localStorage.setItem(CF_FOLDERS_KEY,JSON.stringify(folders));}catch(e){}
     }
     // Ensure meta is always uploaded with a valid timestamp
     if(!_folderModified)_folderModified=Date.now();
     try{localStorage.setItem(FILES_KEY,JSON.stringify(files));}catch(e){}
     fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
-    const _uf=_CF_URL_FILE&&files.find(f=>f.name===_CF_URL_FILE||f.id===_CF_URL_FILE);
-    openFile(_uf?_uf.id:files[0].id);
-  }catch(e){}
+    return {filesChanged,foldersChanged};
+  }catch(e){return false;}
+}
+// Feed-list-only sync used by polling/focus — never touches the open canvas (G),
+// so it can't clobber in-progress edits. Skips while the user is renaming inline.
+function _cfFeedIsEditingInline(){
+  const ae=document.activeElement;
+  return !!(ae&&ae.isContentEditable&&ae.closest('#cf-feed-list'));
+}
+async function cfBackgroundSync(){
+  if(document.hidden||_cfFeedIsEditingInline())return;
+  const res=await cfPullSync();
+  if(res&&(res.filesChanged||res.foldersChanged))renderFeed();
+}
+(async function cfInitSync(){
+  await cfPullSync();
+  const _uf=_CF_URL_FILE&&files.find(f=>f.name===_CF_URL_FILE||f.id===_CF_URL_FILE);
+  openFile(_uf?_uf.id:files[0].id);
+  setInterval(cfBackgroundSync,20000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)cfBackgroundSync();});
+  window.addEventListener('focus',cfBackgroundSync);
 })();
 </script>
 </body>
