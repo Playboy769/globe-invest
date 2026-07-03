@@ -436,6 +436,16 @@ body.presentation #cf-top{display:none!important}
 body.presentation #cf-canvas{top:0!important}
 body.presentation #cf-feed{top:0}
 
+/* ── Toast (mojibake warnings etc.) ─────────────────────────── */
+#cf-toast{position:fixed;top:68px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:300;
+  background:#3a2a1a;color:#f5dfc0;font-size:12.5px;line-height:1.6;padding:9px 16px;border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.22);max-width:420px;text-align:center;opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;font-family:'Calibri','Noto Sans TC',sans-serif}
+#cf-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.cf-node.mojibake{border-color:#c88a3a!important;box-shadow:0 0 0 2px rgba(200,138,58,.35)!important}
+.cf-node.mojibake::after{content:'⚠';position:absolute;top:-8px;right:-8px;background:#c88a3a;color:#fff;
+  font-size:10px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1}
+
 /* ── Shortcuts overlay ───────────────────────────────────── */
 #cf-shortcuts-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 #cf-shortcuts-overlay.on{display:flex}
@@ -609,6 +619,8 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
   </div>
 </div>
 
+<div id="cf-toast"></div>
+
 <!-- Shortcuts overlay -->
 <div id="cf-shortcuts-overlay">
   <div class="cf-shortcuts-box">
@@ -689,7 +701,10 @@ function openFile(id) {
   _loopsActive = false; _loopEdges.clear(); _rbCycles = []; _leverageActive = false; { const _lv=document.getElementById('cf-leverage'); if(_lv)_lv.classList.remove('active'); }
   _traceOrigin = null; _traceEdges.clear(); _traceNodes.clear();
   renderAll(); renderFeed(); updateFilename();
+  const mj=scanMojibake(G);
+  if(mj.count)cfToast('⚠ 此圖表有 '+mj.count+' 處文字含無效字元（橘框標示），建議逐一重新輸入');
 }
+let _mojibakeNodeIds=new Set();
 
 function deleteFile(id) {
   if (files.length === 1) { if (!confirm('Clear this diagram?')) return; files[0].data = emptyGraph(); openFile(files[0].id); return; }
@@ -977,6 +992,39 @@ function getDEFS() {
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function byNode(id){ return G.nodes.find(n=>n.id===id); }
+
+// ── Mojibake guard ──────────────────────────────────────────
+// U+FFFD only ever appears when a decoder already failed to read the source bytes
+// (typically: text copied from somewhere with a mismatched encoding). It can't be
+// "fixed" after the fact — the original bytes are gone — so the only real defense
+// is catching it the moment it's committed, before the user walks away from the source.
+function hasMojibake(s){ return typeof s==='string' && s.indexOf('�')!==-1; }
+let _cfToastT=null;
+function cfToast(msg){
+  const el=document.getElementById('cf-toast'); if(!el)return;
+  el.textContent=msg;
+  clearTimeout(_cfToastT);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  _cfToastT=setTimeout(()=>el.classList.remove('show'),4200);
+}
+function cfWarnMojibake(text){
+  cfToast('⚠ 偵測到無效字元（原始位元組已遺失，來源可能編碼錯誤）— 建議重新輸入這段文字：「'+text.replace(/�+/g,'▢')+'」');
+}
+// Scans a graph for any node/edge text containing U+FFFD; returns matching node ids
+// (for highlighting) and a total hit count (nodes + edges + table cells).
+function scanMojibake(graph){
+  const nodeIds=[]; let count=0;
+  (graph.nodes||[]).forEach(n=>{
+    let flagged=false;
+    if(hasMojibake(n.text)){count++;flagged=true;}
+    if(n.isTable&&n.td&&Array.isArray(n.td.cells)){
+      n.td.cells.forEach(row=>{ if(Array.isArray(row)) row.forEach(c=>{ if(hasMojibake(c)){count++;flagged=true;} }); });
+    }
+    if(flagged)nodeIds.push(n.id);
+  });
+  (graph.edges||[]).forEach(e=>{ if(hasMojibake(e.label))count++; });
+  return {nodeIds,count};
+}
 function byEdge(id){ return G.edges.find(e=>e.id===id); }
 function nid(){ return 'id'+(++G._seq); }
 
@@ -1023,15 +1071,17 @@ function edgeMid(e) {
 // ── Build nodes ────────────────────────────────────────────
 function buildNodes() {
   nodesLayer.innerHTML=''; _els={};
+  _mojibakeNodeIds=new Set(scanMojibake(G).nodeIds);
   // Box nodes first so they render behind regular nodes
   const sorted = [...G.nodes].sort((a,b)=>((a.isBox||a.isImage)?0:1)-((b.isBox||b.isImage)?0:1));
   sorted.forEach(n => {
     const isSel = _sel&&_sel.type==='node'&&_sel.id===n.id;
     const isMulti = _multiSel.has(n.id);
     const isTraced = _traceNodes.has(n.id);
+    const mj = _mojibakeNodeIds.has(n.id)?' mojibake':'';
     const d = document.createElement('div');
     if (n.isBox) {
-      d.className = 'cf-node box-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'');
+      d.className = 'cf-node box-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.w) d.style.width=n.w+'px';
       if (n.bh) d.style.height=n.bh+'px';
       if (n.color) d.dataset.color=n.color;
@@ -1048,7 +1098,7 @@ function buildNodes() {
       d.appendChild(img);
       ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     } else if (n.isTable) {
-      d.className='cf-node table-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'');
+      d.className='cf-node table-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if(n.color)d.dataset.color=n.color;
       const td=n.td||{r:3,c:3,cells:[]};
       if(!td.colWidths)td.colWidths=Array(td.c).fill(90);
@@ -1080,7 +1130,7 @@ function buildNodes() {
       });
       d.appendChild(btns);
     } else {
-      d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'');
+      d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.color) d.dataset.color = n.color;
       if (n.w) d.style.width=n.w+'px';
       if (!n.isText) {
@@ -1430,7 +1480,7 @@ function editNode(id) {
   const sp=el.querySelector('.cf-node-text'),n=byNode(id);
   snapshot();
   _editing=true;el.classList.add('editing');sp.contentEditable='true';sp.focus();selectAll(sp);
-  function done(){_editing=false;el.classList.remove('editing');sp.contentEditable='false';n.text=(sp.textContent.trim()||'Untitled');sp.textContent=n.text;n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();save();cu();}
+  function done(){_editing=false;el.classList.remove('editing');sp.contentEditable='false';n.text=(sp.textContent.trim()||'Untitled');sp.textContent=n.text;n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();save();cu();if(hasMojibake(n.text))cfWarnMojibake(n.text);}
   function onkey(ev){if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();sp.blur();}else if(ev.key==='Escape'){sp.textContent=n.text;sp.blur();}ev.stopPropagation();}
   function cu(){sp.removeEventListener('blur',done);sp.removeEventListener('keydown',onkey);}
   sp.addEventListener('blur',done); sp.addEventListener('keydown',onkey);
@@ -1462,6 +1512,7 @@ function editTableCell(nodeId, row, col) {
     n.td.cells[row][col]=cell.textContent;
     n._w=el.offsetWidth; n._h=el.offsetHeight;
     drawEdges(); placeTools(); save(); cu();
+    if(hasMojibake(cell.textContent))cfWarnMojibake(cell.textContent);
   }
   function onkey(ev){
     if(ev.key==='Escape'){cell.textContent=(n.td.cells[row]&&n.td.cells[row][col])||'';cell.blur();}
@@ -1499,7 +1550,7 @@ function editEdgeLabel(id) {
   const sp=document.createElement('span');sp.className='cf-el-text';sp.textContent=e.label||'';l.appendChild(sp);
   snapshot();
   _editing=true;l.classList.add('editing');sp.contentEditable='true';sp.focus();selectAll(sp);
-  function done(){_editing=false;l.classList.remove('editing');sp.contentEditable='false';e.label=sp.textContent.trim();drawEdges();placeTools();save();cu();}
+  function done(){_editing=false;l.classList.remove('editing');sp.contentEditable='false';e.label=sp.textContent.trim();drawEdges();placeTools();save();cu();if(hasMojibake(e.label))cfWarnMojibake(e.label);}
   function onkey(ev){if(ev.key==='Enter'){ev.preventDefault();sp.blur();}else if(ev.key==='Escape'){sp.textContent=e.label||'';sp.blur();}ev.stopPropagation();}
   function cu(){sp.removeEventListener('blur',done);sp.removeEventListener('keydown',onkey);}
   sp.addEventListener('blur',done); sp.addEventListener('keydown',onkey);
@@ -1746,6 +1797,8 @@ function importJSON() {
         if(!data.nodes||!Array.isArray(data.nodes))throw new Error('invalid');
         snapshot();G=data;if(!G.edges)G.edges=[];if(!G._seq)G._seq=0;
         _sel=null;renderAll();save();
+        const mj=scanMojibake(G);
+        if(mj.count)cfToast('⚠ 匯入的檔案有 '+mj.count+' 處文字含無效字元（橘框標示）— 來源檔案本身編碼已損毀，需手動重新輸入');
       }catch(err){alert('Invalid JSON file');}
     };
     reader.readAsText(file);
