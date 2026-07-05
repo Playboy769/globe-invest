@@ -97,6 +97,22 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-tag.iv-dragging{opacity:.35;transform:scale(.93);transition:opacity .12s,transform .12s}
 .iv-group-box.drop-ready{border-color:#bbb;background:rgba(10,10,10,0.025)}
 .iv-group-box.drag-over{border-color:#0a0a0a!important;background:rgba(10,10,10,0.05)!important;box-shadow:0 0 0 2px rgba(10,10,10,0.07);transform:scale(1.01);transition:all .12s}
+/* ── Companies (ticker + notes) ── */
+.iv-company-list{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.iv-company-row{border-top:1px solid #eee;padding-top:4px}
+.iv-company-hdr{display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 0}
+.iv-company-ticker{font-size:11px;color:#666;font-weight:600;letter-spacing:.03em;font-family:'Calibri',sans-serif;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.iv-company-hdr:hover .iv-company-ticker{color:#0a0a0a}
+.iv-co-note-dot{width:4px;height:4px;border-radius:50%;background:#ccc;flex-shrink:0}
+.iv-co-del-btn{font-size:12px;color:#e8e8e8;cursor:pointer;padding:0 2px;transition:color .15s;user-select:none}
+.iv-co-del-btn:hover{color:#c44}
+.iv-co-note-wrap{padding:2px 0 5px}
+.iv-co-note{width:100%;border:1px solid #eee;border-radius:6px;padding:6px 8px;font-size:11px;font-family:'Calibri','Noto Sans TC',sans-serif;color:#333;background:#fafafa;resize:vertical;min-height:48px;outline:none;transition:border-color .15s,background .15s}
+.iv-co-note:focus{border-color:#bbb;background:#fff}
+.iv-new-co-btn{margin-top:6px;font-size:9px;color:#ccc;cursor:pointer;letter-spacing:.09em;text-transform:uppercase;font-family:'Calibri',sans-serif;transition:color .15s;user-select:none}
+.iv-new-co-btn:hover{color:#888}
+.iv-new-co-inp-wrap{margin-top:5px;border-bottom:1px solid #ddd;padding-bottom:3px}
+.iv-new-co-inp-wrap input{width:100%;border:none;outline:none;font-size:11px;padding:2px 0;font-family:'Calibri',sans-serif;color:#0a0a0a;background:transparent}
 .iv-feed-head{padding:32px 24px 20px;display:flex;align-items:center;justify-content:space-between}
 .iv-feed-title{font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:.16em;font-weight:400;font-family:'Calibri',sans-serif}
 .iv-feed-title .iv-ft-crumb{color:#888}
@@ -638,6 +654,17 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
               const loc=gmap.get(g.id);
               const merged=[...new Set([...(loc.titles||[]),...(g.titles||[])])];
               if(merged.length!==(loc.titles||[]).length){loc.titles=merged;gchanged=true;}
+              /* merge companies (tickers+notes): union by id, adopt server's value if it differs */
+              const locCo=new Map((loc.companies||[]).map(c=>[c.id,c]));
+              (g.companies||[]).forEach(c=>{
+                if(!c||!c.id)return;
+                if(!locCo.has(c.id)){locCo.set(c.id,c);gchanged=true;}
+                else{
+                  const lc=locCo.get(c.id);
+                  if(lc.ticker!==c.ticker||lc.notes!==c.notes){lc.ticker=c.ticker;lc.notes=c.notes;gchanged=true;}
+                }
+              });
+              loc.companies=[...locCo.values()];
             }
           });
           if(gmap.size!==_ivGroups[layer].length){_ivGroups[layer]=[...gmap.values()];gchanged=true;}
@@ -660,9 +687,16 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
 })();
 
 let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null,_ivSearch='';
+let _ivExpandedCo=new Set();
 let _ivHlEntry=null,_ivHlSel='',_ivHlMark=null;
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
+let _ivGrpT;
+function _ivSaveGroupsSoon(){
+  try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}
+  clearTimeout(_ivGrpT);
+  _ivGrpT=setTimeout(()=>{fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});},800);
+}
 let _ivPendingImages=[];
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
 const _IV_CAUSAL_BASE=location.hostname==='localhost'?'http://localhost:8128':'https://globe-invest.up.railway.app/causal';
@@ -906,16 +940,29 @@ function ivRenderGroups(){
       const isActive=_ivActiveGroup&&_ivActiveGroup.layer===layer&&_ivActiveGroup.id===g.id;
       const box=document.createElement('div');
       box.className='iv-group-box'+(isActive?' grp-active':'');
+      box.dataset.gid=g.id;
       const pills=(g.titles||[]).map(t=>{
         const isTagActive=isActive&&_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===t;
         const es=t.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
         const subInline=(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===t)?ivSubChipsHTML(layer,t):'';
         return `<div class="iv-gpill${isTagActive?' gpill-active':''}" onclick="event.stopPropagation();ivSelectGroupTag('${layer}','${g.id}','${es}')"><span>${t}</span><span class="iv-gpill-x" onclick="event.stopPropagation();ivGroupRemoveTitle('${layer}','${g.id}','${es}')">×</span></div>`+subInline;
       }).join('');
+      const companies=(g.companies||[]).map(c=>{
+        const open=_ivExpandedCo.has(c.id);
+        const hasNote=c.notes&&c.notes.trim();
+        return `<div class="iv-company-row">
+          <div class="iv-company-hdr" onclick="event.stopPropagation();ivToggleCompanyNote('${layer}','${g.id}','${c.id}')">
+            <span class="iv-company-ticker" ondblclick="event.stopPropagation();ivRenameCompanyTicker('${layer}','${g.id}','${c.id}',this)">${_ivEscHtml(c.ticker)}</span>
+            ${hasNote?'<span class="iv-co-note-dot"></span>':''}
+            <span class="iv-co-del-btn" onclick="event.stopPropagation();ivDeleteCompany('${layer}','${g.id}','${c.id}')">×</span>
+          </div>
+          ${open?`<div class="iv-co-note-wrap"><textarea class="iv-co-note" placeholder="筆記…" oninput="ivSaveCompanyNote('${layer}','${g.id}','${c.id}',this)">${_ivEscHtml(c.notes||'')}</textarea></div>`:''}
+        </div>`;
+      }).join('');
       box.innerHTML=`<div class="iv-group-hdr" onclick="ivSelectGroup('${layer}','${g.id}')">
         <span class="iv-group-hdr-name" ondblclick="event.stopPropagation();ivRenameGroup('${layer}','${g.id}',this)">${g.name}</span>
         <span class="iv-grp-act"><span class="iv-grp-act-btn" onclick="event.stopPropagation();ivGroupOpenPicker('${layer}','${g.id}',this)" title="add tag to group">+</span><span class="iv-grp-del-btn" onclick="event.stopPropagation();ivDeleteGroup('${layer}','${g.id}')" title="delete group">×</span></span>
-      </div><div class="iv-group-pills">${pills}</div>`;
+      </div><div class="iv-group-pills">${pills}</div><div class="iv-company-list">${companies}</div><div class="iv-new-co-btn" onclick="event.stopPropagation();ivAddCompany('${layer}','${g.id}')">+ ticker</div>`;
       box.addEventListener('dragover',e=>{
         if(!_ivDragData||_ivDragData.layer!==layer)return;
         e.preventDefault();e.dataTransfer.dropEffect='link';
@@ -1008,6 +1055,61 @@ function ivGroupRemoveTitle(layer,groupId,title){
   group.titles=(group.titles||[]).filter(t=>t!==title);
   if(_ivActiveTag&&_ivActiveTag.title===title&&_ivActiveGroup&&_ivActiveGroup.id===groupId)_ivActiveTag=null;
   _ivSaveGroups();ivRenderGroups();ivRenderTags();ivRenderFeed();
+}
+function ivAddCompany(layer,groupId){
+  const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
+  const area=document.getElementById('iv-ga-'+layer);if(!area)return;
+  const groupBox=area.querySelector(`.iv-group-box[data-gid="${groupId}"]`);
+  if(!groupBox||groupBox.querySelector('.iv-new-co-inp-wrap'))return;
+  const wrap=document.createElement('div');
+  wrap.className='iv-new-co-inp-wrap';
+  wrap.innerHTML='<input type="text" placeholder="Ticker…" autocomplete="off" spellcheck="false">';
+  const oldBtn=groupBox.querySelector('.iv-new-co-btn');
+  groupBox.insertBefore(wrap,oldBtn||null);
+  const inp=wrap.querySelector('input');
+  inp.focus();
+  function commit(){
+    const ticker=inp.value.trim();
+    if(ticker){
+      if(!group.companies)group.companies=[];
+      group.companies.push({id:_ivId(),ticker,notes:''});
+      _ivSaveGroups();
+    }
+    wrap.remove();ivRenderGroups();
+  }
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}else if(e.key==='Escape'){wrap.remove();}});
+  inp.addEventListener('blur',()=>setTimeout(()=>{if(wrap.parentNode)commit();},150));
+}
+function ivDeleteCompany(layer,groupId,companyId){
+  const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
+  group.companies=(group.companies||[]).filter(c=>c.id!==companyId);
+  _ivExpandedCo.delete(companyId);
+  _ivSaveGroups();ivRenderGroups();
+}
+function ivToggleCompanyNote(layer,groupId,companyId){
+  if(_ivExpandedCo.has(companyId))_ivExpandedCo.delete(companyId);
+  else _ivExpandedCo.add(companyId);
+  ivRenderGroups();
+}
+function ivSaveCompanyNote(layer,groupId,companyId,textareaEl){
+  const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
+  const company=(group.companies||[]).find(c=>c.id===companyId);if(!company)return;
+  company.notes=textareaEl.value;
+  _ivSaveGroupsSoon();
+}
+function ivRenameCompanyTicker(layer,groupId,companyId,tickerEl){
+  const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
+  const company=(group.companies||[]).find(c=>c.id===companyId);if(!company)return;
+  const old=tickerEl.textContent;
+  tickerEl.contentEditable='true';tickerEl.focus();
+  const sel=window.getSelection();const range=document.createRange();range.selectNodeContents(tickerEl);sel.removeAllRanges();sel.addRange(range);
+  function done(){
+    tickerEl.contentEditable='false';
+    const ticker=tickerEl.textContent.trim()||old;
+    tickerEl.textContent=ticker;company.ticker=ticker;_ivSaveGroups();
+  }
+  tickerEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tickerEl.blur();}else if(e.key==='Escape'){tickerEl.textContent=old;tickerEl.blur();}},{once:false});
+  tickerEl.addEventListener('blur',done,{once:true});
 }
 
 /* ── Feed ── */
