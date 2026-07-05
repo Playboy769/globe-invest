@@ -312,7 +312,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-compose-body.collapsed{max-height:0;opacity:0;pointer-events:none}
 
 /* Attack / Defense stance */
-.iv-stance-bar{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid #eee;flex-shrink:0}
+.iv-stance-bar{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid #eee;flex-shrink:0;transition:background .2s ease}
+.iv-stance-bar.atk-mode{background:rgba(150,0,24,0.07)}
+.iv-stance-bar.def-mode{background:rgba(53,92,125,0.07)}
 .iv-stance-lbl{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.12em;font-family:'Calibri',sans-serif;flex-shrink:0}
 .iv-stance-toggle{display:flex;gap:6px}
 .iv-stance-btn{font-size:13px;font-weight:600;font-family:'Calibri','Noto Sans TC',sans-serif;padding:4px 16px;border-radius:7px;border:1px solid #e4e4e4;color:#bbb;cursor:pointer;user-select:none;transition:all .15s ease}
@@ -2058,10 +2060,14 @@ function ivSetStance(mode){
   ivRenderStance();
 }
 function ivRenderStance(){
-  const atkEl=document.getElementById('iv-stance-atk'),defEl=document.getElementById('iv-stance-def'),tsEl=document.getElementById('iv-stance-ts');
+  const barEl=document.getElementById('iv-stance-bar'),atkEl=document.getElementById('iv-stance-atk'),defEl=document.getElementById('iv-stance-def'),tsEl=document.getElementById('iv-stance-ts');
   if(!atkEl||!defEl)return;
   atkEl.classList.toggle('active',_ivStance.mode==='atk');
   defEl.classList.toggle('active',_ivStance.mode==='def');
+  if(barEl){
+    barEl.classList.toggle('atk-mode',_ivStance.mode==='atk');
+    barEl.classList.toggle('def-mode',_ivStance.mode==='def');
+  }
   if(tsEl){
     if(_ivStance.mode&&_ivStance.ts){
       const d=new Date(_ivStance.ts),pad=n=>String(n).padStart(2,'0');
