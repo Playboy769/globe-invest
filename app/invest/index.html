@@ -99,10 +99,13 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-group-box.drag-over{border-color:#0a0a0a!important;background:rgba(10,10,10,0.05)!important;box-shadow:0 0 0 2px rgba(10,10,10,0.07);transform:scale(1.01);transition:all .12s}
 /* ── Companies (ticker + notes) ── */
 .iv-company-list{display:flex;flex-direction:column;gap:2px;margin-top:6px}
-.iv-company-row{border-top:1px solid #eee;padding-top:4px}
+.iv-company-row{border-top:1px solid #eee;padding-top:4px;transition:background .12s ease}
+.iv-company-row[draggable]{cursor:grab}
+.iv-company-row[draggable]:active{cursor:grabbing}
+.iv-company-row.co-drag-over{background:rgba(10,10,10,0.05)}
 .iv-company-hdr{display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 0}
-.iv-company-ticker{font-size:11px;color:#960018;font-weight:600;letter-spacing:.03em;font-family:'Calibri',sans-serif;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.iv-company-hdr:hover .iv-company-ticker{color:#6e0012}
+.iv-company-ticker{font-size:11px;font-weight:600;letter-spacing:.03em;font-family:'Calibri',sans-serif;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:filter .15s ease}
+.iv-company-hdr:hover .iv-company-ticker{filter:brightness(.75)}
 .iv-co-note-dot{width:4px;height:4px;border-radius:50%;background:#ccc;flex-shrink:0}
 .iv-co-del-btn{font-size:12px;color:#e8e8e8;cursor:pointer;padding:0 2px;transition:color .15s;user-select:none}
 .iv-co-del-btn:hover{color:#c44}
@@ -654,6 +657,8 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
               const loc=gmap.get(g.id);
               const merged=[...new Set([...(loc.titles||[]),...(g.titles||[])])];
               if(merged.length!==(loc.titles||[]).length){loc.titles=merged;gchanged=true;}
+              /* adopt server's color if local has none yet (color is assigned once at creation) */
+              if(!loc.color&&g.color){loc.color=g.color;gchanged=true;}
               /* merge companies (tickers+notes): union by id, adopt server's value if it differs */
               const locCo=new Map((loc.companies||[]).map(c=>[c.id,c]));
               (g.companies||[]).forEach(c=>{
@@ -701,6 +706,19 @@ let _ivPendingImages=[];
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
 const _IV_CAUSAL_BASE=location.hostname==='localhost'?'http://localhost:8128':'https://globe-invest.up.railway.app/causal';
 const SCOLORS={1:'#ced4c6',2:'#c6ccd6',3:'#d6ccba',4:'#d0b4a6',5:'#c0aab8'};
+/* darkest 2 shades of each hue family in the group-ticker palette, darkest tier first */
+const _IV_COLOR_POOL=[
+  '#9B4443','#466D1D','#57357D','#9B8943','#355C7D','#7D3577','#9B6B43','#35387D',
+  '#AB4543','#5E7F19','#6B4B90','#AB9943','#4B7A90','#8F4B90','#AB7543','#4B5390'
+];
+function _ivPickGroupColor(){
+  const used=new Set();
+  ['macro','risk','industry'].forEach(l=>(_ivGroups[l]||[]).forEach(g=>{if(g.color)used.add(g.color);}));
+  const avail=_IV_COLOR_POOL.find(c=>!used.has(c));
+  if(avail)return avail;
+  alert('群組顏色已用完（色票共 '+_IV_COLOR_POOL.length+' 組），請在 _IV_COLOR_POOL 補充更多顏色後再建立新群組。');
+  return _IV_COLOR_POOL[0];
+}
 
 function _ivId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 
@@ -937,6 +955,7 @@ function ivRenderGroups(){
     const groups=_ivGroups[layer]||[];
     area.innerHTML='';
     groups.forEach(g=>{
+      if(!g.color){g.color=_ivPickGroupColor();_ivSaveGroups();}
       const isActive=_ivActiveGroup&&_ivActiveGroup.layer===layer&&_ivActiveGroup.id===g.id;
       const box=document.createElement('div');
       box.className='iv-group-box'+(isActive?' grp-active':'');
@@ -950,10 +969,14 @@ function ivRenderGroups(){
       const companies=(g.companies||[]).map(c=>{
         const open=_ivExpandedCo.has(c.id);
         const hasNote=c.notes&&c.notes.trim();
-        return `<div class="iv-company-row">
+        return `<div class="iv-company-row" draggable="true"
+          ondragstart="ivCoDragStart(event,'${layer}','${g.id}','${c.id}')"
+          ondragover="event.preventDefault();event.stopPropagation();this.classList.add('co-drag-over')"
+          ondragleave="this.classList.remove('co-drag-over')"
+          ondrop="event.stopPropagation();ivCoDrop(event,'${layer}','${g.id}','${c.id}')">
           <div class="iv-company-hdr" onclick="event.stopPropagation();ivToggleCompanyNote('${layer}','${g.id}','${c.id}')">
-            <span class="iv-company-ticker" ondblclick="event.stopPropagation();ivRenameCompanyTicker('${layer}','${g.id}','${c.id}',this)">${_ivEscHtml(c.ticker)}</span>
-            ${hasNote?'<span class="iv-co-note-dot"></span>':''}
+            <span class="iv-company-ticker" style="color:${g.color}" ondblclick="event.stopPropagation();ivRenameCompanyTicker('${layer}','${g.id}','${c.id}',this)">${_ivEscHtml(c.ticker)}</span>
+            ${hasNote?'<span class="iv-co-note-dot" style="background:'+g.color+'"></span>':''}
             <span class="iv-co-del-btn" onclick="event.stopPropagation();ivDeleteCompany('${layer}','${g.id}','${c.id}')">×</span>
           </div>
           ${open?`<div class="iv-co-note-wrap"><textarea class="iv-co-note" placeholder="筆記…" oninput="ivSaveCompanyNote('${layer}','${g.id}','${c.id}',this)">${_ivEscHtml(c.notes||'')}</textarea></div>`:''}
@@ -996,7 +1019,7 @@ function ivAddGroup(layer){
   inp.focus();
   function commit(){
     const name=inp.value.trim();
-    if(name){_ivGroups[layer].push({id:'g'+Date.now(),name,titles:[]});_ivSaveGroups();}
+    if(name){_ivGroups[layer].push({id:'g'+Date.now(),name,titles:[],color:_ivPickGroupColor()});_ivSaveGroups();}
     wrap.remove();ivRenderGroups();
   }
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}else if(e.key==='Escape'){wrap.remove();}});
@@ -1110,6 +1133,27 @@ function ivRenameCompanyTicker(layer,groupId,companyId,tickerEl){
   }
   tickerEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tickerEl.blur();}else if(e.key==='Escape'){tickerEl.textContent=old;tickerEl.blur();}},{once:false});
   tickerEl.addEventListener('blur',done,{once:true});
+}
+let _ivCoDrag=null;
+function ivCoDragStart(e,layer,groupId,companyId){
+  if(e.target.closest('[contenteditable="true"]')){e.preventDefault();return;}
+  _ivCoDrag={layer,groupId,companyId};
+  e.dataTransfer.effectAllowed='move';
+}
+function ivCoDrop(e,layer,groupId,targetId){
+  e.preventDefault();
+  document.querySelectorAll('.iv-company-row.co-drag-over').forEach(r=>r.classList.remove('co-drag-over'));
+  if(!_ivCoDrag||_ivCoDrag.layer!==layer||_ivCoDrag.groupId!==groupId)return;
+  const srcId=_ivCoDrag.companyId;_ivCoDrag=null;
+  if(srcId===targetId)return;
+  const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
+  const list=group.companies||[];
+  const fromIdx=list.findIndex(c=>c.id===srcId);
+  const toIdx=list.findIndex(c=>c.id===targetId);
+  if(fromIdx<0||toIdx<0)return;
+  const [moved]=list.splice(fromIdx,1);
+  list.splice(toIdx,0,moved);
+  _ivSaveGroups();ivRenderGroups();
 }
 
 /* ── Feed ── */
