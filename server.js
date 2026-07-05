@@ -326,6 +326,48 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Recent daily closes for arbitrary tickers (InvestFrame Kelly correlation auto-fetch).
+  // Numeric codes are tried as TWSE (.TW) then TPEx (.TWO); anything else is used as-is
+  // (Yahoo Finance ticker, e.g. AAPL). Response is keyed by the RAW ticker the caller sent.
+  if (req.url.startsWith('/api/stock-history') && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const tickers = (urlObj.searchParams.get('tickers') || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 20);
+      const days = Math.max(2, Math.min(30, parseInt(urlObj.searchParams.get('days'), 10) || 14));
+      if (!tickers.length) throw new Error('missing tickers');
+
+      const result = {};
+      await Promise.allSettled(tickers.map(async raw => {
+        const cacheKey = `stkhist_${raw}`;
+        if (_warnCache[cacheKey] !== undefined && Date.now() - (_warnTime[cacheKey] || 0) < 30 * 60 * 1000) {
+          result[raw] = _warnCache[cacheKey];
+          return;
+        }
+        const candidates = /^\d+$/.test(raw) ? [raw + '.TW', raw + '.TWO'] : [raw];
+        for (const sym of candidates) {
+          try {
+            const { hist } = await fetchSymbol(sym);
+            if (hist && hist.length >= 4) {
+              const entry = { closes: hist.map(v => +v.toFixed(4)) };
+              _warnCache[cacheKey] = entry; _warnTime[cacheKey] = Date.now();
+              result[raw] = entry;
+              return;
+            }
+          } catch (_) { /* try next candidate */ }
+        }
+        result[raw] = { error: 'not found' };
+      }));
+      // trim to requested window here (not cached) so a shorter `days` request doesn't need a re-fetch later
+      Object.keys(result).forEach(k => { if (result[k].closes) result[k] = { closes: result[k].closes.slice(-days) }; });
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(result));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   if (req.url === '/api/invest-data' && req.method === 'GET') {
     const data = fs.existsSync(DATA_FILE) ? fs.readFileSync(DATA_FILE, 'utf8') : '{"macro":[],"risk":[],"industry":[]}';
     res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
