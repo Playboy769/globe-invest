@@ -376,10 +376,14 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.url === '/api/invest-data' && req.method === 'POST') {
-    let body = '';
-    req.on('data', c => { if (body.length < 5e6) body += c; });
+    // Accumulate raw Buffers and decode ONCE at the end — appending chunks to a
+    // string decodes each chunk separately and shatters multibyte UTF-8 (CJK)
+    // characters that straddle chunk boundaries into U+FFFD mojibake.
+    const chunks = []; let received = 0;
+    req.on('data', c => { received += c.length; if (received <= 5e6) chunks.push(c); });
     req.on('end', () => {
       try {
+        const body = Buffer.concat(chunks).toString('utf8');
         JSON.parse(body);
         fs.writeFileSync(DATA_FILE, body, 'utf8');
         res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
@@ -400,10 +404,11 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.url === '/api/invest-groups' && req.method === 'POST') {
-    let body = '';
-    req.on('data', c => { if (body.length < 5e6) body += c; });
+    const chunks = []; let received = 0;
+    req.on('data', c => { received += c.length; if (received <= 5e6) chunks.push(c); });
     req.on('end', () => {
       try {
+        const body = Buffer.concat(chunks).toString('utf8');
         JSON.parse(body);
         fs.writeFileSync(GROUPS_FILE, body, 'utf8');
         res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
@@ -424,10 +429,11 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.url === '/api/causal-files' && req.method === 'POST') {
-    let body = '';
-    req.on('data', c => { if (body.length < 10e6) body += c; });
+    const chunks = []; let received = 0;
+    req.on('data', c => { received += c.length; if (received <= 10e6) chunks.push(c); });
     req.on('end', () => {
       try {
+        const body = Buffer.concat(chunks).toString('utf8');
         JSON.parse(body);
         fs.writeFileSync(CAUSAL_FILE, body, 'utf8');
         res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
@@ -442,10 +448,11 @@ const server = http.createServer(async (req, res) => {
 
   // Image asset upload
   if (req.url === '/api/upload-asset' && req.method === 'POST') {
-    let body = '';
-    req.on('data', c => { if (body.length < 20e6) body += c; });
+    const chunks = []; let received = 0;
+    req.on('data', c => { received += c.length; if (received <= 20e6) chunks.push(c); });
     req.on('end', () => {
       try {
+        const body = Buffer.concat(chunks).toString('utf8');
         const { data, ext } = JSON.parse(body);
         const base64 = data.includes(',') ? data.split(',')[1] : data;
         const buf = Buffer.from(base64, 'base64');
