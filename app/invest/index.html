@@ -312,16 +312,17 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-compose-body.collapsed{max-height:0;opacity:0;pointer-events:none}
 
 /* Attack / Defense stance */
-.iv-stance-bar{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid #eee;flex-shrink:0;transition:background .2s ease}
+.iv-stance-bar{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:10px 16px;border-bottom:1px solid #eee;flex-shrink:0;transition:background .2s ease}
 .iv-stance-bar.atk-mode{background:rgba(150,0,24,0.07)}
 .iv-stance-bar.def-mode{background:rgba(53,92,125,0.07)}
-.iv-stance-lbl{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.12em;font-family:'Calibri',sans-serif;flex-shrink:0}
-.iv-stance-toggle{display:flex;gap:6px}
-.iv-stance-btn{font-size:13px;font-weight:600;font-family:'Calibri','Noto Sans TC',sans-serif;padding:4px 16px;border-radius:7px;border:1px solid #e4e4e4;color:#bbb;cursor:pointer;user-select:none;transition:all .15s ease}
+.iv-stance-lbl{font-size:9.5px;color:#000;text-transform:uppercase;letter-spacing:.1em;font-family:'Calibri',sans-serif;flex-shrink:0;white-space:nowrap}
+.iv-stance-toggle{display:flex;gap:5px;flex-shrink:0}
+.iv-stance-hint{flex:1;min-width:0;font-size:11px;color:#000;font-family:'Calibri','Noto Sans TC',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iv-stance-btn{font-size:12px;font-weight:600;font-family:'Calibri','Noto Sans TC',sans-serif;padding:3px 11px;border-radius:6px;border:1px solid #e4e4e4;color:#bbb;cursor:pointer;user-select:none;transition:all .15s ease}
 .iv-stance-btn:hover{border-color:#ccc;color:#888}
 .iv-stance-btn.atk.active{background:#960018;border-color:#960018;color:#fff}
 .iv-stance-btn.def.active{background:#355C7D;border-color:#355C7D;color:#fff}
-.iv-stance-ts{font-size:10px;color:#ccc;font-family:'Calibri',sans-serif;margin-left:auto}
+.iv-stance-ts{font-size:9.5px;color:#000;font-family:'Calibri',sans-serif;flex-shrink:0;white-space:nowrap}
 
 /* Lightbox */
 #iv-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.76);z-index:999;display:none;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(4px)}
@@ -515,6 +516,7 @@ body.dark .iv-wl-text{color:#aaa}
         <span class="iv-stance-btn atk" id="iv-stance-atk" onclick="ivSetStance('atk')">攻</span>
         <span class="iv-stance-btn def" id="iv-stance-def" onclick="ivSetStance('def')">守</span>
       </div>
+      <span class="iv-stance-hint" id="iv-stance-hint"></span>
       <span class="iv-stance-ts" id="iv-stance-ts"></span>
     </div>
     <div class="iv-compose-body" id="iv-compose-body">
@@ -2062,7 +2064,7 @@ function ivSetStance(mode){
   ivRenderStance();
 }
 function ivRenderStance(){
-  const barEl=document.getElementById('iv-stance-bar'),atkEl=document.getElementById('iv-stance-atk'),defEl=document.getElementById('iv-stance-def'),tsEl=document.getElementById('iv-stance-ts');
+  const barEl=document.getElementById('iv-stance-bar'),atkEl=document.getElementById('iv-stance-atk'),defEl=document.getElementById('iv-stance-def'),tsEl=document.getElementById('iv-stance-ts'),hintEl=document.getElementById('iv-stance-hint');
   if(!atkEl||!defEl)return;
   atkEl.classList.toggle('active',_ivStance.mode==='atk');
   defEl.classList.toggle('active',_ivStance.mode==='def');
@@ -2070,10 +2072,16 @@ function ivRenderStance(){
     barEl.classList.toggle('atk-mode',_ivStance.mode==='atk');
     barEl.classList.toggle('def-mode',_ivStance.mode==='def');
   }
+  if(hintEl){
+    if(_ivStance.mode==='atk')hintEl.textContent='若選擇攻：全倉下注個股部位';
+    else if(_ivStance.mode==='def')hintEl.textContent='若選擇守：15-20% 下注正二或權證部位';
+    else hintEl.textContent='';
+    hintEl.title=hintEl.textContent;
+  }
   if(tsEl){
     if(_ivStance.mode&&_ivStance.ts){
       const d=new Date(_ivStance.ts),pad=n=>String(n).padStart(2,'0');
-      tsEl.textContent=`切換於 ${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      tsEl.textContent=`切換於 ${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
     }else tsEl.textContent='尚未設定';
   }
 }
