@@ -476,6 +476,17 @@ body.presentation #cf-dock{display:none!important}
 body.presentation #cf-dock2{display:none!important}
 body.presentation #cf-canvas{top:0!important}
 body.presentation #cf-feed{top:0}
+body.presentation #cf-node-tools,body.presentation #cf-edge-tools{display:none!important}
+body.presentation #cf-minimap,body.presentation #cf-search-bar{display:none!important}
+#cf-present-bar{display:none;position:absolute;left:50%;bottom:22px;transform:translateX(-50%);align-items:center;gap:8px;background:rgba(255,255,255,.92);border:1px solid #e4e4e4;border-radius:11px;padding:7px 10px;box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:250;backdrop-filter:blur(4px)}
+body.presentation #cf-present-bar{display:flex}
+.cf-pres-nav{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:#666;border-radius:6px;font-size:15px;transition:background .12s,color .12s}
+.cf-pres-nav:hover{background:#f0f0f0;color:#0a0a0a}
+#cf-pres-count{font-size:11px;letter-spacing:.06em;color:#999;min-width:44px;text-align:center;font-family:'Orchid','Noto Sans TC',serif}
+body.dark #cf-present-bar{background:rgba(28,28,28,.9);border-color:#333}
+body.dark .cf-pres-nav{color:#888}
+body.dark .cf-pres-nav:hover{background:#2a2a2a;color:#e0e0e0}
+body.dark #cf-pres-count{color:#666}
 
 /* ── Toast (mojibake warnings etc.) ─────────────────────────── */
 #cf-toast{position:fixed;top:68px;left:50%;transform:translateX(-50%) translateY(-8px);z-index:300;
@@ -710,6 +721,12 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
     <button class="cf-search-nav" id="cf-search-next" title="Next (Enter)">›</button>
     <button class="cf-search-nav" id="cf-search-close" title="Close (Esc)">✕</button>
   </div>
+  <div id="cf-present-bar">
+    <button class="cf-pres-nav" id="cf-pres-prev" title="Previous (←)">‹</button>
+    <span id="cf-pres-count"></span>
+    <button class="cf-pres-nav" id="cf-pres-next" title="Next (→ / Space)">›</button>
+    <button class="cf-pres-nav" id="cf-pres-exit" title="Exit (Esc)">✕</button>
+  </div>
 </div>
 
 <!-- Overflow menu -->
@@ -762,6 +779,7 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Multi-select lasso</div><div class="cf-shortcuts-key">Shift + drag</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle dark mode</div><div class="cf-shortcuts-key">D</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Presentation mode</div><div class="cf-shortcuts-key">F</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Next / previous slide</div><div class="cf-shortcuts-key">→ / ←</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">Ctrl B</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle minimap</div><div class="cf-shortcuts-key">M</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Search nodes &amp; labels</div><div class="cf-shortcuts-key">Ctrl F</div></div>
@@ -2210,10 +2228,52 @@ function toggleDark() {
   document.getElementById('cf-dark-btn').classList.toggle('active',on);
   drawEdges();
 }
-function togglePresentation() {
-  document.body.classList.toggle('presentation');
-  document.getElementById('cf-present-btn').classList.toggle('active',document.body.classList.contains('presentation'));
+// Slide sequence defaults to reading order (top-to-bottom, then left-to-right)
+// rather than G.nodes creation order, since that gives a sensible walkthrough
+// even for diagrams that existed before presentation mode did.
+let _slides=[], _slideIdx=0, _preVt=null;
+function buildSlides(){
+  _slides=[...G.nodes].sort((a,b)=>(a.y-b.y)||(a.x-b.x)).map(n=>n.id);
 }
+function frameNode(id){
+  const n=byNode(id); if(!n)return;
+  const pad=90;
+  const x0=n.x-pad, y0=n.y-pad, x1=n.x+(n._w||80)+pad, y1=n.y+(n._h||40)+pad;
+  const r=canvas.getBoundingClientRect();
+  const s=Math.min(2.2,Math.max(0.3,Math.min(r.width/(x1-x0),r.height/(y1-y0))));
+  vt.s=s; vt.x=(r.width-(x1+x0)*s)/2; vt.y=(r.height-(y1+y0)*s)/2;
+  applyVT();
+}
+function updatePresentUI(){
+  document.getElementById('cf-pres-count').textContent=_slides.length?(_slideIdx+1)+' / '+_slides.length:'';
+}
+function goToSlide(i){
+  if(!_slides.length)return;
+  _slideIdx=((i%_slides.length)+_slides.length)%_slides.length;
+  const id=_slides[_slideIdx];
+  select({type:'node',id});
+  frameNode(id);
+  updatePresentUI();
+}
+function nextSlide(){goToSlide(_slideIdx+1);}
+function prevSlide(){goToSlide(_slideIdx-1);}
+function togglePresentation() {
+  const body=document.body;
+  const entering=!body.classList.contains('presentation');
+  body.classList.toggle('presentation');
+  document.getElementById('cf-present-btn').classList.toggle('active',body.classList.contains('presentation'));
+  if(entering){
+    _preVt={...vt};
+    buildSlides();
+    if(_slides.length)goToSlide(0); else updatePresentUI();
+  } else {
+    if(_preVt){vt=_preVt;applyVT();_preVt=null;}
+    select(null);
+  }
+}
+document.getElementById('cf-pres-next').addEventListener('click',nextSlide);
+document.getElementById('cf-pres-prev').addEventListener('click',prevSlide);
+document.getElementById('cf-pres-exit').addEventListener('click',togglePresentation);
 function toggleShortcuts() {
   document.getElementById('cf-shortcuts-overlay').classList.toggle('on');
 }
@@ -2394,6 +2454,8 @@ document.addEventListener('keydown', e => {
     if(document.body.classList.contains('presentation'))togglePresentation();
     if(searchBar.classList.contains('on'))closeSearch();
   }
+  else if(document.body.classList.contains('presentation')&&(e.key==='ArrowRight'||e.key===' ')){e.preventDefault();nextSlide();}
+  else if(document.body.classList.contains('presentation')&&e.key==='ArrowLeft'){e.preventDefault();prevSlide();}
   else if(ctrl&&(e.key==='f'||e.key==='F')){e.preventDefault();openSearch();}
   else if(ctrl&&(e.key==='z'||e.key==='Z')){e.preventDefault();undo();}
   else if(ctrl&&(e.key==='y'||e.key==='Y')){e.preventDefault();redo();}
