@@ -1063,10 +1063,19 @@ function cfZoomReset() {
   vt.s=s; vt.x=(r.width-(x1+x0)*s)/2; vt.y=(r.height-(y1+y0)*s)/2;
   applyVT();
 }
+// Trackpads never report finger count to the browser — only gesture *type*.
+// A two-finger scroll arrives as a plain wheel event; a pinch arrives as a
+// wheel event with ctrlKey synthesized true (same convention Chrome/Edge/Safari
+// use on both Windows precision touchpads and macOS trackpads). That's the
+// only distinction web code can make, so: two-finger scroll → pan, pinch → zoom.
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
-  const r=canvas.getBoundingClientRect();
-  cfZoom(e.deltaY<0?1.1:1/1.1, e.clientX-r.left, e.clientY-r.top);
+  if (e.ctrlKey) {
+    const r=canvas.getBoundingClientRect();
+    cfZoom(e.deltaY<0?1.1:1/1.1, e.clientX-r.left, e.clientY-r.top);
+  } else {
+    vt.x -= e.deltaX; vt.y -= e.deltaY; applyVT();
+  }
 }, { passive:false });
 
 // ── SVG defs (dynamic for dark mode) ─────────────────────
@@ -2030,13 +2039,12 @@ canvas.addEventListener('pointerdown', e => {
     document.addEventListener('pointermove',mvL);document.addEventListener('pointerup',upL);
     return;
   }
-  // plain drag → pan. Gated on hold time so a quick click — e.g. either half
-  // of a double-click, which almost always carries a few px of natural jitter —
-  // never gets misread as a pan and yanks the whole canvas.
-  const sx=e.clientX,sy=e.clientY,ox=vt.x,oy=vt.y,downAt=Date.now();let panned=false;
-  function mv(ev){if(Date.now()-downAt<150)return;const dx=ev.clientX-sx,dy=ev.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4){panned=true;vt.x=ox+dx;vt.y=oy+dy;applyVT();}}
-  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);if(!panned)select(null);}
-  document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);
+  // Plain single-pointer press on empty canvas: just a click-to-deselect.
+  // Panning the view is the two-finger scroll gesture (see the wheel handler
+  // above) — a single finger/mouse pointer is reserved for node interaction,
+  // so it no longer drags the canvas around.
+  function up(){document.removeEventListener('pointerup',up);select(null);}
+  document.addEventListener('pointerup',up);
 });
 canvas.addEventListener('dblclick', e => {
   if(e.target.closest('.cf-node')||e.target.closest('.cf-tools')||e.target.closest('.cf-edge-label')||e.target.closest('[data-edge]')||e.target.closest('#cf-dock2'))return;
