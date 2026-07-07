@@ -620,8 +620,25 @@ const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
 const _IV_GROUPS_API='/api/invest-groups';
 const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro)){if(!d.daily||typeof d.daily!=='object')d.daily={};return d;}}catch(e){}return{macro:[],risk:[],industry:[],daily:{}};})();
-// migrate: 為舊 entry 補上 modified
-(function(){let changed=false;['macro','risk','industry'].forEach(l=>{(_ivStore[l]||[]).forEach(e=>{if(!e.modified&&e.ts){e.modified=new Date(e.ts+'T00:00:00').toISOString();changed=true;}});});if(changed)try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}})();
+// migrate: 為舊 entry 補上 modified；補上 dailyTs/wl/stance/tomb 等新欄位（缺省容忍）
+(function(){
+  let changed=false;
+  ['macro','risk','industry'].forEach(l=>{(_ivStore[l]||[]).forEach(e=>{if(!e.modified&&e.ts){e.modified=new Date(e.ts+'T00:00:00').toISOString();changed=true;}});});
+  if(!_ivStore.dailyTs||typeof _ivStore.dailyTs!=='object'){_ivStore.dailyTs={};changed=true;}
+  if(!_ivStore.tomb||typeof _ivStore.tomb!=='object'){_ivStore.tomb={};changed=true;}
+  if(!Array.isArray(_ivStore.wl)){
+    let seeded=[];
+    try{const legacy=JSON.parse(localStorage.getItem('iv_wl')||'[]');if(Array.isArray(legacy))seeded=legacy.map(x=>({id:x.id||_ivIdFallback(),text:x.text,color:x.color||'#ddd',mod:new Date().toISOString()}));}catch(e){}
+    _ivStore.wl=seeded;changed=true;
+  }
+  if(!_ivStore.stance||typeof _ivStore.stance!=='object'){
+    let seeded={mode:null,ts:null};
+    try{const legacy=JSON.parse(localStorage.getItem('iv_stance_v1'));if(legacy&&(legacy.mode==='atk'||legacy.mode==='def'))seeded={mode:legacy.mode,ts:legacy.ts?new Date(legacy.ts).toISOString():new Date().toISOString()};}catch(e){}
+    _ivStore.stance=seeded;changed=true;
+  }
+  if(changed)try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));}catch(e){}
+})();
+function _ivIdFallback(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function _ivSaveLocal(){try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));return true;}catch(e){return false;}}
 function _ivSave(){
   const ok=_ivSaveLocal();
@@ -636,72 +653,112 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
   try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('iv_daily_')===0){const ds=k.slice(9);if(ds&&!_ivStore.daily[ds]){const v=localStorage.getItem(k);if(v&&v.trim()){_ivStore.daily[ds]=v;changed=true;}}}}}catch(e){}
   if(changed)_ivSaveLocal();
 })();
+/* ── LWW merge helpers (pure; also exported for node testing via _ivMergeLib) ── */
+function _ivIsNewer(a,b){const A=a||'1970-01-01T00:00:00.000Z',B=b||'1970-01-01T00:00:00.000Z';return A>B;}
+/* whole-object LWW list merge keyed by id, with tombstones. tsField picks the timestamp prop ('modified' or 'mod'). */
+function _ivMergeListLWW(local,server,localTomb,serverTomb,tsField){
+  local=local||[];server=server||[];localTomb=localTomb||{};serverTomb=serverTomb||{};
+  const map=new Map();
+  local.forEach(e=>{if(e&&e.id)map.set(e.id,e);});
+  server.forEach(e=>{
+    if(!e||!e.id)return;
+    if(!map.has(e.id)){map.set(e.id,e);return;}
+    const loc=map.get(e.id);
+    if(_ivIsNewer(e[tsField],loc[tsField]))map.set(e.id,e);
+  });
+  const tomb={};
+  Object.keys(localTomb).forEach(id=>{tomb[id]=localTomb[id];});
+  Object.keys(serverTomb).forEach(id=>{if(!tomb[id]||_ivIsNewer(serverTomb[id],tomb[id]))tomb[id]=serverTomb[id];});
+  const list=[];
+  map.forEach((e,id)=>{
+    const tts=tomb[id];
+    if(tts){const mod=e[tsField];if(!mod||tts>=mod)return;}
+    list.push(e);
+  });
+  return {list,tomb};
+}
+function _ivMergeDaily(localDaily,serverDaily,localTs,serverTs){
+  localDaily=localDaily||{};serverDaily=serverDaily||{};localTs=localTs||{};serverTs=serverTs||{};
+  const dates=new Set([...Object.keys(localDaily),...Object.keys(serverDaily)]);
+  const daily={},ts={};
+  dates.forEach(ds=>{
+    const lv=localDaily[ds],sv=serverDaily[ds];
+    const lt=localTs[ds],st=serverTs[ds];
+    if(lv!==undefined&&sv!==undefined){
+      if(lt&&st){if(_ivIsNewer(st,lt)){daily[ds]=sv;ts[ds]=st;}else{daily[ds]=lv;ts[ds]=lt;}}
+      else if(st&&!lt){daily[ds]=sv;ts[ds]=st;}
+      else if(lt&&!st){daily[ds]=lv;ts[ds]=lt;}
+      else{daily[ds]=lv;}
+    }else if(lv!==undefined){daily[ds]=lv;if(lt)ts[ds]=lt;}
+    else if(sv!==undefined){daily[ds]=sv;if(st)ts[ds]=st;}
+  });
+  return {daily,ts};
+}
+function _ivMergeStance(local,server){
+  local=local||{mode:null,ts:null};server=server||{mode:null,ts:null};
+  if(!server.ts)return local;
+  if(!local.ts)return server;
+  return _ivIsNewer(server.ts,local.ts)?server:local;
+}
+/* pure top-level merge: local/server are {macro,risk,industry,daily,dailyTs,wl,stance,tomb} shaped like _ivStore (fields optional-tolerant) */
+function _ivMerge(local,server){
+  local=local||{};server=server||{};
+  const merged={macro:[],risk:[],industry:[],daily:{},dailyTs:{},wl:[],stance:{mode:null,ts:null},tomb:{}};
+  let changedLocal=false; // local data changed due to server input
+  ['macro','risk','industry'].forEach(layer=>{
+    if(!Array.isArray(server[layer])){merged[layer]=(local[layer]||[]).slice();return;}
+    const {list,tomb}=_ivMergeListLWW(local[layer],server[layer],local.tomb,server.tomb,'modified');
+    merged[layer]=list;
+    Object.assign(merged.tomb,tomb);
+    if(JSON.stringify(list)!==JSON.stringify(local[layer]||[]))changedLocal=true;
+  });
+  const {daily,ts}=_ivMergeDaily(local.daily,server.daily,local.dailyTs,server.dailyTs);
+  merged.daily=daily;merged.dailyTs=ts;
+  if(JSON.stringify(daily)!==JSON.stringify(local.daily||{}))changedLocal=true;
+  const {list:wlList,tomb:wlTomb}=_ivMergeListLWW(local.wl,server.wl,local.tomb,server.tomb,'mod');
+  merged.wl=wlList;
+  Object.assign(merged.tomb,wlTomb);
+  if(JSON.stringify(wlList)!==JSON.stringify(local.wl||[]))changedLocal=true;
+  merged.stance=_ivMergeStance(local.stance,server.stance);
+  if(JSON.stringify(merged.stance)!==JSON.stringify(local.stance||{mode:null,ts:null}))changedLocal=true;
+  return {merged,changedLocal};
+}
+function _ivMergeGroups(local,server){
+  local=local||{};server=server||{};
+  const merged={macro:[],risk:[],industry:[],tomb:{}};
+  let changedLocal=false;
+  ['macro','risk','industry'].forEach(layer=>{
+    if(!Array.isArray(server[layer])){merged[layer]=(local[layer]||[]).slice();return;}
+    const {list,tomb}=_ivMergeListLWW(local[layer],server[layer],local.tomb,server.tomb,'mod');
+    merged[layer]=list;
+    Object.assign(merged.tomb,tomb);
+    if(JSON.stringify(list)!==JSON.stringify(local[layer]||[]))changedLocal=true;
+  });
+  return {merged,changedLocal};
+}
+if(typeof module!=='undefined'&&module.exports){module.exports={_ivMerge,_ivMergeGroups,_ivMergeListLWW,_ivMergeDaily,_ivMergeStance,_ivIsNewer};}
+
 (async function _ivSync(){
   try{
     const [r,rg]=await Promise.all([fetch(_IV_API),fetch(_IV_GROUPS_API)]);
     if(!r.ok)return;
     const d=await r.json();
     if(!Array.isArray(d.macro)||!Array.isArray(d.risk)||!Array.isArray(d.industry))return;
-    let changed=false;
-    /* union by id — keep both local-only and server-only entries; sync highlights from server */
-    ['macro','risk','industry'].forEach(layer=>{
-      const map=new Map();
-      _ivStore[layer].forEach(e=>{if(e&&e.id)map.set(e.id,e);});
-      d[layer].forEach(e=>{
-        if(!e||!e.id)return;
-        if(!map.has(e.id)){map.set(e.id,e);changed=true;}
-        else{
-          const loc=map.get(e.id);
-          const srvHl=JSON.stringify(e.highlights||null);
-          const locHl=JSON.stringify(loc.highlights||null);
-          if(srvHl!==locHl){loc.highlights=e.highlights;changed=true;}
-        }
-      });
-      if(map.size!==_ivStore[layer].length){_ivStore[layer]=[...map.values()];changed=true;}
-    });
-    /* adopt server-only daily notes */
-    if(d.daily&&typeof d.daily==='object'){
-      Object.keys(d.daily).forEach(ds=>{if(!_ivStore.daily[ds]&&d.daily[ds]){_ivStore.daily[ds]=d.daily[ds];changed=true;}});
-    }
-    /* sync groups from dedicated endpoint */
+    const {merged,changedLocal}=_ivMerge(_ivStore,d);
+    const before=JSON.stringify(_ivStore);
+    Object.assign(_ivStore,merged);
+    let changed=(JSON.stringify(_ivStore)!==before);
+    let groupsChanged=false;
     if(rg.ok){
       const dg=await rg.json();
       if(dg&&typeof dg==='object'){
-        let gchanged=false;
-        const serverEmpty=['macro','risk','industry'].every(l=>!Array.isArray(dg[l])||dg[l].length===0);
-        ['macro','risk','industry'].forEach(layer=>{
-          if(!Array.isArray(dg[layer]))return;
-          const gmap=new Map();
-          _ivGroups[layer].forEach(g=>{if(g&&g.id)gmap.set(g.id,g);});
-          dg[layer].forEach(g=>{
-            if(!g||!g.id)return;
-            if(!gmap.has(g.id)){gmap.set(g.id,g);gchanged=true;}
-            else{
-              /* merge titles: union so neither machine loses assignments */
-              const loc=gmap.get(g.id);
-              const merged=[...new Set([...(loc.titles||[]),...(g.titles||[])])];
-              if(merged.length!==(loc.titles||[]).length){loc.titles=merged;gchanged=true;}
-              /* adopt server's color if local has none yet (color is assigned once at creation) */
-              if(!loc.color&&g.color){loc.color=g.color;gchanged=true;}
-              /* merge companies (tickers+notes): union by id, adopt server's value if it differs */
-              const locCo=new Map((loc.companies||[]).map(c=>[c.id,c]));
-              (g.companies||[]).forEach(c=>{
-                if(!c||!c.id)return;
-                if(!locCo.has(c.id)){locCo.set(c.id,c);gchanged=true;}
-                else{
-                  const lc=locCo.get(c.id);
-                  if(lc.ticker!==c.ticker||lc.notes!==c.notes){lc.ticker=c.ticker;lc.notes=c.notes;gchanged=true;}
-                }
-              });
-              loc.companies=[...locCo.values()];
-            }
-          });
-          if(gmap.size!==_ivGroups[layer].length){_ivGroups[layer]=[...gmap.values()];gchanged=true;}
-        });
-        if(gchanged){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}changed=true;}
-        /* server has no groups but local does — upload now (migration / first sync) */
-        const localHasGroups=['macro','risk','industry'].some(l=>_ivGroups[l]&&_ivGroups[l].length>0);
-        if(serverEmpty&&localHasGroups){
+        const gr=_ivMergeGroups(_ivGroups,dg);
+        const gbefore=JSON.stringify(_ivGroups);
+        Object.assign(_ivGroups,gr.merged);
+        groupsChanged=(JSON.stringify(_ivGroups)!==gbefore);
+        if(groupsChanged){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}}
+        /* converge server: if merge produced a result that differs from what the server sent, push it back */
+        if(JSON.stringify(_ivGroups)!==JSON.stringify(dg)){
           fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});
         }
       }
@@ -711,6 +768,14 @@ function _ivSaveDailySoon(){_ivSaveLocal();clearTimeout(_ivDailyT);_ivDailyT=set
       ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();ivRenderWeekStrip(false);
       const note=document.getElementById('iv-daily-note');
       if(note&&document.activeElement!==note){note.value=_ivStore.daily[_ivSelDay]||'';ivNoteResize();}
+      if(typeof ivWLRender==='function')ivWLRender();
+      if(typeof ivRenderStance==='function')ivRenderStance();
+    }else if(groupsChanged){
+      ivRenderGroups();ivRenderTags();ivRenderFeed();
+    }
+    /* converge server for the main store too, if our merged result differs from what server sent */
+    if(JSON.stringify(_ivStore)!==JSON.stringify(d)){
+      fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
     }
   }catch(e){}
 })();
@@ -719,6 +784,7 @@ let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,
 let _ivExpandedCo=new Set();
 let _ivHlEntry=null,_ivHlSel='',_ivHlMark=null;
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
+if(!_ivGroups.tomb||typeof _ivGroups.tomb!=='object')_ivGroups.tomb={};
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
 let _ivGrpT;
 function _ivSaveGroupsSoon(){
@@ -969,6 +1035,9 @@ function ivSelectLayer(layer){ivSetComposeLayer(layer);if(_ivActiveLayer===layer
 function ivRenderLayers(){['macro','risk','industry'].forEach(l=>{const r=document.getElementById('iv-ring-'+l);if(r)r.classList.toggle('layer-active',_ivActiveLayer===l);});}
 function ivRemoveActiveTag(){if(_ivActiveTag)ivRemoveTag(_ivActiveTag.layer,_ivActiveTag.title);}
 function ivRemoveTag(layer,title){
+  const now=new Date().toISOString();
+  if(!_ivStore.tomb)_ivStore.tomb={};
+  _ivStore[layer].forEach(e=>{if(e.title===title&&e.id)_ivStore.tomb[e.id]=now;});
   _ivStore[layer]=_ivStore[layer].filter(e=>e.title!==title);_ivSave();
   if(_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title){_ivActiveTag=null;_ivActiveSub=null;}
   ivRenderTags();ivRenderSubs();ivRenderFeed();
@@ -982,7 +1051,7 @@ function ivRenderGroups(){
     const groups=_ivGroups[layer]||[];
     area.innerHTML='';
     groups.forEach(g=>{
-      if(!g.color){g.color=_ivPickGroupColor();_ivSaveGroups();}
+      if(!g.color){g.color=_ivPickGroupColor();g.mod=new Date().toISOString();_ivSaveGroups();}
       const isActive=_ivActiveGroup&&_ivActiveGroup.layer===layer&&_ivActiveGroup.id===g.id;
       const box=document.createElement('div');
       box.className='iv-group-box'+(isActive?' grp-active':'');
@@ -1046,13 +1115,15 @@ function ivAddGroup(layer){
   inp.focus();
   function commit(){
     const name=inp.value.trim();
-    if(name){_ivGroups[layer].push({id:'g'+Date.now(),name,titles:[],color:_ivPickGroupColor()});_ivSaveGroups();}
+    if(name){_ivGroups[layer].push({id:'g'+Date.now(),name,titles:[],color:_ivPickGroupColor(),mod:new Date().toISOString()});_ivSaveGroups();}
     wrap.remove();ivRenderGroups();
   }
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}else if(e.key==='Escape'){wrap.remove();}});
   inp.addEventListener('blur',()=>setTimeout(()=>{if(wrap.parentNode)commit();},150));
 }
 function ivDeleteGroup(layer,id){
+  if(!_ivGroups.tomb)_ivGroups.tomb={};
+  _ivGroups.tomb[id]=new Date().toISOString();
   _ivGroups[layer]=_ivGroups[layer].filter(g=>g.id!==id);
   if(_ivActiveGroup&&_ivActiveGroup.layer===layer&&_ivActiveGroup.id===id){_ivActiveGroup=null;_ivActiveTag=null;}
   _ivSaveGroups();ivRenderGroups();ivRenderTags();ivRenderFeed();
@@ -1065,7 +1136,7 @@ function ivRenameGroup(layer,id,nameEl){
   function done(){
     nameEl.contentEditable='false';
     const name=nameEl.textContent.trim()||old;
-    nameEl.textContent=name;group.name=name;_ivSaveGroups();
+    nameEl.textContent=name;group.name=name;group.mod=new Date().toISOString();_ivSaveGroups();
   }
   nameEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();nameEl.blur();}else if(e.key==='Escape'){nameEl.textContent=old;nameEl.blur();}},{once:false});
   nameEl.addEventListener('blur',done,{once:true});
@@ -1097,12 +1168,13 @@ function ivGroupOpenPicker(layer,groupId,btn){
 function ivGroupAddTitle(layer,groupId,title){
   const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
   if(!group.titles)group.titles=[];
-  if(!group.titles.includes(title))group.titles.push(title);
+  if(!group.titles.includes(title)){group.titles.push(title);group.mod=new Date().toISOString();}
   _ivSaveGroups();ivRenderGroups();ivRenderTags();
 }
 function ivGroupRemoveTitle(layer,groupId,title){
   const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
   group.titles=(group.titles||[]).filter(t=>t!==title);
+  group.mod=new Date().toISOString();
   if(_ivActiveTag&&_ivActiveTag.title===title&&_ivActiveGroup&&_ivActiveGroup.id===groupId)_ivActiveTag=null;
   _ivSaveGroups();ivRenderGroups();ivRenderTags();ivRenderFeed();
 }
@@ -1123,6 +1195,7 @@ function ivAddCompany(layer,groupId){
     if(ticker){
       if(!group.companies)group.companies=[];
       group.companies.push({id:_ivId(),ticker,notes:''});
+      group.mod=new Date().toISOString();
       _ivSaveGroups();
     }
     wrap.remove();ivRenderGroups();
@@ -1132,7 +1205,10 @@ function ivAddCompany(layer,groupId){
 }
 function ivDeleteCompany(layer,groupId,companyId){
   const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
+  if(!_ivGroups.tomb)_ivGroups.tomb={};
+  _ivGroups.tomb[companyId]=new Date().toISOString();
   group.companies=(group.companies||[]).filter(c=>c.id!==companyId);
+  group.mod=new Date().toISOString();
   _ivExpandedCo.delete(companyId);
   _ivSaveGroups();ivRenderGroups();
 }
@@ -1145,6 +1221,7 @@ function ivSaveCompanyNote(layer,groupId,companyId,textareaEl){
   const group=(_ivGroups[layer]||[]).find(g=>g.id===groupId);if(!group)return;
   const company=(group.companies||[]).find(c=>c.id===companyId);if(!company)return;
   company.notes=textareaEl.value;
+  group.mod=new Date().toISOString();
   _ivSaveGroupsSoon();
 }
 function ivRenameCompanyTicker(layer,groupId,companyId,tickerEl){
@@ -1156,7 +1233,7 @@ function ivRenameCompanyTicker(layer,groupId,companyId,tickerEl){
   function done(){
     tickerEl.contentEditable='false';
     const ticker=tickerEl.textContent.trim()||old;
-    tickerEl.textContent=ticker;company.ticker=ticker;_ivSaveGroups();
+    tickerEl.textContent=ticker;company.ticker=ticker;group.mod=new Date().toISOString();_ivSaveGroups();
   }
   tickerEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tickerEl.blur();}else if(e.key==='Escape'){tickerEl.textContent=old;tickerEl.blur();}},{once:false});
   tickerEl.addEventListener('blur',done,{once:true});
@@ -1180,6 +1257,7 @@ function ivCoDrop(e,layer,groupId,targetId){
   if(fromIdx<0||toIdx<0)return;
   const [moved]=list.splice(fromIdx,1);
   list.splice(toIdx,0,moved);
+  group.mod=new Date().toISOString();
   _ivSaveGroups();ivRenderGroups();
 }
 
@@ -1335,6 +1413,7 @@ function ivLinkDiagram(id){
   const fid=prompt('輸入 CausalFrame 圖表名稱（留空取消連結）：',e.causalFileId||'');
   if(fid===null)return;
   e.causalFileId=fid.trim()||null;
+  e.modified=new Date().toISOString();
   _ivSave();ivShowDetail(id);
 }
 function ivOpenDiagram(id){
@@ -1386,6 +1465,7 @@ function ivDoHighlight(color){
     items.push({t:_ivHlSel,c:color});
   }
   _ivHlEntry.highlights=items;
+  _ivHlEntry.modified=new Date().toISOString();
   _ivSave();ivHideHlPopup();
   window.getSelection()?.removeAllRanges();
   const body=document.querySelector('#iv-feed-detail .iv-fd-body');
@@ -1395,6 +1475,7 @@ function ivDoHighlight(color){
 function ivRemoveHighlight(){
   if(!_ivHlEntry||!_ivHlSel)return;
   _ivHlEntry.highlights=ivHlNorm(_ivHlEntry.highlights).filter(h=>h.t!==_ivHlSel);
+  _ivHlEntry.modified=new Date().toISOString();
   _ivSave();ivHideHlPopup();
   const body=document.querySelector('#iv-feed-detail .iv-fd-body');
   if(body){body.innerHTML=ivRenderContent(_ivHlEntry.content||'');ivApplyHighlights(body,_ivHlEntry.highlights);}
@@ -1416,6 +1497,8 @@ document.addEventListener('mouseup',e=>{
 });
 function ivDeleteEntry(id){
   if(!confirm('Delete this entry permanently?'))return;
+  if(!_ivStore.tomb)_ivStore.tomb={};
+  _ivStore.tomb[id]=new Date().toISOString();
   ['macro','risk','industry'].forEach(l=>{_ivStore[l]=_ivStore[l].filter(e=>e.id!==id);});
   if(_ivEditingId===id)ivClearEditor();
   _ivSave();ivBackToFeed();ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();
@@ -1590,7 +1673,7 @@ function ivRenderWeekStrip(animate=true){
 })();
 function ivSelectDay(ds){
   const note=document.getElementById('iv-daily-note');
-  if(note&&_ivSelDay){_ivStore.daily[_ivSelDay]=note.value;_ivSave();}
+  if(note&&_ivSelDay){_ivStore.daily[_ivSelDay]=note.value;if(!_ivStore.dailyTs)_ivStore.dailyTs={};_ivStore.dailyTs[_ivSelDay]=new Date().toISOString();_ivSave();}
   _ivSelDay=ds;
   if(note){note.value=_ivStore.daily[ds]||'';ivNoteResize();}
   if(!_ivEditingId)ivSetDate(ds);
@@ -1610,7 +1693,7 @@ function ivRefreshDayNoteDot(){
   if(!document.getElementById('iv-ed-date').value)ivSetDate(_ivSelDay);
   const note=document.getElementById('iv-daily-note');if(!note)return;
   note.value=_ivStore.daily[_ivSelDay]||'';
-  note.addEventListener('input',()=>{ivNoteResize();_ivStore.daily[_ivSelDay]=note.value;_ivSaveDailySoon();ivRefreshDayNoteDot();});
+  note.addEventListener('input',()=>{ivNoteResize();_ivStore.daily[_ivSelDay]=note.value;if(!_ivStore.dailyTs)_ivStore.dailyTs={};_ivStore.dailyTs[_ivSelDay]=new Date().toISOString();_ivSaveDailySoon();ivRefreshDayNoteDot();});
   ivNoteResize();
 })();
 
@@ -2015,14 +2098,14 @@ async function ivKellyAutoCorr(){
   }
 }
 
-/* ── Feature 4: Watch List ── */
-window._ivWL=[];try{window._ivWL=JSON.parse(localStorage.getItem('iv_wl')||'[]');}catch(e){window._ivWL=[];}
+/* ── Feature 4: Watch List (lives in _ivStore.wl now; 'iv_wl' kept as legacy read-fallback only) ── */
+window._ivWL=_ivStore.wl;
 const _ivWLColors=['#ced4c6','#c6ccd6','#d6ccba','#d0b4a6','#c0aab8','#ddd'];
-function _ivWLSave(){try{localStorage.setItem('iv_wl',JSON.stringify(_ivWL));}catch(e){}}
+function _ivWLSave(){_ivStore.wl=_ivWL;_ivSaveDailySoon();}
 function ivWLAdd(){
   const txt=(prompt('Add to Watch List:')||'').trim();
   if(!txt)return;
-  _ivWL.push({id:_ivId(),text:txt,color:'#ddd'});
+  _ivWL.push({id:_ivId(),text:txt,color:'#ddd',mod:new Date().toISOString()});
   _ivWLSave();ivWLRender();
 }
 function ivWLRender(){
@@ -2037,6 +2120,7 @@ function ivWLRender(){
     dot.addEventListener('click',()=>{
       const idx=_ivWLColors.indexOf(item.color);
       item.color=_ivWLColors[(idx+1)%_ivWLColors.length];
+      item.mod=new Date().toISOString();
       _ivWLSave();ivWLRender();
     });
     const txt=document.createElement('span');
@@ -2046,23 +2130,28 @@ function ivWLRender(){
       const nv=prompt('編輯 Watch 條目：',item.text);
       if(nv===null)return;
       const t=nv.trim();if(!t)return;
-      item.text=t;_ivWLSave();ivWLRender();
+      item.text=t;item.mod=new Date().toISOString();_ivWLSave();ivWLRender();
     });
     const del=document.createElement('span');
     del.className='iv-wl-del';del.textContent='×';del.title='刪除';
-    del.addEventListener('click',()=>{_ivWL=_ivWL.filter(x=>x.id!==item.id);_ivWLSave();ivWLRender();});
+    del.addEventListener('click',()=>{
+      if(!_ivStore.tomb)_ivStore.tomb={};
+      _ivStore.tomb[item.id]=new Date().toISOString();
+      _ivWL=_ivWL.filter(x=>x.id!==item.id);
+      _ivWLSave();ivWLRender();
+    });
     row.appendChild(dot);row.appendChild(txt);row.appendChild(del);
     el.appendChild(row);
   });
 }
 ivWLRender();
 
-/* ── Attack / Defense stance (manual, single current state) ── */
-const _IV_STANCE_KEY='iv_stance_v1';
-let _ivStance=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_STANCE_KEY));if(d&&(d.mode==='atk'||d.mode==='def'))return d;}catch(e){}return{mode:null,ts:null};})();
+/* ── Attack / Defense stance (manual, single current state; lives in _ivStore.stance now) ── */
+let _ivStance=_ivStore.stance;
 function ivSetStance(mode){
-  _ivStance={mode,ts:Date.now()};
-  try{localStorage.setItem(_IV_STANCE_KEY,JSON.stringify(_ivStance));}catch(e){}
+  _ivStance={mode,ts:new Date().toISOString()};
+  _ivStore.stance=_ivStance;
+  _ivSaveDailySoon();
   ivRenderStance();
 }
 function ivRenderStance(){
