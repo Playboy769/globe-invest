@@ -1283,7 +1283,7 @@ function ivCardHTML(e,layerLabel){
   const q=_ivSearch||'';
   const titleHTML=q?ivHlQ(e.title,q):_ivEscHtml(e.title);
   const previewHTML=q?ivHlQ(rawPreview,q):_ivEscHtml(rawPreview);
-  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}${e.sub?` <span class="iv-fc-sub">· ${e.sub}</span>`:''}</div><div class="iv-fc-title">${titleHTML}</div><div class="iv-fc-preview">${previewHTML}</div>${imgs}<div class="iv-fc-meta"><span>${ivFmtModified(e.modified)||e.ts}</span><span class="iv-fc-author">${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
+  return `<div class="iv-feed-card" style="${sbg}" onclick="ivShowDetail('${e.id}')"><div class="iv-fc-layer">${layerLabel}</div><div class="iv-fc-title">${titleHTML}${e.sub?` <span class="iv-fc-sub">· ${_ivEscHtml(e.sub)}</span>`:''}</div><div class="iv-fc-preview">${previewHTML}</div>${imgs}<div class="iv-fc-meta"><span>${ivFmtModified(e.modified)||e.ts}</span><span class="iv-fc-author">${e.author||''}${e.source?' · '+e.source:''}</span></div></div>`;
 }
 function _ivBySeverity(a,b){return (b.severity||0)-(a.severity||0) || (b.ts||'').localeCompare(a.ts||'');}
 function ivFeedTitleHTML(){
@@ -1395,7 +1395,7 @@ function ivShowDetail(id){
   const _diagBtn=e.causalFileId
     ?`<div class="iv-fd-diag linked" onclick="ivOpenDiagram('${e.id}')" title="開啟因果圖">📊</div>`
     :`<div class="iv-fd-diag" onclick="ivLinkDiagram('${e.id}')" title="連結因果圖">🔗</div>`;
-  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-dup" onclick="ivDuplicateEntry('${e.id}')">Dup</div>${_diagBtn}<div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div><div class="iv-fd-title">${e.title}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${ivFmtModified(e.modified)||e.ts||''}</div>`;
+  det.innerHTML=`<div class="iv-fd-back-row"><div class="iv-fd-back" onclick="ivBackToFeed()">← Back</div><div class="iv-fd-actions"><div class="iv-fd-edit" onclick="ivEditEntry('${e.id}')">Edit</div><div class="iv-fd-dup" onclick="ivDuplicateEntry('${e.id}')">Dup</div>${_diagBtn}<div class="iv-fd-del" onclick="ivDeleteEntry('${e.id}')">Delete</div></div></div><div class="iv-fd-layer">${LN[layer]}</div><div class="iv-fd-title">${e.title}${e.sub?` <span class="iv-fd-sub">· ${e.sub}</span>`:''}</div>${e.author||e.source?`<div style="font-size:14px;color:#666;margin-bottom:16px;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em">${e.author||''}${e.source?' · '+e.source:''}</div>`:''}<div class="iv-fd-body iv-md">${mdBody}</div>${imgs}<div class="iv-fd-meta">${ivFmtModified(e.modified)||e.ts||''}</div>`;
   _ivHlEntry=e;
   if(e.highlights&&e.highlights.length)ivApplyHighlights(det.querySelector('.iv-fd-body'),e.highlights);
   det.addEventListener('click',e2=>{
