@@ -314,13 +314,12 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 /* Attack / Defense stance (per-index: TWII/TWO/DJI/Nasdaq/SOX) */
 .iv-stance-wrap{border-bottom:1px solid #eee;flex-shrink:0}
 .iv-stance-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:8px 16px 0}
-.iv-stance-tab{display:inline-flex;align-items:center;font-size:9.5px;font-family:'Calibri',sans-serif;letter-spacing:.03em;padding:2px 8px;border-radius:5px;border:1px solid #e4e4e4;color:#999;cursor:pointer;user-select:none;white-space:nowrap;transition:all .15s ease}
+.iv-stance-tab{display:inline-flex;align-items:center;font-size:9.5px;font-family:'Calibri',sans-serif;letter-spacing:.03em;padding:2px 8px;border-radius:5px;border:1px solid #e4e4e4;color:#999;cursor:pointer;user-select:none;white-space:nowrap;transition:all .15s ease;background:#fff}
 .iv-stance-tab:hover{border-color:#ccc;color:#666}
-.iv-stance-tab.active{background:#2a2a2a;border-color:#2a2a2a;color:#fff}
-.iv-stance-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ddd;margin-right:4px;flex-shrink:0}
-.iv-stance-tab.mode-atk .iv-stance-dot{background:#960018}
-.iv-stance-tab.mode-def .iv-stance-dot{background:#355C7D}
-.iv-stance-tab.active .iv-stance-dot{background:#fff}
+.iv-stance-tab.active:not(.mode-atk):not(.mode-def){background:#2a2a2a;border-color:#2a2a2a;color:#fff}
+.iv-stance-tab.mode-atk{background:#960018;border-color:#960018;color:#fff}
+.iv-stance-tab.mode-def{background:#355C7D;border-color:#355C7D;color:#fff}
+.iv-stance-tab.active{box-shadow:0 0 0 2px #2a2a2a}
 .iv-stance-bar{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:10px 16px;flex-shrink:0;background-repeat:no-repeat;background-size:200% 100%}
 .iv-stance-bar.atk-mode{background-image:linear-gradient(90deg,rgba(150,0,24,0.03) 0%,rgba(150,0,24,0.14) 50%,rgba(150,0,24,0.03) 100%);animation:iv-stance-flow 15s ease-in-out infinite}
 .iv-stance-bar.def-mode{background-image:linear-gradient(90deg,rgba(53,92,125,0.03) 0%,rgba(53,92,125,0.14) 50%,rgba(53,92,125,0.03) 100%);animation:iv-stance-flow 15s ease-in-out infinite}
@@ -2192,8 +2191,6 @@ function ivRenderStanceTabs(){
     tab.className='iv-stance-tab'+(k===_ivStanceSel?' active':'')+(st.mode==='atk'?' mode-atk':st.mode==='def'?' mode-def':'');
     tab.title=IV_STANCE_LABELS[k]||k;
     tab.onclick=function(){ivSelectStanceTab(k);};
-    const dot=document.createElement('i');dot.className='iv-stance-dot';
-    tab.appendChild(dot);
     tab.appendChild(document.createTextNode(k));
     wrap.appendChild(tab);
   });
