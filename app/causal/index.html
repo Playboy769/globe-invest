@@ -423,6 +423,18 @@ body.dark #cf-lasso{border-color:#4a88dd;background:rgba(74,136,221,0.08)}
 #cf-watermark{position:absolute;bottom:22px;left:24px;font-size:18px;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0a;font-weight:700;pointer-events:none;user-select:none;font-family:'Orchid','Noto Sans TC',serif;z-index:10;transition:opacity .2s}
 body.dark #cf-watermark{color:#e8e8e8}
 
+/* ── Minimap ──────────────────────────────────────────────── */
+#cf-minimap{position:absolute;right:14px;bottom:14px;width:190px;height:130px;background:rgba(255,255,255,.9);border:1px solid #e4e4e4;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.1);z-index:15;overflow:hidden;cursor:crosshair;backdrop-filter:blur(3px);transition:opacity .15s}
+#cf-minimap.hidden{display:none}
+#cf-minimap svg{width:100%;height:100%;display:block}
+.cf-mm-node{fill:#c2c2c2}
+.cf-mm-node.sel{fill:#4a88dd}
+.cf-mm-viewport{fill:rgba(74,136,221,.10);stroke:#4a88dd;stroke-width:1.5;pointer-events:none}
+body.dark #cf-minimap{background:rgba(28,28,28,.88);border-color:#333}
+body.dark .cf-mm-node{fill:#4a4a4a}
+body.dark .cf-mm-node.sel{fill:#5c9ce0}
+body.dark .cf-mm-viewport{fill:rgba(92,156,224,.12);stroke:#5c9ce0}
+
 /* ── Analysis: R/B loops · pulse · leverage ── */
 #cf-overlay{position:absolute;inset:0;pointer-events:none;z-index:6}
 .cf-rb-badge{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;font-family:'Orchid','Noto Sans TC',serif;letter-spacing:.05em;box-shadow:0 2px 9px rgba(0,0,0,0.13);white-space:nowrap}
@@ -559,6 +571,9 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
   <button class="cf-dock2-btn" onclick="cfZoom(1.25)" title="放大 (+)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/><line x1="7.6" y1="10.5" x2="13.4" y2="10.5"/><line x1="10.5" y1="7.6" x2="10.5" y2="13.4"/></svg>
   </button>
+  <button class="cf-dock2-btn" id="cf-minimap-btn" title="Toggle minimap (M)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+  </button>
   <div class="cf-dock2-sep"></div>
   <button class="cf-dock2-btn" id="cf-dark-btn" title="Dark mode (D)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 13.6A8.4 8.4 0 1 1 10.4 3.6a6.8 6.8 0 0 0 10 10z"/></svg>
@@ -662,7 +677,8 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
   </div>
   <span id="cf-count" class="cf-count" style="position:absolute;bottom:54px;left:24px;z-index:10"></span>
   <div id="cf-watermark" title="點兩下重新命名"></div>
-  <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · Ctrl+M: center · 1–6: color · P: trace · ?: help</div>
+  <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · Ctrl+M: center · 1–6: color · P: trace · M: minimap · ?: help</div>
+  <div id="cf-minimap" title="Drag to jump"><svg id="cf-mm-svg"></svg></div>
 </div>
 
 <!-- Overflow menu -->
@@ -1023,6 +1039,7 @@ function applyVT() {
   canvas.style.backgroundPosition = `${vt.x % sp}px ${vt.y % sp}px`;
   const lbl = document.getElementById('cf-zoom-lbl');
   if (lbl) lbl.textContent = Math.round(vt.s*100)+'%';
+  updateMinimapViewport();
 }
 function s2w(sx, sy) {
   const r = canvas.getBoundingClientRect();
@@ -1077,6 +1094,67 @@ canvas.addEventListener('wheel', e => {
     vt.x -= e.deltaX; vt.y -= e.deltaY; applyVT();
   }
 }, { passive:false });
+
+// ── Minimap ────────────────────────────────────────────────
+let _mmHidden = !!localStorage.getItem('cf_mm_hidden');
+let _mmT = null; // cached world->minimap transform; rebuilt in renderMinimap(), reused by updateMinimapViewport()
+const mmEl = document.getElementById('cf-minimap');
+const mmSvg = document.getElementById('cf-mm-svg');
+function renderMinimap() {
+  if (_mmHidden) { mmEl.classList.add('hidden'); return; }
+  mmEl.classList.remove('hidden');
+  if (!G.nodes.length) { mmSvg.innerHTML=''; _mmT=null; return; }
+  const W=190,H=130,pad=8,pd=200;
+  const x0=Math.min(...G.nodes.map(n=>n.x))-pd, y0=Math.min(...G.nodes.map(n=>n.y))-pd;
+  const x1=Math.max(...G.nodes.map(n=>n.x+(n._w||80)))+pd;
+  const y1=Math.max(...G.nodes.map(n=>n.y+(n._h||40)))+pd;
+  const scale=Math.min((W-pad*2)/(x1-x0),(H-pad*2)/(y1-y0));
+  const offX=(W-(x1-x0)*scale)/2, offY=(H-(y1-y0)*scale)/2;
+  _mmT={x0,y0,scale,offX,offY};
+  let s='';
+  G.nodes.forEach(n=>{
+    const w=(n._w||80)*scale, h=(n._h||40)*scale;
+    const mx=(n.x-x0)*scale+offX, my=(n.y-y0)*scale+offY;
+    const isSel=_sel&&_sel.type==='node'&&_sel.id===n.id;
+    s+='<rect class="cf-mm-node'+(isSel?' sel':'')+'" x="'+mx+'" y="'+my+'" width="'+Math.max(w,2)+'" height="'+Math.max(h,2)+'" rx="1"/>';
+  });
+  s+='<rect class="cf-mm-viewport" id="cf-mm-vp" x="0" y="0" width="0" height="0"/>';
+  mmSvg.innerHTML=s;
+  updateMinimapViewport();
+}
+function updateMinimapViewport(){
+  if (_mmHidden || !_mmT) return;
+  const vp=document.getElementById('cf-mm-vp'); if(!vp)return;
+  const r=canvas.getBoundingClientRect();
+  const wx0=-vt.x/vt.s, wy0=-vt.y/vt.s, wx1=(r.width-vt.x)/vt.s, wy1=(r.height-vt.y)/vt.s;
+  const {x0,y0,scale,offX,offY}=_mmT;
+  vp.setAttribute('x',(wx0-x0)*scale+offX);
+  vp.setAttribute('y',(wy0-y0)*scale+offY);
+  vp.setAttribute('width',Math.max((wx1-wx0)*scale,4));
+  vp.setAttribute('height',Math.max((wy1-wy0)*scale,4));
+}
+function jumpMinimap(clientX,clientY){
+  if(!_mmT)return;
+  const {x0,y0,scale,offX,offY}=_mmT;
+  const r=mmSvg.getBoundingClientRect();
+  const wx=(clientX-r.left-offX)/scale+x0, wy=(clientY-r.top-offY)/scale+y0;
+  const cr=canvas.getBoundingClientRect();
+  vt.x=cr.width/2-wx*vt.s; vt.y=cr.height/2-wy*vt.s; applyVT();
+}
+mmEl.addEventListener('pointerdown', e=>{
+  e.stopPropagation(); e.preventDefault();
+  jumpMinimap(e.clientX,e.clientY);
+  function mv(ev){jumpMinimap(ev.clientX,ev.clientY);}
+  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);}
+  document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
+});
+function toggleMinimap(){
+  _mmHidden=!_mmHidden;
+  localStorage.setItem('cf_mm_hidden', _mmHidden?'1':'');
+  document.getElementById('cf-minimap-btn').classList.toggle('active',!_mmHidden);
+  renderMinimap();
+}
+document.getElementById('cf-minimap-btn').addEventListener('click',toggleMinimap);
 
 // ── SVG defs (dynamic for dark mode) ─────────────────────
 function getDEFS() {
@@ -1333,7 +1411,7 @@ function updateChrome(){
   document.getElementById('cf-hint').style.display=G.nodes.length?'block':'none';
   document.getElementById('cf-count').textContent=G.nodes.length+' nodes · '+G.edges.length+' links';
 }
-function renderAll(){ buildNodes(); drawEdges(); placeTools(); updateChrome(); refreshAnalysis(); }
+function renderAll(){ buildNodes(); drawEdges(); placeTools(); updateChrome(); refreshAnalysis(); renderMinimap(); }
 function refreshAnalysis(){
   if(_leverageActive)renderLeverage();
   const ov=document.getElementById('cf-overlay');
@@ -1345,7 +1423,7 @@ function select(sel){
   _sel=sel;
   if(!sel){_multiSel.clear();Object.values(_els).forEach(el=>el.classList.remove('multi-sel'));}
   Object.entries(_els).forEach(([id,el])=>el.classList.toggle('sel',!!sel&&sel.type==='node'&&sel.id===id));
-  drawEdges(); placeTools();
+  drawEdges(); placeTools(); renderMinimap();
 }
 function placeTools(){
   const nt=document.getElementById('cf-node-tools'),et=document.getElementById('cf-edge-tools');
@@ -2267,6 +2345,7 @@ document.addEventListener('keydown', e => {
     drawEdges();placeTools();save();
   }
   else if((e.key==='d'||e.key==='D')&&!ctrl){e.preventDefault();toggleDark();}
+  else if((e.key==='m'||e.key==='M')&&!ctrl){e.preventDefault();toggleMinimap();}
   else if((e.key==='f'||e.key==='F')&&!ctrl){e.preventDefault();togglePresentation();}
   else if(e.key==='?'||e.key==='/' ){e.preventDefault();toggleShortcuts();}
   else if((e.key==='p'||e.key==='P')&&!ctrl&&_sel&&_sel.type==='node'){
@@ -2519,6 +2598,7 @@ loadFiles();
 loadFolders();
 G = JSON.parse(JSON.stringify(activeFile().data));
 if(localStorage.getItem('cf_dark')){ document.body.classList.add('dark'); document.getElementById('cf-dark-btn').classList.add('active'); }
+document.getElementById('cf-minimap-btn').classList.toggle('active',!_mmHidden);
 renderAll();
 renderFeed();
 updateFilename();
