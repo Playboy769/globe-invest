@@ -487,6 +487,27 @@ body.presentation #cf-feed{top:0}
 .cf-node.mojibake::after{content:'⚠';position:absolute;top:-8px;right:-8px;background:#c88a3a;color:#fff;
   font-size:10px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1}
 
+/* ── In-canvas search ────────────────────────────────────── */
+#cf-search-bar{position:absolute;top:44px;left:50%;transform:translateX(-50%) translateY(-6px);display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #e4e4e4;border-radius:10px;padding:6px 8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:45;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+#cf-search-bar.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+#cf-search-inp{font-family:inherit;font-size:12.5px;border:none;outline:none;width:190px;background:transparent;color:#0a0a0a}
+#cf-search-count{font-size:10.5px;color:#aaa;white-space:nowrap;min-width:38px;text-align:center;font-family:'Orchid','Noto Sans TC',serif}
+.cf-search-nav{width:22px;height:22px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;color:#888;border-radius:5px;transition:background .12s,color .12s;padding:0}
+.cf-search-nav:hover{background:#f0f0f0;color:#0a0a0a}
+.cf-node.search-hit{border-color:#9a6fd0!important;box-shadow:0 0 0 2px rgba(154,111,208,.35)!important}
+.cf-node.search-cur{border-color:#7a3fc0!important;box-shadow:0 0 0 3px rgba(122,63,192,.55)!important}
+.cf-edge.search-hit{stroke:#9a6fd0!important}
+.cf-edge.search-cur{stroke:#7a3fc0!important;stroke-width:2.6!important}
+body.dark #cf-search-bar{background:#1e1e1e;border-color:#333;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+body.dark #cf-search-inp{color:#e0e0e0}
+body.dark #cf-search-count{color:#555}
+body.dark .cf-search-nav{color:#666}
+body.dark .cf-search-nav:hover{background:#2a2a2a;color:#ccc}
+body.dark .cf-node.search-hit{border-color:#a97fe0!important;box-shadow:0 0 0 2px rgba(169,127,224,.4)!important}
+body.dark .cf-node.search-cur{border-color:#c39af0!important;box-shadow:0 0 0 3px rgba(195,154,240,.55)!important}
+body.dark .cf-edge.search-hit{stroke:#a97fe0!important}
+body.dark .cf-edge.search-cur{stroke:#c39af0!important;stroke-width:2.6!important}
+
 /* ── Shortcuts overlay ───────────────────────────────────── */
 #cf-shortcuts-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 #cf-shortcuts-overlay.on{display:flex}
@@ -573,6 +594,9 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
   </button>
   <button class="cf-dock2-btn" id="cf-minimap-btn" title="Toggle minimap (M)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+  </button>
+  <button class="cf-dock2-btn" id="cf-search-btn" title="Search (Ctrl+F)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/></svg>
   </button>
   <div class="cf-dock2-sep"></div>
   <button class="cf-dock2-btn" id="cf-dark-btn" title="Dark mode (D)">
@@ -677,8 +701,15 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
   </div>
   <span id="cf-count" class="cf-count" style="position:absolute;bottom:54px;left:24px;z-index:10"></span>
   <div id="cf-watermark" title="點兩下重新命名"></div>
-  <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · Ctrl+M: center · 1–6: color · P: trace · M: minimap · ?: help</div>
+  <div class="cf-hint" id="cf-hint">dblclick: node · T: text mode · Ctrl+Z/Y: undo/redo · Ctrl+M: center · 1–6: color · P: trace · M: minimap · Ctrl+F: search · ?: help</div>
   <div id="cf-minimap" title="Drag to jump"><svg id="cf-mm-svg"></svg></div>
+  <div id="cf-search-bar">
+    <input type="text" id="cf-search-inp" placeholder="Search nodes & labels…" autocomplete="off">
+    <span id="cf-search-count"></span>
+    <button class="cf-search-nav" id="cf-search-prev" title="Previous (Shift+Enter)">‹</button>
+    <button class="cf-search-nav" id="cf-search-next" title="Next (Enter)">›</button>
+    <button class="cf-search-nav" id="cf-search-close" title="Close (Esc)">✕</button>
+  </div>
 </div>
 
 <!-- Overflow menu -->
@@ -732,6 +763,9 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle dark mode</div><div class="cf-shortcuts-key">D</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Presentation mode</div><div class="cf-shortcuts-key">F</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Auto-fit all nodes to text</div><div class="cf-shortcuts-key">Ctrl B</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Toggle minimap</div><div class="cf-shortcuts-key">M</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Search nodes &amp; labels</div><div class="cf-shortcuts-key">Ctrl F</div></div>
+      <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">Next / previous match</div><div class="cf-shortcuts-key">Enter / Shift Enter</div></div>
       <div class="cf-shortcuts-row"><div class="cf-shortcuts-action">This help panel</div><div class="cf-shortcuts-key">?</div></div>
     </div>
     <button class="cf-shortcuts-close" onclick="toggleShortcuts()">Close</button>
@@ -1156,6 +1190,86 @@ function toggleMinimap(){
 }
 document.getElementById('cf-minimap-btn').addEventListener('click',toggleMinimap);
 
+// ── In-canvas search ───────────────────────────────────────
+let _searchMatches=[], _searchIdx=0;
+const searchBar=document.getElementById('cf-search-bar');
+const searchInp=document.getElementById('cf-search-inp');
+const searchCount=document.getElementById('cf-search-count');
+function runSearch(q){
+  _searchMatches=[];
+  const ql=q.trim().toLowerCase();
+  if(ql){
+    G.nodes.forEach(n=>{
+      let hay=n.text||'';
+      if(n.isTable&&n.td&&Array.isArray(n.td.cells))hay+=' '+n.td.cells.flat().filter(Boolean).join(' ');
+      if(hay.toLowerCase().includes(ql))_searchMatches.push({type:'node',id:n.id});
+    });
+    G.edges.forEach(e=>{ if(e.label&&e.label.toLowerCase().includes(ql))_searchMatches.push({type:'edge',id:e.id}); });
+  }
+  _searchIdx=0;
+  if(_searchMatches.length)focusMatch(0,false);
+  else{ applySearchHighlight(); updateSearchUI(); }
+}
+function applySearchHighlight(){
+  const cur=_searchMatches[_searchIdx];
+  Object.entries(_els).forEach(([id,el])=>{
+    el.classList.toggle('search-hit',_searchMatches.some(m=>m.type==='node'&&m.id===id));
+    el.classList.toggle('search-cur',!!cur&&cur.type==='node'&&cur.id===id);
+  });
+  drawEdges();
+}
+function updateSearchUI(){
+  searchCount.textContent=_searchMatches.length?(_searchIdx+1)+' / '+_searchMatches.length:(searchInp.value.trim()?'0 / 0':'');
+}
+function focusMatch(i,doSelect){
+  if(!_searchMatches.length)return;
+  _searchIdx=((i%_searchMatches.length)+_searchMatches.length)%_searchMatches.length;
+  const m=_searchMatches[_searchIdx];
+  let cx,cy;
+  if(m.type==='node'){
+    const n=byNode(m.id); if(!n)return;
+    cx=n.x+(n._w||80)/2; cy=n.y+(n._h||40)/2;
+    if(doSelect!==false)select({type:'node',id:m.id});
+  } else {
+    const e=byEdge(m.id); if(!e)return;
+    const mid=edgeMid(e); cx=mid.x; cy=mid.y;
+    if(doSelect!==false)select({type:'edge',id:m.id});
+  }
+  const r=canvas.getBoundingClientRect();
+  if(vt.s<0.8)vt.s=0.8;
+  vt.x=r.width/2-cx*vt.s; vt.y=r.height/2-cy*vt.s;
+  applyVT();
+  applySearchHighlight();
+  updateSearchUI();
+}
+function nextMatch(){ if(_searchMatches.length)focusMatch(_searchIdx+1); }
+function prevMatch(){ if(_searchMatches.length)focusMatch(_searchIdx-1); }
+function openSearch(){
+  searchBar.classList.add('on');
+  document.getElementById('cf-search-btn').classList.add('active');
+  searchInp.focus(); searchInp.select();
+  if(searchInp.value)runSearch(searchInp.value);
+}
+function closeSearch(){
+  searchBar.classList.remove('on');
+  document.getElementById('cf-search-btn').classList.remove('active');
+  searchInp.value='';
+  runSearch('');
+  canvas.focus?.();
+}
+function toggleSearch(){ searchBar.classList.contains('on')?closeSearch():openSearch(); }
+document.getElementById('cf-search-btn').addEventListener('click',toggleSearch);
+searchInp.addEventListener('input',e=>runSearch(e.target.value));
+searchInp.addEventListener('keydown',e=>{
+  e.stopPropagation();
+  if(e.key==='Enter'){e.preventDefault(); e.shiftKey?prevMatch():nextMatch();}
+  else if(e.key==='Escape'){e.preventDefault();closeSearch();}
+});
+searchInp.addEventListener('pointerdown',e=>e.stopPropagation());
+document.getElementById('cf-search-next').addEventListener('click',nextMatch);
+document.getElementById('cf-search-prev').addEventListener('click',prevMatch);
+document.getElementById('cf-search-close').addEventListener('click',closeSearch);
+
 // ── SVG defs (dynamic for dark mode) ─────────────────────
 function getDEFS() {
   const dark = document.body.classList.contains('dark');
@@ -1364,6 +1478,8 @@ function buildNodes() {
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{ev.stopPropagation();editNode(n.id);});
     }
+    if(_searchMatches.some(m=>m.type==='node'&&m.id===n.id))d.classList.add('search-hit');
+    if(_searchMatches[_searchIdx]&&_searchMatches[_searchIdx].type==='node'&&_searchMatches[_searchIdx].id===n.id)d.classList.add('search-cur');
     nodesLayer.appendChild(d); _els[n.id]=d;
   });
   measureAll();
@@ -1384,13 +1500,14 @@ function drawEdges() {
     const loopCls=isLoop?' loop':'';
     const lsCls=e.ls?(' ls-'+e.ls):(e.delay?' ls-dash':'');
     const traceCls=isTraced&&!isLoop?' traced':'';
+    const searchCls=_searchMatches.some(m=>m.type==='edge'&&m.id===e.id)?(_searchMatches[_searchIdx]&&_searchMatches[_searchIdx].type==='edge'&&_searchMatches[_searchIdx].id===e.id?' search-cur':' search-hit'):'';
     const d=edgePath(p1,p2);
     s+='<path class="cf-edge-hit" data-edge="'+e.id+'" d="'+d+'"/>';
     if(e.ls==='double'){
-      s+='<path class="cf-edge '+polCls+selCls+loopCls+' ls-double'+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
+      s+='<path class="cf-edge '+polCls+selCls+loopCls+' ls-double'+traceCls+searchCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
       s+='<path class="cf-edge-gap" d="'+d+'"/>';
     } else {
-      s+='<path class="cf-edge '+polCls+selCls+loopCls+lsCls+traceCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
+      s+='<path class="cf-edge '+polCls+selCls+loopCls+lsCls+traceCls+searchCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
     }
     if(e.label||e.pol||e.weight!=null){
       const{x:mx,y:my}=bezMid(p1,p2);
@@ -2275,7 +2392,9 @@ document.addEventListener('keydown', e => {
     select(null);
     if(_textMode){_textMode=false;canvas.style.cursor='';document.getElementById('cf-add-text').classList.remove('active');}
     if(document.body.classList.contains('presentation'))togglePresentation();
+    if(searchBar.classList.contains('on'))closeSearch();
   }
+  else if(ctrl&&(e.key==='f'||e.key==='F')){e.preventDefault();openSearch();}
   else if(ctrl&&(e.key==='z'||e.key==='Z')){e.preventDefault();undo();}
   else if(ctrl&&(e.key==='y'||e.key==='Y')){e.preventDefault();redo();}
   else if(ctrl&&(e.key==='c'||e.key==='C')){
