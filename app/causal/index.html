@@ -478,12 +478,22 @@ body.dark #cf-watermark{color:#e8e8e8}
 #cf-minimap{position:absolute;right:14px;bottom:14px;width:190px;height:130px;background:rgba(255,255,255,.9);border:1px solid #e4e4e4;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.1);z-index:15;overflow:hidden;cursor:crosshair;backdrop-filter:blur(3px);transition:opacity .15s}
 #cf-minimap.hidden{display:none}
 #cf-minimap svg{width:100%;height:100%;display:block}
-.cf-mm-node{fill:#c2c2c2}
-.cf-mm-node.sel{fill:#4a88dd}
+.cf-mm-edge{stroke:#bbb;stroke-width:.6;fill:none}
+.cf-mm-node{fill:#fff;stroke:#d6d6d6;stroke-width:.6}
+.cf-mm-node.box{fill:rgba(215,228,250,.5);stroke:#aabbd0;stroke-width:.7;stroke-dasharray:2.2 1.6}
+.cf-mm-node.canvas{fill:#f2eeff;stroke:#c8b8e8}
+.cf-mm-node.media{fill:#eee;stroke:#c8d4e0}
+.cf-mm-node.text{fill:#b0b0b0;stroke:none}
+.cf-mm-node.sel{stroke:#4a88dd;stroke-width:1.4}
 .cf-mm-viewport{fill:rgba(74,136,221,.10);stroke:#4a88dd;stroke-width:1.5;pointer-events:none}
 body.dark #cf-minimap{background:rgba(28,28,28,.88);border-color:#333}
-body.dark .cf-mm-node{fill:#4a4a4a}
-body.dark .cf-mm-node.sel{fill:#5c9ce0}
+body.dark .cf-mm-edge{stroke:#555}
+body.dark .cf-mm-node{fill:#242424;stroke:#3a3a3a}
+body.dark .cf-mm-node.box{fill:rgba(25,40,70,.45);stroke:#3a5a8a}
+body.dark .cf-mm-node.canvas{fill:#241e30;stroke:#5a4a7a}
+body.dark .cf-mm-node.media{fill:#1e1e1e;stroke:#3a3a3a}
+body.dark .cf-mm-node.text{fill:#707070;stroke:none}
+body.dark .cf-mm-node.sel{stroke:#5c9ce0;stroke-width:1.4}
 body.dark .cf-mm-viewport{fill:rgba(92,156,224,.12);stroke:#5c9ce0}
 
 /* ── Analysis: R/B loops · pulse · leverage ── */
@@ -1252,23 +1262,51 @@ let _mmHidden = !!localStorage.getItem('cf_mm_hidden');
 let _mmT = null; // cached world->minimap transform; rebuilt in renderMinimap(), reused by updateMinimapViewport()
 const mmEl = document.getElementById('cf-minimap');
 const mmSvg = document.getElementById('cf-mm-svg');
+// Same fill/border pairing as the real node color dots (.cf-color-dot) and
+// exportSVG, so a colored node reads as the same color on the minimap.
+const MM_NODE_FILL={1:'#fffae8',2:'#e6f4e8',3:'#fde8e8',4:'#e4f0ff',5:'#f0e6ff',6:'#e0f5f5'};
+const MM_NODE_FILL_DARK={1:'rgba(44,40,20,.7)',2:'rgba(24,40,26,.7)',3:'rgba(44,24,24,.7)',4:'rgba(20,28,46,.7)',5:'rgba(32,20,40,.7)',6:'rgba(20,32,32,.7)'};
+const MM_NODE_STROKE={1:'#dfc030',2:'#55aa65',3:'#d06060',4:'#5090d8',5:'#9060c8',6:'#30aaaa'};
 function renderMinimap() {
   if (_mmHidden) { mmEl.classList.add('hidden'); return; }
   mmEl.classList.remove('hidden');
-  if (!G.nodes.length) { mmSvg.innerHTML=''; _mmT=null; return; }
+  const hiddenIds=collapsedMemberIds();
+  const shown=G.nodes.filter(n=>!hiddenIds.has(n.id));
+  if (!shown.length) { mmSvg.innerHTML=''; _mmT=null; return; }
   const W=190,H=130,pad=8,pd=200;
-  const x0=Math.min(...G.nodes.map(n=>n.x))-pd, y0=Math.min(...G.nodes.map(n=>n.y))-pd;
-  const x1=Math.max(...G.nodes.map(n=>n.x+(n._w||80)))+pd;
-  const y1=Math.max(...G.nodes.map(n=>n.y+(n._h||40)))+pd;
+  const x0=Math.min(...shown.map(n=>n.x))-pd, y0=Math.min(...shown.map(n=>n.y))-pd;
+  const x1=Math.max(...shown.map(n=>n.x+(n._w||80)))+pd;
+  const y1=Math.max(...shown.map(n=>n.y+(n._h||40)))+pd;
   const scale=Math.min((W-pad*2)/(x1-x0),(H-pad*2)/(y1-y0));
   const offX=(W-(x1-x0)*scale)/2, offY=(H-(y1-y0)*scale)/2;
   _mmT={x0,y0,scale,offX,offY};
+  const dark=document.body.classList.contains('dark');
+  const w2m=(x,y)=>({x:(x-x0)*scale+offX,y:(y-y0)*scale+offY});
   let s='';
-  G.nodes.forEach(n=>{
+  // Edges under nodes, using the same routing (incl. collapsed-group reroute)
+  // real edges use, so the thumbnail's connections match the live canvas.
+  G.edges.forEach(e=>{
+    const en=edgeEnds(e); if(!en)return;
+    const p1=w2m(en.p1.x,en.p1.y), p2=w2m(en.p2.x,en.p2.y);
+    s+='<line class="cf-mm-edge" x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'"/>';
+  });
+  shown.forEach(n=>{
     const w=(n._w||80)*scale, h=(n._h||40)*scale;
     const mx=(n.x-x0)*scale+offX, my=(n.y-y0)*scale+offY;
     const isSel=_sel&&_sel.type==='node'&&_sel.id===n.id;
-    s+='<rect class="cf-mm-node'+(isSel?' sel':'')+'" x="'+mx+'" y="'+my+'" width="'+Math.max(w,2)+'" height="'+Math.max(h,2)+'" rx="1"/>';
+    let cls='cf-mm-node', extra='';
+    if(n.isBox)cls+=' box';
+    else if(n.isCanvas)cls+=' canvas';
+    else if(n.isImage||n.isEmbed)cls+=' media';
+    else if(n.isText)cls+=' text';
+    else if(n.color){
+      const fill=(dark?MM_NODE_FILL_DARK:MM_NODE_FILL)[n.color];
+      extra=' style="fill:'+fill+';stroke:'+MM_NODE_STROKE[n.color]+'"';
+    }
+    if(isSel)cls+=' sel';
+    const rx=n.isText?0:Math.min(2.5,w/6,h/6);
+    const mw=Math.max(w,n.isText?5:2), mh=Math.max(h,n.isText?2.2:2);
+    s+='<rect class="'+cls+'"'+extra+' x="'+mx+'" y="'+my+'" width="'+mw+'" height="'+mh+'" rx="'+rx+'"/>';
   });
   s+='<rect class="cf-mm-viewport" id="cf-mm-vp" x="0" y="0" width="0" height="0"/>';
   mmSvg.innerHTML=s;
