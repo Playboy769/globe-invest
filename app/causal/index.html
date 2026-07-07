@@ -151,7 +151,7 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 
 /* ── Canvas ──────────────────────────────────────────────── */
 #cf-canvas{position:absolute;top:34px;left:0;right:0;bottom:0;overflow:hidden;background:#fff;background-image:radial-gradient(circle,#ededed 1px,transparent 1px);background-size:22px 22px;user-select:none;touch-action:none}
-#cf-edges{position:absolute;top:0;left:0;width:32000px;height:32000px;pointer-events:none;overflow:visible}
+#cf-edges{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 #cf-nodes,#cf-labels{position:absolute;top:0;left:0;width:32000px;height:32000px;pointer-events:none}
 
 .cf-node{position:absolute;pointer-events:auto;background:#fff;border:1px solid #d6d6d6;border-radius:9px;padding:6px 12px;font-size:14px;line-height:1.45;color:#0a0a0a;min-width:54px;text-align:center;cursor:grab;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow .16s ease,border-color .16s ease;word-break:break-word;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei','Heiti TC','WenQuanYi Micro Hei',sans-serif}
@@ -235,7 +235,7 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-empty{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#0a0a0a;font-size:13.5px;line-height:2.05;letter-spacing:.03em;pointer-events:none;max-width:440px}
 .cf-empty b{display:block;font-size:15px;color:#0a0a0a;margin-bottom:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:400}
 
-.cf-tools{position:absolute;display:none;align-items:center;gap:2px;background:#fff;border:1px solid #e4e4e4;border-radius:9px;padding:3px;box-shadow:0 6px 22px rgba(0,0,0,0.1);z-index:40;transform:translate(-50%,-50%)}
+.cf-tools{position:absolute;display:none;align-items:center;gap:2px;background:#fff;border:1px solid #e4e4e4;border-radius:9px;padding:3px;box-shadow:0 6px 22px rgba(0,0,0,0.1);z-index:40;transform:translate(-50%,-50%);pointer-events:auto}
 .cf-tools.on{display:flex}
 .cf-tool{width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;font-size:13px;color:#999;transition:all .13s ease;user-select:none;font-family:'Orchid',serif}
 .cf-tool:hover{background:#f3f3f3;color:#0a0a0a}
@@ -265,7 +265,7 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-color-dot:hover{transform:scale(1.35);box-shadow:0 1px 4px rgba(0,0,0,0.18)}
 
 /* ── World (zoomable layer) ──────────────────────────────── */
-#cf-world{position:absolute;top:0;left:0;width:32000px;height:32000px;transform-origin:0 0}
+#cf-world{position:absolute;top:0;left:0;width:32000px;height:32000px;transform-origin:0 0;pointer-events:none}
 
 /* ── Node resize handle ──────────────────────────────────── */
 .cf-node-resize{position:absolute;right:-5px;bottom:-5px;width:13px;height:13px;border-radius:3px 3px 7px 3px;background:#fff;border:1.5px solid #b0b0b0;cursor:nwse-resize;opacity:0;transition:opacity .14s,border-color .12s,transform .12s;z-index:4;pointer-events:auto}
@@ -613,8 +613,8 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
 </div>
 
 <div id="cf-canvas">
+  <svg id="cf-edges"></svg>
   <div id="cf-world">
-    <svg id="cf-edges"></svg>
     <div id="cf-nodes"></div>
     <div id="cf-labels"></div>
     <div id="cf-overlay"></div>
@@ -1016,6 +1016,8 @@ function redo() {
 let vt = { x: 0, y: 0, s: 1 };
 function applyVT() {
   world.style.transform = `translate(${vt.x}px,${vt.y}px) scale(${vt.s})`;
+  const eg = document.getElementById('cf-eg');
+  if (eg) eg.setAttribute('transform', `translate(${vt.x},${vt.y}) scale(${vt.s})`);
   const sp = 22 * vt.s;
   canvas.style.backgroundSize = `${sp}px ${sp}px`;
   canvas.style.backgroundPosition = `${vt.x % sp}px ${vt.y % sp}px`;
@@ -1150,7 +1152,7 @@ function edgeEnds(e) {
 // Obsidian-style curve: control points pushed out along each port's normal,
 // scaled by the distance between endpoints
 function edgeCtrl(p1,p2){
-  const k=Math.min(Math.max(Math.hypot(p2.x-p1.x,p2.y-p1.y)*0.5,40),250);
+  const k=Math.min(Math.max(Math.hypot(p2.x-p1.x,p2.y-p1.y)*0.32,30),150);
   return{c1x:p1.x+(p1.tx||0)*k,c1y:p1.y+(p1.ty||0)*k,c2x:p2.x+(p2.tx||0)*k,c2y:p2.y+(p2.ty||0)*k};
 }
 function edgePath(p1,p2){
@@ -1311,7 +1313,9 @@ function drawEdges() {
       lbl.push('<div class="cf-edge-label" data-edge="'+e.id+'" style="left:'+mx+'px;top:'+my+'px">'+sign+txt+'</div>');
     }
   });
-  svg.innerHTML=s;
+  // Edges live in a non-CSS-transformed SVG (crisp at any zoom); pan/zoom is
+  // applied via this group's SVG transform, mirroring #cf-world's CSS transform
+  svg.innerHTML='<g id="cf-eg" transform="translate('+vt.x+','+vt.y+') scale('+vt.s+')">'+s+'</g>';
   if(!_editing)labelsLayer.innerHTML=lbl.join('');
 }
 
@@ -1596,7 +1600,7 @@ function startConnect(id, ev, fromSide) {
   ev.preventDefault(); ev.stopPropagation();
   const A=byNode(id);
   const live=document.createElementNS('http://www.w3.org/2000/svg','path');
-  live.setAttribute('class','cf-live'); svg.appendChild(live);
+  live.setAttribute('class','cf-live'); (document.getElementById('cf-eg')||svg).appendChild(live);
   const startPt=portCenter(A,fromSide)||sidePort(A,A.x,A.y-1);
   let hoverTarget=null;
   function mv(e){
