@@ -2030,9 +2030,11 @@ canvas.addEventListener('pointerdown', e => {
     document.addEventListener('pointermove',mvL);document.addEventListener('pointerup',upL);
     return;
   }
-  // plain drag → pan
-  const sx=e.clientX,sy=e.clientY,ox=vt.x,oy=vt.y;let panned=false;
-  function mv(ev){const dx=ev.clientX-sx,dy=ev.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4){panned=true;vt.x=ox+dx;vt.y=oy+dy;applyVT();}}
+  // plain drag → pan. Gated on hold time so a quick click — e.g. either half
+  // of a double-click, which almost always carries a few px of natural jitter —
+  // never gets misread as a pan and yanks the whole canvas.
+  const sx=e.clientX,sy=e.clientY,ox=vt.x,oy=vt.y,downAt=Date.now();let panned=false;
+  function mv(ev){if(Date.now()-downAt<150)return;const dx=ev.clientX-sx,dy=ev.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>4){panned=true;vt.x=ox+dx;vt.y=oy+dy;applyVT();}}
   function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);if(!panned)select(null);}
   document.addEventListener('pointermove',mv);document.addEventListener('pointerup',up);
 });
