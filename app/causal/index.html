@@ -620,6 +620,29 @@ body.dark .cf-tpl-cen{color:#404040}
 body.dark .cf-tpl-cdesc{color:#555}
 body.dark .cf-tpl-bar{color:#404040;border-color:#2a2a2a}
 body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
+
+/* ── URL prompt (custom modal — window.prompt() is silently swallowed in
+   sandboxed/embedded/automated contexts, so it can't be relied on) ────── */
+#cf-url-overlay{position:fixed;inset:0;z-index:210;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#cf-url-overlay.on{display:flex}
+.cf-url-box{background:#fff;border-radius:16px;padding:22px 24px;width:420px;max-width:90vw;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+.cf-url-title{font-size:13px;color:#333;margin-bottom:12px}
+.cf-url-inp{width:100%;font-family:inherit;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;padding:9px 11px;outline:none;color:#0a0a0a;box-sizing:border-box}
+.cf-url-inp:focus{border-color:#4a88dd}
+.cf-url-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.cf-url-actions button{font-family:inherit;font-size:11.5px;letter-spacing:.05em;border-radius:7px;padding:8px 16px;cursor:pointer;border:1px solid transparent;transition:all .13s}
+#cf-url-cancel{background:none;color:#888;border-color:#e4e4e4}
+#cf-url-cancel:hover{background:#f4f4f4;color:#0a0a0a}
+#cf-url-ok{background:#0a0a0a;color:#fff}
+#cf-url-ok:hover{background:#2a2a2a}
+body.dark .cf-url-box{background:#1e1e1e;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+body.dark .cf-url-title{color:#ccc}
+body.dark .cf-url-inp{background:#141414;border-color:#333;color:#e0e0e0}
+body.dark .cf-url-inp:focus{border-color:#5a9ce0}
+body.dark #cf-url-cancel{color:#888;border-color:#333}
+body.dark #cf-url-cancel:hover{background:#2a2a2a;color:#e0e0e0}
+body.dark #cf-url-ok{background:#e0e0e0;color:#0a0a0a}
+body.dark #cf-url-ok:hover{background:#fff}
 </style>
 </head>
 <body>
@@ -816,6 +839,17 @@ body.dark .cf-tpl-bar:hover{color:#ccc;border-color:#555;background:#222}
 </div>
 
 <div id="cf-toast"></div>
+
+<div id="cf-url-overlay">
+  <div class="cf-url-box">
+    <div class="cf-url-title" id="cf-url-title-txt">Enter a URL</div>
+    <input type="text" id="cf-url-inp" class="cf-url-inp" placeholder="https://example.com" autocomplete="off">
+    <div class="cf-url-actions">
+      <button id="cf-url-cancel">Cancel</button>
+      <button id="cf-url-ok">OK</button>
+    </div>
+  </div>
+</div>
 
 <!-- Shortcuts overlay -->
 <div id="cf-shortcuts-overlay">
@@ -1683,9 +1717,11 @@ function buildNodes() {
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{
         ev.stopPropagation();
-        const url=prompt('Change embed URL:',n.src||''); if(!url)return;
-        let u=url.trim(); if(!/^https?:\/\//i.test(u))u='https://'+u;
-        snapshot(); n.src=u; buildNodes(); save();
+        askUrl('Change embed URL:',n.src||'').then(url=>{
+          if(!url)return;
+          let u=url.trim(); if(!/^https?:\/\//i.test(u))u='https://'+u;
+          snapshot(); n.src=u; buildNodes(); save();
+        });
       });
     } else {
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
@@ -2572,8 +2608,8 @@ document.getElementById('cf-add-table').addEventListener('click',()=>{
   const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
   addTableNode(cx-120,cy-55);
 });
-document.getElementById('cf-add-embed').addEventListener('click',()=>{
-  const url=prompt('Embed a web page — enter its URL:'); if(!url)return;
+document.getElementById('cf-add-embed').addEventListener('click',async ()=>{
+  const url=await askUrl('Embed a web page — enter its URL:',''); if(!url)return;
   let u=url.trim(); if(!/^https?:\/\//i.test(u))u='https://'+u;
   const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
   addEmbedNode(cx-200,cy-140,u);
@@ -2989,6 +3025,40 @@ function openTplGallery() {
 }
 function closeTplGallery() {
   document.getElementById('cf-tpl-overlay').classList.remove('on');
+}
+// Custom stand-in for window.prompt(): native dialogs get silently
+// auto-dismissed in sandboxed/embedded/automated browser contexts (the
+// call just returns null with no visible dialog), so a real in-page
+// modal is the only reliable way to ask for a URL.
+function askUrl(title, defVal){
+  return new Promise(resolve=>{
+    const ov=document.getElementById('cf-url-overlay');
+    const inp=document.getElementById('cf-url-inp');
+    document.getElementById('cf-url-title-txt').textContent=title;
+    inp.value=defVal||'';
+    ov.classList.add('on');
+    requestAnimationFrame(()=>{inp.focus();inp.select();});
+    function done(val){
+      ov.classList.remove('on');
+      document.getElementById('cf-url-ok').removeEventListener('click',onOk);
+      document.getElementById('cf-url-cancel').removeEventListener('click',onCancel);
+      inp.removeEventListener('keydown',onKey);
+      ov.removeEventListener('pointerdown',onBackdrop);
+      resolve(val);
+    }
+    function onOk(){done(inp.value.trim()||null);}
+    function onCancel(){done(null);}
+    function onKey(e){
+      e.stopPropagation();
+      if(e.key==='Enter'){e.preventDefault();onOk();}
+      else if(e.key==='Escape'){e.preventDefault();onCancel();}
+    }
+    function onBackdrop(e){if(e.target===ov)onCancel();}
+    document.getElementById('cf-url-ok').addEventListener('click',onOk);
+    document.getElementById('cf-url-cancel').addEventListener('click',onCancel);
+    inp.addEventListener('keydown',onKey);
+    ov.addEventListener('pointerdown',onBackdrop);
+  });
 }
 function createFromTemplate(tpl) {
   const data = JSON.parse(JSON.stringify(tpl.data));
