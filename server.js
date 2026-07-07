@@ -764,7 +764,11 @@ const server = http.createServer(async (req, res) => {
 
   try {
     const content = fs.readFileSync(fp);
-    res.writeHead(200, { 'Content-Type': MIME[path.extname(fp)] || 'application/octet-stream' });
+    const ext = path.extname(fp);
+    const headers = { 'Content-Type': MIME[ext] || 'application/octet-stream' };
+    // HTML is the app itself — always revalidate so deploys reach users immediately
+    if (ext === '.html') headers['Cache-Control'] = 'no-cache';
+    res.writeHead(200, headers);
     res.end(content);
   } catch (e) {
     res.writeHead(404); res.end('Not found');
