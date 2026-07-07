@@ -201,6 +201,18 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-node.box-node[data-color="5"]{background:rgba(240,230,255,0.55);border-color:#9060c8}
 .cf-node.box-node[data-color="6"]{background:rgba(224,245,245,0.55);border-color:#30aaaa}
 
+.cf-box-collapse{width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#7a9cbf;cursor:pointer;border-radius:4px;flex:none;order:1}
+.cf-node.box-node:not(.collapsed) .cf-box-collapse{position:absolute;top:6px;left:8px;background:rgba(255,255,255,.6)}
+.cf-node.box-node:not(.collapsed) .cf-box-collapse:hover{background:rgba(255,255,255,.9)}
+.cf-node.box-node.collapsed .cf-box-collapse:hover{background:rgba(120,150,190,.2)}
+.cf-node.box-node .cf-node-text{order:2}
+.cf-node.box-node.collapsed{flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;min-height:0;height:auto!important;padding:8px 14px;border-style:solid}
+.cf-box-count{font-size:10px;color:#7a9cbf;background:rgba(120,150,190,.16);border-radius:9px;padding:1px 8px;white-space:nowrap;flex:none;order:3}
+body.dark .cf-node.box-node:not(.collapsed) .cf-box-collapse{color:#8ab0e0;background:rgba(0,0,0,.3)}
+body.dark .cf-node.box-node:not(.collapsed) .cf-box-collapse:hover{background:rgba(0,0,0,.5)}
+body.dark .cf-box-collapse{color:#8ab0e0}
+body.dark .cf-box-count{color:#8ab0e0;background:rgba(0,0,0,.25)}
+
 .cf-edge{fill:none;stroke:#888;stroke-width:1.2;transition:stroke-width .12s ease}
 .cf-edge.spos{stroke:#2a7a44;stroke-width:2.4}
 .cf-edge.pos{stroke:#4f7a5e}
@@ -1362,8 +1374,35 @@ function portCenter(n, side) {
   const m={t:{x:n.x+w/2,y:n.y,tx:0,ty:-1},r:{x:n.x+w,y:n.y+h/2,tx:1,ty:0},b:{x:n.x+w/2,y:n.y+h,tx:0,ty:1},l:{x:n.x,y:n.y+h/2,tx:-1,ty:0}};
   return m[side]||null;
 }
+// ── Group collapse/expand ───────────────────────────────────
+// A box's members are leaf nodes (never other boxes, to dodge nested-collapse
+// complexity) whose full footprint lies within the box's *stored* w/bh — not
+// its live _w/_h, which shrinks while collapsed.
+function boxMembers(box){
+  const w=box.w||200, h=box.bh||120;
+  return G.nodes.filter(n=>n!==box&&!n.isBox&&n.x>=box.x&&n.y>=box.y&&n.x+(n._w||80)<=box.x+w&&n.y+(n._h||40)<=box.y+h);
+}
+function collapsingBoxFor(nodeId){
+  const n=byNode(nodeId); if(!n||n.isBox)return null;
+  return G.nodes.find(b=>b.isBox&&b.collapsed&&boxMembers(b).some(m=>m.id===nodeId))||null;
+}
+function collapsedMemberIds(){
+  const hidden=new Set();
+  G.nodes.filter(n=>n.isBox&&n.collapsed).forEach(box=>boxMembers(box).forEach(m=>hidden.add(m.id)));
+  return hidden;
+}
+function toggleBoxCollapse(id){
+  const n=byNode(id); if(!n||!n.isBox)return;
+  snapshot();
+  n.collapsed=!n.collapsed;
+  renderAll(); save();
+}
 function edgeEnds(e) {
-  const A=byNode(e.from), B=byNode(e.to); if(!A||!B)return null;
+  let A=byNode(e.from), B=byNode(e.to); if(!A||!B)return null;
+  // Route edges touching a hidden (collapsed-away) member to its box instead,
+  // so external links keep pointing at the collapsed group's border.
+  A=collapsingBoxFor(A.id)||A; B=collapsingBoxFor(B.id)||B;
+  if(A.id===B.id)return null;
   const pA=e.fromSide?portCenter(A,e.fromSide):sidePort(A,B.x+(B._w||80)/2,B.y+(B._h||40)/2);
   const pB=e.toSide?portCenter(B,e.toSide):sidePort(B,A.x+(A._w||80)/2,A.y+(A._h||40)/2);
   return{p1:{x:pA.x,y:pA.y,tx:pA.tx,ty:pA.ty},p2:{x:pB.x,y:pB.y,tx:pB.tx,ty:pB.ty}};
@@ -1391,8 +1430,9 @@ function edgeMid(e) {
 function buildNodes() {
   nodesLayer.innerHTML=''; _els={};
   _mojibakeNodeIds=new Set(scanMojibake(G).nodeIds);
+  const hiddenIds=collapsedMemberIds();
   // Box nodes first so they render behind regular nodes
-  const sorted = [...G.nodes].sort((a,b)=>((a.isBox||a.isImage)?0:1)-((b.isBox||b.isImage)?0:1));
+  const sorted = [...G.nodes].filter(n=>!hiddenIds.has(n.id)).sort((a,b)=>((a.isBox||a.isImage)?0:1)-((b.isBox||b.isImage)?0:1));
   sorted.forEach(n => {
     const isSel = _sel&&_sel.type==='node'&&_sel.id===n.id;
     const isMulti = _multiSel.has(n.id);
@@ -1400,12 +1440,25 @@ function buildNodes() {
     const mj = _mojibakeNodeIds.has(n.id)?' mojibake':'';
     const d = document.createElement('div');
     if (n.isBox) {
-      d.className = 'cf-node box-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
+      const collapsed=!!n.collapsed;
+      d.className = 'cf-node box-node'+(collapsed?' collapsed':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.w) d.style.width=n.w+'px';
-      if (n.bh) d.style.height=n.bh+'px';
+      if (n.bh&&!collapsed) d.style.height=n.bh+'px';
       if (n.color) d.dataset.color=n.color;
-      const rh=document.createElement('div'); rh.className='cf-node-resize';
-      rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
+      const chev=document.createElement('div'); chev.className='cf-box-collapse';
+      chev.textContent=collapsed?'▸':'▾'; chev.title=collapsed?'Expand group':'Collapse group';
+      chev.addEventListener('pointerdown',ev=>ev.stopPropagation());
+      chev.addEventListener('click',ev=>{ev.stopPropagation();toggleBoxCollapse(n.id);});
+      d.appendChild(chev);
+      if (collapsed) {
+        const badge=document.createElement('div'); badge.className='cf-box-count';
+        const cnt=boxMembers(n).length;
+        badge.textContent=cnt+(cnt===1?' node':' nodes');
+        d.appendChild(badge);
+      } else {
+        const rh=document.createElement('div'); rh.className='cf-node-resize';
+        rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
+      }
     } else if (n.isImage) {
       d.className='cf-node img-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
       d.style.width=(n.w||280)+'px'; d.style.height=(n.bh||200)+'px';
@@ -1805,6 +1858,10 @@ function onNodeDown(id, ev) {
   const n=byNode(id),el=_els[id];
   const sx=ev.clientX,sy=ev.clientY,ox=n.x,oy=n.y; let moved=false,started=false;
   const origins={[id]:{x:ox,y:oy}};
+  // A collapsed box's members are invisible, so drag them along too — otherwise
+  // expanding later reveals them stranded wherever the box used to be.
+  const passengers=(n.isBox&&n.collapsed)?boxMembers(n):[];
+  passengers.forEach(p=>{origins[p.id]={x:p.x,y:p.y};});
   el.classList.add('dragging');
   function mv(e){
     let dx=(e.clientX-sx)/vt.s,dy=(e.clientY-sy)/vt.s;
@@ -1812,7 +1869,9 @@ function onNodeDown(id, ev) {
     if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
     const snap=snapDrag([id],origins,dx,dy,e.altKey); dx=snap.dx; dy=snap.dy;
     n.x=ox+dx;n.y=oy+dy;
-    el.style.left=n.x+'px';el.style.top=n.y+'px';drawEdges();placeTools();
+    el.style.left=n.x+'px';el.style.top=n.y+'px';
+    passengers.forEach(p=>{const o=origins[p.id];p.x=o.x+dx;p.y=o.y+dy;});
+    drawEdges();placeTools();
   }
   function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);el.classList.remove('dragging');clearGuides();if(moved)save();}
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
@@ -2137,11 +2196,14 @@ function toggleLeverage(){
 function exportSVG() {
   measureAll();
   if(!G.nodes.length)return;
+  const hiddenIds=collapsedMemberIds();
+  const visible=G.nodes.filter(n=>!hiddenIds.has(n.id));
+  if(!visible.length)return;
   const pad=48;
-  const xs=G.nodes.map(n=>n.x),ys=G.nodes.map(n=>n.y);
+  const xs=visible.map(n=>n.x),ys=visible.map(n=>n.y);
   const x0=Math.min(...xs)-pad,y0=Math.min(...ys)-pad;
-  const x1=Math.max(...G.nodes.map(n=>n.x+(n._w||80)))+pad;
-  const y1=Math.max(...G.nodes.map(n=>n.y+(n._h||40)))+pad;
+  const x1=Math.max(...visible.map(n=>n.x+(n._w||80)))+pad;
+  const y1=Math.max(...visible.map(n=>n.y+(n._h||40)))+pad;
   const W=x1-x0,H=y1-y0;
   const nodeColors={1:'#fffae8',2:'#e6f4e8',3:'#fde8e8',4:'#e4f0ff',5:'#f0e6ff',6:'#e0f5f5'};
   const nodeBorders={1:'#dfc030',2:'#55aa65',3:'#d06060',4:'#5090d8',5:'#9060c8',6:'#30aaaa'};
@@ -2168,7 +2230,7 @@ function exportSVG() {
     if(e.label){const m=bezMid(p1,p2);out+=`<text x="${m.x}" y="${m.y}" text-anchor="middle" font-size="11" fill="#555" font-family="serif">${esc(e.label)}</text>`;}
   });
   // Regular nodes
-  G.nodes.filter(n=>!n.isBox).forEach(n=>{
+  visible.filter(n=>!n.isBox).forEach(n=>{
     const w=n._w||80,h=n._h||40;
     if(n.isText){
       out+=`<text x="${n.x+w/2}" y="${n.y+h/2}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="#0a0a0a" font-family="serif">${esc(n.text)}</text>`;
