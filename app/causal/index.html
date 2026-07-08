@@ -294,11 +294,12 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-node.table-node:hover{border-color:#bbb;box-shadow:0 4px 14px rgba(0,0,0,.07)}
 .cf-node.table-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,.18)}
 .cf-tbl-wrap{position:relative}
-.cf-tbl{table-layout:fixed;border-collapse:collapse;font-size:13px;line-height:1.45;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;border-radius:8px;overflow:hidden}
-.cf-tbl td{border:1px solid #e8e8e8;padding:6px 10px;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
+.cf-tbl{table-layout:fixed;border-collapse:collapse;font-size:13px;line-height:1.6;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;border-radius:8px;overflow:hidden}
+.cf-tbl td{border:none;border-bottom:1px solid #e2e2e2;padding:10px 14px;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
 .cf-tbl tr:hover td{background:#f7f7f7}
-.cf-tbl tr:first-child td{background:#f3f3f3;font-weight:600;font-size:12px;letter-spacing:.01em;cursor:pointer}
-.cf-tbl tr:first-child:hover td{background:#ececec}
+.cf-tbl tr:first-child td{background:none;font-weight:700;border-bottom:1.5px solid #0a0a0a;cursor:pointer}
+.cf-tbl tr:first-child:hover td{background:#f7f7f7}
+.cf-tbl tr:last-child td{font-weight:700;border-bottom:none}
 .cf-tbl tr:first-child td:first-child{border-top-left-radius:8px}
 .cf-tbl tr:first-child td:last-child{border-top-right-radius:8px}
 .cf-tbl tr:last-child td:first-child{border-bottom-left-radius:8px}
@@ -399,11 +400,11 @@ body.dark .cf-canvas-rename{color:#9080b0}
 #cf-breadcrumb-label{color:#999}
 body.dark #cf-breadcrumb{background:#1e1e1e;border-color:#333}
 body.dark #cf-breadcrumb-label{color:#666}
-body.dark .cf-node.table-node{background:#1e1e1e}
+body.dark .cf-node.table-node{background:#0d0d0d}
 body.dark .cf-tbl td{border-color:#333;color:#e8e8e8}
-body.dark .cf-tbl tr:hover td{background:#282828}
-body.dark .cf-tbl tr:first-child td{background:#252525}
-body.dark .cf-tbl tr:first-child:hover td{background:#2e2e2e}
+body.dark .cf-tbl tr:hover td{background:#1c1c1c}
+body.dark .cf-tbl tr:first-child td{background:none;border-bottom-color:#e8e8e8}
+body.dark .cf-tbl tr:first-child:hover td{background:#1c1c1c}
 body.dark .cf-tbl td.cf-tbl-active{background:#1a2a3a!important;box-shadow:inset 0 0 0 2px #5090d8}
 body.dark .cf-tbl td[contenteditable="true"]{background:#162436!important;box-shadow:inset 0 0 0 2px #5090d8}
 body.dark .cf-tbl-addcol,body.dark .cf-tbl-addrow{color:#555}
@@ -1695,6 +1696,11 @@ function buildNodes() {
       const cg=document.createElement('colgroup');
       for(let c=0;c<td.c;c++){const col=document.createElement('col');col.style.width=(td.colWidths[c]||90)+'px';cg.appendChild(col);}
       tbl.appendChild(cg);
+      // Rows go in an explicit <tbody> — appending <tr> straight onto <table>
+      // (as before) makes <colgroup> the table's first element child, so
+      // `tr:first-child`/`tr:last-child` CSS never matches any row at all.
+      const tbody=document.createElement('tbody');
+      tbl.appendChild(tbody);
       for(let r=0;r<td.r;r++){
         const tr=document.createElement('tr');
         for(let c=0;c<td.c;c++){
@@ -1719,7 +1725,7 @@ function buildNodes() {
           }
           tr.appendChild(cell);
         }
-        tbl.appendChild(tr);
+        tbody.appendChild(tr);
       }
       wrap.appendChild(tbl);
       // Notion-style hover strips for +row / +col
