@@ -671,10 +671,10 @@ body.dark #cf-url-ok:hover{background:#fff}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 20.8 12 12 20.8 3.2 12z"/><circle cx="12" cy="12" r="2.4"/></svg>
   </button>
   <div class="cf-dock2-sep"></div>
-  <button class="cf-dock2-btn" onclick="cfZoom(0.8)" title="縮小 (-)">
+  <button class="cf-dock2-btn" onclick="cfZoom(1/1.15)" title="縮小 (-)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/><line x1="7.6" y1="10.5" x2="13.4" y2="10.5"/></svg>
   </button>
-  <button class="cf-dock2-btn" onclick="cfZoom(1.25)" title="放大 (+)">
+  <button class="cf-dock2-btn" onclick="cfZoom(1.15)" title="放大 (+)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/><line x1="7.6" y1="10.5" x2="13.4" y2="10.5"/><line x1="10.5" y1="7.6" x2="10.5" y2="13.4"/></svg>
   </button>
   <button class="cf-dock2-btn" id="cf-minimap-btn" title="Toggle minimap (M)">
@@ -1241,7 +1241,7 @@ canvas.addEventListener('wheel', e => {
   e.preventDefault();
   if (e.ctrlKey) {
     const r=canvas.getBoundingClientRect();
-    cfZoom(e.deltaY<0?1.1:1/1.1, e.clientX-r.left, e.clientY-r.top);
+    cfZoom(e.deltaY<0?1.05:1/1.05, e.clientX-r.left, e.clientY-r.top);
   } else {
     vt.x -= e.deltaX; vt.y -= e.deltaY; applyVT();
   }
@@ -2064,6 +2064,18 @@ function snapDrag(dragIds, origins, dx, dy, disabled){
 function onNodeDown(id, ev) {
   if(_editing)return;
   ev.preventDefault();
+  if(ev.shiftKey){
+    ev.stopPropagation();
+    if(_multiSel.has(id))_multiSel.delete(id);
+    else{
+      if(_sel&&_sel.type==='node'&&_sel.id!==id)_multiSel.add(_sel.id);
+      _multiSel.add(id);
+    }
+    if(_multiSel.size===0)select(null);
+    else if(_multiSel.size===1){const only=Array.from(_multiSel)[0];_multiSel.clear();select({type:'node',id:only});}
+    else{_sel=null;buildNodes();updateChrome();}
+    return;
+  }
   if(_multiSel.size>1&&_multiSel.has(id)){
     const sx=ev.clientX,sy=ev.clientY;
     const origins={};
