@@ -48,6 +48,9 @@ html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:
 .iv-ring.macro.layer-active>.iv-ring-label{color:#4a4642}
 .iv-ring.risk.layer-active>.iv-ring-label{color:#8a6f4f}
 .iv-ring.industry.layer-active>.iv-ring-label{color:#566f80}
+.iv-ring.portfolio{background:rgba(90,140,74,0.05)}
+.iv-ring.portfolio.layer-active{background:rgba(90,140,74,0.12);border-color:#5a8c4a}
+.iv-ring.portfolio.layer-active>.iv-ring-label{color:#3f6636}
 .iv-tag-list{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
 .iv-tag{padding:6px 12px;background:#fff;border:1px solid #ddd;border-radius:8px;font-size:11px;color:#555;font-weight:400;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:6px;font-family:'Calibri','Noto Sans TC',sans-serif}
 .iv-tag:hover{background:#f5f5f5;color:#0a0a0a;border-color:#bbb}
@@ -474,6 +477,12 @@ body.dark .iv-wl-text{color:#aaa}
           </div>
         </div>
       </div>
+      <div class="iv-ring portfolio" id="iv-ring-portfolio" style="margin-top:14px">
+        <div class="iv-ring-label" onclick="ivSelectLayer('portfolio')"><span>Portfolio</span><span class="iv-ring-count" id="iv-cnt-portfolio">0</span></div>
+        <div class="iv-tag-list" id="iv-tags-portfolio"></div>
+        <div class="iv-subfeed-bar" id="iv-subs-portfolio"></div>
+        <div class="iv-group-area" id="iv-ga-portfolio"></div>
+      </div>
     </div>
   </div>
   <div class="iv-resize-handle" id="iv-rh1"></div>
@@ -539,6 +548,7 @@ body.dark .iv-wl-text{color:#aaa}
           <option value="macro">Macro Narrative</option>
           <option value="risk">Implied Risk</option>
           <option value="industry">Industry Narrative</option>
+          <option value="portfolio">Portfolio</option>
         </select>
         <div class="iv-cs" id="iv-cs-layer">
           <div class="iv-cs-display" onclick="ivToggleLayerDD()">
@@ -549,6 +559,7 @@ body.dark .iv-wl-text{color:#aaa}
             <div class="iv-cs-opt active" data-val="macro" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#0a0a0a"></span>Macro Narrative</div>
             <div class="iv-cs-opt" data-val="risk" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#c8964a"></span>Implied Risk</div>
             <div class="iv-cs-opt" data-val="industry" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#4a8cc8"></span>Industry Narrative</div>
+            <div class="iv-cs-opt" data-val="portfolio" onclick="ivPickLayer(this)"><span class="iv-cs-dot" style="background:#5a8c4a"></span>Portfolio</div>
           </div>
         </div>
       </div>
@@ -632,11 +643,11 @@ const _IV_API='/api/invest-data';
 const _IV_GROUPS_API='/api/invest-groups';
 const IV_STANCE_KEYS=['TWII','TWO','DJI','Nasdaq','SOX'];
 const IV_STANCE_LABELS={TWII:'TWII 台股加權',TWO:'TWO 櫃買',DJI:'DJI 道瓊',Nasdaq:'Nasdaq 那斯達克',SOX:'SOX 費半'};
-const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro)){if(!d.daily||typeof d.daily!=='object')d.daily={};return d;}}catch(e){}return{macro:[],risk:[],industry:[],daily:{}};})();
+const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro)){if(!d.daily||typeof d.daily!=='object')d.daily={};if(!Array.isArray(d.portfolio))d.portfolio=[];return d;}}catch(e){}return{macro:[],risk:[],industry:[],portfolio:[],daily:{}};})();
 // migrate: 為舊 entry 補上 modified；補上 dailyTs/wl/stance/tomb 等新欄位（缺省容忍）
 (function(){
   let changed=false;
-  ['macro','risk','industry'].forEach(l=>{(_ivStore[l]||[]).forEach(e=>{if(!e.modified&&e.ts){e.modified=new Date(e.ts+'T00:00:00').toISOString();changed=true;}});});
+  ['macro','risk','industry','portfolio'].forEach(l=>{(_ivStore[l]||[]).forEach(e=>{if(!e.modified&&e.ts){e.modified=new Date(e.ts+'T00:00:00').toISOString();changed=true;}});});
   if(!_ivStore.dailyTs||typeof _ivStore.dailyTs!=='object'){_ivStore.dailyTs={};changed=true;}
   if(!_ivStore.tomb||typeof _ivStore.tomb!=='object'){_ivStore.tomb={};changed=true;}
   if(!Array.isArray(_ivStore.wl)){
@@ -729,9 +740,9 @@ function _ivMergeStance(local,server){
 /* pure top-level merge: local/server are {macro,risk,industry,daily,dailyTs,wl,stance,tomb} shaped like _ivStore (fields optional-tolerant) */
 function _ivMerge(local,server){
   local=local||{};server=server||{};
-  const merged={macro:[],risk:[],industry:[],daily:{},dailyTs:{},wl:[],stance:{},tomb:{}};
+  const merged={macro:[],risk:[],industry:[],portfolio:[],daily:{},dailyTs:{},wl:[],stance:{},tomb:{}};
   let changedLocal=false; // local data changed due to server input
-  ['macro','risk','industry'].forEach(layer=>{
+  ['macro','risk','industry','portfolio'].forEach(layer=>{
     if(!Array.isArray(server[layer])){merged[layer]=(local[layer]||[]).slice();return;}
     const {list,tomb}=_ivMergeListLWW(local[layer],server[layer],local.tomb,server.tomb,'modified');
     merged[layer]=list;
@@ -751,9 +762,9 @@ function _ivMerge(local,server){
 }
 function _ivMergeGroups(local,server){
   local=local||{};server=server||{};
-  const merged={macro:[],risk:[],industry:[],tomb:{}};
+  const merged={macro:[],risk:[],industry:[],portfolio:[],tomb:{}};
   let changedLocal=false;
-  ['macro','risk','industry'].forEach(layer=>{
+  ['macro','risk','industry','portfolio'].forEach(layer=>{
     if(!Array.isArray(server[layer])){merged[layer]=(local[layer]||[]).slice();return;}
     const {list,tomb}=_ivMergeListLWW(local[layer],server[layer],local.tomb,server.tomb,'mod');
     merged[layer]=list;
@@ -809,8 +820,9 @@ if(typeof module!=='undefined'&&module.exports){module.exports={_ivMerge,_ivMerg
 let _ivActiveTag=null,_ivActiveSub=null,_ivActiveLayer=null,_ivActiveGroup=null,_ivDragData=null,_ivLayerVal='macro',_ivSevVal=1,_ivEditingId=null,_ivSearch='';
 let _ivExpandedCo=new Set();
 let _ivHlEntry=null,_ivHlSel='',_ivHlMark=null;
-const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[]};})();
+const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[],portfolio:[]};})();
 if(!_ivGroups.tomb||typeof _ivGroups.tomb!=='object')_ivGroups.tomb={};
+if(!Array.isArray(_ivGroups.portfolio))_ivGroups.portfolio=[];
 function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
 let _ivGrpT;
 function _ivSaveGroupsSoon(){
@@ -819,7 +831,7 @@ function _ivSaveGroupsSoon(){
   _ivGrpT=setTimeout(()=>{fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});},800);
 }
 let _ivPendingImages=[];
-const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative'};
+const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative',portfolio:'Portfolio'};
 const _IV_CAUSAL_BASE=location.hostname==='localhost'?'http://localhost:8128':'https://globe-invest.up.railway.app/causal';
 const _IV_STOCK_API=(location.hostname==='localhost'?'https://globe-invest.up.railway.app':'')+'/api/stock-history';
 const SCOLORS={1:'#ced4c6',2:'#c6ccd6',3:'#d6ccba',4:'#d0b4a6',5:'#c0aab8'};
@@ -832,7 +844,7 @@ const _IV_COLOR_POOL=[
 ];
 function _ivPickGroupColor(){
   const used=new Set();
-  ['macro','risk','industry'].forEach(l=>(_ivGroups[l]||[]).forEach(g=>{if(g.color)used.add(g.color);}));
+  ['macro','risk','industry','portfolio'].forEach(l=>(_ivGroups[l]||[]).forEach(g=>{if(g.color)used.add(g.color);}));
   const avail=_IV_COLOR_POOL.find(c=>!used.has(c));
   if(avail)return avail;
   alert('群組顏色已用完（色票共 '+_IV_COLOR_POOL.length+' 組），請在 _IV_COLOR_POOL 補充更多顏色後再建立新群組。');
@@ -856,6 +868,48 @@ function ivPickLayer(el){
   cs.querySelector('.iv-cs-display span').innerHTML=el.innerHTML;
   cs.querySelectorAll('.iv-cs-opt').forEach(o=>o.classList.toggle('active',o.dataset.val===_ivLayerVal));
   cs.classList.remove('open');
+  const titleInp=document.getElementById('iv-ed-title');
+  if(titleInp)titleInp.placeholder=_ivLayerVal==='portfolio'?'e.g. Long Caterpillar (CAT)':'e.g. Fed rate cycle, Memory upcycle...';
+  ivApplyPortfolioTemplate();
+}
+/* ── Portfolio layer: quantitative risk-framework table template ── */
+const IV_PORTFOLIO_TEMPLATE=
+`| 構面 | 參數欄位 | 填入值 |
+|---|---|---|
+| **1. 部位設定** | 標的(Ticker) | |
+| | 槓桿部位金額 | |
+| | 槓桿倍數 | |
+| | 現股部位金額 | |
+| | 總曝險金額 | |
+| | 槓桿:現股 比例 | |
+| **2. 持有期間與滾動** | 波段類型 | |
+| | 最短持有天數 | |
+| | 最長持有天數 | |
+| | Roll(滾倉)觸發條件 | |
+| | Rebook(重新建倉)觸發條件 | |
+| **3. 風險報酬比 φ** | 目標價 P 定義來源 | |
+| | 現價 | |
+| | 預估 Downside 定義來源 | |
+| | φ = (P − 現價) / 預估Downside | |
+| | 進場門檻(φ ≥ ?) | |
+| **4. 進場訊號(EMA)** | EMA 參數 1 | |
+| | EMA 參數 2 | |
+| | EMA 參數 3 | |
+| | 進場邏輯條件 | |
+| **5. 後續情境-漲幅** | 加碼條件 | |
+| | 停利條件 | |
+| | 停利點位 | |
+| **5. 後續情境-持平** | 觀察期限 | |
+| | 處置動作 | |
+| **5. 後續情境-下跌** | 停損條件 | |
+| | 停損點位 | |
+| | 是否攤平/攤平規則 | |`;
+function ivApplyPortfolioTemplate(){
+  if(_ivEditingId||_ivLayerVal!=='portfolio')return;
+  const ta=document.getElementById('iv-ed-content');
+  if(!ta||ta.value.trim())return;
+  ta.value=IV_PORTFOLIO_TEMPLATE;
+  if(document.getElementById('iv-ed-split').classList.contains('split'))_ivRenderPreview();
 }
 /* programmatically sync the compose layer to a selected layer (skips while editing an entry) */
 function ivSetComposeLayer(layer){
@@ -960,7 +1014,7 @@ function ivSubmitEntry(){
   const source=document.getElementById('iv-ed-source').value.trim();
   const sub=document.getElementById('iv-ed-sub').value.trim();
   if(_ivEditingId){
-    const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+    const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio];
     const e=all.find(x=>x.id===_ivEditingId);
     if(e)Object.assign(e,{title,content,ts,author,source,sub,severity:_ivSevVal,images:[..._ivPendingImages],modified:new Date().toISOString()});
     const _ok=_ivSave();if(!_ok&&_ivPendingImages.length)alert('本機儲存空間不足，圖片可能未完整保存。建議減少圖片張數。');
@@ -983,10 +1037,10 @@ function ivClearEditor(){
   ivClearDraft();
 }
 function ivEditEntry(id){
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio];
   const e=all.find(x=>x.id===id);if(!e)return;
   _ivEditingId=id;
-  const _el=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+  const _el=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':_ivStore.industry.includes(e)?'industry':'portfolio';
   const _lo=document.querySelector('#iv-cs-layer .iv-cs-opt[data-val="'+_el+'"]');if(_lo)ivPickLayer(_lo);
   document.getElementById('iv-ed-title').value=e.title;
   document.getElementById('iv-ed-content').value=e.content;
@@ -1005,7 +1059,7 @@ function ivEditEntry(id){
 
 /* ── Tags ── */
 function ivRenderTags(){
-  ['macro','risk','industry'].forEach(layer=>{
+  ['macro','risk','industry','portfolio'].forEach(layer=>{
     const el=document.getElementById('iv-tags-'+layer);
     const cnt=document.getElementById('iv-cnt-'+layer);
     const titles=[...new Set(_ivStore[layer].map(e=>e.title))];
@@ -1042,7 +1096,7 @@ function ivSubChipsHTML(layer,title){
   }).join('');
   return `<span class="iv-sub-wrap"><span class="iv-sub-arrow">›</span>${chips}</span>`;
 }
-function ivRenderSubs(){['macro','risk','industry'].forEach(l=>{const b=document.getElementById('iv-subs-'+l);if(b)b.innerHTML='';});}
+function ivRenderSubs(){['macro','risk','industry','portfolio'].forEach(l=>{const b=document.getElementById('iv-subs-'+l);if(b)b.innerHTML='';});}
 function ivSelectSub(layer,title,sub){ivSetComposeLayer(layer);
   if(_ivActiveSub===sub&&_ivActiveTag&&_ivActiveTag.layer===layer&&_ivActiveTag.title===title){_ivActiveSub=null;}
   else{_ivActiveTag={layer,title};_ivActiveSub=sub;_ivActiveLayer=null;}
@@ -1058,7 +1112,7 @@ function ivRefreshSubList(){
 }
 function ivSelectTag(layer,title){ivSetComposeLayer(layer);_ivActiveTag={layer,title};_ivActiveSub=null;_ivActiveLayer=null;_ivActiveGroup=null;ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderSubs();ivRenderFeed();}
 function ivSelectLayer(layer){ivSetComposeLayer(layer);if(_ivActiveLayer===layer){_ivActiveLayer=null;}else{_ivActiveLayer=layer;}_ivActiveTag=null;_ivActiveSub=null;_ivActiveGroup=null;ivRenderTags();ivRenderLayers();ivRenderGroups();ivRenderSubs();ivRenderFeed();}
-function ivRenderLayers(){['macro','risk','industry'].forEach(l=>{const r=document.getElementById('iv-ring-'+l);if(r)r.classList.toggle('layer-active',_ivActiveLayer===l);});}
+function ivRenderLayers(){['macro','risk','industry','portfolio'].forEach(l=>{const r=document.getElementById('iv-ring-'+l);if(r)r.classList.toggle('layer-active',_ivActiveLayer===l);});}
 function ivRemoveActiveTag(){if(_ivActiveTag)ivRemoveTag(_ivActiveTag.layer,_ivActiveTag.title);}
 function ivRemoveTag(layer,title){
   const now=new Date().toISOString();
@@ -1071,7 +1125,7 @@ function ivRemoveTag(layer,title){
 
 /* ── Groups ── */
 function ivRenderGroups(){
-  ['macro','risk','industry'].forEach(layer=>{
+  ['macro','risk','industry','portfolio'].forEach(layer=>{
     const area=document.getElementById('iv-ga-'+layer);
     if(!area)return;
     const groups=_ivGroups[layer]||[];
@@ -1141,7 +1195,7 @@ function ivAddGroup(layer){
   inp.focus();
   function commit(){
     const name=inp.value.trim();
-    if(name){_ivGroups[layer].push({id:'g'+Date.now(),name,titles:[],color:_ivPickGroupColor(),mod:new Date().toISOString()});_ivSaveGroups();}
+    if(name){(_ivGroups[layer]||(_ivGroups[layer]=[])).push({id:'g'+Date.now(),name,titles:[],color:_ivPickGroupColor(),mod:new Date().toISOString()});_ivSaveGroups();}
     wrap.remove();ivRenderGroups();
   }
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit();}else if(e.key==='Escape'){wrap.remove();}});
@@ -1150,7 +1204,7 @@ function ivAddGroup(layer){
 function ivDeleteGroup(layer,id){
   if(!_ivGroups.tomb)_ivGroups.tomb={};
   _ivGroups.tomb[id]=new Date().toISOString();
-  _ivGroups[layer]=_ivGroups[layer].filter(g=>g.id!==id);
+  _ivGroups[layer]=(_ivGroups[layer]||[]).filter(g=>g.id!==id);
   if(_ivActiveGroup&&_ivActiveGroup.layer===layer&&_ivActiveGroup.id===id){_ivActiveGroup=null;_ivActiveTag=null;}
   _ivSaveGroups();ivRenderGroups();ivRenderTags();ivRenderFeed();
 }
@@ -1293,7 +1347,10 @@ function ivStripMd(s){
     .replace(/^#{1,6}\s+/gm,'').replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
     .replace(/~~([^~]+)~~/g,'$1').replace(/\[([^\]]+)\]\([^)]+\)/g,'$1')
     .replace(/^[-*+]\s+/gm,'').replace(/^\d+\.\s+/gm,'').replace(/^>\s*/gm,'')
-    .replace(/^[-*_]{3,}\s*$/gm,'').replace(/\n+/g,' ').trim();
+    .replace(/^[-*_]{3,}\s*$/gm,'')
+    .replace(/^\|?[\s:|-]+\|[\s:|-]*$/gm,'')
+    .replace(/^\|(.+)\|$/gm,(m,row)=>row.split('|').map(c=>c.trim()).filter(Boolean).join(' · '))
+    .replace(/\n+/g,' ').trim();
 }
 function _ivEscHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function _ivEscRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
@@ -1340,7 +1397,7 @@ function ivRenderFeed(){
     if(titleEl)titleEl.innerHTML=`<span class="iv-ft-crumb">Search</span><span class="iv-ft-sep">›</span><span class="iv-ft-sub">${esc(_ivSearch)}</span>`;
     const q=_ivSearch.toLowerCase();
     const results=[];
-    ['macro','risk','industry'].forEach(l=>_ivStore[l].forEach(e=>{
+    ['macro','risk','industry','portfolio'].forEach(l=>_ivStore[l].forEach(e=>{
       if((e.title||'').toLowerCase().includes(q)||(e.content||'').toLowerCase().includes(q)||(e.sub||'').toLowerCase().includes(q)||(e.author||'').toLowerCase().includes(q))results.push({e,l});
     }));
     results.sort((a,b)=>_ivBySeverity(a.e,b.e));
@@ -1370,11 +1427,11 @@ function ivRenderFeed(){
     if(!entries.length){list.innerHTML='<div class="iv-feed-empty">No entries in '+LN[_ivActiveLayer]+'</div>';return;}
     list.innerHTML=entries.map(e=>ivCardHTML(e,LN[_ivActiveLayer])).join('');return;
   }
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry].sort(_ivBySeverity);
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio].sort(_ivBySeverity);
   cntEl.textContent=all.length+' entries';
   if(!all.length){list.innerHTML='<div class="iv-feed-empty">Select a tag to view entries</div>';return;}
   list.innerHTML=all.map(e=>{
-    const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+    const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':_ivStore.industry.includes(e)?'industry':'portfolio';
     return ivCardHTML(e,LN[layer]);
   }).join('');
 }
@@ -1411,9 +1468,9 @@ function ivRenderContent(src){
   return html;
 }
 function ivShowDetail(id){
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio];
   const e=all.find(x=>x.id===id);if(!e)return;
-  const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+  const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':_ivStore.industry.includes(e)?'industry':'portfolio';
   document.getElementById('iv-feed-list').style.display='none';
   const det=document.getElementById('iv-feed-detail');det.style.display='block';
   const imgs=e.images&&e.images.length?`<div class="iv-fd-imgs">${e.images.map(b=>`<img class="iv-fd-img" src="${b}" onclick="event.stopPropagation();ivOpenImg('${b}')">`).join('')}</div>`:'';
@@ -1434,7 +1491,7 @@ function ivShowDetail(id){
 }
 function ivBackToFeed(){_ivHlEntry=null;_ivHlSel='';_ivHlMark=null;ivHideHlPopup();document.getElementById('iv-feed-detail').style.display='none';document.getElementById('iv-feed-list').style.display='';}
 function ivLinkDiagram(id){
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio];
   const e=all.find(x=>x.id===id);if(!e)return;
   const fid=prompt('輸入 CausalFrame 圖表名稱（留空取消連結）：',e.causalFileId||'');
   if(fid===null)return;
@@ -1443,7 +1500,7 @@ function ivLinkDiagram(id){
   _ivSave();ivShowDetail(id);
 }
 function ivOpenDiagram(id){
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio];
   const e=all.find(x=>x.id===id);if(!e||!e.causalFileId)return;
   window.open(_IV_CAUSAL_BASE+'?file='+encodeURIComponent(e.causalFileId),'_blank');
 }
@@ -1525,14 +1582,14 @@ function ivDeleteEntry(id){
   if(!confirm('Delete this entry permanently?'))return;
   if(!_ivStore.tomb)_ivStore.tomb={};
   _ivStore.tomb[id]=new Date().toISOString();
-  ['macro','risk','industry'].forEach(l=>{_ivStore[l]=_ivStore[l].filter(e=>e.id!==id);});
+  ['macro','risk','industry','portfolio'].forEach(l=>{_ivStore[l]=_ivStore[l].filter(e=>e.id!==id);});
   if(_ivEditingId===id)ivClearEditor();
   _ivSave();ivBackToFeed();ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();
 }
 function ivDuplicateEntry(id){
-  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry];
+  const all=[..._ivStore.macro,..._ivStore.risk,..._ivStore.industry,..._ivStore.portfolio];
   const e=all.find(x=>x.id===id);if(!e)return;
-  const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':'industry';
+  const layer=_ivStore.macro.includes(e)?'macro':_ivStore.risk.includes(e)?'risk':_ivStore.industry.includes(e)?'industry':'portfolio';
   const dup={...e,id:_ivId(),modified:new Date().toISOString()};
   _ivStore[layer].push(dup);_ivSave();
   _ivActiveTag={layer,title:dup.title};_ivActiveSub=null;_ivActiveLayer=null;
@@ -1828,11 +1885,11 @@ function ivToggleDark(){
 /* ── Feature 3: Statistics panel ── */
 function ivShowStats(){
   const all=[];
-  ['macro','risk','industry'].forEach(l=>_ivStore[l].forEach(e=>all.push({e,l})));
+  ['macro','risk','industry','portfolio'].forEach(l=>_ivStore[l].forEach(e=>all.push({e,l})));
   const total=all.length;
   const sevCnt={1:0,2:0,3:0,4:0,5:0,none:0};
   all.forEach(({e})=>{const s=e.severity;if(s&&SCOLORS[s])sevCnt[s]++;else sevCnt.none++;});
-  const layerCnt={macro:_ivStore.macro.length,risk:_ivStore.risk.length,industry:_ivStore.industry.length};
+  const layerCnt={macro:_ivStore.macro.length,risk:_ivStore.risk.length,industry:_ivStore.industry.length,portfolio:_ivStore.portfolio.length};
   /* SVG donut chart */
   const r=60,cx=80,cy=80,stroke=22;
   const circ=2*Math.PI*r;
@@ -1859,7 +1916,7 @@ function ivShowStats(){
     return `<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="width:10px;height:10px;border-radius:50%;background:${sevColors[s]};flex-shrink:0"></span><span style="font-size:12px;color:#555;font-family:'Calibri',sans-serif">Severity ${s}</span><span style="margin-left:auto;font-size:12px;color:#888;font-family:'Calibri',sans-serif">${sevCnt[s]}</span></div>`;
   }).join('');
   const noLeg=sevCnt.none?`<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="width:10px;height:10px;border-radius:50%;background:#e0e0e0;flex-shrink:0"></span><span style="font-size:12px;color:#555;font-family:'Calibri',sans-serif">No severity</span><span style="margin-left:auto;font-size:12px;color:#888;font-family:'Calibri',sans-serif">${sevCnt.none}</span></div>`:'';
-  const layerRow=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid #f0f0f0">${['macro','risk','industry'].map(l=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#888;font-family:'Calibri',sans-serif">${LN[l]}</span><span style="font-size:12px;color:#555;font-family:'Calibri',sans-serif">${layerCnt[l]}</span></div>`).join('')}</div>`;
+  const layerRow=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid #f0f0f0">${['macro','risk','industry','portfolio'].map(l=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#888;font-family:'Calibri',sans-serif">${LN[l]}</span><span style="font-size:12px;color:#555;font-family:'Calibri',sans-serif">${layerCnt[l]}</span></div>`).join('')}</div>`;
   document.getElementById('iv-stats-content').innerHTML=`<div style="display:flex;gap:24px;align-items:flex-start"><div style="flex-shrink:0">${svgChart}</div><div style="flex:1">${legItems}${noLeg}${layerRow}</div></div>`;
   const ov=document.getElementById('iv-stats-overlay');ov.style.display='flex';
 }
