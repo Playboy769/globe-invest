@@ -762,10 +762,9 @@ body.dark #cf-url-ok:hover{background:#fff}
       <div class="cf-tool pulse-btn" data-act="pulse" title="Pulse simulation (S)">⚡</div>
       <div class="cf-tool del" data-act="del" title="Delete node (Del)">✕</div>
       <div class="cf-tool-sep cf-tbl-only"></div>
-      <div class="cf-tool cf-tbl-only" data-act="add-row" title="Add row">+行</div>
-      <div class="cf-tool cf-tbl-only" data-act="del-row" title="Delete last row">−行</div>
-      <div class="cf-tool cf-tbl-only" data-act="add-col" title="Add column">+列</div>
-      <div class="cf-tool cf-tbl-only" data-act="del-col" title="Delete last column">−列</div>
+      <div class="cf-tool align-btn cf-tbl-only" data-act="align-left" title="Align left"><svg width="16" height="14" viewBox="0 0 16 14"><line x1="1" y1="2" x2="15" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="1" y1="7" x2="10" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="1" y1="12" x2="12" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="cf-tool align-btn cf-tbl-only" data-act="align-center" title="Align center"><svg width="16" height="14" viewBox="0 0 16 14"><line x1="1" y1="2" x2="15" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="3" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="cf-tool align-btn cf-tbl-only" data-act="align-right" title="Align right"><svg width="16" height="14" viewBox="0 0 16 14"><line x1="1" y1="2" x2="15" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="6" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="4" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
     </div>
     <div id="cf-edge-tools" class="cf-tools">
       <div class="cf-tool spos" data-pol="++" title="Strong positive (＋＋)">＋＋</div>
@@ -1708,6 +1707,7 @@ function buildNodes() {
           const cell=document.createElement('td');
           cell.textContent=(td.cells[r]&&td.cells[r][c]!=null)?td.cells[r][c]:'';
           cell.dataset.r=r; cell.dataset.c=c;
+          if(td.align==='center'||td.align==='right')cell.style.textAlign=td.align;
           // column resizer on every cell (visible only on hover in CSS)
           const rsz=document.createElement('div');rsz.className='cf-col-resizer';
           rsz.addEventListener('pointerdown',ev=>{ev.stopPropagation();startColResize(n.id,c,ev);});
@@ -1861,6 +1861,10 @@ function placeTools(){
     nt.querySelector('.trace-btn').classList.toggle('active',_traceOrigin===_sel.id);
     const isTbl=!!n.isTable;
     nt.querySelectorAll('.cf-tbl-only').forEach(el=>el.style.setProperty('display',isTbl?'flex':'none','important'));
+    if(isTbl){
+      const curAlign=(n.td&&n.td.align)||'left';
+      nt.querySelectorAll('.align-btn').forEach(b=>b.classList.toggle('active',b.dataset.act==='align-'+curAlign));
+    }
   } else {
     const e=byEdge(_sel.id); if(!e)return;
     const m=edgeMid(e); et.style.left=m.x+'px'; et.style.top=(m.y-19)+'px'; et.classList.add('on');
@@ -2000,6 +2004,12 @@ function setNodeColor(id, c) {
   n.color=(n.color===c?0:c);
   const el=_els[id]; if(el){ if(n.color) el.dataset.color=n.color; else delete el.dataset.color; }
   save();
+}
+function setTableAlign(id, align) {
+  const n=byNode(id); if(!n||!n.isTable||!n.td)return;
+  snapshot();
+  n.td.align=(align==='left'?'':align);
+  renderAll(); placeTools(); save();
 }
 function fitAllNodes() {
   snapshot();
@@ -2729,10 +2739,9 @@ document.getElementById('cf-node-tools').addEventListener('click', e => {
   else if(b.dataset.act==='trace')traceNode(_sel.id);
   else if(b.dataset.act==='pulse')pulseFrom(_sel.id);
   else if(b.dataset.act==='del')removeNode(_sel.id);
-  else if(b.dataset.act==='add-row')tableAddRow(_sel.id);
-  else if(b.dataset.act==='del-row')tableDelRow(_sel.id);
-  else if(b.dataset.act==='add-col')tableAddCol(_sel.id);
-  else if(b.dataset.act==='del-col')tableDelCol(_sel.id);
+  else if(b.dataset.act==='align-left')setTableAlign(_sel.id,'left');
+  else if(b.dataset.act==='align-center')setTableAlign(_sel.id,'center');
+  else if(b.dataset.act==='align-right')setTableAlign(_sel.id,'right');
 });
 
 document.getElementById('cf-add').addEventListener('click',()=>{
