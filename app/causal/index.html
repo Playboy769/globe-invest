@@ -2206,7 +2206,24 @@ function editNode(id) {
   const sp=el.querySelector('.cf-node-text'),n=byNode(id);
   snapshot();
   _editing=true;el.classList.add('editing');sp.contentEditable='true';sp.focus();selectAll(sp);
-  function done(){_editing=false;el.classList.remove('editing');sp.contentEditable='false';n.text=(sp.textContent.trim()||'Untitled');sp.textContent=n.text;n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();save();cu();if(hasMojibake(n.text))cfWarnMojibake(n.text);}
+  function done(){
+    _editing=false;el.classList.remove('editing');sp.contentEditable='false';
+    n.text=(sp.textContent.trim()||'Untitled');sp.textContent=n.text;
+    // A node that was previously fit/resized to a fixed width doesn't grow on
+    // its own when the text gets longer — it just wraps tighter. Widen (never
+    // shrink) so a freshly-typed line isn't left cramped; capped so one very
+    // long line can't blow the card out to an unreasonable width.
+    if(n.w){
+      const prevWS=sp.style.whiteSpace;
+      sp.style.whiteSpace='nowrap';
+      el.style.width='';
+      const natural=Math.min(el.offsetWidth,420);
+      sp.style.whiteSpace=prevWS;
+      el.style.width=n.w+'px';
+      if(natural>n.w){n.w=natural;el.style.width=n.w+'px';}
+    }
+    n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();save();cu();if(hasMojibake(n.text))cfWarnMojibake(n.text);
+  }
   function onkey(ev){if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();sp.blur();}else if(ev.key==='Escape'){sp.textContent=n.text;sp.blur();}ev.stopPropagation();}
   function cu(){sp.removeEventListener('blur',done);sp.removeEventListener('keydown',onkey);}
   sp.addEventListener('blur',done); sp.addEventListener('keydown',onkey);
