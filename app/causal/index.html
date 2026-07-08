@@ -295,7 +295,7 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-node.table-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,.18)}
 .cf-tbl-wrap{position:relative}
 .cf-tbl{table-layout:fixed;border-collapse:collapse;font-size:13px;line-height:1.6;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;border-radius:8px;overflow:hidden}
-.cf-tbl td{border:none;border-bottom:1px solid #e2e2e2;padding:10px 14px;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
+.cf-tbl td{border:none;border-bottom:1px solid #e2e2e2;padding:.77em 1.08em;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
 .cf-tbl tr:hover td{background:#f7f7f7}
 .cf-tbl tr:first-child td{background:none;font-weight:700;border-bottom:1.5px solid #0a0a0a;cursor:pointer}
 .cf-tbl tr:first-child:hover td{background:#f7f7f7}
@@ -1693,6 +1693,7 @@ function buildNodes() {
       if(!td.colWidths)td.colWidths=Array(td.c).fill(90);
       const wrap=document.createElement('div');wrap.className='cf-tbl-wrap';
       const tbl=document.createElement('table');tbl.className='cf-tbl';
+      if(td.fontScale&&td.fontScale!==1)tbl.style.fontSize=(13*td.fontScale).toFixed(2)+'px';
       const cg=document.createElement('colgroup');
       for(let c=0;c<td.c;c++){const col=document.createElement('col');col.style.width=(td.colWidths[c]||90)+'px';cg.appendChild(col);}
       tbl.appendChild(cg);
@@ -1738,6 +1739,8 @@ function buildNodes() {
       addRow.addEventListener('click',ev=>{ev.stopPropagation();tableAddRow(n.id);});
       wrap.appendChild(addRow);
       d.appendChild(wrap);
+      const trh=document.createElement('div'); trh.className='cf-node-resize';
+      trh.addEventListener('pointerdown',ev=>startTableResize(n.id,ev)); d.appendChild(trh);
     } else {
       d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.color) d.dataset.color = n.color;
@@ -2207,6 +2210,36 @@ function startBoxResize(id, dir, ev) {
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
 }
 
+function startTableResize(id, ev0) {
+  ev0.preventDefault(); ev0.stopPropagation();
+  const n=byNode(id), el=_els[id]; if(!n||!el||!n.isTable||!n.td)return;
+  const wrap=el.querySelector('.cf-tbl-wrap'); if(!wrap)return;
+  const sx=ev0.clientX, sy=ev0.clientY;
+  const r=el.getBoundingClientRect();
+  const initW=r.width/vt.s, initH=r.height/vt.s;
+  const baseCW=n.td.colWidths.slice(), baseFS=n.td.fontScale||1;
+  let curS=1;
+  snapshot();
+  wrap.style.transformOrigin='top left';
+  function mv(e){
+    const dx=(e.clientX-sx)/vt.s, dy=(e.clientY-sy)/vt.s;
+    const s=Math.max(.5,Math.min(3,((initW+dx)/initW+(initH+dy)/initH)/2));
+    curS=s;
+    wrap.style.transform='scale('+s+')';
+    el.style.width=(initW*s)+'px'; el.style.height=(initH*s)+'px';
+    n._w=el.offsetWidth; n._h=el.offsetHeight;
+    drawEdges(); placeTools();
+  }
+  function up(){
+    document.removeEventListener('pointermove',mv); document.removeEventListener('pointerup',up);
+    n.td.colWidths=baseCW.map(w=>Math.max(30,Math.round(w*curS)));
+    n.td.fontScale=Math.max(.5,Math.min(3,baseFS*curS));
+    wrap.style.transform=''; wrap.style.transformOrigin=''; el.style.width=''; el.style.height='';
+    renderAll(); drawEdges(); placeTools(); save();
+  }
+  document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
+}
+
 function editNode(id) {
   const el=_els[id]; if(!el)return;
   const sp=el.querySelector('.cf-node-text'),n=byNode(id);
@@ -2287,8 +2320,29 @@ function editTableCell(nodeId, row, col) {
     else if(ev.key==='ArrowRight'&&window.getSelection().toString()===cell.textContent){ev.preventDefault();goTo(row,col+1);}
     ev.stopPropagation();
   }
-  function cu(){cell.removeEventListener('blur',done);cell.removeEventListener('keydown',onkey);}
-  cell.addEventListener('blur',done); cell.addEventListener('keydown',onkey);
+  function onpaste(ev){
+    const text=(ev.clipboardData||window.clipboardData).getData('text/plain');
+    if(!text||!/[\t\n]/.test(text))return; // single value — let the browser paste it into this cell normally
+    ev.preventDefault();
+    const lines=text.replace(/\r/g,'').split('\n');
+    if(lines.length&&lines[lines.length-1]==='')lines.pop();
+    const grid=lines.map(l=>l.split('\t'));
+    if(!grid.length)return;
+    const needR=row+grid.length, needC=col+Math.max(...grid.map(g=>g.length));
+    if(!n.td.cells[row])n.td.cells[row]=[];
+    while(n.td.r<needR){n.td.cells.push([]);n.td.r++;}
+    if(needC>n.td.c){
+      for(let rr=0;rr<n.td.r;rr++){if(!n.td.cells[rr])n.td.cells[rr]=[];while(n.td.cells[rr].length<needC)n.td.cells[rr].push('');}
+      if(n.td.colWidths)while(n.td.colWidths.length<needC)n.td.colWidths.push(90);
+      n.td.c=needC;
+    }
+    grid.forEach((gr,ri)=>gr.forEach((val,ci)=>{if(!n.td.cells[row+ri])n.td.cells[row+ri]=[];n.td.cells[row+ri][col+ci]=val;}));
+    _editing=false; el.classList.remove('editing'); cell.classList.remove('cf-tbl-active');
+    cu();
+    renderAll(); save();
+  }
+  function cu(){cell.removeEventListener('blur',done);cell.removeEventListener('keydown',onkey);cell.removeEventListener('paste',onpaste);}
+  cell.addEventListener('blur',done); cell.addEventListener('keydown',onkey); cell.addEventListener('paste',onpaste);
 }
 function editEdgeLabel(id) {
   const e=byEdge(id); if(!e)return;
@@ -2784,6 +2838,37 @@ document.getElementById('cf-watermark').addEventListener('dblclick', e => {
 document.getElementById('cf-tpl-btn').addEventListener('click', openTplGallery);
 document.getElementById('cf-tpl-overlay').addEventListener('click', e => { if(e.target===e.currentTarget)closeTplGallery(); });
 
+// ── Table OS-clipboard interop (copy/paste as real tab-separated text,
+// so a table round-trips with Excel / Google Sheets / Notion) ──────────
+function copyTableToOS(td){
+  const tsv=Array.from({length:td.r},(_,r)=>
+    Array.from({length:td.c},(_,c)=>(td.cells[r]&&td.cells[r][c]!=null)?td.cells[r][c]:'').join('\t')
+  ).join('\n');
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(tsv).catch(()=>{});
+}
+function pasteClipboardNodes(){
+  if(!_clipboard.length)return;
+  snapshot();
+  const off=28;_multiSel.clear();_sel=null;
+  _clipboard.forEach(n=>{const nn={...n,id:nid(),x:n.x+off,y:n.y+off};G.nodes.push(nn);_multiSel.add(nn.id);});
+  renderAll();save();
+}
+function pasteOSIntoTable(n){
+  if(!navigator.clipboard||!navigator.clipboard.readText){pasteClipboardNodes();return;}
+  navigator.clipboard.readText().then(text=>{
+    if(!text||!/[\t\n]/.test(text)){pasteClipboardNodes();return;}
+    const lines=text.replace(/\r/g,'').split('\n');
+    if(lines.length&&lines[lines.length-1]==='')lines.pop();
+    const grid=lines.map(l=>l.split('\t'));
+    if(!grid.length){pasteClipboardNodes();return;}
+    snapshot();
+    n.td.r=grid.length; n.td.c=Math.max(...grid.map(g=>g.length));
+    n.td.cells=grid.map(g=>{const row=g.slice();while(row.length<n.td.c)row.push('');return row;});
+    n.td.colWidths=Array(n.td.c).fill(90);
+    renderAll();save();
+  }).catch(()=>pasteClipboardNodes());
+}
+
 // ── Keyboard ───────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if(document.getElementById('cf-tpl-overlay').classList.contains('on')){if(e.key==='Escape')closeTplGallery();return;}
@@ -2811,14 +2896,19 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
     const ids=_multiSel.size>0?Array.from(_multiSel):(_sel&&_sel.type==='node'?[_sel.id]:[]);
     _clipboard=ids.map(id=>byNode(id)).filter(Boolean).map(n=>({...n}));
+    // sole selection is a table? also mirror it to the OS clipboard as TSV
+    // so it pastes as a real table into Excel / Sheets / Notion.
+    if(ids.length===1){
+      const n0=byNode(ids[0]);
+      if(n0&&n0.isTable&&n0.td)copyTableToOS(n0.td);
+    }
   }
   else if(ctrl&&(e.key==='v'||e.key==='V')){
     e.preventDefault();
-    if(!_clipboard.length)return;
-    snapshot();
-    const off=28;_multiSel.clear();_sel=null;
-    _clipboard.forEach(n=>{const nn={...n,id:nid(),x:n.x+off,y:n.y+off};G.nodes.push(nn);_multiSel.add(nn.id);});
-    renderAll();save();
+    const pids=_multiSel.size>0?Array.from(_multiSel):(_sel&&_sel.type==='node'?[_sel.id]:[]);
+    const soleTable=pids.length===1?byNode(pids[0]):null;
+    if(soleTable&&soleTable.isTable){pasteOSIntoTable(soleTable);return;}
+    pasteClipboardNodes();
   }
   else if(ctrl&&(e.key==='a'||e.key==='A')){
     e.preventDefault();
