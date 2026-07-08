@@ -1197,6 +1197,18 @@ function s2w(sx, sy) {
   const r = canvas.getBoundingClientRect();
   return { x:(sx-r.left-vt.x)/vt.s, y:(sy-r.top-vt.y)/vt.s };
 }
+// Toolbar "+" buttons used to always drop new nodes at the dead-center of the
+// viewport — this tracks the last place the pointer was actually over the
+// canvas, so they spawn near where the user was looking/pointing instead.
+let _lastCanvasPt=null;
+canvas.addEventListener('pointermove', e=>{ _lastCanvasPt={x:e.clientX,y:e.clientY}; });
+function spawnPoint(){
+  const r=canvas.getBoundingClientRect();
+  if(_lastCanvasPt&&_lastCanvasPt.x>=r.left&&_lastCanvasPt.x<=r.right&&_lastCanvasPt.y>=r.top&&_lastCanvasPt.y<=r.bottom){
+    return s2w(_lastCanvasPt.x,_lastCanvasPt.y);
+  }
+  return { x:(r.width/2-vt.x)/vt.s, y:(r.height/2-vt.y)/vt.s };
+}
 // Smooth zoom: wheel/button events set a target scale; a rAF loop eases the
 // rendered scale toward it each frame, pivoting around the last anchor point
 let _zTarget=null,_zRaf=null,_zAx=0,_zAy=0;
@@ -2648,25 +2660,25 @@ document.getElementById('cf-node-tools').addEventListener('click', e => {
 
 document.getElementById('cf-add').addEventListener('click',()=>{
   const j=(G.nodes.length%6)*20;
-  const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
+  const {x:cx,y:cy}=spawnPoint();
   addNode(cx-55+j,cy-40+j);
 });
 document.getElementById('cf-add-box').addEventListener('click',()=>{
-  const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
+  const {x:cx,y:cy}=spawnPoint();
   addBoxNode(cx-100,cy-60);
 });
 document.getElementById('cf-add-table').addEventListener('click',()=>{
-  const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
+  const {x:cx,y:cy}=spawnPoint();
   addTableNode(cx-120,cy-55);
 });
 document.getElementById('cf-add-embed').addEventListener('click',async ()=>{
   const url=await askUrl('Embed a web page — enter its URL:',''); if(!url)return;
   let u=url.trim(); if(!/^https?:\/\//i.test(u))u='https://'+u;
-  const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
+  const {x:cx,y:cy}=spawnPoint();
   addEmbedNode(cx-200,cy-140,u);
 });
 document.getElementById('cf-add-canvas').addEventListener('click',()=>{
-  const cx=(canvas.clientWidth/2-vt.x)/vt.s,cy=(canvas.clientHeight/2-vt.y)/vt.s;
+  const {x:cx,y:cy}=spawnPoint();
   addCanvasNode(cx-110,cy-65);
 });
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
@@ -2680,8 +2692,7 @@ document.getElementById('cf-img-input').addEventListener('change',e=>{
   const rd=new FileReader();
   rd.onload=async ev=>{
     const dataUrl=ev.target.result;
-    const r=canvas.getBoundingClientRect();
-    const cx=(r.width/2-vt.x)/vt.s, cy=(r.height/2-vt.y)/vt.s;
+    const {x:cx,y:cy}=spawnPoint();
     const ext=(f.name.split('.').pop()||'png').toLowerCase();
     // Try Railway upload; fallback to inline base64
     try{
