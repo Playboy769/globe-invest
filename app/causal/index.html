@@ -48,6 +48,7 @@ body.dark .cf-dock2-grip span{background:#6a4a26}
 .cf-dock2-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:8px;color:#8a6030;cursor:pointer;transition:all .16s ease;padding:0;font-size:14px;font-family:inherit;letter-spacing:0;text-transform:none}
 .cf-dock2-btn:hover{color:#4a2c0a;background:#ffe4c2}
 .cf-dock2-btn.active{color:#4a2c0a;background:#ffe4c2}
+.cf-dock2-btn.disabled{opacity:.32;pointer-events:none}
 .cf-dock2-sep{width:18px;height:1px;background:rgba(140,100,50,0.22);margin:1px 0;flex-shrink:0}
 .cf-dock2-btn svg{width:17px;height:17px;pointer-events:none}
 body.dark #cf-dock2{background:rgba(40,28,14,0.92);border-color:#5a3e1e}
@@ -159,7 +160,7 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-node-text{display:block;outline:none;min-width:18px}
 .cf-node.fixed-h{display:flex;align-items:center;justify-content:center}
 .cf-node.fixed-h .cf-node-text{width:100%;min-width:0}
-.cf-port{position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;border:1.5px solid #9a9a9a;opacity:0;transition:opacity .14s ease,transform .12s ease,background .12s ease,border-color .12s ease;cursor:crosshair;z-index:3}
+.cf-port{position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;border:1.5px solid #9a9a9a;opacity:0;transition:opacity .14s ease,transform .12s ease,background .12s ease,border-color .12s ease;cursor:crosshair;z-index:6}
 .cf-node:hover .cf-port,.cf-node.sel .cf-port{opacity:1}
 .cf-port:hover{background:#0a0a0a;border-color:#0a0a0a;transform:scale(1.4)}
 .cf-node.connect-hover .cf-port{opacity:1}
@@ -177,9 +178,9 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-node[data-color="6"]{background:#e0f5f5;border-color:#30aaaa}
 
 /* Group box node */
-.cf-node.box-node{background:rgba(240,245,255,0.45);border:2px dashed #aabbd0;border-radius:16px;padding:9px 16px;min-width:150px;min-height:90px;max-width:none;box-shadow:none;z-index:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.cf-node.box-node{background:rgba(240,245,255,0.45);border:1.2px dashed #aabbd0;border-radius:16px;padding:9px 16px;min-width:150px;min-height:90px;max-width:none;box-shadow:none;z-index:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
 .cf-node.box-node:hover{border-color:#7a9cbf;background:rgba(225,238,255,0.5)}
-.cf-node.box-node.sel{border-color:#4a88dd;border-style:solid;box-shadow:0 0 0 2px rgba(74,136,221,0.15)}
+.cf-node.box-node.sel{border-color:#4a88dd;border-width:1px;border-style:solid;box-shadow:0 0 0 1px rgba(74,136,221,0.32),0 4px 14px rgba(74,136,221,0.1)}
 .cf-box-handle{position:absolute;opacity:0;transition:opacity .14s;z-index:5;pointer-events:auto;background:#aabbd0;border-radius:3px}
 .cf-node.box-node:hover .cf-box-handle,.cf-node.box-node.sel .cf-box-handle{opacity:1}
 .cf-box-handle.bh-nw{top:-5px;left:-5px;width:10px;height:10px;cursor:nw-resize}
@@ -197,6 +198,10 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-node.box-node[data-color="4"]{background:rgba(228,240,255,0.55);border-color:#5090d8}
 .cf-node.box-node[data-color="5"]{background:rgba(240,230,255,0.55);border-color:#9060c8}
 .cf-node.box-node[data-color="6"]{background:rgba(224,245,245,0.55);border-color:#30aaaa}
+/* Presets 7-12 and custom user-picked colors: hex resolved at render time,
+   fill/border computed into these CSS vars (see applyNodeColorAttr) */
+.cf-node[data-color="custom"]{background:var(--nc-fill);border-color:var(--nc-border)}
+.cf-node.box-node[data-color="custom"]{background:var(--nc-fillbox);border-color:var(--nc-border)}
 
 .cf-box-collapse{width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#7a9cbf;cursor:pointer;border-radius:4px;flex:none;order:1}
 .cf-node.box-node:not(.collapsed) .cf-box-collapse{position:absolute;top:6px;left:8px;background:rgba(255,255,255,.6)}
@@ -227,8 +232,9 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-edge.loop{stroke:#d45000!important}
 .cf-edge.traced{stroke:#4a88dd;stroke-width:2.2}
 
-.cf-edge-label{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;background:#fff;border:1px solid #e0e0e0;border-radius:7px;padding:2px 8px;font-size:11px;color:#555;white-space:nowrap;cursor:text;display:flex;align-items:center;gap:3px;max-width:170px;overflow:hidden;font-family:'Orchid','Noto Sans TC',serif;box-shadow:0 1px 5px rgba(0,0,0,0.07)}
-.cf-edge-label.editing{border-color:#0a0a0a;color:#0a0a0a;overflow:visible}
+.cf-edge-label{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;background:#fff;border:1px solid #e0e0e0;border-radius:7px;padding:2px 8px;font-size:11px;color:#555;white-space:nowrap;cursor:grab;display:flex;align-items:center;gap:3px;max-width:170px;overflow:hidden;font-family:'Orchid','Noto Sans TC',serif;box-shadow:0 1px 5px rgba(0,0,0,0.07)}
+.cf-edge-label:active{cursor:grabbing}
+.cf-edge-label.editing{border-color:#0a0a0a;color:#0a0a0a;overflow:visible;cursor:text}
 .cf-el-text{outline:none;min-width:8px}
 .cf-el-sign{font-size:15px;font-weight:700;line-height:1}
 .cf-el-weight{font-size:10px;color:#888;letter-spacing:.02em}
@@ -246,6 +252,14 @@ body.dark .cf-edge-gap{stroke:#161616}
 
 .cf-tools{position:absolute;display:none;align-items:center;gap:2px;background:#fff;border:1px solid #e4e4e4;border-radius:9px;padding:3px;box-shadow:0 6px 22px rgba(0,0,0,0.1);z-index:40;transform:translate(-50%,-50%);pointer-events:auto}
 .cf-tools.on{display:flex}
+/* Anchored so the bar's BOTTOM edge sits at (left,top) instead of its center —
+   keeps it clear of the node's top port/resize-handle regardless of bar height
+   (extra buttons for table-only actions change the bar's width, not height). */
+#cf-node-tools{transform:translate(-50%,-100%)}
+/* Same anchor-bottom trick for the edge toolbar — it now floats above wherever
+   the (draggable) label currently sits, with a fixed clearance, instead of a
+   center-anchor that let the bar's lower half overlap the label pill. */
+#cf-edge-tools{transform:translate(-50%,-100%)}
 .cf-tool{width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;font-size:13px;color:#999;transition:all .13s ease;user-select:none;font-family:'Orchid',serif}
 .cf-tool:hover{background:#f3f3f3;color:#0a0a0a}
 .cf-tool.spos{color:#2a7a44;font-weight:700;min-width:34px;width:auto;padding:0 5px;white-space:nowrap}
@@ -266,12 +280,19 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-tool.lock-btn.active{background:#fff8e6;color:#c08000;border-radius:6px}
 .cf-tool.trace-btn{color:#4a88dd;font-size:14px}
 .cf-tool.trace-btn.active{background:#e8f0ff}
+.cf-tool.tbl-btn{width:auto;padding:0 6px;font-size:10.5px;font-weight:600;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em;white-space:nowrap}
+.cf-tool.tbl-font{width:19px;font-size:12px;font-weight:700;font-family:'Calibri',sans-serif}
+.cf-tool.disabled{opacity:.35;pointer-events:none}
 .cf-tool-sep{width:1px;height:15px;background:#ececec;margin:0 2px}
-.cf-weight-inp{width:60px;font-size:11px;font-family:inherit;border:1px solid #e4e4e4;border-radius:6px;padding:3px 6px;text-align:center;color:#555;background:#fff;outline:none;cursor:auto}
+.cf-weight-inp{width:60px;font-size:11px;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;border:1px solid #e4e4e4;border-radius:6px;padding:3px 6px;text-align:center;color:#555;background:#fff;outline:none;cursor:auto}
 .cf-weight-inp:focus{border-color:#bbb}
 .cf-weight-label{font-size:9px;letter-spacing:.06em;color:#aaa;text-transform:uppercase;pointer-events:none;user-select:none}
 .cf-color-dot{width:13px;height:13px;border-radius:50%;border:1.5px solid;cursor:pointer;transition:transform .12s,box-shadow .12s;flex-shrink:0}
 .cf-color-dot:hover{transform:scale(1.35);box-shadow:0 1px 4px rgba(0,0,0,0.18)}
+.cf-color-custom{display:flex;align-items:center;justify-content:center;background:#fff;border-style:dashed;color:#bbb;font-size:10px;line-height:1;font-family:Arial,Helvetica,sans-serif}
+.cf-color-custom:hover{color:#4a88dd;border-color:#4a88dd;background:#fff}
+body.dark .cf-color-custom{background:#2a2a2a;border-color:#555;color:#888}
+body.dark .cf-color-custom:hover{color:#6aa0ff;border-color:#6aa0ff;background:#2a2a2a}
 
 /* ── World (zoomable layer) ──────────────────────────────── */
 #cf-world{position:absolute;top:0;left:0;width:32000px;height:32000px;transform-origin:0 0;pointer-events:none}
@@ -295,11 +316,11 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-node.table-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,.18)}
 .cf-tbl-wrap{position:relative}
 .cf-tbl{table-layout:fixed;border-collapse:collapse;font-size:13px;line-height:1.6;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;border-radius:8px;overflow:hidden}
-.cf-tbl td{border:none;border-bottom:1px solid #e2e2e2;padding:.77em 1.08em;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
+.cf-tbl td{border:none;padding:1.1em 1.3em;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
 .cf-tbl tr:hover td{background:#f7f7f7}
-.cf-tbl tr:first-child td{background:none;font-weight:700;border-bottom:1.5px solid #0a0a0a;cursor:pointer}
+.cf-tbl tr:first-child td{background:none;font-weight:700;cursor:pointer}
 .cf-tbl tr:first-child:hover td{background:#f7f7f7}
-.cf-tbl tr:last-child td{font-weight:700;border-bottom:none}
+.cf-tbl tr:last-child td{font-weight:700}
 .cf-tbl tr:first-child td:first-child{border-top-left-radius:8px}
 .cf-tbl tr:first-child td:last-child{border-top-right-radius:8px}
 .cf-tbl tr:last-child td:first-child{border-bottom-left-radius:8px}
@@ -350,7 +371,7 @@ body.dark .cf-node[data-color="5"]{background:#201428;border-color:#603090}
 body.dark .cf-node[data-color="6"]{background:#142020;border-color:#207070}
 body.dark .cf-node.box-node{background:rgba(25,40,70,0.35);border-color:#3a5a8a}
 body.dark .cf-node.box-node:hover{border-color:#5a80be;background:rgba(35,55,100,0.4)}
-body.dark .cf-node.box-node.sel{border-color:#5a88dd}
+body.dark .cf-node.box-node.sel{border-color:#5a88dd;box-shadow:0 0 0 1px rgba(90,136,221,0.4),0 4px 14px rgba(0,0,0,0.35)}
 body.dark .cf-box-handle{background:#4a6a8a}
 .cf-node.img-node{background:#f8f8f8;border:1.5px solid #c8d4e0;border-radius:10px;padding:0;overflow:hidden;min-width:80px;min-height:60px}
 .cf-node.img-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.18)}
@@ -401,9 +422,9 @@ body.dark .cf-canvas-rename{color:#9080b0}
 body.dark #cf-breadcrumb{background:#1e1e1e;border-color:#333}
 body.dark #cf-breadcrumb-label{color:#666}
 body.dark .cf-node.table-node{background:#0d0d0d}
-body.dark .cf-tbl td{border-color:#333;color:#e8e8e8}
+body.dark .cf-tbl td{color:#e8e8e8}
 body.dark .cf-tbl tr:hover td{background:#1c1c1c}
-body.dark .cf-tbl tr:first-child td{background:none;border-bottom-color:#e8e8e8}
+body.dark .cf-tbl tr:first-child td{background:none}
 body.dark .cf-tbl tr:first-child:hover td{background:#1c1c1c}
 body.dark .cf-tbl td.cf-tbl-active{background:#1a2a3a!important;box-shadow:inset 0 0 0 2px #5090d8}
 body.dark .cf-tbl td[contenteditable="true"]{background:#162436!important;box-shadow:inset 0 0 0 2px #5090d8}
@@ -417,6 +438,8 @@ body.dark .cf-node.box-node[data-color="3"]{background:rgba(44,24,24,0.55);borde
 body.dark .cf-node.box-node[data-color="4"]{background:rgba(20,28,46,0.55);border-color:#306090}
 body.dark .cf-node.box-node[data-color="5"]{background:rgba(32,20,40,0.55);border-color:#603090}
 body.dark .cf-node.box-node[data-color="6"]{background:rgba(20,32,32,0.55);border-color:#207070}
+body.dark .cf-node[data-color="custom"]{background:var(--nc-filld);border-color:var(--nc-borderd)}
+body.dark .cf-node.box-node[data-color="custom"]{background:var(--nc-fillboxd);border-color:var(--nc-borderd)}
 body.dark .cf-edge{stroke:#666}
 body.dark .cf-edge.spos{stroke:#3aaa5e;stroke-width:2.4}
 body.dark .cf-edge.pos{stroke:#5c9a6e}
@@ -665,6 +688,13 @@ body.dark #cf-url-ok:hover{background:#fff}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10H9a5 5 0 0 0 0 10h5"/><polyline points="16 6 20 10 16 14"/></svg>
   </button>
   <div class="cf-dock2-sep"></div>
+  <button class="cf-dock2-btn" id="cf-layer-up" title="Bring layer forward">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="11" height="11" rx="2" opacity="0.35"/><rect x="9" y="10" width="11" height="11" rx="2"/><path d="M14.5 3v5.5M11.5 5.5l3-3 3 3"/></svg>
+  </button>
+  <button class="cf-dock2-btn" id="cf-layer-down" title="Send layer backward">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="11" height="11" rx="2" opacity="0.35"/><rect x="4" y="3" width="11" height="11" rx="2"/><path d="M14.5 21v-5.5M11.5 18.5l3 3 3-3"/></svg>
+  </button>
+  <div class="cf-dock2-sep"></div>
   <button class="cf-dock2-btn" id="cf-loops" title="Highlight feedback loops + R/B (⟳)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><polyline points="18.5 2.5 18.5 6.5 14.5 6.5"/></svg>
   </button>
@@ -765,6 +795,14 @@ body.dark #cf-url-ok:hover{background:#fff}
       <div class="cf-tool align-btn cf-tbl-only" data-act="align-left" title="Align left"><svg width="16" height="14" viewBox="0 0 16 14"><line x1="1" y1="2" x2="15" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="1" y1="7" x2="10" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="1" y1="12" x2="12" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
       <div class="cf-tool align-btn cf-tbl-only" data-act="align-center" title="Align center"><svg width="16" height="14" viewBox="0 0 16 14"><line x1="1" y1="2" x2="15" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="3" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
       <div class="cf-tool align-btn cf-tbl-only" data-act="align-right" title="Align right"><svg width="16" height="14" viewBox="0 0 16 14"><line x1="1" y1="2" x2="15" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="6" y1="7" x2="15" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="4" y1="12" x2="15" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div class="cf-tool-sep cf-tbl-only"></div>
+      <div class="cf-tool tbl-btn cf-tbl-only" data-act="add-row" title="Add row">+Row</div>
+      <div class="cf-tool tbl-btn cf-tbl-only" data-act="del-row" title="Delete last row">−Row</div>
+      <div class="cf-tool tbl-btn cf-tbl-only" data-act="add-col" title="Add column">+Col</div>
+      <div class="cf-tool tbl-btn cf-tbl-only" data-act="del-col" title="Delete last column">−Col</div>
+      <div class="cf-tool-sep cf-tbl-only"></div>
+      <div class="cf-tool tbl-font cf-tbl-only" data-act="font-dec" title="Smaller text">A−</div>
+      <div class="cf-tool tbl-font cf-tbl-only" data-act="font-inc" title="Larger text">A+</div>
     </div>
     <div id="cf-edge-tools" class="cf-tools">
       <div class="cf-tool spos" data-pol="++" title="Strong positive (＋＋)">＋＋</div>
@@ -1259,6 +1297,39 @@ canvas.addEventListener('wheel', e => {
   }
 }, { passive:false });
 
+// ── Node color system ───────────────────────────────────────
+// Presets 1-6 keep their hand-tuned CSS classes (data-color="N") untouched.
+// Presets 7-12 and arbitrary custom RGB picks share one path: resolve to a
+// hex, derive fill/border variants at render time, and apply them as CSS
+// custom properties (data-color="custom") so dark mode still works without
+// re-rendering on theme toggle.
+const PRESET_EXTRA_BORDERS={7:'#d8792a',8:'#d6608c',9:'#6070d0',10:'#909090',11:'#a06840',12:'#8aa030'};
+function _hexToRgb(h){h=(h||'').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16)||0;return{r:(n>>16)&255,g:(n>>8)&255,b:n&255};}
+function _rgbToHex(r,g,b){const c=v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0');return '#'+c(r)+c(g)+c(b);}
+function _mixHex(hex,to,t){const a=_hexToRgb(hex),b=_hexToRgb(to);return _rgbToHex(a.r+(b.r-a.r)*t,a.g+(b.g-a.g)*t,a.b+(b.b-a.b)*t);}
+function _rgbaHex(hex,a){const c=_hexToRgb(hex);return 'rgba('+c.r+','+c.g+','+c.b+','+a+')';}
+function resolveColorHex(c){ if(typeof c==='string')return /^#[0-9a-f]{6}$/i.test(c)?c:'#999999'; return PRESET_EXTRA_BORDERS[c]||'#999999'; }
+function nodeColorFillLight(hex){return _mixHex(hex,'#ffffff',0.9);}
+function nodeColorFillDark(hex){return _mixHex(hex,'#000000',0.8);}
+function nodeColorBorderDark(hex){return _mixHex(hex,'#000000',0.42);}
+function applyNodeColorAttr(el,color){
+  if(!color)return;
+  if(typeof color==='number'&&color>=1&&color<=6){ el.dataset.color=color; return; }
+  el.dataset.color='custom';
+  const hex=resolveColorHex(color);
+  const fillL=nodeColorFillLight(hex), fillD=nodeColorFillDark(hex), borderD=nodeColorBorderDark(hex);
+  el.style.setProperty('--nc-border',hex);
+  el.style.setProperty('--nc-borderd',borderD);
+  el.style.setProperty('--nc-fill',fillL);
+  el.style.setProperty('--nc-filld',fillD);
+  el.style.setProperty('--nc-fillbox',_rgbaHex(fillL,0.55));
+  el.style.setProperty('--nc-fillboxd',_rgbaHex(fillD,0.55));
+}
+function clearNodeColorAttr(el){
+  delete el.dataset.color;
+  ['--nc-border','--nc-borderd','--nc-fill','--nc-filld','--nc-fillbox','--nc-fillboxd'].forEach(p=>el.style.removeProperty(p));
+}
+
 // ── Minimap ────────────────────────────────────────────────
 let _mmHidden = !!localStorage.getItem('cf_mm_hidden');
 let _mmT = null; // cached world->minimap transform; rebuilt in renderMinimap(), reused by updateMinimapViewport()
@@ -1302,8 +1373,10 @@ function renderMinimap() {
     else if(n.isImage||n.isEmbed)cls+=' media';
     else if(n.isText)cls+=' text';
     else if(n.color){
-      const fill=(dark?MM_NODE_FILL_DARK:MM_NODE_FILL)[n.color];
-      extra=' style="fill:'+fill+';stroke:'+MM_NODE_STROKE[n.color]+'"';
+      let fill,stroke;
+      if(MM_NODE_STROKE[n.color]){ fill=(dark?MM_NODE_FILL_DARK:MM_NODE_FILL)[n.color]; stroke=MM_NODE_STROKE[n.color]; }
+      else { const hex=resolveColorHex(n.color); stroke=hex; fill=dark?nodeColorFillDark(hex):nodeColorFillLight(hex); }
+      extra=' style="fill:'+fill+';stroke:'+stroke+'"';
     }
     if(isSel)cls+=' sel';
     const rx=n.isText?0:Math.min(2.5,w/6,h/6);
@@ -1347,6 +1420,8 @@ function toggleMinimap(){
   renderMinimap();
 }
 document.getElementById('cf-minimap-btn').addEventListener('click',toggleMinimap);
+document.getElementById('cf-layer-up').addEventListener('click',()=>{if(_sel&&_sel.type==='node')moveLayer(_sel.id,1);});
+document.getElementById('cf-layer-down').addEventListener('click',()=>{if(_sel&&_sel.type==='node')moveLayer(_sel.id,-1);});
 
 // ── In-canvas search ───────────────────────────────────────
 let _searchMatches=[], _searchIdx=0;
@@ -1432,7 +1507,10 @@ document.getElementById('cf-search-close').addEventListener('click',closeSearch)
 function getDEFS() {
   const dark = document.body.classList.contains('dark');
   const n=dark?'#777':'#888', p=dark?'#5c9a6e':'#4f7a5e', g=dark?'#c05050':'#b3564a';
-  const mk=(id,color)=>`<marker id="${id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`;
+  // linejoin must be miter (not round) — a round join blunts the chevron's
+  // tip into a curve, which reads as a chipped/missing point rather than an
+  // arrowhead. linecap stays round, that only affects the two open tail ends.
+  const mk=(id,color)=>`<marker id="${id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="miter"/></marker>`;
   return '<defs>'+mk('cf-ah-neutral',n)+mk('cf-ah-spos','#2a7a44')+mk('cf-ah-pos',p)+mk('cf-ah-neg',g)+mk('cf-ah-sneg','#a03838')+mk('cf-ah-eq','#c8a820')+mk('cf-ah-loop','#d45000')+'</defs>';
 }
 
@@ -1585,22 +1663,50 @@ function edgePath(p1,p2){
   const c=edgeCtrl(p1,p2);
   return'M'+p1.x+','+p1.y+' C'+c.c1x+','+c.c1y+' '+c.c2x+','+c.c2y+' '+p2.x+','+p2.y;
 }
-function bezMid(p1,p2){
-  const c=edgeCtrl(p1,p2);
-  return{x:(p1.x+3*c.c1x+3*c.c2x+p2.x)/8,y:(p1.y+3*c.c1y+3*c.c2y+p2.y)/8};
+function bezPointAt(p1,p2,t){
+  const c=edgeCtrl(p1,p2), mt=1-t;
+  return{
+    x:mt*mt*mt*p1.x+3*mt*mt*t*c.c1x+3*mt*t*t*c.c2x+t*t*t*p2.x,
+    y:mt*mt*mt*p1.y+3*mt*mt*t*c.c1y+3*mt*t*t*c.c2y+t*t*t*p2.y
+  };
 }
+function bezMid(p1,p2){ return bezPointAt(p1,p2,0.5); }
+// Where an edge's label/toolbar sit — the curve's true midpoint by default,
+// or wherever the user has dragged the label to (e.labelT, 0..1 along the curve).
 function edgeMid(e) {
   const en=edgeEnds(e); if(!en)return{x:0,y:0};
-  return bezMid(en.p1,en.p2);
+  return bezPointAt(en.p1,en.p2,e.labelT!=null?e.labelT:0.5);
 }
+// Nearest point on the bezier to a world coordinate, as a t in [0,1] — used
+// while dragging a label along its edge. Coarse scan then a local refine pass.
+function closestTOnBezier(p1,p2,wx,wy){
+  let bestT=0.5,bestD=Infinity;
+  const N=40;
+  for(let i=0;i<=N;i++){
+    const t=i/N,p=bezPointAt(p1,p2,t);
+    const d=(p.x-wx)*(p.x-wx)+(p.y-wy)*(p.y-wy);
+    if(d<bestD){bestD=d;bestT=t;}
+  }
+  const step=1/N,lo=Math.max(0,bestT-step),hi=Math.min(1,bestT+step);
+  for(let i=0;i<=20;i++){
+    const t=lo+(hi-lo)*i/20,p=bezPointAt(p1,p2,t);
+    const d=(p.x-wx)*(p.x-wx)+(p.y-wy)*(p.y-wy);
+    if(d<bestD){bestD=d;bestT=t;}
+  }
+  return Math.max(0.06,Math.min(0.94,bestT));
+}
+
+const CF_TBL_DEFAULT_W=130; // default column width for new tables / columns lacking an explicit width
 
 // ── Build nodes ────────────────────────────────────────────
 function buildNodes() {
   nodesLayer.innerHTML=''; _els={};
   _mojibakeNodeIds=new Set(scanMojibake(G).nodeIds);
   const hiddenIds=collapsedMemberIds();
-  // Box nodes first so they render behind regular nodes
-  const sorted = [...G.nodes].filter(n=>!hiddenIds.has(n.id)).sort((a,b)=>((a.isBox||a.isImage)?0:1)-((b.isBox||b.isImage)?0:1));
+  // Box/Group nodes always render behind everything else, regardless of their
+  // position in G.nodes — layering (moveLayer) only reorders non-box nodes,
+  // whose G.nodes array order IS their paint order (stable sort keeps it).
+  const sorted = [...G.nodes].filter(n=>!hiddenIds.has(n.id)).sort((a,b)=>(a.isBox?0:1)-(b.isBox?0:1));
   sorted.forEach(n => {
     const isSel = _sel&&_sel.type==='node'&&_sel.id===n.id;
     const isMulti = _multiSel.has(n.id);
@@ -1612,7 +1718,7 @@ function buildNodes() {
       d.className = 'cf-node box-node'+(collapsed?' collapsed':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.w) d.style.width=n.w+'px';
       if (n.bh&&!collapsed) d.style.height=n.bh+'px';
-      if (n.color) d.dataset.color=n.color;
+      if (n.color) applyNodeColorAttr(d,n.color);
       const chev=document.createElement('div'); chev.className='cf-box-collapse';
       chev.textContent=collapsed?'▸':'▾'; chev.title=collapsed?'Expand group':'Collapse group';
       chev.addEventListener('pointerdown',ev=>ev.stopPropagation());
@@ -1636,7 +1742,6 @@ function buildNodes() {
       img.src=n.src||'';
       img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:9px';
       d.appendChild(img);
-      ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     } else if (n.isEmbed) {
       d.className='cf-node embed-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
       d.style.width=(n.w||400)+'px'; d.style.height=(n.bh||280)+'px';
@@ -1668,7 +1773,6 @@ function buildNodes() {
       iframe.referrerPolicy='no-referrer';
       if(!n._interact)iframe.style.pointerEvents='none';
       d.appendChild(iframe);
-      ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     } else if (n.isCanvas) {
       d.className='cf-node canvas-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
       d.style.width=(n.w||220)+'px'; d.style.height=(n.bh||130)+'px';
@@ -1684,12 +1788,15 @@ function buildNodes() {
       d.appendChild(ren);
       const rh=document.createElement('div'); rh.className='cf-node-resize';
       rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
-      ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     } else if (n.isTable) {
       d.className='cf-node table-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
-      if(n.color)d.dataset.color=n.color;
+      if(n.color)applyNodeColorAttr(d,n.color);
       const td=n.td||{r:3,c:3,cells:[]};
-      if(!td.colWidths)td.colWidths=Array(td.c).fill(90);
+      if(!td.colWidths)td.colWidths=Array(td.c).fill(CF_TBL_DEFAULT_W);
+      // One-time widen: a table still at the untouched old default (90 on every
+      // column) upgrades to the new default. A table with even one manually
+      // resized column is left alone — that column width was a deliberate choice.
+      else if(td.colWidths.length&&td.colWidths.every(w=>w===90))td.colWidths=td.colWidths.map(()=>CF_TBL_DEFAULT_W);
       const wrap=document.createElement('div');wrap.className='cf-tbl-wrap';
       const tbl=document.createElement('table');tbl.className='cf-tbl';
       if(td.fontScale&&td.fontScale!==1)tbl.style.fontSize=(13*td.fontScale).toFixed(2)+'px';
@@ -1743,7 +1850,7 @@ function buildNodes() {
       trh.addEventListener('pointerdown',ev=>startTableResize(n.id,ev)); d.appendChild(trh);
     } else {
       d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
-      if (n.color) d.dataset.color = n.color;
+      if (n.color) applyNodeColorAttr(d,n.color);
       if (n.w) d.style.width=n.w+'px';
       if (n.bh) { d.style.height=n.bh+'px'; d.classList.add('fixed-h'); }
       if (!n.isText) {
@@ -1754,9 +1861,9 @@ function buildNodes() {
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
     if(!n.isTable&&!n.isImage&&!n.isEmbed){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
-    if (!n.isBox) {
-      ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
-    }
+    // Every node type gets connection ports, including box/group nodes — a
+    // box is a valid edge endpoint just like any other node.
+    ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
     if(n.isTable){
       d.addEventListener('pointerdown',ev=>{d._wasSel=_sel&&_sel.type==='node'&&_sel.id===n.id;onNodeDown(n.id,ev);});
       d.addEventListener('click',ev=>{
@@ -1819,7 +1926,7 @@ function drawEdges() {
       s+='<path class="cf-edge '+polCls+selCls+loopCls+lsCls+traceCls+searchCls+'" d="'+d+'" marker-end="url(#'+ah+')"/>';
     }
     if(e.label||e.pol||e.weight!=null){
-      const{x:mx,y:my}=bezMid(p1,p2);
+      const{x:mx,y:my}=bezPointAt(p1,p2,e.labelT!=null?e.labelT:0.5);
       const sign=e.pol?'<span class="cf-el-sign '+polCls+'">'+(e.pol==='++'?'＋＋':e.pol==='+'?'＋':e.pol==='--'?'－－':e.pol==='-'?'－':'＝')+'</span>':'';
       const wtStr=e.weight!=null?' <span class="cf-el-weight">'+(e.weight>0?'+':'')+e.weight+'</span>':'';
       const txt=(e.label?'<span class="cf-el-text">'+esc(e.label)+'</span>':'')+wtStr;
@@ -1851,23 +1958,38 @@ function select(sel){
   Object.entries(_els).forEach(([id,el])=>el.classList.toggle('sel',!!sel&&sel.type==='node'&&sel.id===id));
   drawEdges(); placeTools(); renderMinimap();
 }
+// Layer reordering is meaningless for a box (always pinned to the back) and
+// needs a selected node to act on — reflect that regardless of which of
+// placeTools' early-return branches below ends up firing.
+function updateLayerButtons(){
+  const up=document.getElementById('cf-layer-up'), down=document.getElementById('cf-layer-down');
+  const n=(_sel&&_sel.type==='node')?byNode(_sel.id):null;
+  const disabled=!n||n.isBox;
+  if(up)up.classList.toggle('disabled',disabled);
+  if(down)down.classList.toggle('disabled',disabled);
+}
 function placeTools(){
   const nt=document.getElementById('cf-node-tools'),et=document.getElementById('cf-edge-tools');
   nt.classList.remove('on'); et.classList.remove('on');
+  updateLayerButtons();
   if(!_sel)return;
   if(_sel.type==='node'){
     const n=byNode(_sel.id); if(!n)return;
-    nt.style.left=(n.x+(_w(n)/2))+'px'; nt.style.top=(n.y-17)+'px'; nt.classList.add('on');
+    nt.style.left=(n.x+(_w(n)/2))+'px'; nt.style.top=(n.y-14)+'px'; nt.classList.add('on');
     nt.querySelector('.trace-btn').classList.toggle('active',_traceOrigin===_sel.id);
     const isTbl=!!n.isTable;
     nt.querySelectorAll('.cf-tbl-only').forEach(el=>el.style.setProperty('display',isTbl?'flex':'none','important'));
     if(isTbl){
       const curAlign=(n.td&&n.td.align)||'left';
       nt.querySelectorAll('.align-btn').forEach(b=>b.classList.toggle('active',b.dataset.act==='align-'+curAlign));
+      const tbl=n.td||{r:1,c:1};
+      const delRowBtn=nt.querySelector('[data-act="del-row"]'), delColBtn=nt.querySelector('[data-act="del-col"]');
+      if(delRowBtn)delRowBtn.classList.toggle('disabled',tbl.r<=1);
+      if(delColBtn)delColBtn.classList.toggle('disabled',tbl.c<=1);
     }
   } else {
     const e=byEdge(_sel.id); if(!e)return;
-    const m=edgeMid(e); et.style.left=m.x+'px'; et.style.top=(m.y-19)+'px'; et.classList.add('on');
+    const m=edgeMid(e); et.style.left=m.x+'px'; et.style.top=(m.y-20)+'px'; et.classList.add('on');
     et.querySelectorAll('.cf-tool[data-pol]').forEach(b=>b.classList.toggle('active',!!e.pol&&b.dataset.pol===e.pol));
     const curLs=e.ls||(e.delay?'dash':'');
     et.querySelectorAll('.ls-btn').forEach(b=>b.classList.toggle('active',b.dataset.ls===curLs));
@@ -1925,7 +2047,7 @@ function startColResize(nodeId, colIdx, ev0) {
   ev0.preventDefault();
   const n=byNode(nodeId); const el=_els[nodeId]; if(!n||!el)return;
   if(!n.td.colWidths)n.td.colWidths=Array(n.td.c).fill(90);
-  const startX=ev0.clientX, startW=n.td.colWidths[colIdx]||90;
+  const startX=ev0.clientX, startW=n.td.colWidths[colIdx]||CF_TBL_DEFAULT_W;
   const rsz=ev0.target; rsz.classList.add('resizing');
   function onMove(e){
     const delta=(e.clientX-startX)/vt.s;
@@ -1946,7 +2068,7 @@ function startColResize(nodeId, colIdx, ev0) {
 }
 function tableAddRow(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();n.td.cells.push(Array(n.td.c).fill(''));n.td.r++;renderAll();save();}
 function tableDelRow(id){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(n.td.r-1,1);n.td.r--;renderAll();save();}
-function tableAddCol(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();for(let r=0;r<n.td.r;r++){if(!n.td.cells[r])n.td.cells[r]=[];while(n.td.cells[r].length<n.td.c)n.td.cells[r].push('');n.td.cells[r].push('');}n.td.c++;if(n.td.colWidths)n.td.colWidths.push(90);renderAll();save();}
+function tableAddCol(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();for(let r=0;r<n.td.r;r++){if(!n.td.cells[r])n.td.cells[r]=[];while(n.td.cells[r].length<n.td.c)n.td.cells[r].push('');n.td.cells[r].push('');}n.td.c++;if(n.td.colWidths)n.td.colWidths.push(CF_TBL_DEFAULT_W);renderAll();save();}
 function tableDelCol(id){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(n.td.c-1,1);}n.td.c--;if(n.td.colWidths)n.td.colWidths.splice(n.td.c,1);renderAll();save();}
 function tableDelRowAt(id,rowIdx){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(rowIdx,1);n.td.r--;renderAll();save();}
 function tableDelColAt(id,colIdx){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(colIdx,1);}n.td.c--;if(n.td.colWidths)n.td.colWidths.splice(colIdx,1);renderAll();save();}
@@ -1964,6 +2086,19 @@ function removeNode(id) {
   _sel=null; _loopEdges.clear(); _loopsActive=false;
   document.getElementById('cf-loops').classList.remove('active');
   renderAll(); save();
+}
+// Bring-forward (dir=1) / send-backward (dir=-1) — swaps the node's position
+// in G.nodes with its nearest non-box neighbor in that direction, since a
+// box's own array position never affects paint order (see buildNodes' sort).
+function moveLayer(id, dir) {
+  const n=byNode(id); if(!n||n.isBox)return;
+  const idx=G.nodes.indexOf(n); if(idx<0)return;
+  let j=idx+dir;
+  while(j>=0&&j<G.nodes.length&&G.nodes[j].isBox)j+=dir;
+  if(j<0||j>=G.nodes.length)return;
+  snapshot();
+  [G.nodes[idx],G.nodes[j]]=[G.nodes[j],G.nodes[idx]];
+  buildNodes(); drawEdges(); save();
 }
 function removeEdge(id) {
   snapshot();
@@ -2002,13 +2137,62 @@ function setNodeColor(id, c) {
   const n=byNode(id); if(!n)return;
   snapshot();
   n.color=(n.color===c?0:c);
-  const el=_els[id]; if(el){ if(n.color) el.dataset.color=n.color; else delete el.dataset.color; }
+  const el=_els[id];
+  if(el){ if(n.color) applyNodeColorAttr(el,n.color); else clearNodeColorAttr(el); }
   save();
+}
+// Builds presets 7-12 + the custom-RGB swatch once, inserted before the first
+// separator in #cf-node-tools (after the 6 hand-authored preset dots).
+function initNodeColorExtras(){
+  const nt=document.getElementById('cf-node-tools');
+  const sep=nt&&nt.querySelector('.cf-tool-sep');
+  if(!nt||!sep||nt.dataset.colorExtrasBuilt)return;
+  nt.dataset.colorExtrasBuilt='1';
+  const names={7:'Orange',8:'Pink',9:'Indigo',10:'Gray',11:'Brown',12:'Olive'};
+  Object.keys(PRESET_EXTRA_BORDERS).forEach(k=>{
+    const col=+k, hex=PRESET_EXTRA_BORDERS[col];
+    const dot=document.createElement('div');
+    dot.className='cf-color-dot'; dot.dataset.col=col;
+    dot.style.background=nodeColorFillLight(hex); dot.style.borderColor=hex;
+    dot.title=names[col]+' ('+col+')';
+    nt.insertBefore(dot,sep);
+  });
+  const custom=document.createElement('div');
+  custom.className='cf-color-dot cf-color-custom'; custom.id='cf-color-custom-btn';
+  custom.title='Custom color (pick any RGB)'; custom.textContent='+';
+  nt.insertBefore(custom,sep);
+  const inp=document.createElement('input');
+  inp.type='color'; inp.id='cf-custom-color-inp'; inp.tabIndex=-1; inp.value='#8a6030';
+  inp.style.cssText='position:absolute;width:0;height:0;opacity:0;pointer-events:none';
+  nt.appendChild(inp);
+  custom.addEventListener('pointerdown',ev=>ev.stopPropagation());
+  custom.addEventListener('click',ev=>{
+    ev.stopPropagation();
+    if(!_sel||_sel.type!=='node')return;
+    const n=byNode(_sel.id);
+    if(n&&typeof n.color==='string')inp.value=n.color;
+    inp.click();
+  });
+  // 'change' (not 'input') so dragging inside the OS picker doesn't spam
+  // snapshot() with one undo step per intermediate hue/saturation tick.
+  inp.addEventListener('change',()=>{
+    if(!_sel||_sel.type!=='node')return;
+    setNodeColor(_sel.id,inp.value.toLowerCase());
+  });
 }
 function setTableAlign(id, align) {
   const n=byNode(id); if(!n||!n.isTable||!n.td)return;
   snapshot();
   n.td.align=(align==='left'?'':align);
+  renderAll(); placeTools(); save();
+}
+// Independent of the corner resize handle (which scales column widths and
+// font together) — this only changes text size, so a user can shrink/grow
+// the table's text without disturbing column widths they've already set.
+function adjustTableFont(id, delta) {
+  const n=byNode(id); if(!n||!n.isTable||!n.td)return;
+  snapshot();
+  n.td.fontScale=Math.max(.6,Math.min(2.4,(n.td.fontScale||1)+delta));
   renderAll(); placeTools(); save();
 }
 function fitAllNodes() {
@@ -2025,7 +2209,11 @@ function fitAllNodes() {
     const prevWS=sp.style.whiteSpace;
     sp.style.whiteSpace='nowrap';
     el.style.width='';
-    const w=el.offsetWidth;
+    // getBoundingClientRect (sub-pixel) rather than offsetWidth (rounded) — the
+    // rounded value can land a fraction of a px short of what the text actually
+    // needs, silently re-wrapping the last word/character once white-space is
+    // restored. Round up plus a 1px pad so the fitted width always clears it.
+    const w=Math.ceil(el.getBoundingClientRect().width)+1;
     sp.style.whiteSpace=prevWS;
     n.w=w; el.style.width=w+'px'; n._w=w;
     n._h=el.offsetHeight;
@@ -2343,7 +2531,7 @@ function editTableCell(nodeId, row, col) {
     while(n.td.r<needR){n.td.cells.push([]);n.td.r++;}
     if(needC>n.td.c){
       for(let rr=0;rr<n.td.r;rr++){if(!n.td.cells[rr])n.td.cells[rr]=[];while(n.td.cells[rr].length<needC)n.td.cells[rr].push('');}
-      if(n.td.colWidths)while(n.td.colWidths.length<needC)n.td.colWidths.push(90);
+      if(n.td.colWidths)while(n.td.colWidths.length<needC)n.td.colWidths.push(CF_TBL_DEFAULT_W);
       n.td.c=needC;
     }
     grid.forEach((gr,ri)=>gr.forEach((val,ci)=>{if(!n.td.cells[row+ri])n.td.cells[row+ri]=[];n.td.cells[row+ri][col+ci]=val;}));
@@ -2547,7 +2735,7 @@ function exportSVG() {
   const W=x1-x0,H=y1-y0;
   const nodeColors={1:'#fffae8',2:'#e6f4e8',3:'#fde8e8',4:'#e4f0ff',5:'#f0e6ff',6:'#e0f5f5'};
   const nodeBorders={1:'#dfc030',2:'#55aa65',3:'#d06060',4:'#5090d8',5:'#9060c8',6:'#30aaaa'};
-  const mk=(id,color)=>`<marker id="${id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`;
+  const mk=(id,color)=>`<marker id="${id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="miter"/></marker>`;
   let out=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${x0} ${y0} ${W} ${H}">`;
   out+=`<defs>${mk('ah-n','#888')}${mk('ah-sp','#2a7a44')}${mk('ah-p','#4f7a5e')}${mk('ah-g','#b3564a')}${mk('ah-sn','#a03838')}${mk('ah-e','#c8a820')}</defs>`;
   out+=`<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="white"/>`;
@@ -2567,7 +2755,7 @@ function exportSVG() {
     const dash=ls==='dash'?' stroke-dasharray="8 5"':ls==='dot'?' stroke-dasharray="1.5 4" stroke-linecap="round"':'';
     const d=edgePath(p1,p2);
     out+=`<path fill="none" stroke="${stroke}" stroke-width="1.6"${dash} d="${d}" marker-end="url(#${ah})"/>`;
-    if(e.label){const m=bezMid(p1,p2);out+=`<text x="${m.x}" y="${m.y}" text-anchor="middle" font-size="11" fill="#555" font-family="serif">${esc(e.label)}</text>`;}
+    if(e.label){const m=bezPointAt(p1,p2,e.labelT!=null?e.labelT:0.5);out+=`<text x="${m.x}" y="${m.y}" text-anchor="middle" font-size="11" fill="#555" font-family="serif">${esc(e.label)}</text>`;}
   });
   // Regular nodes
   visible.filter(n=>!n.isBox).forEach(n=>{
@@ -2575,8 +2763,8 @@ function exportSVG() {
     if(n.isText){
       out+=`<text x="${n.x+w/2}" y="${n.y+h/2}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="#0a0a0a" font-family="serif">${esc(n.text)}</text>`;
     } else {
-      const fill=n.color?(nodeColors[n.color]||'#fff'):'#fff';
-      const stroke=n.color?(nodeBorders[n.color]||'#d6d6d6'):'#d6d6d6';
+      const fill=n.color?(nodeColors[n.color]||nodeColorFillLight(resolveColorHex(n.color))):'#fff';
+      const stroke=n.color?(nodeBorders[n.color]||resolveColorHex(n.color)):'#d6d6d6';
       out+=`<rect x="${n.x}" y="${n.y}" width="${w}" height="${h}" rx="11" fill="${fill}" stroke="${stroke}" stroke-width="1"/>`;
       out+=`<text x="${n.x+w/2}" y="${n.y+h/2}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="#0a0a0a" font-family="serif">${esc(n.text)}</text>`;
     }
@@ -2714,7 +2902,26 @@ canvas.addEventListener('dblclick', e => {
   }
 });
 labelsLayer.addEventListener('dblclick',e=>{const l=e.target.closest('.cf-edge-label');if(l){e.stopPropagation();editEdgeLabel(l.dataset.edge);}});
-labelsLayer.addEventListener('pointerdown',e=>{const l=e.target.closest('.cf-edge-label');if(l&&!_editing){e.stopPropagation();select({type:'edge',id:l.dataset.edge});}});
+labelsLayer.addEventListener('pointerdown',ev0=>{
+  const l=ev0.target.closest('.cf-edge-label'); if(!l||_editing)return;
+  ev0.stopPropagation();
+  const id=l.dataset.edge;
+  select({type:'edge',id});
+  const ed=byEdge(id); if(!ed)return;
+  const en=edgeEnds(ed); if(!en)return;
+  const sx=ev0.clientX,sy=ev0.clientY; let moved=false,started=false;
+  function mv(ev){
+    const dx=ev.clientX-sx,dy=ev.clientY-sy;
+    if(!started&&Math.abs(dx)+Math.abs(dy)>3){started=true;snapshot();}
+    if(!started)return;
+    moved=true;
+    const w=s2w(ev.clientX,ev.clientY);
+    ed.labelT=closestTOnBezier(en.p1,en.p2,w.x,w.y);
+    drawEdges(); placeTools();
+  }
+  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);if(moved)save();}
+  document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
+});
 
 // ── Toolbars ───────────────────────────────────────────────
 document.getElementById('cf-edge-tools').addEventListener('click', e => {
@@ -2742,6 +2949,12 @@ document.getElementById('cf-node-tools').addEventListener('click', e => {
   else if(b.dataset.act==='align-left')setTableAlign(_sel.id,'left');
   else if(b.dataset.act==='align-center')setTableAlign(_sel.id,'center');
   else if(b.dataset.act==='align-right')setTableAlign(_sel.id,'right');
+  else if(b.dataset.act==='add-row')tableAddRow(_sel.id);
+  else if(b.dataset.act==='del-row')tableDelRow(_sel.id);
+  else if(b.dataset.act==='add-col')tableAddCol(_sel.id);
+  else if(b.dataset.act==='del-col')tableDelCol(_sel.id);
+  else if(b.dataset.act==='font-dec')adjustTableFont(_sel.id,-0.1);
+  else if(b.dataset.act==='font-inc')adjustTableFont(_sel.id,0.1);
 });
 
 document.getElementById('cf-add').addEventListener('click',()=>{
@@ -3261,6 +3474,7 @@ loadFolders();
 G = JSON.parse(JSON.stringify(activeFile().data));
 if(localStorage.getItem('cf_dark')){ document.body.classList.add('dark'); document.getElementById('cf-dark-btn').classList.add('active'); }
 document.getElementById('cf-minimap-btn').classList.toggle('active',!_mmHidden);
+initNodeColorExtras();
 renderAll();
 renderFeed();
 updateFilename();
