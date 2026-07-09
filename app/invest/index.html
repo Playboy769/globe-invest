@@ -1779,6 +1779,7 @@ function ivClearSearch(){
 
 /* ── Side panel collapse (Framework / Editor) ── */
 let _ivPanelCollapsed={fw:false,ed:false};
+const _IV_PANEL_RATIO={'iv-framework':3,'iv-feed':3,'iv-editor':2};
 function ivApplyPanelCollapsed(which){
   const panel=document.getElementById(which==='fw'?'iv-framework':'iv-editor');
   const handle=document.getElementById(which==='fw'?'iv-rh1':'iv-rh2');
@@ -1786,6 +1787,20 @@ function ivApplyPanelCollapsed(which){
   if(panel)panel.classList.toggle('iv-panel-collapsed',collapsed);
   if(handle)handle.style.display=collapsed?'none':'';
   document.querySelectorAll('.iv-panel-toggle[data-which="'+which+'"]').forEach(b=>{b.title=collapsed?'展開':'收合';});
+  ivRefillPanels();
+}
+function ivRefillPanels(){
+  const anyCollapsed=_ivPanelCollapsed.fw||_ivPanelCollapsed.ed;
+  ['iv-framework','iv-feed','iv-editor'].forEach(id=>{
+    const p=document.getElementById(id);if(!p||p.classList.contains('iv-panel-collapsed'))return;
+    if(anyCollapsed){
+      if(p.dataset.ivPrevFlex===undefined)p.dataset.ivPrevFlex=p.style.flex||'';
+      p.style.flex=_IV_PANEL_RATIO[id]+' 1 0%';
+    }else if(p.dataset.ivPrevFlex!==undefined){
+      p.style.flex=p.dataset.ivPrevFlex;
+      delete p.dataset.ivPrevFlex;
+    }
+  });
 }
 function ivTogglePanel(which){
   _ivPanelCollapsed[which]=!_ivPanelCollapsed[which];
