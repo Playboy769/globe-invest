@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palo Alto Networks FY Q3 2026 — Q&A / M&A整合 / 技術與產品線 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; }
+  .tab { padding: 10px 20px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #7a2020; }
+
+  .sca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .sca-box { border-radius: 8px; padding: 12px; }
+  .sca-box.blue { background: #eff6ff; border: 1px solid #a9c9f5; }
+  .sca-box.green { background: #f0fdf4; border: 1px solid #a3dab1; }
+  .sca-box.orange { background: #fff7ed; border: 1px solid #f0c090; }
+  .sca-box.red { background: #fef2f2; border: 1px solid #f0aab8; }
+  .sca-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .sca-box.blue h4 { color: #1d4ed8; }
+  .sca-box.green h4 { color: #15803d; }
+  .sca-box.orange h4 { color: #c2600a; }
+  .sca-box.red h4 { color: #b91c4a; }
+  .sca-box ul { padding-left: 14px; }
+  .sca-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .price-band { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-bar { height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; margin: 6px 0; font-size: 12px; font-weight: 600; }
+  .band-ceiling { background: #eff6ff; color: #1d4ed8; border: 1px solid #a9c9f5; }
+  .band-floor { background: #fffbeb; color: #92400e; border: 1px solid #f0d090; }
+  .band-label { font-size: 11px; color: #666; margin: 2px 0; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 230px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 50px; font-size: 13px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid; }
+  .tech-card.dram { background: #eff6ff; border-color: #a9c9f5; }
+  .tech-card.nand { background: #f5f3ff; border-color: #c7b8f0; }
+  .tech-card.hbm { background: #f0fdf4; border-color: #a3dab1; }
+  .tech-card.pkg { background: #fff7ed; border-color: #f0c090; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border: 1px solid #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border: 1px solid #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border: 1px solid #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stat-box { flex: 1; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Palo Alto Networks — FY Q3 2026 Earnings Call Analysis">Palo Alto Networks — FY Q3 2026 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis / M&amp;A Integration / Technology &amp; Product Lines / Risk Matrix &nbsp;·&nbsp; Call Date: June 2, 2026">Q&A 問答分析 / M&A 整合架構 / 技術與產品線 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年6月2日</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="M&amp;A Integration" onclick="sw('sca',this)">M&A 整合架構</div>
+    <div class="tab" data-en="Technology &amp; Product Lines" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl" data-en="Logic Gaps">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Saket Kalia (Barclays)">Saket Kalia（Barclays）</div><div class="qa-topic" data-en="Network Security &mdash; AI Data Center Contribution">網路安全業務 AI 資料中心貢獻度</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Network security was flagged as a multi-year tailwind &mdash; how much of that is coming from AI data center buildouts? Outside of data center builds, how are other customers thinking about network security needs as AI traffic grows?">網路安全業務提到多年順風，AI資料中心建置對此業務貢獻多少？除了資料中心建置之外，其他客戶如何看待AI流量成長帶來的網路安全需求？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh: more traffic requires more inspection, and hardware is the cheapest, fastest way to inspect it. Data center buildouts are pushing up both hardware demand and component pricing (industry component costs are estimated to have risen from 5-8% to 10-12%, roughly a 50% increase in industry demand). Expects the trend to continue for several quarters, if not years, until data center growth plateaus.">Nikesh：流量增加就需要更多檢測，硬體是最具成本效益的檢測手段；資料中心新建潮同時推升硬體需求與零組件單價（產業零組件成本估計從5-8%漲到10-12%，約當產業需求成長50%）；預期此趨勢延續數季甚至數年，直到資料中心建設趨緩才會反轉。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The answer only addressed the macro logic of data center buildouts, without breaking out what percentage of the tailwind actually comes from data centers &mdash; and never directly answered the second half of the question about non-data-center customers. Industry-level narrative was substituted for a customer-segment-specific answer.">只回答了「資料中心建置的宏觀邏輯」，完全沒有拆分「資料中心貢獻多少百分比」的具體數字，也沒有正面回應「非資料中心客戶怎麼看」這半個問題——用產業級敘事取代了客戶分層的具體回答。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Brian Essex (JPMorgan)">Brian Essex（JPMorgan）</div><div class="qa-topic" data-en="Prisma AIRS Evaluation Criteria &times; MTTR">Prisma AIRS 客戶評估標準 × MTTR</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Following the emergence of threats like Mythos, GPT, and the Project Glasswing announcement, how are customers evaluating the platform&#39;s detection-and-response speed advantage?">在Mythos、GPT、Project Glasswing等新型威脅出現後，客戶如何評估平台的偵測回應速度優勢？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh emphasized natively-deployed firewalls across major hyperscalers that can inspect AI traffic. Lee added that Prisma AIRS covers the full lifecycle from pre-deployment scanning/red-teaming to runtime defense, feeding into XSIAM, which has demonstrated sub-10-minute MTTR.">Nikesh：強調公司在各大雲端原生部署防火牆，可檢測AI流量；Lee補充Prisma AIRS涵蓋「部署前掃描/紅隊測試」到「執行時期防護」的完整生命週期，並回饋進XSIAM，證明可將MTTR降至10分鐘內。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Observation">⚑ 觀察</div>
+          <div class="q-text" data-en="No quantified evaluation criteria were given for Prisma AIRS itself (e.g., POC pass rates, head-to-head comparisons) &mdash; management simply repackaged XSIAM&#39;s existing 10-minute MTTR figure without offering any independent performance proof point for Prisma AIRS.">沒有給出客戶評估Prisma AIRS本身的量化標準（例如POC通過率、與競品比較的具體指標），只是重新包裝了XSIAM既有的「10分鐘內回應」數字，並未針對Prisma AIRS獨立提供任何效能證明。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Matthew Hedberg (RBC)">Matthew Hedberg（RBC）</div><div class="qa-topic" data-en="$200M AI Frontier Lab Customer &times; Observability/Security Convergence">$200M AI Frontier Lab 客戶 × 可觀測性/資安整合</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="This quarter&#39;s $100M of net new ARR from the AI frontier lab customer was impressive &mdash; how does observability-security convergence help take share from observability-first competitors?">本季來自該客戶的$100M新增ARR令人印象深刻，可觀測性與資安的整合如何幫助搶占相對於「純可觀測性起家」競品的份額？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Lee: the two remain distinct specialized domains &mdash; you cannot simply bolt a little bit of one onto the other and claim competence. Over time, data from each use case will cross-pollinate the other, with agentics as the eventual integration layer, starting with Cortex and extending to Chronosphere.">Lee：兩者仍是各自獨立的專業領域，不能簡單「加一點」就宣稱另一個領域也做得好；未來會透過數據交叉污染（observability數據餵給security、security數據提供context給observability）與agentics逐步整合。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Biggest Logic Gap">⚑ 最大邏輯缺口</div>
+          <div class="q-text" data-en="CFO Dipak&#39;s prepared remarks had already disclosed that this quarter&#39;s 50%+ QoQ Chronosphere ARR growth was driven by a single existing LLM customer increasing consumption as it migrated off an incumbent vendor &mdash; meaning most of the headline surge came from one customer event, not broad-based adoption. Hedberg treated this single-customer case as validation of the broader observability-security integration strategy, and management never clarified the concentration, leaving the market free to misread it as a structural, broad-based win.">CFO Dipak在事前備稿中已透露，Chronosphere本季環比成長逾50%，主因是「一位既有LLM客戶從舊供應商遷移後用量增加」——換言之絕大部分的環比爆發式成長來自單一客戶事件，而非廣泛新客戶採用。Hedberg把這個單一客戶個案當作「可觀測性與資安整合戰略」的驗證來歌頌，管理層也未澄清成長的集中度，容易讓市場誤讀為結構性、廣泛性的成功。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Meta Marshall (Morgan Stanley)">Meta Marshall（Morgan Stanley）</div><div class="qa-topic" data-en="Depth and Breadth of the Frontier Lab Deal">Frontier Lab 交易的深度與廣度</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How does this deal change the view on the AI-native customer opportunity, and how broad was the platform footprint the customer actually bought?">這筆交易讓公司怎麼看待AI原生客戶的機會？客戶購買了平台的哪些廣度？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh: different model companies handle observability differently (build vs. third-party). Claimed Chronosphere delivers the same capability at roughly half the industry&#39;s cost, making self-build less economical as volume scales; acknowledged more capability still needs to be built to become a full platform.">Nikesh：不同模型公司處理可觀測性的方式不同（自建 vs 第三方）；強調Chronosphere定價約為業界一半，隨用量規模化，自建的經濟性不再合理；坦承還需要補強更多能力才能成為「完整平台」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="No answer was given on which specific modules the customer actually purchased. The claim of roughly half the industry&#39;s cost has no benchmark or third-party verification &mdash; it is a unilateral management assertion.">完全沒有回答「該客戶具體買了哪些模組」；「約為業界一半價格」的說法沒有任何基準比較對象或第三方驗證，屬於管理層單方面主張。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Shaul Eyal (Cowen)">Shaul Eyal（Cowen）</div><div class="qa-topic" data-en="Koi / Agentic Endpoint Momentum">Koi / Agentic Endpoint 動能</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="There is a kind of renaissance happening in endpoint security &mdash; what is driving it?">Endpoint領域出現「文藝復興」，是什麼驅動的？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Lee: over the past 12 months, most endpoint activity has become agentic (vibe-coding tools, MCP servers, hooks/scripts), creating a new endpoint ecosystem layered on top of the existing one that requires specialized capability &mdash; which is what motivated the Koi acquisition.">Lee：過去12個月endpoint上的活動大量轉為agentic（vibe coding工具、MCP servers、hooks/scripts生態系），形成「舊endpoint之上的新endpoint生態系」，需要專門能力，這正是收購Koi的原因。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="Dipak&#39;s prepared financial remarks explicitly stated Koi&#39;s Q3 financial impact was immaterial &mdash; there is no revenue or ARR contribution from Koi visible this quarter. The gap between narrative enthusiasm and financial evidence is notable; this is still purely a story-stage asset.">Dipak在財務摘要中明確指出Koi收購「對Q3業績影響不重大」（immaterial）——本季看不到任何Koi的營收或ARR貢獻數字，敘事熱度與財務證據之間存在明顯落差，目前仍是純故事階段。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Fatima Boolani (Citi)">Fatima Boolani（Citi）</div><div class="qa-topic" data-en="Unit 42 Investment Level &times; Agentic SOC Dogfooding">Unit 42 投資力度 × Agentic SOC 自我實踐</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How much incremental investment is planned behind Unit 42, and is capacity constrained? At a higher level, how much of the agentic SOC concept is being dogfooded internally?">Unit 42要投入多少增量資源？產能是否吃緊？XSIAM內部有多少「自己吃自己狗糧」的agentic能力？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh: Unit 42 has been repurposed to focus on frontier AI defense, with 1,200+ customer touchpoints and 800 meetings. XSIAM was designed with pre-analysis agents built in, but customers remain in Phase 0 &mdash; collecting data, observing, and requiring human approval &mdash; not yet willing to grant agents full autonomy.">Nikesh：Unit 42已重新聚焦於前沿AI防禦，1,200+客戶接觸、800場會議；XSIAM設計上就有「先分析再攝入」的agent機制，但坦言目前客戶仍停留在「Phase 0」（先收集數據、觀察、人工核准），還不願意把決策自主權交給agent。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The specific incremental investment figure (headcount/dollars) was entirely avoided &mdash; only meeting counts and outreach volume were offered as activity metrics. Management also re-disclosed the 25% false-positive rate limitation, effectively conceding that the &quot;agentic SOC&quot; is still aspirational rather than a scalable, monetizable product today &mdash; in tension with the bullish narrative around Prisma AIRS approaching $100M ARR.">完全迴避了「增量投入多少」的具體數字（人力/資金），只用會議次數與客戶接觸數作為活動指標；同時再次自曝25%假陽性率的模型限制，等於承認「agentic SOC」目前是願景而非可規模化變現的產品，與市場對Prisma AIRS「$100M ARR在望」的樂觀敘事形成張力。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Michael Turrin (Wells Fargo)">Michael Turrin（Wells Fargo）</div><div class="qa-topic" data-en="Evolution of AI-Driven Demand and Metrics to Watch">AI需求演變與觀察指標</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How have large-customer conversations evolved since Mythos, and is there greater urgency heading into Q4? What metrics should investors track &mdash; RPO, platformization wins, or something else?">自Mythos事件後，大型客戶對話有何變化？該看RPO還是平台化數字來衡量進展？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh: first joked that six months ago cybersecurity stocks were seen as doomed because AI would replace them, and now demand has actually strengthened. But he explicitly reiterated the 25% false-positive risk of autonomous AI action, and stated plainly: &quot;I would not get ahead of my skis&quot; &mdash; he does not expect a windfall next quarter or the quarter after, only &quot;robust growth,&quot; not acceleration.">Nikesh：先反諷半年前市場曾擔心AI會讓資安股「失業」，如今需求反而更強；但明確提醒25%假陽性率代表AI獨立操作有風險；最關鍵一句：「不要指望下季度或下下季度會有意外爆發（windfall）」，預期只是「穩健成長」（robust growth）而非加速。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Important Logic Gap">⚑ 重要邏輯缺口</div>
+          <div class="q-text" data-en="The earlier part of the call built an elevated narrative around Mythos triggering a paradigm shift in security demand, but when directly asked whether this translates to near-term acceleration, management explicitly cooled expectations. The gap between narrative enthusiasm and the guardrails management itself set on near-term expectations is the single most important thing to watch when interpreting this quarter&#39;s story.">整場法說會前段營造「Mythos開啟資安需求範式轉移」的高昂敘事，但被直接問及「近期是否加速」時，管理層親口降溫，明確排除短期windfall。敘事熱度與管理層親自設定的期望值之間的落差，是解讀本季故事時最需要留意的一點。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Adam Borg (Stifel)">Adam Borg（Stifel）</div><div class="qa-topic" data-en="SASE Breakdown (SSE / SD-WAN / Browser)">SASE 細分（SSE / SD-WAN / Browser）</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Within the $1.6B SASE ARR, how would you rank the momentum across SSE, SD-WAN, and Prisma Browser?">SASE的$1.6B ARR中，SSE、SD-WAN、Prisma Browser個別的動能排序為何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh gave no numeric breakdown, instead framing PANW as leading the &quot;second wave of SASE&quot; &mdash; customers moving from best-of-breed toward a single consolidated platform. SD-WAN is sold only as part of the SASE suite, not standalone; Secure Browser has reached 11 million licenses.">Nikesh：完全沒有拆分數字，改用「第二波SASE」的敘事框架——強調客戶從「best of breed」轉向「整合單一平台」，SD-WAN只作為SASE套件的一部分銷售（不單獨銷售），Secure Browser規模已達1,100萬授權。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Observation">⚑ 觀察</div>
+          <div class="q-text" data-en="This is a consistent pattern across the call &mdash; management systematically declines to disclose SASE sub-segment numbers, and the company simultaneously announced it will not resume line-of-business (Network Security/Cortex/Identity) segment disclosure until FY2027, making independent verification of sub-product momentum even harder in the near term.">這是本場法說會的一貫模式——管理層系統性拒絕揭露SASE內部細分數字，且本季公司同時宣布FY2027起才會恢復依業務線（網路安全/Cortex/Identity）分部揭露，短期內投資人將更難獨立驗證各子產品的真實動能。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="John DiFucci (Guggenheim)">John DiFucci（Guggenheim）</div><div class="qa-topic" data-en="CyberArk Integration Status">CyberArk 整合近況</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Is CyberArk&#39;s strong quarter reflecting go-to-market just getting started, or genuine core PAM strength? Is machine identity actually gaining traction yet?">CyberArk表現優於預期，是go-to-market才剛開始還是核心PAM本身強勁？Machine identity概念是否已落地？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Nikesh acknowledged the Prisma Cloud &rarr; Cortex Cloud migration is &quot;still not behind us,&quot; with about six more months of work ahead; stated plainly that CyberArk &quot;is not contributing as well as some of the other products&quot;; emphasized profitability synergies are running 3-6 months ahead of schedule; and used highly personal language (&quot;this is existential for me... existential for my team&quot;) to describe the stakes of proving the integration a success.">Nikesh：坦承Prisma Cloud→Cortex Cloud遷移「還沒做完，接下來六個月還要繼續啃」；明確說「CyberArk目前的貢獻不如其他產品」；強調獲利能力綜效比原計畫提前3-6個月達成；用「existential」（攸關生死）形容整合成敗對自己與團隊的意義。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Biggest Logic Gap of the Call">⚑ 本場最大邏輯缺口</div>
+          <div class="q-text" data-en="This is the only moment in the entire call where management voluntarily admitted &quot;not everything is perfect&quot; &mdash; CyberArk&#39;s actual revenue contribution trails the other core products, and the Prisma Cloud migration is behind the original plan, yet both admissions are wrapped inside an overall positive narrative of &quot;we did not break it.&quot; Nikesh also leaned on highly personal, emotionally charged language (&quot;existential,&quot; repeated appeals to &quot;trust me&quot;) to vouch for the integration &mdash; a tone that itself is worth flagging: does management need narrative conviction, rather than hard metrics, to sustain market confidence in this acquisition?">這是整場法說會唯一一次管理層主動承認「不是每件事都完美」——CyberArk的營收貢獻其實低於其他主軸產品，Prisma Cloud遷移落後於原計畫，卻被包裝在「我們沒有把它搞砸」的正面敘事中。Nikesh同時用高度個人化、情緒化的語言（「existential」、多次強調「不要不信任我」）為CyberArk整合背書，這種語氣本身值得警惕——是否代表管理層需要靠敘事力，而非硬指標，來維持市場對這筆收購的信心？</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M&A Integration Panel (parallel to MU's SCA panel) -->
+  <div id="panel-sca" class="panel">
+    <div class="section-title" data-en="CyberArk / Chronosphere Acquisition Integration Structure">CyberArk / Chronosphere 收購整合架構</div>
+    <div class="sca-grid">
+      <div class="sca-box blue">
+        <h4 data-en="Acquisition Scale &amp; Contribution">收購規模與貢獻</h4>
+        <ul>
+          <li data-en="CyberArk + Chronosphere combined contributed $1.63B to NGS ARR">CyberArk + Chronosphere合併貢獻NGS ARR $16.3億</li>
+          <li data-en="About 20% of this quarter&#39;s total NGS ARR of $8.13B">佔本季總NGS ARR $81.3億的約20%</li>
+          <li data-en="Organic (ex-M&amp;A) NGS ARR: $6.5B, +28% YoY">有機（不含併購）NGS ARR $65億，YoY +28%</li>
+          <li data-en="RPO contribution from M&amp;A: ~$1.8B (of total RPO $18.4B)">RPO併購貢獻約$18億（佔總RPO $184億）</li>
+          <li data-en="Koi acquisition&#39;s Q3 financial impact: immaterial">Koi收購對Q3財報影響「不重大」（immaterial）</li>
+          <li data-en="Portkey acquisition just closed; no financials disclosed yet">Portkey剛完成收購，尚無揭露財務數字</li>
+        </ul>
+      </div>
+      <div class="sca-box green">
+        <h4 data-en="Integration Timeline">整合時程</h4>
+        <ul>
+          <li data-en="First full quarter post-CyberArk close">CyberArk收購後首個完整季度</li>
+          <li data-en="Profitability synergies running 3-6 months ahead; expected to converge with group level within 12-18 months">獲利能力綜效提前3-6個月，預計12-18個月內與集團一致</li>
+          <li data-en="Prisma Cloud &rarr; Cortex Cloud migration needs another 6 months to complete">Prisma Cloud → Cortex Cloud遷移還需6個月才能完成</li>
+          <li data-en="SBC as % of revenue expected to normalize to pre-acquisition levels within 12-18 months">SBC佔營收比重預期12-18個月內回到收購前水準</li>
+        </ul>
+      </div>
+      <div class="sca-box orange">
+        <h4 data-en="Financial Commitments &amp; Costs">財務承諾與成本</h4>
+        <ul>
+          <li data-en="Q3 SBC at 17% of revenue (up sequentially, mainly from M&amp;A)">Q3 SBC佔營收17%（季增，主因併購）</li>
+          <li data-en="GAAP net loss per share of $(0.22) (includes one-time transaction/integration costs)">GAAP每股虧損$0.22（含交易/整合一次性費用）</li>
+          <li data-en="Non-GAAP EPS of $0.85">Non-GAAP EPS $0.85</li>
+          <li data-en="300+ IT vendors identified for consolidation, ~20% already disposed">已識別300+個IT供應商可整併，已處置約20%</li>
+          <li data-en="40+ new facilities from acquisitions awaiting consolidation">40+個新增設施（辦公空間）待整併</li>
+        </ul>
+      </div>
+      <div class="sca-box red">
+        <h4 data-en="Unverified / Undisclosed">尚待驗證 / 未揭露</h4>
+        <ul>
+          <li data-en="CyberArk&#39;s individual product-line ARR contribution has never been broken out">CyberArk個別產品線ARR貢獻未拆分</li>
+          <li data-en="Chronosphere&#39;s 50%+ QoQ growth &mdash; the share attributable to the single-customer event was not quantified">Chronosphere單季逾50%環比成長中，單一客戶事件佔比未量化</li>
+          <li data-en="Line-of-business segment disclosure will not resume until FY2027">FY2027起才恢復依業務線分部揭露</li>
+          <li data-en="Verifying organic vs. M&amp;A growth over the next two quarters will be harder">本季後續兩季併購 vs 有機成長更難獨立驗證</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="price-band">
+      <div class="section-title" data-en="Path to Profitability Convergence">獲利能力收斂路徑</div>
+      <div class="band-label" data-en="Current state: integration-period dilution (SBC at 17% of revenue, GAAP net loss)">現況：整合期稀釋（SBC佔營收17%，GAAP轉虧）</div>
+      <div class="band-bar band-floor"><span data-en="Current &mdash; SBC 17% of revenue">現況 — SBC 17% of revenue</span><span data-en="GAAP EPS $(0.22)">GAAP EPS &nbsp;$(0.22)</span></div>
+      <div style="text-align:center; color:#888; padding: 4px 0; font-size:12px;" data-en="&#9660; SBC to normalize to pre-acquisition levels within 12-18 months; CyberArk profitability to converge with group level within 3-6 months &#9660;">▼ 12–18個月內SBC回到收購前水準；CyberArk獲利能力3–6個月內追平集團 ▼</div>
+      <div class="band-bar band-ceiling"><span data-en="Target &mdash; FY2028 Free Cash Flow Margin 40%">目標 — FY2028 自由現金流利潤率 40%</span><span data-en="Non-GAAP EPS $0.85 (Q3 actual)">Non-GAAP EPS $0.85（Q3實際）</span></div>
+      <div class="band-label" data-en="The target range still depends on synergies materializing as planned; no interim (FY2027) product-level metrics exist yet to verify it">目標區間仍需仰賴綜效如期兌現，尚未有中期(FY2027)產品層級指標驗證</div>
+      <hr class="divider">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+        <div>
+          <div style="font-size:11px; font-weight:700; color:#1d4ed8; margin-bottom:6px; text-transform:uppercase;" data-en="What This Means for PANW">對 PANW 的意義</div>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8; color:#333;">
+            <li data-en="Short-term GAAP earnings dilution in exchange for long-term breadth in identity and observability markets">短期稀釋GAAP獲利，換取身份/可觀測性市場的長期廣度</li>
+            <li data-en="Proves large-scale M&amp;A integration capability, paving the way for larger future acquisitions">證明大型併購整合能力，為後續更大規模收購鋪路</li>
+            <li data-en="Synergies arriving ahead of schedule reinforce credibility of the FY2028 40% FCF margin target">綜效提前達成強化FY2028 40% FCF利潤率目標的可信度</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:700; color:#c2600a; margin-bottom:6px; text-transform:uppercase;" data-en="What This Means for Investors">對投資人的意義</div>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8; color:#333;">
+            <li data-en="Nearly 20% of the $8.13B NGS ARR comes from M&amp;A &mdash; organic growth must be assessed separately">NGS ARR $8.13B中近20%來自併購，需拆分看有機成長</li>
+            <li data-en="Segment disclosure will not resume until FY2027, narrowing the verification window for this fiscal year">分部揭露將於FY2027才恢復，本財年驗證窗口變窄</li>
+            <li data-en="Whether Chronosphere&#39;s high growth is sustainable depends on whether the single-customer event repeats">Chronosphere高成長是否可持續，取決於單一客戶事件的重複性</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-en="Core Open Questions on CyberArk Integration Execution">CyberArk 整合執行力的核心疑問</div>
+      <p data-en="Management emphasized that it &quot;did not break&quot; CyberArk and that profitability synergies arrived ahead of schedule, but the call also contained rare admissions:<br><br>
+      <strong style=&quot;color:#1a1a2e;&quot;>1) CyberArk&#39;s current contribution to results trails the other products</strong> (in Nikesh&#39;s own words)<br>
+      <strong style=&quot;color:#1a1a2e;&quot;>2) The Prisma Cloud &rarr; Cortex Cloud migration still needs six more months to complete</strong><br>
+      <strong style=&quot;color:#1a1a2e;&quot;>3) CyberArk and Chronosphere&#39;s individual ARR figures have never been broken out &mdash; only the combined number is disclosed</strong><br><br>
+      Management used highly emotional language (&quot;existential&quot;) to vouch for the integration, yet offered no verifiable interim product-level metrics &mdash; segment disclosure will not resume until FY2027. This information vacuum spans exactly the critical integration window, and is the single most important open question from this call.">管理層強調「沒有把CyberArk搞砸」且獲利綜效提前達成，但法說會中同時罕見坦承：<br><br>
+      <strong style="color:#1a1a2e;">① CyberArk目前對業績的貢獻不如其他產品</strong>（Nikesh原話）<br>
+      <strong style="color:#1a1a2e;">② Prisma Cloud遷移到Cortex Cloud的工作仍需六個月才能完成</strong><br>
+      <strong style="color:#1a1a2e;">③ CyberArk與Chronosphere的個別ARR拆分從未被揭露，只給合併數字</strong><br><br>
+      管理層用高度情緒化語言（「existential」）為整合背書，卻沒有提供任何可驗證的中期產品層級指標，直到FY2027才會恢復分部揭露——這段「資訊真空期」恰好覆蓋整個整合關鍵期，是本次法說會最需要追問的未解問題。</p>
+    </div>
+  </div>
+
+  <!-- Tech Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title" data-en="FQ3 Revenue Mix: Product vs. Services">FQ3 營收結構：Product vs Services</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name" data-en="Services Revenue<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(subscription/support)</span>">Services 營收<br><span style="color:#666;font-size:11px;font-weight:400;">(訂閱/支援)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#1565c0;" data-en="$2.4B &nbsp;+31% YoY">$24億 &nbsp;+31% YoY</div></div>
+        <div class="rev-val">80%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Product Revenue<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(hardware/software licenses)</span>">Product 營收<br><span style="color:#666;font-size:11px;font-weight:400;">(硬體/軟體授權)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:25%; background:#7b1fa2;" data-en="$594M &nbsp;+31% YoY">$5.94億 &nbsp;+31% YoY</div></div>
+        <div class="rev-val">20%</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="NGS ARR Key Product Lines (as disclosed, not mutually exclusive)">NGS ARR 主力產品線（依揭露口徑，非互斥加總）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">SASE</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#0d47a1;" data-en="$1.6B &nbsp;+40% YoY">$16億 &nbsp;+40% YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="XSIAM (Cortex)">XSIAM（Cortex）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:38%; background:#1976d2;" data-en="$600M+ &nbsp;+100% YoY">$6億+ &nbsp;+100% YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Chronosphere (Observability)">Chronosphere（可觀測性）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:28%; background:#6a1b9a; white-space:nowrap;" data-en="$300M+ QoQ +50%">$3億+ QoQ+50%</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Prisma AIRS">Prisma AIRS</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:14%; background:#e65100; white-space:nowrap;" data-en="&rarr;$100M">→$1億</div></div>
+        <div class="rev-val" data-en="300+ cust.">300+客戶</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Four Platform Pillars">四大平台支柱</div>
+    <div class="tech-grid">
+      <div class="tech-card dram">
+        <h4 data-en="Network Security">網路安全（Network Security）</h4>
+        <ul>
+          <li data-en="Share of total revenue: ~70%, largest business unit"><strong style="color:#1a1a2e;">佔總營收</strong>：約70%，最大業務單位</li>
+          <li data-en="Hardware firewalls: best quarter in a decade, NGFW bookings up nearly 40% YoY"><strong style="color:#1a1a2e;">硬體防火牆</strong>：十年最佳單季，NGFW booking近+40% YoY</li>
+          <li data-en="SASE ARR: $1.6B, +40% YoY, more than 2x market growth rate"><strong style="color:#1a1a2e;">SASE ARR</strong>：$16億，+40% YoY，市場成長率2倍以上</li>
+          <li data-en="Software firewalls: ARR +25% YoY"><strong style="color:#1a1a2e;">軟體防火牆</strong>：ARR +25% YoY</li>
+          <li data-en="Secure Browser: 11 million licenses, a 4x increase"><strong style="color:#1a1a2e;">Secure Browser</strong>：1,100萬授權，4倍增</li>
+          <li data-en="Hardware pricing: 10% price increase implemented in April, further increases still under evaluation"><strong style="color:#1a1a2e;">硬體漲價</strong>：4月已實施10%漲價，仍評估進一步調漲</li>
+        </ul>
+      </div>
+      <div class="tech-card nand">
+        <h4 data-en="Cortex (SOC / XSIAM)">Cortex（SOC / XSIAM）</h4>
+        <ul>
+          <li data-en="ARR: $600M+, +100% YoY, 740 customers"><strong style="color:#1a1a2e;">ARR</strong>：$6億+，YoY +100%，740位客戶</li>
+          <li data-en="MTTR: majority of customers now under 10 minutes"><strong style="color:#1a1a2e;">MTTR</strong>：多數客戶已降至10分鐘內</li>
+          <li data-en="Telemetry scale: 17PB+ of data processed daily"><strong style="color:#1a1a2e;">遙測規模</strong>：每日處理17PB+資料</li>
+          <li data-en="Sensors: 125M+ across network, endpoint, and cloud"><strong style="color:#1a1a2e;">感測器</strong>：橫跨網路/端點/雲端逾1.25億個</li>
+          <li data-en="Launched 42 months ago, positioned as a disruptive SOC platform"><strong style="color:#1a1a2e;">上線時間</strong>：42個月前推出，定位為顛覆式SOC</li>
+        </ul>
+      </div>
+      <div class="tech-card hbm">
+        <h4 data-en="AI Security (Prisma AIRS / Unit 42)">AI 資安（Prisma AIRS / Unit 42）</h4>
+        <ul>
+          <li data-en="Prisma AIRS customers: 300+ in Q3 (up from 100 in Q2), fastest-growing product in company history"><strong style="color:#1a1a2e;">Prisma AIRS客戶數</strong>：Q3達300+（Q2為100），公司史上成長最快產品</li>
+          <li data-en="ARR target: visibility toward $100M within the next couple of quarters"><strong style="color:#1a1a2e;">ARR目標</strong>：未來幾季內看向$1億</li>
+          <li data-en="Portkey acquisition: AI gateway processing trillions of tokens/month, strengthening real-time agent-to-agent policy enforcement"><strong style="color:#1a1a2e;">Portkey收購</strong>：AI Gateway，處理數兆token/月，強化agent-to-agent即時政策執行</li>
+          <li data-en="Unit 42 pivot: focused on frontier AI defense, 1,200+ customer touchpoints, 800 meetings"><strong style="color:#1a1a2e;">Unit 42轉型</strong>：聚焦前沿AI防禦，1,200+客戶接觸、800場會議</li>
+          <li data-en="Koi acquisition: agentic endpoint security, 150+ interested customers, immaterial Q3 financial contribution"><strong style="color:#1a1a2e;">Koi收購</strong>：agentic端點資安，150+客戶興趣，Q3財務貢獻不重大</li>
+        </ul>
+      </div>
+      <div class="tech-card pkg">
+        <h4 data-en="Identity Security (CyberArk)">身份安全（Identity / CyberArk）</h4>
+        <ul>
+          <li data-en="Idira: next-gen identity platform launched last month, democratizing PAM controls and covering agentic identities"><strong style="color:#1a1a2e;">Idira</strong>：次世代身份平台，上月剛推出，民主化PAM控制並涵蓋agentic身份</li>
+          <li data-en="Cross-org selling: ~1,000 joint CyberArk &times; PANW customer engagements initiated"><strong style="color:#1a1a2e;">跨組織銷售</strong>：已啟動約1,000場CyberArk×PANW聯合客戶會議</li>
+          <li data-en="Profitability synergies: running 3-6 months ahead, expected within 12-18 months"><strong style="color:#1a1a2e;">獲利綜效</strong>：提前3-6個月，預計12-18個月內達成</li>
+          <li data-en="Systems integration: 1 critical system migrated, 4 more planned over the next 4 months"><strong style="color:#1a1a2e;">系統整合</strong>：已遷移1個關鍵系統，未來4個月再遷4個</li>
+          <li data-en="Current state: Nikesh acknowledged contribution trails other product lines"><strong style="color:#1a1a2e;">現況</strong>：Nikesh坦承貢獻低於其他產品線</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title" data-en="AI Threat &amp; Opportunity Landscape">AI 威脅與機會場景</div>
+      <p data-en="<strong style=&quot;color:#1a1a2e;&quot;>Agentic attack speed</strong>: Unit 42 simulated a frontier model (like Mythos) completing an end-to-end ransomware campaign in 25 minutes, far faster than the days typical enterprises need to detect a breach; management expects more sophisticated automated attackers within 3-6 months, and within a few years fully autonomous agentic AI capable of scanning environments, generating bespoke exploits, and executing full attack chains.<br><br>
+        <strong style=&quot;color:#1a1a2e;&quot;>AI data center buildout</strong>: the data center construction wave is driving firewall hardware and traffic-inspection demand, pushing NGFW bookings to their best quarter in a decade, while component shortages are pushing up costs and prices (a 10% increase already implemented in April).<br><br>
+        <strong style=&quot;color:#1a1a2e;&quot;>Agentic endpoint ecosystem</strong>: vibe-coding tools, MCP servers, and hooks/scripts are creating a &quot;new endpoint ecosystem layered on the old one&quot; &mdash; the core rationale behind the Koi acquisition.<br><br>
+        <strong style=&quot;color:#1a1a2e;&quot;>Observability &times; security convergence</strong>: AI-native customers (including two of the top five frontier labs) have adopted Chronosphere; long-term integration with XSIAM will happen through agentics and cross-pollinated data, but today the two remain &quot;distinct specialized domains&quot; that have not yet truly converged.">
+        <strong style="color:#1a1a2e;">Agentic 攻擊速度</strong>：Unit 42模擬前沿模型（如Mythos）可於25分鐘內完成端到端勒索軟體攻擊，遠快於企業平均需數天才能偵測入侵；管理層預期3-6個月內將出現更精密的自動化攻擊者，數年內agentic AI將可全自動掃描環境、產生客製化漏洞利用並執行完整攻擊鏈。<br><br>
+        <strong style="color:#1a1a2e;">AI資料中心建置</strong>：資料中心新建潮推升防火牆硬體與流量檢測需求，帶動NGFW booking創十年最佳單季，同時零組件短缺推升成本與售價（4月已漲價10%）。<br><br>
+        <strong style="color:#1a1a2e;">Agentic端點生態系</strong>：vibe coding工具、MCP servers、hooks/scripts催生「舊端點之上的新端點生態系」，是收購Koi的核心動機。<br><br>
+        <strong style="color:#1a1a2e;">可觀測性 × 資安融合</strong>：AI原生客戶（含前五大前沿實驗室中的兩家）採用Chronosphere，長期將透過agentics與資料交叉污染與XSIAM深度整合，但目前仍是「各自獨立的專業領域」，尚未真正融合。
+      </p>
+    </div>
+  </div>
+
+  <!-- Risk Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title" data-en="Risk Matrix: Disclosed vs. Undisclosed in the Call">風險矩陣：法說會中已揭露 vs. 未揭露</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Chronosphere&#39;s High Growth Is Highly Concentrated in a Single Customer">Chronosphere 高成長高度集中於單一客戶</div>
+        <span data-en="This quarter&#39;s Chronosphere ARR grew over 50% QoQ, which the CFO explicitly attributed to a single existing LLM customer sharply increasing consumption during a vendor migration. If this is a one-time event, QoQ growth rates could fall sharply in coming quarters &mdash; the market risks overestimating sustainability by linearly extrapolating this quarter&#39;s rate.">本季Chronosphere ARR環比增逾50%，CFO明確指出主因是一位既有LLM客戶因供應商遷移而用量大增。若此事件為一次性，未來幾季環比成長率恐大幅回落，市場若將本季增速線性外推將高估其可持續性。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="CyberArk Underperforms Expectations, but Incomplete Integration Is Wrapped in a Positive Narrative">CyberArk貢獻低於預期，整合尚未完成卻被正面敘事包裝</div>
+        <span data-en="Nikesh personally acknowledged CyberArk&#39;s contribution trails other products and that the Prisma Cloud migration still needs six more months, yet the overall narrative remains dominated by positive, emotionally charged language such as &quot;exceeding internal benchmarks&quot; and &quot;existential.&quot; CyberArk&#39;s individual financial figures have never been broken out at the reporting level.">Nikesh親口承認CyberArk貢獻不如其他產品、Prisma Cloud遷移仍需六個月，但整體敘事仍以「超越內部預期」、「existential」等正面/情緒化語言主導，財報層級的CyberArk個別數字從未拆分揭露。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Rising Component Costs and Hardware Price Increases &mdash; Demand Elasticity Unknown">零組件成本上升與硬體漲價的需求彈性未知</div>
+        <span data-en="Management explicitly flagged rising memory/storage component costs, already implemented a 10% hardware price increase in April, and continues to evaluate further increases. Hardware is only ~10% of revenue (a natural hedge), but whether this quarter&#39;s near-40% hardware booking growth reflects genuine demand or pre-price-hike stockpiling remains to be verified next quarter.">管理層明確提及記憶體/儲存零組件成本上升，已於4月實施10%硬體漲價，並持續評估進一步漲價；硬體僅佔營收10%（自然避險），但本季硬體booking成長近40%究竟是真實需求還是漲價前搶購效應，尚待下季驗證。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Segment Disclosure Is Being Reduced Right During Two Major Integration Periods">分部揭露即將收斂，恰逢兩起大型收購整合期</div>
+        <span data-en="The company will stop breaking out core vs. acquired business performance and will not resume line-of-business segment disclosure until FY2027. During the critical integration year for CyberArk and Chronosphere, investors&#39; ability to independently verify organic growth will be materially reduced.">公司將停止拆分核心業務vs收購業務的表現，並延至FY2027才恢復依業務線分部揭露；在CyberArk、Chronosphere整合的關鍵一年，投資人獨立驗證有機成長率的能力將顯著下降。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="The GAAP&ndash;Non-GAAP Earnings Gap Is Widening">GAAP與Non-GAAP利潤的落差擴大</div>
+        <span data-en="This quarter posted a GAAP net loss per share of $(0.22) versus Non-GAAP EPS of $0.85, with SBC rising sequentially to 17% of revenue. Management&#39;s promise to normalize this within 12-18 months remains an unverified forward-looking commitment.">本季GAAP每股虧損$0.22，Non-GAAP EPS達$0.85，SBC佔營收比重季增至17%，管理層承諾12-18個月內回到收購前水準，屬尚待驗證的前瞻承諾。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="An Internal Contradiction in the &quot;Fight AI with AI&quot; Narrative">「以AI對抗AI」敘事的內部矛盾</div>
+        <span data-en="Management twice cited a 25% false-positive rate in frontier AI models to argue that AI cannot defend autonomously on its own &mdash; but the same logic should, in principle, apply to the reliability of the company&#39;s own agentic detection systems like XSIAM, a point never turned inward during the call.">管理層兩度提及前沿AI模型的假陽性率高達25%，用以論證「AI不能單獨完成防禦」，但同一套邏輯理論上也適用於XSIAM等自家agentic偵測系統的可靠性，法說會中未被自我檢視。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Capital Allocation: Buyback Pace Looks Conservative Relative to Strong Free Cash Flow">資金配置：強勁自由現金流下回購步調相對保守</div>
+        <span data-en="Q3 adjusted free cash flow reached $910M (TTM $4.08B, 38.5% margin), yet only $1B was used for buybacks this quarter, leaving just $1B of remaining authorization &mdash; with no signal yet of a new, larger authorization.">Q3調整後自由現金流達$9.1億（TTM $40.8億，利潤率38.5%），但本季僅動用$10億回購，剩餘額度僅$10億，尚無新一輪擴大授權的訊號。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low" data-en="Low">低</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="CEO Uses Highly Personal Language to Vouch for the Integration">CEO高度個人化語言為併購整合背書</div>
+        <span data-en="Nikesh repeatedly used emotionally charged language such as &quot;existential&quot; to underscore the stakes of the CyberArk integration. While this reflects management conviction, it is also a signal worth watching for a possible incentive to downplay real integration difficulties.">Nikesh多次用「existential」等情緒化語言強調CyberArk整合成敗，雖反映管理層決心，但也提示需留意管理層是否有強烈誘因傾向於淡化整合過程中的實際困難。</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>
