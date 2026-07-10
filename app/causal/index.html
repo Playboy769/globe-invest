@@ -152,7 +152,7 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 #cf-edges{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 #cf-nodes,#cf-labels{position:absolute;top:0;left:0;width:32000px;height:32000px;pointer-events:none}
 
-.cf-node{position:absolute;pointer-events:auto;background:#fff;border:1px solid #d6d6d6;border-radius:9px;padding:6px 12px;font-size:13px;line-height:1.45;color:#0a0a0a;min-width:54px;text-align:center;cursor:grab;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow .16s ease,border-color .16s ease;word-break:break-word;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei','Heiti TC','WenQuanYi Micro Hei',sans-serif}
+.cf-node{position:absolute;pointer-events:auto;background:#fff;border:1px solid #d6d6d6;border-radius:9px;padding:6px 12px;font-size:13px;line-height:1.45;color:#0a0a0a;min-width:54px;text-align:left;cursor:grab;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow .16s ease,border-color .16s ease;word-break:break-word;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei','Heiti TC','WenQuanYi Micro Hei',sans-serif}
 .cf-node:hover{border-color:#aaa;box-shadow:0 4px 14px rgba(0,0,0,0.07)}
 .cf-node.sel{border-color:#0a0a0a;box-shadow:0 5px 20px rgba(0,0,0,0.13)}
 .cf-node.editing{cursor:text;border-color:#0a0a0a}
@@ -310,7 +310,6 @@ body.dark .cf-color-custom:hover{color:#6aa0ff;border-color:#6aa0ff;background:#
 .cf-node.text-node.sel{border-color:#0a0a0a;background:rgba(255,255,255,0.7);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .cf-node.text-node.editing{border-color:#0a0a0a;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .cf-node.text-node .cf-port{opacity:0!important;pointer-events:none}
-.cf-node.text-node .cf-node-resize{display:none}
 .cf-node.table-node{padding:0;min-width:80px;overflow:visible;cursor:default;background:#fff;border-radius:9px;user-select:none}
 .cf-node.table-node:hover{border-color:#bbb;box-shadow:0 4px 14px rgba(0,0,0,.07)}
 .cf-node.table-node.sel{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,.18)}
@@ -325,10 +324,14 @@ body.dark .cf-color-custom:hover{color:#6aa0ff;border-color:#6aa0ff;background:#
 .cf-tbl tr:first-child td:last-child{border-top-right-radius:8px}
 .cf-tbl tr:last-child td:first-child{border-bottom-left-radius:8px}
 .cf-tbl tr:last-child td:last-child{border-bottom-right-radius:8px}
-.cf-tbl td.cf-tbl-active{background:#ebf3ff!important;box-shadow:inset 0 0 0 2px #4a88dd}
-.cf-tbl td[contenteditable="true"]{background:#f0f6ff!important;box-shadow:inset 0 0 0 2px #4a88dd;cursor:text;user-select:text}
+.cf-tbl td.cf-tbl-active{box-shadow:inset 0 0 0 1px #bbb}
+.cf-tbl td:has(.cf-tbl-val[contenteditable="true"]){box-shadow:inset 0 0 0 1px #999;cursor:text}
+.cf-tbl-val{display:block;min-height:1.6em;outline:none}
+.cf-tbl-val[contenteditable="true"]{cursor:text;user-select:text}
 .cf-col-resizer{position:absolute;right:-3px;top:0;bottom:0;width:6px;cursor:col-resize;z-index:3;border-radius:3px;transition:background .1s}
 .cf-col-resizer:hover,.cf-col-resizer.resizing{background:rgba(74,136,221,.45)}
+.cf-row-resizer{position:absolute;left:0;right:0;bottom:-3px;height:6px;cursor:row-resize;z-index:3;border-radius:3px;transition:background .1s}
+.cf-row-resizer:hover,.cf-row-resizer.resizing{background:rgba(74,136,221,.45)}
 
 /* ── Notion-style hover affordances ──────────────────────── */
 .cf-tbl-addcol,.cf-tbl-addrow{position:absolute;opacity:0;pointer-events:none;transition:opacity .14s;display:flex;align-items:center;justify-content:center;background:transparent;z-index:2;box-sizing:border-box}
@@ -441,7 +444,7 @@ body.dark .cf-diagref-picker-item:hover{background:#252525}
 body.dark .cf-diagref-picker-folder{color:#555}
 
 /* ── Divider (pure visual line to split the canvas into zones) ── */
-.cf-divider{position:absolute}
+.cf-divider{position:absolute;pointer-events:auto}
 .cf-divider.h{cursor:grab}
 .cf-divider.v{cursor:grab}
 .cf-divider .cf-divider-line{position:absolute;background:#c4c4c4;border-radius:2px}
@@ -483,8 +486,8 @@ body.dark .cf-tbl td{color:#e8e8e8}
 body.dark .cf-tbl tr:hover td{background:#1c1c1c}
 body.dark .cf-tbl tr:first-child td{background:none}
 body.dark .cf-tbl tr:first-child:hover td{background:#1c1c1c}
-body.dark .cf-tbl td.cf-tbl-active{background:#1a2a3a!important;box-shadow:inset 0 0 0 2px #5090d8}
-body.dark .cf-tbl td[contenteditable="true"]{background:#162436!important;box-shadow:inset 0 0 0 2px #5090d8}
+body.dark .cf-tbl td.cf-tbl-active{box-shadow:inset 0 0 0 1px #555}
+body.dark .cf-tbl td:has(.cf-tbl-val[contenteditable="true"]){box-shadow:inset 0 0 0 1px #777}
 body.dark .cf-tbl-addcol,body.dark .cf-tbl-addrow{color:#555}
 body.dark .cf-tbl-addcol:hover,body.dark .cf-tbl-addrow:hover{color:#5090d8;background:#1a2a3a;border-color:#5090d8}
 body.dark .cf-tbl-delrow,body.dark .cf-tbl-delcol{background:#252525;border-color:#3a3a3a;color:#555}
@@ -2078,15 +2081,26 @@ function buildNodes() {
       tbl.appendChild(tbody);
       for(let r=0;r<td.r;r++){
         const tr=document.createElement('tr');
+        if(td.rowHeights&&td.rowHeights[r])tr.style.height=td.rowHeights[r]+'px';
         for(let c=0;c<td.c;c++){
           const cell=document.createElement('td');
-          cell.textContent=(td.cells[r]&&td.cells[r][c]!=null)?td.cells[r][c]:'';
           cell.dataset.r=r; cell.dataset.c=c;
           if(td.align==='center'||td.align==='right')cell.style.textAlign=td.align;
+          // The actual value lives in its own span — editTableCell() edits only
+          // this span (not the whole <td>), so the decorative delCol/delRow
+          // buttons below (siblings, absolutely positioned outside the cell's
+          // visible box) never bleed their own text into the stored value.
+          const valSpan=document.createElement('span'); valSpan.className='cf-tbl-val';
+          valSpan.textContent=(td.cells[r]&&td.cells[r][c]!=null)?td.cells[r][c]:'';
+          cell.appendChild(valSpan);
           // column resizer on every cell (visible only on hover in CSS)
           const rsz=document.createElement('div');rsz.className='cf-col-resizer';
           rsz.addEventListener('pointerdown',ev=>{ev.stopPropagation();startColResize(n.id,c,ev);});
           cell.appendChild(rsz);
+          // row resizer on every cell too (bottom edge, spans the row's height)
+          const rrsz=document.createElement('div');rrsz.className='cf-row-resizer';
+          rrsz.addEventListener('pointerdown',ev=>{ev.stopPropagation();startRowResize(n.id,r,ev);});
+          cell.appendChild(rrsz);
           if(r===0){
             const delCol=document.createElement('div');delCol.className='cf-tbl-delcol';delCol.textContent='−';delCol.title='Delete column';
             delCol.addEventListener('pointerdown',ev=>ev.stopPropagation());
@@ -2121,10 +2135,8 @@ function buildNodes() {
       if (n.color) applyNodeColorAttr(d,n.color);
       if (n.w) d.style.width=n.w+'px';
       if (n.bh) { d.style.height=n.bh+'px'; d.classList.add('fixed-h'); }
-      if (!n.isText) {
-        const rh=document.createElement('div'); rh.className='cf-node-resize';
-        rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
-      }
+      const rh=document.createElement('div'); rh.className='cf-node-resize';
+      rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
     }
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
@@ -2136,12 +2148,12 @@ function buildNodes() {
     if(n.isTable){
       d.addEventListener('pointerdown',ev=>{d._wasSel=_sel&&_sel.type==='node'&&_sel.id===n.id;onNodeDown(n.id,ev);});
       d.addEventListener('click',ev=>{
-        if(ev.target.closest('.cf-col-resizer')||ev.target.closest('.cf-tbl-addcol')||ev.target.closest('.cf-tbl-addrow')||ev.target.closest('.cf-tbl-delrow')||ev.target.closest('.cf-tbl-delcol'))return;
+        if(ev.target.closest('.cf-col-resizer')||ev.target.closest('.cf-row-resizer')||ev.target.closest('.cf-tbl-addcol')||ev.target.closest('.cf-tbl-addrow')||ev.target.closest('.cf-tbl-delrow')||ev.target.closest('.cf-tbl-delcol'))return;
         const cell=ev.target.closest('.cf-tbl td');
         if(cell&&d._wasSel){ev.stopPropagation();editTableCell(n.id,+cell.dataset.r,+cell.dataset.c);}
       });
       d.addEventListener('dblclick',ev=>{
-        if(ev.target.closest('.cf-col-resizer')||ev.target.closest('.cf-tbl-addcol')||ev.target.closest('.cf-tbl-addrow')||ev.target.closest('.cf-tbl-delrow')||ev.target.closest('.cf-tbl-delcol'))return;
+        if(ev.target.closest('.cf-col-resizer')||ev.target.closest('.cf-row-resizer')||ev.target.closest('.cf-tbl-addcol')||ev.target.closest('.cf-tbl-addrow')||ev.target.closest('.cf-tbl-delrow')||ev.target.closest('.cf-tbl-delcol'))return;
         ev.stopPropagation();
         const cell=ev.target.closest('.cf-tbl td');
         if(cell)editTableCell(n.id,+cell.dataset.r,+cell.dataset.c);
@@ -2390,12 +2402,35 @@ function startColResize(nodeId, colIdx, ev0) {
   document.addEventListener('pointermove',onMove);
   document.addEventListener('pointerup',onUp);
 }
-function tableAddRow(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();n.td.cells.push(Array(n.td.c).fill(''));n.td.r++;renderAll();save();}
-function tableDelRow(id){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(n.td.r-1,1);n.td.r--;renderAll();save();}
+function tableAddRow(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();n.td.cells.push(Array(n.td.c).fill(''));n.td.r++;if(n.td.rowHeights)n.td.rowHeights.push(null);renderAll();save();}
+function tableDelRow(id){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(n.td.r-1,1);n.td.r--;if(n.td.rowHeights)n.td.rowHeights.splice(n.td.r,1);renderAll();save();}
 function tableAddCol(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();for(let r=0;r<n.td.r;r++){if(!n.td.cells[r])n.td.cells[r]=[];while(n.td.cells[r].length<n.td.c)n.td.cells[r].push('');n.td.cells[r].push('');}n.td.c++;if(n.td.colWidths)n.td.colWidths.push(CF_TBL_DEFAULT_W);renderAll();save();}
 function tableDelCol(id){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(n.td.c-1,1);}n.td.c--;if(n.td.colWidths)n.td.colWidths.splice(n.td.c,1);renderAll();save();}
-function tableDelRowAt(id,rowIdx){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(rowIdx,1);n.td.r--;renderAll();save();}
+function tableDelRowAt(id,rowIdx){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(rowIdx,1);n.td.r--;if(n.td.rowHeights)n.td.rowHeights.splice(rowIdx,1);renderAll();save();}
 function tableDelColAt(id,colIdx){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(colIdx,1);}n.td.c--;if(n.td.colWidths)n.td.colWidths.splice(colIdx,1);renderAll();save();}
+function startRowResize(nodeId, rowIdx, ev0) {
+  ev0.preventDefault();
+  const n=byNode(nodeId); const el=_els[nodeId]; if(!n||!el)return;
+  if(!n.td.rowHeights)n.td.rowHeights=Array(n.td.r).fill(null);
+  const trEl=el.querySelector('.cf-tbl tbody tr:nth-child('+(rowIdx+1)+')');
+  const startY=ev0.clientY, startH=n.td.rowHeights[rowIdx]||(trEl?trEl.getBoundingClientRect().height/vt.s:36);
+  const rsz=ev0.target; rsz.classList.add('resizing');
+  function onMove(e){
+    const delta=(e.clientY-startY)/vt.s;
+    const h=Math.max(24,startH+delta);
+    n.td.rowHeights[rowIdx]=h;
+    if(trEl)trEl.style.height=h+'px';
+    n._w=el.offsetWidth; n._h=el.offsetHeight; drawEdges();
+  }
+  function onUp(){
+    rsz.classList.remove('resizing');
+    document.removeEventListener('pointermove',onMove);
+    document.removeEventListener('pointerup',onUp);
+    save();
+  }
+  document.addEventListener('pointermove',onMove);
+  document.addEventListener('pointerup',onUp);
+}
 function addEdge(from, to, fromSide, toSide) {
   const ex=G.edges.find(e=>e.from===from&&e.to===to);
   if(ex){select({type:'edge',id:ex.id});return;}
@@ -2734,16 +2769,22 @@ function startResize(id, ev) {
   ev.preventDefault(); ev.stopPropagation();
   const n=byNode(id),el=_els[id]; if(!n||!el)return;
   const sx=ev.clientX,sy=ev.clientY,r=el.getBoundingClientRect(),initW=r.width/vt.s,initH=r.height/vt.s;
-  if(!n.isBox)el.classList.add('fixed-h');
+  // Text labels are width-only: fixing a height would clip wrapped lines
+  // instead of letting the box grow to fit them, so only n.w is ever set —
+  // the box's height stays auto, following however many lines the current
+  // width wraps to.
+  const widthOnly=!!n.isText;
+  if(!n.isBox&&!widthOnly)el.classList.add('fixed-h');
   const mw=n.isBox?150:54,mh=n.isBox?90:34;
   const ox=n.x,oy=n.y;
   snapshot();
   function mv(e){
     let newW=Math.max(mw,initW+(e.clientX-sx)/vt.s);
-    let newH=Math.max(mh,initH+(e.clientY-sy)/vt.s);
-    const snapped=snapResizeBox(id,{x:ox,y:oy,w:newW,h:newH},{right:true,bottom:true},e.altKey);
+    let newH=widthOnly?initH:Math.max(mh,initH+(e.clientY-sy)/vt.s);
+    const snapped=snapResizeBox(id,{x:ox,y:oy,w:newW,h:newH},{right:true,bottom:!widthOnly},e.altKey);
     newW=snapped.w; newH=snapped.h;
-    n.w=newW;n.bh=newH;el.style.width=newW+'px';el.style.height=newH+'px';
+    n.w=newW;el.style.width=newW+'px';
+    if(!widthOnly){n.bh=newH;el.style.height=newH+'px';}
     n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();
   }
   function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);clearGuides();n._w=el.offsetWidth;n._h=el.offsetHeight;save();}
@@ -2835,40 +2876,43 @@ function editNode(id) {
 function editTableCell(nodeId, row, col) {
   const el=_els[nodeId]; if(!el)return;
   const n=byNode(nodeId); if(!n||!n.isTable)return;
-  // already editing this cell — skip
-  const prev=el.querySelector('.cf-tbl td[contenteditable="true"]');
-  if(prev){const pr=+prev.dataset.r,pc=+prev.dataset.c;if(pr===row&&pc===col)return;prev.blur();}
+  // already editing this cell — skip. The editable target is the value span,
+  // not the <td> itself (see cf-tbl-val below), so contentEditable is looked
+  // up there.
+  const prevVal=el.querySelector('.cf-tbl-val[contenteditable="true"]');
+  if(prevVal){const prevCell=prevVal.closest('td');const pr=+prevCell.dataset.r,pc=+prevCell.dataset.c;if(pr===row&&pc===col)return;prevVal.blur();}
   const cell=el.querySelector('.cf-tbl td[data-r="'+row+'"][data-c="'+col+'"]');
   if(!cell)return;
+  const val=cell.querySelector('.cf-tbl-val'); if(!val)return;
   // highlight active cell
   el.querySelectorAll('.cf-tbl td.cf-tbl-active').forEach(c=>c.classList.remove('cf-tbl-active'));
   cell.classList.add('cf-tbl-active');
   snapshot();
   _editing=true; el.classList.add('editing');
-  cell.contentEditable='true'; cell.focus();
-  const range=document.createRange(); range.selectNodeContents(cell);
+  val.contentEditable='true'; val.focus();
+  const range=document.createRange(); range.selectNodeContents(val);
   const s=window.getSelection(); s.removeAllRanges(); s.addRange(range);
   function goTo(r,c){
-    cell.blur();
+    val.blur();
     if(r>=0&&r<n.td.r&&c>=0&&c<n.td.c)setTimeout(()=>editTableCell(nodeId,r,c),15);
   }
   function done(){
-    _editing=false; el.classList.remove('editing'); cell.contentEditable='false';
+    _editing=false; el.classList.remove('editing'); val.contentEditable='false';
     cell.classList.remove('cf-tbl-active');
     if(!n.td.cells[row])n.td.cells[row]=[];
-    n.td.cells[row][col]=cell.textContent;
+    n.td.cells[row][col]=val.textContent;
     n._w=el.offsetWidth; n._h=el.offsetHeight;
     drawEdges(); placeTools(); save(); cu();
-    if(hasMojibake(cell.textContent))cfWarnMojibake(cell.textContent);
+    if(hasMojibake(val.textContent))cfWarnMojibake(val.textContent);
   }
   function onkey(ev){
-    if(ev.key==='Escape'){cell.textContent=(n.td.cells[row]&&n.td.cells[row][col])||'';cell.blur();}
+    if(ev.key==='Escape'){val.textContent=(n.td.cells[row]&&n.td.cells[row][col])||'';val.blur();}
     else if(ev.key==='Tab'){
       ev.preventDefault();
       if(!ev.shiftKey){
         if(col+1<n.td.c)goTo(row,col+1);
         else if(row+1<n.td.r)goTo(row+1,0);
-        else{const tCol=col;cell.blur();tableAddRow(nodeId);setTimeout(()=>editTableCell(nodeId,n.td.r-1,tCol),40);}
+        else{const tCol=col;val.blur();tableAddRow(nodeId);setTimeout(()=>editTableCell(nodeId,n.td.r-1,tCol),40);}
       } else {
         if(col-1>=0)goTo(row,col-1);
         else if(row-1>=0)goTo(row-1,n.td.c-1);
@@ -2877,12 +2921,12 @@ function editTableCell(nodeId, row, col) {
     else if(ev.key==='Enter'&&!ev.shiftKey){
       ev.preventDefault();
       if(row+1<n.td.r)goTo(row+1,col);
-      else{const tCol=col;cell.blur();tableAddRow(nodeId);setTimeout(()=>editTableCell(nodeId,n.td.r-1,tCol),40);}
+      else{const tCol=col;val.blur();tableAddRow(nodeId);setTimeout(()=>editTableCell(nodeId,n.td.r-1,tCol),40);}
     }
-    else if(ev.key==='ArrowUp'&&!ev.shiftKey&&window.getSelection().toString()===cell.textContent)goTo(row-1,col);
-    else if(ev.key==='ArrowDown'&&!ev.shiftKey&&window.getSelection().toString()===cell.textContent)goTo(row+1,col);
-    else if(ev.key==='ArrowLeft'&&window.getSelection().toString()===cell.textContent){ev.preventDefault();goTo(row,col-1);}
-    else if(ev.key==='ArrowRight'&&window.getSelection().toString()===cell.textContent){ev.preventDefault();goTo(row,col+1);}
+    else if(ev.key==='ArrowUp'&&!ev.shiftKey&&window.getSelection().toString()===val.textContent)goTo(row-1,col);
+    else if(ev.key==='ArrowDown'&&!ev.shiftKey&&window.getSelection().toString()===val.textContent)goTo(row+1,col);
+    else if(ev.key==='ArrowLeft'&&window.getSelection().toString()===val.textContent){ev.preventDefault();goTo(row,col-1);}
+    else if(ev.key==='ArrowRight'&&window.getSelection().toString()===val.textContent){ev.preventDefault();goTo(row,col+1);}
     ev.stopPropagation();
   }
   function onpaste(ev){
@@ -2906,8 +2950,8 @@ function editTableCell(nodeId, row, col) {
     cu();
     renderAll(); save();
   }
-  function cu(){cell.removeEventListener('blur',done);cell.removeEventListener('keydown',onkey);cell.removeEventListener('paste',onpaste);}
-  cell.addEventListener('blur',done); cell.addEventListener('keydown',onkey); cell.addEventListener('paste',onpaste);
+  function cu(){val.removeEventListener('blur',done);val.removeEventListener('keydown',onkey);val.removeEventListener('paste',onpaste);}
+  val.addEventListener('blur',done); val.addEventListener('keydown',onkey); val.addEventListener('paste',onpaste);
 }
 function editEdgeLabel(id) {
   const e=byEdge(id); if(!e)return;
@@ -3238,7 +3282,7 @@ function toggleShortcuts() {
 // ── Canvas-level interactions ──────────────────────────────
 const lasso=document.getElementById('cf-lasso');
 canvas.addEventListener('pointerdown', e => {
-  if(e.target.closest('.cf-node')||e.target.closest('.cf-tools')||e.target.closest('.cf-edge-label')||e.target.closest('#cf-dock2'))return;
+  if(e.target.closest('.cf-node')||e.target.closest('.cf-divider')||e.target.closest('.cf-tools')||e.target.closest('.cf-edge-label')||e.target.closest('#cf-dock2'))return;
   const hit=e.target.closest('[data-edge]');
   if(hit){select({type:'edge',id:hit.dataset.edge});return;}
   // Shift+drag → lasso
@@ -3259,7 +3303,7 @@ canvas.addEventListener('pointerdown', e => {
   document.addEventListener('pointerup',up);
 });
 canvas.addEventListener('dblclick', e => {
-  if(e.target.closest('.cf-node')||e.target.closest('.cf-tools')||e.target.closest('.cf-edge-label')||e.target.closest('[data-edge]')||e.target.closest('#cf-dock2'))return;
+  if(e.target.closest('.cf-node')||e.target.closest('.cf-divider')||e.target.closest('.cf-tools')||e.target.closest('.cf-edge-label')||e.target.closest('[data-edge]')||e.target.closest('#cf-dock2'))return;
   const w=s2w(e.clientX,e.clientY);
   if(e.altKey||_textMode){
     addTextLabel(w.x-55,w.y-19);
