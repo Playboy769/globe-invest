@@ -413,6 +413,32 @@ body.dark .cf-canvas-count{color:#8878a8}
 body.dark .cf-node.canvas-node .cf-node-text{color:#c0aee0}
 body.dark .cf-canvas-rename{color:#9080b0}
 
+/* ── Diagram reference node (links to another saved diagram) ── */
+.cf-node.diagramref-node{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:#f7f5ff;border:1.5px solid #c8b8e8;border-radius:12px;min-width:140px;min-height:90px}
+.cf-node.diagramref-node:hover{border-color:#a888d8;background:#f2eeff}
+.cf-node.diagramref-node.sel{border-color:#7a4fc0;box-shadow:0 0 0 2px rgba(122,79,192,.18)}
+.cf-diagramref-name{font-size:17px;font-weight:500;color:#6a4a9a;text-align:center;padding:0 10px;word-break:break-word;max-width:100%}
+.cf-node.diagramref-node.missing{background:#fdeceb;border-color:#e0a8a0;border-style:dashed}
+.cf-node.diagramref-node.missing .cf-diagramref-name{color:#b3564a}
+body.dark .cf-node.diagramref-node{background:#241e30;border-color:#5a4a7a}
+body.dark .cf-node.diagramref-node:hover{border-color:#7a68a0;background:#2a2238}
+body.dark .cf-node.diagramref-node.sel{border-color:#9a7ac0}
+body.dark .cf-diagramref-name{color:#c0aee0}
+body.dark .cf-node.diagramref-node.missing{background:#3a2420;border-color:#7a4a40}
+
+.cf-diagref-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;width:240px;padding:6px}
+.cf-diagref-picker-search{width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;border:1px solid #e5e5e5;border-radius:7px;padding:6px 8px;margin-bottom:5px;outline:none}
+.cf-diagref-picker-list{max-height:260px;overflow-y:auto}
+.cf-diagref-picker-item{padding:7px 10px;border-radius:7px;cursor:pointer;font-size:12px;color:#444;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.cf-diagref-picker-item:hover{background:#f5f5f5}
+.cf-diagref-picker-folder{color:#bbb;font-size:10px;flex-shrink:0}
+.cf-diagref-picker-empty{padding:14px 10px;font-size:11.5px;color:#bbb;text-align:center}
+body.dark .cf-diagref-picker{background:#1a1a1a;border-color:#2a2a2a;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+body.dark .cf-diagref-picker-search{background:#111;border-color:#333;color:#ddd}
+body.dark .cf-diagref-picker-item{color:#aaa}
+body.dark .cf-diagref-picker-item:hover{background:#252525}
+body.dark .cf-diagref-picker-folder{color:#555}
+
 /* ── Breadcrumb (nested-canvas navigation) ──────────────────── */
 #cf-breadcrumb{display:none;position:absolute;top:44px;left:14px;align-items:center;gap:8px;background:#fff;border:1px solid #e4e4e4;border-radius:10px;padding:6px 12px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:45;font-size:12px}
 #cf-breadcrumb.on{display:flex}
@@ -752,6 +778,9 @@ body.dark #cf-url-ok:hover{background:#fff}
   <button class="cf-dock-btn" id="cf-add-canvas" title="Nested canvas">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="13" height="13" rx="2"/><path d="M8 21h13V8"/></svg>
   </button>
+  <button class="cf-dock-btn" id="cf-add-diagramref" title="Insert existing diagram">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15a4.5 4.5 0 0 0 6.8.5l2-2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M15 9a4.5 4.5 0 0 0-6.8-.5l-2 2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg>
+  </button>
   <button class="cf-dock-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 4 4 10 4"/><polyline points="14 4 20 4 20 10"/><polyline points="20 14 20 20 14 20"/><polyline points="10 20 4 20 4 14"/></svg>
   </button>
@@ -981,10 +1010,28 @@ function openFile(id) {
 }
 let _mojibakeNodeIds=new Set();
 
+// How many diagram-ref nodes (anywhere, incl. inside nested private canvases)
+// point directly at fileId — used to warn before deleting a referenced file.
+function countDiagramRefUsages(fileId) {
+  let count = 0;
+  function walk(graph) {
+    (graph.nodes||[]).forEach(n => {
+      if (n.isDiagramRef && n.refId === fileId) count++;
+      if (n.isCanvas && n.data) walk(n.data);
+    });
+  }
+  files.forEach(f => walk(f.data));
+  return count;
+}
 function deleteFile(id) {
   if (files.length === 1) { if (!confirm('Clear this diagram?')) return; files[0].data = emptyGraph(); openFile(files[0].id); return; }
   const f = files.find(x => x.id === id);
-  if (f && (f.data.nodes.length === 0 || confirm(`Delete "${f.name}"?`))) {
+  if (!f) return;
+  const refUses = countDiagramRefUsages(id);
+  const ok = refUses > 0
+    ? confirm(`此圖已被 ${refUses} 個地方以「插入既有 diagram」連結引用，刪除後那些節點會顯示為缺失。確定要刪除「${f.name}」嗎？`)
+    : (f.data.nodes.length === 0 || confirm(`Delete "${f.name}"?`));
+  if (ok) {
     const idx = files.findIndex(x => x.id === id);
     files.splice(idx, 1);
     if (activeId === id) openFile(files[Math.min(idx, files.length-1)].id);
@@ -1075,6 +1122,91 @@ function showFolderPicker(fileId,anchorEl){
     const pr=pk.getBoundingClientRect();
     if(pr.bottom>window.innerHeight-8){pk.style.top='';pk.style.bottom=(window.innerHeight-rect.top+4)+'px';}
   });
+  setTimeout(()=>document.addEventListener('click',function h(e){
+    if(!pk.contains(e.target)){pk.remove();document.removeEventListener('click',h,{capture:true});}
+  },{capture:true}),10);
+}
+
+// ── Diagram-ref cycle detection ──────────────────────────────
+// Collects every file id transitively reachable from `graph` by following
+// isDiagramRef nodes, including ones nested inside private isCanvas sub-graphs.
+function collectDiagramRefIds(graph, seen, visitedFiles) {
+  (graph.nodes||[]).forEach(n=>{
+    if (n.isCanvas && n.data) collectDiagramRefIds(n.data, seen, visitedFiles);
+    else if (n.isDiagramRef && n.refId) {
+      seen.add(n.refId);
+      if (!visitedFiles.has(n.refId)) {
+        visitedFiles.add(n.refId);
+        const rf = files.find(f => f.id === n.refId);
+        if (rf) collectDiagramRefIds(rf.data, seen, visitedFiles);
+      }
+    }
+  });
+  return seen;
+}
+function reachableFileIds(startFileId) {
+  const f = files.find(x => x.id === startFileId); if (!f) return new Set();
+  return collectDiagramRefIds(f.data, new Set(), new Set([startFileId]));
+}
+// Which top-level file "owns" the graph currently being edited — the open
+// diagram itself normally, or the nearest diagram-ref target if nested
+// inside one (mirrors rootFile()'s logic).
+function currentOwnerFileId() {
+  for (let i=_canvasStack.length-1;i>=0;i--) { if (_canvasStack[i].refFile) return _canvasStack[i].refFile.id; }
+  return activeId;
+}
+function wouldCreateCycle(candidateId) {
+  const owner = currentOwnerFileId();
+  if (candidateId === owner) return true;
+  return reachableFileIds(candidateId).has(owner);
+}
+
+// ── Insert-existing-diagram picker ────────────────────────────
+function showDiagramInsertPicker(anchorEl) {
+  document.querySelector('.cf-diagref-picker')?.remove();
+  const owner = currentOwnerFileId();
+  const options = files.filter(f => f.id !== owner && !wouldCreateCycle(f.id));
+  const pk = document.createElement('div'); pk.className='cf-diagref-picker';
+  const search = document.createElement('input');
+  search.className='cf-diagref-picker-search'; search.placeholder='Search diagrams…'; search.autocomplete='off';
+  pk.appendChild(search);
+  const list = document.createElement('div'); list.className='cf-diagref-picker-list';
+  pk.appendChild(list);
+  function renderList(q) {
+    list.innerHTML='';
+    const ql = (q||'').trim().toLowerCase();
+    const shown = options.filter(f => !ql || f.name.toLowerCase().includes(ql));
+    if (!shown.length) {
+      const empty = document.createElement('div'); empty.className='cf-diagref-picker-empty';
+      empty.textContent = options.length ? '沒有符合的圖' : '沒有可插入的圖（會造成循環，或只有這一張）';
+      list.appendChild(empty);
+      return;
+    }
+    shown.forEach(f => {
+      const it = document.createElement('div'); it.className='cf-diagref-picker-item';
+      const nameEl=document.createElement('span'); nameEl.textContent=f.name;
+      it.appendChild(nameEl);
+      const fd = folders.find(x=>x.id===f.folderId);
+      if (fd) { const fEl=document.createElement('span'); fEl.className='cf-diagref-picker-folder'; fEl.textContent=fd.name; it.appendChild(fEl); }
+      it.addEventListener('click', ()=>{
+        const {x:cx,y:cy}=spawnPoint();
+        addDiagramRefNode(cx-110,cy-65,f.id);
+        pk.remove();
+      });
+      list.appendChild(it);
+    });
+  }
+  renderList('');
+  search.addEventListener('input', ()=>renderList(search.value));
+  document.body.appendChild(pk);
+  const rect=anchorEl.getBoundingClientRect();
+  pk.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.bottom+4}px`;
+  requestAnimationFrame(()=>{
+    const pr=pk.getBoundingClientRect();
+    if(pr.right>window.innerWidth-8) pk.style.left=(window.innerWidth-pr.width-8)+'px';
+    if(pr.bottom>window.innerHeight-8){pk.style.top='';pk.style.bottom=(window.innerHeight-rect.top+4)+'px';}
+  });
+  requestAnimationFrame(()=>search.focus());
   setTimeout(()=>document.addEventListener('click',function h(e){
     if(!pk.contains(e.target)){pk.remove();document.removeEventListener('click',h,{capture:true});}
   },{capture:true}),10);
@@ -1369,7 +1501,7 @@ function renderMinimap() {
     const isSel=_sel&&_sel.type==='node'&&_sel.id===n.id;
     let cls='cf-mm-node', extra='';
     if(n.isBox)cls+=' box';
-    else if(n.isCanvas)cls+=' canvas';
+    else if(n.isCanvas||n.isDiagramRef)cls+=' canvas';
     else if(n.isImage||n.isEmbed)cls+=' media';
     else if(n.isText)cls+=' text';
     else if(n.color){
@@ -1383,7 +1515,7 @@ function renderMinimap() {
     const mw=Math.max(w,n.isText?5:2), mh=Math.max(h,n.isText?2.2:2);
     s+='<rect class="'+cls+'"'+extra+' x="'+mx+'" y="'+my+'" width="'+mw+'" height="'+mh+'" rx="'+rx+'"/>';
   });
-  s+='<rect class="cf-mm-viewport" id="cf-mm-vp" x="0" y="0" width="0" height="0"/>';
+  s+='<rect class="cf-mm-viewport" id="cf-mm-vp" x="0" y="0" width="0" height="0" rx="3"/>';
   mmSvg.innerHTML=s;
   updateMinimapViewport();
 }
@@ -1556,7 +1688,10 @@ let _saveT;
 function save() {
   clearTimeout(_saveT);
   _saveT = setTimeout(() => {
-    const f = activeFile();
+    // rootFile()/rootG() stop climbing at the nearest diagram-ref boundary,
+    // so edits made while nested inside a linked diagram save into THAT
+    // file, not the diagram that merely points to it.
+    const f = rootFile();
     f.data = JSON.parse(JSON.stringify(rootG()));
     f.modified = Date.now();
     saveFiles(); renderFeed();
@@ -1613,22 +1748,52 @@ function toggleBoxCollapse(id){
 // object — relinkNestedRefs() re-attaches that fresh object to its parent's
 // .data slot immediately so autosave (which always walks to the true root
 // via rootG()) never snapshots a stale or wrong-level graph.
-let _canvasStack=[]; // {parentG, node, vt, sel}
-function rootG(){ return _canvasStack.length?_canvasStack[0].parentG:G; }
-function relinkNestedRefs(){ if(_canvasStack.length)_canvasStack[_canvasStack.length-1].node.data=G; }
+//
+// A diagram-ref node is the same mechanism with one twist: instead of owning
+// a private .data blob, it points (by id) at another top-level file's data.
+// Entering one swaps G to that *other file's* live data object (not a copy),
+// so edits land directly in files[]. The stack frame remembers refFile so
+// rootG()/rootFile() know to stop climbing at that file's own root instead
+// of continuing up to the diagram that merely references it — that outer
+// diagram's own tree never actually changes when you edit what it points to.
+let _canvasStack=[]; // {parentG, node, refFile, vt, sel}
+function rootG(){
+  for(let i=_canvasStack.length-1;i>=0;i--){
+    if(_canvasStack[i].refFile) return (i+1<_canvasStack.length) ? _canvasStack[i+1].parentG : G;
+  }
+  return _canvasStack.length?_canvasStack[0].parentG:G;
+}
+function rootFile(){
+  for(let i=_canvasStack.length-1;i>=0;i--){ if(_canvasStack[i].refFile) return _canvasStack[i].refFile; }
+  return activeFile();
+}
+function relinkNestedRefs(){
+  if(!_canvasStack.length)return;
+  const top=_canvasStack[_canvasStack.length-1];
+  if(top.refFile) top.refFile.data=G; else top.node.data=G;
+}
 function updateBreadcrumb(){
   const el=document.getElementById('cf-breadcrumb');
   el.classList.toggle('on',_canvasStack.length>0);
   if(_canvasStack.length){
-    const n=_canvasStack[_canvasStack.length-1].node;
-    document.getElementById('cf-breadcrumb-label').textContent='inside "'+(n.text||'Canvas')+'"'+(_canvasStack.length>1?' · depth '+_canvasStack.length:'');
+    const top=_canvasStack[_canvasStack.length-1];
+    const label=top.refFile?top.refFile.name:(top.node.text||'Canvas');
+    document.getElementById('cf-breadcrumb-label').textContent='inside "'+label+'"'+(_canvasStack.length>1?' · depth '+_canvasStack.length:'');
   }
 }
 function enterCanvasNode(id){
-  const n=byNode(id); if(!n||!n.isCanvas)return;
-  if(!n.data)n.data={nodes:[],edges:[],_seq:0};
-  _canvasStack.push({parentG:G,node:n,vt:{...vt},sel:_sel});
-  G=n.data; _sel=null; _multiSel.clear(); _history=[]; _future=[];
+  const n=byNode(id); if(!n||(!n.isCanvas&&!n.isDiagramRef))return;
+  let targetG, refFile=null;
+  if(n.isDiagramRef){
+    refFile=files.find(f=>f.id===n.refId);
+    if(!refFile)return; // missing target — card already shows a "missing" state
+    targetG=refFile.data;
+  } else {
+    if(!n.data)n.data={nodes:[],edges:[],_seq:0};
+    targetG=n.data;
+  }
+  _canvasStack.push({parentG:G,node:n,refFile,vt:{...vt},sel:_sel});
+  G=targetG; _sel=null; _multiSel.clear(); _history=[]; _future=[];
   vt={x:0,y:0,s:1};
   renderAll();
   if(G.nodes.length)cfZoomReset();
@@ -1637,7 +1802,8 @@ function enterCanvasNode(id){
 function exitCanvasNode(){
   if(!_canvasStack.length)return;
   const top=_canvasStack.pop();
-  top.node.data=G;
+  if(top.refFile){ top.refFile.data=G; top.refFile.modified=Date.now(); }
+  else top.node.data=G;
   G=top.parentG; vt=top.vt; _sel=top.sel; _history=[]; _future=[];
   renderAll(); applyVT(); updateBreadcrumb(); save();
 }
@@ -1788,6 +1954,15 @@ function buildNodes() {
       d.appendChild(ren);
       const rh=document.createElement('div'); rh.className='cf-node-resize';
       rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
+    } else if (n.isDiagramRef) {
+      const rf=files.find(f=>f.id===n.refId);
+      d.className='cf-node diagramref-node'+(rf?'':' missing')+(isSel?' sel':'')+(isMulti?' multi-sel':'');
+      d.style.width=(n.w||220)+'px'; d.style.height=(n.bh||130)+'px';
+      const nameEl=document.createElement('div'); nameEl.className='cf-diagramref-name';
+      nameEl.textContent=rf?rf.name:'⚠ 找不到原始圖';
+      d.appendChild(nameEl);
+      const rh=document.createElement('div'); rh.className='cf-node-resize';
+      rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
     } else if (n.isTable) {
       d.className='cf-node table-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if(n.color)applyNodeColorAttr(d,n.color);
@@ -1860,7 +2035,7 @@ function buildNodes() {
     }
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
-    if(!n.isTable&&!n.isImage&&!n.isEmbed){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
+    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
     // Every node type gets connection ports, including box/group nodes — a
     // box is a valid edge endpoint just like any other node.
     ['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
@@ -1878,6 +2053,9 @@ function buildNodes() {
         if(cell)editTableCell(n.id,+cell.dataset.r,+cell.dataset.c);
       });
     } else if(n.isCanvas){
+      d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
+      d.addEventListener('dblclick',ev=>{ev.stopPropagation();enterCanvasNode(n.id);});
+    } else if(n.isDiagramRef){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{ev.stopPropagation();enterCanvasNode(n.id);});
     } else if(n.isEmbed){
@@ -2040,6 +2218,14 @@ function addEmbedNode(x, y, src) {
 function addCanvasNode(x, y) {
   snapshot();
   const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),text:'Nested canvas',isCanvas:true,w:220,bh:130,data:{nodes:[],edges:[],_seq:0}};
+  G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+  return n;
+}
+// A diagram-ref node stores only refId — never a copy of the target's graph —
+// so the same diagram can be inserted in many places and always stays live.
+function addDiagramRefNode(x, y, refId) {
+  snapshot();
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isDiagramRef:true,refId:refId,w:220,bh:130};
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
@@ -2278,6 +2464,41 @@ function snapDrag(dragIds, origins, dx, dy, disabled){
   }
   return{dx:sdx,dy:sdy};
 }
+// Same idea as snapDrag, but for resizing: snaps whichever edge(s) of `box`
+// are actively moving (per `edges`, e.g. {right:true,bottom:true} for a
+// bottom-right corner handle) to other nodes' edges/centers, drawing the
+// same guide lines. excludeId keeps the node being resized out of its own
+// candidate list.
+function snapResizeBox(excludeId, box, edges, disabled){
+  clearGuides();
+  if(disabled)return box;
+  let {x,y,w,h}=box;
+  const left=x, right=x+w, top=y, bottom=y+h;
+  let bestDx=null,bestDxDist=SNAP+0.001,bestDxGuide=null;
+  let bestDy=null,bestDyDist=SNAP+0.001,bestDyGuide=null;
+  G.nodes.forEach(on=>{
+    if(on.id===excludeId)return;
+    const ow=on._w||80, oh=on._h||40;
+    const oxLines=[on.x,on.x+ow/2,on.x+ow], oyLines=[on.y,on.y+oh/2,on.y+oh];
+    if(edges.right)oxLines.forEach(oxl=>{const d=Math.abs(right-oxl);if(d<bestDxDist){bestDxDist=d;bestDx={delta:oxl-right,fromRight:true};bestDxGuide={line:oxl,other:on};}});
+    if(edges.left)oxLines.forEach(oxl=>{const d=Math.abs(left-oxl);if(d<bestDxDist){bestDxDist=d;bestDx={delta:oxl-left,fromRight:false};bestDxGuide={line:oxl,other:on};}});
+    if(edges.bottom)oyLines.forEach(oyl=>{const d=Math.abs(bottom-oyl);if(d<bestDyDist){bestDyDist=d;bestDy={delta:oyl-bottom,fromBottom:true};bestDyGuide={line:oyl,other:on};}});
+    if(edges.top)oyLines.forEach(oyl=>{const d=Math.abs(top-oyl);if(d<bestDyDist){bestDyDist=d;bestDy={delta:oyl-top,fromBottom:false};bestDyGuide={line:oyl,other:on};}});
+  });
+  if(bestDx){
+    if(bestDx.fromRight)w+=bestDx.delta; else {x+=bestDx.delta;w-=bestDx.delta;}
+    const on=bestDxGuide.other,oh2=on._h||40;
+    const y0=Math.min(y,on.y)-20,y1=Math.max(y+h,on.y+oh2)+20;
+    vLine(bestDxGuide.line,y0,y1);
+  }
+  if(bestDy){
+    if(bestDy.fromBottom)h+=bestDy.delta; else {y+=bestDy.delta;h-=bestDy.delta;}
+    const on=bestDyGuide.other,ow2=on._w||80;
+    const x0=Math.min(x,on.x)-20,x1=Math.max(x+w,on.x+ow2)+20;
+    hLine(bestDyGuide.line,x0,x1);
+  }
+  return{x,y,w,h};
+}
 
 // ── Node drag ──────────────────────────────────────────────
 function onNodeDown(id, ev) {
@@ -2377,14 +2598,17 @@ function startResize(id, ev) {
   const sx=ev.clientX,sy=ev.clientY,r=el.getBoundingClientRect(),initW=r.width/vt.s,initH=r.height/vt.s;
   if(!n.isBox)el.classList.add('fixed-h');
   const mw=n.isBox?150:54,mh=n.isBox?90:34;
+  const ox=n.x,oy=n.y;
   snapshot();
   function mv(e){
-    const newW=Math.max(mw,initW+(e.clientX-sx)/vt.s);
-    const newH=Math.max(mh,initH+(e.clientY-sy)/vt.s);
+    let newW=Math.max(mw,initW+(e.clientX-sx)/vt.s);
+    let newH=Math.max(mh,initH+(e.clientY-sy)/vt.s);
+    const snapped=snapResizeBox(id,{x:ox,y:oy,w:newW,h:newH},{right:true,bottom:true},e.altKey);
+    newW=snapped.w; newH=snapped.h;
     n.w=newW;n.bh=newH;el.style.width=newW+'px';el.style.height=newH+'px';
     n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();
   }
-  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);n._w=el.offsetWidth;n._h=el.offsetHeight;save();}
+  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);clearGuides();n._w=el.offsetWidth;n._h=el.offsetHeight;save();}
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
 }
 
@@ -2394,17 +2618,22 @@ function startBoxResize(id, dir, ev) {
   const sx=ev.clientX,sy=ev.clientY;
   const r=el.getBoundingClientRect();
   const initW=r.width/vt.s,initH=r.height/vt.s,initX=n.x,initY=n.y;
+  const edges={right:!!dir.e,left:!!dir.w,bottom:!!dir.s,top:!!dir.n};
   snapshot();
   function mv(e){
     const dx=(e.clientX-sx)/vt.s,dy=(e.clientY-sy)/vt.s;
-    if(dir.e){n.w=Math.max(150,initW+dx);}
-    if(dir.s){n.bh=Math.max(90,initH+dy);}
-    if(dir.w){const nw=Math.max(150,initW-dx);n.x=initX+(initW-nw);n.w=nw;el.style.left=n.x+'px';}
-    if(dir.n){const nh=Math.max(90,initH-dy);n.y=initY+(initH-nh);n.bh=nh;el.style.top=n.y+'px';}
-    el.style.width=n.w+'px';el.style.height=n.bh+'px';
+    let x=initX,y=initY,w=initW,h=initH;
+    if(dir.e){w=Math.max(150,initW+dx);}
+    if(dir.s){h=Math.max(90,initH+dy);}
+    if(dir.w){const nw=Math.max(150,initW-dx);x=initX+(initW-nw);w=nw;}
+    if(dir.n){const nh=Math.max(90,initH-dy);y=initY+(initH-nh);h=nh;}
+    const snapped=snapResizeBox(id,{x,y,w,h},edges,e.altKey);
+    ({x,y,w,h}=snapped);
+    n.x=x;n.y=y;n.w=w;n.bh=h;
+    el.style.left=n.x+'px';el.style.top=n.y+'px';el.style.width=n.w+'px';el.style.height=n.bh+'px';
     n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();
   }
-  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);n._w=el.offsetWidth;n._h=el.offsetHeight;save();}
+  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);clearGuides();n._w=el.offsetWidth;n._h=el.offsetHeight;save();}
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
 }
 
@@ -2979,6 +3208,9 @@ document.getElementById('cf-add-embed').addEventListener('click',async ()=>{
 document.getElementById('cf-add-canvas').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
   addCanvasNode(cx-110,cy-65);
+});
+document.getElementById('cf-add-diagramref').addEventListener('click',(ev)=>{
+  showDiagramInsertPicker(ev.currentTarget);
 });
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
