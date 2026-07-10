@@ -197,6 +197,10 @@ async function getCompanyInfo() {
 // Warning alerts cache (5 min TTL — intraday market alerts)
 const _warnCache = {};
 const _warnTime  = {};
+
+// OpenGraph metadata cache (24h TTL — CausalFrame embed preview cards)
+const _ogCache = {};
+const _ogTime  = {};
 const WARN_APIS  = {
   'twse-notice':  'https://openapi.twse.com.tw/v1/announcement/notice',
   'twse-punish':  'https://openapi.twse.com.tw/v1/announcement/punish',
@@ -257,6 +261,98 @@ function fetchUrl(url) {
     req.on('error', reject);
     req.setTimeout(10000, () => { req.destroy(); reject(new Error('timeout')); });
   });
+}
+
+// ── OpenGraph metadata fetch (CausalFrame embed preview cards) ──
+// Blocks the obvious SSRF vectors (loopback/private/link-local ranges) since this
+// endpoint fetches whatever URL the client passes in. Not exhaustive (no DNS-rebind
+// protection), but this is a personal-portfolio tool, not a multi-tenant service.
+function isPrivateHost(hostname) {
+  const h = (hostname || '').toLowerCase();
+  if (h === 'localhost' || h === '0.0.0.0' || h.endsWith('.local')) return true;
+  const m = h.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (m) {
+    const a = +m[1], b = +m[2];
+    if (a === 127 || a === 10 || a === 0) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+  }
+  if (h === '::1' || h.startsWith('fe80:') || h.startsWith('fc') || h.startsWith('fd')) return true;
+  return false;
+}
+
+function fetchHtml(url, redirectsLeft) {
+  if (redirectsLeft === undefined) redirectsLeft = 3;
+  return new Promise((resolve, reject) => {
+    const headers = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept-Encoding': 'gzip, deflate, br',
+    };
+    const req = https.get(url, { headers }, res => {
+      if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location && redirectsLeft > 0) {
+        res.resume();
+        let next;
+        try { next = new URL(res.headers.location, url).toString(); } catch (e) { return reject(new Error('bad redirect')); }
+        if (isPrivateHost(new URL(next).hostname)) return reject(new Error('redirect to disallowed host'));
+        fetchHtml(next, redirectsLeft - 1).then(resolve, reject);
+        return;
+      }
+      if (res.statusCode !== 200) { res.resume(); return reject(new Error('HTTP ' + res.statusCode)); }
+      const enc = res.headers['content-encoding'] || '';
+      let stream = res;
+      if (enc.includes('br'))       stream = res.pipe(zlib.createBrotliDecompress());
+      else if (enc.includes('gzip')) stream = res.pipe(zlib.createGunzip());
+      else if (enc.includes('deflate')) stream = res.pipe(zlib.createInflate());
+      const chunks = []; let total = 0;
+      stream.on('data', c => {
+        total += c.length;
+        if (total <= 2e6) chunks.push(c);
+        else stream.destroy();
+      });
+      const finish = () => resolve(Buffer.concat(chunks).toString('utf8'));
+      stream.on('end', finish);
+      stream.on('close', finish);
+      stream.on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(8000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
+}
+
+function extractMetaTag(html, prop) {
+  const re1 = new RegExp('<meta[^>]+(?:property|name)=["\']' + prop + '["\'][^>]+content=["\']([^"\']*)["\']', 'i');
+  const re2 = new RegExp('<meta[^>]+content=["\']([^"\']*)["\'][^>]+(?:property|name)=["\']' + prop + '["\']', 'i');
+  const m = html.match(re1) || html.match(re2);
+  return m ? m[1].trim() : '';
+}
+
+function decodeHtmlEntities(s) {
+  return (s || '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&#x27;/g, "'");
+}
+
+async function fetchOgData(targetUrl) {
+  const u = new URL(targetUrl);
+  if (!/^https?:$/.test(u.protocol)) throw new Error('invalid protocol');
+  if (isPrivateHost(u.hostname)) throw new Error('host not allowed');
+  const html = await fetchHtml(targetUrl);
+  const titleTagMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+  const ogTitle = extractMetaTag(html, 'og:title') || (titleTagMatch ? titleTagMatch[1] : '');
+  const ogDesc = extractMetaTag(html, 'og:description') || extractMetaTag(html, 'description');
+  let ogImage = extractMetaTag(html, 'og:image') || extractMetaTag(html, 'twitter:image');
+  if (ogImage && !/^https?:\/\//i.test(ogImage)) {
+    try { ogImage = new URL(ogImage, u.origin).toString(); } catch (e) { ogImage = ''; }
+  }
+  return {
+    title: decodeHtmlEntities(ogTitle).slice(0, 200),
+    description: decodeHtmlEntities(ogDesc).slice(0, 400),
+    image: ogImage || '',
+    domain: u.hostname.replace(/^www\./, ''),
+  };
 }
 
 // Combines Yahoo's session window (currentTradingPeriod.regular) with tick staleness —
@@ -443,6 +539,29 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ error: e.message }));
       }
     });
+    return;
+  }
+
+  // OpenGraph metadata for CausalFrame's link-preview embed cards
+  if (req.url.startsWith('/api/og-fetch') && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const target = urlObj.searchParams.get('url') || '';
+      if (!target) throw new Error('missing url');
+      const cacheKey = 'og_' + target;
+      let data;
+      if (_ogCache[cacheKey] && Date.now() - (_ogTime[cacheKey] || 0) < 24 * 60 * 60 * 1000) {
+        data = _ogCache[cacheKey];
+      } else {
+        data = await fetchOgData(target);
+        _ogCache[cacheKey] = data; _ogTime[cacheKey] = Date.now();
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(data));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
     return;
   }
 
