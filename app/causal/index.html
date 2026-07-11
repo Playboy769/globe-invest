@@ -3299,8 +3299,16 @@ function exportPNG(){
   // descendant, so capturing #cf-world alone silently drops all the edges.
   const savedVt={...vt};
   vt.x=0; vt.y=0; vt.s=1; applyVT();
+  // #cf-canvas also holds UI chrome that isn't diagram content — the node/link
+  // count label, file-name watermark, keyboard hint, minimap, search bar and
+  // the empty-state placeholder. Unlike diagram nodes these are positioned
+  // relative to the viewport rather than world coordinates, so they show up
+  // at arbitrary/overlapping spots once #cf-world's transform is reset for
+  // capture. Skip them explicitly instead of letting html2canvas rasterize them.
+  const CF_UI_CHROME_IDS=['cf-count','cf-watermark','cf-hint','cf-minimap','cf-search-bar','cf-empty','cf-node-tools','cf-edge-tools'];
+  const ignoreUiChrome=el=>CF_UI_CHROME_IDS.includes(el.id);
   setTimeout(()=>{
-    html2canvas(canvas,{useCORS:true,allowTaint:true,scale:2,backgroundColor:'#ffffff',x:x0,y:y0,width:W,height:H}).then(c=>{
+    html2canvas(canvas,{useCORS:true,allowTaint:true,scale:2,backgroundColor:'#ffffff',x:x0,y:y0,width:W,height:H,ignoreElements:ignoreUiChrome}).then(c=>{
       vt.x=savedVt.x; vt.y=savedVt.y; vt.s=savedVt.s; applyVT();
       const a=document.createElement('a');a.download=(activeFile().name||'causal-diagram')+'.png';a.href=c.toDataURL('image/png');a.click();
     }).catch(err=>{
