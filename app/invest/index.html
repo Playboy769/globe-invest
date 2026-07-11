@@ -1759,11 +1759,28 @@ function ivClearSearch(){
     // anyone who already has that bad value saved from before this fix shipped.
     let collapsedNow=null;try{collapsedNow=JSON.parse(localStorage.getItem('iv_panel_collapsed'));}catch(e){}
     const collapsedKeys=['fw',null,'ed'];
-    if(saved&&saved.length===3)panels.forEach((p,i)=>{
-      const k=collapsedKeys[i];
-      if(k&&collapsedNow&&collapsedNow[k])return;
-      p.style.flex='0 0 '+saved[i];
-    });
+    if(saved&&saved.length===3){
+      panels.forEach((p,i)=>{
+        const k=collapsedKeys[i];
+        if(k&&collapsedNow&&collapsedNow[k])return;
+        p.style.flex='0 0 '+saved[i];
+      });
+      // Old saves stored raw pixel widths, which are only valid for the browser
+      // zoom level (or window width) they were captured at. If zoom changed since
+      // then, three flex-shrink:0 fixed-px panels can sum to more than the wrap is
+      // now wide, and the layout visibly overflows instead of shrinking to fit.
+      // Detect that and self-heal to the panels' CSS-default flex ratio.
+      // getBoundingClientRect() right after a synchronous style write forces the
+      // browser to resolve layout immediately, so this doesn't need to wait a
+      // frame (and mustn't: requestAnimationFrame never fires for a backgrounded
+      // tab, which would leave the overflow unfixed indefinitely).
+      const wrapEl=document.getElementById('iv-wrap');
+      const totalW=panels.reduce((s,p)=>s+p.getBoundingClientRect().width,0);
+      if(wrapEl&&totalW>wrapEl.getBoundingClientRect().width+4){
+        panels.forEach(p=>{p.style.flex='';});
+        try{localStorage.removeItem('iv_col_w');}catch(e){}
+      }
+    }
   }catch(e){}
   function lockPanels(){panels.forEach(p=>{p.style.flex='0 0 '+p.getBoundingClientRect().width+'px';});}
   // A collapsed panel's rect is the 8px sliver, not its real width — baking that into
@@ -1773,10 +1790,16 @@ function ivClearSearch(){
   function savePanels(){
     try{
       let prev=null;try{prev=JSON.parse(localStorage.getItem('iv_col_w'));}catch(e){}
+      // Persist as a percentage of the wrap's width, not raw pixels — a percentage
+      // stays valid if the browser's zoom level or window width changes later,
+      // where a fixed pixel value would not (see the overflow self-heal above).
+      const wrapW=document.getElementById('iv-wrap').getBoundingClientRect().width||1;
       const widths=panels.map((p,i)=>{
         const k=_IV_COL_KEYS[i];
         if(k&&_ivPanelCollapsed[k]&&prev&&prev[i])return prev[i];
-        return p.getBoundingClientRect().width+'px';
+        const pct=(p.getBoundingClientRect().width/wrapW*100).toFixed(4)+'%';
+        p.style.flex='0 0 '+pct;
+        return pct;
       });
       localStorage.setItem('iv_col_w',JSON.stringify(widths));
     }catch(e){}
