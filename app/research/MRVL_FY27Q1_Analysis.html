@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marvell Technology — FY Q1 2027 — Q&A / 收購整合架構 / 技術與產品線 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; }
+  .tab { padding: 10px 20px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #7a2020; }
+  .flag-box.obs { background: #eff6ff; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+  .flag-box.obs .q-text { color: #1e3a6e; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .sca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .sca-box { border-radius: 8px; padding: 12px; }
+  .sca-box.blue { background: #eff6ff; border: 1px solid #a9c9f5; }
+  .sca-box.green { background: #f0fdf4; border: 1px solid #a3dab1; }
+  .sca-box.orange { background: #fff7ed; border: 1px solid #f0c090; }
+  .sca-box.red { background: #fef2f2; border: 1px solid #f0aab8; }
+  .sca-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .sca-box.blue h4 { color: #1d4ed8; }
+  .sca-box.green h4 { color: #15803d; }
+  .sca-box.orange h4 { color: #c2600a; }
+  .sca-box.red h4 { color: #b91c4a; }
+  .sca-box ul { padding-left: 14px; }
+  .sca-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .price-band { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-bar { height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; margin: 6px 0; font-size: 12px; font-weight: 600; }
+  .band-ceiling { background: #eff6ff; color: #1d4ed8; border: 1px solid #a9c9f5; }
+  .band-floor { background: #fffbeb; color: #92400e; border: 1px solid #f0d090; }
+  .band-label { font-size: 11px; color: #666; margin: 2px 0; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 230px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 70px; font-size: 13px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid; }
+  .tech-card.dram { background: #eff6ff; border-color: #a9c9f5; }
+  .tech-card.nand { background: #f5f3ff; border-color: #c7b8f0; }
+  .tech-card.hbm { background: #f0fdf4; border-color: #a3dab1; }
+  .tech-card.pkg { background: #fff7ed; border-color: #f0c090; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border: 1px solid #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border: 1px solid #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border: 1px solid #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stat-box { flex: 1; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Marvell Technology — FY Q1 2027 Earnings Call Analysis">Marvell Technology — FY Q1 2027 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis / M&amp;A Integration / Technology &amp; Product Lines / Risk Matrix &nbsp;·&nbsp; Call Date: May 27, 2026 &nbsp;·&nbsp; Cross-referenced with 10-Q for the period ended May 2, 2026">Q&A 問答分析 / 收購整合架構 / 技術與產品線 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年5月27日 &nbsp;·&nbsp; 交叉比對截至2026/5/2財季10-Q</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="M&amp;A Integration" onclick="sw('sca',this)">收購整合架構</div>
+    <div class="tab" data-en="Technology &amp; Product Lines" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl" data-en="Logic Gaps">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Vivek Arya (Bank of America)">Vivek Arya（Bank of America）</div><div class="qa-topic" data-en="Custom $10B FY29 Math &amp; New Tier-1 XPU Customer">Custom $10B FY29目標算術 × 新Tier-1 XPU客戶</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Confirming the $10B+ custom revenue target for FY2029 implies a $5-6B YoY jump from FY2028 — is that math right? When will Marvell be more comfortable discussing the new Tier-1 XPU customer, and is Marvell exclusive with them given their large CapEx profile?">確認custom營收FY2029達$100億+的目標，意味著FY2028到FY2029要跳升$50-60億——這個算術對嗎？公司何時會更願意談論這位新Tier-1 XPU客戶？考量對方CapEx規模龐大，Marvell是否為獨家供應商？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt confirmed the math, tracing it back to an April 2024 long-term target (~$8B implied at 20% share of a then-sized TAM) that grew to over $10B after resizing the custom silicon TAM to ~$55B at last June's custom silicon event. Said the new Tier-1 program 'remains on track,' is hitting milestones, and represents about 1/3 of next year's custom growth. Did not address exclusivity.">Matt確認算術無誤，並回溯到2024年4月設定的長期目標（當時TAM估算下約隱含$80億，佔比20%），去年6月custom silicon活動後TAM重新估算至約$550億，隱含目標上修至$100億以上；表示新Tier-1計畫「進度正常」、持續達成里程碑，約佔明年custom成長的1/3。未回應獨家供應商問題。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The exclusivity question was never addressed — Matt pivoted entirely to reaffirming growth math instead. &quot;Firm requirements in place for all of next fiscal year&quot; is a strong claim with no verifiable specifics (volume, ramp date, or customer identity), and the 10-Q does not name this customer or program either.">獨家供應商的問題完全沒有被回應——Matt整段話都在重申成長算術；「已鎖定明年度全年的確定需求」是個很強的說法，卻沒有任何可驗證的細節（量體、量產時間、客戶身份），10-Q中也未揭露此客戶或計畫名稱。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Vivek Arya:</b> "Thank you for taking my question. Matt, towards the end of your presentation, you mentioned something along the lines of your custom XPU is on target to hit $10 billion in fiscal 2029. I just wanted to make sure that we heard that correctly, because that would mean that fiscal 2028, if your XPU is a little over $4 billion and then it gets to $10 billion, that's an increase of at least $5 billion-$6 billion year-over-year in sales. I just wanted to make sure that I heard that. Then, Matt, at what point will you feel more comfortable talking about that large customer and the progress in this new program? Do you expect to be exclusive in this? Because they have a really large CapEx profile. When do you think investors should start to give Marvell more credit for that new XPU program that should start next year?"<br><br><b>Matt Murphy:</b> "Yeah, thanks, Vivek. Yeah, you heard it right. Just for context on the $10 billion+ for fiscal 2029, the context for that is, back in April 2024, we set long-term targets out through calendar 2028, which would be our fiscal 2029. At that time, we had identified a data center custom overall market, overall custom silicon market, which would generate about $8 billion in revenue for us, was sort of what you if you assume 20% of our market sizing at that time for fiscal 2029. At our custom silicon event last summer in June of 2025, we then said basically the TAM is bigger. The implied, again, if we achieved our share targets in fiscal 2029, would indicate something over $10 billion. It was like a $55 billion TAM. Take 20% on that's $11 billion. Call it in that range. Yeah, we're still tracking to it. That's a key part of our assumption. Two years ago, it looked like a very steep hill to climb. We're clearly making progress there. Yeah, between our existing programs, our new ramp, and just a plethora of XPU attach programs, all of which have sized up significantly since we won them. We definitely see line of sight to hit those targets. Again, this is just updating investors along the way about how we're progressing. On your second question, program remains on track. I think we're hitting all of our milestones. We see for next year, I think it's stated in my prepared remarks, kind of across the board on all of the custom programs we have, we're seeing indications of greater need for demand. We had judged that one down pretty significantly. I think as we progress through the year, to answer your questions, I think we'll all gain confidence in the magnitude of that ramp. It's on track, and it's a key part of our plan for next year. It's not the only piece. It's probably still about 1/3 of the total growth we're expecting in our custom business next year. Yeah, it's on a very strong trajectory, Vivek, from fiscal 2027 to 2028 to 2029 and beyond on the custom side overall, which includes XPU and XPU attach. Thanks."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Harlan Sur (JPMorgan)">Harlan Sur（JPMorgan）</div><div class="qa-topic" data-en="SRAM IP &times; SRAM-Based XPU Offload (LPU-style) Design Wins">SRAM IP × SRAM-based XPU offload（LPU式）設計案</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Given Marvell's leading SRAM IP (first 2nm SRAM IP to market), is the team seeing more interest in SRAM-based XPU offload ASICs (LPU/STX-style), and are there already XPU-attach design wins for SRAM-based offload architectures?">既然Marvell擁有業界領先的SRAM IP（業界首款2nm SRAM IP），團隊是否看到更多SRAM-based XPU offload ASIC（類LPU/STX）的興趣？是否已有針對SRAM-based offload架構的XPU attach設計案？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt traced SRAM IP heritage back to the Avera acquisition, GlobalFoundries and IBM lineage, said it 'continues to be a key part' of the IP portfolio and 'one of the reasons' Marvell is winning XPU-attach designs, calling it 'one piece of the puzzle.'">Matt回溯SRAM IP血統至Avera收購、GlobalFoundries與IBM團隊，表示這「持續是IP組合的關鍵部分」，也是「贏得XPU attach設計案的原因之一」，稱其為「拼圖的一塊」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The direct yes/no ask — whether there are ALREADY design wins specifically for SRAM-based offload architectures — was never confirmed or denied. Management answered with pedigree and narrative instead of the concrete fact pattern requested.">問題直接問的「是否已經有」SRAM-based offload架構的設計案，從頭到尾沒有被明確肯定或否認。管理層用血統與敘事回答，迴避了具體的事實確認。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Harlan Sur:</b> "Good afternoon. Thanks for taking my question. Matt, with the aggressive evolution of inferencing compute workloads, this has really opened up a lot of opportunity for these XPU offload engines like an LPU processor, an STX processor, right? That's what motivated NVIDIA, for example, to acquire that startup Groq, right? That has this unique SRAM-based memory architecture that's enabled them to design a very efficient sort of low latency inferencing engine called LPU. I seem to recall that the Marvell team actually co-designed the startup's first generation LPU inferencing chip. We all know that Marvell has always focused on memory and in particular SRAM-based IP, like highest density, lowest power. In fact, I think you guys brought the industry's first 2 nm SRAM IP to the market last year. Is the Marvell team leveraging this differentiation? Are you seeing more interest in SRAM-based XPU offload ASICs, and do you already have XPU attached design wins for SRAM-based offload architectures?"<br><br><b>Matt Murphy:</b> "Thanks for the question, Harlan. First, you definitely pay attention. We talked about this actually quite extensively in June of 2025 at our custom silicon event. We had a whole dedicated presentation actually on our best-in-class SRAM design capability and IP. That's, by the way, a legacy and a history investment area that goes all the way back to the Avera acquisition and prior to that, the team being in GlobalFoundries and IBM. There's a long legacy there. That technology has evolved from networking products into AI products, and you can see that trend in the market as inferencing is happening. That continues to be a key part of our IP portfolio for sure as we go win designs, and it's one of the reasons why we are winning our designs in XPU attach. It's part of the bigger strategy really, which is, I think having the full suite of solutions, right, from advanced packaging, best-in-class high speed I/O, and just the ability to really dive in and get to develop these solutions with our customers in very aggressive time to market time frames, leveraging our manufacturing expertise and our capacity, et cetera. It's one piece of the puzzle, but it is an important piece for sure, and we definitely see that as a trend out there, Harlan. We'll keep you updated."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Timothy Arcuri (UBS)">Timothy Arcuri（UBS）</div><div class="qa-topic" data-en="Breadth of Customer Base &times; Possible Move Into the Compute TAM">客戶基礎廣度 × 是否切入運算(compute) TAM</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="There is speculation Marvell may be moving into the compute TAM (the largest custom compute wallet) rather than just attach/networking — is that included in current forecasts, or would it be incremental?">市場臆測Marvell可能切入運算(compute) TAM本身（而非僅是attach/networking），這是全市場最大的custom compute錢包——這是否已包含在目前預測中，還是屬於增量？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt confirmed custom engagements across all US hyperscalers (some XPU, some XPU+attach, some attach-only), said newer programs won since 'last summer' could contribute in FY2029 as an 'insurance policy' but are 'not needed' for current targets, and described design activity as 'through the roof.'">Matt確認在所有美國雲端巨頭都有custom engagement（有的是XPU、有的XPU+attach、有的只是attach），去年夏天以來新贏得的計畫可能在FY2029貢獻，視為「保險政策」但目前目標「不需要」它們，並形容設計活動「爆量」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The direct compute-TAM question was never confirmed or denied — Matt deflected to breadth-of-engagement generalities. Combined with Srini Pajjuri's later question (scale-up switching is explicitly excluded from the $16.5B FY28 number), there may be real incremental upside baked out of guidance, but management gave zero magnitude, timeline, or customer names to size it.">直接問的「是否切入compute TAM」從未被確認或否認——Matt用「engagement廣度」的泛泛之詞帶過。搭配Srini Pajjuri後面的問題（scale-up switching明確不在$165億FY28數字中），guidance之外可能確實存在增量上檔，但管理層完全沒有給出規模、時程或客戶名稱可供估算。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Timothy Arcuri:</b> "Thanks a lot. Matt, I wanted to ask about the breadth of the customer base. I know we've talked about the existing XPU you have. There's this new customer on the XPU, and then you do have some XPU attach with a third customer as well. There's some speculation that you actually might be moving into the compute TAM, and that's by far the biggest custom compute wallet out there. Is that included in the forecast, or would that be incremental to this? I guess I'm just trying to ask about the breadth of the customer base, because I know you mentioned about the engagements broadening. Wondering if you could talk about that. Thanks."<br><br><b>Matt Murphy:</b> "Well, I think a couple of things. The first is, we've said this for some time, we have custom engagements across the board at all the U.S. hyperscalers, and we've had that for some time. Some XPU, some XPU and XPU attach, some just XPU attach. That's part of the AI custom silicon event we did last summer, is indicating that broad pipeline of opportunities and sockets. Everything we've laid out, which is the greater than 20% growth this year, more than doubling next year, then still having line of sight to our long-term targets. That's all based on the designs we've already won and locked and even going back, really, the last summer. If some of these programs, again, the timing on them, the newer ones we've won since last summer, if you can get them done in a two-year timeframe, then you might get some contribution from that in fiscal 2029, but that's not needed. Think of that as like an insurance policy. Great, if some of those hit, then if you're worried about some of the existing programs not quite getting there. When we look at the whole picture net-net, we feel very comfortable with the trajectory of our custom business, and it's not requiring anything incremental. I would just say broadly across the board, our technology platform is very competitive, and we're out there competing every day for the most important sockets in the world. Again, those would contribute later. At our 2 nm platform and then beyond, our roadmap is very compelling, and it's only strengthened since our custom silicon event last summer. This business is inflecting, and it's definitely on the right track. Again, I highlighted a number of reasons why that is with Harlan's question, but I'll just tell you that what we've really seen, and it's been pretty pronounced, I would say, in the last six months or so, is that the performance of our high-speed I/O, our SerDes performance, our die-to-die, and our ability to integrate that very densely in XPU switching applications, XPU attach applications, is the amount of activity we're seeing on demand for that, I think people realizing that really it's us and just maybe a couple other people that can do this at the level that's needed for this level of performance integration. It's driving a whole new set of opportunities, quite frankly. Again, design activity is through the roof at Marvell across the board, but including on custom silicon."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Michael Tsvetanov, on behalf of Aaron Rakers (Wells Fargo)">Michael Tsvetanov 代 Aaron Rakers（Wells Fargo）</div><div class="qa-topic" data-en="Detail on New XPU / Custom Socket Wins">新XPU / Custom socket贏單的細節</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Prepared remarks mentioned a few new XPU/custom socket wins — can you provide additional color, e.g. accelerator type or chip type?">事前備稿提到幾個新的XPU/custom socket贏單——能否提供更多細節，例如加速器類型或晶片類型？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt explicitly declined: 'no additional details at this time,' reiterating only that the 50+ opportunity pipeline outlined at last June's event continues to close and grow in both sockets and dollars.">Matt明確拒絕：「目前沒有更多細節」，只重申去年6月活動列出的50+個機會管線持續成交，且sockets數與金額都在成長。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Explicit Non-Answer">⚑ 明確拒答</div>
+          <div class="q-text" data-en="Unlike the softer deflections elsewhere on the call, this is a clean, explicit refusal to disclose. Worth noting the pattern: management proactively teases new design wins in prepared remarks, then declines to substantiate them when directly asked.">與法說會其他較委婉的迴避不同，這次是乾脆的明確拒答。值得留意的模式：管理層在備稿中主動預告新贏單，被直接追問時卻拒絕提供任何可驗證細節。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Michael Tsvetanov (on behalf of Aaron Rakers):</b> "Hi, guys. This is Michael Tsvetanov on behalf of Aaron. Thank you for the question. I think you mentioned in your script that you had a few, I think, new XPU or custom, I guess, socket wins. Could you just provide any additional color on, I guess, those XPUs or XPU attach or maybe the type accelerator or just type of chip? That'd be really helpful. Thank you."<br><br><b>Matt Murphy:</b> "Yeah, no additional details at this time. I think it's just another data point we're trying to give people that based on the 50+ type of opportunities we outlined last June, we continue to close on those. That opportunity pipeline continues to grow in terms of sockets and dollars, by the way. I think every program we looked at a year ago is larger when we look a year later. No additional details at this time. At the right time, we'll do a more comprehensive look back and update you on our progress. Right now, at least from the current business we have, the revenue line is definitely moving in the right direction and strong validation for the capabilities that we have."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Blayne Curtis (Jefferies)">Blayne Curtis（Jefferies）</div><div class="qa-topic" data-en="CXL Opportunity Alongside Accelerators &times; Content per Accelerator">CXL機會 × 每顆加速器的content量化</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How real is the CXL opportunity alongside accelerators — is there a way to think about content per accelerator?">CXL搭配加速器的機會有多真實？能否量化每顆加速器的content？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt reiterated the prior target of XPU-attach alone exceeding $1B in revenue within a couple of years, cited memory-cycle tailwinds and rising KV-caching-driven CXL adoption, but gave no dollar figure for content per accelerator.">Matt重申先前設定的目標——XPU attach單獨在幾年內超過$10億營收——並提到記憶體循環順風與KV caching驅動的CXL採用率上升，但沒有給出每顆加速器content的具體金額。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="A direct request for a quantified content-per-accelerator metric was answered with a qualitative trend narrative instead — no number was ever provided.">明確要求量化每顆加速器content的問題，得到的是定性趨勢敘事——始終沒有給出任何數字。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Blayne Curtis:</b> "Hey, guys. Thanks for taking my question. Matt, I wanted to ask about specifically the CXL opportunity alongside accelerators. How real is that opportunity? Is there a way to think about the content for accelerator for that?"<br><br><b>Matt Murphy:</b> "Well, yeah, it's a very real opportunity. One, is we engaged in this business actually a few years back, and this was when the applications were really driven by traditional server dynamics for x86 compute, and that's obviously vectored over into AI. I think we had a plan in this area, which we've talked about, getting that sort of custom line item of XPU attach alone over $1 billion in revenue in the next couple of years. That continues to expand both because we continue to expand the customer base, which is very compelling. Also, I think the concerns around the memory cycle we're in are driving additional adoption of CXL-based design. It's sort of no secret at this point that I think the memory architectures are endemic and critical on how people think about deploying their next generation infrastructure. I think us coming in with these very proven solutions now for CXL are really playing in our favor. I think it's just the trend line continues and just it continues to size up both because of the CapEx, higher penetration due to some of the memory issues, and then just more and more of these solutions moving into inferencing. Those are some of the trends that we're seeing, Blayne."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Chris Caso (Wolfe Research)">Chris Caso（Wolfe Research）</div><div class="qa-topic" data-en="Capacity Constraints &times; Is the Guidance Raise New Supply or Just Catching Up to Known Demand?">產能瓶頸 × guidance上修是新產能還是補上已知需求？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How is Marvell securing incremental capacity? And is the guidance raise a function of securing more capacity, or of becoming more comfortable with demand customers had already forecast (i.e., management was previously not guiding to everything customers had told them)?">Marvell如何取得增量產能？guidance上修究竟是因為取得更多產能，還是只是對客戶早已提供的需求預測變得更有信心（亦即先前guidance本就沒有反映客戶給出的全部需求）？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt handed off to COO Chris Koopmans, who described giving a small number of key suppliers a five-year forecast and consistently hitting commitments, plus prepayments (echoing the CFO's ~$1B FY27 figure) to back forecasts with cash — no supplier names, no quantified capacity add.">Matt轉交COO Chris Koopmans回答，描述向少數關鍵供應商提供五年期預測並穩定兌現承諾，並用預付款（呼應CFO提到的FY27約$10億）以現金為預測背書——沒有供應商名稱，也沒有量化的產能增幅。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The second half of the question — new supply vs. simply catching up to already-known demand — was never actually answered. Separately, the 10-Q discloses $2.76B in wafer commitments plus $709M in technology-license commitments through FY2031, plus a further $870M post-quarter deposit for FY2030-2033 capacity — a combined ~$4.3B commitment stack that is far larger in scope than the '~$1B in prepayments this fiscal year' figure emphasized on the call.">問題後半段——「是新產能還是只是補上已知需求」——始終沒有被正面回答。另外，10-Q揭露晶圓採購承諾$27.6億、技術授權承諾$7.09億（皆至FY2031），加上季後追加的$8.7億FY2030-2033產能訂金，合計約$43億的承諾規模，遠大於法說會強調的「本財年約$10億預付款」數字。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Chris Caso:</b> "Yes, thank you. Good evening. Question is about some more color on how you're addressing capacity constraints right now. You spoke about some of the prepayments. First part of the question is how you're managing to get that additional capacity. As a follow-on to that, with the increase in guidance, is that a function of you managing to get more capacity out of your supply base, or is it really more of a factor of becoming more comfortable with the forecast your customers already given you and know that you didn't guide us to everything your customers had put in their forecast in the first place?"<br><br><b>Matt Murphy:</b> "Yeah, thanks. Hey, I'll hand this one over to Chris, who's been knee-deep in this. Just to give a shout-out to our team, our supply chain operation's been doing an outstanding job, and our suppliers have been doing an outstanding job continuing to react to the changes upward in demand. We've been very pleased with that, we are in great shape overall to deliver on what we just talked about. I'll have Chris give some more color on how we're going about that."<br><br><b>Chris Koopmans:</b> "Sure. Thanks, Matt. Yeah, I think as Matt mentioned, I've been dealing with the operations side since 2020, 2021, and I don't think we've been in an unconstrained environment since then. Everything that touches AI has been constrained basically since the beginning of this. Ultimately, the way we've been able to manage this is by building very tight relationships with a small number of key suppliers, giving them a five-year forecast of what we need and hitting what we need each time along the way and doing what we said we were going to do. That goes a long ways towards getting what you need when you take everything that you need as you go along. We work very closely with all of our key customers and with our key suppliers to give them that forecast. Yeah, there's really only a handful of companies that are driving this AI infrastructure TAM build-out. In order to do that, part of that is the prepayments that Willem mentioned that we're making with our suppliers to back our forecast with confidence and cash. Ultimately, that's what helps us deliver the revenue capabilities we have."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Ross Seymore (Deutsche Bank)">Ross Seymore（Deutsche Bank）</div><div class="qa-topic" data-en="Why Does Interconnect Growth Decelerate Next Year After Accelerating All Year?">為何interconnect成長在連續上修一整年後，next FY卻預期減速？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Interconnect growth has accelerated all year (30%→50%→70%) — why would it slow toward closer to (but still above) hyperscaler CapEx growth next year? Is that conservatism, or a real reason, given every tailwind cited (DCI, AEC, 1.6T, scale-up) still sounds strong?">Interconnect成長一整年持續上修（30%→50%→70%）——為何next FY會朝向接近（但仍高於）雲端CapEx成長率放緩？這是保守，還是有實質理由？畢竟提到的每個順風（DCI、AEC、1.6T、scale-up）聽起來都還很強。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt agreed there is 'a lot of upward bias,' listing the 1.6T step-up, DCI ramp, retimers/AECs, and scale-up optics (now ~$300M) as tailwinds, but landed on '$16.5 billion is where we're comfortable overall... but I think there's upward bias for sure.'">Matt同意「有很大的上修空間」，列舉1.6T升級、DCI放量、retimer/AEC、scale-up optics（現達約$3億）等順風，但結論仍停在「整體我們對$165億感到舒適……但確實有上修空間」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="Management effectively admits the FY28 guide is conservative ('upward bias') but never gave a substantive reason for the deceleration assumption Ross directly asked about — the FY28 number appears to bake in a deceleration management itself doesn't seem to believe in, without explaining the gap.">管理層實質上承認FY28 guide偏保守（「上修空間」），卻從未針對Ross直接追問的「減速假設」給出實質理由——FY28數字似乎內建了一個連管理層自己都不太相信的減速假設，卻未解釋這個落差從何而來。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Ross Seymore:</b> "Hi, guys. Thanks, Matt. Question, I wanted to go to the interconnect side of things. Matt, you talked about the growth rate going to, I think, over 70% this year. If I recall right, it was the beginning of this year, 30%, then 50%, and now 70%, so it's clearly accelerating. I guess the question is why would you think, other than just conservatism, that that would slow to kind of closer to, but still above the hyperscaler CapEx rate next year? Is that just conservatism or because everything that you rattled off before about the DCI side of things, AEC, 1.6 T, the scale up, et cetera, all sounds like those are still very, very strong tailwinds. I just wanted to get a little more color as to what you're thinking in fiscal 2028 for that business."<br><br><b>Matt Murphy:</b> "I think the fact is this is where we are right now, Ross, and very encouraged to see as we've progressed, as you mentioned, from where we were starting probably around last September to now with the growth rate continuing to inch up as CapEx has gone up and also the attach rate of our interconnect products have gone up. The new initiatives, those businesses are ramping. We've had a lot of success across the board here, but this has been the star of the show here. I think when you look out to next year, I think this is where we are today. If you start building a bottoms-up model, you can see that there's definitely a possibility for a lot of upward bias because our traditional business in DSPs, obviously we talked about a big step up next year in 1.6 T. That's higher content. You have DCI ramping. You have the new initiatives, things like retimers and AECs, but also you have scale-up optics, which we're effectively calling at this point to be about $300 million, which is true NPO and CPO-based solutions. This is like the beginning of a major growth cycle for us. I think there's a lot of optionality is what I would say at the moment, Ross. I think today, net-net, you look overall $16.5 billion is where we're comfortable overall, but I think there's upward bias for sure. The trends continue."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Tore Svanberg (Stifel)">Tore Svanberg（Stifel）</div><div class="qa-topic" data-en="Which 2-3 Scale-Up Products Are Surprising to the Upside?">Scale-up哪2-3個產品驚喜最大？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Given the many scale-up dynamics (copper, optical, NPO, CPO), what specifically has surprised to the upside in the last few months — which 2-3 products?">考量scale-up的多種動態（copper、optical、NPO、CPO），過去幾個月具體是哪些方面帶來驚喜——是哪2-3個產品？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt gave a long qualitative answer on breadth across all technologies, the Celestial team integration as a 'home run,' end-to-end XPU-to-switch positioning, and reliability credentials (15B+ device-hours, 224G SerDes in production) — but never named the 2-3 specific products asked for.">Matt給出一段冗長的定性回答，談所有技術的廣度、Celestial團隊整合是「全壘打」、XPU到switch的端到端定位、可靠度資歷（15億+元件小時、224G SerDes量產中）——但從未點名被要求的那2-3個具體產品。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="A specificity request was answered at the platform/strategy level — a consistent pattern across this call whenever analysts asked for product- or number-level granularity.">要求具體點名的問題，得到的是平台/策略層級的回答——這是整場法說會中，只要分析師要求產品或數字層級細節時反覆出現的模式。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Tore Svanberg:</b> "Yes. Thank you, and congrats on the record quarter. Matt, I was hoping to zoom in a little bit more on the interconnect business and specifically scale-up. Obviously, a lot of that is in front of you. There's also a lot of different dynamics there, right? Whether it's copper, optical, MPO, CPO, copper. What has been surprising to you the last few months as far as what two or three products are you seeing the bigger upside from? Because obviously, it's a very dynamic market. Given your new growth forecast here, there must be a few that are worth highlighting. Thank you."<br><br><b>Matt Murphy:</b> "Yeah. Well, I'll start at the top. The good news is, as you said, you just rattled off a number of different technologies and there's an equal number more you didn't mention. We're in all of them. I think that's one of the unique advantages that we bring to the table is we have the absolute broadest range of connectivity and scale-up and scale-out solutions for interconnect in the industry. I think as I was indicating to Ross, I think everything's got an upward bias to it. The area where I think the most intense activity has sort of emerged is, and I think it's been just a home run getting the Celestial team in here and combining them with our own very, very strong and capable optics team. That combined team, we're able to go into customers now and outline full end-to-end solutions from XPU to switch with any type of interface and optical or copper connection between that the customer can envision and really optimize around that. That's why we mentioned we're seeing for next year not just the Celestial products ramping on scale-up optics, but also Marvell products as well. I think that's an area that could bias upward. That's in the context of us presenting a very comprehensive total system solution. In the end, especially for this first generation, you're going to want to have these solutions bookended, Tore, and you're going to want to have the XPU integrate the same photonic element as the switch side. We are able to walk in and show our capability on switches, our ability to integrate into XPUs or build the XPU, and then all the optics in between. It's a very, very powerful combination, and I think the end-to-end is getting a lot of attention. The fact is, we have the proven technology. It's not a PowerPoint. It's not a concept. I mean, we have 15 billion hours as an example of device data on four generations of silicon photonics already. We have 224 G SerDes in production. We have die-to-die in production. We built switches for multiple generations that are reticle sized with high yield. This is like the most complex stuff you're going to do in the semiconductor industry, and we're able to simultaneously do it all and bring it to our customers. If I were to point out a trend, which is kind of what you're getting at, it's that trend right now is how do we help our customers enable their scale up network for the future? This is like Gen 1, ground zero. I mean, there's a lot of room to go here. That's what I'd say the most sort of intense discussions we're having in. We're very much investing to win here. That's why you see us, in some cases, betting on multiple standards or multiple technologies. We don't want to miss out, and we will pivot at the right time. We'll follow our customers, we'll follow the market, but today we have a little bit of a blank sheet, and it's very refreshing to our customers because we don't just go in there with our agenda based on the one piece that we have and say, well, this is what we have. This is what we can offer you. We go in with, here's the technology that you need. It's real engineering. It's real proven silicon. It's real proof of concept that we can show. I think more to come on this one."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Srini Pajjuri (RBC Capital Markets)">Srini Pajjuri（RBC Capital Markets）</div><div class="qa-topic" data-en="Scale-Up Switching (ESUN / NVLink / UALink) Opportunity Sizing for FY28+">Scale-up switching（ESUN/NVLink/UALink）FY28以後的機會規模</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Scale-out switching is tracking to $1B annualized next year off small share — as you move to scale-up (ESUN, NVLink, UALink), that could be an even bigger, fully greenfield market. How should investors think about that opportunity for FY28 and beyond?">Scale-out switching明年可望達年化$10億，市佔仍小——轉向scale-up（ESUN、NVLink、UALink）可能是更大、完全全新的市場。投資人該如何看待FY28以後這個機會？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt was notably candid: scale-up switching is 'very little, nothing in the $16.5 billion' FY28 guide, framing the entire category as pure, unmodeled upside not yet reflected in any published number or Analyst Day discussion.">Matt這段回答罕見坦率：scale-up switching「幾乎沒有反映在$165億」的FY28 guide裡，將整個類別定位為完全未建模的純上檔，尚未出現在任何已公布數字或Analyst Day討論中。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label flag" data-en="⚑ Observation — Rare Explicit Disclosure">⚑ 觀察——罕見的明確揭露</div>
+          <div class="q-text" data-en="Unlike most of the call's deflections, this is a genuine transparency moment: FY28 guidance is understated by design relative to the full opportunity set. That cuts positively (real upside optionality), but the size and timing of that upside remain completely unquantified — analysts have no way to model it yet.">與法說會多數迴避不同，這是一次真正的透明時刻：FY28 guidance相對於完整機會集合是刻意保守的。這對投資人是正面的（真實的上檔選擇權），但這個上檔的規模與時程完全未量化——分析師目前無從建模。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Srini Pajjuri:</b> "Thank you. Matt, I want to zoom in on the switching side. I think you talked about scale-out switching doubling this year and potentially reaching $1 billion annualized run rate next year. I know it's a large market and you have relatively small share in that market. As you go from scale-out to scale-up, you mentioned three different, I guess, ESUN, NVLink, and also UALink. It seems to me that could be even larger market and obviously it's all greenfield market for you. I'm just curious as to how you're thinking about that opportunity in 2028 and beyond. Thank you."<br><br><b>Matt Murphy:</b> "Thanks, Srini. You're right on the scale-out side. It's a large and established market. We're an emerging company there. I would just say though, I think it's a huge milestone to look out to next year and have line of sight to $1 billion of revenue here when if I go back five years ago when we were able to bring the Innovium team in, it was effectively a pre-revenue company or very little with, at that time, line of sight to $100 million, $150 million of revenue. That's gone really well if you look over the last five years, right? Just where we're heading. A lot of those assets and capabilities that we got from that are now directly being leveraged into scale-up networking, particularly obviously on the Ethernet side, on ESUN. That, in our mind is a bigger opportunity from the standpoint that the market share isn't established yet. That's what I was referring to earlier in Tore's question. There's so many important architectural discussions going on, it's not just the switch, it really requires a very broad set of capabilities and track record for customers to bet on you here. I think the stakes are higher because we do continue to see the adoption of CPO and NPO technologies being much more robust and sticky inside the scale-up networks, which is just a lot more TAM for Marvell as well. You've got switch ASPs that are roughly the same, you've got a whole new emerging market segment where nobody's quite established the leadership position there. We think based on our set of assets and our strategy, we should do really well there. All the numbers I've rattled off to everybody here, which is a lot, I get it, the concept is trying to give people visibility onto the different pieces of Marvell that you might not think of. On the scale up and on the switching side, that is not really in any numbers I'm talking about right now. Very little, nothing in the $16.5 billion. Then the year after, we'll probably get some contribution, but that's never showed up in an Analyst Day we've done or any kind of discussion. That's all in front of us, and that's all upside, and I think it can be very meaningful over time. We'll see."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Simon Leopold (Raymond James)">Simon Leopold（Raymond James）</div><div class="qa-topic" data-en="Relative Sizing of the Three FY28 Custom Growth Drivers">FY28三大custom成長動能的相對佔比</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Of the three FY28 custom growth drivers — existing programs, XPU attach, and the new Tier-1 ramp — which is biggest, or how should we think about relative contribution?">FY28 custom三大成長動能——既有計畫、XPU attach、新Tier-1放量——哪個最大？該如何看待相對貢獻？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matt reiterated 'roughly 1/3, 1/3, 1/3' across the three buckets, unchanged from last quarter's framing, noting only that all three have 'sized up' in absolute dollar terms as the whole business more than doubles.">Matt重申三個桶「大致各佔1/3」，與上季的架構相同，只補充三者在絕對金額上都「變大了」，因為整體業務將翻倍以上成長。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="This re-confirms Vivek Arya's earlier point without adding granularity: roughly a third of FY28 custom growth remains dependent on the least-verifiable of the three buckets — a single, unnamed new Tier-1 customer with no confirmed production date beyond 'next fiscal year.' The equal-thirds framing has now been repeated for two consecutive quarters without any breakdown by dollar amount.">這只是重複確認Vivek Arya先前的重點，並未增加細節：FY28 custom成長中約三分之一，仍仰賴三個桶中最難驗證的一個——一個未具名的新Tier-1客戶，量產時間僅說「next FY」，沒有其他確認。「大致三等分」的說法已連續兩季重複，卻從未給出實際金額的拆分。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Simon Leopold:</b> "Thank you very much for taking the question. I am wondering, if we look at the fiscal 2028 outlook for the custom to double and the three drivers that you outlined, can you give us a little bit more color as to which of these is the biggest, or how to think about the contributions between existing customer expansion, the XPU attach, and then the new Tier 1? Just trying to get a sense of relative size of each. Thanks."<br><br><b>Matt Murphy:</b> "Yeah. No problem. Thanks for the question. Last quarter, when we talked about it was about 1/3, 1/3, 1/3 in those different buckets, the existing programs, XPU attach, and our new program. It's about the same. What's happened is what we said, it's going to more than double. All of those have sized up. I think across the board, I would say, all of our different custom programs, which again, I mentioned was quite a few when you add the XPU attach in there, every one of those has sized up and wants to be bigger for next year. It's a double plus, which is great, and I'd say it's roughly the same ratio. We'll know more, obviously, as we get through the year here and lock the production plan for next year and our allocation. At the moment, everything wants to be more, and we will do that. We'll more than double the business from this year to next year in about the same increments in terms of growth. Thanks for the question."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M&A Integration Panel -->
+  <div id="panel-sca" class="panel">
+    <div class="section-title" data-en="Celestial AI / XConn Acquisition Integration Structure">Celestial AI / XConn 收購整合架構</div>
+    <div class="sca-grid">
+      <div class="sca-box blue">
+        <h4 data-en="Acquisition Scale &amp; Contribution">收購規模與貢獻</h4>
+        <ul>
+          <li data-en="Celestial AI: $3.5B, closed Feb 2026, Photonic Fabric technology already selected by a Tier 1 hyperscaler for its next-gen XPU scale-up network">Celestial AI：$35億，2026年2月完成收購，Photonic Fabric技術已被一家Tier 1雲端巨頭選為次世代XPU scale-up網路方案</li>
+          <li data-en="XConn Technologies: $469M, closed Feb 2026, advanced PCIe/CXL switching silicon feeding directly into UALink/ESUN scale-up switching and PCIe Gen 6/CXL 3.1">XConn Technologies：$4.69億，2026年2月完成收購，先進PCIe/CXL交換晶片直接餵入UALink/ESUN scale-up switching與PCIe Gen 6/CXL 3.1</li>
+          <li data-en="Combined goodwill impact: $11.1B &rarr; $13.9B (+$2.8B) on the balance sheet">合併商譽影響：資產負債表商譽由$111億增至$139億（+$28億）</li>
+          <li data-en="Scale-up optics FY28 outlook more than doubled from ~$150M (Celestial-only) to &gt;$300M (Celestial + Marvell products combined)">Scale-up optics FY28展望較先前（僅Celestial）的約$1.5億上修逾一倍至&gt;$3億（Celestial+Marvell產品合計）</li>
+          <li data-en="NVIDIA also invested $2.0B via Series A convertible preferred (closed 3/31/2026) — a separate capital event tied to the expanded optics/NVLink Fusion/AI-RAN partnership, landing in the same quarter">NVIDIA同季另外透過Series A可轉換優先股投資$20億（2026/3/31完成）——與擴大的optics/NVLink Fusion/AI-RAN合作相關的獨立資本事件，恰好落在同一季</li>
+        </ul>
+      </div>
+      <div class="sca-box green">
+        <h4 data-en="Integration Timeline">整合時程</h4>
+        <ul>
+          <li data-en="Both acquisitions closed February 2026 — this is essentially their first full quarter">兩筆收購皆於2026年2月完成——本季實質上是首個完整季度</li>
+          <li data-en="Celestial: 'full strength' of engineering/ops org focused on bringing its first-generation chiplet into high-volume manufacturing — i.e. still pre-HVM">Celestial：工程與營運組織「全力投入」將其第一代chiplet導入量產製造——換言之尚未進入量產階段</li>
+          <li data-en="XConn: capabilities already feeding PCIe Gen 6/CXL 3.1 roadmap and UALink/ESUN scale-up switch development; team 'substantially expanded'">XConn：能力已餵入PCIe Gen 6/CXL 3.1藍圖與UALink/ESUN scale-up switch開發；團隊「大幅擴編」</li>
+          <li data-en="CFO guides GAAP EPS to 'normalize' in Q2 FY27 after this quarter's purchase-accounting distortion">CFO guide本季購買會計扭曲後，GAAP EPS將於FY27 Q2「正常化」</li>
+        </ul>
+      </div>
+      <div class="sca-box orange">
+        <h4 data-en="Financial Commitments &amp; Costs">財務承諾與成本</h4>
+        <ul>
+          <li data-en="Celestial contingent consideration (earn-out): $315.8M initial &rarr; $647.6M quarter-end (+$331.8M fair-value charge, tied to Marvell's own stock price)">Celestial或有對價（earn-out）：初始$3.158億 → 季末$6.476億（+$3.318億公允價值變動，與Marvell自家股價連動）</li>
+          <li data-en="Hedge: $300M notional cash-settled forward stock purchase contract generated an $81.1M unrealized gain — only ~24% offset of the liability's fair-value increase">避險：$3億名目金額之cash-settled forward stock purchase contract，本季產生$8,110萬未實現利得——僅對沖負債公允價值增幅的約24%</li>
+          <li data-en="Assumed equity awards: Celestial $203.0M FV ($190.1M future expense), XConn $35.4M FV ($15.0M future expense) — ongoing SBC drag ahead">承接股權獎酬：Celestial公允價值$2.03億（未來費用$1.901億）、XConn公允價值$3,540萬（未來費用$1,500萬）——後續持續拖累SBC</li>
+          <li data-en="$1.27B net cash used for acquisitions this quarter, partly funded via a new $1.0B 2036 Senior Notes issuance (and $500M 2026 notes retired)">本季併購淨動用現金$12.7億，部分透過新發$10億2036年到期優先票券融資（並贖回$5億2026年到期票券）</li>
+        </ul>
+      </div>
+      <div class="sca-box red">
+        <h4 data-en="Unverified / Undisclosed">尚待驗證 / 未揭露</h4>
+        <ul>
+          <li data-en="New Tier-1 XPU customer identity never disclosed — yet ~1/3 of FY28 custom growth depends on it">新Tier-1 XPU客戶身份從未揭露——但FY28 custom成長約1/3仰賴於此</li>
+          <li data-en="No analyst asked about the 80.6% YoY GAAP net income collapse or the contingent-consideration mechanics driving it">沒有任何分析師詢問GAAP淨利年減80.6%的問題，或背後的或有對價機制</li>
+          <li data-en="No analyst asked about NVIDIA preferred stock dilution terms, despite 7.9M weighted-avg diluted shares already added this quarter with a full quarter's effect still to come in Q2">沒有分析師詢問NVIDIA優先股稀釋條款，儘管本季已新增790萬加權平均稀釋股數，且Q2才會反映全季效果</li>
+          <li data-en="China 44% / Taiwan 21% shipment-destination concentration (per 10-Q) never referenced anywhere in the call">10-Q揭露的中國44%／台灣21%出貨目的地集中度，法說會全程未被提及</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="price-band">
+      <div class="section-title" data-en="Path to GAAP Earnings Normalization">GAAP獲利正常化路徑</div>
+      <div class="band-label" data-en="Current state: purchase-accounting distortion (contingent consideration fair-value charge dwarfs the hedge gain)">現況：購買會計扭曲（或有對價公允價值損失遠大於避險利得）</div>
+      <div class="band-bar band-floor"><span data-en="Current — Q1 FY27 GAAP EPS $0.04">現況 — Q1 FY27 GAAP EPS $0.04</span><span data-en="Non-GAAP EPS $0.80">Non-GAAP EPS &nbsp;$0.80</span></div>
+      <div style="text-align:center; color:#888; padding: 4px 0; font-size:12px;" data-en="&#9660; CFO guides GAAP EPS to normalize in Q2 — but the contingent consideration is remeasured every quarter against Marvell's own stock price, so this remains structurally exposed to something management doesn't control &#9660;">▼ CFO guide GAAP EPS於Q2正常化——但或有對價每季都要按Marvell自家股價重新評估公允價值，結構性暴露於管理層無法控制的變數 ▼</div>
+      <div class="band-bar band-ceiling"><span data-en="Target — Q2 FY27 GAAP EPS Guide">目標 — Q2 FY27 GAAP EPS Guide</span><span data-en="GAAP $0.32-$0.42 / Non-GAAP $0.88-$0.98">GAAP $0.32-$0.42 / Non-GAAP $0.88-$0.98</span></div>
+      <div class="band-label" data-en="The Q2 GAAP guide implicitly assumes no further large contingent-consideration swings — effectively a bet on Marvell's own share-price stability, not something the operating business controls">Q2 GAAP guide隱含假設不會再出現大幅或有對價波動——本質上是押注Marvell自家股價穩定，而非營運本業能控制的變數</div>
+      <hr class="divider">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+        <div>
+          <div style="font-size:11px; font-weight:700; color:#1d4ed8; margin-bottom:6px; text-transform:uppercase;" data-en="What This Means for Marvell">對 Marvell 的意義</div>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8; color:#333;">
+            <li data-en="Short-term GAAP earnings volatility in exchange for silicon-photonics and PCIe/CXL switching breadth needed for the scale-up networking cycle">短期GAAP獲利波動，換取scale-up networking周期所需的矽光子與PCIe/CXL switching廣度</li>
+            <li data-en="Scale-up optics outlook already more than doubling (Celestial + Marvell combined) suggests early integration is bearing fruit on the product side">Scale-up optics展望已較先前上修逾一倍（Celestial+Marvell合計），顯示整合初期在產品面已見成效</li>
+            <li data-en="NVIDIA's simultaneous $2.0B equity investment reinforces the strategic case for the interconnect/custom silicon bet">NVIDIA同季追加$20億股權投資，強化了interconnect/custom silicon策略布局的可信度</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:700; color:#c2600a; margin-bottom:6px; text-transform:uppercase;" data-en="What This Means for Investors">對投資人的意義</div>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8; color:#333;">
+            <li data-en="GAAP EPS will likely stay noisy for as long as the contingent consideration liability remains outstanding and only partially hedged">只要或有對價負債尚未結清、且僅部分避險，GAAP EPS恐持續失真</li>
+            <li data-en="Diluted share count is climbing from three simultaneous capital actions this quarter (Celestial stock, XConn stock, NVIDIA preferred) — a full quarter of NVIDIA dilution has not yet hit the P&amp;L">本季三筆資本事件同時發生（Celestial股票、XConn股票、NVIDIA優先股）推升稀釋股數——NVIDIA的完整季度稀釋效果尚未反映在損益表</li>
+            <li data-en="Non-GAAP figures (the metric management and the market focus on) already exclude the contingent-consideration noise — worth tracking the GAAP/non-GAAP gap each quarter as a integration-health indicator">Non-GAAP數字（管理層與市場關注的指標）已排除或有對價的雜訊——GAAP/Non-GAAP落差可作為每季追蹤整合健康度的指標</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-en="Core Open Question on Celestial AI's Earn-Out Structure">Celestial AI或有對價結構的核心疑問</div>
+      <p data-en="Management framed this quarter's GAAP miss purely as a technical purchase-accounting artifact, and no analyst pressed on it. But three points are worth holding in mind together:<br><br>
+      <strong style=&quot;color:#1a1a2e;&quot;>1) The contingent consideration is tied to Marvell's own stock price</strong>, meaning a strong stock rally (the very outcome shareholders want) mechanically inflates the liability and depresses future GAAP earnings further, unless the hedge notional is increased<br>
+      <strong style=&quot;color:#1a1a2e;&quot;>2) The $300M hedge notional only covered about a quarter of this quarter's $331.8M swing</strong> — if Marvell's stock continues to re-rate on the AI infrastructure narrative, the unhedged portion of future swings could be larger, not smaller<br>
+      <strong style=&quot;color:#1a1a2e;&quot;>3) This lands in the same quarter as two other dilutive capital events</strong> (XConn stock issuance, NVIDIA's $2.0B convertible preferred) — the combined effect on diluted share count and GAAP EPS trajectory has not been modeled or discussed by management or analysts">管理層將本季GAAP未達預期完全歸因於技術性的購買會計因素，且沒有分析師追問。但三點值得一併留意：<br><br>
+      <strong style="color:#1a1a2e;">① 或有對價與Marvell自家股價連動</strong>，意味著股價強勢上漲（股東最樂見的結果）反而會機械性推升負債、進一步壓低未來GAAP獲利，除非避險名目金額同步擴大<br>
+      <strong style="color:#1a1a2e;">② $3億避險名目金額僅覆蓋本季$3.318億波動的約四分之一</strong>——若Marvell股價因AI基礎建設敘事持續重新評價，未來波動中未避險的部分恐怕只會更大、不會更小<br>
+      <strong style="color:#1a1a2e;">③ 這恰好與另外兩筆稀釋性資本事件同季發生</strong>（XConn股票發行、NVIDIA $20億可轉換優先股）——稀釋股數與GAAP EPS軌跡的合併效果，管理層與分析師都未曾建模或討論過</p>
+    </div>
+  </div>
+
+  <!-- Tech Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title" data-en="Q1 FY27 Revenue Mix: Data Center vs. Communications &amp; Other">Q1 FY27 營收結構：Data Center vs Communications &amp; Other</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name" data-en="Data Center<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(interconnect / switching / custom)</span>">Data Center 營收<br><span style="color:#666;font-size:11px;font-weight:400;">(interconnect／switching／custom)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#1565c0;" data-en="$1.83B &nbsp;+27% YoY">$18.3億 &nbsp;+27% YoY</div></div>
+        <div class="rev-val">76%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Communications &amp; Other<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(enterprise networking / carrier / consumer)</span>">Communications &amp; Other 營收<br><span style="color:#666;font-size:11px;font-weight:400;">(企業網路／電信／消費)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:32%; background:#7b1fa2;" data-en="$585M &nbsp;+29% YoY">$5.85億 &nbsp;+29% YoY</div></div>
+        <div class="rev-val">24%</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title" data-en="Observation">觀察</div>
+      <p data-en="The 76/24 mix is unchanged YoY (10-Q) even though the entire growth narrative is framed around data center — Communications &amp; Other actually grew a hair faster YoY (+29% vs. +27%) off a smaller, recovering base. The data center story is a rate-of-acceleration story, not yet a mix-shift story.">76/24的營收結構年比不變（10-Q揭露），儘管整個成長敘事都圍繞data center——Communications &amp; Other實際上年增速略快（+29% vs +27%），只是基期較小且處於復甦階段。目前data center故事是「加速度」故事，尚未反映在營收結構的位移上。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Data Center Business Lines: FY27/FY28 Growth Trajectory (as disclosed on the call)">Data Center業務線：FY27/FY28成長軌跡（依法說會揭露口徑）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name" data-en="Interconnect<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(largest DC business line)</span>">Interconnect<br><span style="color:#666;font-size:11px;font-weight:400;">(最大DC業務線)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#0d47a1;" data-en="FY27: &gt;70% YoY (raised from 50%)">FY27：&gt;70% YoY（上修自50%）</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Custom Silicon">Custom Silicon</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:60%; background:#1976d2; white-space:nowrap;" data-en="FY27: &gt;20% &nbsp;/ FY28: &gt;2x YoY">FY27：&gt;20% ／ FY28：&gt;2倍 YoY</div></div>
+        <div class="rev-val" data-en="&rarr;$10B FY29">→$100億 FY29</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Scale-Out Switching">Scale-Out Switching</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:40%; background:#6a1b9a; white-space:nowrap;" data-en="FY27: &gt;$600M &nbsp;/ FY28: &gt;$1B annualized">FY27：&gt;$6億 ／ FY28：&gt;$10億年化</div></div>
+        <div class="rev-val" data-en="2x FY26">2倍 FY26</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="DCI Module<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(scale-across 1.6T ZR/ZR+)</span>">DCI Module<br><span style="color:#666;font-size:11px;font-weight:400;">(scale-across 1.6T ZR/ZR+)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:40%; background:#e65100; white-space:nowrap;" data-en="FY26: ~$500M &rarr; FY28: ~$1B annualized">FY26：約$5億 → FY28：約$10億年化</div></div>
+        <div class="rev-val">2x</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Scale-Up Optics<br><span style=&quot;color:#666;font-size:11px;font-weight:400;&quot;>(NPO/CPO, Celestial+Marvell)</span>">Scale-Up Optics<br><span style="color:#666;font-size:11px;font-weight:400;">(NPO/CPO，Celestial+Marvell)</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:18%; background:#c62828; white-space:nowrap;" data-en="Prior ~$150M &rarr; Now &gt;$300M FY28">先前約$1.5億 → 現在&gt;$3億 FY28</div></div>
+        <div class="rev-val">2x+</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Four Platform Pillars">四大平台支柱</div>
+    <div class="tech-grid">
+      <div class="tech-card dram">
+        <h4 data-en="Interconnect">Interconnect（互連）</h4>
+        <ul>
+          <li data-en="800G PAM4 demand strengthening; 200G/lane 1.6T ramping fast, another step-up expected FY28"><strong style="color:#1a1a2e;">PAM4</strong>：800G需求走強；200G/lane 1.6T快速放量，FY28再升一階</li>
+          <li data-en="TIAs and drivers scaling toward $1B+ annualized run-rate within the next few quarters"><strong style="color:#1a1a2e;">TIA與Driver</strong>：未來數季內朝向$10億+年化run-rate</li>
+          <li data-en="Coherent Light (2-20km): first-gen 200G/lane 1.6T shipping; next-gen adds integrated MACsec"><strong style="color:#1a1a2e;">Coherent Light</strong>（2-20km）：第一代200G/lane 1.6T已出貨；次世代整合MACsec</li>
+          <li data-en="DCI: industry-first secure 1.6T ZR/ZR+ modules (2nm coherent DSP) sampling this year, targeting the scale-across TAM (&gt;10x bandwidth vs. front-end DCI)"><strong style="color:#1a1a2e;">DCI</strong>：業界首款安全1.6T ZR/ZR+模組（2nm coherent DSP）今年送樣，瞄準scale-across TAM（頻寬需求&gt;10倍於前端DCI）</li>
+        </ul>
+      </div>
+      <div class="tech-card nand">
+        <h4 data-en="Switching">Switching（交換）</h4>
+        <ul>
+          <li data-en="Scale-out: 51.2T ramping strongly, new 100T platform launched, roadmap to 200T+"><strong style="color:#1a1a2e;">Scale-out</strong>：51.2T快速放量，新100T平台上市，藍圖持續至200T+</li>
+          <li data-en="Scale-up: internally developed UALink and ESUN switches, plus NVLink Fusion via the expanded NVIDIA partnership"><strong style="color:#1a1a2e;">Scale-up</strong>：自研UALink與ESUN switch，另透過擴大的NVIDIA合作取得NVLink Fusion</li>
+          <li data-en="XConn adds PCIe Gen 6 / CXL 3.1 switching, paired with retimers and memory expanders for end-to-end reference designs"><strong style="color:#1a1a2e;">XConn</strong>：加入PCIe Gen 6／CXL 3.1 switching，搭配retimer與記憶體擴充器提供端到端參考設計</li>
+          <li data-en="Each scale-up switch engagement framed as a 'multi-billion dollar lifetime revenue opportunity'; explicitly excluded from the $16.5B FY28 guide"><strong style="color:#1a1a2e;">機會規模</strong>：每個scale-up switch engagement都被定位為「數十億美元終身營收機會」；明確不在$165億FY28 guide內</li>
+        </ul>
+      </div>
+      <div class="tech-card hbm">
+        <h4 data-en="Custom Silicon">Custom Silicon（客製化晶片）</h4>
+        <ul>
+          <li data-en="Flagship XPU program driving multiple years of growth across multiple generations"><strong style="color:#1a1a2e;">旗艦XPU</strong>：驅動跨多世代的多年成長</li>
+          <li data-en="10+ XPU-attach programs ramping (NIC, CXL memory attach), demand exceeding prior forecasts on rising inference KV-caching needs"><strong style="color:#1a1a2e;">XPU attach</strong>：10+個計畫放量中（NIC、CXL記憶體attach），需求因推論KV caching需求上升而超前預測</li>
+          <li data-en="New Tier-1 XPU program: 'firm requirements for all of next fiscal year,' ~1/3 of FY28 custom growth, customer identity undisclosed"><strong style="color:#1a1a2e;">新Tier-1 XPU計畫</strong>：「已鎖定next FY全年確定需求」，佔FY28 custom成長約1/3，客戶身份未揭露</li>
+          <li data-en="Target: &gt;$10B custom revenue by FY29 (~20% share of a ~$55B custom silicon TAM per June 2025 sizing)"><strong style="color:#1a1a2e;">目標</strong>：FY29 custom營收&gt;$100億（依2025年6月估算，約佔$550億custom silicon TAM的20%）</li>
+        </ul>
+      </div>
+      <div class="tech-card pkg">
+        <h4 data-en="Scale-Up Optics">Scale-Up Optics（規模擴增光學）</h4>
+        <ul>
+          <li data-en="Broadest modulator portfolio: MZM, EAM, MRM, plus emerging microLED/microVCSEL approaches, supporting both NPO and CPO"><strong style="color:#1a1a2e;">最廣調變器組合</strong>：MZM、EAM、MRM，加上新興microLED／microVCSEL方案，同時支援NPO與CPO</li>
+          <li data-en="Celestial AI's Photonic Fabric (EAM + low-power analog SerDes) already selected by a Tier 1 hyperscaler for next-gen XPU scale-up"><strong style="color:#1a1a2e;">Celestial AI Photonic Fabric</strong>：（EAM+低功耗類比SerDes）已被一家Tier 1雲端巨頭選為次世代XPU scale-up方案</li>
+          <li data-en="MRM device demonstrations completed; ongoing TSMC CoWoS collaboration"><strong style="color:#1a1a2e;">MRM</strong>：元件展示已完成，持續與台積電CoWoS平台合作</li>
+          <li data-en="Polariton acquisition adds plasmonics tech (&gt;1THz modulator bandwidth, up to 10x current silicon photonics), extending the roadmap to 3.2T+"><strong style="color:#1a1a2e;">Polariton收購</strong>：加入電漿子(plasmonics)技術（調變器頻寬&gt;1THz，較現行矽光子快達10倍），將藍圖延伸至3.2T以上</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title" data-en="AI Infrastructure Demand Landscape">AI基礎建設需求場景</div>
+      <p data-en="<strong style=&quot;color:#1a1a2e;&quot;>Agentic AI as a networking multiplier</strong>: a single agentic user request can trigger many model queries routed across different parts of the cluster (vs. one-shot inferencing), substantially increasing low-latency, long-reach traffic and memory requirements — management frames this as a fresh tailwind for scale-out, scale-up, and XPU-attach simultaneously.<br><br>
+        <strong style=&quot;color:#1a1a2e;&quot;>More CPUs, more attach</strong>: agentic AI is also expected to increase the number of CPUs deployed in AI infrastructure, which directly drives NIC, PCIe switch, and retimer demand plus CPU-centric front-end network bandwidth — a second-order beneficiary of the same trend.<br><br>
+        <strong style=&quot;color:#1a1a2e;&quot;>Scale-across as the next DCI wave</strong>: AI clusters increasingly must span multiple data centers due to power/space constraints, extending the back-end AI network between sites; aggregate scale-across bandwidth needs are projected at &gt;10x today's front-end DCI networks, and Marvell already ships DCI to all five major U.S. hyperscalers.<br><br>
+        <strong style=&quot;color:#1a1a2e;&quot;>Silicon photonics roadmap extension</strong>: the Polariton acquisition's plasmonics technology (demonstrated &gt;1THz modulator bandwidth) is being folded into the DCI and coherent-lite roadmaps to extend the platform to 3.2T and beyond — a forward-looking technology bet with no near-term revenue attached yet.">
+        <strong style="color:#1a1a2e;">Agentic AI是網路流量的放大器</strong>：單一agentic使用者請求可能觸發多次模型查詢，並被路由至叢集不同部位（相對於傳統一次性推論），大幅提升低延遲、長距離的流量與記憶體需求——管理層將此定位為同時驅動scale-out、scale-up與XPU attach的全新順風。<br><br>
+        <strong style="color:#1a1a2e;">更多CPU、更多attach</strong>：agentic AI預期也會推升AI基礎建設中部署的CPU數量，直接帶動NIC、PCIe switch、retimer需求，以及CPU為中心的前端網路頻寬——是同一趨勢的次級受益者。<br><br>
+        <strong style="color:#1a1a2e;">Scale-across：DCI的下一波</strong>：受限於電力與空間，AI叢集日益需要跨多個資料中心，將後端AI網路延伸至站點之間；scale-across聚合頻寬需求預估較現行前端DCI網路高逾10倍，Marvell目前已對美國五大雲端巨頭全數出貨DCI產品。<br><br>
+        <strong style="color:#1a1a2e;">矽光子藍圖延伸</strong>：Polariton收購取得的電漿子技術（展示調變器頻寬&gt;1THz）正被納入DCI與coherent-lite藍圖，將平台延伸至3.2T以上——這是一項尚無近期營收貢獻的前瞻技術布局。
+      </p>
+    </div>
+  </div>
+
+  <!-- Risk Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title" data-en="Risk Matrix: Disclosed vs. Undisclosed in the Call">風險矩陣：法說會中已揭露 vs. 未揭露</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="GAAP Earnings Remain Structurally Exposed to Celestial AI's Contingent Consideration">GAAP獲利結構性暴露於Celestial AI或有對價</div>
+        <span data-en="The Celestial AI earn-out liability is remeasured quarterly against Marvell's own stock price. This quarter's $331.8M fair-value charge (vs. only an $81.1M hedge gain) drove an 80.6% YoY collapse in GAAP net income. No analyst asked about this mechanic on the call, even though a continued stock re-rating would mechanically inflate the liability further.">Celestial AI的earn-out負債每季都要按Marvell自家股價重新評估公允價值。本季$3.318億的公允價值損失（相對僅$8,110萬的避險利得）導致GAAP淨利年減80.6%。法說會中沒有任何分析師詢問這個機制，儘管股價持續重新評價將機械性地進一步推升這筆負債。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="~1/3 of FY28 Custom Growth Hinges on an Unnamed, Unverifiable New Tier-1 Program">FY28 custom成長約1/3仰賴未具名、無法驗證的新Tier-1計畫</div>
+        <span data-en="Management explicitly declined to provide any identifying detail on the new Tier-1 XPU program (customer name, exclusivity, volume) across two separate questions (Vivek Arya, Michael Tsvetanov), despite it representing roughly a third of next year's custom growth for two consecutive quarters of guidance.">管理層在兩個不同問題（Vivek Arya、Michael Tsvetanov）中都明確拒絕提供新Tier-1 XPU計畫的任何辨識性細節（客戶名稱、獨家性、量體），儘管該計畫已連續兩季被列為明年custom成長約三分之一的來源。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="FY28 Interconnect Deceleration Assumption Was Never Substantively Justified">FY28 interconnect減速假設從未獲得實質理由支持</div>
+        <span data-en="Management effectively conceded the FY28 guide has 'upward bias' when pressed by Ross Seymore on why 70%+ growth this year should decelerate toward CapEx growth (~30%+) next year, but never explained the reasoning behind the deceleration baked into the guide itself.">被Ross Seymore追問「為何今年70%+成長next FY該減速至CapEx成長率(~30%+)」時，管理層實質上承認FY28 guide「有上修空間」，卻從未解釋內建於guide本身的減速假設是基於什麼理由。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Geographic Shipment Concentration (China 44% / Taiwan 21%) Never Referenced on the Call">出貨地理集中度（中國44%／台灣21%）法說會全程未提</div>
+        <span data-en="The 10-Q discloses 44% of revenue shipped to China and 21% to Taiwan as final destinations, a meaningful export-control and geopolitical exposure that is invisible in the entirely qualitative, demand-focused narrative management presented on the call.">10-Q揭露44%營收出貨目的地為中國、21%為台灣，這是實質的出口管制與地緣政治曝險，在管理層法說會上完全定性、聚焦需求面的敘事中完全看不到。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Dilution From Three Simultaneous Capital Events Was Never Raised">三筆同時發生的資本事件所帶來的稀釋從未被提及</div>
+        <span data-en="Celestial stock issuance, XConn stock issuance, and NVIDIA's $2.0B convertible preferred (21.8M shares at $91.84) all landed in the same quarter, pushing diluted shares from 875.6M to 893.3M YoY — with only a partial quarter of NVIDIA dilution reflected so far (closed 3/31/2026). No analyst asked about capital structure or dilution management.">Celestial股票發行、XConn股票發行、NVIDIA $20億可轉換優先股（2,180萬股，轉換價$91.84）三筆事件同季發生，將稀釋股數自年增875.6百萬股推升至893.3百萬股——且目前僅反映NVIDIA部分季度的稀釋效果（2026/3/31完成交易）。沒有任何分析師詢問資本結構或稀釋管理問題。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Total Multi-Year Capacity Commitments Are Larger Than the Call's Framing Suggests">多年期產能承諾規模大於法說會敘事所暗示</div>
+        <span data-en="The 10-Q discloses $2.76B in wafer purchase commitments and $709M in technology-license commitments through FY2031, plus a further $870M post-quarter deposit for FY2030-2033 capacity — a combined ~$4.3B stack, versus the '~$1B in prepayments this fiscal year' figure emphasized in prepared remarks.">10-Q揭露晶圓採購承諾$27.6億、技術授權承諾$7.09億（皆至FY2031），加上季後追加$8.7億的FY2030-2033產能訂金，合計約$43億，相較於事前備稿強調的「本財年約$10億預付款」規模大得多。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Scale-Up Switching Upside Is Real but Completely Unmodeled">Scale-up switching的上檔真實存在，但完全未建模</div>
+        <span data-en="Management explicitly confirmed scale-up switching (UALink/ESUN/NVLink Fusion) is 'nothing in the $16.5 billion' FY28 guide — a rare moment of candor, but it also means a potentially multi-billion-dollar category has zero disclosed size, timing, or milestones for investors to track.">管理層明確確認scale-up switching（UALink/ESUN/NVLink Fusion）「完全不在$165億」FY28 guide裡——這是罕見的坦率時刻，但也意味著一個潛在數十億美元規模的類別，完全沒有揭露規模、時程或里程碑供投資人追蹤。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low" data-en="Low">低</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Communications &amp; Other Remains a Low-Growth, Low-Diversification Segment">Communications &amp; Other仍是低成長、低分散度的業務</div>
+        <span data-en="At ~24% of revenue growing only ~10% in FY27 and low-single-digits in FY28, the segment is stable but does not meaningfully diversify Marvell away from its now near-total dependence on the AI data center cycle.">佔營收約24%，FY27僅成長約10%、FY28為低個位數，該業務穩定但無法為Marvell提供有意義的分散——公司如今幾乎完全仰賴AI資料中心周期。</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>
