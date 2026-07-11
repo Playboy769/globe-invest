@@ -8,9 +8,12 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
 
-  .page-header { padding: 20px 24px 0; }
-  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
   .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
 
   .container { max-width: 920px; margin: 0 auto; padding: 16px 24px 40px; }
 
@@ -87,10 +90,6 @@
   .tech-card ul { padding-left: 14px; }
   .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
 
-  .bridge-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 12px; border-bottom: 1px solid #eee; }
-  .bridge-row:last-child { border-bottom: none; }
-  .bridge-row.anchor { font-weight: 700; background: #f5f6fa; border-radius: 4px; padding: 8px 10px; margin: 2px 0; }
-
   .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
   .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; white-space: nowrap; }
   .risk-badge.high { background: #fee2e2; color: #b91c1c; border: 1px solid #f0aaaa; }
@@ -105,273 +104,278 @@
 </head>
 <body>
 <div class="page-header">
-  <h1>Dell Technologies — FY2027 Q1 法說會分析</h1>
-  <p>Q&A 問答分析 / 財務與業務板塊 / AI Backlog 與供應鏈 / 觀察與風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年5月28日</p>
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Dell Technologies — FY2027 Q1 Earnings Call Analysis">Dell Technologies — FY2027 Q1 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis (verbatim transcript) / Financials &amp; Segments / AI Backlog &amp; Supply Chain / Risk Matrix &nbsp;·&nbsp; Call Date: May 28, 2026">Q&A 問答分析 / 財務與業務板塊 / AI Backlog 與供應鏈 / 觀察與風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年5月28日</p>
 </div>
 <div class="container">
   <div class="tabs">
-    <div class="tab active" onclick="sw('qa',this)">Q&A 問答分析</div>
-    <div class="tab" onclick="sw('fin',this)">財務與業務板塊</div>
-    <div class="tab" onclick="sw('ai',this)">AI Backlog 與供應鏈</div>
-    <div class="tab" onclick="sw('risk',this)">觀察與風險矩陣</div>
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="Financials &amp; Segments" onclick="sw('fin',this)">財務與業務板塊</div>
+    <div class="tab" data-en="AI Backlog &amp; Supply Chain" onclick="sw('ai',this)">AI Backlog 與供應鏈</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">觀察與風險矩陣</div>
   </div>
 
   <!-- Q&A Panel -->
   <div id="panel-qa" class="panel active">
+    <div class="note-box" style="margin-bottom:12px;">
+      <div class="q-label" data-en="Note">說明</div>
+      <div class="q-text" data-en="Questions and management responses below are the unedited transcript, verbatim, from the earnings call (source: Quartr transcript). The flagged &quot;Logic Gap / Observation&quot; commentary is original analysis and is not part of the transcript.">下方的問題與管理層回應為法說會逐字稿原文（來源：Quartr），未經刪改。標示為「邏輯缺口／觀察」的段落是原創分析，非逐字稿內容。</div>
+    </div>
     <div class="stat-row">
-      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">分析師提問</div></div>
-      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">核心問題</div></div>
-      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl">邏輯缺口/未答</div></div>
+      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl" data-en="Logic Gaps / Unanswered">邏輯缺口/未答</div></div>
     </div>
 
     <div class="qa-item open">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Ben Reitzes（Melius Research）</div><div class="qa-topic">拉貨提前 vs. 真實需求；下半年財測上修的組成</div></div>
+        <div><div class="qa-analyst" data-en="Ben Reitzes (Melius Research)">Ben Reitzes（Melius Research）</div><div class="qa-topic" data-en="Pull-forward vs. real demand; composition of the raised second-half guide">拉貨提前 vs. 真實需求；下半年財測上修的組成</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">本季表現如此驚人，是否有明顯的拉貨提前效應（尤其傳統伺服器與PC）？財測卻同步上修下半年，代表拉貨提前對全年影響不大——能否拆解各板塊拉貨提前 vs. 真實需求的組成？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Well, let me say congratulations, guys. I don&#39;t think I&#39;ve ever seen a Dell quarter like this. Maybe Michael had one in the dorm room or something, beating expectations, but congrats to you guys. The question that I have is with regard to the inherent level of real demand. When you see something like this, you think there could be some pull forward, especially in the traditional servers and the PCs. The way you guided for the year, obviously by taking up the second half, would imply that the pull forward doesn&#39;t have much of an impact stealing from the rest of the year. Can you just go through the puts and takes of the pull forwards in the major segments, please, and how you came up with still a higher second half? Thanks.">本季表現如此驚人，是否有明顯的拉貨提前效應（尤其傳統伺服器與PC）？財測卻同步上修下半年，代表拉貨提前對全年影響不大——能否拆解各板塊拉貨提前 vs. 真實需求的組成？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：需求來自多重因素——價格上漲疑慮驅動的拉貨提前、龐大的存量設備汰換需求（PC三分之一機齡4年以上、多數伺服器仍為14G或更舊）、AI帶動的傳統伺服器新需求（推論、agentic），以及四大板塊全面搶佔市佔率。動盪時期客戶傾向找Dell尋求「穩定的手」。前瞻管道健康度超越歷史常態，這給了上修全年財測270億美元的信心。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Sure. Thank you, Ben. It was a good quarter. Been here a long time. It&#39;s a good quarter. When we look at the demand environment that we are operating in today, it&#39;s very different than historical. We think of it as several factors that are driving demand. Clearly what you said, there is a pull-in component, there&#39;s a buy-ahead. Customers want to ensure they have access to supply. They&#39;re concerned about raising prices, and they&#39;re acting. There&#39;s also a component of we have large install bases, whether that be in PCs, where you have a third of the units that are four years or older. We were lagging in a Windows 11 refresh and caught up through the quarter against historical refreshes. We have a large number of 14G servers in the install base that need to be upgraded as customers are moving to modernize.<br><br>Customers are upgrading their edge, they&#39;re upgrading the infrastructure. They&#39;re looking for more capable PCs as agentic workloads make their way to the edge. They&#39;re looking to consolidate space, power, and cooling to drive efficiency. Our new 18G servers are a great vehicle to do that with its 13:1 consolidation. We&#39;re seeing pockets of fundamental new demand. There&#39;s new demand driven by AI. There&#39;s an AI drag. There&#39;s inference. The agentic AI is driving a new marketplace for traditional servers that we haven&#39;t seen before. I think the last two are what you would expect out of Dell, are we&#39;re winning. We&#39;re taking share on all three segments, four if I count AI servers. All four major businesses, PC, server, storage, AI servers, taking share, we&#39;re winning.<br><br>Lastly, during these times of supply disruption and a lot of puts and takes in the marketplace, customers tend to come to Dell to look for a calming hand, looking for help. We&#39;re certainly helping as many customers as we have. That&#39;s in PCs. That&#39;s in servers, that&#39;s in storage.<br><br>Those are the demand levers of the demand dynamics that we see across all of the businesses. As we look at our forward-looking pipelines, the pipelines have never been healthier. They&#39;re actually growing at greater than historical rates, which gave us confidence to raise the guide by $27 billion of revenue for the year. I hope that helps.">Jeff：需求來自多重因素——價格上漲疑慮驅動的拉貨提前、龐大的存量設備汰換需求（PC三分之一機齡4年以上、多數伺服器仍為14G或更舊）、AI帶動的傳統伺服器新需求（推論、agentic），以及四大板塊全面搶佔市佔率。動盪時期客戶傾向找Dell尋求「穩定的手」。前瞻管道健康度超越歷史常態，這給了上修全年財測270億美元的信心。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 邏輯缺口</div>
-          <div class="q-text">列出了一整串需求驅動因素，卻完全沒有拆解「多少比例是拉貨提前、多少是真實需求」這個問題本身要的答案。上修財測的唯一佐證是「管道健康度」的定性描述，外部投資人無法獨立驗證。</div>
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="A full list of demand drivers was given, but the actual question — what proportion is pull-forward vs. durable demand — was never quantified. The sole evidence offered for the guidance raise is qualitative &quot;pipeline health,&quot; which outside investors cannot independently verify.">列出了一整串需求驅動因素，卻完全沒有拆解「多少比例是拉貨提前、多少是真實需求」這個問題本身要的答案。上修財測的唯一佐證是「管道健康度」的定性描述，外部投資人無法獨立驗證。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Mark Newman（Bernstein）</div><div class="qa-topic">傳統伺服器成長：出貨量 vs. 漲價的拆分</div></div>
+        <div><div class="qa-analyst" data-en="Mark Newman (Bernstein)">Mark Newman（Bernstein）</div><div class="qa-topic" data-en="Traditional server growth: units vs. pricing split">傳統伺服器成長：出貨量 vs. 漲價的拆分</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">傳統伺服器爆發性成長中，出貨量與漲價各佔多少比重？這股動能能否延續超過1-2季，甚至到明年？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Hi. Thanks for taking my question and congrats on a great quarter. It would be great to get a bit more clarity on the breakout of growth between units and pricing, particularly for the blowout performance you had on traditional servers. Just adding to some of the stuff you said in previous question, just trying to get better sense for how much confidence you have that this is sustainable beyond just one or two quarters, but through this year and into next year. Thanks so much, and congrats again.">傳統伺服器爆發性成長中，出貨量與漲價各佔多少比重？這股動能能否延續超過1-2季，甚至到明年？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：PC與伺服器出貨量均有絕對成長（PC受惠於高價位帶搶市佔；伺服器則是絕對台數成長+每台內含更多核心/DRAM/NAND的「內容成長」），疊加通膨環境下的漲價。明確表示「不會拆解具體比例」。也提到AI推論/agentic負載正在把高密度傳統伺服器需求帶進neocloud與先進企業客戶。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Thanks, Mark. Very specifically, we grew units in PCs. The last reported quarter, we grew units in consumer PCs and commercial PCs, and obviously the aggregate market. We took share. There&#39;s a baseline of growth there. We were already the industry leader in PC revenue, and clearly the inflationary environment has driven up prices. Where we saw that primarily is on high price band products. We were the market leader in high price band in PCs, and that expanded as prices moved up. I won&#39;t parse out the specifics, but we had a great growth quarter in units. Obviously, the inflationary environment, we had the execution towards, for example, high-end and gaming and consumer. We had high price bands and commercial PCs. Don&#39;t forget the attached business.<br><br>The attached business for us around peripherals and around services is very healthy, and when the base business grows, it drags more revenue with each and every unit. On servers, absolute server unit growth occurred. They&#39;ll probably kick me under the table here. We had significant unit growth in traditional servers. We had the content growth. We are continuing to see on a year-over-year basis, more cores, more DRAM, more NAND placed in each and every server. You have the uplift of more content, and then obviously that content is growing as well in terms of the inflationary side. Absolute growth in units, absolute growth in the content driven by modernization and consolidation as customers are looking to upgrade and modernize their fleets. We had the inflationary part.<br><br>The other part of servers that I think is important to call out is this notion of AI drag and seeing traditional servers move and take on AI workloads. Those AI workloads we&#39;re seeing with very dense servers making their way into the neoclouds, into some of the more advanced enterprise users, think semiconductor companies, big tech, that are using it to actually drive some of the inference workloads and agentic workloads inside their environment. That&#39;s how I would capture it.">Jeff：PC與伺服器出貨量均有絕對成長（PC受惠於高價位帶搶市佔；伺服器則是絕對台數成長+每台內含更多核心/DRAM/NAND的「內容成長」），疊加通膨環境下的漲價。明確表示「不會拆解具體比例」。也提到AI推論/agentic負載正在把高密度傳統伺服器需求帶進neocloud與先進企業客戶。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 邏輯缺口</div>
-          <div class="q-text">分析師明確要的「出貨量 vs. 漲價」拆分比例被直接拒答，只給了方向性的定性描述。</div>
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The exact unit/price split the analyst explicitly asked for was declined outright — only directional, qualitative color was given.">分析師明確要的「出貨量 vs. 漲價」拆分比例被直接拒答，只給了方向性的定性描述。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Amit Daryanani（Evercore）</div><div class="qa-topic">下半年營收佔比從歷史52%降至財測隱含48%</div></div>
+        <div><div class="qa-analyst" data-en="Amit Daryanani (Evercore)">Amit Daryanani（Evercore）</div><div class="qa-topic" data-en="H2 revenue mix falling from a historical ~52% to ~48% implied by guidance">下半年營收佔比從歷史52%降至財測隱含48%</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">財測隱含下半年僅佔全年營收約48%，低於歷史常態的約52%。這個轉變中，有多少來自拉貨提前效應、多少來自刻意保守？保守的成因主要是零組件供給不足嗎？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Yep. Thanks a lot for taking my question and congrats on a really nice set of numbers over here from my side as well. You folks talked about maintaining an appropriate prudence, I think, is the way you framed it, like maintaining appropriate prudence when it comes to your guide, despite raising the back half outlook. If I sort of think about H2 versus H1 math for a second, right? I think the guide implies 48% of the revenues this year will come in the back half of the year. Historically, that number&#39;s been around 52%. Can you just touch on how much of that H2 drop you&#39;re expecting right now versus historically is from a pull-in versus you folks are perhaps just being a bit more conservative? Is that conservativeness coming more from lack of component availability or where could that lever be? Thank you.">財測隱含下半年僅佔全年營收約48%，低於歷史常態的約52%。這個轉變中，有多少來自拉貨提前效應、多少來自刻意保守？保守的成因主要是零組件供給不足嗎？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：「問題出在我身上，我們有供給問題……不是需求問題。」David：需求全面超越供給（GPU、CPU、傳統伺服器、PC皆然）；團隊會持續媒合供給與需求，並在下半年持續追逐管道機會。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: You bet, Amit. I&#39;m going to lead and David&#39;s going to punch the answer home, but I&#39;m the problem. We have a supply issue. We are supply constrained in the second half. It is not a demand issue for us.<br><br>David Kennedy: Yeah, that&#39;s the story here. The demand continues to outpace the supply. That demand is broad-based, as Jeff said, it&#39;s going beyond the GPU, there&#39;s more AI opportunities from a CPU perspective, traditional server, in the PC. We continue, obviously, these are complex designs. As we go forward, we&#39;ll continue with operational execution to work with our supply chain teams, our go-to-market teams, and our product teams to really execute a match-up to the best execution-wise, the supply that we have with the demand shaping that we see. The teams have obviously executed that tremendously in Q1. We&#39;ll look to do the same as we head into the back half of the year. The demand is there, as Jeff said. That&#39;s what we&#39;re looking at. We&#39;ll continue to look for more supply. We would like more supply.<br><br>The team will continue to go execute and go chase the pipeline that Jeff referenced earlier, which continues to be in very healthy shape.">Jeff：「問題出在我身上，我們有供給問題……不是需求問題。」David：需求全面超越供給（GPU、CPU、傳統伺服器、PC皆然）；團隊會持續媒合供給與需求，並在下半年持續追逐管道機會。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 全場最明確的邏輯缺口</div>
-          <div class="q-text">這是全場唯一給出精確數字對比（48% vs 歷史52%）的問題，管理層卻只用「供給吃緊、非需求問題」的通用說法回應，完全沒有解釋「供給吃緊」這個因素具體如何導致下半年佔比從歷史常態下修的機制——換言之，問題本身要的定量拆解從未被正面回答。</div>
+          <div class="q-label flag" data-en="⚑ Clearest Logic Gap of the Call">⚑ 全場最明確的邏輯缺口</div>
+          <div class="q-text" data-en="This is the only question of the call with a precise quantitative comparison (48% vs. a historical 52%), yet management answered with a generic &quot;it&#39;s supply, not demand&quot; assertion, never explaining the actual mechanism by which supply constraints specifically produce a lower-than-historical H2 weighting — the quantitative breakdown the question asked for was never delivered.">這是全場唯一給出精確數字對比（48% vs 歷史52%）的問題，管理層卻只用「供給吃緊、非需求問題」的通用說法回應，完全沒有解釋「供給吃緊」這個因素具體如何導致下半年佔比低於歷史常態的機制——換言之，問題本身要的定量拆解從未被正面回答。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Wamsi Mohan（Bank of America）</div><div class="qa-topic">是否透支明年IT預算？Tier 2 CSP的重要性</div></div>
+        <div><div class="qa-analyst" data-en="Wamsi Mohan (Bank of America)">Wamsi Mohan（Bank of America）</div><div class="qa-topic" data-en="Is next year&#39;s budget being borrowed from? Materiality to Tier 2 CSPs">是否透支明年IT預算？Tier 2 CSP的重要性</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">當前需求強勁，是否代表提前透支了明年的IT預算？Agentic驅動的傳統伺服器需求對Tier 2 CSP客層的重要性有多高，能否對沖企業客戶需求可能出現的降溫？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Yes, thank you so much. Very impressive set of results here. I guess if we think about the comment you made on the call, I think you said customers are prioritizing securing supply, and that is something that you expect will continue for the remainder of the year. In this kind of an environment where you just noted that demand is extremely strong, what&#39;s your take on the magnitude of the variation in IT budgets for this year? Do you think that some of this is coming out of the budgets for next year as well on the enterprise side? I&#39;m also curious on the traditional servers, I think, Jeff, you mentioned how agentic AI is maybe changing the usage. Is there a materiality of this to Tier 2 CSPs as well? You noted enterprise strength, but kind of curious if Tier 2 CSPs could be a potential offset to maybe any change in linearity of demand at enterprise. Thank you.">當前需求強勁，是否代表提前透支了明年的IT預算？Agentic驅動的傳統伺服器需求對Tier 2 CSP客層的重要性有多高，能否對沖企業客戶需求可能出現的降溫？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：「我無法對客戶明年的預算表態。」多年期（3-5年）的供給保障對話已與大型客戶展開；約2季的前瞻管道能見度異常強勁。David：預期全年結束時仍會有可觀的積壓訂單；DFS融資業務在各業務線均呈雙位數的訂單成長，協助客戶在預算限制下仍能提前取得設備。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Wamsi, I can&#39;t speak to next year and budgets for customers. Clearly the longer-term conversations we&#39;re having with customers are multi-year in nature of how they secure supply to provide their growth and upgrade their infrastructure. The discussions are multi-year in nature, think three, four, five years. Those discussions are underway, and it really is about access to supply because quite honestly, I can&#39;t tell them what the price is going to be. It&#39;s arrangements and agreements that we&#39;re working with large customers to ensure they have what they need to grow their businesses. We saw that occur across some of the largest enterprises around the world. Our pipelines indicate that&#39;s going to continue with the next set of customers and the next set of customers before that, which is breaking the historical norms of pipeline build within the quarter and the out quarters.<br><br>Our pipelines are good two quarters out. What was really interesting about traditional servers as an example, is we saw the pipeline grow in quarter greater than historical norms. We saw the two quarters out pipelines grow. It&#39;s showing more customers looking to get access to the technology. We&#39;re seeing budgets grow. We&#39;re seeing budgets shift. Obviously, we&#39;re one quarter into the year. We&#39;ll see how the second half plays out. I think that&#39;s part of the prudence that we&#39;re trying to convey of where&#39;s the demand signal. The demand that we see continues to be robust. We in the supply chain have to go find more parts for the businesses and for our customers to fulfill that demand. I hope that helps.<br><br>David Kennedy: I&#39;d add maybe a couple of things, Jeff. I think as we talk about demand outpacing supply in that environment, we would expect to exit the year with meaningful backlog as we enter next year. I think that&#39;s an important point. The other piece would be from our financing and DFS element, which again, is a competitive advantage for us. We&#39;re engaged with many customers who in normal course of business would not need to take advantage of financing offerings, but the opportunity to partially use our facility to get as much gear in their environments in year to manage their potential budget issues is a great way to balance that, and we&#39;re seeing double-digit origination growth across our CSG business, our traditional server business, our storage business, as well as AI, which you&#39;d expect.<br><br>We&#39;re seeing different ways we can help our customers get as much technology into their environments as quick as we can.">Jeff：「我無法對客戶明年的預算表態。」多年期（3-5年）的供給保障對話已與大型客戶展開；約2季的前瞻管道能見度異常強勁。David：預期全年結束時仍會有可觀的積壓訂單；DFS融資業務在各業務線均呈雙位數的訂單成長，協助客戶在預算限制下仍能提前取得設備。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 明確迴避</div>
-          <div class="q-text">「無法對明年預算表態」是對問題核心（是否透支明年預算）的直接迴避；Tier 2 CSP的具體重要性也未被單獨回應。</div>
+          <div class="q-label flag" data-en="⚑ Explicit Non-Answer">⚑ 明確迴避</div>
+          <div class="q-text" data-en="&quot;I can&#39;t speak to next year&#39;s budgets&quot; is a direct non-answer to the actual question asked (whether next year&#39;s budget is being borrowed from); the Tier 2 CSP-specific part of the question also went unaddressed.">「無法對明年預算表態」是對問題核心（是否透支明年預算）的直接迴避；Tier 2 CSP的具體重要性也未被單獨回應。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Katherine Murphy（Goldman Sachs）</div><div class="qa-topic">AI伺服器財測上修100億美元的客層來源；製造產能上限</div></div>
+        <div><div class="qa-analyst" data-en="Katherine Murphy (Goldman Sachs)">Katherine Murphy（Goldman Sachs）</div><div class="qa-topic" data-en="Source of the $10B AI server guidance raise; manufacturing capacity ceiling">AI伺服器財測上修100億美元的客層來源；製造產能上限</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">在5,000家客戶中，全年AI伺服器財測上修的100億美元增量主要來自哪個客層？以目前的製造合作夥伴產能，最多能支援多大規模？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Thank you for the question. I was wondering if you could further talk to the raised full year guidance for AI servers to $60 billion, and where across your customer base, the 5,000 customers you mentioned, you&#39;re seeing that $10 billion of incremental opportunity for the fiscal year. As a follow-up, how much capacity can you support in the AI server space with your current manufacturing partners? Thank you very much.">在5,000家客戶中，全年AI伺服器財測上修的100億美元增量主要來自哪個客層？以目前的製造合作夥伴產能，最多能支援多大規模？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">David：積壓訂單達513億美元（歷史新高），僅90天內就上修全年AI財測100億美元；成長廣泛分布於neocloud/主權國家/企業客戶；客戶數半年內成長逾50%；未來5季的前瞻管道是積壓訂單的「數倍」。Jeff／David對產能提問的回應：「沒有產能問題，是零組件問題」／「供給問題」。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="David Kennedy: A strong start to the year, Kath, $16.1 billion of shipments, $24.4 billion of orders. Our backlog now sits at $51.3 billion. Just 90 days into the quarter, we&#39;re raising our full year guide by $10 billion. We&#39;ll continue to work through those deployments as we match up our supply. Obviously, these are complex designs that we&#39;re engaged on. We&#39;re actively involved in the technology transition as we get ready for Vera Rubin, working with all these customer bases in relation to data center readiness, and making sure they can receive the product. As you look at our portfolio, it&#39;s expanding and growing across all our verticals, whether that&#39;s neoclouds, our sovereign relationships, our enterprise customers. You would&#39;ve heard Michael last week at Dell Technologies World talk about our 5,000 customers, which is up over 50% in the last six months.<br><br>You can see the traction that&#39;s coming, and I guess the other data point I&#39;d add is as we look at our pipeline over the next five quarters, that&#39;s multiples of our backlog and it&#39;s growing across each individual vertical there, again, across neoclouds individually, sovereign individually, and the enterprise space. It&#39;s broad-based and it&#39;s prevalent either geography-wise or vertical-wise.<br><br>Jeff Clarke: On capacity.<br>David Kennedy: Yeah, we have the capacity.<br>Jeff Clarke: Well, there&#39;s no capacity issue, it&#39;s parts.<br>David Kennedy: It&#39;s parts.<br>Jeff Clarke: Supply.<br>David Kennedy: Supply.">David：積壓訂單達513億美元（歷史新高），僅90天內就上修全年AI財測100億美元；成長廣泛分布於neocloud/主權國家/企業客戶；客戶數半年內成長逾50%；未來5季的前瞻管道是積壓訂單的「數倍」。Jeff／David對產能提問的回應：「沒有產能問題，是零組件問題」／「供給問題」。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 問題被重新框定</div>
-          <div class="q-text">「製造產能上限」這個具體問題被直接轉換成「零組件供給」問題來回答，等於沒有正面回應分析師問的製造端產能問題本身。</div>
+          <div class="q-label flag" data-en="⚑ Question Reframed">⚑ 問題被重新框定</div>
+          <div class="q-text" data-en="The &quot;manufacturing capacity ceiling&quot; question was directly recast as a &quot;components/supply&quot; question instead — the manufacturing-throughput question as originally asked was not answered on its own terms.">「製造產能上限」這個具體問題被直接轉換成「零組件供給」問題來回答，等於沒有正面回應分析師問的製造端產能問題本身。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Samik Chatterjee（JPMorgan）</div><div class="qa-topic">排除AI後毛利率展望改善的驅動因素</div></div>
+        <div><div class="qa-analyst" data-en="Samik Chatterjee (JPMorgan)">Samik Chatterjee（JPMorgan）</div><div class="qa-topic" data-en="Drivers behind the improved ex-AI gross margin outlook">排除AI後毛利率展望改善的驅動因素</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">排除AI伺服器組合效應後，毛利率展望比90天前更好——是漲價驅動，還是產品組合轉變？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Hi. Thanks for taking my question, congrats from my side as well on the strong results here. Maybe just to focus on one specific comment that you made in your prepared remarks, where the gross margin outlook for the year ex-AI is better than you had 90 days ago. If you can just flesh that out a bit more in terms of, is that a function of price increases that you&#39;ve been able to take, or is that a function of the sort of mix of products that you&#39;re now selling or where customer demand is focused relative to what you envisioned 90 days ago? Just curious to hear what&#39;s driving that better outlook there. Thank you.">排除AI伺服器組合效應後，毛利率展望比90天前更好——是漲價驅動，還是產品組合轉變？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">David：主要來自Dell IP儲存產品組合（PowerStore、PowerScale等非結構化儲存）帶動陣列層級的毛利率順風；傳統伺服器與CSG毛利率則靠定價紀律維持。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="David Kennedy: Yeah, sure, Samik. I think it starts with our Dell IP storage portfolio. We&#39;ve taken up our revenue guide not only for Q2 but also for the back half of the year. We&#39;re seeing our Dell IP portfolio resonate in the marketplace, whether that&#39;s the unstructured product from a PowerStore perspective in the mid-range. All of that obviously drives from a Dell IP mix perspective, tailwinds from a margin perspective, and array perspective. On the other elements of the business, both CSG and traditional server, we&#39;ve made the commitment to make sure we sustain our margin rates. We see a path to that. We will continue to manage that as we see the growth. You put that basket of goods together from a core business perspective, and you see the lift in the overall margin rate as a result.">David：主要來自Dell IP儲存產品組合（PowerStore、PowerScale等非結構化儲存）帶動陣列層級的毛利率順風；傳統伺服器與CSG毛利率則靠定價紀律維持。</div>
         </div>
         <div class="note-box">
-          <div class="q-label">觀察</div>
-          <div class="q-text">屬於本場少數給出明確歸因的回答，未見顯著邏輯缺口。</div>
+          <div class="q-label" data-en="Observation">觀察</div>
+          <div class="q-text" data-en="One of the few clean, directly-attributed answers of the call — no significant logic gap observed.">屬於本場少數給出明確歸因的回答，未見顯著邏輯缺口。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Asiya Merchant（Citigroup）</div><div class="qa-topic">AI伺服器對儲存/服務的搭售率；AI伺服器毛利率確認</div></div>
+        <div><div class="qa-analyst" data-en="Asiya Merchant (Citigroup)">Asiya Merchant（Citigroup）</div><div class="qa-topic" data-en="AI server attach rate for storage/services; AI server margin confirmation">AI伺服器對儲存/服務的搭售率；AI伺服器毛利率確認</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">AI伺服器對儲存與服務的搭售率是多少？Dell IP儲存的成長是否由AI伺服器搭售驅動？AI伺服器維持中個位數營益率目標是否不變？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Great. I&#39;ll add my congrats here, too. Thank you for taking my question. If we could just talk a little bit about the attach rates that you&#39;re seeing for the AI servers, especially as you&#39;re talking about greater enterprise demand here. You talked about 5,000 customers now. That&#39;s up from where it was a quarter ago. If you could just flesh out how you&#39;re seeing that attach rate for storage and services, and is the recent uptick in Dell IP storage a function of attach to AI servers as well as on services, if you could just comment on that, and how that fleshes out into the margin outlook for AI servers. I think I heard maintaining a mid-single-digit margin outlook for AI servers. Thank you.">AI伺服器對儲存與服務的搭售率是多少？Dell IP儲存的成長是否由AI伺服器搭售驅動？AI伺服器維持中個位數營益率目標是否不變？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：大量描述儲存動能（PowerMax連續5季成長、PowerStore連續9季雙位數成長、PowerScale連續4季、ObjectScale連續3季、資料保護連續2季），強調非結構化儲存是「餵養AI巨獸的資料集」，並提及Lightning平行檔案系統與PowerStore Elite規格。全程未給出具體的搭售率數字。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Sure. Lots into the question. We&#39;ll start with the broader topic of we are increasing the amount of storage and services that we&#39;re providing AI customers. Michael made reference at Dell Technologies World last week with our unstructured data solutions, the portfolio of products, and how we had won across several major customers, which I think are important bellwethers of what&#39;s changing in the marketplace and how our products are being perceived. We are making progress with our AI customers, neoclouds, Sovereigns, the high-frequency traders, and some of the biggest technology companies in the world, semiconductor companies in the world, where we are selling more storage, more Dell IP storage, in fact, only Dell IP storage. You&#39;re seeing it in our work. Our unstructured portfolio of products had its best quarter in demand ever.<br><br>Unstructured data is the data set that feeds the beast, so to speak, in AI. That&#39;s where we&#39;re seeing the greatest growth and making the most traction. If you think about the portfolio broadly, David mentioned five straight quarters of growth of Dell IP. It&#39;s five in PowerMax, it&#39;s nine in PowerStore, it&#39;s four in PowerScale, it&#39;s three in ObjectScale. Our data protection product is two. We are seeing the entire portfolio gain momentum, a combination of more competitive products designed for the AI era. I would point to Lightning as being an example of an AI parallel file system specifically designed for this class of devices and customers. We&#39;re seeing increased traction. We&#39;re certified across NVIDIA&#39;s stack.<br><br>We are engineering with them on how to make data ingest and data management and the whole data estate easier for enterprises to adopt to accelerate their AI needs. Quite frankly, we&#39;re in an era where architecture matters more than it ever has. I think of our PowerStore Elite product. We get real excited. We had fun with this last week at Dell Technologies World. It&#39;s got 3x the performance of its predecessor, 1.5 million IOPS, 6:1 data reduction. Buy one petabyte of raw storage, store six petabytes of data. I think about it&#39;s 70% faster in reads. It&#39;s got 4x more throughput. I think about the exascale storage we built purposely for this class of customers. I think about the rack scale architecture that Arthur talked about last week on stage, where we talk about the role of storage, networking, compute coming together, driving more performance.<br><br>I think about what&#39;s happening in the world of data protection where architecture matters again in 75:1 compression rates. Ultimately, our fundamental architecture that drives fewer servers and fewer SSDs to store equivalent amounts of information versus our competitors. All of that is being packaged up and presented to our entire customer set and then specifically targeted to our AI customers. Whether it&#39;s sovereign, whether it&#39;s a neocloud or an enterprise, and we&#39;re seeing traction. Optimistic, not claiming victory here. We have a lot of work to do. We&#39;re committed to the space. If you look at the payload that we delivered at DTW last week, it was the biggest and broadest storage payload we&#39;ve ever brought out at any given time, and there&#39;s more to come.<br><br>Using AI inside our R&amp;D organizations, we are delivering larger payloads in shorter periods of time, and storage is the primary vehicle to deliver that through. I hope that gives a sense, and obviously we&#39;re still seeing one of the differentiators we have in the marketplace is services, our ability to deploy service product, keep up times greater than anyone else, continues to be a differentiator in the marketplace and we&#39;ll continue to invest in that broadly across all customers.">Jeff：大量描述儲存動能（PowerMax連續5季成長、PowerStore連續9季雙位數成長、PowerScale連續4季、ObjectScale連續3季、資料保護連續2季），強調非結構化儲存是「餵養AI巨獸的資料集」，並提及Lightning平行檔案系統與PowerStore Elite規格。全程未給出具體的搭售率數字。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 邏輯缺口</div>
-          <div class="q-text">問題明確要「搭售率」這個量化指標，管理層用大量定性敘事帶過，從未提供任何百分比數字。</div>
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="The question explicitly asked for an &quot;attach rate&quot; — a quantitative metric. Management substituted extensive qualitative narrative and never gave a single percentage figure.">問題明確要「搭售率」這個量化指標，管理層用大量定性敘事帶過，從未提供任何百分比數字。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Erik Woodring（Morgan Stanley）</div><div class="qa-topic">是否應更新10月法說會日設定的三年期財測目標？</div></div>
+        <div><div class="qa-analyst" data-en="Erik Woodring (Morgan Stanley)">Erik Woodring（Morgan Stanley）</div><div class="qa-topic" data-en="Should the October Analyst Day 3-year targets be updated?">是否應更新10月法說會日設定的三年期財測目標？</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">以現在對agentic AI與搶佔市佔率的認知，如果回到去年10月的法說會日，會如何修正當時設定的「營收成長7-9%、EPS成長15%+」三年期目標？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Hey, guys. A big congrats from me on the quarter. Just an amazing result. I realize we&#39;re having a lot of conversations here about sustainability, but I&#39;d love to maybe ask you if we could go back to last October, and knowing what you know now about the market and incremental agentic and ways that traditional servers are being used, perhaps in different ways, and your ability to take share from peers. If we went back to the October Analyst Day, how would you change that 7%-9% revenue guide and 15%+ EPS guide? Ultimately, I&#39;m trying to get an understanding of the sustainability of what you&#39;re seeing across multiple years. I realize you might not have numbers, but I would just love your thoughts on where maybe that 7%-9% and 15%+ would go, knowing what you know today. Thank you so much.">以現在對agentic AI與搶佔市佔率的認知，如果回到去年10月的法說會日，會如何修正當時設定的「營收成長7-9%、EPS成長15%+」三年期目標？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">David：「我們不會在Q1法說會上重擬五年計畫」——明確拒絕更新，改以Q1/Q2財測與約2.5季的管道能見度作為參考。Jeff：大篇幅闡述agentic AI創造的全新TAM（「CPU是支撐每個AI代理人的骨幹」），明確表示「我無法告訴你這個TAM有多大……我們還在最早期階段」。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="David Kennedy: Yeah, I don&#39;t think we&#39;d work a five-year program on the Q1 earnings call. Obviously, as we go through, what we&#39;ll do is obviously validate what we&#39;re seeing. We were very keen on the back of the Q1 momentum that we see, where the growth is real, it&#39;s durable, it&#39;s accelerating, it&#39;s more broad-based, it&#39;s expanding beyond the GPU. All of those proof points, as they evolve and emerge, give us and gave us the confidence not only to take up our Q2 guide, which pretty much mirror images what we did in Q1, but also look at the second half, and build out incremental guidance across every level, whether it&#39;s PCs, server, storage, and AI. As we do that, Jeff touched on earlier, we&#39;re always pretty confident as we look out over a two and a half quarter lens in our pipeline as we do that.<br><br>The other obviously dialogue there is, as we talked about an AI pipeline over the next five quarters, building out multiples of our backlog. All of those, again, indicate that strong reference points of a broader-based demand element. Obviously core to that will be the agility for our EPS over time. That said, like I said earlier, we&#39;ll look to drive meaningful backlog as we exit this year. I think that&#39;s where we are, Erik, in terms of looking out any horizon for now.<br><br>Jeff Clarke: Erik, I might add the following perspective. I don&#39;t think applying historical models or historical views about the market and how it&#39;s going to act are appropriate today. We&#39;re finding new uses. The way that I get asked this, or I&#39;ll ask you this is: What&#39;s the value of adding intelligence into every workflow, every decision, every product, every customer interaction? I would assert the value is pretty darn high. That&#39;s what&#39;s been really, I think, the game changer since that October time, is what&#39;s really happened in agentic. What you&#39;re seeing are new categories of TAM expanding. You had the three microprocessor leaders talk about an expansion of CPU TAMs. Why? It&#39;s driven by agentic. What&#39;s happening in agentic? Agentic is really the movement of AI from an advisor to an operator. It&#39;s actually going to do something now. It&#39;s going to do something meaningful.<br><br>To do something, that agent needs support, just like a human needs support. That agent needs support, in this case, of a CPU. You have all of this wonderfulness that a GPU drives, but you have this work that has to be done around IO, around branch, retries, managing state. They&#39;re very sequential. They&#39;re very serial in nature as a result of that. That&#39;s a workload that&#39;s for the CPU. If you think about this notion, that&#39;s generally called a harness. If you think about that harness, the CPU runs it. It&#39;s going to make those calls, it&#39;s going to manage memory, and it&#39;s in the loop in every decision that an agent makes. We didn&#39;t know this in October.<br><br>This is a completely new marketplace that&#39;s being driven by putting intelligence in every workflow and every part of knowledge work on the planet today, and we&#39;re just beginning. Another way to describe this is the premium for computational capability, whether that be on the edge with a PC, smartphone, servers running this harness, GPUs doing magical, wonderful work creating all of this great value, just continues to grow at a rate we&#39;ve never seen, and it&#39;s pulling the rest of the ecosystem. That&#39;s what we see. If I go for the trifecta here, all of that stuff&#39;s got to be stored. It needs high-performance storage to be able to ultimately have a receipt of what the agent is doing so it can be corrected, you can understand what it did. That&#39;s where we&#39;re at.<br><br>I don&#39;t know how we would&#39;ve predicted that in October, and today I can&#39;t sit here and tell you how big the TAM is other than I know it&#39;s bigger, it&#39;s growing, and we&#39;re in the early innings of it.">David：「我們不會在Q1法說會上重擬五年計畫」——明確拒絕更新，改以Q1/Q2財測與約2.5季的管道能見度作為參考。Jeff：大篇幅闡述agentic AI創造的全新TAM（「CPU是支撐每個AI代理人的骨幹」），明確表示「我無法告訴你這個TAM有多大……我們還在最早期階段」。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 全場最關鍵的未解問題</div>
-          <div class="q-text">管理層本季就把全年財測上修270億美元營收、約5美元EPS——如此巨大的單季上修——卻明確拒絕表態去年10月才剛設定的三年期成長目標是否已經過時。「世界已經根本改變」（Jeff的敘事）與「不會更新長期演算法」（David的立場）之間的落差，是本場最重要的張力所在。</div>
+          <div class="q-label flag" data-en="⚑ Most Consequential Open Question of the Call">⚑ 全場最關鍵的未解問題</div>
+          <div class="q-text" data-en="Management raised full-year guidance by $27B in revenue and roughly $5 in EPS this quarter alone — an enormous single-quarter revision — yet explicitly declined to say whether the multi-year growth algorithm (7-9% revenue / 15%+ EPS) set just seven months earlier at the Analyst Day is now stale. The gap between &quot;the world has fundamentally changed&quot; (Jeff&#39;s framing) and &quot;we won&#39;t update the long-term algorithm&quot; (David&#39;s framing) is the single most important tension in the call.">管理層本季就把全年財測上修270億美元營收、約5美元EPS——如此巨大的單季上修——卻明確拒絕表態去年10月才剛設定的三年期成長目標是否已經過時。「世界已經根本改變」（Jeff的敘事）與「不會更新長期演算法」（David的立場）之間的落差，是本場法說會最重要的張力所在。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">David Vogt（UBS）</div><div class="qa-topic">CSG營益率大幅提升的驅動因素；長期能否維持</div></div>
+        <div><div class="qa-analyst" data-en="David Vogt (UBS)">David Vogt（UBS）</div><div class="qa-topic" data-en="CSG margin drivers and durability">CSG營益率大幅提升的驅動因素；長期能否維持</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">CSG營益率達約8%（近年最佳），是如何做到的？漲價還是低成本庫存的貢獻較大？長期會回到投資人日設定的歷史區間嗎？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Great. Thanks, guys, for taking my questions. Jeff, I appreciate all the detail, and David on servers and storage. I want to ask a question on CSG. Obviously, strong performance, taking market share, but can you expand on how you drove profitability dramatically, both sequentially and year-over-year? Going back and thinking through the best margin I&#39;ve seen in the PC industry, it was probably not 8%. Just given the drop-through, it looks like over 25% drop-through, how do we think about what&#39;s driving that? How much is price versus maybe low-cost inventory? How do we think the PC margins trends longer term? Do we go back to your normal historical long-term range that you talked about at the Investor Day? Just how do we think about where the market is in your competitive positioning from a pricing and margin perspective? Thanks.">CSG營益率達約8%（近年最佳），是如何做到的？漲價還是低成本庫存的貢獻較大？長期會回到投資人日設定的歷史區間嗎？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：營運費用槓桿（YoY降600個基點、QoQ降300個基點）是最大單一因素；坦承定價「刻意提前調漲，事後看有點太早」，一定程度上壓抑了交易型（消費者/中小企業）需求；高毛利產品組合提升與周邊/服務搭售也有貢獻；「我們並非COVID時期的毛利率水準……目前也還沒抓到最佳平衡點」。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Hey, look, Dave and I will tag-team this. I think the way to look at this, clearly, we benefited from tremendous scale in the business. David made reference that the operating expense as a % of revenue was down, I believe, 300 basis points on a year-over-year basis. Actually, a sequential basis.<br><br>David Kennedy: 600 basis points.<br><br>Jeff Clarke: Yeah, 600 basis points on a year-over-year basis. On a sequential basis, 300. Well, that&#39;s powerful in a business like the PC business. We also told you in our last earnings call, we were purposely late in making a price move because we wanted to build momentum with volume. We did. We took share in Q4. In Q1, we purposely moved the price in earlier as we got our Q2 cost. I think about what we&#39;re doing today, we probably moved a little too early in retrospect. We saw that temper a little bit of demand in the transactional business consumer, small and medium business, and we&#39;re looking to find the right optimum place for that, which is reflected in our go-forward guidance of operating margins for the PC business. I mentioned we had TRU uplift. TRU uplift drives more profit. I mentioned that we had greater peripherals attach and service attach.<br><br>That drives profitability in the business. That&#39;s the package. We are not operating at COVID margins. Far from it, in fact. If you go back to the operating margins in that era, they were at this range or slightly better. We&#39;re benefiting from the tremendous scale of the Dell company, a discipline in pricing, that we&#39;re working to find the right optimum balance, particularly in that transactionally-oriented side of the marketplace, consumer, small and medium business. Large deals are done deal by deal. We like what we&#39;re doing. We think we don&#39;t have it perfect yet. Still trying to find the right balance, but I&#39;m optimistic.">Jeff：營運費用槓桿（YoY降600個基點、QoQ降300個基點）是最大單一因素；坦承定價「刻意提前調漲，事後看有點太早」，一定程度上壓抑了交易型（消費者/中小企業）需求；高毛利產品組合提升與周邊/服務搭售也有貢獻；「我們並非COVID時期的毛利率水準……目前也還沒抓到最佳平衡點」。</div>
         </div>
         <div class="note-box">
-          <div class="q-label">觀察：罕見的自我修正坦承</div>
-          <div class="q-text">管理層主動承認調價時機「有點太早」並壓抑了部分需求——這與2Q CSG營益率財測已明確下修至約6%（本季為8%）「以平衡需求、市占與獲利」相互印證，顯示這個剛被大肆讚揚的板塊，管理層自己也在為近期的獲利讓步預作準備。</div>
+          <div class="q-label" data-en="Observation: A Rare Self-Corrective Admission">觀察：罕見的自我修正坦承</div>
+          <div class="q-text" data-en="Management voluntarily admitted pricing was moved &quot;a little too early in retrospect,&quot; dampening some demand — this lines up with Q2 CSG operating margin guidance being cut to ~6% (from Q1&#39;s 8%) &quot;to balance demand, share, and profitability,&quot; suggesting management itself is preparing to give back some near-term profitability in the very segment just praised.">管理層主動承認調價時機「有點太早」並壓抑了部分需求——這與2Q CSG營益率財測已明確下修至約6%（本季為8%）「以平衡需求、市占與獲利」相互印證，顯示這個剛被大肆讚揚的板塊，管理層自己也在為近期的獲利讓步預作準備。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Tim Long（Barclays）</div><div class="qa-topic">傳統伺服器 vs. 儲存成長率的落差；漲價的持續性</div></div>
+        <div><div class="qa-analyst" data-en="Tim Long (Barclays)">Tim Long（Barclays）</div><div class="qa-topic" data-en="Traditional server vs. storage growth gap; durability of repricing">傳統伺服器 vs. 儲存成長率的落差；漲價的持續性</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">傳統伺服器全年財測成長約60%，遠高於儲存的中個位數——儲存是否會有更長的成長尾巴？若原物料成本再度上漲，持續調漲售價會不會愈來愈困難？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Thank you. A two-parter, if I could, hopefully both quick on the more traditional enterprise business. First, you talked a lot about storage. Just curious with traditional server guided to 60% for the year and storage mid-single digit, does that mean that we could see a longer pull-through or tail to storage as we look out a little bit further? Secondly, you guys navigated the price increases very well. You&#39;ve touched on that as well. Just curious in your past history with this, if we do get another uptick that&#39;s meaningful in the next several months or quarters, does it get harder to push pricing through another time, or is it similar, the dynamic that you think you&#39;ve seen over the last quarter or two? Thank you.">傳統伺服器全年財測成長約60%，遠高於儲存的中個位數——儲存是否會有更長的成長尾巴？若原物料成本再度上漲，持續調漲售價會不會愈來愈困難？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">David：儲存財測受到「Dell IP vs. 第三方」產品組合交叉轉換效應壓抑，該效應「到今年底就不再是財測橋接中的重要因素」。Jeff（定價）：「幾乎每天都在重新定價」；預期通膨環境（燃料、原物料、DRAM、NAND、CPU）將持續；部分客戶會「等到覺得夠了」而觀望，另一部分則加速採購以鎖定供給。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="David Kennedy: Tim, I guess a couple of things in there. First, if you look at our guide for the full year, again, I go back to the dynamic that we referenced earlier. When you look at our second half growth in the plan, it&#39;s still, if you like, inhibited by the supply that we can get. The demand is there. The demand is outpacing the supply. That applies to across our ISG business as we look at that. The other element, I think we discussed this 90 days ago, as you look at our Dell IP mix in terms of our storage portfolio, we continue to do that crossover with the historical business, we get more Dell IP versus third party. By the end of this year, that stops becoming any relevant element of our bridge in relation to that.<br><br>Seeing growth in storage on a consistent basis and building that trend is something that excites us from a P&amp;L perspective as we move forward and as we go execute that piece of it.<br><br>Jeff Clarke: On the pricing side, Tim, we&#39;re repricing it feels like every day, and I&#39;m sure our customers feel that pain. Unfortunately, I don&#39;t see that changing given the world that we&#39;re living in today, where you have an inflationary environment, whether it&#39;s fuel, whether it&#39;s raw materials, whether that&#39;s DRAM, whether that&#39;s NAND, CPUs. We are living in an inflationary environment that is changing at a rate that obviously we&#39;ve never seen before, and everything that we see suggests that continues. There&#39;ll be a point where some customers, it&#39;s enough, and they&#39;ll wait it out, and we&#39;re seeing that in some cases. In other cases, we&#39;re seeing an acceleration, that notion that was called out earlier, where folks are trying to secure that supply now and over multiple years because it&#39;s going to be more constrained.">David：儲存財測受到「Dell IP vs. 第三方」產品組合交叉轉換效應壓抑，該效應「到今年底就不再是財測橋接中的重要因素」。Jeff（定價）：「幾乎每天都在重新定價」；預期通膨環境（燃料、原物料、DRAM、NAND、CPU）將持續；部分客戶會「等到覺得夠了」而觀望，另一部分則加速採購以鎖定供給。</div>
         </div>
         <div class="note-box">
-          <div class="q-label">觀察</div>
-          <div class="q-text">對成長率落差的成因（產品組合交叉轉換效應將於年底淡出）給出了具體、可信的機制說明，未見明顯迴避。</div>
+          <div class="q-label" data-en="Observation">觀察</div>
+          <div class="q-text" data-en="A specific, credible mechanism was given for the growth-rate gap (the Dell IP/third-party mix crossover fading out by year-end) — no significant evasion observed.">對成長率落差的成因（產品組合交叉轉換效應將於年底淡出）給出了具體、可信的機制說明，未見明顯迴避。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Simon Leopold（Raymond James）</div><div class="qa-topic">記憶體以外的供給瓶頸排序</div></div>
+        <div><div class="qa-analyst" data-en="Simon Leopold (Raymond James)">Simon Leopold（Raymond James）</div><div class="qa-topic" data-en="Rank-order the supply constraints beyond memory">記憶體以外的供給瓶頸排序</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">除了記憶體，還有哪些因素（如PCB）限制了上檔空間？能否依嚴重程度排序？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Great. Thank you. Appreciate it. Wanted to come back to the risks and the supply constraints in that I think everybody understands memory at this point, but I&#39;d like to get a sense from you as to what other elements or factors are limiting any upside beyond the memory constraint, and I&#39;m thinking about things like printed circuit boards, et cetera. Just help us understand sort of the rank orders. Appreciate it.">除了記憶體，還有哪些因素（如PCB）限制了上檔空間？能否依嚴重程度排序？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：排序為DRAM/NAND優先，其次是微處理器（CPU），再來是硬碟，之後是更廣泛的零組件長尾；先進製程節點「已完全滿載」，交期約1年；成熟製程節點也逐漸滿載。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Sure, Simon. Yeah, I called out the three that we&#39;re spending a tremendous amount of time on. Obviously, NAND and DRAM, microprocessors. If you went down the list, next it&#39;s likely hard drives. You go down the list beyond that, there&#39;s lots of things. If you look at what&#39;s happening in the semiconductor network, you&#39;re seeing utilization of the trailing nodes beginning to fill at greater rates. Leading-edge node stuff is fully allocated. Lead times are a year.<br><br>All of those are pressured, but the most pressure comes across the four that I described in the first three, primarily, of DRAM, NAND, CPUs, then hard drives, and then ultimately the basket of goods that sit around that. Our supply chain has clearly worked through this. This is what we do. Never run out of parts. Got a salesforce that&#39;s out selling lots with a demand and pipeline that looks very encouraging that we tried to convey through the call. We have our work cut out for us to work with our partners to drive more supply, and every bit and byte matters. Every microprocessor matters, and that&#39;s what we all try to do every day.">Jeff：排序為DRAM/NAND優先，其次是微處理器（CPU），再來是硬碟，之後是更廣泛的零組件長尾；先進製程節點「已完全滿載」，交期約1年；成熟製程節點也逐漸滿載。</div>
         </div>
         <div class="note-box">
-          <div class="q-label">觀察</div>
-          <div class="q-text">回應直接且具體，對問題本身給出了清楚的排序答案，未見迴避。</div>
+          <div class="q-label" data-en="Observation">觀察</div>
+          <div class="q-text" data-en="A direct, specific rank-ordered answer to a well-posed question — no evasion.">回應直接且具體，對問題本身給出了清楚的排序答案，未見迴避。</div>
         </div>
       </div>
     </div>
 
     <div class="qa-item">
       <div class="qa-header" onclick="toggleQA(this)">
-        <div><div class="qa-analyst">Krish Sankar（TD Cowen）</div><div class="qa-topic">伺服器x86 vs. Arm佔比；架構是否影響毛利率</div></div>
+        <div><div class="qa-analyst" data-en="Krish Sankar (TD Cowen)">Krish Sankar（TD Cowen）</div><div class="qa-topic" data-en="x86 vs. Arm server mix; margin differential">伺服器x86 vs. Arm佔比；架構是否影響毛利率</div></div>
         <div class="qa-arrow">▼</div>
       </div>
       <div class="qa-body">
         <div class="q-block">
-          <div class="q-label q">問題核心</div>
-          <div class="q-text">伺服器產品線中x86與Arm架構的佔比為何？架構選擇是否影響毛利率？</div>
+          <div class="q-label q" data-en="Analyst Question (verbatim)">問題核心</div>
+          <div class="q-text" data-en="Yeah, hi. Thanks for taking my question. Jeff, again, congrats on an amazing result. I just wanted to find out, on your servers, is there a way to think about what is the mix of x86 versus Arm, does it matter to you, or is there any margin differential between those two architectures from a Dell standpoint?">伺服器產品線中x86與Arm架構的佔比為何？架構選擇是否影響毛利率？</div>
         </div>
         <div class="q-block">
-          <div class="q-label a">管理層回應</div>
-          <div class="q-text">Jeff：傳統伺服器目前100%為x86。大規模液冷AI機櫃（GB200/GB300，未來轉向Vera Rubin）偏向Arm；「企業級AI」（B200/B300、RTX 6000 Pro）則偏向x86。</div>
+          <div class="q-label a" data-en="Management Response (verbatim)">管理層回應</div>
+          <div class="q-text" data-en="Jeff Clarke: Traditional servers are x86 today. We&#39;re excited about the opportunity with Vera in the future, particularly as we talk about these advanced workloads that drive increasingly more computational need. Running this harness, the CPU managing this scaffolding around every GPU call is going to be more performant, and there&#39;ll be more choice here, more opportunity. We need the relief of microprocessors. We&#39;re excited about that. On the GPU side, if my memory serves me right, it&#39;s biased towards Arm. When you think about the big GB200, GB300, obviously heading towards Vera, you think about direct liquid cooling, the large deployments biased towards Arm. If you think about Enterprise AI think B200, B300, RTX 6000 Pro, you think those x86.">Jeff：傳統伺服器目前100%為x86。大規模液冷AI機櫃（GB200/GB300，未來轉向Vera Rubin）偏向Arm；「企業級AI」（B200/B300、RTX 6000 Pro）則偏向x86。</div>
         </div>
         <div class="flag-box">
-          <div class="q-label flag">⚑ 部分未答</div>
-          <div class="q-text">問題的架構佔比部分有回應，但「是否影響毛利率」這一半完全沒有被觸及。</div>
+          <div class="q-label flag" data-en="⚑ Partially Unanswered">⚑ 部分未答</div>
+          <div class="q-text" data-en="The architecture-mix half of the question was addressed, but the &quot;does it affect margin&quot; half was never touched.">問題的架構佔比部分有回應，但「是否影響毛利率」這一半完全沒有被觸及。</div>
         </div>
       </div>
     </div>
@@ -380,212 +384,212 @@
   <!-- Financials & Segments Panel -->
   <div id="panel-fin" class="panel">
     <div class="stat-row">
-      <div class="stat-box"><div class="stat-val">$43.8B</div><div class="stat-lbl">Q1營收</div><div class="stat-sub">+88% YoY</div></div>
-      <div class="stat-box"><div class="stat-val">$4.86</div><div class="stat-lbl">Diluted EPS</div><div class="stat-sub">+214% YoY，歷史新高</div></div>
-      <div class="stat-box"><div class="stat-val">$4.2B</div><div class="stat-lbl">營業利益</div><div class="stat-sub">+154%，9.7%營益率</div></div>
-      <div class="stat-box"><div class="stat-val">$4.1B</div><div class="stat-lbl">營業活動現金流</div><div class="stat-sub">Q1歷史新高</div></div>
+      <div class="stat-box"><div class="stat-val">$43.8B</div><div class="stat-lbl" data-en="Q1 Revenue">Q1營收</div><div class="stat-sub" data-en="+88% YoY">+88% YoY</div></div>
+      <div class="stat-box"><div class="stat-val">$4.86</div><div class="stat-lbl" data-en="Diluted EPS">Diluted EPS</div><div class="stat-sub" data-en="+214% YoY, record">+214% YoY，歷史新高</div></div>
+      <div class="stat-box"><div class="stat-val">$4.2B</div><div class="stat-lbl" data-en="Operating Income">營業利益</div><div class="stat-sub" data-en="+154%, 9.7% margin">+154%，9.7%營益率</div></div>
+      <div class="stat-box"><div class="stat-val">$4.1B</div><div class="stat-lbl" data-en="Operating Cash Flow">營業活動現金流</div><div class="stat-sub" data-en="Q1 record">Q1歷史新高</div></div>
     </div>
 
     <div class="tbl-wrap">
-      <div class="tbl-title">合併損益表摘要</div>
+      <div class="tbl-title" data-en="Consolidated Income Statement Summary">合併損益表摘要</div>
       <table>
-        <tr><th>項目</th><th>Q1-FY27</th><th>YoY變化</th><th>備註</th></tr>
-        <tr><td>營收</td><td>$43.8B</td><td class="pos">+88%</td><td>歷史新高</td></tr>
-        <tr><td>毛利（非GAAP）</td><td>$7.9B</td><td class="pos">+57%</td><td>毛利率18.1%，受AI伺服器組合稀釋</td></tr>
-        <tr><td>營運費用</td><td>$3.7B</td><td class="neg">+9%</td><td>佔營收8.4%，20年來新低</td></tr>
-        <tr class="total"><td>營業利益</td><td>$4.2B</td><td class="pos">+154%</td><td>營益率9.7%</td></tr>
-        <tr><td>淨利</td><td>$3.2B</td><td class="pos">+194%</td><td>—</td></tr>
-        <tr class="total"><td>稀釋每股盈餘（非GAAP）</td><td>$4.86</td><td class="pos">+214%</td><td>歷史新高</td></tr>
+        <tr><th data-en="Item">項目</th><th data-en="Q1-FY27">Q1-FY27</th><th data-en="YoY">YoY變化</th><th data-en="Notes">備註</th></tr>
+        <tr><td data-en="Revenue">營收</td><td>$43.8B</td><td class="pos">+88%</td><td data-en="Record">歷史新高</td></tr>
+        <tr><td data-en="Gross margin (non-GAAP)">毛利（非GAAP）</td><td>$7.9B</td><td class="pos">+57%</td><td data-en="18.1% rate, diluted by AI server mix">毛利率18.1%，受AI伺服器組合稀釋</td></tr>
+        <tr><td data-en="Operating expenses">營運費用</td><td>$3.7B</td><td class="neg">+9%</td><td data-en="8.4% of revenue, lowest in 20 years">佔營收8.4%，20年來新低</td></tr>
+        <tr class="total"><td data-en="Operating income">營業利益</td><td>$4.2B</td><td class="pos">+154%</td><td data-en="9.7% margin">營益率9.7%</td></tr>
+        <tr><td data-en="Net income">淨利</td><td>$3.2B</td><td class="pos">+194%</td><td>—</td></tr>
+        <tr class="total"><td data-en="Diluted EPS (non-GAAP)">稀釋每股盈餘（非GAAP）</td><td>$4.86</td><td class="pos">+214%</td><td data-en="Record">歷史新高</td></tr>
       </table>
     </div>
     <div class="note-box">
-      <div class="q-label">⚑ 毛利率結構</div>
-      <div class="q-text">排除AI伺服器組合影響後，毛利率實際是上升的——AI伺服器營收年增近9倍，稀釋了整體毛利率百分比，但傳統伺服器、儲存、CSG的毛利率均維持穩健，OpEx佔營收比重降至20年新低（8.4%），是本季獲利槓桿的主要來源。</div>
+      <div class="q-label" data-en="⚑ Margin Structure">⚑ 毛利率結構</div>
+      <div class="q-text" data-en="Excluding the AI server mix impact, gross margin actually rose — AI server revenue grew nearly 9x YoY, diluting the blended gross margin rate, but traditional server, storage, and CSG margins all remained solid. OpEx as a % of revenue fell to a 20-year low (8.4%), the main source of this quarter&#39;s operating leverage.">排除AI伺服器組合影響後，毛利率實際是上升的——AI伺服器營收年增近9倍，稀釋了整體毛利率百分比，但傳統伺服器、儲存、CSG的毛利率均維持穩健，OpEx佔營收比重降至20年新低（8.4%），是本季獲利槓桿的主要來源。</div>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">ISG（基礎架構解決方案集團）— 營收 $29.0B，+181% YoY</div>
+    <div class="section-title" data-en="ISG (Infrastructure Solutions Group) — Revenue $29.0B, +181% YoY">ISG（基礎架構解決方案集團）— 營收 $29.0B，+181% YoY</div>
     <div class="tbl-wrap">
       <table>
-        <tr><th>項目</th><th>Q1-FY27</th><th>YoY變化</th><th>備註</th></tr>
-        <tr><td>AI伺服器營收</td><td>$16.1B</td><td class="pos">近+800%</td><td>訂單$24.4B，積壓訂單$51.3B（新高）</td></tr>
-        <tr><td>傳統伺服器與網路</td><td>$8.5B</td><td class="pos">+92%</td><td>需求持續超越供給</td></tr>
-        <tr><td>儲存</td><td>$4.3B</td><td class="pos">+8%</td><td>Dell IP組合驅動</td></tr>
-        <tr class="total"><td>ISG營業利益</td><td>$3.1B</td><td class="pos">+206%</td><td>營益率10.5%，+80bps</td></tr>
+        <tr><th data-en="Item">項目</th><th data-en="Q1-FY27">Q1-FY27</th><th data-en="YoY">YoY變化</th><th data-en="Notes">備註</th></tr>
+        <tr><td data-en="AI server revenue">AI伺服器營收</td><td>$16.1B</td><td class="pos" data-en="~+800%">近+800%</td><td data-en="Orders $24.4B, backlog $51.3B (record)">訂單$24.4B，積壓訂單$51.3B（新高）</td></tr>
+        <tr><td data-en="Traditional server &amp; networking">傳統伺服器與網路</td><td>$8.5B</td><td class="pos">+92%</td><td data-en="Demand continues to outpace supply">需求持續超越供給</td></tr>
+        <tr><td data-en="Storage">儲存</td><td>$4.3B</td><td class="pos">+8%</td><td data-en="Driven by Dell IP mix">Dell IP組合驅動</td></tr>
+        <tr class="total"><td data-en="ISG operating income">ISG營業利益</td><td>$3.1B</td><td class="pos">+206%</td><td data-en="10.5% margin, +80bps">營益率10.5%，+80bps</td></tr>
       </table>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">CSG（客戶端解決方案集團）— 營收 $14.6B，+17% YoY</div>
+    <div class="section-title" data-en="CSG (Client Solutions Group) — Revenue $14.6B, +17% YoY">CSG（客戶端解決方案集團）— 營收 $14.6B，+17% YoY</div>
     <div class="tbl-wrap">
       <table>
-        <tr><th>項目</th><th>Q1-FY27</th><th>YoY變化</th><th>備註</th></tr>
-        <tr><td>商用</td><td>$13.0B</td><td class="pos">+18%</td><td>連續7季成長，連續9季需求成長</td></tr>
-        <tr><td>消費</td><td>$1.6B</td><td class="pos">+9%</td><td>連續3季需求成長，遊戲需求強勁</td></tr>
-        <tr class="total"><td>CSG營業利益</td><td>$1.2B</td><td>—</td><td>營益率8%，連續第2季搶佔市佔率</td></tr>
+        <tr><th data-en="Item">項目</th><th data-en="Q1-FY27">Q1-FY27</th><th data-en="YoY">YoY變化</th><th data-en="Notes">備註</th></tr>
+        <tr><td data-en="Commercial">商用</td><td>$13.0B</td><td class="pos">+18%</td><td data-en="7th consecutive quarter of growth, 9th of demand growth">連續7季成長，連續9季需求成長</td></tr>
+        <tr><td data-en="Consumer">消費</td><td>$1.6B</td><td class="pos">+9%</td><td data-en="3rd consecutive quarter of demand growth, strong gaming">連續3季需求成長，遊戲需求強勁</td></tr>
+        <tr class="total"><td data-en="CSG operating income">CSG營業利益</td><td>$1.2B</td><td>—</td><td data-en="8% margin, share gain for 2nd consecutive quarter">營益率8%，連續第2季搶佔市佔率</td></tr>
       </table>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">現金與股東回饋</div>
+    <div class="section-title" data-en="Cash &amp; Shareholder Returns">現金與股東回饋</div>
     <div class="tbl-wrap">
       <table>
-        <tr><th>項目</th><th>數值</th></tr>
-        <tr><td>現金及投資</td><td>$14.1B（季增+$0.8B）</td></tr>
-        <tr><td>核心槓桿比率</td><td>1.2x</td></tr>
-        <tr><td>股東回饋總額</td><td>$2.1B</td></tr>
-        <tr><td>&nbsp;&nbsp;股票回購</td><td>1,100萬股，均價$147/股</td></tr>
-        <tr><td>&nbsp;&nbsp;股利</td><td>約$0.63/股</td></tr>
+        <tr><th data-en="Item">項目</th><th data-en="Value">數值</th></tr>
+        <tr><td data-en="Cash &amp; investments">現金及投資</td><td data-en="$14.1B (+$0.8B QoQ)">$14.1B（季增+$0.8B）</td></tr>
+        <tr><td data-en="Core leverage ratio">核心槓桿比率</td><td>1.2x</td></tr>
+        <tr><td data-en="Total shareholder returns">股東回饋總額</td><td>$2.1B</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Share buybacks">&nbsp;&nbsp;股票回購</td><td data-en="11M shares, avg. $147/share">1,100萬股，均價$147/股</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Dividend">&nbsp;&nbsp;股利</td><td data-en="~$0.63/share">約$0.63/股</td></tr>
       </table>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">財測：Q2-FY27 vs. 全年FY27（本次上修）</div>
+    <div class="section-title" data-en="Guidance: Q2-FY27 vs. Full-Year FY27 (Raised)">財測：Q2-FY27 vs. 全年FY27（本次上修）</div>
     <div class="tbl-wrap">
       <table>
-        <tr><th>項目</th><th>Q2-FY27財測</th><th>FY27財測（上修後）</th></tr>
-        <tr><td>營收</td><td>$44B–$45B（中值+~50%）</td><td>$165B–$169B（中值$167B，+~50%，上修$27B）</td></tr>
-        <tr><td>ISG成長</td><td>~+75%（AI伺服器營收$15.5B）</td><td>~+80%（AI伺服器營收中值$60B，約2.4x YoY）</td></tr>
-        <tr><td>傳統伺服器成長</td><td>—</td><td>略高於60%</td></tr>
-        <tr><td>儲存成長</td><td>—</td><td>中個位數</td></tr>
-        <tr><td>CSG成長</td><td>~+20%</td><td>低雙位數</td></tr>
-        <tr><td>營業利益成長</td><td>~+80%</td><td>逾+55%</td></tr>
-        <tr><td>CSG營益率</td><td>~6%（Q1實際為8%）</td><td>—</td></tr>
-        <tr><td>稀釋EPS（非GAAP）</td><td>$4.80 ±$0.10（+100%+）</td><td>$17.90 ±$0.25（+~75%）</td></tr>
+        <tr><th data-en="Item">項目</th><th data-en="Q2-FY27 Guide">Q2-FY27財測</th><th data-en="FY27 Guide (Raised)">FY27財測（上修後）</th></tr>
+        <tr><td data-en="Revenue">營收</td><td data-en="$44B&ndash;$45B (midpoint ~+50%)">$44B–$45B（中值+~50%）</td><td data-en="$165B&ndash;$169B (midpoint $167B, +~50%, raised $27B)">$165B–$169B（中值$167B，+~50%，上修$27B）</td></tr>
+        <tr><td data-en="ISG growth">ISG成長</td><td data-en="~+75% (AI server revenue $15.5B)">~+75%（AI伺服器營收$15.5B）</td><td data-en="~+80% (AI server revenue midpoint $60B, ~2.4x YoY)">~+80%（AI伺服器營收中值$60B，約2.4x YoY）</td></tr>
+        <tr><td data-en="Traditional server growth">傳統伺服器成長</td><td>—</td><td data-en="Just over 60%">略高於60%</td></tr>
+        <tr><td data-en="Storage growth">儲存成長</td><td>—</td><td data-en="Mid-single-digits">中個位數</td></tr>
+        <tr><td data-en="CSG growth">CSG成長</td><td data-en="~+20%">~+20%</td><td data-en="Low-teens">低雙位數</td></tr>
+        <tr><td data-en="Operating income growth">營業利益成長</td><td data-en="~+80%">~+80%</td><td data-en="Over +55%">逾+55%</td></tr>
+        <tr><td data-en="CSG operating margin">CSG營益率</td><td data-en="~6% (Q1 actual was 8%)">~6%（Q1實際為8%）</td><td>—</td></tr>
+        <tr><td data-en="Diluted EPS (non-GAAP)">稀釋EPS（非GAAP）</td><td data-en="$4.80 ±$0.10 (+100%+)">$4.80 ±$0.10（+100%+）</td><td data-en="$17.90 ±$0.25 (+~75%)">$17.90 ±$0.25（+~75%）</td></tr>
       </table>
     </div>
     <div class="note-box">
-      <div class="q-label">⚑ 值得留意</div>
-      <div class="q-text">Q2財測的AI伺服器營收（$15.5B）較Q1實際（$16.1B）略為持平甚至略降，代表全年AI伺服器財測（中值$60B）的增量主要押注在下半年——這使得全年AI財測的兌現高度仰賴供給端（DRAM/NAND/CPU）實際改善的執行力，而非單純的需求延續。CSG營益率財測也從Q1實際的8%下修至Q2的約6%，是管理層主動選擇「以利潤換取市佔與需求」的訊號。</div>
+      <div class="q-label" data-en="⚑ Worth Noting">⚑ 值得留意</div>
+      <div class="q-text" data-en="Q2 AI server revenue guidance ($15.5B) is roughly flat to slightly down versus Q1 actual ($16.1B), meaning the increment in the full-year AI server guide (midpoint $60B) is mostly staked on the second half — making the full-year target&#39;s realization highly dependent on actual supply-side (DRAM/NAND/CPU) execution rather than pure demand continuation. CSG operating margin guidance was also cut from Q1&#39;s actual 8% to roughly 6% for Q2 — a signal that management is deliberately trading some profit for share and demand.">Q2財測的AI伺服器營收（$15.5B）較Q1實際（$16.1B）略為持平甚至略降，代表全年AI伺服器財測（中值$60B）的增量主要押注在下半年——這使得全年目標的兌現高度依賴DRAM/NAND/CPU供給實際改善的執行力，而非單純的需求延續。CSG營益率財測也從Q1實際的8%下修至Q2的約6%，管理層明確表示這是「平衡需求、市佔與獲利」的主動選擇。</div>
     </div>
   </div>
 
   <!-- AI Backlog & Supply Chain Panel -->
   <div id="panel-ai" class="panel">
     <div class="stat-row">
-      <div class="stat-box"><div class="stat-val">$24.4B</div><div class="stat-lbl">Q1 AI伺服器訂單</div></div>
-      <div class="stat-box"><div class="stat-val">$16.1B</div><div class="stat-lbl">Q1 AI伺服器營收認列</div></div>
-      <div class="stat-box"><div class="stat-val">$51.3B</div><div class="stat-lbl">季末積壓訂單</div><div class="stat-sub">歷史新高</div></div>
-      <div class="stat-box"><div class="stat-val">5,000+</div><div class="stat-lbl">AI客戶數</div><div class="stat-sub">半年成長逾50%</div></div>
+      <div class="stat-box"><div class="stat-val">$24.4B</div><div class="stat-lbl" data-en="Q1 AI Server Orders">Q1 AI伺服器訂單</div></div>
+      <div class="stat-box"><div class="stat-val">$16.1B</div><div class="stat-lbl" data-en="Q1 AI Server Revenue Recognized">Q1 AI伺服器營收認列</div></div>
+      <div class="stat-box"><div class="stat-val">$51.3B</div><div class="stat-lbl" data-en="Ending Backlog">季末積壓訂單</div><div class="stat-sub" data-en="Record">歷史新高</div></div>
+      <div class="stat-box"><div class="stat-val">5,000+</div><div class="stat-lbl" data-en="AI Customers">AI客戶數</div><div class="stat-sub" data-en="Up &gt;50% in 6 months">半年成長逾50%</div></div>
     </div>
     <div class="note-box">
-      <div class="q-label">⚑ 積壓訂單淨增加</div>
-      <div class="q-text">本季訂單$24.4B超過認列營收$16.1B，代表積壓訂單淨增加約$8.3B，是積壓訂單創新高（$51.3B）的直接來源；管理層兩度強調「預期全年結束時仍有可觀積壓訂單」，意味著即使供給持續改善，需求端的滿足仍會落後於訂單累積速度。</div>
+      <div class="q-label" data-en="⚑ Net Backlog Build">⚑ 積壓訂單淨增加</div>
+      <div class="q-text" data-en="This quarter&#39;s orders ($24.4B) exceeded recognized revenue ($16.1B), meaning backlog grew by roughly $8.3B net — the direct source of the record $51.3B backlog. Management twice emphasized it expects &quot;meaningful backlog&quot; to remain at year-end, meaning that even as supply improves, order accumulation is expected to keep outpacing fulfillment.">本季訂單$24.4B超過認列營收$16.1B，代表積壓訂單淨增加約$8.3B，是積壓訂單創新高（$51.3B）的直接來源；管理層兩度強調「預期全年結束時仍有可觀積壓訂單」，意味著即使供給持續改善，需求端的滿足仍會落後於訂單累積速度。</div>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">供給瓶頸排序（依嚴重程度）</div>
+    <div class="section-title" data-en="Supply Constraint Ranking (by severity)">供給瓶頸排序（依嚴重程度）</div>
     <div class="tech-grid">
       <div class="tech-card blue">
-        <h4>1. DRAM / NAND（最主要瓶頸）</h4>
+        <h4 data-en="1. DRAM / NAND (Primary Constraint)">1. DRAM / NAND（最主要瓶頸）</h4>
         <ul>
-          <li>管理層在整場法說會中反覆強調的首要制約因素</li>
-          <li>「記憶體不確定性」正促使客戶跨傳統與AI負載提前鎖定長期供給</li>
+          <li data-en="The factor management repeatedly emphasized as the top constraint throughout the call">管理層在整場法說會中反覆強調的首要制約因素</li>
+          <li data-en="&quot;Memory uncertainty&quot; is prompting customers to lock in long-term supply across both traditional and AI workloads">「記憶體不確定性」正促使客戶跨傳統與AI負載提前鎖定長期供給</li>
         </ul>
       </div>
       <div class="tech-card purple">
-        <h4>2. 微處理器（CPU）</h4>
+        <h4 data-en="2. Microprocessors (CPUs)">2. 微處理器（CPU）</h4>
         <ul>
-          <li>先進製程節點「已完全滿載」，交期約1年</li>
-          <li>成熟製程節點也開始逐漸填滿產能</li>
+          <li data-en="Leading-edge nodes are &quot;fully allocated,&quot; with ~1-year lead times">先進製程節點「已完全滿載」，交期約1年</li>
+          <li data-en="Trailing-edge nodes are also beginning to fill up">成熟製程節點也開始逐漸填滿產能</li>
         </ul>
       </div>
       <div class="tech-card green">
-        <h4>3. 硬碟</h4>
+        <h4 data-en="3. Hard Drives">3. 硬碟</h4>
         <ul>
-          <li>排序第三順位的瓶頸</li>
+          <li data-en="Ranked as the third-most-pressured constraint">排序第三順位的瓶頸</li>
         </ul>
       </div>
       <div class="tech-card orange">
-        <h4>4. 更廣泛的零組件長尾</h4>
+        <h4 data-en="4. Broader Component Tail">4. 更廣泛的零組件長尾</h4>
         <ul>
-          <li>PCB等其他零組件也開始受到波及，但壓力遠低於前三項</li>
+          <li data-en="PCBs and other components are also beginning to feel pressure, though far less than the top three">PCB等其他零組件也開始受到波及，但壓力遠低於前三項</li>
         </ul>
       </div>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">Dell IP 儲存動能（AI相關的間接受惠板塊）</div>
+    <div class="section-title" data-en="Dell IP Storage Momentum (an AI-adjacent beneficiary)">Dell IP 儲存動能（AI相關的間接受惠板塊）</div>
     <div class="tbl-wrap">
       <table>
-        <tr><th>產品線</th><th>連續成長季數</th><th>備註</th></tr>
-        <tr><td>PowerMax</td><td>5季</td><td>主儲存</td></tr>
-        <tr><td>PowerStore</td><td>9季（雙位數）</td><td>中階生態系動能強</td></tr>
-        <tr><td>PowerScale</td><td>4季（近2季雙位數）</td><td>非結構化儲存</td></tr>
-        <tr><td>ObjectScale</td><td>3季</td><td>物件儲存</td></tr>
-        <tr><td>資料保護</td><td>2季</td><td>—</td></tr>
+        <tr><th data-en="Product Line">產品線</th><th data-en="Consecutive Quarters of Growth">連續成長季數</th><th data-en="Notes">備註</th></tr>
+        <tr><td>PowerMax</td><td data-en="5 quarters">5季</td><td data-en="Primary storage">主儲存</td></tr>
+        <tr><td>PowerStore</td><td data-en="9 quarters (double-digit)">9季（雙位數）</td><td data-en="Strong mid-range ecosystem momentum">中階生態系動能強</td></tr>
+        <tr><td>PowerScale</td><td data-en="4 quarters (last 2 double-digit)">4季（近2季雙位數）</td><td data-en="Unstructured storage">非結構化儲存</td></tr>
+        <tr><td>ObjectScale</td><td data-en="3 quarters">3季</td><td data-en="Object storage">物件儲存</td></tr>
+        <tr><td data-en="Data Protection">資料保護</td><td data-en="2 quarters">2季</td><td>—</td></tr>
       </table>
     </div>
     <div class="note-box">
-      <div class="q-label">觀察</div>
-      <div class="q-text">Dell IP儲存組合佔比提升是本季ex-AI毛利率改善的主要來源，管理層將非結構化儲存定位為「餵養AI巨獸的資料集」，但具體的AI伺服器對儲存搭售率從未被量化（見Q&A分析：Asiya Merchant提問）。</div>
+      <div class="q-label" data-en="Observation">觀察</div>
+      <div class="q-text" data-en="Rising Dell IP storage mix is the main source of this quarter&#39;s ex-AI margin improvement. Management framed unstructured storage as &quot;the data set that feeds the beast&quot; of AI, but the specific AI-server-to-storage attach rate was never quantified (see Q&amp;A analysis: Asiya Merchant&#39;s question).">Dell IP儲存組合佔比提升是本季ex-AI毛利率改善的主要來源，管理層將非結構化儲存定位為「餵養AI巨獸的資料集」，但具體的AI伺服器對儲存搭售率從未被量化（見Q&A分析：Asiya Merchant提問）。</div>
     </div>
 
     <div class="divider"></div>
-    <div class="section-title">DFS 融資：需求的另一個推手</div>
+    <div class="section-title" data-en="DFS Financing: Another Demand Lever">DFS 融資：需求的另一個推手</div>
     <div class="card">
-      <p>David Kennedy提到，DFS（Dell Financial Services）融資業務在CSG、傳統伺服器、儲存與AI各業務線均呈現雙位數的訂單起源成長，協助客戶在自身預算受限的情況下，仍能提前取得所需設備。這是一項真實的競爭優勢，但也代表部分反映在訂單/需求數字中的強度，是由Dell自身的融資部門平滑客戶資本支出時程所促成，與純粹由客戶自有資金驅動的需求性質不完全相同。</p>
+      <p data-en="David Kennedy noted that DFS (Dell Financial Services) financing is seeing double-digit origination growth across CSG, traditional servers, storage, and AI, helping customers take delivery of equipment now even when their own budgets are constrained. This is a genuine competitive advantage, but it also means part of the strength reflected in order/demand figures is being facilitated by Dell&#39;s own financing arm smoothing customers&#39; capex timing, rather than being purely organically-funded demand.">David Kennedy提到，DFS（Dell Financial Services）融資業務在CSG、傳統伺服器、儲存與AI各業務線均呈現雙位數的訂單起源成長，協助客戶在自身預算受限的情況下，仍能提前取得所需設備。這是一項真實的競爭優勢，但也代表部分反映在訂單/需求數字中的強度，是由Dell自身的融資部門平滑客戶資本支出時程所促成，與純粹由客戶自有資金驅動的需求性質不完全相同。</p>
     </div>
   </div>
 
   <!-- Risk Matrix Panel -->
   <div id="panel-risk" class="panel">
-    <div class="section-title">觀察與風險矩陣：法說會中已揭露 vs. 未直接回應</div>
+    <div class="section-title" data-en="Observations &amp; Risk Matrix: Disclosed vs. Not Directly Answered on the Call">觀察與風險矩陣：法說會中已揭露 vs. 未直接回應</div>
 
     <div class="risk-item">
-      <div class="risk-badge high">高</div>
+      <div class="risk-badge high" data-en="High">高</div>
       <div class="risk-text">
-        <div class="risk-title">最重要的長期問題被明確迴避：三年期財測目標是否已過時</div>
-        管理層本季就把全年營收財測上修270億美元、EPS上修約5美元——如此巨大的單季上修幅度——卻在被直接問及是否應更新去年10月才剛設定的三年期目標（營收7-9%、EPS 15%+）時明確拒絕表態（「不會在Q1法說會上重擬五年計畫」）。「世界已經根本改變」的敘事與「長期演算法不變」的立場之間存在明顯張力，是本場法說會最大的未解問題。
+        <div class="risk-title" data-en="The most important long-term question was explicitly sidestepped: are the 3-year targets now stale?">最重要的長期問題被明確迴避：三年期財測目標是否已過時</div>
+        <span data-en="Management raised full-year guidance by $27B in revenue and roughly $5 in EPS this quarter alone — an enormous single-quarter revision — yet explicitly declined to say whether the 3-year targets (7-9% revenue, 15%+ EPS) set just seven months earlier at the Analyst Day are now outdated (&quot;we wouldn&#39;t work a five-year program on the Q1 earnings call&quot;). The tension between &quot;the world has fundamentally changed&quot; and &quot;the long-term algorithm is unchanged&quot; is the biggest open question of the call.">管理層本季就把全年營收財測上修270億美元、EPS上修約5美元——如此巨大的單季上修幅度——卻在被直接問及是否應更新去年10月才剛設定的三年期目標（營收7-9%、EPS 15%+）時明確拒絕表態（「不會在Q1法說會上重擬五年計畫」）。「世界已經根本改變」的敘事與「長期演算法不變」的立場之間存在明顯張力，是本場法說會最大的未解問題。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge high">高</div>
+      <div class="risk-badge high" data-en="High">高</div>
       <div class="risk-text">
-        <div class="risk-title">下半年營收佔比從歷史52%降至財測隱含48%，成因未被正面解釋</div>
-        這是全場唯一被精確量化的問題（分析師明確指出歷史常態與財測隱含值的差距），管理層僅以「供給問題、非需求問題」的通用說法回應，未解釋供給吃緊具體如何導致下半年佔比低於歷史常態的機制。
+        <div class="risk-title" data-en="H2 revenue weighting fell from a historical 52% to a guidance-implied 48%, with the mechanism never explained">下半年營收佔比從歷史52%降至財測隱含48%，成因未被正面解釋</div>
+        <span data-en="The only question of the call with a precise quantitative comparison (a specific historical rate vs. the guidance-implied rate) was answered with a generic &quot;it&#39;s supply, not demand&quot; — management never explained how tight supply specifically produces a lower-than-historical H2 weighting.">這是全場唯一被精確量化的問題（分析師明確指出歷史常態與財測隱含值的差距），管理層僅以「供給問題、非需求問題」的通用說法回應，未解釋供給吃緊具體如何導致下半年佔比低於歷史常態的機制。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge med">中</div>
+      <div class="risk-badge med" data-en="Med">中</div>
       <div class="risk-text">
-        <div class="risk-title">全年AI伺服器財測高度仰賴下半年執行，Q2財測反而較Q1實績持平或略降</div>
-        Q2 AI伺服器營收財測（$15.5B）低於Q1實際（$16.1B），意味著全年財測中值$60B的增量主要押注在下半年——這使得全年目標的兌現高度依賴DRAM/NAND/CPU供給實際改善的執行力，而非單純需求延續。
+        <div class="risk-title" data-en="The full-year AI server guide depends heavily on H2 execution — Q2 guidance is actually flat-to-down vs. Q1 actual">全年AI伺服器財測高度仰賴下半年執行，Q2財測反而較Q1實績持平或略降</div>
+        <span data-en="Q2 AI server revenue guidance ($15.5B) is below Q1 actual ($16.1B), meaning the increment to the full-year target (midpoint $60B) is mostly staked on the second half — making full-year realization highly dependent on actual DRAM/NAND/CPU supply improvement rather than pure demand continuation.">Q2 AI伺服器營收財測（$15.5B）低於Q1實際（$16.1B），意味著全年財測中值$60B的增量主要押注在下半年——這使得全年目標的兌現高度依賴DRAM/NAND/CPU供給實際改善的執行力，而非純粹需求延續。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge med">中</div>
+      <div class="risk-badge med" data-en="Med">中</div>
       <div class="risk-text">
-        <div class="risk-title">CSG毛利率提升伴隨「調價過早」的自我修正坦承，且Q2財測已主動下修</div>
-        Jeff Clarke坦承CSG定價「刻意提前調漲，事後看有點太早」，壓抑了部分交易型（消費者/中小企業）需求；Q2 CSG營益率財測也從Q1實際的8%下修至約6%，管理層明確表示這是「平衡需求、市佔與獲利」的主動選擇——即剛被大肆讚揚的板塊，管理層自己已在為近期獲利讓步預作準備。
+        <div class="risk-title" data-en="CSG margin improvement came with a self-corrective admission of &quot;pricing too early,&quot; and Q2 guidance is already cut">CSG毛利率提升伴隨「調價過早」的自我修正坦承，且Q2財測已主動下修</div>
+        <span data-en="Jeff Clarke admitted CSG pricing was moved &quot;a little too early in retrospect,&quot; dampening some transactional (consumer/SMB) demand; Q2 CSG operating margin guidance was also cut from Q1&#39;s actual 8% to roughly 6% — management explicitly framed this as a deliberate choice to &quot;balance demand, share, and profitability,&quot; meaning the segment just praised is already being prepared for a near-term profitability give-back.">Jeff Clarke坦承CSG定價「刻意提前調漲，事後看有點太早」，壓抑了部分交易型（消費者/中小企業）需求；Q2 CSG營益率財測也從Q1實際的8%下修至約6%，管理層明確表示這是「平衡需求、市佔與獲利」的主動選擇——即剛被大肆讚揚的板塊，管理層自己已在為近期獲利讓步預作準備。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge med">中</div>
+      <div class="risk-badge med" data-en="Med">中</div>
       <div class="risk-text">
-        <div class="risk-title">「是否透支明年預算」未獲正面回應</div>
-        Jeff Clarke明確表示「無法對客戶明年預算表態」——考量本次財測上修的規模之大，這是一個仍待觀察的真實開放問題。
+        <div class="risk-title" data-en="&quot;Is next year&#39;s budget being borrowed from&quot; went unanswered">「是否透支明年預算」未獲正面回應</div>
+        <span data-en="Jeff Clarke explicitly stated &quot;I can&#39;t speak to next year&#39;s budgets&quot; — given the scale of this guidance raise, this remains a genuinely open question.">Jeff Clarke明確表示「無法對客戶明年預算表態」——考量本次財測上修的規模之大，這是一個仍待觀察的真實開放問題。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge med">中</div>
+      <div class="risk-badge med" data-en="Med">中</div>
       <div class="risk-text">
-        <div class="risk-title">供應鏈仍是全年財測能否兌現的關鍵制約</div>
-        管理層反覆強調需求「持續超越供給」，並預期「全年結束時仍會有可觀積壓訂單」——意味著即使需求持續強勁，實際能認列的營收規模仍取決於零組件供給能否如期改善，而非公司自身可完全掌控的變數。
+        <div class="risk-title" data-en="Supply remains the key constraint on whether the full-year guide is achievable">供應鏈仍是全年財測能否兌現的關鍵制約</div>
+        <span data-en="Management repeatedly emphasized demand &quot;continues to outpace supply&quot; and expects to &quot;exit the year with meaningful backlog&quot; — meaning realized revenue still depends on whether component supply actually improves as assumed, a variable not fully within the company&#39;s own control.">管理層反覆強調需求「持續超越供給」，並預期「全年結束時仍會有可觀積壓訂單」——意味著即使需求持續強勁，實際能認列的營收規模仍取決於零組件供給能否如期改善，而非公司自身可完全掌控的變數。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge low">低</div>
+      <div class="risk-badge low" data-en="Low">低</div>
       <div class="risk-text">
-        <div class="risk-title">DFS融資驅動的訂單成長，可能部分平滑而非純粹反映真實需求強度</div>
-        DFS融資業務在各業務線均呈雙位數訂單起源成長，協助客戶在預算受限下提前取得設備——這是真實的競爭優勢，但也代表部分訂單強度是由Dell自身融資部門平滑客戶資本支出時程所促成，與純粹自有資金驅動的需求性質不完全相同。
+        <div class="risk-title" data-en="Order growth partly facilitated by Dell&#39;s own financing arm, not purely organic demand">DFS融資驅動的雙位數訂單成長，可能部分平滑而非純粹反映真實需求強度</div>
+        <span data-en="DFS financing origination grew double-digits across all business lines, helping customers take delivery despite budget constraints — a real competitive advantage, but part of the reported order strength reflects Dell smoothing customers&#39; capex timing rather than purely organically-funded demand.">DFS融資業務在各業務線均呈雙位數訂單起源成長，協助客戶在預算受限下提前取得設備——這是真實的競爭優勢，但也代表部分訂單強度是由Dell自身融資部門平滑客戶資本支出時程所促成，與純粹自有資金驅動的需求性質不完全相同。</span>
       </div>
     </div>
     <div class="risk-item">
-      <div class="risk-badge low">低</div>
+      <div class="risk-badge low" data-en="Low">低</div>
       <div class="risk-text">
-        <div class="risk-title">多個具體量化問題被管理層以定性敘事帶過</div>
-        本場多個分析師明確要求的量化指標（出貨量vs漲價拆分比例、AI伺服器對儲存/服務搭售率、x86/Arm毛利率差異、AI伺服器製造產能上限）均未獲得具體數字回應，改以定性敘事帶過。單一問題個別看影響有限，但作為重複出現的模式，值得在評估本次「超預期+上修」故事有多少可驗證的硬數字支撐時納入考量。
+        <div class="risk-title" data-en="Several specific quantitative questions were answered with narrative instead of numbers">多個具體量化問題被管理層以定性敘事帶過</div>
+        <span data-en="Several analyst requests for specific metrics (unit/price split, AI server storage/services attach rate, x86/Arm margin differential, AI manufacturing capacity ceiling) went unanswered in quantitative terms, substituted with qualitative narrative. Individually minor, but as a repeated pattern it&#39;s worth weighing how much of this &quot;beat and raise&quot; story rests on verifiable hard numbers versus management tone.">本場多個分析師明確要求的量化指標（出貨量vs漲價拆分比例、AI伺服器對儲存/服務搭售率、x86/Arm毛利率差異、AI伺服器製造產能上限）均未獲得具體數字回應，改以定性敘事帶過。單一問題個別看影響有限，但作為重複出現的模式，值得在評估本次「超預期+上修」故事有多少可驗證的硬數字支撐時納入考量。</span>
       </div>
     </div>
   </div>
@@ -600,6 +604,16 @@ function sw(id, el) {
 }
 function toggleQA(header) {
   header.parentElement.classList.toggle('open');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
 }
 </script>
 </body>
