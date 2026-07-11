@@ -2000,6 +2000,11 @@ function buildNodes() {
       const BH=[{cls:'bh-nw',dir:{n:1,w:1}},{cls:'bh-n',dir:{n:1}},{cls:'bh-ne',dir:{n:1,e:1}},{cls:'bh-e',dir:{e:1}},{cls:'bh-se',dir:{s:1,e:1}},{cls:'bh-s',dir:{s:1}},{cls:'bh-sw',dir:{s:1,w:1}},{cls:'bh-w',dir:{w:1}}];
       BH.forEach(h=>{const bh=document.createElement('div');bh.className='cf-box-handle '+h.cls;bh.addEventListener('pointerdown',ev=>startBoxResize(n.id,h.dir,ev));d.appendChild(bh);});
       const img=document.createElement('img');
+      // Without crossOrigin set, html2canvas (used by exportPNG) treats an
+      // already-loaded image as tainted and silently skips drawing it even
+      // with useCORS:true — the flag has to be present before the browser
+      // fetches the image, not just on html2canvas's own capture call.
+      img.crossOrigin='anonymous';
       img.src=n.src||'';
       img.style.cssText='width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;border-radius:9px';
       d.appendChild(img);
@@ -3282,17 +3287,20 @@ function exportPNG(){
   const x1=Math.max(...visible.map(n=>n.x+(n._w||80)))+pad;
   const y1=Math.max(...visible.map(n=>n.y+(n._h||40)))+pad;
   const W=x1-x0,H=y1-y0;
-  // html2canvas can't reliably rasterize #cf-world while its pan/zoom CSS
-  // transform (translate+scale, set by applyVT) is active — nodes end up
-  // captured at positions offset from where they actually sit in world
-  // coordinates, which is what "跑版" (misaligned layout) is. Reset the
-  // transform to identity for the capture, crop directly to the diagram's
-  // own world-space bounding box (so it's independent of current pan/zoom
-  // and viewport size), then restore the user's view afterward.
+  // html2canvas can't reliably rasterize the canvas while its pan/zoom CSS
+  // transform (translate+scale, set by applyVT on #cf-world and on the
+  // #cf-eg edge group) is active — content ends up captured at positions
+  // offset from where it actually sits in world coordinates, which is what
+  // "跑版" (misaligned layout) is. Reset the transform to identity for the
+  // capture, crop directly to the diagram's own world-space bounding box (so
+  // it's independent of current pan/zoom and viewport size), then restore
+  // the user's view afterward. Capture #cf-canvas itself, not #cf-world —
+  // #cf-edges (the connecting lines) is a sibling of #cf-world, not a
+  // descendant, so capturing #cf-world alone silently drops all the edges.
   const savedVt={...vt};
   vt.x=0; vt.y=0; vt.s=1; applyVT();
   setTimeout(()=>{
-    html2canvas(world,{useCORS:true,allowTaint:true,scale:2,backgroundColor:'#ffffff',x:x0,y:y0,width:W,height:H}).then(c=>{
+    html2canvas(canvas,{useCORS:true,allowTaint:true,scale:2,backgroundColor:'#ffffff',x:x0,y:y0,width:W,height:H}).then(c=>{
       vt.x=savedVt.x; vt.y=savedVt.y; vt.s=savedVt.s; applyVT();
       const a=document.createElement('a');a.download=(activeFile().name||'causal-diagram')+'.png';a.href=c.toDataURL('image/png');a.click();
     }).catch(err=>{
