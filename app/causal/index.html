@@ -3211,7 +3211,7 @@ function exportSVG() {
   const nodeColors={1:'#fffae8',2:'#e6f4e8',3:'#fde8e8',4:'#e4f0ff',5:'#f0e6ff',6:'#e0f5f5'};
   const nodeBorders={1:'#dfc030',2:'#55aa65',3:'#d06060',4:'#5090d8',5:'#9060c8',6:'#30aaaa'};
   const mk=(id,color)=>`<marker id="${id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="miter"/></marker>`;
-  let out=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="${x0} ${y0} ${W} ${H}">`;
+  let out=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${W}" height="${H}" viewBox="${x0} ${y0} ${W} ${H}">`;
   out+=`<defs>${mk('ah-n','#888')}${mk('ah-sp','#2a7a44')}${mk('ah-p','#4f7a5e')}${mk('ah-g','#b3564a')}${mk('ah-sn','#a03838')}${mk('ah-e','#c8a820')}</defs>`;
   out+=`<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="white"/>`;
   // Box nodes first
@@ -3234,9 +3234,52 @@ function exportSVG() {
   });
   // Regular nodes
   visible.filter(n=>!n.isBox).forEach(n=>{
-    const w=n._w||80,h=n._h||40;
+    const w=n._w||n.w||80,h=n._h||n.bh||40;
     if(n.isText){
       out+=`<text x="${n.x+w/2}" y="${n.y+h/2}" text-anchor="middle" dominant-baseline="middle" font-size="14" fill="#0a0a0a" font-family="serif">${esc(n.text)}</text>`;
+    } else if(n.isImage){
+      const href=esc(n.src||'');
+      out+=`<image href="${href}" xlink:href="${href}" x="${n.x}" y="${n.y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+    } else if(n.isDivider){
+      const isH=n.orient==='h';
+      const stroke=n.color?(nodeBorders[n.color]||resolveColorHex(n.color)):'#c4c4c4';
+      const x1=isH?n.x:n.x+7, y1=isH?n.y+7:n.y;
+      const x2=isH?n.x+(n.len||300):n.x+7, y2=isH?n.y+7:n.y+(n.len||300);
+      out+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>`;
+    } else if(n.isTable&&n.td){
+      const td=n.td;
+      const colWidths=(td.colWidths&&td.colWidths.length===td.c)?td.colWidths:Array(td.c).fill(CF_TBL_DEFAULT_W);
+      const rowH0=28;
+      let cy=n.y;
+      for(let r=0;r<td.r;r++){
+        let cx=n.x;
+        const rh=(td.rowHeights&&td.rowHeights[r])||rowH0;
+        for(let c=0;c<td.c;c++){
+          const cw=colWidths[c]||CF_TBL_DEFAULT_W;
+          out+=`<rect x="${cx}" y="${cy}" width="${cw}" height="${rh}" fill="#fff" stroke="#e0e0e0" stroke-width="1"/>`;
+          const val=(td.cells[r]&&td.cells[r][c]!=null)?td.cells[r][c]:'';
+          const weight=(td.bold&&td.bold[r]&&td.bold[r][c])?' font-weight="700"':'';
+          const style=(td.italic&&td.italic[r]&&td.italic[r][c])?' font-style="italic"':'';
+          out+=`<text x="${cx+6}" y="${cy+rh/2}" dominant-baseline="middle" font-size="12" fill="#0a0a0a" font-family="serif"${weight}${style}>${esc(String(val))}</text>`;
+          cx+=cw;
+        }
+        cy+=rh;
+      }
+    } else if(n.isDiagramRef){
+      const rf=(typeof files!=='undefined')?files.find(f=>f.id===n.refId):null;
+      out+=`<rect x="${n.x}" y="${n.y}" width="${w}" height="${h}" rx="11" fill="#f5f0ff" stroke="#b090d8" stroke-width="1"/>`;
+      out+=`<text x="${n.x+w/2}" y="${n.y+h/2}" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#0a0a0a" font-family="serif">${esc(rf?rf.name:'⚠ 找不到原始圖')}</text>`;
+    } else if(n.isCanvas){
+      const nc=(n.data&&n.data.nodes)?n.data.nodes.length:0;
+      out+=`<rect x="${n.x}" y="${n.y}" width="${w}" height="${h}" rx="11" fill="#eef4ff" stroke="#90b0d8" stroke-width="1"/>`;
+      out+=`<text x="${n.x+w/2}" y="${n.y+h/2-8}" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#0a0a0a" font-family="serif">${esc(n.text||'Nested canvas')}</text>`;
+      out+=`<text x="${n.x+w/2}" y="${n.y+h/2+12}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#777" font-family="serif">${nc+(nc===1?' node':' nodes')}</text>`;
+    } else if(n.isEmbed){
+      let domain=n.src||'';
+      try{domain=new URL(n.src).hostname.replace(/^www\./,'');}catch(e){}
+      out+=`<rect x="${n.x}" y="${n.y}" width="${w}" height="${h}" rx="11" fill="#fff" stroke="#d6d6d6" stroke-width="1"/>`;
+      out+=`<text x="${n.x+12}" y="${n.y+22}" font-size="13" fill="#0a0a0a" font-family="serif">${esc(n.ogTitle||domain||n.src||'')}</text>`;
+      out+=`<text x="${n.x+12}" y="${n.y+h-10}" font-size="11" fill="#5090d8" font-family="serif">${esc(domain||n.src||'')}</text>`;
     } else {
       const fill=n.color?(nodeColors[n.color]||nodeColorFillLight(resolveColorHex(n.color))):'#fff';
       const stroke=n.color?(nodeBorders[n.color]||resolveColorHex(n.color)):'#d6d6d6';
