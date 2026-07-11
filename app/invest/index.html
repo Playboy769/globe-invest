@@ -1752,10 +1752,35 @@ function ivClearSearch(){
   ];
   try{
     const saved=JSON.parse(localStorage.getItem('iv_col_w'));
-    if(saved&&saved.length===3)panels.forEach((p,i)=>{p.style.flex='0 0 '+saved[i];});
+    // Skip restoring a saved width for a panel that starts out collapsed: pre-fix builds
+    // could persist a collapsed panel's 8px sliver here (see savePanels below), and applying
+    // that as its flex-basis left it stuck too narrow forever after — even once uncollapsed.
+    // Falling back to the panel's CSS default flex is a one-time, self-healing reset for
+    // anyone who already has that bad value saved from before this fix shipped.
+    let collapsedNow=null;try{collapsedNow=JSON.parse(localStorage.getItem('iv_panel_collapsed'));}catch(e){}
+    const collapsedKeys=['fw',null,'ed'];
+    if(saved&&saved.length===3)panels.forEach((p,i)=>{
+      const k=collapsedKeys[i];
+      if(k&&collapsedNow&&collapsedNow[k])return;
+      p.style.flex='0 0 '+saved[i];
+    });
   }catch(e){}
   function lockPanels(){panels.forEach(p=>{p.style.flex='0 0 '+p.getBoundingClientRect().width+'px';});}
-  function savePanels(){try{localStorage.setItem('iv_col_w',JSON.stringify(panels.map(p=>p.getBoundingClientRect().width+'px')));}catch(e){}}
+  // A collapsed panel's rect is the 8px sliver, not its real width — baking that into
+  // iv_col_w would permanently lose the width to restore to on next uncollapse, since this
+  // is the only place panel widths get persisted. Keep whatever was last saved for it instead.
+  const _IV_COL_KEYS=['fw',null,'ed'];
+  function savePanels(){
+    try{
+      let prev=null;try{prev=JSON.parse(localStorage.getItem('iv_col_w'));}catch(e){}
+      const widths=panels.map((p,i)=>{
+        const k=_IV_COL_KEYS[i];
+        if(k&&_ivPanelCollapsed[k]&&prev&&prev[i])return prev[i];
+        return p.getBoundingClientRect().width+'px';
+      });
+      localStorage.setItem('iv_col_w',JSON.stringify(widths));
+    }catch(e){}
+  }
   [document.getElementById('iv-rh1'),document.getElementById('iv-rh2')].forEach((h,hi)=>{
     const L=panels[hi],R=panels[hi+1];
     h.addEventListener('mousedown',ev=>{
@@ -1789,10 +1814,17 @@ function ivApplyPanelCollapsed(which){
   document.querySelectorAll('.iv-panel-toggle[data-which="'+which+'"]').forEach(b=>{b.title=collapsed?'展開':'收合';});
   ivRefillPanels();
 }
+const _IV_PANEL_KEY={'iv-framework':'fw','iv-editor':'ed'};
 function ivRefillPanels(){
   const anyCollapsed=_ivPanelCollapsed.fw||_ivPanelCollapsed.ed;
   ['iv-framework','iv-feed','iv-editor'].forEach(id=>{
-    const p=document.getElementById(id);if(!p||p.classList.contains('iv-panel-collapsed'))return;
+    const p=document.getElementById(id);if(!p)return;
+    // Key off the live collapse flags, not the DOM class: during ivInitPanelCollapse's
+    // sequential fw/ed calls, a panel's class may not be applied yet even though its flag
+    // is already true, which used to let this loop capture (and permanently keep) that
+    // panel's own about-to-be-collapsed width as its "restore to" baseline.
+    const key=_IV_PANEL_KEY[id];
+    if(key&&_ivPanelCollapsed[key])return;
     if(anyCollapsed){
       if(p.dataset.ivPrevFlex===undefined)p.dataset.ivPrevFlex=p.style.flex||'';
       p.style.flex=_IV_PANEL_RATIO[id]+' 1 0%';
