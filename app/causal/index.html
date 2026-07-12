@@ -320,7 +320,7 @@ body.dark .cf-color-custom:hover{color:#6aa0ff;border-color:#6aa0ff;background:#
 .cf-tbl{table-layout:fixed;border-collapse:collapse;font-size:13px;line-height:1.6;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;border-radius:8px;overflow:hidden}
 .cf-tbl td{border:none;padding:1.1em 1.3em;min-width:44px;text-align:left;outline:none;white-space:pre-wrap;word-break:break-word;cursor:pointer;color:#0a0a0a;position:relative;box-sizing:border-box}
 .cf-tbl tr:hover td{background:#f7f7f7}
-.cf-tbl tr:first-child td{background:none;font-weight:700;cursor:pointer}
+.cf-tbl tr:first-child td{background:none;cursor:pointer}
 .cf-tbl tr:first-child:hover td{background:#f7f7f7}
 .cf-tbl tr:first-child td:first-child{border-top-left-radius:8px}
 .cf-tbl tr:first-child td:last-child{border-top-right-radius:8px}
@@ -1956,6 +1956,10 @@ function closestTOnBezier(p1,p2,wx,wy){
 }
 
 const CF_TBL_DEFAULT_W=130; // default column width for new tables / columns lacking an explicit width
+// Header row (row 0) reads as bold by default until a cell's bold state is
+// explicitly recorded — once td.bold[r][c] exists it always wins, so this is
+// only consulted as a fallback for untouched cells.
+function cfBoldDefault(r){return r===0;}
 
 // ── Build nodes ────────────────────────────────────────────
 function buildNodes() {
@@ -2113,7 +2117,9 @@ function buildNodes() {
           const cell=document.createElement('td');
           cell.dataset.r=r; cell.dataset.c=c;
           if(td.align==='center'||td.align==='right')cell.style.textAlign=td.align;
-          if(td.bold&&td.bold[r]&&td.bold[r][c])cell.style.fontWeight='700';
+          const boldSet=td.bold&&td.bold[r]&&td.bold[r][c]!==undefined;
+          const boldOn=boldSet?td.bold[r][c]:cfBoldDefault(r);
+          cell.style.fontWeight=boldOn?'700':'400';
           if(td.italic&&td.italic[r]&&td.italic[r][c])cell.style.fontStyle='italic';
           // The actual value lives in its own span — editTableCell() edits only
           // this span (not the whole <td>), so the decorative delCol/delRow
@@ -2305,7 +2311,8 @@ function placeTools(){
       if(delRowBtn)delRowBtn.classList.toggle('disabled',tbl.r<=1);
       if(delColBtn)delColBtn.classList.toggle('disabled',tbl.c<=1);
       const ac=(_tblActiveCell&&_tblActiveCell.nodeId===_sel.id)?_tblActiveCell:null;
-      const activeBold=!!(ac&&tbl.bold&&tbl.bold[ac.row]&&tbl.bold[ac.row][ac.col]);
+      const acBoldSet=ac&&tbl.bold&&tbl.bold[ac.row]&&tbl.bold[ac.row][ac.col]!==undefined;
+      const activeBold=!!ac&&(acBoldSet?tbl.bold[ac.row][ac.col]:cfBoldDefault(ac.row));
       const activeItalic=!!(ac&&tbl.italic&&tbl.italic[ac.row]&&tbl.italic[ac.row][ac.col]);
       const boldBtn=nt.querySelector('[data-act="cell-bold"]'), italicBtn=nt.querySelector('[data-act="cell-italic"]');
       if(boldBtn)boldBtn.classList.toggle('active',activeBold);
@@ -2457,7 +2464,7 @@ function startColResize(nodeId, colIdx, ev0) {
 }
 function tableAddRow(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();n.td.cells.push(Array(n.td.c).fill(''));n.td.r++;if(n.td.rowHeights)n.td.rowHeights.push(null);if(n.td.bold)n.td.bold.push(Array(n.td.c).fill(false));if(n.td.italic)n.td.italic.push(Array(n.td.c).fill(false));renderAll();save();}
 function tableDelRow(id){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(n.td.r-1,1);n.td.r--;if(n.td.rowHeights)n.td.rowHeights.splice(n.td.r,1);if(n.td.bold)n.td.bold.splice(n.td.r,1);if(n.td.italic)n.td.italic.splice(n.td.r,1);renderAll();save();}
-function tableAddCol(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();for(let r=0;r<n.td.r;r++){if(!n.td.cells[r])n.td.cells[r]=[];while(n.td.cells[r].length<n.td.c)n.td.cells[r].push('');n.td.cells[r].push('');if(n.td.bold){if(!n.td.bold[r])n.td.bold[r]=[];while(n.td.bold[r].length<n.td.c)n.td.bold[r].push(false);n.td.bold[r].push(false);}if(n.td.italic){if(!n.td.italic[r])n.td.italic[r]=[];while(n.td.italic[r].length<n.td.c)n.td.italic[r].push(false);n.td.italic[r].push(false);}}n.td.c++;if(n.td.colWidths)n.td.colWidths.push(CF_TBL_DEFAULT_W);renderAll();save();}
+function tableAddCol(id){const n=byNode(id);if(!n||!n.isTable)return;snapshot();for(let r=0;r<n.td.r;r++){if(!n.td.cells[r])n.td.cells[r]=[];while(n.td.cells[r].length<n.td.c)n.td.cells[r].push('');n.td.cells[r].push('');if(n.td.bold){if(!n.td.bold[r])n.td.bold[r]=[];while(n.td.bold[r].length<n.td.c)n.td.bold[r].push(cfBoldDefault(r));n.td.bold[r].push(cfBoldDefault(r));}if(n.td.italic){if(!n.td.italic[r])n.td.italic[r]=[];while(n.td.italic[r].length<n.td.c)n.td.italic[r].push(false);n.td.italic[r].push(false);}}n.td.c++;if(n.td.colWidths)n.td.colWidths.push(CF_TBL_DEFAULT_W);renderAll();save();}
 function tableDelCol(id){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(n.td.c-1,1);if(n.td.bold&&n.td.bold[r])n.td.bold[r].splice(n.td.c-1,1);if(n.td.italic&&n.td.italic[r])n.td.italic[r].splice(n.td.c-1,1);}n.td.c--;if(n.td.colWidths)n.td.colWidths.splice(n.td.c,1);renderAll();save();}
 function tableDelRowAt(id,rowIdx){const n=byNode(id);if(!n||!n.isTable||n.td.r<=1)return;snapshot();n.td.cells.splice(rowIdx,1);n.td.r--;if(n.td.rowHeights)n.td.rowHeights.splice(rowIdx,1);if(n.td.bold)n.td.bold.splice(rowIdx,1);if(n.td.italic)n.td.italic.splice(rowIdx,1);renderAll();save();}
 function tableDelColAt(id,colIdx){const n=byNode(id);if(!n||!n.isTable||n.td.c<=1)return;snapshot();for(let r=0;r<n.td.r;r++){if(n.td.cells[r])n.td.cells[r].splice(colIdx,1);if(n.td.bold&&n.td.bold[r])n.td.bold[r].splice(colIdx,1);if(n.td.italic&&n.td.italic[r])n.td.italic[r].splice(colIdx,1);}n.td.c--;if(n.td.colWidths)n.td.colWidths.splice(colIdx,1);renderAll();save();}
@@ -2468,8 +2475,9 @@ function toggleTableCellFormat(id,kind){
   if(row>=n.td.r||col>=n.td.c)return;
   snapshot();
   const key=kind==='italic'?'italic':'bold';
-  if(!n.td[key])n.td[key]=Array.from({length:n.td.r},()=>Array(n.td.c).fill(false));
-  if(!n.td[key][row])n.td[key][row]=Array(n.td.c).fill(false);
+  const dflt=r=>key==='bold'&&cfBoldDefault(r);
+  if(!n.td[key])n.td[key]=Array.from({length:n.td.r},(_,r)=>Array(n.td.c).fill(dflt(r)));
+  if(!n.td[key][row])n.td[key][row]=Array(n.td.c).fill(dflt(row));
   n.td[key][row][col]=!n.td[key][row][col];
   renderAll();save();
 }
