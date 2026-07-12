@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloudflare — FY Q1 2026 — Q&amp;A / GAAP落差與可轉債到期結構 / 四大Act業務線 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; }
+  .tab { padding: 10px 20px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #7a2020; }
+  .flag-box.obs { background: #eff6ff; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+  .flag-box.obs .q-text { color: #1e3a6e; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .sca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .sca-box { border-radius: 8px; padding: 12px; }
+  .sca-box.blue { background: #eff6ff; border: 1px solid #a9c9f5; }
+  .sca-box.green { background: #f0fdf4; border: 1px solid #a3dab1; }
+  .sca-box.orange { background: #fff7ed; border: 1px solid #f0c090; }
+  .sca-box.red { background: #fef2f2; border: 1px solid #f0aab8; }
+  .sca-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .sca-box.blue h4 { color: #1d4ed8; }
+  .sca-box.green h4 { color: #15803d; }
+  .sca-box.orange h4 { color: #c2600a; }
+  .sca-box.red h4 { color: #b91c4a; }
+  .sca-box ul { padding-left: 14px; }
+  .sca-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .price-band { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-bar { height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; margin: 6px 0; font-size: 12px; font-weight: 600; }
+  .band-ceiling { background: #eff6ff; color: #1d4ed8; border: 1px solid #a9c9f5; }
+  .band-floor { background: #fffbeb; color: #92400e; border: 1px solid #f0d090; }
+  .band-label { font-size: 11px; color: #666; margin: 2px 0; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 230px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 70px; font-size: 13px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid; }
+  .tech-card.dram { background: #eff6ff; border-color: #a9c9f5; }
+  .tech-card.nand { background: #f5f3ff; border-color: #c7b8f0; }
+  .tech-card.hbm { background: #f0fdf4; border-color: #a3dab1; }
+  .tech-card.pkg { background: #fff7ed; border-color: #f0c090; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border: 1px solid #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border: 1px solid #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border: 1px solid #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stat-box { flex: 1; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Cloudflare — FY Q1 2026 Earnings Call Analysis">Cloudflare — FY Q1 2026 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis / GAAP-vs-Non-GAAP &amp; Convertible Note Maturity Structure / Four Act Business Lines / Risk Matrix &nbsp;·&nbsp; Call Date: May 7, 2026 &nbsp;·&nbsp; Cross-referenced with 10-Q for the period ended March 31, 2026 and the same-day 8-K restructuring announcement">Q&amp;A 問答分析 / GAAP落差與可轉債到期結構 / 四大Act業務線 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年5月7日 &nbsp;·&nbsp; 交叉比對截至2026/3/31財季10-Q與同日發布的裁員重組8-K</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="GAAP Gap &amp; Note Maturity Structure" onclick="sw('sca',this)">GAAP落差與可轉債到期結構</div>
+    <div class="tab" data-en="Four Act Business Lines" onclick="sw('tech',this)">四大Act業務線</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl" data-en="Logic Gaps">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">開場觀察</div><div class="qa-topic" data-en="The Call's Own Disclaimer vs. What Was Actually Said">法說會自己的免責聲明 vs. 實際說出口的數字</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="flag-box obs">
+          <div class="q-label flag" data-en="⚑ Observation — No Analyst Asked About This">⚑ 觀察——沒有任何分析師問到這件事</div>
+          <div class="q-text" data-en="Phil Winslow's opening remarks state: &quot;all financial numbers we talk about today, other than revenue, will be on an adjusted non-GAAP basis.&quot; Every subsequent operating-income, net-income, and EPS figure on the call was then stated as a bare number, with no &quot;non-GAAP&quot; qualifier attached in the sentence itself (&quot;We delivered an operating profit of $73.1 million&quot;; &quot;Our net income in the quarter was $94 million&quot;). Cross-referencing the 10-Q and 8-K: GAAP operating result for Q1 2026 was actually a LOSS of $(62.0)M, and GAAP net result was a LOSS of $(22.9)M (diluted EPS $(0.07)) — versus the $73.1M operating profit and $94M net income cited on the call. The largest reconciling item is stock-based compensation of $114.2M (Cost of revenue $3.7M, S&amp;M $39.3M, R&amp;D $43.0M, G&amp;A $28.2M), which alone does not fully bridge the ~$135M operating-income gap; the remaining reconciling items were not itemized in the disclosures reviewed. This is not a novel or hidden practice — Cloudflare's non-GAAP reporting is disclosed and reconciled in the press release — but on the call itself, a listener relying only on what was said aloud would come away believing Cloudflare was solidly GAAP-profitable in Q1, when it in fact posted a GAAP net loss.">Phil Winslow開場即聲明：「除營收外，今日所談論的所有財務數字皆為調整後非GAAP基礎」。但法說會後續提到的每一個營業利益、淨利、EPS數字，都是以裸數字方式說出口，句子本身並未附上「非GAAP」的限定詞（「我們創造了7,310萬美元的營業利益」；「本季淨利為9,400萬美元」）。交叉比對10-Q與8-K：2026年Q1的GAAP營業結果實際上是虧損$(6,200)萬，GAAP淨結果也是虧損$(2,290)萬（稀釋每股虧損$0.07）——相對於法說會上引用的營業利益$7,310萬與淨利$9,400萬。最大的對帳項目是股權薪酬$1.142億（營收成本$370萬、行銷$3,930萬、研發$4,300萬、管理$2,820萬），單靠這一項並不足以完全解釋約$1.35億的營業利益落差；其餘對帳項目在所查閱的揭露文件中並未逐項列出。這並非新奇或隱藏的做法——Cloudflare的非GAAP申報在新聞稿中皆有揭露並對帳——但單就法說會口頭內容而言，一位只聽口頭陳述的聽眾，會誤以為Cloudflare本季GAAP層面穩健獲利，而實際上公司是GAAP淨虧損。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Matthew Hedberg（RBC Capital Markets）</div><div class="qa-topic" data-en="Agentic Traffic Tailwind vs. Restructuring Rationale &amp; Guidance Conservatism">Agentic流量順風 × 重組決策理由與guide保守度</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Why is Cloudflare seeing stronger tailwinds monetizing agentic traffic than &quot;Act One&quot; competitors? Separately, given the restructuring is announced from a position of strength (strong Q1 results), why now, how will it make Cloudflare stronger, and has any conservatism been embedded into the guide for this action?">為何Cloudflare在Act One業務貨幣化agentic流量上，比其他競爭者看到更強的順風？另外，考量重組是在Q1強勁業績、看似處於優勢地位時宣布，為何選在此時？這如何讓Cloudflare變得更強？guidance中是否已納入這項行動的保守假設？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matthew Prince: frames the restructuring as roles becoming obsolete, not a performance judgment; predicts headcount will be higher in 2027 than at any point in 2026 despite the cut. On traffic: Cloudflare never chased bandwidth-driven CDN traffic (video streaming), instead targeting APIs/applications — &quot;hundreds of billions of agentic requests per month, growing exponentially&quot; — positioning this as validating a long-standing strategic choice rather than a new capability. Thomas Seifert: guidance excludes AE/quota-carrying sales capacity from the cuts; states the team &quot;tried to be thoughtful and prudent&quot; in reflecting residual risk in the guide.">Matthew Prince：將重組定位為職務本身已過時，而非績效評判；預測儘管裁員，2027年員工人數仍將高於2026年任何時點。關於流量：Cloudflare從未追逐頻寬驅動的CDN流量（影音串流），而是鎖定API/應用程式——「每月數千億次agentic請求，且呈指數成長」——將此定位為驗證長期以來的策略選擇，而非一項新能力。Thomas Seifert：guidance中裁員排除AE/配額銷售產能；表示團隊「已試圖以審慎、謹慎的方式」在guide中反映剩餘風險。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="&quot;Hundreds of billions of agentic requests per month&quot; is asserted with zero attached revenue or monetization-rate figure — the entire premise of &quot;Act One tailwinds&quot; rests on a traffic-volume claim that cannot be tied to a dollar amount from anything disclosed on the call or in the 10-Q. Separately, &quot;tried to be thoughtful and prudent&quot; is the full extent of the answer on guidance conservatism — no percentage, dollar range, or specific line item was identified as containing a buffer for restructuring-related disruption (e.g., attrition risk among remaining staff, temporary productivity loss during the transition).">「每月數千億次agentic請求」的說法沒有附上任何營收或貨幣化比率數字——整個「Act One順風」的前提，建立在一個流量規模的說法上，卻無法連結到法說會或10-Q中任何已揭露的金額。另外，「已試圖以審慎、謹慎的方式」是guidance保守度問題的完整答案——沒有任何百分比、金額區間，或特定項目被指出含有為重組相關擾動（例如留任員工的流失風險、轉型期間暫時性生產力下滑）預留的緩衝。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Matthew Hedberg:</b> "Great. Thanks for taking my questions, guys. You know, Matthew, first, you know, on your strong Q1 results, you know, I find it interesting that some of your Act One competitors don't seem to be benefiting from monetizing agentic traffic the same way you are. I guess, you know, first of all, why are you seeing such strong tailwinds there? Then as a follow-up regarding the announced restructuring, really in light of these strong Q1 results, it seemed to really be coming from a position of strength. I guess the question is why now? You know, how is it gonna make Cloudflare stronger? Thomas, have you embedded any conservatism into the guide for this action?"<br><br><b>Matthew Prince:</b> "Yeah, Matt, thanks. Maybe I'll start with the second 'cause, again, I think it's, you know, I think sort of the honorable thing to do... I would guess that in 2027 we'll have more employees than we did, you know, at any point in 2026... To your first question about traffic, I think the key here is something that we've always understood... Today, you know, literally, we're seeing hundreds of billions of agentic requests per month, and that number is growing exponentially."<br><br><b>Thomas Seifert:</b> "Yeah, let me take your second part regarding guidance and how this action is reflected. First of all, I would say we've been rather thoughtful... the only exception really is our AE and quota-carrying capacity... I think we've been careful trying to reflect whatever residual risk remains in the guidance that we provided for the remainder of the year. I think we, as usual, we've tried to be thoughtful and prudent in how we think about what is in front of us."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Adam Borg（Stifel）</div><div class="qa-topic" data-en="Internal AI Coding Costs vs. Efficiency &times; Data Sovereignty Opportunity">內部AI程式碼成本 vs 效率 × 資料主權機會</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How is Cloudflare balancing R&amp;D coding-agent adoption against the cost of running it internally, and what AI efficiencies is the company targeting? Follow-up: how does Cloudflare think about the data localization/sovereignty opportunity, not just within Zero Trust (Act Two) but across all four Acts?">Cloudflare如何在R&D程式碼代理採用與內部執行成本之間取得平衡？公司鎖定哪些AI效率目標？追問：Cloudflare如何看待資料在地化/主權機會，不只在Zero Trust（Act Two），而是across所有四個Act？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matthew Prince: confirms costs rose alongside 600% usage growth but claims Cloudflare's cost increase is smaller than peers, attributed to (1) favorable AI-lab customer relationships, (2) running most coding-tool workloads on Cloudflare's own infrastructure rather than leaving the network, and (3) AI Gateway routing simple tasks to near-zero-marginal-cost internal models. On sovereignty: present in 120+ countries/350+ cities; can pin data to specific cities (e.g., Berlin, Frankfurt, Munich) with granularity &quot;no hyperscaler can match&quot;; frames this as increasingly synergistic with Zero Trust/SASE fine-grained access control for agents.">Matthew Prince：確認成本隨使用量成長600%而上升，但聲稱Cloudflare的成本增幅小於同業，歸因於（1）與AI實驗室客戶的良好關係、（2）大多數程式碼工具工作負載留在Cloudflare自身網路上執行、（3）AI Gateway將簡單任務路由至邊際成本近乎為零的內部模型。關於主權：據點遍及120多國、350多座城市；可將資料釘選在特定城市（例如柏林、法蘭克福、慕尼黑），granularity「沒有任何超大規模業者能匹配」；將此定位為與Zero Trust/SASE針對agent的細粒度存取控制日益協同。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="&quot;I don't think it's gone up nearly as much as some others&quot; is a comparative cost claim with no dollar figure attached on either side — no internal AI infrastructure cost number, no peer benchmark, and no breakdown of how much of the $114.2M in total Q1 stock-based compensation (R&amp;D alone: $43.0M) or the $151.0M GAAP R&amp;D expense line is AI-tooling-related versus headcount-related. The claim is unfalsifiable from anything disclosed in the call or 10-Q.">「我不認為成本增幅有像其他公司那麼多」是一個比較性的成本說法，卻沒有附上任何一方的金額——沒有內部AI基礎建設成本數字、沒有同業benchmark，也沒有拆解Q1股權薪酬總額$1.142億（單研發部門即$4,300萬）或GAAP研發費用$1.51億中，有多少與AI工具相關、多少與人力成本相關。這項說法無法用法說會或10-Q中任何已揭露內容加以驗證或反駁。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Adam Borg:</b> "Awesome. Thanks so much for taking the question. Maybe Matthew for you know, one of the things that we keep on hearing about is just how AI costs internally are really expensive, especially around, you know, R&amp;D coding agents used internally. How do you think about balancing, you know, R&amp;D agentic coding adoption with the cost?"<br><br><b>Matthew Prince:</b> "Yeah. First of all, you know, we have seen, as usage has gone up, you know, 600% in the last quarter, we have seen costs go up, but I don't think it's gone up nearly as much as some others... Most of the use of various AI coding tools, isn't even leaving our network."<br><br><b>Adam Borg:</b> "...how do you think about the data localization opportunity, sovereign opportunity, not just in Act Two, but across the acts?"<br><br><b>Matthew Prince:</b> "Yeah. I mean, I think that we're uniquely positioned for a world where they're increasing regulatory or even just practical requirements around keeping data in particular jurisdictions... We can do that with a level of granularity that no hyperscaler can match."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Saket Kalia（Barclays）</div><div class="qa-topic" data-en="Cross-Act Margin Structure &times; Act Four Monetization Milestones">跨Act毛利率結構 × Act Four貨幣化里程碑</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="How should investors think about net OpEx impact and gross margin as the lower-margin Acts (developer platform) continue to grow? Follow-up: what milestones (lighthouse accounts, industry consortiums) need to happen for Act Four (AI/content monetization) to inflect?">隨著毛利率較低的Act（開發者平台）持續成長，投資人該如何看待淨營業費用影響與毛利率？追問：Act Four（AI/內容貨幣化）要出現拐點，需要哪些里程碑（燈塔客戶、產業聯盟）？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Thomas Seifert: confirms gross margin varies by Act, developer products weakest; argues operating margin (not gross margin) will become the better competitiveness measure; states free-traffic-to-paid-traffic reallocation into cost of revenue is &quot;literally a wash from an overall P&amp;L perspective&quot;; cites &quot;north of 46%&quot; Rule of 40 today, visibility to &quot;north of 50%&quot; next year. Matthew Prince (Act Four): the internet's ad/subscription business model will change over the next five years, likely via micropayments on agentic requests; explicitly states &quot;nobody can handle the volumes right now&quot; for the needed micropayment infrastructure — current excitement is around ~1 million transactions/second, but Cloudflare needs &quot;something significantly larger than that&quot;; cites media-industry crawl-control penetration as the first lighthouse signal, with foundational-model-company deals as the next milestone, targeted as one of Cloudflare's &quot;top six priorities for 2026.&quot;">Thomas Seifert：確認毛利率依Act而異，開發者產品最弱；主張營業利益率（而非毛利率）將成為衡量競爭力更好的指標；表示免費流量轉為付費流量、費用重分類至營收成本，「就整體損益表而言，其實是一個wash（互相抵銷）」；引用今日「北於46%」的Rule of 40，並有能見度看到明年「北於50%」。Matthew Prince（Act Four）：網路的廣告/訂閱商業模式將在未來五年內改變，可能透過對agentic請求收取微支付；明確表示「目前沒有人能處理這樣的交易量」，指所需的微支付基礎建設——目前市場興奮的規模約為每秒100萬筆交易，但Cloudflare需要「比這大得多的量級」；引用媒體產業爬蟲控制滲透率作為第一個燈塔訊號，將與基礎模型公司的交易視為下一個里程碑，並列為Cloudflare「2026年六大優先事項」之一。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="&quot;Literally a wash from an overall P&amp;L perspective&quot; is asserted with no reconciling dollar figure — the 10-Q confirms gross margin compressed 130bps YoY and 210bps QoQ (72.8% vs 75.1% sequential per the call's own figures) from the free-to-paid traffic reallocation, but no offsetting S&amp;M dollar reduction was quantified to support the &quot;wash&quot; claim. More strikingly, Cloudflare's own CEO states the infrastructure required for its self-described future flagship revenue stream (Act Four micropayments) does not yet exist at the necessary scale anywhere in the industry — a direct admission that the business model underpinning long-term monetization of &quot;500 billion requests&quot; per second of traffic is currently infeasible, not merely unbuilt.">「就整體損益表而言其實是一個wash」的說法沒有附上任何對帳金額——10-Q確認毛利率因免費轉付費流量重分類而YoY下滑130個基點、QoQ下滑210個基點（依法說會自己的數字為72.8% vs環比75.1%），但沒有量化任何用以支持「wash」說法的S&amp;M費用抵銷金額。更值得注意的是，Cloudflare執行長親口承認，公司自我定位為未來旗艦營收來源（Act Four微支付）所需的基礎建設，目前在整個產業中都尚未存在到所需的規模——這等於直接承認，支撐「每秒5,000億次請求」流量長期貨幣化的商業模式，目前不只是尚未建成，而是根本不可行。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Saket Kalia:</b> "...How do you think about sort of the net impact to OpEx, and how should we sort of think about gross margins as those other acts continue to grow?"<br><br><b>Thomas Seifert:</b> "...Just keep in mind that one of the biggest moving cross-margin this the last quarter was free traffic moving to paid traffic and cost moving into cost of revenue. While that is decreasing the cross-margin, it's literally a wash from an overall P&amp;L perspective."<br><br><b>Saket Kalia:</b> "...I'd love to hit on Act Four a little bit... What are some of the milestones that you need to see in order to see that business inflect?"<br><br><b>Matthew Prince:</b> "...The challenge is, like, nobody can handle the volumes right now. We're looking around to partner with people. We're looking around for everything. At right now, the sort of transaction volumes that are that people are excited about, like 1 million transactions per second, we need something that's significantly larger than that."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">James Fish（Piper Sandler）</div><div class="qa-topic" data-en="GPU Inferencing Investment Appetite &times; Zero Trust Sales-Cycle Compression">GPU推論投資意願 × Zero Trust銷售週期壓縮</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Given inferencing demand, how willing is Cloudflare to invest more megawatts/capacity behind its network to host inferencing workloads? Follow-up: are enterprise Zero Trust sales cycles compressing due to hardware vulnerabilities/supply chain issues, or are approvals still elongated?">考量推論需求，Cloudflare投入更多megawatt/產能來承載推論工作負載的意願有多高？追問：是否因硬體漏洞/供應鏈問題，企業Zero Trust銷售週期正在壓縮，還是核准流程仍然拉長？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Thomas Seifert: &quot;no restriction on leaning in&quot; to this opportunity, citing the 1 million developer-count increase as evidence. Matthew Prince: contrasts Cloudflare's model (invest behind demand, high GPU utilization approaching CPU's 70-80%) against hyperscalers (invest ahead of demand, single-digit GPU utilization industry-wide) — a business-model rather than capital-scale argument. On Zero Trust: hardware vendors have &quot;nine lives,&quot; supply chain/memory shortages are a tailwind, but declines to call this the definitive inflection point.">Thomas Seifert：「毫無限制地投入」這項機會，並引用開發者數增加100萬作為證據。Matthew Prince：對比Cloudflare的模式（依需求投資在後、GPU利用率正逼近CPU的70-80%）與超大規模業者的模式（依需求投資在前、全產業GPU利用率為個位數）——這是商業模式而非資本規模層面的論點。關於Zero Trust：硬體業者「命很硬」，供應鏈/記憶體短缺是順風，但拒絕將此定調為確定的轉折點。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="&quot;No restriction on leaning in&quot; is not a capital or megawatt commitment — the only hard number offered (1 million new developers) measures platform adoption, not GPU/inferencing capacity deployed. Network capex was 9% of revenue in Q1 against a 14%-15% full-year guide (per the 10-Q Key Data cross-reference), meaning roughly two-thirds of the year's guided network capex is still to be spent — a real acceleration is implied but was not connected to Fish's specific &quot;megawatts&quot; question with any figure.">「毫無限制地投入」並不是一項資本或megawatt層級的承諾——唯一給出的具體數字（新增100萬開發者）衡量的是平台採用度，而非已部署的GPU/推論產能。網路資本支出在Q1僅為營收的9%，相對全年guide的14%-15%（依10-Q關鍵數據交叉比對），意味著全年guide的網路資本支出約有三分之二仍待支出——雖然暗示著確實會加速，但並未以任何具體數字連結回Fish提出的「megawatt」具體問題。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>James Fish:</b> "...what's the team's willingness to go after more of this opportunity and really drive more megawatts behind the network to host more of those inferencing use cases like what you're seeing out of some of your edge peers?"<br><br><b>Thomas Seifert:</b> "...We are continuing to optimize margin for these products, but we are not at all restricting growth. Just the opposite, I would say. There's no restriction on leaning in, into this opportunity."<br><br><b>Matthew Prince:</b> "...Across most of the hyperscalers, you're seeing utilization rates of their GPUs that are in the single digits. Whereas we're slowly getting our GPU utilization to approach what our CPU utilization is, which is up in the 70%-80% range."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Gabriela Borges（Goldman Sachs）</div><div class="qa-topic" data-en="GPU/CPU Fleet Mix Shift &times; Anthropic Managed Agents Opportunity/Risk">GPU/CPU機隊組合轉變 × Anthropic managed agents機會/風險</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="Is Cloudflare now routing some AI inference to CPUs rather than GPUs, and what does that imply for unit economics? Follow-up: does infrastructure like Anthropic's managed agents create opportunity or risk for Cloudflare's business model?">Cloudflare現在是否已將部分AI推論路由至CPU而非GPU？這對單位經濟效益有何意涵？追問：像Anthropic managed agents這類基礎建設，對Cloudflare的商業模式是機會還是風險？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matthew Prince: servers now ship with CPU+GPU+memory+storage+network bundled together; Cloudflare abstracts the optimal silicon per workload/customer tier rather than renting discrete H100s; frames the company as &quot;a giant scheduler.&quot; On Anthropic: declines to discuss specific customers, but calls the trend positive, citing Dynamic Workers adoption by an unnamed large AI studio going from ~0 to over 1 million Dynamic Workers in 15 days.">Matthew Prince：伺服器現已將CPU+GPU+記憶體+儲存+網路捆綁出貨；Cloudflare依工作負載/客戶層級抽象化出最適合的晶片組合，而非以個別H100計費出租；將公司定位為「一個巨大的排程器」。關於Anthropic：拒絕談論特定客戶，但稱此趨勢正面，並引用一家未具名大型AI工作室採用Dynamic Workers的案例，在15天內從約0成長至超過100萬個Dynamic Workers。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Gabriela Borges:</b> "...Matthew, you're just talking about how GPU utilization is approaching CPU utilization. Are you also finding that there are some AI inference that you can now route to CPUs?"<br><br><b>Matthew Prince:</b> "...I think what's different about us is we are not renting, you know, an H100... I think that has always, at some level, Cloudflare has always been just a giant scheduler."<br><br><b>Gabriela Borges:</b> "...there is the data point in your quarter on Anthropic announcing managed agents. I would just love to pick your brain on where you think that type of infrastructure intersecting with the LLM creates opportunity and/or risk for the Cloudflare business model."<br><br><b>Matthew Prince:</b> "Without talking about specific customers, I'll say that what we're seeing from the major AI labs is, first of all, that we're partnered with all of them... in just the last 15 days, went from essentially zero Dynamic Workers to over 1 million Dynamic Workers running across this the platform."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Fatima Boolani（Citi）</div><div class="qa-topic" data-en="Agentic Halo Across Acts One-Three &times; Pool of Funds Renewal Trends">Agentic對Act One-Three的加乘效應 × Pool of Funds續約趨勢</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="What halo effect could production agentic systems have on Act One, Two, and Three revenue? Follow-up: with pool-of-funds contracts now three years mature, what renewal and expansion trends are showing up in the earliest vintage?">生產環境中的agentic系統，對Act One、Two、Three營收可能帶來什麼樣的加乘效應？追問：pool of funds合約已邁入第三年成熟期，最早期的客戶群展現出什麼樣的續約與擴張趨勢？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Matthew Prince: Act Three benefits most directly (more code needs efficient ephemeral compute; &gt;75% of Workers platform growth from new customers); Act One benefits because agents visit &quot;5,000&quot; sites versus a human's &quot;5&quot; for the same task, driving usage; Act Two benefits from fine-grained data-access control for agents, especially in self-serve. Thomas Seifert (pool of funds): now in its &quot;sixth quarter,&quot; describes it as a maturing, standard go-to-market tool; states the company had its &quot;highest ever renewal rate&quot; last quarter including pool-of-funds renewals, confirming the hypothesis that it drives both expansion and stickiness.">Matthew Prince：Act Three受益最直接（更多程式碼需要高效的短暫運算資源；Workers平台成長逾75%來自新客戶）；Act One受益於agent對同一任務的造訪次數是人類的「5,000」次vs「5」次，帶動使用量；Act Two受益於針對agent的細粒度資料存取控制，尤其在自助式服務領域。Thomas Seifert（pool of funds）：目前已進入「第六季」，形容其為日益成熟、標準化的go-to-market工具；表示公司上季創下「史上最高續約率」，其中包含所有到期的pool of funds交易，驗證了此工具同時驅動擴張與黏著度的假設。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="&quot;Highest ever renewal rate&quot; is asserted with no percentage attached, and dollar-based net retention was actually reported DOWN 2 points sequentially to 118% in the same call — the two claims are not necessarily contradictory (renewal rate and net retention measure different things), but the call offers no reconciling figure to show how a record renewal rate coexists with a sequentially declining retention metric.">「史上最高續約率」的說法沒有附上任何百分比，而同一場法說會中，以美元計算的淨留存率實際上環比下滑2個百分點至118%——這兩項說法未必互相矛盾（續約率與淨留存率衡量的是不同指標），但法說會並未提供任何對帳數字，說明創紀錄的續約率如何與環比下滑的留存指標並存。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Fatima Boolani:</b> "...I'm wondering if you can speak to what sort of halo the rise of production agentic systems could have on the more flagship established parts of your business, i.e., the revenue and monetization halo to Act One, Act Two, and certainly Act Three products."<br><br><b>Matthew Prince:</b> "I mean, I think for the Act Three products, the developer platform products, I think it's the most obvious... If I'm looking for a digital camera as a human, I might visit five websites if I really care about it. My agent's gonna visit 5,000."<br><br><b>Fatima Boolani:</b> "...I was wondering if you have any comments or observations on a pending renewal cycle from maybe your earliest vintage of pool of fund adopters..."<br><br><b>Thomas Seifert:</b> "...From a renewal perspective, you heard this in Matthew's prepared remarks. We had our highest ever renewal rate in the last quarter, and that includes all the pool of funds deals that were up for renewal."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Shaul Eyal（TD Cowen）</div><div class="qa-topic" data-en="Sales Capacity/Productivity Trade-off &times; Partner Channel Mix Trajectory">銷售產能/生產力取捨 × 通路夥伴佔比走向</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q" data-en="Core Question">問題核心</div>
+          <div class="q-text" data-en="With quota-carrying capacity accelerating, how should investors think about capacity growth relative to productivity going forward? Follow-up: partner revenue reached 30% of revenue this quarter — what's driving the increase, and how much further channel mix should be expected?">配額銷售產能持續加速的情況下，投資人未來該如何看待產能成長相對於生產力的關係？追問：本季通路夥伴營收佔比達30%，是什麼驅動這項成長？未來通路佔比還有多少上升空間？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a" data-en="Management Response">管理層回應</div>
+          <div class="q-text" data-en="Thomas Seifert: the reduction is concentrated in AE support-ratio roles, freeing budget within the same spend envelope to deploy more quota-carrying capacity toward the market opportunity — a reallocation argument, not a headcount-growth one. Matthew Prince (partners): attributes the 30% partner share to a go-to-market motion begun roughly two years ago under Mark Anderson, particularly effective for consultative Act Two sales; states future channel mix will depend on which partners best leverage agentic AI for scale and velocity, without giving a target or trajectory.">Thomas Seifert：裁減主要集中在AE支援比例相關職務，在相同支出範圍內釋出預算，用以投入更多配額銷售產能於市場機會——這是一個資源重新配置的論點，而非人力成長的論點。Matthew Prince（夥伴）：將30%的夥伴佔比歸因於約兩年前由Mark Anderson啟動的go-to-market動能，對需要顧問式銷售的Act Two業務尤其有效；表示未來通路佔比將取決於哪些夥伴最善於運用agentic AI提升規模與速度，但未給出目標數字或走向。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div>
+          <div class="q-text" data-en="Eyal's direct question — &quot;how much more channel mix would you expect going forward&quot; — is never actually answered; Prince's response describes what has driven the trend historically and speculates about future partner selection dynamics, but supplies no number, range, or directional target for where partner revenue share goes from 30%. Similarly, &quot;freeing up dollars within the same spend envelope&quot; on support ratios is asserted with no before/after ratio, dollar amount, or percentage given.">Eyal的直接提問——「未來通路佔比還有多少上升空間」——始終沒有被真正回答；Prince的回答描述的是過去驅動這項趨勢的原因，並對未來夥伴篩選動態做出推測，卻沒有給出任何數字、區間，或夥伴營收佔比從30%起將走向何方的方向性目標。同樣地，「在相同支出範圍內釋出資金」用於支援比例，這項說法也沒有附上任何前後比例、金額或百分比。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div>
+          <div class="orig-text"><b>Shaul Eyal:</b> "...Thomas, you mentioned quota-carrying sales capacity continues to accelerate. Could you provide some more color on your expectations to continue to grow capacity relative to productivity?"<br><br><b>Thomas Seifert:</b> "...where we see significant productivity is in the support ratios for these AEs. The ratio is going to change significantly, which means we are freeing up dollars within the same spend envelope now of dollars, you can deploy more quota-carrying AE capacity towards our market opportunity."<br><br><b>Shaul Eyal:</b> "...partners increased to 30% of revenue this quarter. What's driving this continued increase, and how much more channel mix would you expect going forward?"<br><br><b>Matthew Prince:</b> "...I think the big question is gonna be what partners are really able to leverage this new world of agentic AI in order to, you know, just get additional value and scale and velocity. I think that's what we're evaluating across the partnership world."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAAP Gap & Convertible Note Maturity Structure Panel -->
+  <div id="panel-sca" class="panel">
+    <div class="section-title" data-en="GAAP-vs-Non-GAAP Gap &amp; Convertible Note Maturity Structure">GAAP落差與可轉換債到期結構</div>
+    <div class="sca-grid">
+      <div class="sca-box blue">
+        <h4 data-en="Restructuring Plan Scale &amp; Structure">重組計畫規模與結構</h4>
+        <ul>
+          <li data-en="Announced same-day as earnings (May 7, 2026, 8-K): ~20% workforce reduction, approximately 1,100 positions, across &quot;all functions and geographies&quot; except quota-carrying AE capacity.">與財報同日宣布（2026年5月7日8-K）：裁減約20%員工，約1,100個職位，涵蓋「所有職能與地區」，但排除配額銷售AE產能。</li>
+          <li data-en="Total estimated charges: $140M-$150M for FY2026 — cash (severance/notice/benefits) $105M-$110M, non-cash (accelerated share-based vesting) $35M-$40M.">2026全年預估總費用：$1.4億-$1.5億——現金（資遣費/通知期/福利）$1.05億-$1.1億，非現金（加速股權授予）$3,500萬-$4,000萬。</li>
+          <li data-en="Majority of charges concentrated in Q2 2026; plan execution &quot;substantially complete&quot; by end of Q3 2026.">絕大部分費用集中於2026年Q2；計畫執行預計於2026年Q3底前「大致完成」。</li>
+          <li data-en="Pre-reduction headcount at quarter-end: ~5,500.">裁員前季末員工人數：約5,500人。</li>
+        </ul>
+      </div>
+      <div class="sca-box green">
+        <h4 data-en="GAAP-vs-Non-GAAP Mechanics">GAAP與非GAAP的落差機制</h4>
+        <ul>
+          <li data-en="GAAP operating result Q1 2026: LOSS of $(62.0)M. Non-GAAP figure cited on call: $73.1M operating profit (11.4% margin). Gap: ~$135.1M.">2026年Q1 GAAP營業結果：虧損$(6,200)萬。法說會引用的非GAAP數字：營業利益$7,310萬（利益率11.4%）。落差：約$1.351億。</li>
+          <li data-en="GAAP net result Q1 2026: LOSS of $(22.9)M, diluted EPS $(0.07). Non-GAAP figure cited on call: $94M net income, $0.25/share. Gap: ~$116.9M.">2026年Q1 GAAP淨結果：虧損$(2,290)萬，稀釋每股虧損$0.07。法說會引用的非GAAP數字：淨利$9,400萬，每股$0.25。落差：約$1.169億。</li>
+          <li data-en="Stock-based compensation, the largest single reconciling item: $114.2M total (Cost of revenue $3.7M, S&amp;M $39.3M, R&amp;D $43.0M, G&amp;A $28.2M) — up 19.6% YoY from $95.5M.">股權薪酬，最大的單一對帳項目：合計$1.142億（營收成本$370萬、行銷$3,930萬、研發$4,300萬、管理$2,820萬）——較去年同期$9,550萬成長19.6%。</li>
+          <li data-en="SBC alone does not fully bridge the ~$135M operating-income gap; remaining reconciling items (e.g. payroll tax on SBC, intangible amortization) were not itemized in the disclosures reviewed. No restructuring accrual recorded in Q1 — the entire charge is a subsequent event.">股權薪酬本身並不足以完全解釋約$1.35億的營業利益落差；其餘對帳項目（例如股權薪酬相關薪資稅、無形資產攤銷）在所查閱的揭露文件中並未逐項列出。Q1並未認列任何重組準備金——整筆費用屬於後續事件。</li>
+        </ul>
+      </div>
+      <div class="sca-box orange">
+        <h4 data-en="Related Financial Commitments">相關財務承諾</h4>
+        <ul>
+          <li data-en="2026 Notes: $1,293.8M principal, due Aug 15, 2026 (inside 5 months of quarter-end), current liability, conversion price ~$191.34.">2026年到期票據：本金$12.938億，2026年8月15日到期（距季末不到5個月），列為流動負債，轉換價約$191.34。</li>
+          <li data-en="2030 Notes: $2,000.0M principal, due June 15, 2030, non-current, conversion price ~$247.67.">2030年到期票據：本金$20.0億，2030年6月15日到期，非流動負債，轉換價約$247.67。</li>
+          <li data-en="Capped calls hedge dilution up to $250.94 (2026 tranche) and $469.73 (2030 tranche); combined premium paid $369.7M, recorded in equity.">上限買權（capped calls）對沖稀釋，上限分別為$250.94（2026批次）與$469.73（2030批次）；合計支付權利金$3.697億，計入股東權益。</li>
+          <li data-en="Company-cited free cash flow $84.1M does not equal GAAP-statement operating CF ($158.3M) minus capex ($65.2M) = $93.1M — an unreconciled $8.9M gap, no bridge disclosed.">公司引用的自由現金流$8,410萬，與GAAP現金流量表的營運現金流（$1.583億）減去資本支出（$6,520萬）＝$9,310萬並不相等——存在未對帳的$890萬落差，未揭露對帳橋樑。</li>
+        </ul>
+      </div>
+      <div class="sca-box red">
+        <h4 data-en="Unverified / Undisclosed">尚待驗證 / 未揭露</h4>
+        <ul>
+          <li data-en="The full reconciling bridge from GAAP to non-GAAP operating income/net income beyond stock-based compensation was not itemized in the disclosures reviewed.">除股權薪酬外，GAAP與非GAAP營業利益/淨利之間完整的對帳橋樑，在所查閱的揭露文件中並未逐項列出。</li>
+          <li data-en="No restructuring accrual/liability exists yet on the balance sheet — investors modeling Q2/Q3 2026 GAAP results are relying entirely on the guided $140M-$150M range, not a booked figure.">資產負債表上尚無任何重組應計負債——投資人若要為2026年Q2/Q3的GAAP結果建模，完全只能仰賴guide的$1.4億-$1.5億區間，而非已入帳的數字。</li>
+          <li data-en="Cloudflare does not disclose a formal segment/product revenue breakdown — the &quot;Act One/Two/Three/Four&quot; framework used throughout the call is a narrative construct, not a reported GAAP segment, so the magnitude of the Workers-platform margin drag cannot be independently quantified beyond &quot;lower than corporate average.&quot;">Cloudflare未揭露正式的分部/產品營收拆分——法說會中反覆使用的「Act One/Two/Three/Four」架構是敘事性框架，並非申報的GAAP分部，因此Workers平台毛利率拖累的幅度，除了「低於公司平均」之外，無法獨立量化。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="price-band">
+      <div class="section-title" data-en="GAAP vs. Non-GAAP Operating Result: The Gap the Call Never Named">GAAP vs 非GAAP營業結果：法說會中從未被點名的落差</div>
+      <div class="band-label" data-en="Current state: every operating-income and net-income figure spoken aloud on the call was the non-GAAP figure, stated without a qualifier in the sentence itself">現況：法說會口頭提到的每一個營業利益與淨利數字，都是非GAAP數字，且句子本身並未附上限定詞</div>
+      <div class="band-bar band-floor"><span data-en="GAAP operating result — LOSS of $(62.0)M">GAAP營業結果——虧損$(6,200)萬</span><span data-en="per the 10-Q income statement">依10-Q損益表</span></div>
+      <div style="text-align:center; color:#888; padding: 4px 0; font-size:12px;" data-en="&#9650; ~$135.1M gap, driven primarily but not entirely by $114.2M of stock-based compensation &#9650;">▲ 約$1.351億落差，主要（但非全部）由$1.142億股權薪酬驅動 ▲</div>
+      <div class="band-bar band-ceiling"><span data-en="Non-GAAP operating profit cited on call — $73.1M">法說會引用的非GAAP營業利益——$7,310萬</span><span data-en="11.4% margin, stated without a &quot;non-GAAP&quot; qualifier in the sentence">利益率11.4%，句子本身未附「非GAAP」限定詞</span></div>
+      <div class="band-label" data-en="The same pattern repeats at the net-income line: GAAP net loss $(22.9)M vs. the $94M net income figure cited on the call — a $116.9M gap">相同模式在淨利數字上重演：GAAP淨虧損$(2,290)萬 vs 法說會引用的淨利$9,400萬——落差達$1.169億</div>
+      <hr class="divider">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+        <div>
+          <div style="font-size:11px; font-weight:700; color:#1d4ed8; margin-bottom:6px; text-transform:uppercase;" data-en="What This Means for Cloudflare">對 Cloudflare 的意義</div>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8; color:#333;">
+            <li data-en="The non-GAAP framing is standard SaaS practice and is properly disclosed/reconciled in the press release — this is a presentation-emphasis issue, not an accounting-fraud one.">非GAAP框架是SaaS產業的標準做法，且在新聞稿中確實有適當揭露/對帳——這是簡報重點呈現的問題，而非會計舞弊問題。</li>
+            <li data-en="Heavy SBC usage (5.9% of revenue) is a deliberate capital-allocation choice that conserves cash while diluting shareholders — consistent with a company still investing aggressively in sales capacity and R&amp;D.">高比例的股權薪酬使用（佔營收5.9%）是刻意的資本配置選擇，在稀釋股東權益的同時保留現金——與一家仍積極投資銷售產能與研發的公司相符。</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:700; color:#c2600a; margin-bottom:6px; text-transform:uppercase;" data-en="What This Means for Investors">對投資人的意義</div>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8; color:#333;">
+            <li data-en="A listener relying solely on what was said aloud on the call — without independently reading the 10-Q — would not know Cloudflare posted a GAAP net loss in a quarter management repeatedly described as a position of strength.">一位僅仰賴法說會口頭內容、未獨立閱讀10-Q的聽眾，不會知道Cloudflare在管理層反覆形容為「處於優勢地位」的這一季，實際上是GAAP淨虧損。</li>
+            <li data-en="The 2026 Notes' $1.29B maturity (Aug 2026) and the bulk of the $105M-$110M cash restructuring outlay both land in 2026 — liquidity ($4.16B cash+AFS) comfortably covers both, but H2 2026 capital allocation now has two large, concurrent cash events to plan around.">2026年到期票據的$12.9億到期日（2026年8月）與$1.05億-$1.1億現金重組支出的絕大部分，都落在2026年內——雖然流動性（現金+可供出售證券共$41.6億）足以從容應付兩者，但2026下半年的資本配置規劃，現在必須同時安排兩項規模龐大、時間重疊的現金事件。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-en="Core Open Question on the GAAP/Non-GAAP Framing">GAAP/非GAAP框架的核心疑問</div>
+      <p data-en="Cloudflare's opening disclaimer properly flags that non-GAAP figures will be used, and the press release properly reconciles them. But nowhere in the call itself — across roughly an hour of prepared remarks and Q&amp;A — did any speaker restate a GAAP figure alongside a non-GAAP one, and no analyst asked for the GAAP figures directly.<br><br>
+      <strong style="color:#1a1a2e;">1) The magnitude of the gap ($135.1M operating, $116.9M net) is unusually large relative to the headline figures themselves</strong> — non-GAAP operating income of $73.1M is smaller than the GAAP-to-non-GAAP adjustment required to get there from a GAAP loss<br>
+      <strong style="color:#1a1a2e;">2) Stock-based compensation ($114.2M, 5.9% of revenue) explains most but not all of the gap</strong> — the residual reconciling items were not itemized in the disclosures reviewed, meaning the full bridge is not independently verifiable from the call transcript alone<br>
+      <strong style="color:#1a1a2e;">3) The restructuring charge is entirely unbooked as of the quarter reported</strong> — Q2 2026 GAAP results will show the bulk of $140M-$150M in charges on top of a quarter that, even before any restructuring charges, was already GAAP-loss-making<br><br>
+      This is the single most important framing question for interpreting Cloudflare's Q1 2026 &quot;strength&quot; narrative heading into the June 9 Investor Day.">Cloudflare開場的免責聲明確實適當地標示將使用非GAAP數字，新聞稿也確實有適當對帳。但在整場法說會——涵蓋約一小時的預先準備發言與問答——沒有任何一位發言者在提到非GAAP數字的同時，重述對應的GAAP數字，也沒有任何分析師直接詢問GAAP數字。<br><br>
+      <strong style="color:#1a1a2e;">① 落差的規模（營業利益落差$1.351億、淨利落差$1.169億）相對於頭條數字本身而言異常龐大</strong>——非GAAP營業利益$7,310萬，甚至小於從GAAP虧損調整到該數字所需的落差本身<br>
+      <strong style="color:#1a1a2e;">② 股權薪酬（$1.142億，佔營收5.9%）解釋了落差的大部分，但並非全部</strong>——剩餘的對帳項目在所查閱的揭露文件中並未逐項列出，意味著僅憑法說會逐字稿，無法獨立驗證完整的對帳橋樑<br>
+      <strong style="color:#1a1a2e;">③ 重組費用截至本季申報時完全尚未入帳</strong>——2026年Q2的GAAP結果，將在一個「即便不計入任何重組費用、本身就已經是GAAP虧損」的基礎上，疊加$1.4億-$1.5億費用的絕大部分<br><br>
+      在6月9日投資人活動之前，這是解讀Cloudflare 2026年Q1「處於優勢地位」敘事時，最重要的框架性疑問。</p>
+    </div>
+  </div>
+
+  <!-- Tech Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title" data-en="Q1 FY26 Revenue by Geography (10-Q, matches figures stated on call)">Q1 FY26 營收結構：依地理區域（10-Q，與法說會數字一致）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name" data-en="United States">United States</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#1565c0;" data-en="$315.8M &nbsp;+34% YoY">$3.158億 &nbsp;+34% YoY</div></div>
+        <div class="rev-val">49%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="EMEA">EMEA</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:56%; background:#7b1fa2;" data-en="$175.7M &nbsp;+31% YoY">$1.757億 &nbsp;+31% YoY</div></div>
+        <div class="rev-val">28%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Asia Pacific">Asia Pacific</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:31%; background:#6a1b9a; white-space:nowrap;" data-en="$98.6M &nbsp;+34% YoY">$9,860萬 &nbsp;+34% YoY</div></div>
+        <div class="rev-val">15%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name" data-en="Other">Other</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:16%; background:#e65100; white-space:nowrap;" data-en="$49.6M">$4,960萬</div></div>
+        <div class="rev-val">8%</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title" data-en="Observation">觀察</div>
+      <p data-en="Cloudflare does not report a formal product or business-line segment breakdown — the &quot;Act One/Two/Three/Four&quot; framework analysts and management use throughout the call is an internal narrative construct, not a disclosed GAAP segment. The only quantified breakdowns in the 10-Q are geographic (above) and channel: direct customers $446.8M (70%) vs. channel partners $193.0M (30%), consistent with Shaul Eyal's question about partner mix reaching 30% of revenue.">Cloudflare並未申報正式的產品或業務線分部拆分——分析師與管理層在整場法說會中反覆使用的「Act One/Two/Three/Four」架構，是內部敘事性建構，並非已揭露的GAAP分部。10-Q中唯一量化拆分的維度是地理區域（如上）與通路：直接客戶$4.468億（70%）vs 通路夥伴$1.93億（30%），與Shaul Eyal提問中通路佔比達營收30%的說法一致。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="The Four &quot;Acts&quot; — Cloudflare's Own Narrative Framework">四大「Act」——Cloudflare自訂的敘事框架</div>
+    <div class="tech-grid">
+      <div class="tech-card dram">
+        <h4 data-en="Act One — Network / Security (CDN, DDoS, WAF)">Act One — 網路 / 安全（CDN、DDoS、WAF）</h4>
+        <ul>
+          <li data-en="Explicitly framed as never having chased bandwidth-driven CDN traffic (video streaming, called a &quot;commodity&quot;); instead targeted APIs/applications from the start"><strong style="color:#1a1a2e;">定位</strong>：明確表示從未追逐頻寬驅動的CDN流量（影音串流，被稱為「商品化」業務）；從一開始就鎖定API/應用程式</li>
+          <li data-en="&quot;Hundreds of billions of agentic requests per month, growing exponentially&quot; — no attached revenue figure"><strong style="color:#1a1a2e;">流量規模</strong>：「每月數千億次agentic請求，且呈指數成長」——未附上對應的營收數字</li>
+          <li data-en="Agent-vs-human traffic ratio framed as structurally favorable: an agent visits &quot;5,000&quot; sites for a task a human would visit &quot;5&quot; sites for"><strong style="color:#1a1a2e;">agent vs 人類</strong>：agent與人類流量比率被定位為結構性有利：agent為單一任務造訪「5,000」個網站，人類僅造訪「5」個</li>
+          <li data-en="Non-human internet traffic projected by management to surpass human traffic &quot;somewhere in 2027&quot;"><strong style="color:#1a1a2e;">展望</strong>：管理層預期非人類網路流量將於「2027年某個時間點」超越人類流量</li>
+        </ul>
+      </div>
+      <div class="tech-card nand">
+        <h4 data-en="Act Two — Zero Trust / SASE">Act Two — Zero Trust / SASE</h4>
+        <ul>
+          <li data-en="Positioned around fine-grained data-access control for agents (&quot;only have access to the things they should&quot;), increasingly synergistic with data-sovereignty demand across 120+ countries/350+ cities"><strong style="color:#1a1a2e;">定位</strong>：圍繞針對agent的細粒度資料存取控制（「只能存取應被允許存取的內容」），與涵蓋120多國/350多座城市的資料主權需求日益協同</li>
+          <li data-en="Self-serve Zero Trust described as the primary on-ramp for hobbyist/individual tools (e.g. OpenClaw) that later convert to enterprise usage — &quot;basically the only game in town&quot; for this self-serve niche per management"><strong style="color:#1a1a2e;">自助式服務</strong>：自助式Zero Trust被形容為業餘/個人工具（如OpenClaw）日後轉化為企業使用的主要入口——管理層稱在此自助式利基市場中「基本上是唯一的選擇」</li>
+          <li data-en="Partner-led consultative selling motion (30% of revenue) described as especially effective for Act Two integrations"><strong style="color:#1a1a2e;">通路</strong>：以夥伴為主導的顧問式銷售動能（佔營收30%）被形容為對Act Two整合案特別有效</li>
+          <li data-en="Legacy hardware vendors (VPN/firewall incumbents) still holding share despite vulnerabilities and supply-chain/memory shortages — management declines to call an inflection point"><strong style="color:#1a1a2e;">競爭態勢</strong>：儘管有漏洞問題與供應鏈/記憶體短缺，傳統硬體業者（VPN/防火牆既有業者）仍守住部分市占——管理層拒絕稱此為確定的轉折點</li>
+        </ul>
+      </div>
+      <div class="tech-card hbm">
+        <h4 data-en="Act Three — Workers Developer Platform">Act Three — Workers開發者平台</h4>
+        <ul>
+          <li data-en="5.5M+ developers at quarter-end, +1M in Q1 alone (vs +1.5M for all of 2025) — the single fastest-growing metric disclosed this quarter"><strong style="color:#1a1a2e;">開發者規模</strong>：季末超過550萬名開發者，單Q1即新增100萬（相較2025全年僅新增150萬）——本季揭露成長最快的單一指標</li>
+          <li data-en="&gt;75% of Workers platform growth from new customers, per management"><strong style="color:#1a1a2e;">客戶結構</strong>：依管理層所述，Workers平台成長逾75%來自新客戶</li>
+          <li data-en="Explicitly the platform's lowest-gross-margin product line — &quot;currently carry a lower gross margin than our corporate average,&quot; a direct driver of the 130bps YoY / 210bps QoQ gross margin decline"><strong style="color:#1a1a2e;">毛利率</strong>：明確為平台毛利率最低的產品線——「目前毛利率低於公司平均」，是毛利率YoY下滑130個基點、QoQ下滑210個基點的直接驅動因素</li>
+          <li data-en="&quot;Dynamic Workers&quot; (new, lighter-weight than containers) cited as driving rapid AI-studio adoption — one unnamed studio went from ~0 to 1M+ in 15 days"><strong style="color:#1a1a2e;">新產品</strong>：「Dynamic Workers」（新推出，比容器更輕量）被引用為驅動AI工作室快速採用的關鍵——一家未具名工作室在15天內從約0成長至逾100萬</li>
+        </ul>
+      </div>
+      <div class="tech-card pkg">
+        <h4 data-en="Act Four — Content Monetization / Agentic Commerce">Act Four — 內容貨幣化 / Agentic商務</h4>
+        <ul>
+          <li data-en="Framed as a fundamental change to the internet's ad/subscription business model over the &quot;next five years&quot; — &quot;might not be one thing&quot;"><strong style="color:#1a1a2e;">定位</strong>：被定位為網路廣告/訂閱商業模式在「未來五年」內的根本性改變——「可能不只是單一模式」</li>
+          <li data-en="Explicit admission: micropayment infrastructure needed for the vision does not yet exist at required scale anywhere — &quot;nobody can handle the volumes right now&quot;; current excitement (~1M transactions/sec) is below what Cloudflare says it needs"><strong style="color:#1a1a2e;">基礎建設現況</strong>：明確承認願景所需的微支付基礎建設，目前在任何地方都尚未存在到所需規模——「目前沒有人能處理這樣的交易量」；目前業界興奮的規模（約每秒100萬筆交易）低於Cloudflare表示所需的水準</li>
+          <li data-en="Milestone claimed: penetration in the ad-supported media space went from &quot;relatively low&quot; to &quot;dominating&quot; — cited as the first lighthouse signal, unquantified"><strong style="color:#1a1a2e;">已達成里程碑</strong>：宣稱在廣告支持型媒體領域的滲透率已從「相對低」轉為「主導地位」——被引用為第一個燈塔訊號，但未量化</li>
+          <li data-en="Named as one of Cloudflare's &quot;top six priorities for 2026&quot; — target is first revenue passed back to the long tail of the internet, no dollar or timeline target given"><strong style="color:#1a1a2e;">2026優先事項</strong>：被列為Cloudflare「2026年六大優先事項」之一——目標是產生首筆回饋給網路長尾內容創作者的營收，但未給出金額或時程目標</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title" data-en="Cross-Act Structural Tension">跨Act的結構性張力</div>
+      <p data-en="<strong style=&quot;color:#1a1a2e;&quot;>The four Acts pull in opposite directions on margin.</strong> Act Three (Workers) is explicitly the lowest-gross-margin, fastest-growing line, actively compressing corporate gross margin (down 130bps YoY, 210bps QoQ) even as management insists this is &quot;literally a wash&quot; at the P&amp;L level — an assertion not reconciled with any dollar figure. Act One is the profitability anchor but its forward growth narrative rests on an unquantified traffic-volume claim (&quot;hundreds of billions of agentic requests&quot;).<br><br>
+      <strong style=&quot;color:#1a1a2e;&quot;>Act Four is the most rhetorically prominent and least operationally real of the four</strong>: it is the subject of the call's most repeated framing language (&quot;paradigm shift,&quot; &quot;agentic internet&quot;) yet management's own CEO states the core infrastructure it depends on — internet-scale micropayments — does not exist anywhere in the industry at the necessary scale today. This is a structurally different risk profile than Acts One-Three, which are monetizing today; Act Four is, by management's own admission, pre-infrastructure.<br><br>
+      <strong style=&quot;color:#1a1a2e;&quot;>No segment-level profitability disclosure exists to test any of this quantitatively</strong> — unlike peers that report by product or segment, Cloudflare's Act framework is a qualitative narrative overlay on a single-segment GAAP income statement, meaning every margin claim tied to a specific Act is, by definition, unverifiable from the filings alone.">
+        <strong style="color:#1a1a2e;">四大Act在毛利率上彼此拉扯、方向相反。</strong>Act Three（Workers）明確是毛利率最低、成長最快的業務線，正主動壓縮公司整體毛利率（YoY下滑130個基點、QoQ下滑210個基點），儘管管理層堅稱這在損益表層面「其實是一個wash」——這項說法未附上任何金額加以對帳。Act One是獲利能力的支柱，但其未來成長敘事，建立在一個未量化的流量規模說法之上（「每月數千億次agentic請求」）。<br><br>
+        <strong style="color:#1a1a2e;">Act Four是四者之中，修辭上最突出、但營運上最不真實的一個</strong>：它是整場法說會中最反覆出現的框架語言主題（「典範轉移」、「agentic網路」），但公司執行長親口表示，這項願景所依賴的核心基礎建設——網路規模的微支付——目前在整個產業中，任何地方都尚未存在到所需的規模。這與正在貨幣化中的Act One-Three，屬於結構上完全不同的風險層級；依管理層自己的說法，Act Four仍處於「基礎建設尚未到位」的階段。<br><br>
+        <strong style="color:#1a1a2e;">沒有任何分部層級的獲利能力揭露，可以用來量化檢驗上述任何一項說法</strong>——不同於以產品或分部申報的同業，Cloudflare的Act框架只是疊加在單一分部GAAP損益表之上的定性敘事，這意味著任何綁定特定Act的毛利率說法，依定義都無法僅憑申報文件獨立驗證。
+      </p>
+    </div>
+  </div>
+
+  <!-- Risk Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title" data-en="Risk Matrix: Disclosed vs. Undisclosed in the Call">風險矩陣：法說會中已揭露 vs. 未揭露</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="GAAP Net Loss vs. Uncaveated &quot;$94M Net Income&quot; Headline Number">GAAP淨虧損 vs. 未附限定詞的「淨利9,400萬美元」頭條數字</div>
+        <span data-en="Every operating-income and net-income figure spoken aloud on the call was the non-GAAP figure, stated without a &quot;non-GAAP&quot; qualifier in the sentence itself. GAAP results were actually an operating loss of $(62.0)M and a net loss of $(22.9)M. Stock-based compensation ($114.2M) is the largest but not the sole reconciling item; the remainder was not itemized in the disclosures reviewed.">法說會口頭提到的每一個營業利益與淨利數字，都是非GAAP數字，且句子本身並未附上「非GAAP」限定詞。GAAP實際結果為營業虧損$(6,200)萬、淨虧損$(2,290)萬。股權薪酬（$1.142億）是最大但非唯一的對帳項目；其餘部分在所查閱的揭露文件中並未逐項列出。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="CEO Admits Act Four's Required Infrastructure &quot;Nobody Can Handle&quot; Yet">執行長承認Act Four所需基礎建設「目前沒有人能處理」</div>
+        <span data-en="Matthew Prince states directly that the micropayment infrastructure needed to monetize agentic traffic at scale does not exist anywhere in the industry today, and that current excitement (~1M transactions/second) falls short of what Cloudflare says it needs. Act Four is repeatedly used as forward-looking framing language throughout the call despite this admission.">Matthew Prince直接表示，用以大規模貨幣化agentic流量所需的微支付基礎建設，目前在整個產業中任何地方都尚未存在，而目前業界興奮的規模（約每秒100萬筆交易）也未達到Cloudflare所稱所需的水準。儘管有此承認，Act Four仍在整場法說會中被反覆用作前瞻性的框架語言。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="$1.29B Convertible Note Maturity Lands in the Same Year as the Bulk of Restructuring Cash Outlay">$12.9億可轉換債到期，與絕大部分重組現金支出落在同一年</div>
+        <span data-en="The 2026 Notes ($1,293.8M principal) mature August 15, 2026 — inside 5 months of quarter-end — the same fiscal year in which $105M-$110M of cash restructuring costs will be paid, mostly in Q2-Q3. Liquidity ($932.2M cash + $3,231.7M AFS securities = ~$4.16B) comfortably covers both, but H2 2026 capital planning must absorb a debt repayment/refinancing decision concurrent with peak severance cash outflows. Not discussed on the call.">2026年到期票據（本金$12.938億）將於2026年8月15日到期——距季末不到5個月——與$1.05億-$1.1億現金重組費用支付（主要落在Q2-Q3）屬同一財年。流動性（現金$9.322億+可供出售證券$32.317億＝約$41.6億）足以從容應付兩者，但2026下半年的資本規劃，必須同時吸收一項債務償還/再融資決策，以及資遣費現金流出的高峰期。法說會上並未討論此事。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="OFAC Export-Control Self-Disclosure Never Mentioned on the Call">OFAC出口管制自願揭露事項，法說會上從未提及</div>
+        <span data-en="The 10-Q discloses Cloudflare received an OFAC No Action Letter on April 9, 2026 regarding a voluntary self-disclosure of potential export control violations. No dollar exposure, counterparty, or affected product line was disclosed in the filing text reviewed, and the topic was not raised by any analyst or by management on the call.">10-Q揭露Cloudflare於2026年4月9日收到OFAC不採取行動函，涉及一項針對潛在出口管制違規的自願揭露。所查閱的申報文件中，並未揭露涉及金額、交易對手，或受影響的產品線，法說會上也沒有任何分析師或管理層提及此事。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="&quot;Literally a Wash&quot; Gross Margin Claim Has No Reconciling Dollar Figure">「其實是一個wash」的毛利率說法，沒有任何對帳金額</div>
+        <span data-en="Thomas Seifert asserts free-to-paid traffic reallocation into cost of revenue is &quot;literally a wash from an overall P&amp;L perspective,&quot; but no offsetting S&amp;M dollar reduction was quantified to support this. Gross margin did decline 130bps YoY / 210bps QoQ as disclosed, but whether the P&amp;L truly nets to zero cannot be verified from anything stated on the call or in the 10-Q text reviewed.">Thomas Seifert聲稱免費轉付費流量重分類至營收成本，「就整體損益表而言其實是一個wash」，但沒有量化任何用以支持此說法的S&amp;M費用抵銷金額。毛利率確實如揭露般YoY下滑130個基點、QoQ下滑210個基點，但損益表是否真的淨額為零，無法從法說會或所查閱的10-Q文字中任何內容獨立驗證。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Restructuring Support-Ratio Productivity Claim Given No Baseline or Target Numbers">重組後支援比例生產力提升的說法，未附任何基準或目標數字</div>
+        <span data-en="Thomas Seifert states support-ratio changes for account executives will &quot;free up dollars within the same spend envelope&quot; to fund more quota-carrying capacity, framed as the basis for guidance not needing conservatism beyond &quot;thoughtful and prudent.&quot; No current ratio, target ratio, or dollar amount freed was disclosed, making the underlying productivity assumption behind full-year guidance unverifiable.">Thomas Seifert表示，客戶經理支援比例的調整將「在相同支出範圍內釋出資金」，用以投入更多配額銷售產能，並將此定位為guidance除了「審慎、謹慎」之外，不需額外保守假設的依據。目前比例、目標比例，或釋出的具體金額，皆未揭露，使得全年guidance背後的生產力假設無法獨立驗證。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low" data-en="Low">低</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="No Formal Segment Disclosure Means Act-Level Margin Claims Are Structurally Unverifiable">沒有正式分部揭露，意味著Act層級的毛利率說法在結構上無法驗證</div>
+        <span data-en="Cloudflare reports a single GAAP segment; the &quot;Act One/Two/Three/Four&quot; framework is a management narrative overlay, not a disclosed financial segment. Every claim about a specific Act's margin profile (e.g. Workers being &quot;lower than corporate average&quot;) is, by construction, a qualitative assertion that cannot be checked against filed numbers. Not a near-term risk, but a persistent modeling and disclosure-transparency limitation.">Cloudflare僅申報單一GAAP分部；「Act One/Two/Three/Four」框架是管理層的敘事性疊加層，並非已揭露的財務分部。任何針對特定Act毛利率輪廓的說法（例如Workers「低於公司平均」），依其性質皆為定性主張，無法對照申報數字加以檢驗。這並非近期風險，而是一項持續存在的建模與揭露透明度限制。</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>
