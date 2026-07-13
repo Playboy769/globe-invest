@@ -938,6 +938,7 @@ body.dark #cf-url-ok:hover{background:#fff}
   <button class="cf-overflow-item" id="cf-export-png">Export PNG</button>
   <button class="cf-overflow-item" id="cf-export-json">Export JSON</button>
   <button class="cf-overflow-item" id="cf-import-json">Import JSON</button>
+  <button class="cf-overflow-item" id="cf-import-csv">Import CSV</button>
   <div class="cf-overflow-sep"></div>
   <button class="cf-overflow-item" id="cf-present-btn">Presentation  F</button>
   <button class="cf-overflow-item" id="cf-help-btn">Shortcuts  ?</button>
@@ -3352,6 +3353,60 @@ function importJSON() {
   inp.click();
 }
 
+// Minimal RFC4180 CSV parser — handles quoted fields (with embedded commas,
+// newlines, and "" escapes) and both \r\n and \n line endings.
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1); // strip BOM
+  const rows = []; let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') { if (text[i+1] === '"') { field += '"'; i++; } else inQuotes = false; }
+      else field += ch;
+    } else if (ch === '"') inQuotes = true;
+    else if (ch === ',') { row.push(field); field = ''; }
+    else if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+    else if (ch === '\r') { if (text[i+1] === '\n') continue; row.push(field); rows.push(row); row = []; field = ''; }
+    else field += ch;
+  }
+  if (field !== '' || row.length) { row.push(field); rows.push(row); }
+  while (rows.length && rows[rows.length-1].length === 1 && rows[rows.length-1][0] === '') rows.pop();
+  return rows;
+}
+
+// Import CSV into a table node: replaces the selected table's data if one is
+// selected (matches the JSON import's "load = replace" behavior), otherwise
+// spawns a new table node sized to the CSV.
+function importCSV() {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.csv,text/csv';
+  inp.onchange = ev => {
+    const file = ev.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const rows = parseCSV(String(e.target.result));
+        if (!rows.length || !rows[0].length) throw new Error('empty');
+        const c = Math.max(...rows.map(r => r.length));
+        const cells = rows.map(r => { const row = r.slice(0, c); while (row.length < c) row.push(''); return row; });
+        const r = cells.length;
+        snapshot();
+        const selNode = _sel && _sel.type === 'node' ? byNode(_sel.id) : null;
+        if (selNode && selNode.isTable) {
+          selNode.td = { r, c, cells };
+          renderAll(); select({type:'node',id:selNode.id}); save();
+        } else {
+          const {x:cx,y:cy} = spawnPoint();
+          const n = {id:nid(), x:Math.max(4,cx-120), y:Math.max(4,cy-55), isTable:true, td:{r,c,cells}};
+          G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+        }
+        cfToast('已匯入 CSV：'+r+' 列 × '+c+' 欄');
+      } catch (err) { alert('CSV 檔案格式錯誤或為空'); }
+    };
+    reader.readAsText(file, 'UTF-8');
+  };
+  inp.click();
+}
+
 // ── Dark / Presentation / Shortcuts ───────────────────────
 function toggleDark() {
   document.body.classList.toggle('dark');
@@ -3570,6 +3625,7 @@ document.getElementById('cf-export-svg').addEventListener('click',()=>{closeOver
 document.getElementById('cf-export-png').addEventListener('click',exportPNG);
 document.getElementById('cf-export-json').addEventListener('click',()=>{closeOverflow();exportJSON();});
 document.getElementById('cf-import-json').addEventListener('click',()=>{closeOverflow();importJSON();});
+document.getElementById('cf-import-csv').addEventListener('click',()=>{closeOverflow();importCSV();});
 document.getElementById('cf-present-btn').addEventListener('click',()=>{closeOverflow();togglePresentation();});
 document.getElementById('cf-help-btn').addEventListener('click',()=>{closeOverflow();toggleShortcuts();});
 
