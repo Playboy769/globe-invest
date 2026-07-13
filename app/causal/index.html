@@ -3353,6 +3353,27 @@ function importJSON() {
   inp.click();
 }
 
+// Decode a CSV file's raw bytes to text, auto-detecting encoding. Excel's
+// "CSV UTF-8" export writes a BOM; its plain "CSV (Comma delimited)" export
+// (still the default many users hit) writes the OS codepage instead — Big5
+// on Traditional Chinese Windows, GBK on Simplified — which garbles any
+// Chinese text if blindly decoded as UTF-8. Detect via a strict UTF-8 decode
+// first (throws on invalid byte sequences) and fall back to Big5/GBK.
+function decodeCSVBytes(buffer) {
+  const bytes = new Uint8Array(buffer);
+  if (bytes.length >= 3 && bytes[0] === 0xEF && bytes[1] === 0xBB && bytes[2] === 0xBF) {
+    return new TextDecoder('utf-8').decode(bytes.subarray(3));
+  }
+  try {
+    return new TextDecoder('utf-8', {fatal:true}).decode(bytes);
+  } catch (e) {
+    for (const enc of ['big5','gbk']) {
+      try { return new TextDecoder(enc, {fatal:true}).decode(bytes); } catch (e2) {}
+    }
+    return new TextDecoder('utf-8').decode(bytes); // last resort, may still be garbled
+  }
+}
+
 // Minimal RFC4180 CSV parser — handles quoted fields (with embedded commas,
 // newlines, and "" escapes) and both \r\n and \n line endings.
 function parseCSV(text) {
@@ -3384,7 +3405,7 @@ function importCSV() {
     const reader = new FileReader();
     reader.onload = e => {
       try {
-        const rows = parseCSV(String(e.target.result));
+        const rows = parseCSV(decodeCSVBytes(e.target.result));
         if (!rows.length || !rows[0].length) throw new Error('empty');
         const c = Math.max(...rows.map(r => r.length));
         const cells = rows.map(r => { const row = r.slice(0, c); while (row.length < c) row.push(''); return row; });
@@ -3402,7 +3423,7 @@ function importCSV() {
         cfToast('已匯入 CSV：'+r+' 列 × '+c+' 欄');
       } catch (err) { alert('CSV 檔案格式錯誤或為空'); }
     };
-    reader.readAsText(file, 'UTF-8');
+    reader.readAsArrayBuffer(file);
   };
   inp.click();
 }
