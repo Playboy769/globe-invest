@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSMC (TSM) — FY2026 Q2 法說會分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; margin-top: 4px; }
+  .card li { line-height: 1.7; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 190px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 130px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .seg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .seg-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .seg-card.blue { border-top-color: #2563eb; }
+  .seg-card.green { border-top-color: #15803d; }
+  .seg-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .seg-card.blue h4 { color: #1d4ed8; }
+  .seg-card.green h4 { color: #15803d; }
+  .seg-card ul { padding-left: 14px; }
+  .seg-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 130px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; font-size: 11.5px; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 12px; }
+  td strong { color: #1a1a2e; }
+
+  .note-box { font-size: 11.5px; color: #888; margin-top: 8px; line-height: 1.6; border-top: 1px dashed #e2e4ea; padding-top: 8px; }
+  .note-box b { color: #666; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>台積電 TSMC (TSM) — FY2026 Q2 法說會分析</h1>
+  <p>Q&amp;A 問答分析 / Arizona 追加 $100B 投資 / 技術與產品線 / 供應鏈 / 風險矩陣　·　法說會日期：2026年7月16日　·　交叉比對 2Q26 Quarterly Management Report、2Q26 Presentation、Consolidated Condensed Financial Statements（皆為公司自結數字，TSMC 為 20-F 申報人，無 10-Q）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" onclick="sw('event',this)">Arizona追加投資</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('supply',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題組</div></div>
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Sunny Lin（UBS）</div><div class="qa-topic">三年CapEx guidance拒答 × Arizona追加投資的時程模糊</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">是否能比照2021年COVID超級週期時的做法，給出未來三年（2026-2028）具體CapEx數字？另外，Arizona追加TWD100B投資後，累計金額如何、擴產時程為何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei拒絕給數字，只重申「未來三年CapEx將比過去三年更顯著提高」——這個措辭比上一季（僅稱「顯著提高」）又加了一層「even more」的強化語氣，屬於語言上的升級但仍非具體數字。Arizona方面：確認再加碼TWD100B（原文陳述與Sunny追問時使用的幣別不一致，見下方⚑），預計再增建約4座廠（前後段合計），時程「視市場狀況」，未給出具體年份。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">管理層連續兩季用「更顯著提高」的層層加碼形容詞取代具體數字，但同時把2026資本支出guidance從年初的$52-56B一路上修到本季的$60-64B——換言之，管理層明明有能力逐季給出精確數字（且已經給了三次），卻始終拒絕把這個逐季上修的軌跡，轉換成一個面向未來的具體多年區間，讓分析師只能用「猜測 + 逐季驚訝」的方式追蹤，而非用一個可驗證的模型追蹤。另外，Wei原文說的是「additional $100 billion investment」（美元），但Sunny Lin追問時說的是「total TWD 265 billion CapEx in Arizona」（新台幣），兩個數字換算完全對不上（$100B以32匯率約當TWD3.2兆，遠大於TWD265B），逐字稿本身存在明顯的幣別/單位混淆，本文不做進一步換算推論，僅如實呈現此落差。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Sunny Lin:</b> "Back in the COVID super cycle, TSMC did provide a three-year CapEx outlook... I wonder at this point, will it be possible for you to share any color, maybe for the coming three years' CapEx?"<br><br><b>C.C. Wei:</b> "We do not have a number to share with you... Last time we said our CapEx in the next three years will be significantly higher than the CapEx in the past three years. The CapEx in the next three years will be even more significantly higher than the past three years."<br><br><b>Sunny Lin (follow-up):</b> "Now with total TWD 265 billion CapEx in Arizona, what's your current plan to bring on the capacities...?"<br><br><b>C.C. Wei:</b> "The schedule will depend on the market situation... It probably additional four more fabs will be built."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Charlie Chan（Morgan Stanley）</div><div class="qa-topic">Samsung/Intel競爭迴避 × AI CAGR更新遭拒</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Samsung靠記憶體業務獲利支撐先進製程投資、Intel有美國政府政策支持，TSMC如何應對？另外，1月給的AI相關營收五年CAGR（中高50%）是否有更新？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei不正面比較兩家對手的具體威脅程度，改用「技術、製造、客戶信任」三大護城河帶過，並用「選擇技術夥伴不是去7-11買牛奶」的比喻強調轉換成本高、需要五年才能養成一個技術世代。AI CAGR方面：Wei直接拒絕給新數字，只說「更強、更強，我們不知道該怎麼回答這個問題」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Wei被直接問及Samsung用記憶體獲利反哺晶圓代工投資、Intel有美國政府政策撐腰這兩個具體威脅來源，但回答完全沒有拆解這兩個威脅各自的實質殺傷力，只用「護城河」通用敘事帶過。AI CAGR部分，管理層自己在本季已經把全年營收成長guidance從~30%上修到「slightly above 40%」，理論上有充分的數字基礎去更新一個五年CAGR區間，卻選擇用「我們不知道怎麼回答」這種罕見的正面拒絕，而非慣常的「暫不提供」——這種措辭上的躊躇本身可能透露管理層對於AI需求的加速斜率究竟能維持多久，內部信心不如營收guidance數字表現出來的那麼篤定。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Charlie Chan:</b> "How about Samsung Foundry? They got a huge profit from memory business. Intel got a U.S. policy support... Would TSMC worry that your competitors...build a large capacity in the future to compete with you?"<br><br><b>C.C. Wei:</b> "Choosing a technology, ramping it up, is not buying a milk from 7-Eleven... it takes about five years."<br><br><b>Charlie Chan (follow-up):</b> "Are you ready to revise up the five-year revenue CAGR, especially this AI semi CAGR? I remember it was high 50%."<br><br><b>C.C. Wei:</b> "Let me give you not a number, but it's stronger and stronger. We don't give you the number today because it continue to increase, so we don't know how to answer this question."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Arthur（Macquarie）</div><div class="qa-topic">EMIB-T封裝競爭 → 被重新包裝成前段晶圓利多</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Intel的EMIB-T先進封裝技術似乎逐漸取得市場關注，TSMC如何應對這個競爭威脅？如果客戶要求TSMC支援這類新技術的特殊需求，公司會如何處理？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei不否認封裝產能吃緊已「限制客戶成長」，因此歡迎市場出現替代產能來分擔負載——因為封裝只是TSMC業務的一小部分，前段晶圓製造（大部分營收來源）反而會因此受惠。對客戶特殊需求，僅泛稱「支援客戶成功是我們的第一優先」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">這個「歡迎競爭分擔我們吃緊的封裝產能，藉此讓前段晶圓業務受惠」的說法，在稍後Ha Lu（BofA）問到同一個EMIB-T威脅時被逐字重複——顯示這是管理層針對後段封裝競爭威脅預先準備好的統一公關口徑，而非針對個別提問的即時判斷。這個口徑巧妙地把「competitor蠶食我的市場」重新框架成「competitor幫我分擔滿載產能」，但迴避了一個更根本的問題：如果客戶開始把先進封裝訂單轉去其他供應商，這是否會弱化TSMC「前段+後段一條龍」的整合服務優勢，進而在下一輪先進封裝技術世代競標時流失客戶？管理層沒有正面處理這個中長期客戶黏著度的風險。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Arthur:</b> "We noticed that especially the EMIB-T is gaining traction. How will TSMC react this request?"<br><br><b>C.C. Wei:</b> "Our packaging capacity is so tight that now it's limiting my customers' growth. We welcome that additional flexibility in the market. That will help TSMC's front-end wafer business growth, which is a majority part of TSMC's business."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Gokul（分析師）</div><div class="qa-topic">「所有客戶的真話加總起來不是真相」× 對記憶體毛利率的坦率忌妒</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">產能擴張決策中是否納入競爭對手動態，以及如何處理資料中心電力/建置延遲可能導致晶片閒置庫存的風險？另外，作為晶圓代工龍頭是否認為長期毛利率理應高於記憶體同業？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei罕見地坦承需求預測的方法論限制：「每個客戶都告訴我實話，但把所有實話加起來，並不是真相」，因為每個CEO都必須表現積極（"CEO got to be aggressive"），因此TSMC需要對供應商的demand signal做主觀折減判斷。對於閒置風險，表示正主動追蹤資料中心建置進度以確保「晶片不會被放進庫存」。毛利率方面：坦言「羨慕」記憶體同業86%的毛利率，若TSMC能做到約68%就「很高興了」，並強調公司刻意不對客戶進行4-5倍式的價格壓榨，以維持客戶信任與長期夥伴關係。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Wei說「若做到68%毛利率就很高興」，但本季實際毛利率已經是67.7%——幾乎已經達到他口中的「滿足點」，而且他同時給出的3Q26毛利率guidance（65-67%midpoint 66%）還會因N2稀釋而略降，等於管理層自己設定的「開心門檻」已經被本季數字追平甚至反向下修guidance，這句話與其說是展望性的目標，更像是在為下一季毛利率guidance下修預先「管理期待」，卻沒有分析師接續追問這個「已經達標」的表態，是否代表未來毛利率擴張的空間比市場想像的更有限。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>C.C. Wei:</b> "Remember that I believe every customer tell me the truth. Everyone... You put all the truths together, it's not the truth. Mark down that word."<br><br><b>C.C. Wei (毛利率):</b> "I'm really jealous about memory companies, 86% gross margin. 86%? About 68%, I would be happy about that."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Jim Fontanelli（RTTNews）</div><div class="qa-topic">客戶集中度風險被否認，但未提供數據反駁</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">AI需求遠超其他終端市場，前五大客戶佔比是否已達歷史新高，這是否構成集中度風險？另外，是否考慮跟進部分客戶直接投資/融資其終端客戶（如雲端服務商）的做法？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei否認這是隱憂，並反駁分析師的前提，稱不是既有大客戶持續坐大，而是「AI產業裡有很多新玩家」進場。融資／投資客戶的客戶方面：明確表示「目前不做這種財務安排」，因為現有商業模式運作順暢。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Jim的提問明確引用「top five customers becoming meaningfully larger than at any point in your history」這個具體趨勢主張，Wei的回應卻只給出「有很多新玩家」這個定性反駁，沒有拿出任何前五大客戶佔比的歷史數字來正面反證分析師的說法。20-F揭露的客戶集中度數字（Customer A 19%、Customer B 17%，2025年度）本身就顯示前二大客戶合計占比逐年攀升（2024年為12%+22%=34%，2025年為19%+17%=36%），與Wei口頭否認的方向恰好相反，這個落差在法說會現場沒有被進一步追問或核對。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Jim Fontanelli:</b> "I think your exposure to your top five customers is becoming meaningfully larger than at any point in your history. I'd just like to understand how you see that risk."<br><br><b>C.C. Wei:</b> "That's not our concern... It's not what you said that the bigger customer is growing bigger and bigger. No. There's a lot of new player in the AI industry."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mehdi Hosseini（KGI）</div><div class="qa-topic">Arizona時程無法承諾 × COUPE平台貢獻時點模糊</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Arizona追加TWD100B投資的具體時間表（3年或5年）？另外，COUPE（共同封裝光學）平台何時能對營收產生實質貢獻？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei表示「有計畫但沒有可對外公布的確定時間表」，會盡量加快，同時也在加速台灣、日本新廠進度，理由是「供需缺口太大」。COUPE方面：已開始量產，隨資料中心對降低功耗/提高頻寬的需求增加，預期COUPE需求將在「未來幾年」持續成長為重要技術，但未給出具體貢獻年份或營收占比。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">兩個問題管理層都選擇用「有計畫、會加速」的方向性語言取代具體時間表，COUPE作為一個「已經開始量產」的技術，理論上管理層對其爬坡曲線應有內部規劃，卻仍以「as time goes by」帶過，顯示公司在對外溝通新技術/新產能的商業化節奏時，傾向系統性地保留模糊空間，而非只在單一敏感議題（如CapEx）上才如此。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Mehdi Hosseini:</b> "Is there any way you can give us some timeline? Is it over the next 3 years, 5 years?"<br><br><b>C.C. Wei:</b> "We do have a plan, but... if you ask me to give you a firm schedule, no, we don't have it today."<br><br><b>Mehdi Hosseini (follow-up):</b> "When should we expect the COUPE platform to have a material contribution to your top line?"<br><br><b>C.C. Wei:</b> "I believe the COUPE will continue to increase the demand, and then will become a very important technology in the next few years."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Laura Chen（Citibank）</div><div class="qa-topic">GPU/CPU/XPU成長配比不可量化 × 玻璃基板進度僅剩「約一年」</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Agentic AI帶動CPU回歸的趨勢下，GPU／AI加速器／CPU三者的成長能見度分別如何？另外，CoWoS玻璃基板/玻璃核心技術的進度如何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei不拆分具體占比，僅稱三者都用TSMC最先進製程，公司正協助客戶在GPU/CPU/XPU間動態調配晶圓供給。玻璃基板方面：目前CoWoS主流仍是既有材料，正與基板供應商合作開發替代方案以降低成本，試產線已建置，預計約一年後成熟並可投入量產。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">「約一年後成熟」這個玻璃基板時間點，與稍早Robert Sanders問到High-NA微影採用進度時管理層給出的模糊答案形成對比——同樣是新技術導入，玻璃基板拿到了具體的「一年」時間框架，High-NA卻完全沒有，顯示管理層願意具體化的技術時程，可能取決於該技術對現有業務的邊際重要性、而非一致的揭露原則。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>C.C. Wei:</b> "We are developing that alternative, try to lower down the cost... we're building a pilot line... it will take about another one year to be mature so we can put it into the production with our customer."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ha Lu（Bank of America）</div><div class="qa-topic">多年營收guidance再度落空 × 前後段業務「互不相關」的切割話術</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">CapEx與營收guidance同步上修，能否量化未來幾年營收成長率？這波CapEx上修主要驅動力是雲端AI、邊緣運算，還是設備供應商漲價？另外，若後段封裝競爭（如EMIB-T）持續升溫，是否會侵蝕TSMC從前段到後段的整合價值？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei再次拒絕給多年營收數字，僅稱「接下來幾年對TSMC會是非常好的生意」；驅動力方面明確答「全部都是AI相關」，不特別拆分雲端/邊緣。前後段整合價值方面：重申「前段晶圓與後段封裝是兩個不同的生意」，並再次搬出「歡迎後段競爭分擔滿載產能、藉此讓前段受惠」的統一口徑（與Arthur提問時逐字相同）。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">「前段與後段是兩個不同的生意」這個切割說法，與管理層在本場法說會其他地方反覆強調「TSMC提供從設計協助、製造到封裝測試的一條龍服務是核心競爭優勢」的敘事互相矛盾——如果前後段業務真的毫不相關，那麼TSMC近年大舉投資CoWoS/SoIC等先進封裝產能的策略邏輯就難以自圓其說。管理層在面對「競爭」框架時選擇強調業務切割，面對「客戶黏著度」框架時卻強調整合服務，屬於前後不一致的敘事選擇性使用。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>C.C. Wei:</b> "The front end's wafer business and the back end's business are two different things, right? If they are the same, you can expect ASE become the front-end competitor also."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Robert Sanders（Deutsche Bank）</div><div class="qa-topic">High-NA die-stitching疑慮未正面回答 × 供需缺口「不願評論記憶體」的曖昧留白</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">High-NA微影設備的field size僅為現有系統一半，die stitching的技術挑戰是否會拖慢High-NA導入速度？另外，市場普遍假設先進製程供需缺口約為30-50%，這個數字是否準確，甚至可能更大？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei確認field size確實只有一半，且已納入製造成本考量，但表示TSMC正與ASML合作優化其成熟度與成本效益，最終是否採用取決於「技術成熟度與成本」的整體評估。供需缺口方面：明確表示「沒有數字可以分享」，缺口「非常大」，並特別聲明「不想對記憶體產業發表評論」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Wei被直接問及die stitching是否會「拖慢」High-NA導入時，沒有正面回答是或否，只重申「成熟度與成本」的抽象評估架構——等於承認了field size減半是真實限制，卻拒絕評估這個限制對導入時程的具體影響。更值得注意的是「不想對記憶體產業發表評論」這句話：Robert並沒有問記憶體，此為管理層主動避開的話題，暗示先進製程供需缺口的規模，可能已經大到管理層擔心一旦具體化數字，會被拿去跟同樣缺貨的記憶體產業做比較、進而引發對整體半導體供應鏈是否過熱的聯想。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Robert Sanders:</b> "Is it in fact much larger than 30%-50% above [supply]?"<br><br><b>C.C. Wei:</b> "No, we don't have a number to share. Let me say that the gap is very big. Sorry, I don't want to make a comment on the memory, a very big gap."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Evelyn Yu（Goldman Sachs）</div><div class="qa-topic">Symposium產能CAGR「now is bigger」但不給新數字 × 封裝CapEx拆分再遭拒</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">技術研討會揭露的2nm家族2026-2028產能CAGR約70%、N3+/N5約25%CAGR，這些數字是否仍然有效？另外，先進封裝CapEx能否從「封裝/測試/光罩/其他」這個大類中單獨拆分揭露？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei確認方向「現在數字更大了」，但不願給出更新後的具體CAGR百分比。封裝CapEx拆分方面：Wei解釋前後段資本配置有彈性，會依瓶頸機動調整資源，因此「無法精確說明哪個領域花了多少CapEx」，僅重申仍落在原本10-20%的區間。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">「現在數字更大了」這句回應本身就是一個沒有明說的上修動作——等於間接承認Symposium當時公布的70%/25%產能CAGR已經過時、實際成長更快，卻選擇不重新公布數字，讓投資人只能自行腦補幅度。這與前面Charlie Chan問AI CAGR時的模式完全一致：管理層屢次用「更強、更大」這類比較級語言暗示上修，卻系統性避免把比較級轉換成具體基準數字，形成一種「只給方向、不給幅度」的固定溝通模式。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Evelyn Yu:</b> "Are those numbers still right assumptions today?"<br><br><b>C.C. Wei:</b> "Did we say that in Technology Symposium? Oh, we show the chart. Okay, now is bigger. That's all I say."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Felix Pan（KGI）</div><div class="qa-topic">CapEx上修雙因子：需求＋設備通膨 × 成熟製程分化明確</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">2026年CapEx guidance年初至今已上修近$10B，主要驅動來自CPU/加速器需求還是記憶體相關成本，或後段CoWoS擴產？另外，成熟製程近期需求回溫、供給偏緊的傳言是否屬實？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Wei明確給出兩個具體驅動因子：（1）客戶需求持續增加、要求TSMC加大配合擴產的力道；（2）設備採購成本因通膨上升——這是本場法說會少數管理層主動具名兩個量化因子的回答。成熟製程方面：明確區分——僅電源管理IC與CMOS影像感測器（因AI資料中心用電與環境感測需求）供給吃緊，其餘消費性成熟製程需求仍疲弱，與平台別數據中Smartphone(-4% QoQ)、DCE(持平)的走勢一致。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">這是全場法說會少數管理層願意具體拆解成因的回答，值得注意的反而是「沒有邏輯缺口」本身——當問題聚焦在「CapEx上修的因子是什麼」而非「CapEx上修的絕對數字是多少」時，管理層願意坦率回答；顯示前面多次拒絕給數字的模式，鎖定的是「未來承諾的具體數字」，而非「已發生決策的定性成因」，這個區別有助於投資人判斷哪類問題未來仍值得追問、哪類注定拿不到答案。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>C.C. Wei:</b> "The most important reason is because of demand continue to increase, and we feel the pressure from the customer to drive... cooperate with TSMC for the capacity increase. That's one of the major reason. The second reason is inflation. Now we buy the tools with inflation price."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 特殊事件 -->
+  <div id="panel-event" class="panel">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">$100B</div><div class="stat-lbl">Arizona 追加投資（CEO原話，美元）</div></div>
+      <div class="stat-box"><div class="stat-val">~4座</div><div class="stat-lbl">預計新增晶圓/封裝廠（合計）</div></div>
+      <div class="stat-box"><div class="stat-val">無</div><div class="stat-lbl">對外公布的明確時間表</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">事件摘要</div>
+      <p>C.C. Wei 在法說會準備聲明中宣布，基於美國領先客戶與聯邦/州/市政府的支持，TSMC 將在 Arizona 追加 <strong>$100 billion</strong> 投資，用於興建多座 2 奈米及以下邏輯晶圓廠，以及先進封裝廠，以支撐美國主要客戶的多年期強勁需求。這是本季在既有 Arizona 擴產計畫之上的追加宣布，與台灣 13 座新廠（含先進封裝）、日本新廠擴建同步並進。</p>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>CEO原話：額外 $100B 投資於 Arizona</li>
+          <li>預計再增建約 4 座廠，涵蓋前段晶圓與後段封裝</li>
+          <li>技術世代：2 奈米及以下邏輯製程</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限</h4>
+        <ul>
+          <li>管理層明確表示「無法給出確定時間表」</li>
+          <li>「視市場狀況」動態調整</li>
+          <li>管理層強調會「盡量加速」，並同步加快台灣、日本擴產進度</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾</h4>
+        <ul>
+          <li>落在 2026 年度 CapEx guidance（$60-64B）與「未來三年比過去三年更顯著提高」的整體資本支出框架內，非另立獨立預算</li>
+          <li>約 70-80% 的 2026 CapEx 投向先進製程，10-20% 投向封裝/測試/光罩等，10% 投向特殊製程</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>逐字稿中「$100B」（CEO原話，美元）與分析師追問時引用的「TWD 265 billion累計金額」換算不吻合，可能為逐字稿口譯/幣別混用的誤差，本文不做進一步換算推論</li>
+          <li>具體時程、對台灣/日本既有擴產計畫的資源排擠效果，管理層均未說明</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問（盡職調查式追問清單）</h4>
+      <ol>
+        <li>追加的 $100B 是否已完全計入本季上修後的 2026 年度 $60-64B CapEx guidance，還是代表 2027 年之後才會逐步認列的更長期承諾？</li>
+        <li>新增約 4 座廠的技術世代配置，是否涵蓋更先進的 A14/A16 世代，或仍以 N2 家族為主？與既有 3 座 N3 廠（美國、日本各一、台灣一）的量產排程如何銜接、是否互相排擠人才與設備供給？</li>
+        <li>逐字稿中 $100B（美元）與 TWD 265 billion（新台幣）兩個數字的落差，究竟是傳譯/單位混用的技術性誤差，還是分析師與管理層對「Arizona累計投資總額」的定義本身就存在認知落差（例如是否含土地、廠務、還是僅設備）？下一季法說會值得直接追問以釐清。</li>
+      </ol>
+    </div>
+    <div class="note-box"><b>來源：</b>C.C. Wei 開場聲明（Arizona投資宣布）；Sunny Lin（UBS）與 Mehdi Hosseini（KGI）之提問與管理層回應。</div>
+  </div>
+
+  <!-- 技術與產品線 -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">2Q26 營收依技術平台別（QoQ 成長率）</div>
+    <div class="rev-chart">
+      <div class="rev-row"><div class="rev-name">High Performance Computing</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:66%;background:#2563eb;">66%</div></div><div class="rev-val">QoQ +20%</div></div>
+      <div class="rev-row"><div class="rev-name">Smartphone</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:22%;background:#7a4fa3;">22%</div></div><div class="rev-val">QoQ -4%</div></div>
+      <div class="rev-row"><div class="rev-name">Internet of Things</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:5%;background:#c2600a;">5%</div></div><div class="rev-val">QoQ +4%</div></div>
+      <div class="rev-row"><div class="rev-name">Automotive</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:4%;background:#15803d;">4%</div></div><div class="rev-val">QoQ +15%</div></div>
+      <div class="rev-row"><div class="rev-name">Digital Consumer Electronics</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:1%;background:#0891b2;">1%</div></div><div class="rev-val">QoQ +5%</div></div>
+      <div class="rev-row"><div class="rev-name">Others</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:2%;background:#94a3b8;">2%</div></div><div class="rev-val">QoQ +5%</div></div>
+    </div>
+    <div class="note-box"><b>出處：</b>2Q26 Presentation p.6「2Q26 Revenue by Platform」；2Q26 Quarterly Management Report I. Revenue Analysis。HPC 單季+20% QoQ 是本季營收成長12%的最主要來源；Smartphone 是唯一衰退的平台。</div>
+
+    <div class="card">
+      <div class="card-title">2Q26 營收依技術節點（先進製程占比77%）</div>
+      <table>
+        <tr><th>節點</th><th>2Q26</th><th>1Q26</th><th>2Q25</th></tr>
+        <tr><td>2nm</td><td><strong>3%</strong>（新貢獻）</td><td>0%</td><td>0%</td></tr>
+        <tr><td>3nm</td><td><strong>30%</strong></td><td>25%</td><td>24%</td></tr>
+        <tr><td>5nm</td><td><strong>33%</strong></td><td>36%</td><td>36%</td></tr>
+        <tr><td>7nm</td><td><strong>11%</strong></td><td>13%</td><td>14%</td></tr>
+        <tr><td>16/20nm</td><td>6%</td><td>7%</td><td>7%</td></tr>
+        <tr><td>28nm</td><td>6%</td><td>7%</td><td>7%</td></tr>
+        <tr><td>40/45nm 及更成熟製程</td><td>共11%</td><td>共12%</td><td>共12%</td></tr>
+      </table>
+      <div class="note-box">⚑ 人工解讀：2nm 從0%直接貢獻3%營收，是本季「N2陡峭爬坡」敘事的直接數字證據，也正是CFO guidance中3Q26毛利率將被稀釋3-4個百分點的來源；同時5nm、7nm占比雙雙下滑，顯示產能正系統性地從成熟先進節點向2nm/3nm遷移。<b>出處：</b>2Q26 Presentation p.5、2Q26 Quarterly Management Report I. Revenue Analysis。</div>
+    </div>
+
+    <div class="seg-grid">
+      <div class="seg-card blue">
+        <h4>A14 世代技術路線圖</h4>
+        <ul>
+          <li>第二代奈米片電晶體，較N2再進一步全節點跨代提升</li>
+          <li>同功耗下速度提升10-15%，或同速度下功耗降低25-30%，晶片密度提升近20%</li>
+          <li>內部產品線試驗片已達約90%元件效能與約90%的256Mb SRAM良率</li>
+          <li>客戶流片（tape-out）已啟動且領先原訂時程；預production 2027年，量產2028年</li>
+        </ul>
+      </div>
+      <div class="seg-card green">
+        <h4>A13 / A12 衍生世代</h4>
+        <ul>
+          <li>A13：透過97%光學縮放技術再省下逾6%晶片面積，設計規則向下相容A14</li>
+          <li>A12：導入Super Power Rail超級電源軌技術於A14平台，追求更佳效能/功耗/面積表現</li>
+          <li>A13、A12 均排定2029年量產，定位為延長A14世代生命週期的衍生節點（呼應N2→2奈米家族的模式）</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note-box"><b>出處：</b>C.C. Wei 開場聲明「A14 status」段落。</div>
+
+    <div class="card">
+      <div class="card-title">長期需求敘事（因果鏈）</div>
+      <p>Agentic AI 興起 → 資料中心對 CPU 角色的需求「復甦」（不只是AI加速器）→ 無論客戶採x86、Arm或RISC-V架構，「幾乎都是TSMC客戶」→ TSMC與CPU客戶協作分配先進製程產能，帶動整體矽含量需求成長。管理層同時強調 COUPE（共同封裝光學）平台已投入量產，隨資料中心對低功耗、高頻寬通訊通道的需求提升，COUPE預期在未來數年內成長為重要技術；玻璃基板/玻璃核心等CoWoS替代材料試產線已建置，預計約一年後成熟並投入量產，目標是在維持效能的同時降低先進封裝成本。</p>
+      <div class="note-box"><b>出處：</b>C.C. Wei「Acceleration of agentic AI」段落；Mehdi Hosseini、Laura Chen 提問之管理層回應。</div>
+    </div>
+  </div>
+
+  <!-- 供應鏈 -->
+  <div id="panel-supply" class="panel">
+    <div class="card">
+      <div class="card-title">本季更新：VIS 持股結構變動（2026/05/15）</div>
+      <p>TSMC 於 2026/05/15 出售 <strong>8.1%</strong> 的世界先進（VIS）股權，本次交易連同按市值重評，於2Q26認列 <strong>NT$63.20 billion</strong> 的處分暨評價利得（為本季業外損益從1Q26的NT$28.83B跳增至NT$95.83B的主要原因）。若以先前 20-F 揭露的持股基準（2026/2/28約27.6%）反推，賣出後持股估計降至約 <strong>19-20%</strong>——惟三份Q2文件均未揭露處分後的精確持股比例，此為本文依已知基準與賣出幅度的推算值，非公司直接揭露數字，實際持股請以TSMC後續公告或下一份20-F為準。</p>
+      <div class="note-box"><b>出處：</b>2Q26 Quarterly Management Report「Non-Operating Items」段落＋VI.「Recap of Recent Important Events」；2Q26 Presentation p.10。⚑ 這打破了原本「季度財報通常不重新揭露年度性質的股權數據」的預期——VIS持股變動是一次性、有明確日期的實際交易事件，因此本文在此更新，其餘客戶集中度、董事持股等真正屬於年度揭露節奏的項目維持FY2025 20-F原始數據不變（見下方Sankey圖）。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">供應鏈與客戶集中度關係圖（FY2025 20-F 為主，VIS 持股已更新註記）</div>
+      <p>完整互動版 Sankey 圖表（供應鏈、營收分部、股權結構）請見 <a href="TSMC_FY2025_Analysis.html">TSMC_FY2025_Analysis.html</a>。客戶集中度（Customer A 19%／Customer B 17%，2025年度）與董事/國發基金持股結構為 20-F 年度揭露項目，本季財報並未重新揭露，故沿用原始數據；「營收分部」圖已更新為本季（2Q26）的技術平台與地區別數字（見下）。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">2Q26 營收依地區別（新增數據，20-F年度揭露之外的季度補充）</div>
+      <table>
+        <tr><th>地區</th><th>2Q26</th><th>1Q26</th><th>2Q25</th></tr>
+        <tr><td>North America</td><td><strong>78%</strong></td><td>76%</td><td>75%</td></tr>
+        <tr><td>Asia Pacific</td><td>8%</td><td>9%</td><td>9%</td></tr>
+        <tr><td>China</td><td>6%</td><td>7%</td><td>9%</td></tr>
+        <tr><td>Japan</td><td>4%</td><td>4%</td><td>4%</td></tr>
+        <tr><td>EMEA</td><td>4%</td><td>4%</td><td>3%</td></tr>
+      </table>
+      <div class="note-box">⚑ North America占比逐季攀升（75%→76%→78%），與HPC平台占比同步攀升（60%→61%→66%）互為印證——北美雲端/AI客戶集中度的兩個獨立揭露維度（地區別與平台別）方向一致，交叉驗證了「AI需求集中在美系大型雲端服務商」的敘事。China占比則從9%降至6%，與Smartphone平台走弱的方向亦一致。<b>出處：</b>2Q26 Quarterly Management Report I. Revenue Analysis。</div>
+    </div>
+  </div>
+
+  <!-- 風險矩陣 -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">客戶集中度持續攀升，管理層口頭否認但未提供數字反駁</div>
+        Jim Fontanelli（RTTNews）直接引用「前五大客戶占比創歷史新高」的具體主張，Wei僅以「有很多新玩家」定性反駁，未提供任何佔比數字。交叉比對FY2025 20-F揭露：Customer A、B合計占比已從2024年的34%（12%+22%）攀升至2025年的36%（19%+17%），與Wei口頭否認的方向相反。若前二大客戶占比持續攀升且逐字稿中管理層又拒絕提供正面數據反駁，這是本季風險矩陣中證據最紮實的一項。
+        <div class="risk-source">來源：Jim Fontanelli 提問；TSM_20-F_Sankey_Source_Notes.md 客戶集中度數字</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">N2陡峭爬坡稀釋3Q26毛利率3-4個百分點</div>
+        2nm製程貢獻已從0%躍升至本季3%的wafer revenue，CFO Wendell Huang明確guidance 3Q26毛利率中位數66%，較本季67.7%下滑約1.7個百分點，主要即為N2稀釋效果（部分被海外稼動率與成本改善抵銷）。
+        <div class="risk-source">來源：Wendell Huang財務簡報；2Q26 Presentation p.9 3Q26 Guidance</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">CapEx成長速度已超過營運現金流成長速度，自由現金流季減</div>
+        2Q26資本支出（NT$496.00B）較1Q26（NT$350.76B）跳增41.5%，快於營運現金流的12.1%成長（NT$698.97B→NT$783.36B），導致自由現金流由1Q26的NT$348.21B降至2Q26的NT$287.36B，即便當季營收與獲利同創新高。
+        <div class="risk-source">來源：2Q26 Presentation p.8 Cash Flows；2Q26 Quarterly Management Report IV-2</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">海外擴廠毛利稀釋將於後期階段擴大至3-4個百分點</div>
+        管理層重申海外(美/日/德)新廠稀釋效果將從早期的2-3%擴大至後期的3-4%，隨美國Arizona、日本熊本擴產規模持續加碼（本季再追加$100B），此結構性稀釋壓力的實際期間與幅度將隨產能佔比提升而放大，且是管理層主動、重複揭露的已知風險（非本文獨創）。
+        <div class="risk-source">來源：Wendell Huang財務簡報「second half of the year」段落</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低－中（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">語言確定性與資本承諾確定性的落差——管理層連續兩季用「比較級」取代具體數字</div>
+        本季至少4個獨立問題（三年CapEx、AI CAGR、Symposium產能CAGR、供需缺口幅度）管理層都用「更強」「更大」「even more」等比較級語言回應，卻系統性拒絕把方向性判斷轉換為可驗證的具體區間，即便在需求可見度理論上應該更清晰的當下（營收guidance已上修至40%+）。這種「只給方向不給幅度」的一致模式，若在下一季轉為具體數字，可能代表管理層信心真正轉強；若持續模糊，則可能暗示連管理層自己都對AI需求能見度的精確度沒有把握，值得下一季法說會重點追蹤是否鬆口。
+        <div class="risk-source">來源：本文Q&amp;A tab逐項邏輯缺口彙整（Sunny Lin、Charlie Chan、Evelyn Yu、Robert Sanders四組問答交叉比對）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">VIS股權處分屬一次性業外利得，非本業獲利能力的訊號</div>
+        本季淨利年增77.4%的部分貢獻（NT$63.20B業外利得）來自VIS股權處分與市值重評，屬一次性項目，不應直接外推為本業獲利能力的結構性改善；扣除此因素後，營業利益（Operating Income）年增65.4%、季增16.3%仍全部來自本業（wafer業務）表現，故本業基本面仍屬紮實，此項風險評級偏低，僅作為財測校正提醒。
+        <div class="risk-source">來源：2Q26 Quarterly Management Report II-3 Non-Operating Items</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">外國發行人身分，無Form 4揭露可交叉驗證內部人信心</div>
+        TSMC以20-F申報SEC，屬外國私人發行人，一般豁免於Section 16 Form 4申報義務，本文無法比照美國發行人分析框架納入內部人買賣訊號作為管理層信心的交叉驗證，此為結構性資訊限制，非本季特有。
+        <div class="risk-source">來源：TSM_20-F_Sankey_Source_Notes.md 資料限制說明</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。資料來源：TSMC 2Q26 Quarterly Management Report、2Q26 Earnings Presentation、Consolidated Condensed Financial Statements（皆為2026/7/16公司自結公布數字）、2026/7/16法說會逐字稿、TSMC FY2025 20-F。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

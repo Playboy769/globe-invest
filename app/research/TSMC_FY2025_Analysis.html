@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSMC — FY2025 20-F — 供應鏈 / 營收分部 / 股權結構</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; margin-top: 4px; }
+  .card li { line-height: 1.7; color: #333; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .sankey-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 760px) { .sankey-grid { grid-template-columns: 1fr; } }
+
+  .source-note { font-size: 11px; color: #888; margin-top: 8px; line-height: 1.6; border-top: 1px dashed #e2e4ea; padding-top: 8px; }
+  .source-note b { color: #666; }
+
+  .limit-box { background: #fff; border: 1px solid #f0d090; border-left: 4px solid #c2600a; border-radius: 6px; padding: 10px 12px; margin-top: 8px; font-size: 12px; line-height: 1.6; color: #333; }
+  .limit-box b { color: #92400e; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>台積電 TSMC (TSM) — 關係圖總覽</h1>
+  <p>供應鏈與客戶集中度（FY2025 20-F，VIS持股已更新註記） / 2Q26 營收分部 / 股權結構（FY2025 20-F）　·　來源：20-F（Accession 0001628280-26-025362，申報日 2026-04-16，會計年度至 2025-12-31）＋ 2Q26 Quarterly Management Report（2026-07-16）　·　詳細出處見 <code>TSM_20-F_Sankey_Source_Notes.md</code> 與 <a href="TSM_FY2026Q2_Analysis.html">TSM_FY2026Q2_Analysis.html</a></p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('supply',this)">供應鏈</div>
+    <div class="tab" onclick="sw('rev',this)">營收分部</div>
+    <div class="tab" onclick="sw('own',this)">股權結構</div>
+  </div>
+
+  <!-- 供應鏈 -->
+  <div id="panel-supply" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">19%</div><div class="stat-lbl">Customer A 占2025淨營收</div></div>
+      <div class="stat-box"><div class="stat-val">17%</div><div class="stat-lbl">Customer B 占2025淨營收</div></div>
+      <div class="stat-box"><div class="stat-val">36%</div><div class="stat-lbl">前兩大客戶合計集中度</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">上游關係人採購 → TSMC → 下游客戶集中度 / 關係人銷售</div>
+      <div id="sankeyEmbed_tsmSupplyChain01" style="width:100%;height:520px;background:#f2e9da;border:1px solid #ddd;border-radius:6px;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"VIS","label":"VIS 世界先進（2026/5/15出售8.1%後估計持股~19-20%）","color":"#b5651d"},{"id":"SSMC","label":"SSMC (TSMC持股38.8%)","color":"#b5651d"},{"id":"Xintec","label":"精材科技 Xintec (TSMC持股41.0%)","color":"#b5651d"},{"id":"TSMC","label":"TSMC","color":"#0f4c81"},{"id":"CustomerA","label":"Customer A（占2025淨營收19%）","color":"#2f7d4f"},{"id":"CustomerB","label":"Customer B（占2025淨營收17%）","color":"#2f7d4f"},{"id":"OtherCustomers","label":"其他客戶合計（個別均<10%，推算值）","color":"#7fb896"},{"id":"GUC","label":"創意電子 GUC (TSMC持股34.8%)","color":"#2f7d4f"}],"links":[{"source":"VIS","target":"TSMC","value":878},{"source":"SSMC","target":"TSMC","value":4113},{"source":"Xintec","target":"TSMC","value":5448},{"source":"TSMC","target":"CustomerA","value":726974.3},{"source":"TSMC","target":"CustomerB","value":645178.7},{"source":"TSMC","target":"OtherCustomers","value":2436901},{"source":"TSMC","target":"GUC","value":31094}]};
+  var MAX_NODE_PX = 260, HUB_RATIO = 0.06;
+  function labelOf(d){ return d.text || d.key || ""; }
+  function computeFlowMeta(data){
+    var out={}, inc={};
+    data.links.forEach(function(l){ out[l.source]=(out[l.source]||0)+l.value; inc[l.target]=(inc[l.target]||0)+l.value; });
+    var flows={};
+    data.nodes.forEach(function(n){ flows[n.id]=Math.max(out[n.id]||0, inc[n.id]||0); });
+    var maxFlow=0; Object.keys(flows).forEach(function(k){ if(flows[k]>maxFlow) maxFlow=flows[k]; });
+    var scale = maxFlow>0 ? MAX_NODE_PX/maxFlow : 1;
+    return { flows: flows, maxFlow: maxFlow, scale: scale };
+  }
+  function render(){
+    var $ = go.GraphObject.make;
+    var diagram = $(go.Diagram, "sankeyEmbed_tsmSupplyChain01", {
+      initialAutoScale: go.Diagram.Uniform,
+      isReadOnly: true,
+      "animationManager.isEnabled": false,
+      layout: $(go.LayeredDigraphLayout, { setsPortSpots: true, direction: 0, layerSpacing: 50, columnSpacing: 10 })
+    });
+    function makeTooltip(){
+      return $(go.Adornment, "Auto", $(go.Shape,{fill:"#222",stroke:null}), $(go.TextBlock,{margin:6,stroke:"white",font:"10pt sans-serif"}, new go.Binding("text","",labelOf)));
+    }
+    diagram.nodeTemplateMap.add("hub", $(go.Node, "Auto",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, { stroke: null, minSize: new go.Size(26,0) }, new go.Binding("fill","color"), new go.Binding("height","pixelSize")),
+      $(go.TextBlock, { margin:4, font:"bold 10pt sans-serif", stroke:"white", textAlign:"center", maxSize:new go.Size(140,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplateMap.add("leaf", $(go.Node, "Horizontal",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, "Rectangle", { width:12, height:12, stroke:null }, new go.Binding("fill","color")),
+      $(go.TextBlock, { margin:new go.Margin(0,0,0,4), font:"9pt sans-serif", stroke:"#333", maxSize:new go.Size(220,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplate = diagram.nodeTemplateMap.get("leaf");
+    diagram.linkTemplate = $(go.Link,
+      { routing: go.Link.Normal, curve: go.Link.Bezier, fromEndSegmentLength:50, toEndSegmentLength:50, fromSpot: go.Spot.Right, toSpot: go.Spot.Left },
+      $(go.Shape, { strokeWidth:1, opacity:0.55, stroke:"black" },
+        new go.Binding("strokeWidth","pixelWidth"),
+        new go.Binding("stroke","fromNode", function(node){ return node && node.data ? node.data.color : "black"; }).ofObject())
+    );
+    var meta = computeFlowMeta(DATA);
+    var nodeDataArray = DATA.nodes.map(function(n){
+      var flow = meta.flows[n.id] || 0;
+      return { key:n.id, text:n.label, color:n.color, pixelSize: Math.max(flow*meta.scale,4), category: flow >= meta.maxFlow*HUB_RATIO ? "hub" : "leaf" };
+    });
+    var linkDataArray = DATA.links.map(function(l){ return { from:l.source, to:l.target, pixelWidth: Math.max(l.value*meta.scale,1) }; });
+    diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    diagram.layoutDiagram(true);
+    diagram.zoomToFit();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function(){ diagram.layoutDiagram(true); diagram.zoomToFit(); }).observe(diagram.div);
+    }
+  }
+  if (window.go) { render(); return; }
+  if (!window.__sankeyGojsLoad) {
+    window.__sankeyGojsLoad = new Promise(function(resolve){
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/gojs/release/go.js";
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+  }
+  window.__sankeyGojsLoad.then(render);
+})();
+</script>
+      <div class="source-note">
+        <b>線寬單位：</b>NT$百萬元（關係人交易金額 / 客戶淨營收金額，皆為FY2025 20-F揭露數字，未隨季度更新）。<b>出處：</b>Item 7 Major Shareholders and Related Party Transactions（VIS/SSMC/Xintec/GUC 交易金額）；Item 18 附註 Geographic and major customers' information（Customer A/B 客戶集中度）。「其他客戶合計」為 2025淨營收總額扣除 Customer A、B 後的推算值。
+      </div>
+      <div class="limit-box"><b>2026/7 更新：</b>TSMC 已於 2026/5/15 出售 VIS 8.1% 股權（2Q26認列處分暨市值重評利得NT$63.20B），VIS 節點標籤已更新註記估計持股區間；此為有明確日期的實際交易，與客戶集中度等真正屬於年度揭露節奏的項目不同，故單獨更新。精確處分後持股比例未見於公司已發布的Q2文件，詳見 <a href="TSM_FY2026Q2_Analysis.html">TSM_FY2026Q2_Analysis.html</a> 供應鏈tab。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">設備 / 原物料供應商（未具名，未列入 Sankey 線寬）</div>
+      <ul>
+        <li><b>設備供應商</b>：微影掃描機、清洗/軌道設備、檢測設備、蝕刻機、爐管、濕式站、離子植入機、濺鍍機、CVD、CMP設備、測試機與探針台等；20-F 僅描述「部分設備供應商數量有限」，未點名廠商或揭露採購金額。</li>
+        <li><b>原物料供應商</b>：矽晶圓（主要供應商位於台灣、日本、德國、新加坡）、化學品、氣體、各類貴金屬；20-F 說明「部分原物料採單一來源採購」，同樣未具名、未揭露金額。</li>
+      </ul>
+      <div class="limit-box"><b>資料限制：</b>這兩類供應商是 TSMC 營運上真實存在的重要上游關係，但 20-F 本身沒有揭露具體公司名稱或採購金額，因此沒有放進 Sankey 圖裡硬湊線寬，避免用未揭露的數字誤導比例觀感。</div>
+    </div>
+  </div>
+
+  <!-- 營收分部 -->
+  <div id="panel-rev" class="panel">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">NT$1.27兆</div><div class="stat-lbl">2Q26淨營收</div></div>
+      <div class="stat-box"><div class="stat-val">78%</div><div class="stat-lbl">North America 營收占比</div></div>
+      <div class="stat-box"><div class="stat-val">66%</div><div class="stat-lbl">HPC 平台營收占比</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">地區別 → TSMC 2Q26淨營收 → 技術平台別</div>
+      <div id="sankeyEmbed_tsmRevenue01" style="width:100%;height:520px;background:#f2e9da;border:1px solid #ddd;border-radius:6px;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"NorthAmerica","label":"North America（78%）","color":"#1b6fa8"},{"id":"AsiaPacific","label":"Asia Pacific（8%）","color":"#1b6fa8"},{"id":"China","label":"China（6%）","color":"#1b6fa8"},{"id":"Japan","label":"Japan（4%）","color":"#1b6fa8"},{"id":"EMEA","label":"EMEA（4%）","color":"#1b6fa8"},{"id":"TSMCRev","label":"TSMC 2Q26淨營收 NT$1,270,381M","color":"#0f4c81"},{"id":"HPC","label":"High Performance Computing（66%，QoQ+20%）","color":"#7a4fa3"},{"id":"Smartphone","label":"Smartphone（22%，QoQ-4%）","color":"#7a4fa3"},{"id":"IoT","label":"Internet of Things（5%，QoQ+4%）","color":"#7a4fa3"},{"id":"Automotive","label":"Automotive（4%，QoQ+15%）","color":"#7a4fa3"},{"id":"DCE","label":"Digital Consumer Electronics（1%，QoQ+5%）","color":"#7a4fa3"},{"id":"Others","label":"Others（2%，QoQ+5%）","color":"#7a4fa3"}],"links":[{"source":"NorthAmerica","target":"TSMCRev","value":990897},{"source":"AsiaPacific","target":"TSMCRev","value":101630},{"source":"China","target":"TSMCRev","value":76223},{"source":"Japan","target":"TSMCRev","value":50815},{"source":"EMEA","target":"TSMCRev","value":50815},{"source":"TSMCRev","target":"HPC","value":838451},{"source":"TSMCRev","target":"Smartphone","value":279484},{"source":"TSMCRev","target":"IoT","value":63519},{"source":"TSMCRev","target":"Automotive","value":50815},{"source":"TSMCRev","target":"DCE","value":12704},{"source":"TSMCRev","target":"Others","value":25408}]};
+  var MAX_NODE_PX = 260, HUB_RATIO = 0.06;
+  function labelOf(d){ return d.text || d.key || ""; }
+  function computeFlowMeta(data){
+    var out={}, inc={};
+    data.links.forEach(function(l){ out[l.source]=(out[l.source]||0)+l.value; inc[l.target]=(inc[l.target]||0)+l.value; });
+    var flows={};
+    data.nodes.forEach(function(n){ flows[n.id]=Math.max(out[n.id]||0, inc[n.id]||0); });
+    var maxFlow=0; Object.keys(flows).forEach(function(k){ if(flows[k]>maxFlow) maxFlow=flows[k]; });
+    var scale = maxFlow>0 ? MAX_NODE_PX/maxFlow : 1;
+    return { flows: flows, maxFlow: maxFlow, scale: scale };
+  }
+  function render(){
+    var $ = go.GraphObject.make;
+    var diagram = $(go.Diagram, "sankeyEmbed_tsmRevenue01", {
+      initialAutoScale: go.Diagram.Uniform,
+      isReadOnly: true,
+      "animationManager.isEnabled": false,
+      layout: $(go.LayeredDigraphLayout, { setsPortSpots: true, direction: 0, layerSpacing: 50, columnSpacing: 10 })
+    });
+    function makeTooltip(){
+      return $(go.Adornment, "Auto", $(go.Shape,{fill:"#222",stroke:null}), $(go.TextBlock,{margin:6,stroke:"white",font:"10pt sans-serif"}, new go.Binding("text","",labelOf)));
+    }
+    diagram.nodeTemplateMap.add("hub", $(go.Node, "Auto",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, { stroke: null, minSize: new go.Size(26,0) }, new go.Binding("fill","color"), new go.Binding("height","pixelSize")),
+      $(go.TextBlock, { margin:4, font:"bold 10pt sans-serif", stroke:"white", textAlign:"center", maxSize:new go.Size(140,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplateMap.add("leaf", $(go.Node, "Horizontal",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, "Rectangle", { width:12, height:12, stroke:null }, new go.Binding("fill","color")),
+      $(go.TextBlock, { margin:new go.Margin(0,0,0,4), font:"9pt sans-serif", stroke:"#333", maxSize:new go.Size(220,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplate = diagram.nodeTemplateMap.get("leaf");
+    diagram.linkTemplate = $(go.Link,
+      { routing: go.Link.Normal, curve: go.Link.Bezier, fromEndSegmentLength:50, toEndSegmentLength:50, fromSpot: go.Spot.Right, toSpot: go.Spot.Left },
+      $(go.Shape, { strokeWidth:1, opacity:0.55, stroke:"black" },
+        new go.Binding("strokeWidth","pixelWidth"),
+        new go.Binding("stroke","fromNode", function(node){ return node && node.data ? node.data.color : "black"; }).ofObject())
+    );
+    var meta = computeFlowMeta(DATA);
+    var nodeDataArray = DATA.nodes.map(function(n){
+      var flow = meta.flows[n.id] || 0;
+      return { key:n.id, text:n.label, color:n.color, pixelSize: Math.max(flow*meta.scale,4), category: flow >= meta.maxFlow*HUB_RATIO ? "hub" : "leaf" };
+    });
+    var linkDataArray = DATA.links.map(function(l){ return { from:l.source, to:l.target, pixelWidth: Math.max(l.value*meta.scale,1) }; });
+    diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    diagram.layoutDiagram(true);
+    diagram.zoomToFit();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function(){ diagram.layoutDiagram(true); diagram.zoomToFit(); }).observe(diagram.div);
+    }
+  }
+  if (window.go) { render(); return; }
+  if (!window.__sankeyGojsLoad) {
+    window.__sankeyGojsLoad = new Promise(function(resolve){
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/gojs/release/go.js";
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+  }
+  window.__sankeyGojsLoad.then(render);
+})();
+</script>
+      <div class="source-note">
+        <b>線寬單位：</b>NT$百萬元。<b>出處：</b>2Q26 Quarterly Management Report／2Q26 Presentation「Net Revenue by Geography」與「Net Revenue by Platform」兩張表，兩表總額一致（NT$1,270,381M）故可共用同一中心節點。⚑ 與供應鏈/股權結構兩個tab不同，本圖已從FY2025年度數字更新為2Q26季度數字；地區別線寬由公布的整數百分比反推換算，與總額有NT$1M內的四捨五入誤差，平台別因所有%加總剛好100%故完全吻合。FY2025年度版本歷史數字見 <code>TSM_20-F_Sankey_Source_Notes.md</code>。
+      </div>
+    </div>
+  </div>
+
+  <!-- 股權結構 -->
+  <div id="panel-own" class="panel">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">6.38%</div><div class="stat-lbl">國發基金持股</div></div>
+      <div class="stat-box"><div class="stat-val">20.49%</div><div class="stat-lbl">ADS持有人持股（透過Citibank）</div></div>
+      <div class="stat-box"><div class="stat-val">259億股</div><div class="stat-lbl">已發行普通股總數</div></div>
+    </div>
+
+    <div class="sankey-grid">
+      <div class="card">
+        <div class="card-title">誰持有 TSMC</div>
+        <div id="sankeyEmbed_tsmOwnersIn01" style="width:100%;height:460px;background:#f2e9da;border:1px solid #ddd;border-radius:6px;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"NDF","label":"國發基金 National Development Fund（6.38%）","color":"#a5762f"},{"id":"ADS","label":"ADS存託憑證持有人（透過Citibank名義持有，20.49%）","color":"#a5762f"},{"id":"Directors","label":"董事及高階經理人合計（0.23%）","color":"#a5762f"},{"id":"Others","label":"其他分散股東（個別均<5%，推算值，72.90%）","color":"#c9a876"},{"id":"TSMCShares","label":"TSMC 已發行普通股 25,932,524,521股","color":"#0f4c81"}],"links":[{"source":"NDF","target":"TSMCShares","value":1653709980},{"source":"ADS","target":"TSMCShares","value":5313450863},{"source":"Directors","target":"TSMCShares","value":60237681},{"source":"Others","target":"TSMCShares","value":18905125997}]};
+  var MAX_NODE_PX = 260, HUB_RATIO = 0.06;
+  function labelOf(d){ return d.text || d.key || ""; }
+  function computeFlowMeta(data){
+    var out={}, inc={};
+    data.links.forEach(function(l){ out[l.source]=(out[l.source]||0)+l.value; inc[l.target]=(inc[l.target]||0)+l.value; });
+    var flows={};
+    data.nodes.forEach(function(n){ flows[n.id]=Math.max(out[n.id]||0, inc[n.id]||0); });
+    var maxFlow=0; Object.keys(flows).forEach(function(k){ if(flows[k]>maxFlow) maxFlow=flows[k]; });
+    var scale = maxFlow>0 ? MAX_NODE_PX/maxFlow : 1;
+    return { flows: flows, maxFlow: maxFlow, scale: scale };
+  }
+  function render(){
+    var $ = go.GraphObject.make;
+    var diagram = $(go.Diagram, "sankeyEmbed_tsmOwnersIn01", {
+      initialAutoScale: go.Diagram.Uniform,
+      isReadOnly: true,
+      "animationManager.isEnabled": false,
+      layout: $(go.LayeredDigraphLayout, { setsPortSpots: true, direction: 0, layerSpacing: 50, columnSpacing: 10 })
+    });
+    function makeTooltip(){
+      return $(go.Adornment, "Auto", $(go.Shape,{fill:"#222",stroke:null}), $(go.TextBlock,{margin:6,stroke:"white",font:"10pt sans-serif"}, new go.Binding("text","",labelOf)));
+    }
+    diagram.nodeTemplateMap.add("hub", $(go.Node, "Auto",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, { stroke: null, minSize: new go.Size(26,0) }, new go.Binding("fill","color"), new go.Binding("height","pixelSize")),
+      $(go.TextBlock, { margin:4, font:"bold 10pt sans-serif", stroke:"white", textAlign:"center", maxSize:new go.Size(140,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplateMap.add("leaf", $(go.Node, "Horizontal",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, "Rectangle", { width:12, height:12, stroke:null }, new go.Binding("fill","color")),
+      $(go.TextBlock, { margin:new go.Margin(0,0,0,4), font:"9pt sans-serif", stroke:"#333", maxSize:new go.Size(220,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplate = diagram.nodeTemplateMap.get("leaf");
+    diagram.linkTemplate = $(go.Link,
+      { routing: go.Link.Normal, curve: go.Link.Bezier, fromEndSegmentLength:50, toEndSegmentLength:50, fromSpot: go.Spot.Right, toSpot: go.Spot.Left },
+      $(go.Shape, { strokeWidth:1, opacity:0.55, stroke:"black" },
+        new go.Binding("strokeWidth","pixelWidth"),
+        new go.Binding("stroke","fromNode", function(node){ return node && node.data ? node.data.color : "black"; }).ofObject())
+    );
+    var meta = computeFlowMeta(DATA);
+    var nodeDataArray = DATA.nodes.map(function(n){
+      var flow = meta.flows[n.id] || 0;
+      return { key:n.id, text:n.label, color:n.color, pixelSize: Math.max(flow*meta.scale,4), category: flow >= meta.maxFlow*HUB_RATIO ? "hub" : "leaf" };
+    });
+    var linkDataArray = DATA.links.map(function(l){ return { from:l.source, to:l.target, pixelWidth: Math.max(l.value*meta.scale,1) }; });
+    diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    diagram.layoutDiagram(true);
+    diagram.zoomToFit();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function(){ diagram.layoutDiagram(true); diagram.zoomToFit(); }).observe(diagram.div);
+    }
+  }
+  if (window.go) { render(); return; }
+  if (!window.__sankeyGojsLoad) {
+    window.__sankeyGojsLoad = new Promise(function(resolve){
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/gojs/release/go.js";
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+  }
+  window.__sankeyGojsLoad.then(render);
+})();
+</script>
+        <div class="source-note"><b>線寬單位：</b>普通股股數。<b>出處：</b>Item 7 Major Shareholders，資料基準日 2026-02-28。「其他分散股東」為已發行總股數扣除前三者後的推算值。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">TSMC 對外主要權益投資</div>
+        <div id="sankeyEmbed_tsmOwnersOut01" style="width:100%;height:460px;background:#f2e9da;border:1px solid #ddd;border-radius:6px;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"TSMC2","label":"TSMC","color":"#0f4c81"},{"id":"VIS2","label":"VIS（2025/12/31帳面價值NT$18,068.7M，2026/5/15已出售8.1%，帳面價值待更新）","color":"#2f7d4f"},{"id":"SSMC2","label":"SSMC（持股39%，帳面價值NT$12,419.2M）","color":"#2f7d4f"},{"id":"Xintec2","label":"Xintec（持股41%，帳面價值NT$4,470.4M）","color":"#2f7d4f"},{"id":"GUC2","label":"GUC（持股35%，帳面價值NT$2,893.6M）","color":"#2f7d4f"}],"links":[{"source":"TSMC2","target":"VIS2","value":18068.7},{"source":"TSMC2","target":"SSMC2","value":12419.2},{"source":"TSMC2","target":"Xintec2","value":4470.4},{"source":"TSMC2","target":"GUC2","value":2893.6}]};
+  var MAX_NODE_PX = 260, HUB_RATIO = 0.06;
+  function labelOf(d){ return d.text || d.key || ""; }
+  function computeFlowMeta(data){
+    var out={}, inc={};
+    data.links.forEach(function(l){ out[l.source]=(out[l.source]||0)+l.value; inc[l.target]=(inc[l.target]||0)+l.value; });
+    var flows={};
+    data.nodes.forEach(function(n){ flows[n.id]=Math.max(out[n.id]||0, inc[n.id]||0); });
+    var maxFlow=0; Object.keys(flows).forEach(function(k){ if(flows[k]>maxFlow) maxFlow=flows[k]; });
+    var scale = maxFlow>0 ? MAX_NODE_PX/maxFlow : 1;
+    return { flows: flows, maxFlow: maxFlow, scale: scale };
+  }
+  function render(){
+    var $ = go.GraphObject.make;
+    var diagram = $(go.Diagram, "sankeyEmbed_tsmOwnersOut01", {
+      initialAutoScale: go.Diagram.Uniform,
+      isReadOnly: true,
+      "animationManager.isEnabled": false,
+      layout: $(go.LayeredDigraphLayout, { setsPortSpots: true, direction: 0, layerSpacing: 50, columnSpacing: 10 })
+    });
+    function makeTooltip(){
+      return $(go.Adornment, "Auto", $(go.Shape,{fill:"#222",stroke:null}), $(go.TextBlock,{margin:6,stroke:"white",font:"10pt sans-serif"}, new go.Binding("text","",labelOf)));
+    }
+    diagram.nodeTemplateMap.add("hub", $(go.Node, "Auto",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, { stroke: null, minSize: new go.Size(26,0) }, new go.Binding("fill","color"), new go.Binding("height","pixelSize")),
+      $(go.TextBlock, { margin:4, font:"bold 10pt sans-serif", stroke:"white", textAlign:"center", maxSize:new go.Size(140,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplateMap.add("leaf", $(go.Node, "Horizontal",
+      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+      $(go.Shape, "Rectangle", { width:12, height:12, stroke:null }, new go.Binding("fill","color")),
+      $(go.TextBlock, { margin:new go.Margin(0,0,0,4), font:"9pt sans-serif", stroke:"#333", maxSize:new go.Size(220,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))
+    ));
+    diagram.nodeTemplate = diagram.nodeTemplateMap.get("leaf");
+    diagram.linkTemplate = $(go.Link,
+      { routing: go.Link.Normal, curve: go.Link.Bezier, fromEndSegmentLength:50, toEndSegmentLength:50, fromSpot: go.Spot.Right, toSpot: go.Spot.Left },
+      $(go.Shape, { strokeWidth:1, opacity:0.55, stroke:"black" },
+        new go.Binding("strokeWidth","pixelWidth"),
+        new go.Binding("stroke","fromNode", function(node){ return node && node.data ? node.data.color : "black"; }).ofObject())
+    );
+    var meta = computeFlowMeta(DATA);
+    var nodeDataArray = DATA.nodes.map(function(n){
+      var flow = meta.flows[n.id] || 0;
+      return { key:n.id, text:n.label, color:n.color, pixelSize: Math.max(flow*meta.scale,4), category: flow >= meta.maxFlow*HUB_RATIO ? "hub" : "leaf" };
+    });
+    var linkDataArray = DATA.links.map(function(l){ return { from:l.source, to:l.target, pixelWidth: Math.max(l.value*meta.scale,1) }; });
+    diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    diagram.layoutDiagram(true);
+    diagram.zoomToFit();
+    if (window.ResizeObserver) {
+      new ResizeObserver(function(){ diagram.layoutDiagram(true); diagram.zoomToFit(); }).observe(diagram.div);
+    }
+  }
+  if (window.go) { render(); return; }
+  if (!window.__sankeyGojsLoad) {
+    window.__sankeyGojsLoad = new Promise(function(resolve){
+      var s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/gojs/release/go.js";
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+  }
+  window.__sankeyGojsLoad.then(render);
+})();
+</script>
+        <div class="source-note"><b>線寬單位：</b>NT$百萬元（權益法投資帳面價值，2025-12-31）。<b>出處：</b>Item 18 附註 Investments Accounted for Using Equity Method；持股%另取 Item 7（2026-02-28）較新基準值。</div>
+        <div class="limit-box"><b>2026/7 更新：</b>TSMC 已於 2026/5/15 出售 VIS 8.1% 股權，圖中帳面價值仍為出售前（2025/12/31）數字，出售後的新帳面價值未見於已發布的Q2文件，本圖線寬未反映此交易，僅在標籤註記提醒。</div>
+      </div>
+    </div>
+    <div class="limit-box"><b>注意：</b>左圖線寬單位是股數、右圖線寬單位是帳面金額，兩者刻意分成兩張獨立的圖，不合併成單一 Sankey——因為兩種單位分屬不同分母（TSMC自身股本 vs. 各被投資公司自身股本），硬併在一起會誤導視覺比例。</div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。資料來源：TSMC 20-F（FY2025，SEC Accession 0001628280-26-025362）。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
