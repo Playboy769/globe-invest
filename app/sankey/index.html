@@ -1,83 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>Sankey 流向圖編輯器 (GoJS)</title>
-  <script src="https://cdn.jsdelivr.net/npm/gojs/release/go.js"></script>
+  <title>Sankey 流向圖編輯器 (D3)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <style>
+    :root{--c-canvas:#fff;--c-ink:#0a0a0a;--c-accent:#d1591f;--c-accent-deep:#a94515;--c-accent-soft:rgba(209,89,31,.08)}
     * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; font-family: -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif; color: #222; }
-    body { display: flex; flex-direction: column; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex; flex-direction: column;
+      font-family: 'Orchid','Noto Serif TC','PMingLiU',serif;
+      color: var(--c-ink); background: var(--c-canvas);
+      -webkit-font-smoothing: antialiased;
+    }
 
     .toolbar {
       display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
-      padding: 8px 12px; background: #2c2c2c; color: #fff;
+      padding: 10px 16px; background: #fff; border-bottom: 1px solid #eee;
     }
-    .toolbar h1 { font-size: 15px; margin: 0 12px 0 0; font-weight: 600; white-space: nowrap; }
+    .toolbar h1 { font-size: 15px; margin: 0 14px 0 0; font-weight: 400; letter-spacing: .14em; white-space: nowrap; }
     .toolbar button {
-      background: #444; color: #fff; border: 1px solid #666; border-radius: 4px;
-      padding: 6px 10px; font-size: 12.5px; cursor: pointer;
+      border-radius: 100px; border: 1px solid #ddd; background: #fff; color: #888;
+      font-size: 11.5px; letter-spacing: .08em; padding: 7px 16px; cursor: pointer;
+      transition: all .2s ease; font-family: inherit;
     }
-    .toolbar button:hover { background: #555; }
-    .toolbar button.danger:hover { background: #7a2b2b; }
+    .toolbar button:hover:not(:disabled) { color: var(--c-accent); border-color: var(--c-accent); }
+    .toolbar button:disabled { opacity: .35; cursor: default; }
+    .toolbar button.danger:hover:not(:disabled) { color: var(--c-accent-deep); border-color: var(--c-accent-deep); }
     .toolbar .spacer { flex: 1; }
-    .toolbar .hint { font-size: 11.5px; color: #bbb; }
+    .toolbar .hint { font-size: 11.5px; color: #999; line-height: 1.7; }
 
     .error-banner {
-      display: none; background: #5c1d1d; color: #ffd9d9; padding: 8px 14px;
-      font-size: 12.5px; white-space: pre-line; border-bottom: 1px solid #7a2b2b;
+      display: none; background: #fff; color: #b3261e; padding: 10px 16px;
+      font-size: 12.5px; white-space: pre-line; border-bottom: 1px solid #b3261e22;
     }
     .error-banner.show { display: block; }
 
     .layout { flex: 1; display: flex; min-height: 0; }
-    #myDiagramDiv { flex: 1; background: #f2e9da; min-width: 0; }
+    #myDiagramDiv { flex: 1; background: #fff; min-width: 0; }
 
     .sidebar {
-      width: 380px; flex: none; display: flex; flex-direction: column;
-      border-left: 1px solid #ccc; background: #fafafa; min-height: 0;
+      width: 400px; flex: none; display: flex; flex-direction: column;
+      border-left: 1px solid #eee; background: #fff; min-height: 0;
     }
-    .tabs { display: flex; border-bottom: 1px solid #ccc; }
+    .tabs { display: flex; border-bottom: 1px solid #eee; }
     .tab-btn {
-      flex: 1; padding: 8px; font-size: 12.5px; background: #eee; border: none;
-      border-right: 1px solid #ccc; cursor: pointer;
+      flex: 1; padding: 10px 8px; font-size: 12.5px; background: transparent; border: none;
+      color: #aaa; cursor: pointer; font-family: inherit; letter-spacing: .04em;
+      transition: color .2s ease;
     }
-    .tab-btn:last-child { border-right: none; }
-    .tab-btn.active { background: #fafafa; font-weight: 600; box-shadow: inset 0 -2px 0 #333; }
-    .tab-panel { display: none; flex: 1; min-height: 0; flex-direction: column; overflow: auto; padding: 10px; }
+    .tab-btn.active { color: var(--c-ink); font-weight: 500; box-shadow: inset 0 -2px 0 var(--c-accent); }
+    .tab-panel { display: none; flex: 1; min-height: 0; flex-direction: column; overflow: auto; padding: 12px; }
     .tab-panel.active { display: flex; }
 
-    table.editor-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    table.editor-table th { text-align: left; font-size: 11px; color: #666; padding: 4px 3px; border-bottom: 1px solid #ddd; }
-    table.editor-table td { padding: 3px; border-bottom: 1px solid #eee; vertical-align: middle; }
-    table.editor-table input[type="text"], table.editor-table input[type="number"], table.editor-table select {
-      width: 100%; font-size: 12px; padding: 3px 4px; border: 1px solid #ccc; border-radius: 3px;
+    .filter-input {
+      width: 100%; font-size: 12px; padding: 6px 8px; margin-bottom: 8px;
+      border: 1px solid #ddd; border-radius: 4px; font-family: inherit; color: var(--c-ink);
     }
-    table.editor-table input[type="color"] { width: 30px; height: 24px; padding: 0; border: 1px solid #ccc; border-radius: 3px; }
-    table.editor-table tr.selected { background: #fff3cd; }
-    .row-del { background: none; border: none; color: #a33; cursor: pointer; font-size: 14px; padding: 2px 6px; }
-    .row-del:hover { color: #e00; }
+    .filter-input:focus { border-color: var(--c-accent); outline: none; }
+
+    table.editor-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    table.editor-table th {
+      text-align: left; font-size: 11px; color: #999; text-transform: uppercase;
+      letter-spacing: .08em; padding: 5px 3px; border-bottom: 1px solid #eee; font-weight: 500;
+    }
+    table.editor-table td { padding: 4px 3px; border-bottom: 1px solid #f3f3f3; vertical-align: middle; }
+    table.editor-table input[type="text"], table.editor-table input[type="number"], table.editor-table select {
+      width: 100%; font-size: 12px; padding: 4px 5px; border: 1px solid #ddd; border-radius: 4px;
+      font-family: inherit; color: var(--c-ink); background: #fff;
+    }
+    table.editor-table input[type="text"]:focus, table.editor-table input[type="number"]:focus, table.editor-table select:focus {
+      border-color: var(--c-accent); outline: none;
+    }
+    table.editor-table input[type="color"] { width: 30px; height: 26px; padding: 0; border: 1px solid #ddd; border-radius: 4px; }
+    table.editor-table tr.selected { background: var(--c-accent-soft); }
+    .row-del { background: none; border: none; color: #bbb; cursor: pointer; font-size: 14px; padding: 2px 6px; }
+    .row-del:hover { color: var(--c-accent-deep); }
 
     .add-row-bar { display: flex; gap: 6px; margin-top: 8px; }
-    .add-row-bar button { flex: none; padding: 6px 10px; font-size: 12px; border: 1px solid #999; border-radius: 4px; background: #eee; cursor: pointer; }
-    .add-row-bar button:hover { background: #ddd; }
+    .add-row-bar button, .json-actions button, .json-actions label {
+      flex: none; padding: 7px 16px; font-size: 11.5px; letter-spacing: .08em; border-radius: 100px;
+      border: 1px solid #ddd; background: #fff; color: #888; cursor: pointer; font-family: inherit;
+      transition: all .2s ease;
+    }
+    .add-row-bar button:hover, .json-actions button:hover, .json-actions label:hover { color: var(--c-accent); border-color: var(--c-accent); }
+    .json-actions button.primary { background: var(--c-ink); border-color: var(--c-ink); color: #fff; }
+    .json-actions button.primary:hover { background: var(--c-accent); border-color: var(--c-accent); color: #fff; }
 
-    .hint-box { font-size: 11.5px; color: #666; background: #eee; border-radius: 4px; padding: 8px; margin-bottom: 8px; line-height: 1.5; }
+    .hint-text { font-size: 11.5px; color: #999; line-height: 1.7; margin-bottom: 8px; }
+    .hint-text code { color: #888; }
+
+    .dirty-badge { font-size: 11px; color: var(--c-accent-deep); margin-left: 8px; display: none; }
+
+    .json-error {
+      display: none; font-size: 12px; color: #b3261e; background: #fff; border: 1px solid #b3261e22;
+      border-radius: 4px; padding: 8px 10px; margin-bottom: 8px; white-space: pre-line;
+    }
+    .json-error.show { display: block; }
 
     #jsonPanel { display: flex; flex-direction: column; height: 100%; }
-    #jsonText { flex: 1; width: 100%; font-family: Consolas, monospace; font-size: 11.5px; resize: none; padding: 6px; }
-    .json-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-    .json-actions button { padding: 6px 10px; font-size: 12px; border: 1px solid #999; border-radius: 4px; background: #eee; cursor: pointer; }
-    .json-actions button:hover { background: #ddd; }
+    #jsonText { flex: 1; width: 100%; font-family: Consolas, monospace; font-size: 11.5px; resize: none; padding: 8px; border: 1px solid #ddd; border-radius: 4px; color: var(--c-ink); }
+    #jsonText:focus { border-color: var(--c-accent); outline: none; }
+    .json-actions { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    #embedText { height: 140px; font-family: Consolas, monospace; font-size: 11.5px; resize: none; padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%; color: var(--c-ink); }
+    #embedText:focus { border-color: var(--c-accent); outline: none; }
+
+    .toast-container {
+      position: fixed; right: 18px; bottom: 18px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+    }
+    .toast {
+      background: #fff; border: 1px solid #eee; border-radius: 6px; padding: 10px 16px;
+      font-size: 12.5px; color: var(--c-ink); box-shadow: 0 4px 14px rgba(0,0,0,.08);
+      font-family: inherit; max-width: 320px;
+    }
   </style>
 </head>
 <body>
   <div class="toolbar">
     <h1>Sankey 流向圖編輯器</h1>
     <button id="btnFit">符合畫面</button>
+    <button id="btnUndo" disabled>復原</button>
+    <button id="btnRedo" disabled>重做</button>
     <button id="btnSample">載入範例（UK 能源）</button>
     <button id="btnClear" class="danger">清空重來</button>
     <span class="spacer"></span>
-    <span class="hint">點一下圖上的節點可跳到對應列；資料會自動存在瀏覽器（localStorage）</span>
+    <span class="hint">滾輪縮放・點圖上節點/連結可跳到對應列・Ctrl+Z 復原・資料自動儲存於瀏覽器</span>
   </div>
   <div id="errorBanner" class="error-banner"></div>
 
@@ -92,9 +145,10 @@
       </div>
 
       <div class="tab-panel active" id="panel-nodes">
-        <div class="hint-box">■ 大色塊：流量佔比較高的節點，高度依流量自動縮放並顯示內嵌標籤。<br>▫ 小方塊：流量較低的節點，以圖例樣式在旁邊顯示標籤。</div>
+        <div class="hint-text">節點高度依流量大小自動縮放，滑鼠移到圖上的節點或連結會顯示詳細數值。</div>
+        <input type="text" class="filter-input" id="nodeFilter" placeholder="搜尋節點標籤...">
         <table class="editor-table">
-          <thead><tr><th style="width:34px">色</th><th>ID</th><th>標籤</th><th style="width:24px"></th></tr></thead>
+          <thead><tr><th style="width:34px">色</th><th>標籤</th><th style="width:24px"></th></tr></thead>
           <tbody id="nodesBody"></tbody>
         </table>
         <div class="add-row-bar">
@@ -103,7 +157,8 @@
       </div>
 
       <div class="tab-panel" id="panel-links">
-        <div class="hint-box">數值代表這條連結的流量大小，會直接對應到線條粗細。</div>
+        <div class="hint-text">數值代表這條連結的流量大小，會直接對應到線條粗細。</div>
+        <input type="text" class="filter-input" id="linkFilter" placeholder="搜尋來源或目標節點...">
         <table class="editor-table">
           <thead><tr><th>來源</th><th>目標</th><th style="width:70px">數值</th><th style="width:24px"></th></tr></thead>
           <tbody id="linksBody"></tbody>
@@ -115,27 +170,29 @@
 
       <div class="tab-panel" id="panel-json">
         <div id="jsonPanel">
-          <div class="hint-box">要換成自己的資料時，直接在這裡貼上/編輯 JSON 再按「套用」，或用「匯入檔案」讀取本機 .json。格式：<code>{"nodes":[{"id","label","color"}],"links":[{"source","target","value"}]}</code>（也接受 GoJS 慣用的 key/text/from/to/width 欄位名）。</div>
+          <div class="hint-text">要換成自己的資料時，直接在這裡貼上/編輯 JSON 再按「套用」，或用「匯入檔案」讀取本機 .json。格式：<code>{"nodes":[{"id","label","color"}],"links":[{"source","target","value"}]}</code>（也接受 GoJS 慣用的 key/text/from/to/width 欄位名）。</div>
+          <div id="jsonErrorBox" class="json-error"></div>
           <textarea id="jsonText" spellcheck="false"></textarea>
           <div class="json-actions">
-            <button id="btnApplyJson">套用 JSON</button>
+            <button id="btnApplyJson" class="primary">套用 JSON</button>
             <button id="btnSyncJson">從目前資料重新產生</button>
             <button id="btnCopyJson">複製</button>
             <button id="btnDownloadJson">下載 .json</button>
-            <label style="padding:6px 10px;font-size:12px;border:1px solid #999;border-radius:4px;background:#eee;cursor:pointer;">
-              匯入檔案<input type="file" id="fileInput" accept="application/json" style="display:none">
-            </label>
+            <label>匯入檔案<input type="file" id="fileInput" accept="application/json" style="display:none"></label>
+            <span id="jsonDirtyBadge" class="dirty-badge">已修改，尚未套用</span>
           </div>
-          <div class="hint-box" style="margin-top:10px;">要把這張圖放進報告（例如 earnings call 分析框架的「供應鏈」tab）時，用下面按鈕產生一段唯讀、可直接貼進其他 HTML 的 &lt;div&gt;+&lt;script&gt; 區塊 —— 不需要另外在該檔案 &lt;head&gt; 加 GoJS，會自動偵測並注入。</div>
+          <div class="hint-text" style="margin-top:14px;">要把這張圖放進報告（例如 earnings call 分析框架的「供應鏈」tab）時，用下面按鈕產生一段唯讀、可直接貼進其他 HTML 的 &lt;div&gt;+&lt;script&gt; 區塊 —— 不需要另外在該檔案 &lt;head&gt; 加 D3，會自動偵測並依序注入 d3 與 d3-sankey。</div>
           <div class="json-actions">
             <button id="btnGenEmbed">產生嵌入代碼</button>
-            <button id="btnCopyEmbed">複製嵌入代碼</button>
+            <button id="btnCopyEmbed" class="primary">複製嵌入代碼</button>
           </div>
-          <textarea id="embedText" spellcheck="false" style="height:140px;"></textarea>
+          <textarea id="embedText" spellcheck="false"></textarea>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="toast-container" id="toastContainer"></div>
 
   <script>
     // ---------- sample data (UK 2050 pathways calculator, GoJS Sankey sample values) ----------
@@ -288,12 +345,66 @@
 
     var PALETTE = ["#562038","#268251","#254d57","#c260ad","#7c3e06","#556171","#2dc3d2","#e44d42","#9c8000","#5c5c10","#6b6b45","#fec184","#96665c","#8b8b8b"];
     var STORAGE_KEY = "sankeyEditorState";
-    var MAX_NODE_PX = 260;   // tallest hub block / thickest link at the largest flow value
-    var HUB_RATIO = 0.06;    // nodes whose flow is under 6% of the max flow render as small "leaf" labels
 
     var state = { nodes: [], links: [] };
-    var myDiagram;
+    var svg, gMain, zoomBehavior, tooltipEl, resizeObserver;
+    var currentNodesSel = null, currentLinksSel = null;
+    var currentSankeyNodes = [], currentSankeyLinks = [];
     var selectedNodeId = null;
+    var selectedLinkIdx = null;
+    var nodeFilterText = "";
+    var linkFilterText = "";
+    var jsonDirty = false;
+    var undoStack = [];
+    var redoStack = [];
+    var UNDO_CAP = 100;
+
+    // ---------- undo / redo ----------
+    function pushUndo() {
+      undoStack.push(JSON.stringify(state));
+      if (undoStack.length > UNDO_CAP) undoStack.shift();
+      redoStack.length = 0;
+      updateUndoRedoButtons();
+    }
+
+    function undo() {
+      if (!undoStack.length) return;
+      redoStack.push(JSON.stringify(state));
+      if (redoStack.length > UNDO_CAP) redoStack.shift();
+      state = JSON.parse(undoStack.pop());
+      selectedNodeId = null;
+      selectedLinkIdx = null;
+      renderAll();
+      updateUndoRedoButtons();
+      showToast("已復原");
+    }
+
+    function redo() {
+      if (!redoStack.length) return;
+      undoStack.push(JSON.stringify(state));
+      if (undoStack.length > UNDO_CAP) undoStack.shift();
+      state = JSON.parse(redoStack.pop());
+      selectedNodeId = null;
+      selectedLinkIdx = null;
+      renderAll();
+      updateUndoRedoButtons();
+      showToast("已重做");
+    }
+
+    function updateUndoRedoButtons() {
+      document.getElementById("btnUndo").disabled = undoStack.length === 0;
+      document.getElementById("btnRedo").disabled = redoStack.length === 0;
+    }
+
+    // ---------- toast ----------
+    function showToast(msg) {
+      var container = document.getElementById("toastContainer");
+      var t = document.createElement("div");
+      t.className = "toast";
+      t.textContent = msg;
+      container.appendChild(t);
+      setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 2500);
+    }
 
     // ---------- persistence ----------
     function loadInitialState() {
@@ -301,10 +412,17 @@
         var raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           var parsed = JSON.parse(raw);
-          if (parsed && Array.isArray(parsed.nodes) && Array.isArray(parsed.links)) return parsed;
+          if (parsed && Array.isArray(parsed.nodes) && Array.isArray(parsed.links)) {
+            var errors = validate(parsed);
+            if (!errors.length) {
+              return { data: parsed, restored: true };
+            } else {
+              showBootError(errors);
+            }
+          }
         }
       } catch (e) { /* fall through to sample */ }
-      return JSON.parse(JSON.stringify(SAMPLE_DATA));
+      return { data: JSON.parse(JSON.stringify(SAMPLE_DATA)), restored: false };
     }
 
     function persist() {
@@ -334,6 +452,50 @@
     }
 
     // ---------- validation ----------
+    // DFS-based cycle detection over the directed link graph. d3-sankey throws on circular
+    // links, so this must be caught before we ever hand data to the renderer. Returns an
+    // array of node labels describing one offending cycle path, or null if acyclic.
+    function detectCycle(data) {
+      var idToLabel = {};
+      data.nodes.forEach(function (n) { idToLabel[n.id] = n.label || n.id; });
+      var adj = {};
+      data.links.forEach(function (l) {
+        if (!l.source || !l.target) return;
+        (adj[l.source] = adj[l.source] || []).push(l.target);
+      });
+      var visitState = {}; // 0/undefined = unvisited, 1 = visiting, 2 = done
+      var pathStack = [];
+      var cyclePath = null;
+
+      function dfs(node) {
+        if (cyclePath) return;
+        visitState[node] = 1;
+        pathStack.push(node);
+        var neighbors = adj[node] || [];
+        for (var i = 0; i < neighbors.length; i++) {
+          var nxt = neighbors[i];
+          if (cyclePath) return;
+          if (visitState[nxt] === 1) {
+            var startIdx = pathStack.indexOf(nxt);
+            cyclePath = pathStack.slice(startIdx).concat([nxt]);
+            return;
+          } else if (visitState[nxt] !== 2) {
+            dfs(nxt);
+            if (cyclePath) return;
+          }
+        }
+        pathStack.pop();
+        visitState[node] = 2;
+      }
+
+      Object.keys(adj).forEach(function (n) {
+        if (!cyclePath && visitState[n] !== 2) dfs(n);
+      });
+
+      if (cyclePath) return cyclePath.map(function (id) { return idToLabel[id] || id; });
+      return null;
+    }
+
     function validate(data) {
       var errors = [];
       var seen = {};
@@ -344,242 +506,337 @@
       });
       var ids = {};
       data.nodes.forEach(function (n) { if (n.id) ids[n.id] = true; });
+      var pairSeen = {};
       data.links.forEach(function (l, i) {
         if (!l.source || !ids[l.source]) errors.push("第 " + (i + 1) + " 條連結的來源節點不存在：「" + l.source + "」。");
         if (!l.target || !ids[l.target]) errors.push("第 " + (i + 1) + " 條連結的目標節點不存在：「" + l.target + "」。");
         if (!(l.value > 0)) errors.push("第 " + (i + 1) + " 條連結的數值必須大於 0（目前：" + l.value + "）。");
+        if (l.source && l.target && l.source === l.target) errors.push("第 " + (i + 1) + " 條連結的來源與目標相同（自我迴圈）：「" + l.source + "」。");
+        if (l.source && l.target) {
+          var key = l.source + "→" + l.target;
+          if (pairSeen[key]) errors.push("第 " + (i + 1) + " 條連結與另一條連結重複（來源「" + l.source + "」→ 目標「" + l.target + "」）。");
+          pairSeen[key] = true;
+        }
       });
+      var cycle = detectCycle(data);
+      if (cycle) errors.push("連結形成循環（" + cycle.join(" → ") + "），Sankey 圖不支援循環流向。");
       return errors;
     }
 
-    function showErrors(errors) {
+    function showBootError(errors) {
       var banner = document.getElementById("errorBanner");
-      if (!errors.length) { banner.className = "error-banner"; banner.textContent = ""; return; }
       banner.className = "error-banner show";
-      banner.textContent = "資料有問題，圖表未更新，請修正以下項目：\n" + errors.map(function (e) { return "• " + e; }).join("\n");
+      banner.textContent = "瀏覽器中儲存的資料有問題，已改用範例資料。問題項目：\n" + errors.map(function (e) { return "• " + e; }).join("\n");
     }
 
-    // ---------- flow size computation (relative, so it scales to any dataset's magnitude) ----------
-    function computeFlowMeta(data) {
-      var out = {}, inc = {};
-      data.links.forEach(function (l) {
-        out[l.source] = (out[l.source] || 0) + l.value;
-        inc[l.target] = (inc[l.target] || 0) + l.value;
-      });
-      var flows = {};
-      data.nodes.forEach(function (n) { flows[n.id] = Math.max(out[n.id] || 0, inc[n.id] || 0); });
-      var maxFlow = 0;
-      Object.keys(flows).forEach(function (k) { if (flows[k] > maxFlow) maxFlow = flows[k]; });
-      var scale = maxFlow > 0 ? MAX_NODE_PX / maxFlow : 1;
-      return { flows: flows, maxFlow: maxFlow, scale: scale };
+    function showJsonError(msg) {
+      var box = document.getElementById("jsonErrorBox");
+      box.className = "json-error show";
+      box.textContent = msg;
     }
 
-    // ---------- GoJS setup ----------
-    function labelOf(data) { return data.text || data.key || ""; }
+    function clearJsonError() {
+      var box = document.getElementById("jsonErrorBox");
+      box.className = "json-error";
+      box.textContent = "";
+    }
 
+    // ---------- D3 sankey renderer ----------
     function initDiagram() {
-      var $ = go.GraphObject.make;
-      myDiagram = $(go.Diagram, "myDiagramDiv", {
-        initialAutoScale: go.Diagram.Uniform,
-        "animationManager.isEnabled": false,
-        layout: $(go.LayeredDigraphLayout, {
-          setsPortSpots: true,
-          direction: 0,
-          layerSpacing: 50,
-          columnSpacing: 10
-        })
+      var container = document.getElementById("myDiagramDiv");
+      container.style.position = "relative";
+
+      svg = d3.select(container).append("svg")
+        .attr("width", "100%").attr("height", "100%")
+        .style("display", "block");
+      gMain = svg.append("g");
+
+      zoomBehavior = d3.zoom().scaleExtent([0.3, 4]).on("zoom", function (event) {
+        gMain.attr("transform", event.transform);
       });
+      svg.call(zoomBehavior);
 
-      // full label on hover, so nothing is ever permanently unreadable even when truncated on-screen
-      function makeTooltip() {
-        return $(go.Adornment, "Auto",
-          $(go.Shape, { fill: "#222", stroke: null }),
-          $(go.TextBlock, { margin: 6, stroke: "white", font: "10pt sans-serif" },
-            new go.Binding("text", "", labelOf))
-        );
-      }
+      tooltipEl = document.createElement("div");
+      tooltipEl.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;" +
+        "border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;" +
+        "box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+      container.appendChild(tooltipEl);
 
-      // "hub" nodes use an "Auto" panel with NO explicit width on the Shape: that lets the
-      // Shape auto-grow to wrap however wide the label needs to be, so the colored
-      // background always fully covers the text (only "height" is pinned, via a binding,
-      // to encode flow volume). Giving the Shape a fixed width here is what caused the
-      // earlier bug where text got clipped/truncated to that fixed width.
-      myDiagram.nodeTemplateMap.add("hub",
-        $(go.Node, "Auto",
-          { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
-          $(go.Shape,
-            { stroke: null, minSize: new go.Size(26, 0) },
-            new go.Binding("fill", "color"),
-            new go.Binding("height", "pixelSize")),
-          $(go.TextBlock,
-            {
-              margin: 4,
-              font: "bold 10pt sans-serif",
-              stroke: "white",
-              textAlign: "center",
-              maxSize: new go.Size(140, NaN),
-              overflow: go.TextBlock.OverflowEllipsis
-            },
-            new go.Binding("text", "", labelOf))
-        ));
+      resizeObserver = new ResizeObserver(debounce(function () { renderDiagram(state); }, 150));
+      resizeObserver.observe(container);
+    }
 
-      myDiagram.nodeTemplateMap.add("leaf",
-        $(go.Node, "Horizontal",
-          { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
-          $(go.Shape, "Rectangle",
-            { width: 12, height: 12, stroke: null },
-            new go.Binding("fill", "color")),
-          $(go.TextBlock,
-            {
-              margin: new go.Margin(0, 0, 0, 4),
-              font: "9pt sans-serif",
-              stroke: "#333",
-              maxSize: new go.Size(220, NaN),
-              overflow: go.TextBlock.OverflowEllipsis
-            },
-            new go.Binding("text", "", labelOf))
-        ));
-      myDiagram.nodeTemplate = myDiagram.nodeTemplateMap.get("leaf");
+    function showTooltip(event, text) {
+      var container = document.getElementById("myDiagramDiv");
+      var rect = container.getBoundingClientRect();
+      tooltipEl.textContent = text;
+      tooltipEl.style.display = "block";
+      tooltipEl.style.left = (event.clientX - rect.left + 12) + "px";
+      tooltipEl.style.top = (event.clientY - rect.top + 12) + "px";
+    }
 
-      myDiagram.linkTemplate =
-        $(go.Link,
-          {
-            routing: go.Link.Normal,
-            curve: go.Link.Bezier,
-            fromEndSegmentLength: 50,
-            toEndSegmentLength: 50,
-            fromSpot: go.Spot.Right,
-            toSpot: go.Spot.Left
-          },
-          $(go.Shape,
-            { strokeWidth: 1, opacity: 0.55, stroke: "black" },
-            new go.Binding("strokeWidth", "pixelWidth"),
-            new go.Binding("stroke", "fromNode", function (node) {
-              return node && node.data ? node.data.color : "black";
-            }).ofObject())
-        );
+    function hideTooltip() {
+      if (tooltipEl) tooltipEl.style.display = "none";
+    }
 
-      // clicking a node in the diagram jumps to & highlights its row in the sidebar
-      myDiagram.addDiagramListener("ObjectSingleClicked", function (e) {
-        var part = e.subject.part;
-        if (part instanceof go.Node) selectNodeRow(part.data.key);
+    function highlightNode(d) {
+      var connectedIds = {};
+      connectedIds[d.id] = true;
+      currentSankeyLinks.forEach(function (l) {
+        if (l.source.id === d.id) connectedIds[l.target.id] = true;
+        if (l.target.id === d.id) connectedIds[l.source.id] = true;
+      });
+      currentLinksSel.attr("stroke-opacity", function (l) {
+        return (l.source.id === d.id || l.target.id === d.id) ? 0.65 : 0.08;
+      });
+      currentNodesSel.select("rect").attr("opacity", function (n) {
+        return connectedIds[n.id] ? 1 : 0.35;
       });
     }
 
-    function buildGojsModel(data, meta) {
-      var nodeDataArray = data.nodes.map(function (n) {
-        var flow = meta.flows[n.id] || 0;
-        return {
-          key: n.id,
-          text: n.label,
-          color: n.color,
-          pixelSize: Math.max(flow * meta.scale, 4),
-          category: flow >= meta.maxFlow * HUB_RATIO ? "hub" : "leaf"
-        };
-      });
-      var linkDataArray = data.links.map(function (l) {
-        return { from: l.source, to: l.target, pixelWidth: Math.max(l.value * meta.scale, 1) };
-      });
-      myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
-      myDiagram.layoutDiagram(true);
-      myDiagram.zoomToFit();
+    function highlightLink(d) {
+      currentLinksSel.attr("stroke-opacity", function (l) { return l === d ? 0.7 : 0.08; });
+    }
+
+    function clearHighlight() {
+      if (currentLinksSel) applySelectionMarks();
+      if (currentNodesSel) currentNodesSel.select("rect").attr("opacity", 1);
+    }
+
+    // reflects selectedNodeId/selectedLinkIdx (set by activateNodeRow/activateLinkRow) onto the SVG
+    function applySelectionMarks() {
+      if (currentNodesSel) {
+        currentNodesSel.select("rect")
+          .attr("stroke", function (d) { return d.id === selectedNodeId ? "#0a0a0a" : null; })
+          .attr("stroke-width", function (d) { return d.id === selectedNodeId ? 1.5 : null; });
+      }
+      if (currentLinksSel) {
+        currentLinksSel.attr("stroke-opacity", function (l) { return l.idx === selectedLinkIdx ? 0.7 : 0.38; });
+      }
+    }
+
+    function selectDiagramNode(id) { applySelectionMarks(); }
+    function selectDiagramLink(idx) { applySelectionMarks(); }
+
+    function renderDiagram(data) {
+      if (!svg || !gMain) return;
+      var container = document.getElementById("myDiagramDiv");
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return; // zero-size guard: ResizeObserver will re-fire once visible
+
+      gMain.selectAll("*").remove();
+      currentNodesSel = null;
+      currentLinksSel = null;
+      svg.attr("viewBox", [0, 0, w, h]);
+
+      if (!data.nodes.length) return; // empty state: nothing to draw
+
+      try {
+        var nodesCopy = data.nodes.map(function (n) { return { id: n.id, label: n.label, color: n.color }; });
+        var linksCopy = data.links.map(function (l, idx) { return { source: l.source, target: l.target, value: l.value, idx: idx }; });
+
+        var sankeyGen = d3.sankey()
+          .nodeId(function (d) { return d.id; })
+          .nodeWidth(14)
+          .nodePadding(12)
+          .nodeAlign(d3.sankeyJustify)
+          .extent([[10, 10], [w - 10, h - 10]]);
+
+        var graph = sankeyGen({ nodes: nodesCopy, links: linksCopy });
+        currentSankeyNodes = graph.nodes;
+        currentSankeyLinks = graph.links;
+
+        var linkSel = gMain.append("g").attr("class", "links").attr("fill", "none")
+          .selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function (d) { return d.source.color; })
+          .attr("stroke-width", function (d) { return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38)
+          .style("cursor", "pointer");
+
+        var nodeSel = gMain.append("g").attr("class", "nodes")
+          .selectAll("g").data(graph.nodes).enter().append("g");
+
+        nodeSel.append("rect")
+          .attr("x", function (d) { return d.x0; })
+          .attr("y", function (d) { return d.y0; })
+          .attr("width", function (d) { return d.x1 - d.x0; })
+          .attr("height", function (d) { return Math.max(1, d.y1 - d.y0); })
+          .attr("fill", function (d) { return d.color; })
+          .attr("rx", 1)
+          .style("cursor", "pointer");
+
+        nodeSel.append("text")
+          .attr("x", function (d) { return d.x0 < w / 2 ? d.x1 + 6 : d.x0 - 6; })
+          .attr("y", function (d) { return (d.y0 + d.y1) / 2; })
+          .attr("text-anchor", function (d) { return d.x0 < w / 2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 10.5px 'Noto Serif TC', serif")
+          .attr("fill", "#333")
+          .text(function (d) { return d.label; });
+
+        currentNodesSel = nodeSel;
+        currentLinksSel = linkSel;
+
+        nodeSel
+          .on("mousemove", function (event, d) {
+            showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+            highlightNode(d);
+          })
+          .on("mouseleave", function () { hideTooltip(); clearHighlight(); })
+          .on("click", function (event, d) { selectNodeRow(d.id); });
+
+        linkSel
+          .on("mousemove", function (event, d) {
+            showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+            highlightLink(d);
+          })
+          .on("mouseleave", function () { hideTooltip(); clearHighlight(); })
+          .on("click", function (event, d) { selectLinkRow(d.idx); });
+
+        applySelectionMarks();
+      } catch (err) {
+        showToast("圖表繪製發生錯誤：" + (err && err.message ? err.message : err));
+      }
     }
 
     // ---------- render orchestration ----------
     function renderAll(skipPersist) {
       var errors = validate(state);
-      showErrors(errors);
       if (!errors.length) {
-        var meta = computeFlowMeta(state);
-        buildGojsModel(state, meta);
+        renderDiagram(state);
       }
       renderNodesTable();
       renderLinksTable();
-      syncJsonTextarea();
-      if (!skipPersist) persist();
+      if (!jsonDirty) syncJsonTextarea();
+      if (!skipPersist && !errors.length) persist();
     }
 
     // ---------- nodes table ----------
+    function nextNodeId() {
+      var n = 1, id;
+      do { id = "n" + n; n++; } while (state.nodes.some(function (x) { return x.id === id; }));
+      return id;
+    }
+
     function renderNodesTable() {
       var body = document.getElementById("nodesBody");
       body.innerHTML = "";
+      var filter = (nodeFilterText || "").trim().toLowerCase();
       state.nodes.forEach(function (n, idx) {
+        if (filter && (n.label || "").toLowerCase().indexOf(filter) === -1 && (n.id || "").toLowerCase().indexOf(filter) === -1) return;
         var tr = document.createElement("tr");
         tr.dataset.idx = idx;
         if (n.id === selectedNodeId) tr.className = "selected";
         tr.innerHTML =
           '<td><input type="color" data-field="color" value="' + escapeAttr(n.color || "#888888") + '"></td>' +
-          '<td><input type="text" data-field="id" value="' + escapeAttr(n.id) + '"></td>' +
           '<td><input type="text" data-field="label" value="' + escapeAttr(n.label) + '"></td>' +
           '<td><button class="row-del" title="刪除節點">✕</button></td>';
         body.appendChild(tr);
       });
     }
 
-    document.getElementById("nodesBody").addEventListener("change", function (e) {
+    var nodesBodyEl = document.getElementById("nodesBody");
+
+    nodesBodyEl.addEventListener("change", function (e) {
       var tr = e.target.closest("tr");
       if (!tr) return;
       var idx = Number(tr.dataset.idx);
       var field = e.target.dataset.field;
       if (!field) return;
       var node = state.nodes[idx];
-      if (field === "id") {
-        var newId = e.target.value.trim();
-        if (!newId) { e.target.value = node.id; return; }
-        if (newId !== node.id && state.nodes.some(function (n) { return n.id === newId; })) {
-          alert("節點 ID「" + newId + "」已被使用，請換一個。");
-          e.target.value = node.id;
-          return;
-        }
-        var oldId = node.id;
-        node.id = newId;
-        state.links.forEach(function (l) {
-          if (l.source === oldId) l.source = newId;
-          if (l.target === oldId) l.target = newId;
-        });
-        if (selectedNodeId === oldId) selectedNodeId = newId;
-      } else {
-        node[field] = e.target.value;
-      }
+      if (!node) return;
+      pushUndo();
+      node[field] = e.target.value;
       renderAll();
     });
 
-    document.getElementById("nodesBody").addEventListener("click", function (e) {
+    nodesBodyEl.addEventListener("click", function (e) {
       if (!e.target.classList.contains("row-del")) return;
       var tr = e.target.closest("tr");
       var idx = Number(tr.dataset.idx);
       var node = state.nodes[idx];
+      if (!node) return;
+      pushUndo();
       var relatedLinks = state.links.filter(function (l) { return l.source === node.id || l.target === node.id; });
-      var msg = "刪除節點「" + (node.label || node.id) + "」";
-      if (relatedLinks.length) msg += "，會一併刪除 " + relatedLinks.length + " 條相關連結";
-      if (!confirm(msg + "，確定嗎？")) return;
       state.links = state.links.filter(function (l) { return l.source !== node.id && l.target !== node.id; });
       state.nodes.splice(idx, 1);
       if (selectedNodeId === node.id) selectedNodeId = null;
       renderAll();
+      var msg = "已刪除節點「" + (node.label || node.id) + "」";
+      if (relatedLinks.length) msg += "與 " + relatedLinks.length + " 條連結";
+      msg += "，可復原";
+      showToast(msg);
+    });
+
+    nodesBodyEl.addEventListener("focusin", function (e) {
+      var tr = e.target.closest("tr");
+      if (!tr) return;
+      activateNodeRow(Number(tr.dataset.idx));
+    });
+    nodesBodyEl.addEventListener("click", function (e) {
+      if (e.target.classList.contains("row-del")) return;
+      var tr = e.target.closest("tr");
+      if (!tr) return;
+      activateNodeRow(Number(tr.dataset.idx));
     });
 
     document.getElementById("btnAddNode").addEventListener("click", function () {
-      var n = 1, id;
-      do { id = "node" + n; n++; } while (state.nodes.some(function (x) { return x.id === id; }));
-      state.nodes.push({ id: id, label: id, color: PALETTE[state.nodes.length % PALETTE.length] });
+      pushUndo();
+      var id = nextNodeId();
+      var label = "節點" + (state.nodes.length + 1);
+      var color = PALETTE[state.nodes.length % PALETTE.length];
+      state.nodes.push({ id: id, label: label, color: color });
       renderAll();
+      focusNewNodeRow(id);
     });
 
+    function focusNewNodeRow(id) {
+      var idx = state.nodes.findIndex(function (n) { return n.id === id; });
+      if (idx < 0) return;
+      var tr = document.querySelector('#nodesBody tr[data-idx="' + idx + '"]');
+      if (!tr) return;
+      tr.scrollIntoView({ block: "center", behavior: "smooth" });
+      var input = tr.querySelector('input[data-field="label"]');
+      if (input) { input.focus(); input.select(); }
+    }
+
     // ---------- links table ----------
+    function sortedNodesForOptions() {
+      var labelCounts = {};
+      state.nodes.forEach(function (n) { labelCounts[n.label] = (labelCounts[n.label] || 0) + 1; });
+      var arr = state.nodes.slice().sort(function (a, b) {
+        return (a.label || "").localeCompare(b.label || "", "zh-Hant");
+      });
+      return arr.map(function (n) {
+        var text = labelCounts[n.label] > 1 ? (n.label + " (" + n.id + ")") : n.label;
+        return { id: n.id, text: text };
+      });
+    }
+
     function nodeOptionsHtml(selectedId) {
-      return state.nodes.map(function (n) {
-        var sel = n.id === selectedId ? " selected" : "";
-        return '<option value="' + escapeAttr(n.id) + '"' + sel + ">" + escapeHtml(n.label || n.id) + "</option>";
+      return sortedNodesForOptions().map(function (o) {
+        var sel = o.id === selectedId ? " selected" : "";
+        return '<option value="' + escapeAttr(o.id) + '"' + sel + ">" + escapeHtml(o.text) + "</option>";
       }).join("");
     }
 
     function renderLinksTable() {
       var body = document.getElementById("linksBody");
       body.innerHTML = "";
+      var filter = (linkFilterText || "").trim().toLowerCase();
+      var nodeById = {};
+      state.nodes.forEach(function (n) { nodeById[n.id] = n; });
       state.links.forEach(function (l, idx) {
+        if (filter) {
+          var srcLabel = ((nodeById[l.source] && nodeById[l.source].label) || l.source || "").toLowerCase();
+          var tgtLabel = ((nodeById[l.target] && nodeById[l.target].label) || l.target || "").toLowerCase();
+          if (srcLabel.indexOf(filter) === -1 && tgtLabel.indexOf(filter) === -1) return;
+        }
         var tr = document.createElement("tr");
         tr.dataset.idx = idx;
+        if (idx === selectedLinkIdx) tr.className = "selected";
         tr.innerHTML =
           '<td><select data-field="source">' + nodeOptionsHtml(l.source) + '</select></td>' +
           '<td><select data-field="target">' + nodeOptionsHtml(l.target) + '</select></td>' +
@@ -589,50 +846,212 @@
       });
     }
 
-    document.getElementById("linksBody").addEventListener("change", function (e) {
+    var linksBodyEl = document.getElementById("linksBody");
+
+    linksBodyEl.addEventListener("change", function (e) {
       var tr = e.target.closest("tr");
       if (!tr) return;
       var idx = Number(tr.dataset.idx);
       var field = e.target.dataset.field;
       if (!field) return;
       var link = state.links[idx];
-      link[field] = field === "value" ? Number(e.target.value) : e.target.value;
+      if (!link) return;
+
+      if (field === "value") {
+        var num = Number(e.target.value);
+        if (!(num > 0) || isNaN(num)) {
+          e.target.value = link.value;
+          showToast("數值必須是大於 0 的數字，已還原。");
+          return;
+        }
+        pushUndo();
+        link.value = num;
+        renderAll();
+        return;
+      }
+
+      var newVal = e.target.value;
+      var other = field === "source" ? link.target : link.source;
+      if (newVal === other) {
+        e.target.value = link[field];
+        showToast("來源與目標不能是同一個節點，已還原。");
+        return;
+      }
+      var wouldBeSource = field === "source" ? newVal : link.source;
+      var wouldBeTarget = field === "target" ? newVal : link.target;
+      var dup = state.links.some(function (l, i) { return i !== idx && l.source === wouldBeSource && l.target === wouldBeTarget; });
+      if (dup) {
+        e.target.value = link[field];
+        showToast("已存在相同來源與目標的連結，已還原。");
+        return;
+      }
+      var testLinks = state.links.map(function (l, i) {
+        return i === idx ? { source: wouldBeSource, target: wouldBeTarget } : { source: l.source, target: l.target };
+      });
+      if (detectCycle({ nodes: state.nodes, links: testLinks })) {
+        e.target.value = link[field];
+        showToast("這會形成循環流向，已還原。");
+        return;
+      }
+      pushUndo();
+      link[field] = newVal;
       renderAll();
     });
 
-    document.getElementById("linksBody").addEventListener("click", function (e) {
+    linksBodyEl.addEventListener("click", function (e) {
       if (!e.target.classList.contains("row-del")) return;
       var idx = Number(e.target.closest("tr").dataset.idx);
+      var link = state.links[idx];
+      if (!link) return;
+      pushUndo();
       state.links.splice(idx, 1);
+      if (selectedLinkIdx === idx) selectedLinkIdx = null;
       renderAll();
+      showToast("已刪除連結，可復原");
+    });
+
+    linksBodyEl.addEventListener("focusin", function (e) {
+      var tr = e.target.closest("tr");
+      if (!tr) return;
+      activateLinkRow(Number(tr.dataset.idx));
+    });
+    linksBodyEl.addEventListener("click", function (e) {
+      if (e.target.classList.contains("row-del")) return;
+      var tr = e.target.closest("tr");
+      if (!tr) return;
+      activateLinkRow(Number(tr.dataset.idx));
     });
 
     document.getElementById("btnAddLink").addEventListener("click", function () {
-      if (state.nodes.length < 2) { alert("請先新增至少兩個節點，才能建立連結。"); return; }
-      state.links.push({ source: state.nodes[0].id, target: state.nodes[1].id, value: 1 });
+      if (state.nodes.length < 2) { showToast("請先新增至少兩個節點，才能建立連結。"); return; }
+      var source = (selectedNodeId && state.nodes.some(function (n) { return n.id === selectedNodeId; })) ? selectedNodeId : state.nodes[0].id;
+      var target = null;
+      for (var i = 0; i < state.nodes.length; i++) {
+        var candidate = state.nodes[i];
+        if (candidate.id === source) continue;
+        var isDup = state.links.some(function (l) { return l.source === source && l.target === candidate.id; });
+        if (!isDup) { target = candidate.id; break; }
+      }
+      if (!target) {
+        var other = state.nodes.filter(function (n) { return n.id !== source; })[0];
+        if (!other) { showToast("找不到可用的目標節點。"); return; }
+        target = other.id;
+      }
+      pushUndo();
+      state.links.push({ source: source, target: target, value: 1 });
       renderAll();
+      focusNewLinkRow(state.links.length - 1);
     });
 
-    // ---------- node <-> row selection sync ----------
-    function selectNodeRow(nodeId) {
-      selectedNodeId = nodeId;
-      document.querySelector('.tab-btn[data-tab="nodes"]').click();
-      renderNodesTable();
-      var row = document.querySelector('#nodesBody tr[data-idx]');
-      state.nodes.forEach(function (n, idx) {
-        if (n.id === nodeId) {
-          var tr = document.querySelectorAll("#nodesBody tr")[idx];
-          if (tr) tr.scrollIntoView({ block: "center", behavior: "smooth" });
-        }
+    function focusNewLinkRow(idx) {
+      var tr = document.querySelector('#linksBody tr[data-idx="' + idx + '"]');
+      if (!tr) return;
+      tr.scrollIntoView({ block: "center", behavior: "smooth" });
+      var sel = tr.querySelector('select[data-field="source"]');
+      if (sel) sel.focus();
+    }
+
+    // ---------- row <-> canvas selection sync ----------
+    function highlightNodeRow(id) {
+      document.querySelectorAll("#nodesBody tr").forEach(function (tr) {
+        var i = Number(tr.dataset.idx);
+        var n = state.nodes[i];
+        tr.classList.toggle("selected", !!(id != null && n && n.id === id));
       });
     }
+
+    function highlightLinkRow(idx) {
+      document.querySelectorAll("#linksBody tr").forEach(function (tr) {
+        var i = Number(tr.dataset.idx);
+        tr.classList.toggle("selected", idx != null && i === idx);
+      });
+    }
+
+    function activateNodeRow(idx) {
+      var node = state.nodes[idx];
+      if (!node) return;
+      selectedNodeId = node.id;
+      selectedLinkIdx = null;
+      highlightNodeRow(node.id);
+      highlightLinkRow(null);
+      selectDiagramNode(node.id);
+    }
+
+    function activateLinkRow(idx) {
+      var link = state.links[idx];
+      if (!link) return;
+      selectedLinkIdx = idx;
+      selectedNodeId = null;
+      highlightLinkRow(idx);
+      highlightNodeRow(null);
+      selectDiagramLink(idx);
+    }
+
+    function switchTabUnlessJsonDirty(tab) {
+      var jsonPanelActive = document.getElementById("panel-json").classList.contains("active");
+      if (jsonPanelActive && jsonDirty) return;
+      var btn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+      if (btn) btn.click();
+    }
+
+    function scrollTableRowIntoView(bodyId, matchFn) {
+      var rows = document.querySelectorAll("#" + bodyId + " tr");
+      for (var i = 0; i < rows.length; i++) {
+        if (matchFn(rows[i])) { rows[i].scrollIntoView({ block: "center", behavior: "smooth" }); break; }
+      }
+    }
+
+    function selectNodeRow(nodeId) {
+      selectedNodeId = nodeId;
+      selectedLinkIdx = null;
+      highlightNodeRow(nodeId);
+      highlightLinkRow(null);
+      switchTabUnlessJsonDirty("nodes");
+      scrollTableRowIntoView("nodesBody", function (tr) {
+        var n = state.nodes[Number(tr.dataset.idx)];
+        return n && n.id === nodeId;
+      });
+    }
+
+    function selectLinkRow(idx) {
+      selectedLinkIdx = idx;
+      selectedNodeId = null;
+      highlightLinkRow(idx);
+      highlightNodeRow(null);
+      switchTabUnlessJsonDirty("links");
+      scrollTableRowIntoView("linksBody", function (tr) { return Number(tr.dataset.idx) === idx; });
+    }
+
+    // ---------- filters ----------
+    document.getElementById("nodeFilter").addEventListener("input", function (e) {
+      nodeFilterText = e.target.value;
+      renderNodesTable();
+    });
+    document.getElementById("linkFilter").addEventListener("input", function (e) {
+      linkFilterText = e.target.value;
+      renderLinksTable();
+    });
 
     // ---------- JSON tab ----------
     function syncJsonTextarea() {
       document.getElementById("jsonText").value = JSON.stringify(state, null, 2);
     }
 
-    document.getElementById("btnSyncJson").addEventListener("click", syncJsonTextarea);
+    function updateJsonDirtyBadge() {
+      document.getElementById("jsonDirtyBadge").style.display = jsonDirty ? "inline" : "none";
+    }
+
+    document.getElementById("jsonText").addEventListener("input", function () {
+      jsonDirty = true;
+      updateJsonDirtyBadge();
+    });
+
+    document.getElementById("btnSyncJson").addEventListener("click", function () {
+      jsonDirty = false;
+      updateJsonDirtyBadge();
+      clearJsonError();
+      syncJsonTextarea();
+    });
 
     document.getElementById("btnApplyJson").addEventListener("click", function () {
       var text = document.getElementById("jsonText").value;
@@ -640,25 +1059,54 @@
       try {
         parsed = JSON.parse(text);
       } catch (err) {
-        showErrors(["JSON 格式錯誤，無法解析：" + err.message]);
+        showJsonError("JSON 格式錯誤，無法解析：" + err.message);
         return;
       }
       var normalized = normalizeImportedData(parsed);
       var errors = validate(normalized);
-      if (errors.length) { showErrors(errors); return; }
+      if (errors.length) {
+        showJsonError(errors.map(function (e) { return "• " + e; }).join("\n"));
+        return;
+      }
+      pushUndo();
       state = normalized;
       selectedNodeId = null;
+      selectedLinkIdx = null;
+      jsonDirty = false;
+      updateJsonDirtyBadge();
+      clearJsonError();
       renderAll();
+      showToast("已套用 JSON");
     });
 
-    document.getElementById("btnCopyJson").addEventListener("click", function () {
-      var ta = document.getElementById("jsonText");
-      ta.select();
-      try {
-        navigator.clipboard.writeText(ta.value);
-      } catch (e) {
-        document.execCommand("copy");
+    function copyWithFeedback(text, btn) {
+      var original = btn.textContent;
+      function done() {
+        btn.textContent = "已複製 ✓";
+        setTimeout(function () { btn.textContent = original; }, 1500);
       }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+      } else {
+        fallbackCopy(text);
+        done();
+      }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) { /* ignore */ }
+      document.body.removeChild(ta);
+    }
+
+    document.getElementById("btnCopyJson").addEventListener("click", function () {
+      copyWithFeedback(document.getElementById("jsonText").value, this);
     });
 
     document.getElementById("btnDownloadJson").addEventListener("click", function () {
@@ -680,15 +1128,26 @@
         try {
           parsed = JSON.parse(reader.result);
         } catch (err) {
-          showErrors(["檔案不是合法的 JSON：" + err.message]);
+          document.querySelector('.tab-btn[data-tab="json"]').click();
+          showJsonError("檔案不是合法的 JSON：" + err.message);
           return;
         }
         var normalized = normalizeImportedData(parsed);
         var errors = validate(normalized);
-        if (errors.length) { showErrors(errors); return; }
+        if (errors.length) {
+          document.querySelector('.tab-btn[data-tab="json"]').click();
+          showJsonError(errors.map(function (e) { return "• " + e; }).join("\n"));
+          return;
+        }
+        pushUndo();
         state = normalized;
         selectedNodeId = null;
+        selectedLinkIdx = null;
+        jsonDirty = false;
+        updateJsonDirtyBadge();
+        clearJsonError();
         renderAll();
+        showToast("已匯入檔案「" + file.name + "」");
       };
       reader.readAsText(file);
       e.target.value = "";
@@ -701,72 +1160,104 @@
       var id = "sankeyEmbed_" + Math.random().toString(36).slice(2, 9);
       var dataJson = JSON.stringify({ nodes: data.nodes, links: data.links });
       var lines = [];
-      lines.push('<div id="' + id + '" style="width:100%;height:520px;background:#f2e9da;border:1px solid #ddd;border-radius:6px;"></div>');
+      lines.push('<div id="' + id + '" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>');
       lines.push("<script>");
       lines.push("(function(){");
       lines.push("  var DATA = " + dataJson + ";");
-      lines.push("  var MAX_NODE_PX = 260, HUB_RATIO = 0.06;");
-      lines.push('  function labelOf(d){ return d.text || d.key || ""; }');
-      lines.push("  function computeFlowMeta(data){");
-      lines.push("    var out={}, inc={};");
-      lines.push("    data.links.forEach(function(l){ out[l.source]=(out[l.source]||0)+l.value; inc[l.target]=(inc[l.target]||0)+l.value; });");
-      lines.push("    var flows={};");
-      lines.push("    data.nodes.forEach(function(n){ flows[n.id]=Math.max(out[n.id]||0, inc[n.id]||0); });");
-      lines.push("    var maxFlow=0; Object.keys(flows).forEach(function(k){ if(flows[k]>maxFlow) maxFlow=flows[k]; });");
-      lines.push("    var scale = maxFlow>0 ? MAX_NODE_PX/maxFlow : 1;");
-      lines.push("    return { flows: flows, maxFlow: maxFlow, scale: scale };");
-      lines.push("  }");
       lines.push("  function render(){");
-      lines.push("    var $ = go.GraphObject.make;");
-      lines.push('    var diagram = $(go.Diagram, "' + id + '", {');
-      lines.push("      initialAutoScale: go.Diagram.Uniform,");
-      lines.push("      isReadOnly: true,");
-      lines.push('      "animationManager.isEnabled": false,');
-      lines.push("      layout: $(go.LayeredDigraphLayout, { setsPortSpots: true, direction: 0, layerSpacing: 50, columnSpacing: 10 })");
-      lines.push("    });");
-      lines.push("    function makeTooltip(){");
-      lines.push('      return $(go.Adornment, "Auto", $(go.Shape,{fill:"#222",stroke:null}), $(go.TextBlock,{margin:6,stroke:"white",font:"10pt sans-serif"}, new go.Binding("text","",labelOf)));');
+      lines.push('    var container = document.getElementById("' + id + '");');
+      lines.push("    if (!container) return;");
+      lines.push('    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");');
+      lines.push('    var gMain = svg.append("g");');
+      lines.push('    var tooltip = document.createElement("div");');
+      lines.push("    tooltip.style.cssText = \"position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;\";");
+      lines.push("    container.appendChild(tooltip);");
+      lines.push("    function showTooltip(event, text){");
+      lines.push("      var rect = container.getBoundingClientRect();");
+      lines.push("      tooltip.textContent = text;");
+      lines.push('      tooltip.style.display = "block";');
+      lines.push("      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';");
+      lines.push("      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';");
       lines.push("    }");
-      lines.push('    diagram.nodeTemplateMap.add("hub", $(go.Node, "Auto",');
-      lines.push("      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },");
-      lines.push('      $(go.Shape, { stroke: null, minSize: new go.Size(26,0) }, new go.Binding("fill","color"), new go.Binding("height","pixelSize")),');
-      lines.push('      $(go.TextBlock, { margin:4, font:"bold 10pt sans-serif", stroke:"white", textAlign:"center", maxSize:new go.Size(140,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))');
-      lines.push("    ));");
-      lines.push('    diagram.nodeTemplateMap.add("leaf", $(go.Node, "Horizontal",');
-      lines.push("      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },");
-      lines.push('      $(go.Shape, "Rectangle", { width:12, height:12, stroke:null }, new go.Binding("fill","color")),');
-      lines.push('      $(go.TextBlock, { margin:new go.Margin(0,0,0,4), font:"9pt sans-serif", stroke:"#333", maxSize:new go.Size(220,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))');
-      lines.push("    ));");
-      lines.push('    diagram.nodeTemplate = diagram.nodeTemplateMap.get("leaf");');
-      lines.push("    diagram.linkTemplate = $(go.Link,");
-      lines.push("      { routing: go.Link.Normal, curve: go.Link.Bezier, fromEndSegmentLength:50, toEndSegmentLength:50, fromSpot: go.Spot.Right, toSpot: go.Spot.Left },");
-      lines.push('      $(go.Shape, { strokeWidth:1, opacity:0.55, stroke:"black" },');
-      lines.push('        new go.Binding("strokeWidth","pixelWidth"),');
-      lines.push('        new go.Binding("stroke","fromNode", function(node){ return node && node.data ? node.data.color : "black"; }).ofObject())');
-      lines.push("    );");
-      lines.push("    var meta = computeFlowMeta(DATA);");
-      lines.push("    var nodeDataArray = DATA.nodes.map(function(n){");
-      lines.push("      var flow = meta.flows[n.id] || 0;");
-      lines.push('      return { key:n.id, text:n.label, color:n.color, pixelSize: Math.max(flow*meta.scale,4), category: flow >= meta.maxFlow*HUB_RATIO ? "hub" : "leaf" };');
-      lines.push("    });");
-      lines.push("    var linkDataArray = DATA.links.map(function(l){ return { from:l.source, to:l.target, pixelWidth: Math.max(l.value*meta.scale,1) }; });");
-      lines.push("    diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);");
-      lines.push("    diagram.layoutDiagram(true);");
-      lines.push("    diagram.zoomToFit();");
+      lines.push('    function hideTooltip(){ tooltip.style.display = "none"; }');
+      lines.push("    function draw(){");
+      lines.push("      var rect = container.getBoundingClientRect();");
+      lines.push("      var w = rect.width, h = rect.height;");
+      lines.push("      if (w < 50 || h < 50) return;");
+      lines.push('      svg.attr("viewBox", [0,0,w,h]);');
+      lines.push('      gMain.selectAll("*").remove();');
+      lines.push("      if (!DATA.nodes.length) return;");
+      lines.push("      try {");
+      lines.push("        var nodesCopy = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });");
+      lines.push("        var linksCopy = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });");
+      lines.push('        var sankeyGen = d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(12).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,h-10]]);');
+      lines.push("        var graph = sankeyGen({nodes:nodesCopy, links:linksCopy});");
+      lines.push('        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")');
+      lines.push('          .attr("d", d3.sankeyLinkHorizontal())');
+      lines.push('          .attr("stroke", function(d){ return d.source.color; })');
+      lines.push('          .attr("stroke-width", function(d){ return Math.max(1, d.width); })');
+      lines.push('          .attr("stroke-opacity", 0.38);');
+      lines.push('        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");');
+      lines.push('        nodeSel.append("rect")');
+      lines.push('          .attr("x", function(d){ return d.x0; })');
+      lines.push('          .attr("y", function(d){ return d.y0; })');
+      lines.push('          .attr("width", function(d){ return d.x1-d.x0; })');
+      lines.push('          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })');
+      lines.push('          .attr("fill", function(d){ return d.color; })');
+      lines.push('          .attr("rx", 1);');
+      lines.push('        nodeSel.append("text")');
+      lines.push('          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })');
+      lines.push('          .attr("y", function(d){ return (d.y0+d.y1)/2; })');
+      lines.push('          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })');
+      lines.push('          .attr("dominant-baseline", "middle")');
+      lines.push('          .style("font", "500 10.5px \'Noto Serif TC\', serif")');
+      lines.push('          .attr("fill", "#333")');
+      lines.push('          .text(function(d){ return d.label; });');
+      lines.push("        var connectedMap = {};");
+      lines.push("        graph.links.forEach(function(l){");
+      lines.push("          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;");
+      lines.push("          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;");
+      lines.push("        });");
+      lines.push('        nodeSel.on("mousemove", function(event, d){');
+      lines.push('          showTooltip(event, d.label + "\\n流量 " + d.value.toLocaleString());');
+      lines.push("          var connected = connectedMap[d.id] || {};");
+      lines.push('          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });');
+      lines.push('          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });');
+      lines.push('        }).on("mouseleave", function(){');
+      lines.push("          hideTooltip();");
+      lines.push('          linkSel.attr("stroke-opacity", 0.38);');
+      lines.push('          nodeSel.select("rect").attr("opacity", 1);');
+      lines.push("        });");
+      lines.push('        linkSel.on("mousemove", function(event, d){');
+      lines.push('          showTooltip(event, d.source.label + " → " + d.target.label + "\\n" + d.value.toLocaleString());');
+      lines.push('          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });');
+      lines.push('        }).on("mouseleave", function(){');
+      lines.push("          hideTooltip();");
+      lines.push('          linkSel.attr("stroke-opacity", 0.38);');
+      lines.push("        });");
+      lines.push("      } catch (err) { /* layout error: leave blank rather than crash the host page */ }");
+      lines.push("    }");
+      lines.push("    draw();");
       lines.push("    if (window.ResizeObserver) {");
-      lines.push("      new ResizeObserver(function(){ diagram.layoutDiagram(true); diagram.zoomToFit(); }).observe(diagram.div);");
+      lines.push("      var t;");
+      lines.push("      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);");
       lines.push("    }");
       lines.push("  }");
-      lines.push("  if (window.go) { render(); return; }");
-      lines.push("  if (!window.__sankeyGojsLoad) {");
-      lines.push("    window.__sankeyGojsLoad = new Promise(function(resolve){");
-      lines.push('      var s = document.createElement("script");');
-      lines.push('      s.src = "https://cdn.jsdelivr.net/npm/gojs/release/go.js";');
-      lines.push("      s.onload = resolve;");
-      lines.push("      document.head.appendChild(s);");
+      lines.push("  if (window.d3 && d3.sankey) { render(); return; }");
+      lines.push("  if (!window.__sankeyD3Load) {");
+      lines.push("    window.__sankeyD3Load = new Promise(function(resolve){");
+      lines.push('      var s1 = document.createElement("script");');
+      lines.push('      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";');
+      lines.push("      s1.onload = function(){");
+      lines.push('        var s2 = document.createElement("script");');
+      lines.push('        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";');
+      lines.push("        s2.onload = resolve;");
+      lines.push("        document.head.appendChild(s2);");
+      lines.push("      };");
+      lines.push("      document.head.appendChild(s1);");
       lines.push("    });");
       lines.push("  }");
-      lines.push("  window.__sankeyGojsLoad.then(render);");
+      lines.push("  window.__sankeyD3Load.then(render);");
       lines.push("})();");
       lines.push("</" + "script>");
       return lines.join("\n");
@@ -778,13 +1269,8 @@
 
     document.getElementById("btnCopyEmbed").addEventListener("click", function () {
       var ta = document.getElementById("embedText");
-      if (!ta.value) ta.value = buildEmbedSnippet(state);
-      ta.select();
-      try {
-        navigator.clipboard.writeText(ta.value);
-      } catch (e) {
-        document.execCommand("copy");
-      }
+      ta.value = buildEmbedSnippet(state); // always regenerate from current state before copying
+      copyWithFeedback(ta.value, this);
     });
 
     // ---------- tabs ----------
@@ -798,25 +1284,46 @@
     });
 
     // ---------- toolbar ----------
-    document.getElementById("btnFit").addEventListener("click", function () { myDiagram.zoomToFit(); });
+    document.getElementById("btnFit").addEventListener("click", function () {
+      if (svg && zoomBehavior) svg.transition().duration(200).call(zoomBehavior.transform, d3.zoomIdentity);
+    });
+    document.getElementById("btnUndo").addEventListener("click", undo);
+    document.getElementById("btnRedo").addEventListener("click", redo);
 
     document.getElementById("btnSample").addEventListener("click", function () {
-      if (!confirm("這會覆蓋目前的資料，換成範例的 UK 能源流向資料，確定嗎？")) return;
+      pushUndo();
       state = JSON.parse(JSON.stringify(SAMPLE_DATA));
       selectedNodeId = null;
+      selectedLinkIdx = null;
       renderAll();
+      showToast("已載入範例資料，可按復原還原");
     });
 
     document.getElementById("btnClear").addEventListener("click", function () {
-      if (!confirm("這會清空所有節點與連結，確定嗎？")) return;
+      pushUndo();
       state = { nodes: [], links: [] };
       selectedNodeId = null;
+      selectedLinkIdx = null;
       renderAll();
+      showToast("已清空，可按復原還原");
     });
 
-    window.addEventListener("resize", debounce(function () {
-      if (myDiagram) myDiagram.zoomToFit();
-    }, 200));
+    // ---------- keyboard: Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z (skipped while typing in the JSON/embed textareas) ----------
+    document.addEventListener("keydown", function (e) {
+      var active = document.activeElement;
+      if (active === document.getElementById("jsonText") || active === document.getElementById("embedText")) return;
+      var ctrl = e.ctrlKey || e.metaKey;
+      if (!ctrl) return;
+      var key = e.key.toLowerCase();
+      if (key === "z" && !e.shiftKey) { e.preventDefault(); undo(); }
+      else if (key === "y" || (key === "z" && e.shiftKey)) { e.preventDefault(); redo(); }
+    });
+
+    // ---------- number-input wheel guard: prevent accidental value changes while scrolling the page ----------
+    document.addEventListener("wheel", function () {
+      var el = document.activeElement;
+      if (el && el.tagName === "INPUT" && el.type === "number") el.blur();
+    }, { passive: true });
 
     // ---------- utils ----------
     function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -824,9 +1331,12 @@
     function debounce(fn, ms) { var t; return function () { clearTimeout(t); var args = arguments; t = setTimeout(function () { fn.apply(null, args); }, ms); }; }
 
     // ---------- boot ----------
-    state = loadInitialState();
+    var boot = loadInitialState();
+    state = boot.data;
     initDiagram();
     renderAll(true);
+    updateUndoRedoButtons();
+    if (boot.restored) showToast("已還原上次編輯的資料");
   </script>
 </body>
 </html>
