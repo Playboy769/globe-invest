@@ -61,6 +61,41 @@ body.dark #cf-loops.active{color:#ff9a3a;background:#3a2410}
 #cf-leverage.active{color:#a85a00;background:#ffe0b0}
 body.dark #cf-leverage.active{color:#ff9a3a;background:#3a2410}
 
+/* ── Dock groups — collapses same-category buttons behind one face icon;
+   the real buttons (with all their original click handlers) live inside the
+   flyout, they're just hidden until hover ── */
+.cf-dock-group{position:relative}
+.cf-dock-face{position:relative}
+.cf-dock-flyout{
+  position:fixed;z-index:60;display:flex;gap:3px;align-items:center;padding:5px;
+  border-radius:10px;background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid #e5e5e5;box-shadow:0 8px 24px rgba(0,0,0,0.12);
+  opacity:0;pointer-events:none;transition:opacity .12s ease;
+}
+.cf-dock-flyout.show{opacity:1;pointer-events:auto}
+body.dark .cf-dock-flyout{background:rgba(24,24,24,0.96);border-color:#333}
+.cf-dock2-flyout{background:rgba(255,244,230,0.96);border-color:#f0c890}
+body.dark .cf-dock2-flyout{background:rgba(40,28,14,0.96);border-color:#5a3e1e}
+.cf-dock-face.group-active::after{
+  content:'';position:absolute;top:2px;right:2px;width:5px;height:5px;border-radius:50%;
+  background:#4a88dd;pointer-events:none;
+}
+.cf-dock2-btn.cf-dock-face.group-active::after{background:#a85a00}
+body.dark .cf-dock-face.group-active::after{background:#5a9ee0}
+body.dark .cf-dock2-btn.cf-dock-face.group-active::after{background:#ff9a3a}
+
+/* ── Dock tooltips — replaces native title-attribute tooltips on the two
+   floating docks with a styled, theme-aware popover ── */
+.cf-tooltip{position:fixed;z-index:9999;background:#1c1c1c;color:#f2f2f2;font-size:11px;font-family:'Calibri','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;padding:5px 9px;border-radius:6px;white-space:nowrap;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,0.22);opacity:0;transition:opacity .12s ease;letter-spacing:.01em;left:0;top:0}
+.cf-tooltip.show{opacity:1}
+.cf-tooltip::after{content:'';position:absolute;border:5px solid transparent}
+.cf-tooltip.pos-right::after{left:-5px;top:50%;margin-top:-5px;border-right-color:#1c1c1c}
+.cf-tooltip.pos-left::after{right:-5px;top:50%;margin-top:-5px;border-left-color:#1c1c1c}
+body.dark .cf-tooltip{background:#eee;color:#111;box-shadow:0 4px 14px rgba(0,0,0,0.5)}
+body.dark .cf-tooltip.pos-right::after{border-right-color:#eee}
+body.dark .cf-tooltip.pos-left::after{border-left-color:#eee}
+
 /* ── Feed panel ──────────────────────────────────────────── */
 #cf-feed{
   position:fixed;left:0;top:0;bottom:0;width:340px;
@@ -370,6 +405,14 @@ body.dark .cf-node:hover{border-color:#555}
 body.dark .cf-node.sel{border-color:#ccc;box-shadow:0 5px 20px rgba(0,0,0,0.5)}
 body.dark .cf-node.multi-sel{border-color:#4a88dd}
 body.dark .cf-node.traced-node{border-color:#4a88dd;box-shadow:0 0 0 2px rgba(74,136,221,0.3)}
+/* text-node's own light-mode rules (background:transparent, near-black
+   selected/editing borders) win on specificity over the generic
+   body.dark .cf-node rules above, so dark mode needs its own overrides
+   here rather than relying on the cascade to fall through. */
+body.dark .cf-node.text-node{background:transparent;border-color:transparent}
+body.dark .cf-node.text-node:hover{border-color:#555;background:rgba(255,255,255,0.06)}
+body.dark .cf-node.text-node.sel{border-color:#ccc;background:rgba(255,255,255,0.1);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+body.dark .cf-node.text-node.editing{border-color:#ccc;background:#1e1e1e;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
 body.dark .cf-node[data-color="1"]{background:#2c2814;border-color:#8a6a10}
 body.dark .cf-node[data-color="2"]{background:#18281a;border-color:#307040}
 body.dark .cf-node[data-color="3"]{background:#2c1818;border-color:#803030}
@@ -776,19 +819,33 @@ body.dark #cf-url-ok:hover{background:#fff}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10H9a5 5 0 0 0 0 10h5"/><polyline points="16 6 20 10 16 14"/></svg>
   </button>
   <div class="cf-dock2-sep"></div>
-  <button class="cf-dock2-btn" id="cf-layer-up" title="Bring layer forward">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="11" height="11" rx="2" opacity="0.35"/><rect x="9" y="10" width="11" height="11" rx="2"/><path d="M14.5 3v5.5M11.5 5.5l3-3 3 3"/></svg>
-  </button>
-  <button class="cf-dock2-btn" id="cf-layer-down" title="Send layer backward">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="11" height="11" rx="2" opacity="0.35"/><rect x="4" y="3" width="11" height="11" rx="2"/><path d="M14.5 21v-5.5M11.5 18.5l3 3 3-3"/></svg>
-  </button>
+  <div class="cf-dock-group cf-dock2-group">
+    <button class="cf-dock2-btn cf-dock-face" title="圖層順序">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="11" height="11" rx="2" opacity="0.35"/><rect x="9" y="10" width="11" height="11" rx="2"/><path d="M14.5 3v5.5M11.5 5.5l3-3 3 3"/></svg>
+    </button>
+    <div class="cf-dock-flyout cf-dock2-flyout">
+      <button class="cf-dock2-btn" id="cf-layer-up" title="Bring layer forward">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="11" height="11" rx="2" opacity="0.35"/><rect x="9" y="10" width="11" height="11" rx="2"/><path d="M14.5 3v5.5M11.5 5.5l3-3 3 3"/></svg>
+      </button>
+      <button class="cf-dock2-btn" id="cf-layer-down" title="Send layer backward">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="11" height="11" rx="2" opacity="0.35"/><rect x="4" y="3" width="11" height="11" rx="2"/><path d="M14.5 21v-5.5M11.5 18.5l3 3 3-3"/></svg>
+      </button>
+    </div>
+  </div>
   <div class="cf-dock2-sep"></div>
-  <button class="cf-dock2-btn" id="cf-loops" title="Highlight feedback loops + R/B (⟳)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><polyline points="18.5 2.5 18.5 6.5 14.5 6.5"/></svg>
-  </button>
-  <button class="cf-dock2-btn" id="cf-leverage" title="Leverage points · centrality (◈)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 20.8 12 12 20.8 3.2 12z"/><circle cx="12" cy="12" r="2.4"/></svg>
-  </button>
+  <div class="cf-dock-group cf-dock2-group">
+    <button class="cf-dock2-btn cf-dock-face" title="分析">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><polyline points="18.5 2.5 18.5 6.5 14.5 6.5"/></svg>
+    </button>
+    <div class="cf-dock-flyout cf-dock2-flyout">
+      <button class="cf-dock2-btn" id="cf-loops" title="Highlight feedback loops + R/B (⟳)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><polyline points="18.5 2.5 18.5 6.5 14.5 6.5"/></svg>
+      </button>
+      <button class="cf-dock2-btn" id="cf-leverage" title="Leverage points · centrality (◈)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 20.8 12 12 20.8 3.2 12z"/><circle cx="12" cy="12" r="2.4"/></svg>
+      </button>
+    </div>
+  </div>
   <div class="cf-dock2-sep"></div>
   <button class="cf-dock2-btn" onclick="cfZoom(1/1.15)" title="縮小 (-)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/><line x1="7.6" y1="10.5" x2="13.4" y2="10.5"/></svg>
@@ -796,12 +853,19 @@ body.dark #cf-url-ok:hover{background:#fff}
   <button class="cf-dock2-btn" onclick="cfZoom(1.15)" title="放大 (+)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/><line x1="7.6" y1="10.5" x2="13.4" y2="10.5"/><line x1="10.5" y1="7.6" x2="10.5" y2="13.4"/></svg>
   </button>
-  <button class="cf-dock2-btn" id="cf-minimap-btn" title="Toggle minimap (M)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
-  </button>
-  <button class="cf-dock2-btn" id="cf-search-btn" title="Search (Ctrl+F)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/></svg>
-  </button>
+  <div class="cf-dock-group cf-dock2-group">
+    <button class="cf-dock2-btn cf-dock-face" title="檢視">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+    </button>
+    <div class="cf-dock-flyout cf-dock2-flyout">
+      <button class="cf-dock2-btn" id="cf-minimap-btn" title="Toggle minimap (M)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>
+      </button>
+      <button class="cf-dock2-btn" id="cf-search-btn" title="Search (Ctrl+F)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.8"/><line x1="15.6" y1="15.6" x2="21" y2="21"/></svg>
+      </button>
+    </div>
+  </div>
   <div class="cf-dock2-sep"></div>
   <button class="cf-dock2-btn" id="cf-dark-btn" title="Dark mode (D)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.4 13.6A8.4 8.4 0 1 1 10.4 3.6a6.8 6.8 0 0 0 10 10z"/></svg>
@@ -818,38 +882,59 @@ body.dark #cf-url-ok:hover{background:#fff}
   <button class="cf-dock-btn cf-btn-files" id="cf-toggle-feed" title="Diagrams">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 3 21 8 12 13 3 8 12 3"/><polyline points="3 12 12 17 21 12"/><polyline points="3 16 12 21 21 16"/></svg>
   </button>
-  <button class="cf-dock-btn" id="cf-add" title="+ Node">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="11" rx="3"/><line x1="18.5" y1="2.8" x2="18.5" y2="10.2" stroke-width="2.6"/><line x1="14.8" y1="6.5" x2="22.2" y2="6.5" stroke-width="2.6"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-box" title="+ Box">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" stroke-dasharray="4 3"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-text" title="+ Text">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="5" x2="20" y2="5"/><line x1="12" y1="5" x2="12" y2="20"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-img" title="Upload image">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><polyline points="4 17 9 12 13 16 16 13 20 17"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-table" title="Insert table">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
-  </button>
-  <input type="file" id="cf-img-input" accept="image/*" style="display:none">
-  <button class="cf-dock-btn" id="cf-add-pdf" title="Upload PDF">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-  </button>
-  <input type="file" id="cf-pdf-input" accept="application/pdf" style="display:none">
-  <button class="cf-dock-btn" id="cf-add-embed" title="Embed a web page">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-canvas" title="Nested canvas">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="13" height="13" rx="2"/><path d="M8 21h13V8"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-diagramref" title="Insert existing diagram">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15a4.5 4.5 0 0 0 6.8.5l2-2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M15 9a4.5 4.5 0 0 0-6.8-.5l-2 2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg>
-  </button>
-  <button class="cf-dock-btn" id="cf-add-divider" title="Divider (splits the canvas into zones — dblclick to flip orientation)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
-  </button>
+  <div class="cf-dock-group">
+    <button class="cf-dock-btn cf-dock-face" title="新增節點">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="11" rx="3"/><line x1="18.5" y1="2.8" x2="18.5" y2="10.2" stroke-width="2.6"/><line x1="14.8" y1="6.5" x2="22.2" y2="6.5" stroke-width="2.6"/></svg>
+    </button>
+    <div class="cf-dock-flyout">
+      <button class="cf-dock-btn" id="cf-add" title="+ Node">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="11" rx="3"/><line x1="18.5" y1="2.8" x2="18.5" y2="10.2" stroke-width="2.6"/><line x1="14.8" y1="6.5" x2="22.2" y2="6.5" stroke-width="2.6"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-box" title="+ Box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" stroke-dasharray="4 3"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-text" title="+ Text">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="5" x2="20" y2="5"/><line x1="12" y1="5" x2="12" y2="20"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="cf-dock-group">
+    <button class="cf-dock-btn cf-dock-face" title="插入媒體">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><polyline points="4 17 9 12 13 16 16 13 20 17"/></svg>
+    </button>
+    <div class="cf-dock-flyout">
+      <button class="cf-dock-btn" id="cf-add-img" title="Upload image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><polyline points="4 17 9 12 13 16 16 13 20 17"/></svg>
+      </button>
+      <input type="file" id="cf-img-input" accept="image/*" style="display:none">
+      <button class="cf-dock-btn" id="cf-add-pdf" title="Upload PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+      </button>
+      <input type="file" id="cf-pdf-input" accept="application/pdf" style="display:none">
+      <button class="cf-dock-btn" id="cf-add-embed" title="Embed a web page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="cf-dock-group">
+    <button class="cf-dock-btn cf-dock-face" title="插入結構">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+    </button>
+    <div class="cf-dock-flyout">
+      <button class="cf-dock-btn" id="cf-add-table" title="Insert table">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-canvas" title="Nested canvas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="13" height="13" rx="2"/><path d="M8 21h13V8"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-diagramref" title="Insert existing diagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15a4.5 4.5 0 0 0 6.8.5l2-2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M15 9a4.5 4.5 0 0 0-6.8-.5l-2 2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-divider" title="Divider (splits the canvas into zones — dblclick to flip orientation)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </div>
+  </div>
   <button class="cf-dock-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 4 4 10 4"/><polyline points="14 4 20 4 20 10"/><polyline points="20 14 20 20 14 20"/><polyline points="10 20 4 20 4 14"/></svg>
   </button>
@@ -4308,6 +4393,99 @@ function initDockDrag(dock,grip,storeKey){
 }
 initDockDrag(document.getElementById('cf-dock'),document.getElementById('cf-dock-grip'),'cf-dock-pos');
 initDockDrag(document.getElementById('cf-dock2'),document.getElementById('cf-dock2-grip'),'cf-dock2-pos');
+
+// Replace native title-attribute tooltips on the two floating docks with a
+// styled popover — the OS default (white box, hard border) clashed with the
+// app's rounded/blurred dock chrome.
+(function initDockTooltips(){
+  const tip=document.createElement('div');
+  tip.className='cf-tooltip';
+  document.body.appendChild(tip);
+  let showTimer=null,hideTimer=null;
+  function place(el,side){
+    const r=el.getBoundingClientRect();
+    tip.classList.remove('pos-left','pos-right');
+    if(side==='left'){
+      tip.classList.add('pos-left');
+      tip.style.left=(r.left-9-tip.offsetWidth)+'px';
+    } else {
+      tip.classList.add('pos-right');
+      tip.style.left=(r.right+9)+'px';
+    }
+    tip.style.top=(r.top+r.height/2-tip.offsetHeight/2)+'px';
+  }
+  function bind(container,side){
+    if(!container)return;
+    container.querySelectorAll('[title]').forEach(el=>{
+      const text=el.getAttribute('title');
+      if(!text)return;
+      el.removeAttribute('title');
+      el.setAttribute('data-tip',text);
+      el.addEventListener('mouseenter',()=>{
+        clearTimeout(hideTimer);
+        showTimer=setTimeout(()=>{
+          tip.textContent=text;
+          tip.classList.remove('show');
+          place(el,side);
+          requestAnimationFrame(()=>{place(el,side);tip.classList.add('show');});
+        },380);
+      });
+      const dismiss=()=>{
+        clearTimeout(showTimer);
+        hideTimer=setTimeout(()=>tip.classList.remove('show'),60);
+      };
+      el.addEventListener('mouseleave',dismiss);
+      el.addEventListener('pointerdown',dismiss);
+    });
+  }
+  bind(document.getElementById('cf-dock'),'right');
+  bind(document.getElementById('cf-dock2'),'left');
+})();
+
+// Same-category dock buttons collapse behind one face icon; hovering the
+// face reveals the real buttons (unmodified — same ids, same click
+// handlers) in a flyout beside it. Left-dock groups open to the right,
+// right-dock groups open to the left, mirroring which edge each dock hugs.
+(function initDockGroups(){
+  document.querySelectorAll('.cf-dock-group').forEach(group=>{
+    const face=group.querySelector('.cf-dock-face');
+    const fly=group.querySelector('.cf-dock-flyout');
+    if(!face||!fly)return;
+    // #cf-dock/#cf-dock2 use backdrop-filter, which (like filter) makes an
+    // element the containing block for position:fixed descendants — left
+    // nested here, the flyout would position relative to the dock's own box
+    // instead of the viewport. Move it out to document.body instead.
+    document.body.appendChild(fly);
+    // Moving the flyout to <body> also breaks CSS `:has()` reaching from the
+    // face back to an active child (they're no longer in the same subtree),
+    // so mirror .active state onto the face icon by hand.
+    const syncActive=()=>face.classList.toggle('group-active',!!fly.querySelector('.active'));
+    new MutationObserver(syncActive).observe(fly,{attributes:true,attributeFilter:['class'],subtree:true});
+    syncActive();
+    const side=group.classList.contains('cf-dock2-group')?'left':'right';
+    let openTimer=null,closeTimer=null;
+    function openFly(){
+      clearTimeout(closeTimer);
+      openTimer=setTimeout(()=>{
+        const r=face.getBoundingClientRect();
+        const fr=fly.getBoundingClientRect();
+        const top=r.top+r.height/2-fr.height/2;
+        const left=side==='right'?r.right+8:r.left-8-fr.width;
+        fly.style.top=Math.max(6,top)+'px';
+        fly.style.left=Math.max(6,left)+'px';
+        fly.classList.add('show');
+      },160);
+    }
+    function scheduleClose(){
+      clearTimeout(openTimer);
+      closeTimer=setTimeout(()=>fly.classList.remove('show'),180);
+    }
+    face.addEventListener('mouseenter',openFly);
+    face.addEventListener('mouseleave',scheduleClose);
+    fly.addEventListener('mouseenter',()=>clearTimeout(closeTimer));
+    fly.addEventListener('mouseleave',scheduleClose);
+  });
+})();
 </script>
 </body>
 </html>
