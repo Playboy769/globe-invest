@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Sankey 流向圖編輯器 (GoJS)</title>
+  <script src="https://cdn.jsdelivr.net/npm/gojs/release/go.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif; color: #222; }
+    body { display: flex; flex-direction: column; }
+
+    .toolbar {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+      padding: 8px 12px; background: #2c2c2c; color: #fff;
+    }
+    .toolbar h1 { font-size: 15px; margin: 0 12px 0 0; font-weight: 600; white-space: nowrap; }
+    .toolbar button {
+      background: #444; color: #fff; border: 1px solid #666; border-radius: 4px;
+      padding: 6px 10px; font-size: 12.5px; cursor: pointer;
+    }
+    .toolbar button:hover { background: #555; }
+    .toolbar button.danger:hover { background: #7a2b2b; }
+    .toolbar .spacer { flex: 1; }
+    .toolbar .hint { font-size: 11.5px; color: #bbb; }
+
+    .error-banner {
+      display: none; background: #5c1d1d; color: #ffd9d9; padding: 8px 14px;
+      font-size: 12.5px; white-space: pre-line; border-bottom: 1px solid #7a2b2b;
+    }
+    .error-banner.show { display: block; }
+
+    .layout { flex: 1; display: flex; min-height: 0; }
+    #myDiagramDiv { flex: 1; background: #f2e9da; min-width: 0; }
+
+    .sidebar {
+      width: 380px; flex: none; display: flex; flex-direction: column;
+      border-left: 1px solid #ccc; background: #fafafa; min-height: 0;
+    }
+    .tabs { display: flex; border-bottom: 1px solid #ccc; }
+    .tab-btn {
+      flex: 1; padding: 8px; font-size: 12.5px; background: #eee; border: none;
+      border-right: 1px solid #ccc; cursor: pointer;
+    }
+    .tab-btn:last-child { border-right: none; }
+    .tab-btn.active { background: #fafafa; font-weight: 600; box-shadow: inset 0 -2px 0 #333; }
+    .tab-panel { display: none; flex: 1; min-height: 0; flex-direction: column; overflow: auto; padding: 10px; }
+    .tab-panel.active { display: flex; }
+
+    table.editor-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    table.editor-table th { text-align: left; font-size: 11px; color: #666; padding: 4px 3px; border-bottom: 1px solid #ddd; }
+    table.editor-table td { padding: 3px; border-bottom: 1px solid #eee; vertical-align: middle; }
+    table.editor-table input[type="text"], table.editor-table input[type="number"], table.editor-table select {
+      width: 100%; font-size: 12px; padding: 3px 4px; border: 1px solid #ccc; border-radius: 3px;
+    }
+    table.editor-table input[type="color"] { width: 30px; height: 24px; padding: 0; border: 1px solid #ccc; border-radius: 3px; }
+    table.editor-table tr.selected { background: #fff3cd; }
+    .row-del { background: none; border: none; color: #a33; cursor: pointer; font-size: 14px; padding: 2px 6px; }
+    .row-del:hover { color: #e00; }
+
+    .add-row-bar { display: flex; gap: 6px; margin-top: 8px; }
+    .add-row-bar button { flex: none; padding: 6px 10px; font-size: 12px; border: 1px solid #999; border-radius: 4px; background: #eee; cursor: pointer; }
+    .add-row-bar button:hover { background: #ddd; }
+
+    .hint-box { font-size: 11.5px; color: #666; background: #eee; border-radius: 4px; padding: 8px; margin-bottom: 8px; line-height: 1.5; }
+
+    #jsonPanel { display: flex; flex-direction: column; height: 100%; }
+    #jsonText { flex: 1; width: 100%; font-family: Consolas, monospace; font-size: 11.5px; resize: none; padding: 6px; }
+    .json-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .json-actions button { padding: 6px 10px; font-size: 12px; border: 1px solid #999; border-radius: 4px; background: #eee; cursor: pointer; }
+    .json-actions button:hover { background: #ddd; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <h1>Sankey 流向圖編輯器</h1>
+    <button id="btnFit">符合畫面</button>
+    <button id="btnSample">載入範例（UK 能源）</button>
+    <button id="btnClear" class="danger">清空重來</button>
+    <span class="spacer"></span>
+    <span class="hint">點一下圖上的節點可跳到對應列；資料會自動存在瀏覽器（localStorage）</span>
+  </div>
+  <div id="errorBanner" class="error-banner"></div>
+
+  <div class="layout">
+    <div id="myDiagramDiv"></div>
+
+    <div class="sidebar">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="nodes">節點</button>
+        <button class="tab-btn" data-tab="links">連結</button>
+        <button class="tab-btn" data-tab="json">JSON</button>
+      </div>
+
+      <div class="tab-panel active" id="panel-nodes">
+        <div class="hint-box">■ 大色塊：流量佔比較高的節點，高度依流量自動縮放並顯示內嵌標籤。<br>▫ 小方塊：流量較低的節點，以圖例樣式在旁邊顯示標籤。</div>
+        <table class="editor-table">
+          <thead><tr><th style="width:34px">色</th><th>ID</th><th>標籤</th><th style="width:24px"></th></tr></thead>
+          <tbody id="nodesBody"></tbody>
+        </table>
+        <div class="add-row-bar">
+          <button id="btnAddNode">+ 新增節點</button>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-links">
+        <div class="hint-box">數值代表這條連結的流量大小，會直接對應到線條粗細。</div>
+        <table class="editor-table">
+          <thead><tr><th>來源</th><th>目標</th><th style="width:70px">數值</th><th style="width:24px"></th></tr></thead>
+          <tbody id="linksBody"></tbody>
+        </table>
+        <div class="add-row-bar">
+          <button id="btnAddLink">+ 新增連結</button>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="panel-json">
+        <div id="jsonPanel">
+          <div class="hint-box">要換成自己的資料時，直接在這裡貼上/編輯 JSON 再按「套用」，或用「匯入檔案」讀取本機 .json。格式：<code>{"nodes":[{"id","label","color"}],"links":[{"source","target","value"}]}</code>（也接受 GoJS 慣用的 key/text/from/to/width 欄位名）。</div>
+          <textarea id="jsonText" spellcheck="false"></textarea>
+          <div class="json-actions">
+            <button id="btnApplyJson">套用 JSON</button>
+            <button id="btnSyncJson">從目前資料重新產生</button>
+            <button id="btnCopyJson">複製</button>
+            <button id="btnDownloadJson">下載 .json</button>
+            <label style="padding:6px 10px;font-size:12px;border:1px solid #999;border-radius:4px;background:#eee;cursor:pointer;">
+              匯入檔案<input type="file" id="fileInput" accept="application/json" style="display:none">
+            </label>
+          </div>
+          <div class="hint-box" style="margin-top:10px;">要把這張圖放進報告（例如 earnings call 分析框架的「供應鏈」tab）時，用下面按鈕產生一段唯讀、可直接貼進其他 HTML 的 &lt;div&gt;+&lt;script&gt; 區塊 —— 不需要另外在該檔案 &lt;head&gt; 加 GoJS，會自動偵測並注入。</div>
+          <div class="json-actions">
+            <button id="btnGenEmbed">產生嵌入代碼</button>
+            <button id="btnCopyEmbed">複製嵌入代碼</button>
+          </div>
+          <textarea id="embedText" spellcheck="false" style="height:140px;"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- sample data (UK 2050 pathways calculator, GoJS Sankey sample values) ----------
+    var SAMPLE_DATA = {
+      nodes: [
+        {id:"Coal reserves", label:"Coal reserves", color:"#562038"},
+        {id:"Coal imports", label:"Coal imports", color:"#562038"},
+        {id:"Oil reserves", label:"Oil reserves", color:"#562038"},
+        {id:"Oil imports", label:"Oil imports", color:"#562038"},
+        {id:"Gas reserves", label:"Gas reserves", color:"#268251"},
+        {id:"Gas imports", label:"Gas imports", color:"#268251"},
+        {id:"UK land based bioenergy", label:"UK land based bioenergy", color:"#f6bcd5"},
+        {id:"Marine algae", label:"Marine algae", color:"#681313"},
+        {id:"Agricultural 'waste'", label:"Agricultural 'waste'", color:"#254d57"},
+        {id:"Other waste", label:"Other waste", color:"#c9b7d8"},
+        {id:"Biomass imports", label:"Biomass imports", color:"#fea19f"},
+        {id:"Biofuel imports", label:"Biofuel imports", color:"#d93c3c"},
+        {id:"Coal", label:"Coal", color:"#562038"},
+        {id:"Oil", label:"Oil", color:"#562038"},
+        {id:"Natural gas", label:"Natural gas", color:"#254d57"},
+        {id:"Solar", label:"Solar", color:"#c9a59d"},
+        {id:"Solar PV", label:"Solar PV", color:"#c9a59d"},
+        {id:"Bio-conversion", label:"Bio-conversion", color:"#b5cbe9"},
+        {id:"Solid", label:"Solid", color:"#9c8000"},
+        {id:"Liquid", label:"Liquid", color:"#e44d42"},
+        {id:"Gas", label:"Gas", color:"#268251"},
+        {id:"Nuclear", label:"Nuclear", color:"#c260ad"},
+        {id:"Thermal generation", label:"Thermal generation", color:"#254d57"},
+        {id:"CHP", label:"CHP", color:"#c9a500"},
+        {id:"Electricity imports", label:"Electricity imports", color:"#c9a500"},
+        {id:"Wind", label:"Wind", color:"#8b8b8b"},
+        {id:"Tidal", label:"Tidal", color:"#6f3a5f"},
+        {id:"Wave", label:"Wave", color:"#8b8b8b"},
+        {id:"Geothermal", label:"Geothermal", color:"#556171"},
+        {id:"Hydro", label:"Hydro", color:"#7c3e06"},
+        {id:"Electricity grid", label:"Electricity grid", color:"#c260ad"},
+        {id:"H2 conversion", label:"H2 conversion", color:"#868686"},
+        {id:"Solar Thermal", label:"Solar Thermal", color:"#c9a59d"},
+        {id:"H2", label:"H2", color:"#868686"},
+        {id:"Pumped heat", label:"Pumped heat", color:"#96665c"},
+        {id:"District heating", label:"District heating", color:"#c9b7d8"},
+        {id:"Losses", label:"Losses", color:"#254d57"},
+        {id:"Over generation / exports", label:"Over generation / exports", color:"#f6bcd5"},
+        {id:"Heating and cooling - homes", label:"Heating and cooling - homes", color:"#c7a39b"},
+        {id:"Road transport", label:"Road transport", color:"#8b8b8b"},
+        {id:"Heating and cooling - commercial", label:"Heating and cooling - commercial", color:"#c9a59d"},
+        {id:"Industry", label:"Industry", color:"#96665c"},
+        {id:"Lighting & appliances - homes", label:"Lighting & appliances - homes", color:"#2dc3d2"},
+        {id:"Lighting & appliances - commercial", label:"Lighting & appliances - commercial", color:"#2dc3d2"},
+        {id:"Agriculture", label:"Agriculture", color:"#5c5c10"},
+        {id:"Rail transport", label:"Rail transport", color:"#6b6b45"},
+        {id:"Domestic aviation", label:"Domestic aviation", color:"#40a840"},
+        {id:"National navigation", label:"National navigation", color:"#268251"},
+        {id:"International aviation", label:"International aviation", color:"#fec184"},
+        {id:"International shipping", label:"International shipping", color:"#fec184"},
+        {id:"Geosequestration", label:"Geosequestration", color:"#fec184"}
+      ],
+      links: [
+        {source:"Coal reserves", target:"Coal", value:31},
+        {source:"Coal imports", target:"Coal", value:86},
+        {source:"Oil reserves", target:"Oil", value:244},
+        {source:"Oil imports", target:"Oil", value:1},
+        {source:"Gas reserves", target:"Natural gas", value:182},
+        {source:"Gas imports", target:"Natural gas", value:61},
+        {source:"UK land based bioenergy", target:"Bio-conversion", value:1},
+        {source:"Marine algae", target:"Bio-conversion", value:1},
+        {source:"Agricultural 'waste'", target:"Bio-conversion", value:1},
+        {source:"Other waste", target:"Bio-conversion", value:8},
+        {source:"Other waste", target:"Solid", value:1},
+        {source:"Biomass imports", target:"Solid", value:1},
+        {source:"Biofuel imports", target:"Liquid", value:1},
+        {source:"Coal", target:"Solid", value:117},
+        {source:"Oil", target:"Liquid", value:244},
+        {source:"Natural gas", target:"Gas", value:244},
+        {source:"Solar", target:"Solar PV", value:1},
+        {source:"Solar PV", target:"Electricity grid", value:1},
+        {source:"Solar", target:"Solar Thermal", value:1},
+        {source:"Bio-conversion", target:"Solid", value:3},
+        {source:"Bio-conversion", target:"Liquid", value:1},
+        {source:"Bio-conversion", target:"Gas", value:5},
+        {source:"Bio-conversion", target:"Losses", value:1},
+        {source:"Solid", target:"Over generation / exports", value:1},
+        {source:"Liquid", target:"Over generation / exports", value:18},
+        {source:"Gas", target:"Over generation / exports", value:1},
+        {source:"Solid", target:"Thermal generation", value:106},
+        {source:"Liquid", target:"Thermal generation", value:2},
+        {source:"Gas", target:"Thermal generation", value:87},
+        {source:"Nuclear", target:"Thermal generation", value:41},
+        {source:"Thermal generation", target:"District heating", value:2},
+        {source:"Thermal generation", target:"Electricity grid", value:92},
+        {source:"Thermal generation", target:"Losses", value:142},
+        {source:"Solid", target:"CHP", value:1},
+        {source:"Liquid", target:"CHP", value:1},
+        {source:"Gas", target:"CHP", value:1},
+        {source:"CHP", target:"Electricity grid", value:1},
+        {source:"CHP", target:"Losses", value:1},
+        {source:"Electricity imports", target:"Electricity grid", value:1},
+        {source:"Wind", target:"Electricity grid", value:1},
+        {source:"Tidal", target:"Electricity grid", value:1},
+        {source:"Wave", target:"Electricity grid", value:1},
+        {source:"Geothermal", target:"Electricity grid", value:1},
+        {source:"Hydro", target:"Electricity grid", value:1},
+        {source:"Electricity grid", target:"H2 conversion", value:1},
+        {source:"Electricity grid", target:"Over generation / exports", value:1},
+        {source:"Electricity grid", target:"Losses", value:6},
+        {source:"Gas", target:"H2 conversion", value:1},
+        {source:"H2 conversion", target:"H2", value:1},
+        {source:"H2 conversion", target:"Losses", value:1},
+        {source:"Solar Thermal", target:"Heating and cooling - homes", value:1},
+        {source:"H2", target:"Road transport", value:1},
+        {source:"Pumped heat", target:"Heating and cooling - homes", value:1},
+        {source:"Pumped heat", target:"Heating and cooling - commercial", value:1},
+        {source:"CHP", target:"Heating and cooling - homes", value:1},
+        {source:"CHP", target:"Heating and cooling - commercial", value:1},
+        {source:"District heating", target:"Heating and cooling - homes", value:1},
+        {source:"District heating", target:"Heating and cooling - commercial", value:1},
+        {source:"District heating", target:"Industry", value:2},
+        {source:"Electricity grid", target:"Heating and cooling - homes", value:7},
+        {source:"Solid", target:"Heating and cooling - homes", value:3},
+        {source:"Liquid", target:"Heating and cooling - homes", value:3},
+        {source:"Gas", target:"Heating and cooling - homes", value:81},
+        {source:"Electricity grid", target:"Heating and cooling - commercial", value:7},
+        {source:"Solid", target:"Heating and cooling - commercial", value:1},
+        {source:"Liquid", target:"Heating and cooling - commercial", value:2},
+        {source:"Gas", target:"Heating and cooling - commercial", value:19},
+        {source:"Electricity grid", target:"Lighting & appliances - homes", value:21},
+        {source:"Gas", target:"Lighting & appliances - homes", value:2},
+        {source:"Electricity grid", target:"Lighting & appliances - commercial", value:18},
+        {source:"Gas", target:"Lighting & appliances - commercial", value:2},
+        {source:"Electricity grid", target:"Industry", value:30},
+        {source:"Solid", target:"Industry", value:13},
+        {source:"Liquid", target:"Industry", value:34},
+        {source:"Gas", target:"Industry", value:54},
+        {source:"Electricity grid", target:"Agriculture", value:1},
+        {source:"Solid", target:"Agriculture", value:1},
+        {source:"Liquid", target:"Agriculture", value:1},
+        {source:"Gas", target:"Agriculture", value:1},
+        {source:"Electricity grid", target:"Road transport", value:1},
+        {source:"Liquid", target:"Road transport", value:122},
+        {source:"Electricity grid", target:"Rail transport", value:2},
+        {source:"Liquid", target:"Rail transport", value:1},
+        {source:"Liquid", target:"Domestic aviation", value:2},
+        {source:"Liquid", target:"National navigation", value:4},
+        {source:"Liquid", target:"International aviation", value:38},
+        {source:"Liquid", target:"International shipping", value:13},
+        {source:"Electricity grid", target:"Geosequestration", value:1},
+        {source:"Gas", target:"Losses", value:2}
+      ]
+    };
+
+    var PALETTE = ["#562038","#268251","#254d57","#c260ad","#7c3e06","#556171","#2dc3d2","#e44d42","#9c8000","#5c5c10","#6b6b45","#fec184","#96665c","#8b8b8b"];
+    var STORAGE_KEY = "sankeyEditorState";
+    var MAX_NODE_PX = 260;   // tallest hub block / thickest link at the largest flow value
+    var HUB_RATIO = 0.06;    // nodes whose flow is under 6% of the max flow render as small "leaf" labels
+
+    var state = { nodes: [], links: [] };
+    var myDiagram;
+    var selectedNodeId = null;
+
+    // ---------- persistence ----------
+    function loadInitialState() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.nodes) && Array.isArray(parsed.links)) return parsed;
+        }
+      } catch (e) { /* fall through to sample */ }
+      return JSON.parse(JSON.stringify(SAMPLE_DATA));
+    }
+
+    function persist() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage full/unavailable: non-fatal */ }
+    }
+
+    // ---------- import normalization (accepts our schema or GoJS-style key/text/from/to/width) ----------
+    function normalizeImportedData(raw) {
+      var srcNodes = raw.nodes || raw.nodeDataArray || [];
+      var srcLinks = raw.links || raw.linkDataArray || [];
+      var nodes = srcNodes.map(function (n) {
+        var id = n.id != null ? String(n.id) : String(n.key != null ? n.key : "");
+        return {
+          id: id,
+          label: n.label || n.text || n.ltext || id,
+          color: n.color || "#888888"
+        };
+      });
+      var links = srcLinks.map(function (l) {
+        return {
+          source: l.source != null ? String(l.source) : String(l.from),
+          target: l.target != null ? String(l.target) : String(l.to),
+          value: Number(l.value != null ? l.value : l.width) || 0
+        };
+      });
+      return { nodes: nodes, links: links };
+    }
+
+    // ---------- validation ----------
+    function validate(data) {
+      var errors = [];
+      var seen = {};
+      data.nodes.forEach(function (n, i) {
+        if (!n.id) errors.push("第 " + (i + 1) + " 個節點缺少 ID。");
+        else if (seen[n.id]) errors.push("節點 ID 重複：「" + n.id + "」，每個 ID 必須唯一。");
+        seen[n.id] = true;
+      });
+      var ids = {};
+      data.nodes.forEach(function (n) { if (n.id) ids[n.id] = true; });
+      data.links.forEach(function (l, i) {
+        if (!l.source || !ids[l.source]) errors.push("第 " + (i + 1) + " 條連結的來源節點不存在：「" + l.source + "」。");
+        if (!l.target || !ids[l.target]) errors.push("第 " + (i + 1) + " 條連結的目標節點不存在：「" + l.target + "」。");
+        if (!(l.value > 0)) errors.push("第 " + (i + 1) + " 條連結的數值必須大於 0（目前：" + l.value + "）。");
+      });
+      return errors;
+    }
+
+    function showErrors(errors) {
+      var banner = document.getElementById("errorBanner");
+      if (!errors.length) { banner.className = "error-banner"; banner.textContent = ""; return; }
+      banner.className = "error-banner show";
+      banner.textContent = "資料有問題，圖表未更新，請修正以下項目：\n" + errors.map(function (e) { return "• " + e; }).join("\n");
+    }
+
+    // ---------- flow size computation (relative, so it scales to any dataset's magnitude) ----------
+    function computeFlowMeta(data) {
+      var out = {}, inc = {};
+      data.links.forEach(function (l) {
+        out[l.source] = (out[l.source] || 0) + l.value;
+        inc[l.target] = (inc[l.target] || 0) + l.value;
+      });
+      var flows = {};
+      data.nodes.forEach(function (n) { flows[n.id] = Math.max(out[n.id] || 0, inc[n.id] || 0); });
+      var maxFlow = 0;
+      Object.keys(flows).forEach(function (k) { if (flows[k] > maxFlow) maxFlow = flows[k]; });
+      var scale = maxFlow > 0 ? MAX_NODE_PX / maxFlow : 1;
+      return { flows: flows, maxFlow: maxFlow, scale: scale };
+    }
+
+    // ---------- GoJS setup ----------
+    function labelOf(data) { return data.text || data.key || ""; }
+
+    function initDiagram() {
+      var $ = go.GraphObject.make;
+      myDiagram = $(go.Diagram, "myDiagramDiv", {
+        initialAutoScale: go.Diagram.Uniform,
+        "animationManager.isEnabled": false,
+        layout: $(go.LayeredDigraphLayout, {
+          setsPortSpots: true,
+          direction: 0,
+          layerSpacing: 50,
+          columnSpacing: 10
+        })
+      });
+
+      // full label on hover, so nothing is ever permanently unreadable even when truncated on-screen
+      function makeTooltip() {
+        return $(go.Adornment, "Auto",
+          $(go.Shape, { fill: "#222", stroke: null }),
+          $(go.TextBlock, { margin: 6, stroke: "white", font: "10pt sans-serif" },
+            new go.Binding("text", "", labelOf))
+        );
+      }
+
+      // "hub" nodes use an "Auto" panel with NO explicit width on the Shape: that lets the
+      // Shape auto-grow to wrap however wide the label needs to be, so the colored
+      // background always fully covers the text (only "height" is pinned, via a binding,
+      // to encode flow volume). Giving the Shape a fixed width here is what caused the
+      // earlier bug where text got clipped/truncated to that fixed width.
+      myDiagram.nodeTemplateMap.add("hub",
+        $(go.Node, "Auto",
+          { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+          $(go.Shape,
+            { stroke: null, minSize: new go.Size(26, 0) },
+            new go.Binding("fill", "color"),
+            new go.Binding("height", "pixelSize")),
+          $(go.TextBlock,
+            {
+              margin: 4,
+              font: "bold 10pt sans-serif",
+              stroke: "white",
+              textAlign: "center",
+              maxSize: new go.Size(140, NaN),
+              overflow: go.TextBlock.OverflowEllipsis
+            },
+            new go.Binding("text", "", labelOf))
+        ));
+
+      myDiagram.nodeTemplateMap.add("leaf",
+        $(go.Node, "Horizontal",
+          { locationSpot: go.Spot.Center, toolTip: makeTooltip() },
+          $(go.Shape, "Rectangle",
+            { width: 12, height: 12, stroke: null },
+            new go.Binding("fill", "color")),
+          $(go.TextBlock,
+            {
+              margin: new go.Margin(0, 0, 0, 4),
+              font: "9pt sans-serif",
+              stroke: "#333",
+              maxSize: new go.Size(220, NaN),
+              overflow: go.TextBlock.OverflowEllipsis
+            },
+            new go.Binding("text", "", labelOf))
+        ));
+      myDiagram.nodeTemplate = myDiagram.nodeTemplateMap.get("leaf");
+
+      myDiagram.linkTemplate =
+        $(go.Link,
+          {
+            routing: go.Link.Normal,
+            curve: go.Link.Bezier,
+            fromEndSegmentLength: 50,
+            toEndSegmentLength: 50,
+            fromSpot: go.Spot.Right,
+            toSpot: go.Spot.Left
+          },
+          $(go.Shape,
+            { strokeWidth: 1, opacity: 0.55, stroke: "black" },
+            new go.Binding("strokeWidth", "pixelWidth"),
+            new go.Binding("stroke", "fromNode", function (node) {
+              return node && node.data ? node.data.color : "black";
+            }).ofObject())
+        );
+
+      // clicking a node in the diagram jumps to & highlights its row in the sidebar
+      myDiagram.addDiagramListener("ObjectSingleClicked", function (e) {
+        var part = e.subject.part;
+        if (part instanceof go.Node) selectNodeRow(part.data.key);
+      });
+    }
+
+    function buildGojsModel(data, meta) {
+      var nodeDataArray = data.nodes.map(function (n) {
+        var flow = meta.flows[n.id] || 0;
+        return {
+          key: n.id,
+          text: n.label,
+          color: n.color,
+          pixelSize: Math.max(flow * meta.scale, 4),
+          category: flow >= meta.maxFlow * HUB_RATIO ? "hub" : "leaf"
+        };
+      });
+      var linkDataArray = data.links.map(function (l) {
+        return { from: l.source, to: l.target, pixelWidth: Math.max(l.value * meta.scale, 1) };
+      });
+      myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+      myDiagram.layoutDiagram(true);
+      myDiagram.zoomToFit();
+    }
+
+    // ---------- render orchestration ----------
+    function renderAll(skipPersist) {
+      var errors = validate(state);
+      showErrors(errors);
+      if (!errors.length) {
+        var meta = computeFlowMeta(state);
+        buildGojsModel(state, meta);
+      }
+      renderNodesTable();
+      renderLinksTable();
+      syncJsonTextarea();
+      if (!skipPersist) persist();
+    }
+
+    // ---------- nodes table ----------
+    function renderNodesTable() {
+      var body = document.getElementById("nodesBody");
+      body.innerHTML = "";
+      state.nodes.forEach(function (n, idx) {
+        var tr = document.createElement("tr");
+        tr.dataset.idx = idx;
+        if (n.id === selectedNodeId) tr.className = "selected";
+        tr.innerHTML =
+          '<td><input type="color" data-field="color" value="' + escapeAttr(n.color || "#888888") + '"></td>' +
+          '<td><input type="text" data-field="id" value="' + escapeAttr(n.id) + '"></td>' +
+          '<td><input type="text" data-field="label" value="' + escapeAttr(n.label) + '"></td>' +
+          '<td><button class="row-del" title="刪除節點">✕</button></td>';
+        body.appendChild(tr);
+      });
+    }
+
+    document.getElementById("nodesBody").addEventListener("change", function (e) {
+      var tr = e.target.closest("tr");
+      if (!tr) return;
+      var idx = Number(tr.dataset.idx);
+      var field = e.target.dataset.field;
+      if (!field) return;
+      var node = state.nodes[idx];
+      if (field === "id") {
+        var newId = e.target.value.trim();
+        if (!newId) { e.target.value = node.id; return; }
+        if (newId !== node.id && state.nodes.some(function (n) { return n.id === newId; })) {
+          alert("節點 ID「" + newId + "」已被使用，請換一個。");
+          e.target.value = node.id;
+          return;
+        }
+        var oldId = node.id;
+        node.id = newId;
+        state.links.forEach(function (l) {
+          if (l.source === oldId) l.source = newId;
+          if (l.target === oldId) l.target = newId;
+        });
+        if (selectedNodeId === oldId) selectedNodeId = newId;
+      } else {
+        node[field] = e.target.value;
+      }
+      renderAll();
+    });
+
+    document.getElementById("nodesBody").addEventListener("click", function (e) {
+      if (!e.target.classList.contains("row-del")) return;
+      var tr = e.target.closest("tr");
+      var idx = Number(tr.dataset.idx);
+      var node = state.nodes[idx];
+      var relatedLinks = state.links.filter(function (l) { return l.source === node.id || l.target === node.id; });
+      var msg = "刪除節點「" + (node.label || node.id) + "」";
+      if (relatedLinks.length) msg += "，會一併刪除 " + relatedLinks.length + " 條相關連結";
+      if (!confirm(msg + "，確定嗎？")) return;
+      state.links = state.links.filter(function (l) { return l.source !== node.id && l.target !== node.id; });
+      state.nodes.splice(idx, 1);
+      if (selectedNodeId === node.id) selectedNodeId = null;
+      renderAll();
+    });
+
+    document.getElementById("btnAddNode").addEventListener("click", function () {
+      var n = 1, id;
+      do { id = "node" + n; n++; } while (state.nodes.some(function (x) { return x.id === id; }));
+      state.nodes.push({ id: id, label: id, color: PALETTE[state.nodes.length % PALETTE.length] });
+      renderAll();
+    });
+
+    // ---------- links table ----------
+    function nodeOptionsHtml(selectedId) {
+      return state.nodes.map(function (n) {
+        var sel = n.id === selectedId ? " selected" : "";
+        return '<option value="' + escapeAttr(n.id) + '"' + sel + ">" + escapeHtml(n.label || n.id) + "</option>";
+      }).join("");
+    }
+
+    function renderLinksTable() {
+      var body = document.getElementById("linksBody");
+      body.innerHTML = "";
+      state.links.forEach(function (l, idx) {
+        var tr = document.createElement("tr");
+        tr.dataset.idx = idx;
+        tr.innerHTML =
+          '<td><select data-field="source">' + nodeOptionsHtml(l.source) + '</select></td>' +
+          '<td><select data-field="target">' + nodeOptionsHtml(l.target) + '</select></td>' +
+          '<td><input type="number" min="0" step="any" data-field="value" value="' + escapeAttr(l.value) + '"></td>' +
+          '<td><button class="row-del" title="刪除連結">✕</button></td>';
+        body.appendChild(tr);
+      });
+    }
+
+    document.getElementById("linksBody").addEventListener("change", function (e) {
+      var tr = e.target.closest("tr");
+      if (!tr) return;
+      var idx = Number(tr.dataset.idx);
+      var field = e.target.dataset.field;
+      if (!field) return;
+      var link = state.links[idx];
+      link[field] = field === "value" ? Number(e.target.value) : e.target.value;
+      renderAll();
+    });
+
+    document.getElementById("linksBody").addEventListener("click", function (e) {
+      if (!e.target.classList.contains("row-del")) return;
+      var idx = Number(e.target.closest("tr").dataset.idx);
+      state.links.splice(idx, 1);
+      renderAll();
+    });
+
+    document.getElementById("btnAddLink").addEventListener("click", function () {
+      if (state.nodes.length < 2) { alert("請先新增至少兩個節點，才能建立連結。"); return; }
+      state.links.push({ source: state.nodes[0].id, target: state.nodes[1].id, value: 1 });
+      renderAll();
+    });
+
+    // ---------- node <-> row selection sync ----------
+    function selectNodeRow(nodeId) {
+      selectedNodeId = nodeId;
+      document.querySelector('.tab-btn[data-tab="nodes"]').click();
+      renderNodesTable();
+      var row = document.querySelector('#nodesBody tr[data-idx]');
+      state.nodes.forEach(function (n, idx) {
+        if (n.id === nodeId) {
+          var tr = document.querySelectorAll("#nodesBody tr")[idx];
+          if (tr) tr.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+      });
+    }
+
+    // ---------- JSON tab ----------
+    function syncJsonTextarea() {
+      document.getElementById("jsonText").value = JSON.stringify(state, null, 2);
+    }
+
+    document.getElementById("btnSyncJson").addEventListener("click", syncJsonTextarea);
+
+    document.getElementById("btnApplyJson").addEventListener("click", function () {
+      var text = document.getElementById("jsonText").value;
+      var parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch (err) {
+        showErrors(["JSON 格式錯誤，無法解析：" + err.message]);
+        return;
+      }
+      var normalized = normalizeImportedData(parsed);
+      var errors = validate(normalized);
+      if (errors.length) { showErrors(errors); return; }
+      state = normalized;
+      selectedNodeId = null;
+      renderAll();
+    });
+
+    document.getElementById("btnCopyJson").addEventListener("click", function () {
+      var ta = document.getElementById("jsonText");
+      ta.select();
+      try {
+        navigator.clipboard.writeText(ta.value);
+      } catch (e) {
+        document.execCommand("copy");
+      }
+    });
+
+    document.getElementById("btnDownloadJson").addEventListener("click", function () {
+      var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "sankey-data.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("fileInput").addEventListener("change", function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        var parsed;
+        try {
+          parsed = JSON.parse(reader.result);
+        } catch (err) {
+          showErrors(["檔案不是合法的 JSON：" + err.message]);
+          return;
+        }
+        var normalized = normalizeImportedData(parsed);
+        var errors = validate(normalized);
+        if (errors.length) { showErrors(errors); return; }
+        state = normalized;
+        selectedNodeId = null;
+        renderAll();
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    });
+
+    // ---------- embed snippet (read-only, self-contained, for pasting into a report page) ----------
+    // Kept as a separate copy of the render logic (not a call back into this page's functions)
+    // because the generated snippet has to run standalone inside a completely different HTML file.
+    function buildEmbedSnippet(data) {
+      var id = "sankeyEmbed_" + Math.random().toString(36).slice(2, 9);
+      var dataJson = JSON.stringify({ nodes: data.nodes, links: data.links });
+      var lines = [];
+      lines.push('<div id="' + id + '" style="width:100%;height:520px;background:#f2e9da;border:1px solid #ddd;border-radius:6px;"></div>');
+      lines.push("<script>");
+      lines.push("(function(){");
+      lines.push("  var DATA = " + dataJson + ";");
+      lines.push("  var MAX_NODE_PX = 260, HUB_RATIO = 0.06;");
+      lines.push('  function labelOf(d){ return d.text || d.key || ""; }');
+      lines.push("  function computeFlowMeta(data){");
+      lines.push("    var out={}, inc={};");
+      lines.push("    data.links.forEach(function(l){ out[l.source]=(out[l.source]||0)+l.value; inc[l.target]=(inc[l.target]||0)+l.value; });");
+      lines.push("    var flows={};");
+      lines.push("    data.nodes.forEach(function(n){ flows[n.id]=Math.max(out[n.id]||0, inc[n.id]||0); });");
+      lines.push("    var maxFlow=0; Object.keys(flows).forEach(function(k){ if(flows[k]>maxFlow) maxFlow=flows[k]; });");
+      lines.push("    var scale = maxFlow>0 ? MAX_NODE_PX/maxFlow : 1;");
+      lines.push("    return { flows: flows, maxFlow: maxFlow, scale: scale };");
+      lines.push("  }");
+      lines.push("  function render(){");
+      lines.push("    var $ = go.GraphObject.make;");
+      lines.push('    var diagram = $(go.Diagram, "' + id + '", {');
+      lines.push("      initialAutoScale: go.Diagram.Uniform,");
+      lines.push("      isReadOnly: true,");
+      lines.push('      "animationManager.isEnabled": false,');
+      lines.push("      layout: $(go.LayeredDigraphLayout, { setsPortSpots: true, direction: 0, layerSpacing: 50, columnSpacing: 10 })");
+      lines.push("    });");
+      lines.push("    function makeTooltip(){");
+      lines.push('      return $(go.Adornment, "Auto", $(go.Shape,{fill:"#222",stroke:null}), $(go.TextBlock,{margin:6,stroke:"white",font:"10pt sans-serif"}, new go.Binding("text","",labelOf)));');
+      lines.push("    }");
+      lines.push('    diagram.nodeTemplateMap.add("hub", $(go.Node, "Auto",');
+      lines.push("      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },");
+      lines.push('      $(go.Shape, { stroke: null, minSize: new go.Size(26,0) }, new go.Binding("fill","color"), new go.Binding("height","pixelSize")),');
+      lines.push('      $(go.TextBlock, { margin:4, font:"bold 10pt sans-serif", stroke:"white", textAlign:"center", maxSize:new go.Size(140,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))');
+      lines.push("    ));");
+      lines.push('    diagram.nodeTemplateMap.add("leaf", $(go.Node, "Horizontal",');
+      lines.push("      { locationSpot: go.Spot.Center, toolTip: makeTooltip() },");
+      lines.push('      $(go.Shape, "Rectangle", { width:12, height:12, stroke:null }, new go.Binding("fill","color")),');
+      lines.push('      $(go.TextBlock, { margin:new go.Margin(0,0,0,4), font:"9pt sans-serif", stroke:"#333", maxSize:new go.Size(220,NaN), overflow: go.TextBlock.OverflowEllipsis }, new go.Binding("text","",labelOf))');
+      lines.push("    ));");
+      lines.push('    diagram.nodeTemplate = diagram.nodeTemplateMap.get("leaf");');
+      lines.push("    diagram.linkTemplate = $(go.Link,");
+      lines.push("      { routing: go.Link.Normal, curve: go.Link.Bezier, fromEndSegmentLength:50, toEndSegmentLength:50, fromSpot: go.Spot.Right, toSpot: go.Spot.Left },");
+      lines.push('      $(go.Shape, { strokeWidth:1, opacity:0.55, stroke:"black" },');
+      lines.push('        new go.Binding("strokeWidth","pixelWidth"),');
+      lines.push('        new go.Binding("stroke","fromNode", function(node){ return node && node.data ? node.data.color : "black"; }).ofObject())');
+      lines.push("    );");
+      lines.push("    var meta = computeFlowMeta(DATA);");
+      lines.push("    var nodeDataArray = DATA.nodes.map(function(n){");
+      lines.push("      var flow = meta.flows[n.id] || 0;");
+      lines.push('      return { key:n.id, text:n.label, color:n.color, pixelSize: Math.max(flow*meta.scale,4), category: flow >= meta.maxFlow*HUB_RATIO ? "hub" : "leaf" };');
+      lines.push("    });");
+      lines.push("    var linkDataArray = DATA.links.map(function(l){ return { from:l.source, to:l.target, pixelWidth: Math.max(l.value*meta.scale,1) }; });");
+      lines.push("    diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);");
+      lines.push("    diagram.layoutDiagram(true);");
+      lines.push("    diagram.zoomToFit();");
+      lines.push("    if (window.ResizeObserver) {");
+      lines.push("      new ResizeObserver(function(){ diagram.layoutDiagram(true); diagram.zoomToFit(); }).observe(diagram.div);");
+      lines.push("    }");
+      lines.push("  }");
+      lines.push("  if (window.go) { render(); return; }");
+      lines.push("  if (!window.__sankeyGojsLoad) {");
+      lines.push("    window.__sankeyGojsLoad = new Promise(function(resolve){");
+      lines.push('      var s = document.createElement("script");');
+      lines.push('      s.src = "https://cdn.jsdelivr.net/npm/gojs/release/go.js";');
+      lines.push("      s.onload = resolve;");
+      lines.push("      document.head.appendChild(s);");
+      lines.push("    });");
+      lines.push("  }");
+      lines.push("  window.__sankeyGojsLoad.then(render);");
+      lines.push("})();");
+      lines.push("</" + "script>");
+      return lines.join("\n");
+    }
+
+    document.getElementById("btnGenEmbed").addEventListener("click", function () {
+      document.getElementById("embedText").value = buildEmbedSnippet(state);
+    });
+
+    document.getElementById("btnCopyEmbed").addEventListener("click", function () {
+      var ta = document.getElementById("embedText");
+      if (!ta.value) ta.value = buildEmbedSnippet(state);
+      ta.select();
+      try {
+        navigator.clipboard.writeText(ta.value);
+      } catch (e) {
+        document.execCommand("copy");
+      }
+    });
+
+    // ---------- tabs ----------
+    document.querySelectorAll(".tab-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.remove("active"); });
+        document.querySelectorAll(".tab-panel").forEach(function (p) { p.classList.remove("active"); });
+        btn.classList.add("active");
+        document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+      });
+    });
+
+    // ---------- toolbar ----------
+    document.getElementById("btnFit").addEventListener("click", function () { myDiagram.zoomToFit(); });
+
+    document.getElementById("btnSample").addEventListener("click", function () {
+      if (!confirm("這會覆蓋目前的資料，換成範例的 UK 能源流向資料，確定嗎？")) return;
+      state = JSON.parse(JSON.stringify(SAMPLE_DATA));
+      selectedNodeId = null;
+      renderAll();
+    });
+
+    document.getElementById("btnClear").addEventListener("click", function () {
+      if (!confirm("這會清空所有節點與連結，確定嗎？")) return;
+      state = { nodes: [], links: [] };
+      selectedNodeId = null;
+      renderAll();
+    });
+
+    window.addEventListener("resize", debounce(function () {
+      if (myDiagram) myDiagram.zoomToFit();
+    }, 200));
+
+    // ---------- utils ----------
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+    function escapeAttr(s) { return escapeHtml(s); }
+    function debounce(fn, ms) { var t; return function () { clearTimeout(t); var args = arguments; t = setTimeout(function () { fn.apply(null, args); }, ms); }; }
+
+    // ---------- boot ----------
+    state = loadInitialState();
+    initDiagram();
+    renderAll(true);
+  </script>
+</body>
+</html>
