@@ -592,6 +592,9 @@
       currentNodesSel.select("rect").attr("opacity", function (n) {
         return connectedIds[n.id] ? 1 : 0.35;
       });
+      currentNodesSel.select("text").attr("opacity", function (n) {
+        return connectedIds[n.id] ? 1 : 0.25;
+      });
     }
 
     function highlightLink(d) {
@@ -600,7 +603,10 @@
 
     function clearHighlight() {
       if (currentLinksSel) applySelectionMarks();
-      if (currentNodesSel) currentNodesSel.select("rect").attr("opacity", 1);
+      if (currentNodesSel) {
+        currentNodesSel.select("rect").attr("opacity", 1);
+        currentNodesSel.select("text").attr("opacity", 1);
+      }
     }
 
     // reflects selectedNodeId/selectedLinkIdx (set by activateNodeRow/activateLinkRow) onto the SVG
@@ -618,6 +624,83 @@
     function selectDiagramNode(id) { applySelectionMarks(); }
     function selectDiagramLink(idx) { applySelectionMarks(); }
 
+    // ---------- layout helpers (shared reasoning with buildEmbedSnippet, kept as separate copies) ----------
+    var lastLayoutW = 0, lastLayoutH = 0, lastVirtualH = 0;
+
+    function makeSankeyGen(w, extentH, nodePadding) {
+      return d3.sankey()
+        .nodeId(function (d) { return d.id; })
+        .nodeWidth(14)
+        .nodePadding(nodePadding)
+        .iterations(64)
+        .nodeAlign(d3.sankeyJustify)
+        .extent([[10, 10], [w - 10, extentH - 10]]);
+    }
+
+    // Two-pass layout: run once at container height, measure the densest column, then
+    // re-run on fresh copies at a taller virtual height if needed (d3-sankey mutates its input).
+    function computeVirtualLayout(data, w, h, nodePadding) {
+      var nodesCopy1 = data.nodes.map(function (n) { return { id: n.id, label: n.label, color: n.color }; });
+      var linksCopy1 = data.links.map(function (l, idx) { return { source: l.source, target: l.target, value: l.value, idx: idx }; });
+      var graph1 = makeSankeyGen(w, h, nodePadding)({ nodes: nodesCopy1, links: linksCopy1 });
+
+      var colCounts = {};
+      graph1.nodes.forEach(function (n) {
+        var cx = Math.round(n.x0);
+        colCounts[cx] = (colCounts[cx] || 0) + 1;
+      });
+      var maxPerColumn = 0;
+      for (var key in colCounts) { if (colCounts[key] > maxPerColumn) maxPerColumn = colCounts[key]; }
+
+      var virtualH = Math.max(h, maxPerColumn * 26);
+      if (virtualH > h) {
+        var nodesCopy2 = data.nodes.map(function (n) { return { id: n.id, label: n.label, color: n.color }; });
+        var linksCopy2 = data.links.map(function (l, idx) { return { source: l.source, target: l.target, value: l.value, idx: idx }; });
+        var graph2 = makeSankeyGen(w, virtualH, nodePadding)({ nodes: nodesCopy2, links: linksCopy2 });
+        return { graph: graph2, virtualH: virtualH };
+      }
+      return { graph: graph1, virtualH: h };
+    }
+
+    // Greedy top-down vertical dodge of node labels, grouped by anchor side + rounded anchor x.
+    // Bars are untouched; only the stored label y (_labelY) is adjusted.
+    function dodgeLabels(nodes, w, fontSize) {
+      var minSep = fontSize + 3;
+      var groups = {};
+      nodes.forEach(function (d) {
+        var anchorLeft = d.x0 < w / 2;
+        var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+        var key = (anchorLeft ? "L" : "R") + "_" + gx;
+        (groups[key] = groups[key] || []).push(d);
+      });
+      Object.keys(groups).forEach(function (key) {
+        var arr = groups[key];
+        arr.sort(function (a, b) { return (a.y0 + a.y1) / 2 - (b.y0 + b.y1) / 2; });
+        var prevY = null;
+        arr.forEach(function (d) {
+          var y = (d.y0 + d.y1) / 2;
+          if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+          d._labelY = y;
+          prevY = y;
+        });
+      });
+    }
+
+    function computeFitTransform(w, h, virtualH) {
+      var k = Math.min(1, h / virtualH);
+      var tx = (w - w * k) / 2;
+      var ty = 0;
+      return d3.zoomIdentity.translate(tx, ty).scale(k);
+    }
+
+    function applyFitTransform(animate) {
+      if (!svg || !zoomBehavior) return;
+      if (!lastLayoutW || !lastLayoutH || !lastVirtualH) return;
+      var t = computeFitTransform(lastLayoutW, lastLayoutH, lastVirtualH);
+      if (animate) svg.transition().duration(200).call(zoomBehavior.transform, t);
+      else svg.call(zoomBehavior.transform, t);
+    }
+
     function renderDiagram(data) {
       if (!svg || !gMain) return;
       var container = document.getElementById("myDiagramDiv");
@@ -633,19 +716,15 @@
       if (!data.nodes.length) return; // empty state: nothing to draw
 
       try {
-        var nodesCopy = data.nodes.map(function (n) { return { id: n.id, label: n.label, color: n.color }; });
-        var linksCopy = data.links.map(function (l, idx) { return { source: l.source, target: l.target, value: l.value, idx: idx }; });
-
-        var sankeyGen = d3.sankey()
-          .nodeId(function (d) { return d.id; })
-          .nodeWidth(14)
-          .nodePadding(12)
-          .nodeAlign(d3.sankeyJustify)
-          .extent([[10, 10], [w - 10, h - 10]]);
-
-        var graph = sankeyGen({ nodes: nodesCopy, links: linksCopy });
+        var FONT_SIZE = 10.5;
+        var layout = computeVirtualLayout(data, w, h, 16);
+        var graph = layout.graph;
+        var virtualH = layout.virtualH;
+        lastLayoutW = w; lastLayoutH = h; lastVirtualH = virtualH;
         currentSankeyNodes = graph.nodes;
         currentSankeyLinks = graph.links;
+
+        dodgeLabels(graph.nodes, w, FONT_SIZE);
 
         var linkSel = gMain.append("g").attr("class", "links").attr("fill", "none")
           .selectAll("path").data(graph.links).enter().append("path")
@@ -669,15 +748,21 @@
 
         nodeSel.append("text")
           .attr("x", function (d) { return d.x0 < w / 2 ? d.x1 + 6 : d.x0 - 6; })
-          .attr("y", function (d) { return (d.y0 + d.y1) / 2; })
+          .attr("y", function (d) { return d._labelY; })
           .attr("text-anchor", function (d) { return d.x0 < w / 2 ? "start" : "end"; })
           .attr("dominant-baseline", "middle")
-          .style("font", "500 10.5px 'Noto Serif TC', serif")
+          .style("font", "500 " + FONT_SIZE + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
           .attr("fill", "#333")
           .text(function (d) { return d.label; });
 
         currentNodesSel = nodeSel;
         currentLinksSel = linkSel;
+
+        applyFitTransform(false);
 
         nodeSel
           .on("mousemove", function (event, d) {
@@ -1184,14 +1269,53 @@
       lines.push("      var rect = container.getBoundingClientRect();");
       lines.push("      var w = rect.width, h = rect.height;");
       lines.push("      if (w < 50 || h < 50) return;");
-      lines.push('      svg.attr("viewBox", [0,0,w,h]);');
+      lines.push('      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");');
       lines.push('      gMain.selectAll("*").remove();');
       lines.push("      if (!DATA.nodes.length) return;");
       lines.push("      try {");
-      lines.push("        var nodesCopy = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });");
-      lines.push("        var linksCopy = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });");
-      lines.push('        var sankeyGen = d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(12).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,h-10]]);');
-      lines.push("        var graph = sankeyGen({nodes:nodesCopy, links:linksCopy});");
+      lines.push("        var nodePadding = 16;");
+      lines.push("        function makeGen(extentH){");
+      lines.push('          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);');
+      lines.push("        }");
+      lines.push("        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });");
+      lines.push("        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });");
+      lines.push("        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});");
+      lines.push("        var colCounts = {};");
+      lines.push("        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });");
+      lines.push("        var maxPerColumn = 0;");
+      lines.push("        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }");
+      lines.push("        var virtualH = Math.max(h, maxPerColumn*26);");
+      lines.push("        var graph;");
+      lines.push("        if (virtualH > h) {");
+      lines.push("          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });");
+      lines.push("          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });");
+      lines.push("          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});");
+      lines.push("        } else {");
+      lines.push("          graph = graph1;");
+      lines.push("          virtualH = h;");
+      lines.push("        }");
+      lines.push('        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");');
+      lines.push("        var k = Math.min(1, h / virtualH);");
+      lines.push("        var fontSize = Math.min(10.5/k, 10.5/0.45);");
+      lines.push("        var minSep = fontSize + 3;");
+      lines.push("        var dodgeGroups = {};");
+      lines.push("        graph.nodes.forEach(function(d){");
+      lines.push("          var anchorLeft = d.x0 < w/2;");
+      lines.push("          var gx = Math.round(anchorLeft ? d.x1 : d.x0);");
+      lines.push('          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;');
+      lines.push("          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);");
+      lines.push("        });");
+      lines.push("        Object.keys(dodgeGroups).forEach(function(gkey){");
+      lines.push("          var arr = dodgeGroups[gkey];");
+      lines.push("          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });");
+      lines.push("          var prevY = null;");
+      lines.push("          arr.forEach(function(d){");
+      lines.push("            var y = (d.y0+d.y1)/2;");
+      lines.push("            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;");
+      lines.push("            d._labelY = y;");
+      lines.push("            prevY = y;");
+      lines.push("          });");
+      lines.push("        });");
       lines.push('        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")');
       lines.push('          .attr("d", d3.sankeyLinkHorizontal())');
       lines.push('          .attr("stroke", function(d){ return d.source.color; })');
@@ -1207,10 +1331,14 @@
       lines.push('          .attr("rx", 1);');
       lines.push('        nodeSel.append("text")');
       lines.push('          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })');
-      lines.push('          .attr("y", function(d){ return (d.y0+d.y1)/2; })');
+      lines.push('          .attr("y", function(d){ return d._labelY; })');
       lines.push('          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })');
       lines.push('          .attr("dominant-baseline", "middle")');
-      lines.push('          .style("font", "500 10.5px \'Noto Serif TC\', serif")');
+      lines.push('          .style("font", "500 " + fontSize + "px \'Noto Serif TC\', serif")');
+      lines.push('          .style("paint-order", "stroke")');
+      lines.push('          .style("stroke", "#fff")');
+      lines.push('          .style("stroke-width", "3px")');
+      lines.push('          .style("stroke-linejoin", "round")');
       lines.push('          .attr("fill", "#333")');
       lines.push('          .text(function(d){ return d.label; });');
       lines.push("        var connectedMap = {};");
@@ -1223,10 +1351,12 @@
       lines.push("          var connected = connectedMap[d.id] || {};");
       lines.push('          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });');
       lines.push('          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });');
+      lines.push('          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });');
       lines.push('        }).on("mouseleave", function(){');
       lines.push("          hideTooltip();");
       lines.push('          linkSel.attr("stroke-opacity", 0.38);');
       lines.push('          nodeSel.select("rect").attr("opacity", 1);');
+      lines.push('          nodeSel.select("text").attr("opacity", 1);');
       lines.push("        });");
       lines.push('        linkSel.on("mousemove", function(event, d){');
       lines.push('          showTooltip(event, d.source.label + " → " + d.target.label + "\\n" + d.value.toLocaleString());');
@@ -1285,7 +1415,7 @@
 
     // ---------- toolbar ----------
     document.getElementById("btnFit").addEventListener("click", function () {
-      if (svg && zoomBehavior) svg.transition().duration(200).call(zoomBehavior.transform, d3.zoomIdentity);
+      applyFitTransform(true);
     });
     document.getElementById("btnUndo").addEventListener("click", undo);
     document.getElementById("btnRedo").addEventListener("click", redo);
@@ -1307,6 +1437,11 @@
       renderAll();
       showToast("已清空，可按復原還原");
     });
+
+    // window-resize fallback: ResizeObserver callbacks are suspended in background tabs,
+    // so also re-render on the resize event (fires regardless of visibility)
+    window.addEventListener("resize", debounce(function () { if (myDiagramReady()) renderDiagram(state); }, 200));
+    function myDiagramReady() { return !!(svg && gMain); }
 
     // ---------- keyboard: Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z (skipped while typing in the JSON/embed textareas) ----------
     document.addEventListener("keydown", function (e) {
