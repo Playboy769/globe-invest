@@ -493,11 +493,15 @@ body.dark .cf-canvas-rename{color:#9080b0}
 .cf-diagramref-name{font-size:17px;font-weight:500;color:#6a4a9a;text-align:center;padding:0 10px;word-break:break-word;max-width:100%}
 .cf-node.diagramref-node.missing{background:#fdeceb;border-color:#e0a8a0;border-style:dashed}
 .cf-node.diagramref-node.missing .cf-diagramref-name{color:#b3564a}
+.cf-diagramref-icon{font-size:22px;color:#9a7ac0;line-height:1}
+.cf-node.diagramref-node.missing .cf-diagramref-icon{color:#b3564a}
 body.dark .cf-node.diagramref-node{background:#241e30;border-color:#5a4a7a}
 body.dark .cf-node.diagramref-node:hover{border-color:#7a68a0;background:#2a2238}
 body.dark .cf-node.diagramref-node.sel{border-color:#9a7ac0}
 body.dark .cf-diagramref-name{color:#c0aee0}
+body.dark .cf-diagramref-icon{color:#b09ad8}
 body.dark .cf-node.diagramref-node.missing{background:#3a2420;border-color:#7a4a40}
+body.dark .cf-node.diagramref-node.missing .cf-diagramref-icon{color:#c97b6c}
 
 .cf-diagref-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;width:240px;padding:6px}
 .cf-diagref-picker-search{width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;border:1px solid #e5e5e5;border-radius:7px;padding:6px 8px;margin-bottom:5px;outline:none}
@@ -2201,6 +2205,8 @@ function buildNodes() {
       const rf=files.find(f=>f.id===n.refId);
       d.className='cf-node diagramref-node'+(rf?'':' missing')+(isSel?' sel':'')+(isMulti?' multi-sel':'');
       d.style.width=(n.w||220)+'px'; d.style.height=(n.bh||130)+'px';
+      const icon=document.createElement('div'); icon.className='cf-diagramref-icon'; icon.textContent='↗';
+      d.appendChild(icon);
       const nameEl=document.createElement('div'); nameEl.className='cf-diagramref-name';
       nameEl.textContent=rf?rf.name:'⚠ 找不到原始圖';
       d.appendChild(nameEl);
