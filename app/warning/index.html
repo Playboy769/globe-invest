@@ -295,6 +295,19 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
 .hp-pct.flat { color:var(--ink-ghost); }
 
 /* ── MARKET BREADTH CHART ── */
+.brd-date-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:7px 16px; border-radius:100px;
+  font-family:'Calibri',sans-serif; font-size:13px; font-weight:600;
+  letter-spacing:.03em; font-variant-numeric:tabular-nums;
+  background:var(--surface); color:var(--ink-soft); border:1px solid var(--border);
+}
+.brd-date-badge .zh { font-family:'Noto Sans TC',sans-serif; font-weight:500; margin-right:2px; }
+.brd-date-dot { width:7px; height:7px; border-radius:50%; background:var(--ink-ghost); flex-shrink:0; }
+.brd-date-badge.fresh { background:var(--green-bg); color:var(--green-ink); border-color:transparent; }
+.brd-date-badge.fresh .brd-date-dot { background:var(--green-ink); }
+.brd-date-badge.stale { background:var(--amber-bg); color:var(--amber-ink); border-color:transparent; }
+.brd-date-badge.stale .brd-date-dot { background:#d97706; }
 .brd-chart-scroll { overflow-x:auto; padding:24px 0 0; }
 .brd-chart { display:flex; align-items:flex-end; gap:6px; min-width:680px; height:180px; }
 .brd-col  { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
@@ -584,6 +597,12 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
      SECTION 5 — MARKET BREADTH
 ═══════════════════════════════════════════ -->
 <div id="sec-breadth" class="sec-panel" hidden>
+  <div style="padding:20px 48px 0">
+    <span id="brd-date-badge" class="brd-date-badge en">
+      <span class="brd-date-dot"></span>
+      <span class="zh">資料日期</span> <span id="brd-date-val">—</span>
+    </span>
+  </div>
   <div class="stat-strip">
     <div class="stat-cell s-down">
       <div class="stat-label zh">跌停家數</div><div class="stat-num en" id="b-cnt-ld">—</div>
@@ -667,6 +686,9 @@ function daysUntil(d){
   if(!dd) return null;
   dd.setHours(0,0,0,0);
   return Math.round((dd - TODAY) / 86400000);
+}
+function fmtYMD(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 // ─── Sort engine ──────────────────────────────────────────────────────
 const SORT_IDS = {
@@ -1466,7 +1488,10 @@ function computeBreadth(twseRows, tpexRows){
   }
   (twseRows||[]).forEach(r => ingest(r.ClosingPrice, r.Change));
   (tpexRows||[]).forEach(r => ingest(r.Close, r.Change));
-  return { buckets, up, down, flat, limitUp, limitDown };
+  // Both feeds carry the trading date on every row (ROC 7-digit, e.g. "1150716") —
+  // read it from whichever source actually returned rows, TWSE first.
+  const rawDate = (twseRows && twseRows[0] && twseRows[0].Date) || (tpexRows && tpexRows[0] && tpexRows[0].Date) || '';
+  return { buckets, up, down, flat, limitUp, limitDown, date: fmtDate(rawDate) };
 }
 
 async function loadBreadth(){
@@ -1502,6 +1527,18 @@ function renderBreadth(){
   document.getElementById('b-cnt-up').textContent = up;
   document.getElementById('b-cnt-lu').textContent = limitUp;
   document.getElementById('scnt-breadth').textContent = up + down + flat;
+
+  const dateBadge = document.getElementById('brd-date-badge');
+  const dateVal = document.getElementById('brd-date-val');
+  if(d.date){
+    dateVal.textContent = d.date;
+    const isToday = d.date === fmtYMD(TODAY);
+    dateBadge.classList.toggle('fresh', isToday);
+    dateBadge.classList.toggle('stale', !isToday);
+  } else {
+    dateVal.textContent = '—';
+    dateBadge.classList.remove('fresh', 'stale');
+  }
 
   const maxCount = Math.max(...buckets, 1);
   const total = up + down + flat || 1;
