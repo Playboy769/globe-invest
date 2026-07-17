@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GS — FY Q2 2026 — Q&A / AI基建融資與Capital Solutions Group / 業務板塊 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 24px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; left: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -22px; transform: translateX(-50%); text-align: center; font-size: 11px; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 2px; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 210px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 110px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .seg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .seg-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .seg-card.gbm { border-top-color: #2563eb; }
+  .seg-card.awm { border-top-color: #15803d; }
+  .seg-card.ps { border-top-color: #c2600a; }
+  .seg-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .seg-card.gbm h4 { color: #1d4ed8; }
+  .seg-card.awm h4 { color: #15803d; }
+  .seg-card.ps h4 { color: #c2600a; }
+  .seg-card ul { padding-left: 14px; }
+  .seg-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.2; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stat-box { flex: 1; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Goldman Sachs (GS) — FY Q2 2026 Earnings Call Analysis">Goldman Sachs (GS) — FY Q2 2026 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis / AI Infrastructure Financing &amp; Capital Solutions Group / Business Platform / Risk Matrix &nbsp;·&nbsp; Call Date: July 14, 2026 &nbsp;·&nbsp; Cross-referenced with 10-Q for the period ended March 31, 2026 (Q2 10-Q not yet filed) and Form 4 filings">Q&amp;A 問答分析 / AI基建融資週期與Capital Solutions Group / 業務板塊 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年7月14日 &nbsp;·&nbsp; 交叉比對截至2026/3/31財季10-Q（Q2 10-Q尚未申報）與Form 4申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="AI Infra Financing &amp; Capital Solutions Group" onclick="sw('cap',this)">AI基建融資與Capital Solutions Group</div>
+    <div class="tab" data-en="Business Platform" onclick="sw('biz',this)">業務板塊</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl" data-en="Logic Gaps">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Glenn Schorr（Evercore）</div><div class="qa-topic">Equities 財務槓桿倍增 × 客戶集中度</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">整體市場成交量僅+9%，但Equities毛利率+50%、營收+86%左右，RWA卻反而下降——這組數字背後的wallet share增長從何而來？是否存在客戶集中度風險？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Coleman：equities financing是多年投資成果，去年即決定加碼Asia人才/科技/風控投入，年初監管資本鬆綁後進一步加碼部署；追問客戶結構時，僅泛稱「long-short、量化型等多元客戶」、「大客戶很有影響力但整體高度分散」，未給出具體佔比。Solomon補充：GS在每個地區都具備規模領先優勢，此刻正直接受惠於全球布局的連結能力。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Schorr直接問的是「wallet share增長來源」與「集中度」兩件事，Coleman僅以定性語言（「非常分散」）帶過，全程未提供任何客戶數、單一客戶佔比或前N大客戶營收貢獻的量化數字。GS本身也不在10-Q揭露equities業務的地區/客戶集中度明細（10-Q Note 26的Credit Concentrations僅涵蓋放款，不含交易/融資類客戶曝險），投資人事實上無從獨立驗證「高度分散」這個說法。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Glenn Schorr:</b> "I saw overall market volume's up 9%, but margin was up 50%, and your revenue was up like 86% or whatever. Yet somehow RWA is down. Those are all great trends, but maybe you could talk about wallet share gains and what you're seeing in that backdrop."<br><br><b>Denis Coleman:</b> "The performance of our equities business in the last quarter is the result of a number of multi-year investments... on the heels of some of the regulatory capital relief that we received at the turn of the year, identified the people that we were going to deploy more by way of financial resources and try and capture what we viewed as a competitive shortcoming in Asia... We remain very focused around the world for the equities business... trying to identify pockets where we have bigger opportunities to grow our share with clients."<br><br><b>Glenn Schorr (follow-up):</b> "Can you talk a little bit about the client composition? ...if we should be thinking about any concentration risk, because at times there's a handful of big clients that drive that."<br><br><b>Denis Coleman:</b> "The business has different characteristics globally... long-short investors, more quant-oriented investors... We have very big clients in a lot of our businesses, they are very influential, this is a highly diversified suite of clients across the world."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ebrahim Poonawala（Bank of America）</div><div class="qa-topic">資本配置優先序 × AI CapEx週期的持久性</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">資本配置在Asia/Europe/US、markets業務 vs AI CapEx融資之間如何取捨，以及本季買回股票的邏輯？延伸追問：Solomon曾公開說市場「貪婪多於恐懼」，如何評估AI CapEx投資泡沫風險與這個週期的持久性？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Solomon：資本配置永遠優先支持客戶業務（如有accretive回報則優先於買回），若無處部署才積極買回——本季屬於「創造更大資本緩衝」的一季，買回與客戶部署同時發生。對於AI CapEx持久性：認為目前仍處建置早期階段，三到五年維度看好，但坦承「不會是直線發展」，未來6-18個月可能出現recalibration，token定價、企業採購方式等仍有高度不確定性。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Solomon自己主動點出「token定價」「企業如何為AI基礎設施定價」等具體風險變數，但完全沒有回頭量化GS自身在這個情境下的曝險——例如若AI CapEx週期在未來6-18個月出現他自己說的「recalibration」，GS的IB backlog（本季創5年新高）、prime/FICC financing餘額會受到多大衝擊，管理層並未提供、分析師也未追問任何情境測試數字。10-Q揭露GS已於2026年4月提交年度CCAR資本計畫，且DFAST壓力測試結果應已於6月發布（法說會前一個月），但管理層在回答這個「壓力情境」問題時完全沒有引用自家壓力測試結果佐證信心。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Ebrahim Poonawala:</b> "How you're thinking about capital allocation across your markets business in Asia versus Europe versus the United States, market financing versus all the CapEx AI activity that's going on, and then how you think about all of that relative to the buybacks that we did this quarter."<br><br><b>David Solomon:</b> "It is always our desire to take our capital and allocate it toward supporting our clients... if we could do that and have no excess capital, we would... This was a quarter, given the performance, where we actually created more cushion and more buffer."<br><br><b>Ebrahim Poonawala (follow-up):</b> "Talk to us about the durability of the AI CapEx cycle... you were quoted in the press during the quarter about there's more greed than fear in the market. As investors think about the risk of maybe an investment bubble around AI..."<br><br><b>David Solomon:</b> "We are in the relative early innings of a very, very significant... AI build-out cycle... I'm not smart enough to tell you whether or not there can be recalibrations, in the short term, sometime in the next six months, the next 18 months... There's a lot of talk about token spend and the cost of the technology."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Erika Najarian（UBS）</div><div class="qa-topic">Asia Hyperscale交易貢獻 × Prime定價權</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Equities數字爆量，Asia hyperscale交易貢獻多少？近期科技股回檔是否值得擔心？Asia prime capacity據傳偏緊，GS的prime定價是否開始出現議價優勢？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Coleman：equities表現「非常廣泛」，主要驅動是個股相對指數的高離散度（dispersion），在指數上漲同時仍出現高離散度，促使客戶更頻繁尋求GS協助管理部位。Prime方面：確認Asia是刻意加碼的策略選擇，目前已看到部分定價槓桿（pricing leverage）浮現，部分同業也轉趨謹慎，但GS會「保持選擇性」擴張。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Najarian明確問「Asia hyperscale交易貢獻多少」，Coleman完全沒有回答這個具體佔比，改談「dispersion」這個總體市場現象帶過。這是本場法說會第二次（前一題Schorr也問過）分析師試圖量化Asia/單一主題對Equities爆量貢獻度，管理層兩次都選擇不量化——形成一致的迴避模式，而非單一個案。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Erika Najarian:</b> "How much is the Asia hyperscale trade driving the equities revenues at Goldman? Does the recent correction, is that any cause for concern?... whether or not in prime you're starting to see a little bit of pricing power, given the global demand for balance sheet."<br><br><b>Denis Coleman:</b> "The activity for our equities business has been very broad-based... we're seeing single name equity dispersion relative to index, and we're seeing that dispersion relative to index while the market's going up... We do see opportunities for pricing leverage. There are some participants in the market that are also, I'll say, being more disciplined."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Christian Bolu（Autonomous Research）</div><div class="qa-topic">SLR降至同業最低 × 費用效率的可持續性</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">SLR下滑40bp至4.3%，已是同業最低，這對融資業務擴張構成多大限制？願意把SLR壓到多低？另外，H1效率比58.8%已優於60%目標，這是市場強勁的結果、還是結構性降本？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Coleman：公司同時管理CET1、SLR等多重「常常此消彼長」的約束條件，會動態、靈活（nimble）地在客戶機會與資源配置間取捨，但未給出SLR下限數字。效率方面：坦承營收成長40%、薪酬成本僅+30%、非薪酬成本僅+22%，形成明顯營運槓桿，並強調「目前為止沒有結構性的費用基礎改變」——效率提升主要來自營收成長本身，而非成本結構重組。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Coleman把SLR下滑完全描述為GS主動的資源配置選擇，但依10-Q揭露，GS已於2026/1/1提前採用修訂版eSLR標準，把G-SIB適用的緩衝從固定2%改為「G-SIB附加資本的50%」，使SLR**要求本身**從2025/12的5.0%降至2026/3的3.75%——換言之，SLR下滑有相當比例是監管規則鬆綁帶來的「免費」空間，而非純粹靠GS自己優化資產負債表效率換來的，這個結構性因素在回答中完全沒有被提及。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Christian Bolu:</b> "SLR did fall 40 basis points to 4.3%... Your SLR ratio is now the lowest among peers. How much does SLR govern constraints on growing the financing business? Then maybe give us a sense of how low you're willing to run that ratio."<br><br><b>Denis Coleman:</b> "We have a number of different, often oscillating, binding constraints as a firm. We manage to all of them... We will look at the opportunity set that our clients are presenting to us and then make choices about the relative resource allocation."<br><br><b>Christian Bolu (follow-up):</b> "How much of the expense or efficiency gains you've had so far is a function of just a strength in the markets business versus what you've already taken out from a structural cost perspective."<br><br><b>Denis Coleman:</b> "We've been able to grow our revs at about 40%... Comp expense is only growing at 30% and non-comp at 22%... I would not say that there's been any structural change in our expense base at this point."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mike Mayo（Wells Fargo Securities）</div><div class="qa-topic">One GS「乘數效應」拒絕量化 × Prime finance供需缺口</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">GS的併購顧問市佔比第二名高出50%，advisory backlog創新高——每賺$1併購顧問費，能連帶帶來多少其他業務營收？是10%、20%還是50%？另外，prime finance需求爆量，GS的產能vs需求現況如何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Solomon明確表示「不會給你一個具體百分比」，改以敘事框架說明：顧問關係建立信任，信任帶動融資、避險等業務更早、更獨家地找上GS，進而外溢到AWM（更多轉介、更早看到投資機會）與財富管理（客戶財富留在GS內）。Coleman：prime／FICC financing的客戶需求持續「遠超過我們願意承作的量」，這是AI CapEx超級週期下每個地區、每個產業都在找融資的結果。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Solomon是本場法說會中最直接的一次拒絕給數字（"I'm not going to give you a specific percentage, and to be honest, I don't know if I could give you an exact percentage that I could underwrite on a public call"）——但One GS「flywheel／乘數效應」這個敘事在整場電話會議中被管理層主動提及至少5次，作為解釋Equities、AWM、財富管理多項業務同步走強的核心邏輯，卻始終無法被還原成任何可驗證的數字，形成「敘事驅動估值、但敘事本身不可量化驗證」的落差。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Mike Mayo:</b> "What is the multiplier effect? For every $1 of merger fee that you generate, how much more do you get in all those other activities... Is it like 10% elsewhere, 20%, 50%?"<br><br><b>David Solomon:</b> "I'm not going to give you a specific percentage, and to be honest, I don't know if I could give you an exact percentage that I could underwrite on a public call... That flywheel is powerful. I can't give you a percentage, but it's a meaningful part of the integrated performance of the firm."<br><br><b>Mike Mayo (follow-up):</b> "Your prime finance is up a gargantuan amount year-over-year. What's your capacity versus the demand?"<br><br><b>Denis Coleman:</b> "There continues to be far more demand across the client segment than we're willing to engage... We're at a moment in time where the demands for the provision of financing are outstripping what we think is the appropriate quantum."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Manan Gosalia（Morgan Stanley）</div><div class="qa-topic">GBM放款成長來源 × CET1變動拆解</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">GBM放款成長主要來自FICC financing還是併購相關融資？未來balance sheet可以分配多少到這塊？另外，本季VaR上升但RWA卻下降，CET1比率變動的具體driver是什麼？未來一年CET1可望落在什麼區間管理？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Coleman詳細拆解：一部分是併購相關的「deals book」資本部署，一部分是計入FICC financing的其他抵押放款成長；並說明GS現在依商品類型採不同的「取得-結構化-分銷」策略——部分留在自家資產負債表（計入FICC financing）、部分透過Capital Solutions Group的原始發行能力「路由」給AWM客戶（讓AWM客戶取得原本只留給自家資產負債表的曝險）、部分包銷後分銷給機構客戶。CET1方面：市場風險RWA因VaR相關項目下降約20bp，信用風險RWA因特定融資放款活動改善小幅貢獻，其餘變動主要來自獲利留存扣除股利與買回；維持「監管門檻之上50-100bp」的操作模型，目前150bp緩衝高於此區間上緣，多出的部分會優先用於客戶端部署、其餘回饋股東。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Coleman的回答其實揭露了一個結構性轉變：GS越來越把原本只留在自家資產負債表的信用曝險，透過Capital Solutions Group「路由」給AWM的客戶（同一批高淨值/機構客戶，也是GS財富管理與OCIO業務極力爭取的對象）。這代表AWM客戶正在承接GS自身因CET1／SLR資本限制而無法全部留下的信用風險——管理層將此描述為「不同商品的不同來源、結構、分銷策略」，但沒有任何分析師追問這種「表內資本受限→表外路由給自家財富管理客戶」的安排，是否存在定價公允性或利益衝突的治理機制。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Manan Gosalia:</b> "Can you just talk about the strength in loan growth in the Global Banking &amp; Markets business? I guess how much of that is from the FICC financing side... how much of that is from just general deal-related financing?"<br><br><b>Denis Coleman:</b> "We are prioritizing deployment of capital into our deals book... the other collateralized largely relates to what we report as FICC financing... We are using our origination capabilities... and we're routing it to our asset and wealth management business. Because there are clients that we have in asset and wealth management that are very interested in getting exposure and investing in the same kinds of products that we used to invest only for ourselves on our balance sheet."<br><br><b>Manan Gosalia (follow-up):</b> "VaR was up in the quarter... but RWAs were actually down quarter-on-quarter. I guess the question is, what drove that and how should we think about the range in which you can manage your CET1 ratio over the next year or so?"<br><br><b>Denis Coleman:</b> "We remain committed to an operating model that's sort of called plus 50 to 100 basis points. We're obviously in excess of that... You should expect that cushion to be deployed for the client franchise and then some return of capital."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brennan Hawken（BMO）</div><div class="qa-topic">人力精簡與AI生產力 × Backlog中的Sponsor回歸訊號</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">營收強勁成長下，人力反而季減2%，是AI／One GS 3.0效率成果、還是刻意的目標？backlog季增年增皆創高，是否看到PE sponsor重新回歸的早期訊號？leveraged finance走強是活動回溫還是主要是再融資？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Coleman：人力數字是「投入與工具運用後的自然結果」，非設定的具體目標，且屬季節性（每年Q3才是大批新人入職季），年增其實是正的、僅季度環比略降。人力科技化提升生產力，讓員工「自然離職後較少感覺需要補人」。Solomon：backlog最大驅動仍是策略性併購，監管環境轉向對「無機式擴大競爭力」更寬容，促使CEO更敢於談大型整併；sponsor對話變多但尚未真正加速，仍是「未來上檔」；leveraged finance部分與AI基建建置有關，也有一部分是sponsor客戶藉由資本結構調整（recap）從被投企業取出資金。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Solomon把backlog爆量的根本原因歸結於「監管環境變寬鬆，CEO現在敢想大型整併」，這其實是把GS本季的招牌成長故事（「AI驅動的策略性活動」）背後真正的邊際變數，指向了**反壟斷／併購審查政策的寬鬆化**，而非純粹AI基建需求本身——這是一個政策依賴、可能隨政府更迭而反轉的驅動因子，卻被整場法說會的敘事包裝成單純的「AI週期早期階段」，沒有任何分析師追問這個政策寬鬆的持續性。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Brennan Hawken:</b> "Despite really robust revenue growth, headcount was down 2% quarter-over-quarter... Is this decline in headcount a function of some of the efficiency efforts you've been focused on..."<br><br><b>Denis Coleman:</b> "I think those numbers are an output of the efforts that we're undertaking, and it's not the result of some specific target... headcount's up year-over-year, but it's down slightly over the course of this calendar year."<br><br><b>Brennan Hawken (follow-up):</b> "Could you speak to maybe some trends in the backlogs, whether you're seeing early signs of sponsor reengaging?"<br><br><b>David Solomon:</b> "We're now also in a regulatory environment where when the question's asked, 'Could I' inorganically enhance my competitive position? The answer is maybe after a period of time where the answer would've been, absolutely no way... While there is more sponsored dialogue, the sponsor stuff still has not accelerated."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Dan Fannon（Jefferies）</div><div class="qa-topic">另類資產待部署AUM遞延 × H2誘因費用指引</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">非收費型另類資產AUM已超過$1000億，這批資金多久會轉化為管理費收入？另外，管理層預告H2誘因費用「將大幅增加」，能否給出量化區間？這是基於已宣布交易還是估值變動？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Solomon：募資與部署之間存在時間差，且是「階梯式」的連續過程，難以公式化預測部署速度快慢；長期目標是年募資$750-1000億，重點在維持募資機能、讓團隊挑選最佳部署時機。Coleman：確認Q3、Q4誘因費用將「顯著」高於Q2的$112M，且與「已知、有時程表」的特定交易掛鉤，屬於可預期而非隨機事件。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Coleman明確表示這些H2誘因費用「is related to specific transactions that are known and out there」——換言之管理層手上已經有具體交易清單和時程表，卻拒絕具名或給出金額區間，只承諾「materially higher」。這與Mayo提出的「乘數效應」問題屬於同一種模式：管理層掌握可精確量化的資訊，卻選擇僅以定性形容詞回應，讓分析師無法建立可驗證的財測模型。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Dan Fannon:</b> "You have fee paying AUM, or I should say non-fee paying AUM, that's well north of $100 billion. I was curious about how to think about the pace of when we should see that kind of flow into management fees."<br><br><b>David Solomon:</b> "There is a lag. You can't formulaically predict it."<br><br><b>Dan Fannon (follow-up):</b> "You mentioned incentive income to increase materially for the remainder of the year. Hoping maybe to get a little bit of a quantification around that."<br><br><b>Denis Coleman:</b> "We do expect in the third and fourth quarter to have materially higher incentive fees. It is related to specific transactions that are known and out there. Based on a schedule and some events, we know that there are incentive fees that we expect to earn as a firm."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Devin Ryan（Citizens Bank）</div><div class="qa-topic">另類資產募資動能持久性 × Agentic AI客戶端機會被迴避</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">另類資產募資強勁，是長期市佔集中趨勢的延續、還是LP變得更挑剔／更聚焦私募信貸這類特定領域？另外，GS內部AI建置到了什麼階段，agentic AI是否有機會發展成**客戶端**的創新服務、成為GS早期卡位的機會？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Solomon：兩者皆是——長期平台規模優勢持續發威，同時LP確實在特定領域（如私募信貸）更傾向找業績與能力更突出的管理人；募資存在季度間的「lumpiness」但全年方向明確超前。Coleman：agentic AI話題被完全導向**內部**應用——從工程團隊的生產力起步，透過整合大型語言模型供應商關係與外部工程人才招募，逐步把GS內部高度差異化的數據與AI萃取分析能力結合，讓員工提供更好的建議與分析。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Devin Ryan問題後半段明確聚焦「客戶端（client-facing）」的agentic AI創新機會（"even from a client-facing perspective to be innovating with where you could be early and could be meaningful"），但Coleman整段回答只談內部工程生產力與數據萃取，完全沒有正面回應「客戶端」這個關鍵字所指向的產品化／貨幣化機會，是一次典型的問題錯位式迴避。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Devin Ryan:</b> "As you think about just how fast this technology is evolving, you think about agentic as well and maybe opportunities... even from a client-facing perspective to be innovating with where you could be early and could be meaningful?"<br><br><b>Denis Coleman:</b> "It started with productivity and a more narrow component of the firm called engineering... hiring a bunch of engineers from the outside... Goldman Sachs has an enormous amount of highly differentiated data that we have collected and curated over many years. We put that all together with the extraction and analytic capabilities of these new technologies and put that in the hands of our world-class talent."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Gerard Cassidy（RBC）</div><div class="qa-topic">AI週期 vs 網路泡沫／2021年比較 × One GS市佔量化（少見的正面回應）</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">這波AI驅動的資本市場活動，規模上與網路泡沫時期、2021年疫情期投行大年相比如何？另外，交易業務的強勁表現，多少歸功於One GS策略、多少歸功於中東衝突等總體波動因素？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Solomon：拒絕做歷史直接類比，但主動揭露一個反直覺數字——本季IPO量能雖然強勁，但實際上「處於或低於十年平均值」；真正不同的是GS這次的獲利引擎更多元、更耐久，而非單押AI週期。One GS量化：回顧2020年首次Investor Day時，GS在前100大帳戶中僅44家排名前三；如今前100大帳戶中近80家排名前三，前150大帳戶中則有127家排名前三——六年半的市佔紀律帶來的結果。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Solomon自曝「IPO量能其實處於十年平均值或以下」，直接與整場法說會「創紀錄」「史無前例的AI週期」的敘事基調形成反差，但沒有任何分析師抓住這個自相矛盾的細節追問——如果連IPO市場都只是平均水準，那麼本季各業務線的「record」紀錄，有多少其實是集中在少數超大型交易（Alphabet、SpaceX等具名案例）而非市場普遍熱絡？</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Gerard Cassidy:</b> "Can you compare this period and the influence that AI is having on the business... to prior periods similar to maybe the dot-com era or even during the 2021 period..."<br><br><b>David Solomon:</b> "IPO volumes in this quarter were kind of at or below the 10-year average. Okay?... the firm is so much bigger, so much more diverse, has so many more earnings engines, has so much more durable revenue than it had the last time we saw a significant investment cycle like this."<br><br><b>Gerard Cassidy (follow-up):</b> "Is there any way of quantifying how much of the success in those numbers has come from One Goldman Sachs versus the market conditions just being so volatile?"<br><br><b>David Solomon:</b> "I think we said we were top three with 44 of the top 100... I think today we're top three with close to 80 of the top 100, but we are top three with 127 of the top 150."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Chris McGratty（KBW）</div><div class="qa-topic">AWM佔營收比重的理想值 × 管理層自評尚待加強之處</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">AWM約佔營收四分之一，這是理想的業務組合嗎？是否有無機成長機會可以補強？另外，有沒有哪個業務／地區是管理層自認「還沒達到應有水準」的？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Solomon：理想組合會略有不同，但GBM成長速度已超出六七年前設定的路線圖，不會為了改變組合而犧牲這塊成長；持續尋找無機成長機會補強AWM，門檻一向很高。自評弱項：明確點名**超高淨值財富管理**——這個市場高度分散、沒有絕對龍頭，GS近兩年已加大投資，且會持續加碼。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">此題管理層給出的答案相對透明、具體（明確點名超高淨值財富管理為投資不足的領域），與Mayo、Fannon兩題形成對比，顯示管理層在「業務組合戰略」層面的坦誠度，明顯高於在「乘數效應量化」「誘因費用區間」等會直接影響短期財測的具體數字上的坦誠度——這個選擇性揭露的模式本身，是解讀整場法說會時值得留意的訊號。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Chris McGratty:</b> "AWM is about a quarter of the revenues. I guess the question, is this about where you'd like it to be..."<br><br><b>David Solomon:</b> "If I could paint an ideal business mix between Global Banking &amp; Markets and Asset and Wealth Management, the percentage would be slightly different... I wouldn't trade away that growth at all."<br><br><b>Chris McGratty (follow-up):</b> "What's not at your high expectations, whether nuances within a business strategy, geography..."<br><br><b>David Solomon:</b> "One of the most obvious ones is wealth... It's a very fragmented business where people have fragmented share. There's no big leader that has more... we're investing in those people. We've accelerated our investment."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capital Solutions / AI Financing Panel -->
+  <div id="panel-cap" class="panel">
+    <div class="section-title">本季特殊事件深度拆解：AI基建融資超級週期 × Capital Solutions Group</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>FICC+Equities合計financing營收 $4.5B，YoY +62%，佔FICC+Equities總營收37%</li>
+          <li>Equity financing YoY +91%，創紀錄；prime balances創歷史新高</li>
+          <li>FICC financing YoY +14%創新高；FICC intermediation YoY +39%</li>
+          <li>總放款組合季增3%至$261B，主要來自「其他抵押放款」（deals book + FICC financing）與住宅不動產放款</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>結構／期限</h4>
+        <ul>
+          <li>Capital Solutions Group整合advisory、financing、風控、資本市場執行、分銷於一體</li>
+          <li>依商品類型採不同「來源—結構化—分銷」策略：留自家資產負債表（計入FICC financing）／路由給AWM客戶／包銷分銷給機構投資人</li>
+          <li>advisory backlog為5年最高、史上第二高，主要由策略性（非sponsor）併購驅動</li>
+          <li>leveraged finance成長部分來自AI基建建置，部分來自sponsor客戶的資本結構調整（recap）</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>資本佔用</h4>
+        <ul>
+          <li>CET1（Standardized）12.9%，較11.4%監管門檻高出150bp緩衝</li>
+          <li>SLR降至4.3%（同業最低），較前期下滑約40bp</li>
+          <li>10-Q揭露：2026/1/1提前採用eSLR新規，G-SIB緩衝由固定2%改為G-SIB附加資本的50%，SLR要求本身由5.0%（2025/12）降至3.75%（2026/3）</li>
+          <li>操作模型：CET1維持監管門檻上50-100bp緩衝，目前150bp緩衝已高於此區間上緣</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>Prime／FICC financing「需求持續遠超GS願意承作的量」——但未揭露GS實際婉拒了多少融資需求</li>
+          <li>AI基建曝險（資料中心、GPU抵押、hyperscaler資本支出相關）佔$4.5B financing營收與$261B放款組合的比例，全程未被拆分揭露</li>
+          <li>Solomon自承token定價、企業採購模式仍高度不確定，可能在6-18個月內出現「recalibration」，但未提供任何情境測試量化結果</li>
+          <li>sponsor（PE）併購量能仍「低於歷史均值」——若回溫，backlog與leveraged finance仍有未反映的上檔</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問：盡職調查式追問清單</h4>
+      <ol>
+        <li>$4.5B的FICC+Equities financing營收與季增3%的$261B放款組合中，有多少比例是直接與AI資料中心／GPU抵押／hyperscaler資本支出掛鉤？GS從未拆分揭露這個新興、快速成長的曝險類別，使投資人無法評估集中度。</li>
+        <li>若eSLR改革（G-SIB緩衝由固定2%改為附加資本50%）未來被下一屆政府或監管機關收緊甚至撤銷，GS目前靠此規則紅利支撐的prime／financing資產負債表擴張，有多少比例會重新受到資本天花板限制？</li>
+        <li>Capital Solutions Group把原本只留在GS自家資產負債表的信用曝險，「路由」給AWM客戶承接——這批客戶同時也是GS財富管理與OCIO業務極力爭取、且透過投行轉介（900筆轉介）持續擴大的對象，兩者之間的定價公允性與利益衝突治理機制為何？</li>
+        <li>Advisory backlog創5年新高，但backlog的「品質」（策略性併購 vs. sponsor併購 vs. 再融資／recap）是否與過去週期不同？如果sponsor活動遲遲不加速，目前偏重策略性併購的backlog，其兌現速度與確定性是否比歷史平均更快、更確定，還是相反？</li>
+      </ol>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">CET1 資本緩衝：門檻 vs 操作區間 vs 實際值（Standardized，2026 Q2）</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>11.4%<br>監管門檻</div>
+        <div class="band-marker target" style="left:38%;"><div class="dot"></div>11.9–12.4%<br>操作區間(+50~100bp)</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>12.9%<br>實際值</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>監管最低要求</span>
+        <span><span class="sw" style="background:#2563eb;"></span>管理層自訂操作區間</span>
+        <span><span class="sw" style="background:#15803d;"></span>2026 Q2 實際值（高於自訂區間上緣約50bp）</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">實際CET1（12.9%）已超出管理層自己揭露的「監管門檻+50~100bp」操作區間上緣（12.4%）約50bp，對應Coleman所述「多出的緩衝將優先用於客戶端部署、其餘回饋股東」——本季$4B買回即是這個機制的具體體現。</p>
+    </div>
+
+    <div class="section-title">立場對照：AI基建融資超級週期 對GS vs 對其融資客戶</div>
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>對 Goldman Sachs</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>Financing營收多重紀錄（FICC+Equities financing +62% YoY）</li>
+          <li>透過AWM／機構分銷降低資本負擔，賺取結構化與分銷手續費（資本輕量化模式）</li>
+          <li>advisory-financing-AWM形成自我強化的flywheel，抬高客戶轉換成本</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>營收結構更集中在AI CapEx週期的延續性，週期一旦「recalibration」，backlog與financing需求同步降溫</li>
+          <li>SLR已降至同業最低，資本部位對eSLR監管紅利的依賴度上升</li>
+          <li>信用風險：若AI基建投報不如預期，$261B放款組合中與此相關的部位首當其衝</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4>對 融資客戶（hyperscaler／資料中心開發商等）</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>取得GS全球資產負債表與分銷網路，可彈性選擇債權/股權/表外結構化方案</li>
+          <li>透過Capital Solutions Group「一站式」取得顧問、融資、風控、資本市場執行整合服務</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>Coleman坦言「已開始出現定價槓桿（pricing leverage）」——融資成本可能隨供給端更謹慎而走升</li>
+          <li>需求「遠超GS願意承作的量」，代表客戶可能面臨額度配給、需要接受更嚴格條件才能取得資金</li>
+          <li>過度依賴少數具備全球規模與資產負債表深度的投行（GS為其一），議價力相對受限</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Platform Panel -->
+  <div id="panel-biz" class="panel">
+    <div class="section-title">業務板塊營收（2026 Q2，YoY%）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">Global Banking &amp; Markets（總計，創紀錄）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#2563eb;">$15.5B</div></div>
+        <div class="rev-val">segment ROE 25%(H1)</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Advisory</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:36%; background:#60a5fa;">$1.4B</div></div>
+        <div class="rev-val">+17% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Equity Underwriting</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:25%; background:#60a5fa;">$985M</div></div>
+        <div class="rev-val">+130% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Debt Underwriting</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:26%; background:#60a5fa;">$1.0B</div></div>
+        <div class="rev-val">+75% YoY，史上最佳單季</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— FICC</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:118%; background:#3b82f6;">$4.6B</div></div>
+        <div class="rev-val">+32% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Equities（創紀錄）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:190%; background:#1d4ed8;">$7.4B</div></div>
+        <div class="rev-val">record</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Asset &amp; Wealth Management</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:118%; background:#15803d;">$4.6B</div></div>
+        <div class="rev-val">+20% YoY，H1 pre-tax margin 24%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Platform Solutions</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:6%; background:#c2600a;">$221M</div></div>
+        <div class="rev-val">guide：後續季度大致持平</div>
+      </div>
+    </div>
+    <p style="color:#888; font-size:11px; margin-top:-8px; margin-bottom:16px;">⚑ 條狀長度以Global Banking &amp; Markets $15.5B為100%基準做相對比例示意，非精確線性刻度。</p>
+
+    <div class="section-title">三大板塊摘要</div>
+    <div class="seg-grid">
+      <div class="seg-card gbm">
+        <h4>Global Banking &amp; Markets</h4>
+        <ul>
+          <li>Advisory：全球M&amp;A顧問量第一，H1宣布交易$1.2T，領先第二名約$425B</li>
+          <li>Equity UW：Alphabet增資、SpaceX IPO主辦行之一，H1排名第一</li>
+          <li>FICC：利率、商品、房貸intermediation全面走強</li>
+          <li>Equities：intermediation+60% YoY，financing+91% YoY，皆創紀錄</li>
+          <li>IB backlog：5年最高、史上第二高，advisory backlog創紀錄</li>
+        </ul>
+      </div>
+      <div class="seg-card awm">
+        <h4>Asset &amp; Wealth Management</h4>
+        <ul>
+          <li>管理費$3.4B創紀錄，+20% YoY；誘因費用$112M，H2預期「顯著」走高</li>
+          <li>Private banking &amp; lending $689M，放款餘額成長至$48B</li>
+          <li>AUS達$4T創紀錄，本季淨流入$91B，連續34季長期淨流入</li>
+          <li>另類資產本季募資$59B創紀錄（私募信貸$31B），全年目標上調至逾$125B</li>
+          <li>Industry Ventures／Innovator兩筆收購整合初期動能良好（10-Q：Industry Ventures對價含約$315M可交換單位＋至2030年績效對賭）</li>
+          <li>新增Verizon、Lockheed Martin退休金OCIO委任，合計AUS $70B</li>
+        </ul>
+      </div>
+      <div class="seg-card ps">
+        <h4>Platform Solutions</h4>
+        <ul>
+          <li>營收主要來自Apple Card發卡與存款業務，及已退出業務的殘值</li>
+          <li>10-Q揭露：2025/12已簽約將Apple Card專案移交其他發卡機構，預計約24個月內完成過渡（約2027年底）</li>
+          <li>10-Q資產面：放款餘額$19,116M（2025/12：$19,823M，略降），與退出時程一致</li>
+          <li>屬於確定中的收斂／退出型業務，非成長引擎</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">因果鏈敘事：AI基建週期 → One GS Flywheel</div>
+      <div class="flow-chain">
+        <span class="node">AI基建投資週期擴張</span><span class="arrow">→</span>
+        <span class="node">CEO追求規模優勢意願上升</span><span class="arrow">→</span>
+        <span class="node">大型策略性M&amp;A量能+90%(H1)</span><span class="arrow">→</span>
+        <span class="node">Advisory backlog創5年新高</span><span class="arrow">→</span>
+        <span class="node">顧問信任外溢至Financing/資本市場執行</span><span class="arrow">→</span>
+        <span class="node">Capital Solutions Group整合分銷(自家/AWM/機構)</span><span class="arrow">→</span>
+        <span class="node">IB轉介AWM 900筆(2025迄今)</span><span class="arrow">→</span>
+        <span class="node">財富管理AUS達$2T創紀錄</span><span class="arrow">→</span>
+        <span class="node">另類資產募資$59B創紀錄</span><span class="arrow">→</span>
+        <span class="node">全年募資目標上調至$125B+</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">這條因果鏈是管理層在整場法說會反覆強調的核心敘事（「One GS」「flywheel」用詞出現5次以上），但如Q&amp;A Tab中Mike Mayo一題所示，這個鏈條中每一個「外溢」箭頭的實際轉換率，管理層均未提供可驗證的量化數字。</p>
+    </div>
+  </div>
+
+  <!-- Risk Matrix Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">AI CapEx週期減速／Recalibration風險——GS營收結構已更深度綁定此週期</div>
+        Solomon本人主動承認AI基建週期「不會是直線發展」，未來6-18個月可能出現「recalibration」，且token定價、企業採購模式仍高度不確定；但GS本季IB backlog（5年新高）、financing營收（多項紀錄）已高度依賴這個週期的延續。若週期降溫，advisory backlog的兌現速度與prime/FICC financing的需求強度將同步承壓，而管理層在被問及情境測試時（Ebrahim Poonawala提問）並未引用自家CCAR/DFAST壓力測試結果佐證信心，形成「口頭安心、無數據佐證」的落差。
+        <div class="risk-source">來源：法說會Ebrahim Poonawala/Q&amp;A；10-Q揭露2026年4月已提交CCAR資本計畫</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">SLR資本紅利的監管依賴性——eSLR改革若反轉，融資超級週期恐面臨資本天花板</div>
+        交叉比對10-Q與法說會可拼出一個管理層未主動揭露的風險鏈：GS已於2026/1/1提前採用修訂版eSLR標準，使SLR要求本身從5.0%（2025/12）降至3.75%（2026/3），這是本季prime/FICC financing資產負債表得以大幅擴張（equity financing+91% YoY、financing營收佔FICC+Equities比重達37%）的重要制度性前提之一；同時Coleman在回答Mike Mayo時坦言「客戶對financing的需求持續遠超GS願意承作的量」。換言之，GS目前是在「監管緩衝剛放寬、需求又遠超供給」的雙重有利環境下衝刺財務槓桿業務——一旦Basel III最終規則制定不如預期寬鬆，或未來政府調整eSLR方向，SLR要求可能回升，屆時正處於需求爆量階段的prime/financing業務將率先受到資本天花板限制，形成「當紅業務线突然被監管急煞車」的情境，而這個依賴鏈條在整場法說會沒有被任何一方明確點出。
+        <div class="risk-source">來源：10-Q「Leverage Ratios」揭露＋法說會Christian Bolu提問／Denis Coleman、David Solomon（Basel III finalization評論）交叉比對</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Equities／Prime業務對Asia集中度的量化黑箱</div>
+        本場法說會有兩位分析師（Glenn Schorr、Erika Najarian）分別追問Asia／hyperscale交易對Equities爆量的具體貢獻度與客戶集中度，管理層兩次均以「高度分散」「多元客戶」等定性語言回應，未提供任何客戶數、單一客戶佔比或地區別營收拆分；GS也未在10-Q揭露交易/融資類業務的地區或客戶集中度（10-Q Note 26信用集中度僅涵蓋放款）。若Asia動能降溫（如Erika Najarian提及的「近期科技股回檔」），投資人目前無從評估衝擊幅度。
+        <div class="risk-source">來源：法說會Glenn Schorr、Erika Najarian提問</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">併購活動繁榮的政策依賴性</div>
+        Solomon明確將本輪backlog爆量歸因於「監管環境轉向對無機式擴大競爭力更寬容」（"the answer would've been, absolutely no way, whatever the question was"），而非單純AI基建需求本身。這代表GS本季招牌成長引擎之一，實質上綁定於當前反壟斷／併購審查的政策寬鬆度，屬於可能隨政府更迭或政策轉向而反轉的外生變數，而非純粹的技術週期驅動因子。
+        <div class="risk-source">來源：法說會Brennan Hawken提問／David Solomon回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Capital Solutions Group「路由」機制的潛在利益衝突治理缺口</div>
+        Coleman向Manan Gosalia說明，GS正把原本只留在自家資產負債表的信用曝險，透過Capital Solutions Group的原始發行能力，路由給AWM客戶承接——這批客戶同時也是GS財富管理／OCIO業務積極爭取、且透過投行轉介（900筆，2025年迄今）持續擴大的對象。管理層將此定調為「不同商品的不同分銷策略」，但未說明這種安排的定價公允性機制、資訊揭露義務或是否存在GS自身資本受限（CET1/SLR）才轉向AWM客戶承接的誘因問題。
+        <div class="risk-source">來源：法說會Manan Gosalia提問／Denis Coleman回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Platform Solutions／Apple Card確定性收斂，無接續消費金融策略</div>
+        10-Q證實Apple Card專案已於2025年12月簽約移交其他發卡機構，過渡期約24個月（約至2027年底完成），對應Platform Solutions本季僅$221M營收且管理層預期「後續季度大致持平」。這是一個確定中的萎縮業務，管理層未在本場法說會提出任何接續的消費金融或平台策略，顯示GS在2017-2022年間的消費金融擴張實驗，最終以持續收斂告終。
+        <div class="risk-source">來源：10-Q Platform Solutions附註；法說會Denis Coleman揭露$221M營收guide</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人交易訊號：四位最高層具名高管同步小額出脫，無買進</div>
+        法說會前約4-11週（2026年5月1日至5月14日）的Form 4申報顯示，CEO David Solomon（出售3,470股）、CFO Denis Coleman（出售6,857股）、Chief Legal Officer Kathryn Ruemmler（出售約13,790股）、Chief Accounting Officer Sheara Fredman（出售10,301股）均於當時歷史相對高檔的股價（$925-975/股，事後股價進一步走高）出售股票，透過家族信託持有，申報文件未載明是否為Rule 10b5-1預先排程計畫，同期無任何內部人買進，且6月17日後至法說會當日無新增申報。四人同步出脫的模式較符合年度分紅解禁後的例行賣股節奏，規模相對其職務層級並不算大，但仍與Solomon本人在受訪時提及的「市場貪婪多於恐懼」背景形成一個值得留意（而非警訊等級）的情緒交叉檢核點。
+        <div class="risk-source">來源：SEC EDGAR Form 4申報（accession 0001900188-26-000015、0001850865-26-000012、0001693709-26-000009、0001792653-26-000012、0001850865-26-000009）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">法律訴訟／監管調查——例行性揭露，無本季新增重大個案</div>
+        10-Q Item 1與Note 27維持標準化揭露語言，管理層警示訴訟費用「可能維持高檔」，但未點名本季新增或升級的個別重大訴訟案件，截至最近一期10-Q亦無足以對財務狀況構成重大不利影響的認定。
+        <div class="risk-source">來源：10-Q Item 1 Legal Proceedings / Note 27</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+let isEn = false;
+function toggleLang() {
+  isEn = !isEn;
+  document.getElementById('langBtn').textContent = isEn ? '繁體中文' : 'English';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    if (isEn) {
+      if (!el.dataset.zh) el.dataset.zh = el.innerHTML;
+      el.innerHTML = el.dataset.en;
+    } else {
+      if (el.dataset.zh) el.innerHTML = el.dataset.zh;
+    }
+  });
+}
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
