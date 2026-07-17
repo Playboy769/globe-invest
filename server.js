@@ -210,6 +210,8 @@ const WARN_APIS  = {
   'twse-3insti':  'https://openapi.twse.com.tw/v1/exchangeReport/MI_3INSTI',
   'twse-exdiv':   'https://openapi.twse.com.tw/v1/exchangeReport/TWT48U_ALL',
   'tpex-exdiv':   'https://www.tpex.org.tw/openapi/v1/tpex_exright_prepost',
+  'twse-stock-day-all':     'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL',
+  'tpex-mainboard-quotes':  'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes',
 };
 
 async function getWarnData(key) {
@@ -856,6 +858,8 @@ const server = http.createServer(async (req, res) => {
     '/api/warning/twse-3insti':  'twse-3insti',
     '/api/warning/twse-exdiv':   'twse-exdiv',
     '/api/warning/tpex-exdiv':   'tpex-exdiv',
+    '/api/warning/twse-stock-day-all':    'twse-stock-day-all',
+    '/api/warning/tpex-mainboard-quotes': 'tpex-mainboard-quotes',
   }[req.url];
   if (warnKey && req.method === 'GET') {
     try {

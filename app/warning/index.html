@@ -294,6 +294,33 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
 .hp-pct.dn   { color:var(--green-ink); }
 .hp-pct.flat { color:var(--ink-ghost); }
 
+/* ── MARKET BREADTH CHART ── */
+.brd-chart-scroll { overflow-x:auto; padding:24px 0 0; }
+.brd-chart { display:flex; align-items:flex-end; gap:6px; min-width:680px; height:180px; }
+.brd-col  { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+            height:100%; min-width:22px; }
+.brd-num  { font-family:'Calibri',sans-serif; font-size:10.5px; font-weight:600; color:var(--ink-soft);
+            font-variant-numeric:tabular-nums; margin-bottom:5px; white-space:nowrap; }
+.brd-bar  { width:100%; border-radius:3px 3px 0 0; min-height:2px; background:var(--ink-ghost);
+            transition:height .5s cubic-bezier(.22,.61,.36,1); }
+.brd-bar.up    { background:#f0b3ab; }
+.brd-bar.up.hi { background:var(--red-ink); }
+.brd-bar.dn    { background:#a8d9bd; }
+.brd-bar.dn.hi { background:var(--green-ink); }
+.brd-axis { font-family:'Calibri',sans-serif; font-size:9.5px; color:var(--ink-faint); margin-top:6px;
+            font-variant-numeric:tabular-nums; }
+.brd-ratio { display:flex; align-items:center; height:24px; border-radius:4px; overflow:hidden;
+             margin-top:24px; background:var(--border-lt); min-width:680px; }
+.brd-ratio-seg { height:100%; display:flex; align-items:center; justify-content:center;
+                 font-family:'Calibri',sans-serif; font-size:11px; font-weight:600; color:#fff;
+                 transition:width .5s cubic-bezier(.22,.61,.36,1); }
+.brd-ratio-seg.dn { background:var(--green-ink); }
+.brd-ratio-seg.up { background:var(--red-ink); }
+.brd-note { font-family:'Noto Sans TC',sans-serif; font-size:11.5px; color:var(--ink-ghost);
+            line-height:1.7; padding:20px 0 8px; }
+.stat-cell.s-up   .stat-num { color:var(--red-ink); }
+.stat-cell.s-down .stat-num { color:var(--green-ink); }
+
 /* ── RESPONSIVE ── */
 @media (max-width:960px) {
   header,.sec-nav,.stat-strip,.tab-bar,.tbl-wrap,footer { padding-left:24px; padding-right:24px; }
@@ -344,6 +371,9 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </button>
   <button class="sec-btn zh" data-sec="hp" onclick="switchSec('hp')">
     高價股 <span class="sec-cnt" id="scnt-hp"></span>
+  </button>
+  <button class="sec-btn zh" data-sec="breadth" onclick="switchSec('breadth')">
+    漲跌分佈 <span class="sec-cnt" id="scnt-breadth"></span>
   </button>
 </nav>
 
@@ -550,6 +580,34 @@ footer { border-top:1px solid var(--border); padding:18px 48px;
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════
+     SECTION 5 — MARKET BREADTH
+═══════════════════════════════════════════ -->
+<div id="sec-breadth" class="sec-panel" hidden>
+  <div class="stat-strip">
+    <div class="stat-cell s-down">
+      <div class="stat-label zh">跌停家數</div><div class="stat-num en" id="b-cnt-ld">—</div>
+    </div>
+    <div class="stat-cell s-down">
+      <div class="stat-label zh">下跌家數</div><div class="stat-num en" id="b-cnt-dn">—</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label zh">平盤家數</div><div class="stat-num en" id="b-cnt-fl">—</div>
+    </div>
+    <div class="stat-cell s-up">
+      <div class="stat-label zh">上漲家數</div><div class="stat-num en" id="b-cnt-up">—</div>
+    </div>
+    <div class="stat-cell s-up">
+      <div class="stat-label zh">漲停家數</div><div class="stat-num en" id="b-cnt-lu">—</div>
+    </div>
+  </div>
+  <div class="tbl-wrap" style="padding-top:0">
+    <div id="breadthBody"><div class="state-wrap"><div class="state-dots">
+      <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+    </div><div class="state-msg zh">正在載入全市場漲跌資料…</div></div></div>
+  </div>
+</div>
+
 <!-- ── Footer ── -->
 <footer>
   <span class="ft-src en">TWSE openapi.twse.com.tw &nbsp;&middot;&nbsp; TPEx tpex.org.tw/openapi</span>
@@ -569,6 +627,7 @@ const S = {
   inst:  { rows:[], loaded:false },
   exdiv: { rows:[], loaded:false },
   hp:    { rows:[], metrics:{}, rt:{}, loaded:false, filter:'all', sortCol:'price', sortDir:'desc', done:0, total:0 },
+  breadth: { data:null, loaded:false },
   warnSort:  { col: null,    dir: 'asc' },
   instSort:  { col: 'total', dir: 'desc' },
   exdivSort: { col: 'date',  dir: 'asc'  },
@@ -732,9 +791,10 @@ function switchSec(id){
   S.activeSec = id;
   document.querySelectorAll('.sec-btn').forEach(b=>b.classList.toggle('active',b.dataset.sec===id));
   document.querySelectorAll('.sec-panel').forEach(p=>{ p.hidden = p.id!=='sec-'+id; });
-  if(id==='inst'  && !S.inst.loaded)  loadInst();
-  if(id==='exdiv' && !S.exdiv.loaded) loadExDiv();
-  if(id==='hp'    && !S.hp.loaded)    loadHP();
+  if(id==='inst'    && !S.inst.loaded)    loadInst();
+  if(id==='exdiv'   && !S.exdiv.loaded)   loadExDiv();
+  if(id==='hp'      && !S.hp.loaded)      loadHP();
+  if(id==='breadth' && !S.breadth.loaded) loadBreadth();
 }
 
 function refresh(){
@@ -744,6 +804,7 @@ function refresh(){
   if(s==='exdiv')  { S.exdiv.loaded=false; loadExDiv(); }
   if(s==='hp')     { S.hp.loaded=false; S.hp.rows=[]; S.hp.metrics={}; S.hp.rt={}; loadHP(); }
   else             { stopHPPoll(); }
+  if(s==='breadth'){ S.breadth.loaded=false; loadBreadth(); }
 }
 
 // ═══════════════════════════════════════════
@@ -1365,6 +1426,114 @@ async function loadHP(){
   }catch(e){
     document.getElementById('hp-tbody').innerHTML=`<tr><td colspan="20" style="padding:40px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)}</td></tr>`;
   }
+}
+
+// ═══════════════════════════════════════════
+// MARKET BREADTH SECTION
+// ═══════════════════════════════════════════
+// Daily limit is exactly ±10% of prior close, but tick-size rounding means the
+// realized % rarely lands on exactly 10.00 — 9.5% catches limit hits reliably
+// without over-counting ordinary large moves.
+const BRD_LIMIT_PCT = 9.5;
+
+// Buckets index 0..20 map to pct-change buckets -10..+10. Bucket 0 is reserved
+// for exact-zero change (matches the separate 平盤家數 stat); any nonzero pct
+// rounds to at least ±1 so it never collides with that bucket.
+function computeBreadth(twseRows, tpexRows){
+  const buckets = new Array(21).fill(0);
+  let up=0, down=0, flat=0, limitUp=0, limitDown=0;
+
+  function ingest(closeStr, changeStr){
+    const close  = parseFloat(closeStr);
+    const change = parseFloat(changeStr); // NaN for 除息/除權/non-numeric rows
+    if(!isFinite(close) || !isFinite(change)) return;
+    const prevClose = close - change;
+    if(!(prevClose > 0)) return;
+
+    if(change > 0) up++; else if(change < 0) down++; else flat++;
+    const pct = (change / prevClose) * 100;
+    if(pct >= BRD_LIMIT_PCT) limitUp++;
+    else if(pct <= -BRD_LIMIT_PCT) limitDown++;
+
+    let bucket;
+    if(change === 0) bucket = 0;
+    else {
+      bucket = Math.round(pct);
+      if(bucket === 0) bucket = pct > 0 ? 1 : -1;
+      bucket = Math.max(-10, Math.min(10, bucket));
+    }
+    buckets[bucket + 10]++;
+  }
+  (twseRows||[]).forEach(r => ingest(r.ClosingPrice, r.Change));
+  (tpexRows||[]).forEach(r => ingest(r.Close, r.Change));
+  return { buckets, up, down, flat, limitUp, limitDown };
+}
+
+async function loadBreadth(){
+  setSpin(true);
+  document.getElementById('breadthBody').innerHTML = `<div class="state-wrap"><div class="state-dots">
+    <div class="state-dot"></div><div class="state-dot"></div><div class="state-dot"></div>
+  </div><div class="state-msg zh">正在載入全市場漲跌資料…</div></div>`;
+
+  const [twseRows, tpexRows] = await Promise.all([
+    apiFetch('twse-stock-day-all'), apiFetch('tpex-mainboard-quotes'),
+  ]);
+
+  if(twseRows.length || tpexRows.length){
+    S.breadth.data = computeBreadth(twseRows, tpexRows);
+    S.breadth.loaded = true;
+  }
+  setSpin(false); document.getElementById('updTime').textContent = nowStr();
+  renderBreadth();
+}
+
+function renderBreadth(){
+  const d = S.breadth.data;
+  const body = document.getElementById('breadthBody');
+  if(!d){
+    empty('breadthBody', '全市場資料無法載入', 'TWSE / TPEx snapshot APIs did not respond. Try again.');
+    return;
+  }
+
+  const { buckets, up, down, flat, limitUp, limitDown } = d;
+  document.getElementById('b-cnt-ld').textContent = limitDown;
+  document.getElementById('b-cnt-dn').textContent = down;
+  document.getElementById('b-cnt-fl').textContent = flat;
+  document.getElementById('b-cnt-up').textContent = up;
+  document.getElementById('b-cnt-lu').textContent = limitUp;
+  document.getElementById('scnt-breadth').textContent = up + down + flat;
+
+  const maxCount = Math.max(...buckets, 1);
+  const total = up + down + flat || 1;
+  const upPct   = Math.round((up   / total) * 100);
+  const downPct = Math.round((down / total) * 100);
+
+  const bars = buckets.map((count, i) => {
+    const bucket = i - 10;
+    const heightPct = Math.max((count / maxCount) * 100, count > 0 ? 3 : 0);
+    let cls = 'brd-bar';
+    if(bucket > 0) cls += ' up' + (bucket >= 4 ? ' hi' : '');
+    else if(bucket < 0) cls += ' dn' + (bucket <= -4 ? ' hi' : '');
+    return `
+      <div class="brd-col">
+        <div class="brd-num en">${count}</div>
+        <div class="${cls}" style="height:${heightPct}%"></div>
+        <div class="brd-axis en">${bucket > 0 ? '+' + bucket : bucket}</div>
+      </div>`;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="brd-chart-scroll">
+      <div class="brd-chart">${bars}</div>
+      <div class="brd-ratio">
+        <div class="brd-ratio-seg dn en" style="width:${downPct}%">${downPct > 6 ? downPct + '%' : ''}</div>
+        <div class="brd-ratio-seg up en" style="width:${upPct}%">${upPct > 6 ? upPct + '%' : ''}</div>
+      </div>
+    </div>
+    <p class="brd-note zh">
+      資料範圍：TWSE STOCK_DAY_ALL ＋ TPEx tpex_mainboard_quotes 當日快照（含 ETF／受益證券，不含當日除息除權個股）。
+      漲跌停以當日漲跌幅 ≥ ${BRD_LIMIT_PCT}% 近似判定。橫條為上漲／下跌家數佔比（不含平盤）。
+    </p>`;
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────
