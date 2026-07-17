@@ -906,7 +906,7 @@ body.dark #cf-url-ok:hover{background:#fff}
       <button class="cf-dock-btn" id="cf-add-img" title="Upload image">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><polyline points="4 17 9 12 13 16 16 13 20 17"/></svg>
       </button>
-      <input type="file" id="cf-img-input" accept="image/*" style="display:none">
+      <input type="file" id="cf-img-input" accept="image/*" multiple style="display:none">
       <button class="cf-dock-btn" id="cf-add-pdf" title="Upload PDF">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
       </button>
@@ -3751,13 +3751,13 @@ document.getElementById('cf-add-text').addEventListener('click',()=>{
   _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
   document.getElementById('cf-add-text').classList.toggle('active',_textMode);
 });
-document.getElementById('cf-add-img').addEventListener('click',()=>document.getElementById('cf-img-input').click());
-document.getElementById('cf-img-input').addEventListener('change',e=>{
-  const f=e.target.files[0];if(!f)return;
+// Shared by the dock-button file picker, canvas drag-drop, and clipboard paste below.
+function addImageFromFile(f, pt) {
+  if(!f) return;
   const rd=new FileReader();
   rd.onload=async ev=>{
     const dataUrl=ev.target.result;
-    const {x:cx,y:cy}=spawnPoint();
+    const cx=pt?pt.x:0, cy=pt?pt.y:0;
     const ext=(f.name.split('.').pop()||'png').toLowerCase();
     // Try Railway upload; fallback to inline base64
     try{
@@ -3767,6 +3767,12 @@ document.getElementById('cf-img-input').addEventListener('change',e=>{
     addImageNode(cx-140,cy-100,dataUrl);
   };
   rd.readAsDataURL(f);
+}
+document.getElementById('cf-add-img').addEventListener('click',()=>document.getElementById('cf-img-input').click());
+document.getElementById('cf-img-input').addEventListener('change',e=>{
+  const files=Array.from(e.target.files||[]);if(!files.length)return;
+  const {x:cx,y:cy}=spawnPoint();
+  files.forEach((f,i)=>addImageFromFile(f,{x:cx+i*24,y:cy+i*24}));
   e.target.value='';
 });
 // Shared by the dock-button file picker and canvas drag-drop below.
@@ -3802,8 +3808,21 @@ canvas.addEventListener('drop', e=>{
   Array.from(e.dataTransfer.files).forEach((f,i)=>{
     if(f.type==='application/pdf'||/\.pdf$/i.test(f.name)){
       addPdfFromFile(f,{x:pt.x+i*24,y:pt.y+i*24});
+    }else if(f.type.startsWith('image/')){
+      addImageFromFile(f,{x:pt.x+i*24,y:pt.y+i*24});
     }
   });
+});
+// Paste one or more images from the OS clipboard straight onto the canvas.
+document.addEventListener('paste', e=>{
+  if(document.activeElement && ['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if(document.activeElement && document.activeElement.isContentEditable) return;
+  const items=Array.from((e.clipboardData||window.clipboardData||{}).items||[]);
+  const imgFiles=items.filter(it=>it.kind==='file'&&it.type.startsWith('image/')).map(it=>it.getAsFile());
+  if(!imgFiles.length) return;
+  e.preventDefault();
+  const {x:cx,y:cy}=spawnPoint();
+  imgFiles.forEach((f,i)=>addImageFromFile(f,{x:cx+i*24,y:cy+i*24}));
 });
 document.getElementById('cf-clear').addEventListener('click',()=>{
   if(!G.nodes.length||confirm('Clear the whole diagram?')){snapshot();G=emptyGraph();_sel=null;renderAll();save();}
