@@ -104,14 +104,53 @@
       var rect = container.getBoundingClientRect();
       var w = rect.width, h = rect.height;
       if (w < 50 || h < 50) return;
-      svg.attr("viewBox", [0,0,w,h]);
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
       gMain.selectAll("*").remove();
       if (!DATA.nodes.length) return;
       try {
-        var nodesCopy = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
-        var linksCopy = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
-        var sankeyGen = d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(12).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,h-10]]);
-        var graph = sankeyGen({nodes:nodesCopy, links:linksCopy});
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
         var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
           .attr("d", d3.sankeyLinkHorizontal())
           .attr("stroke", function(d){ return d.source.color; })
@@ -127,10 +166,14 @@
           .attr("rx", 1);
         nodeSel.append("text")
           .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
-          .attr("y", function(d){ return (d.y0+d.y1)/2; })
+          .attr("y", function(d){ return d._labelY; })
           .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
           .attr("dominant-baseline", "middle")
-          .style("font", "500 10.5px 'Noto Serif TC', serif")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
           .attr("fill", "#333")
           .text(function(d){ return d.label; });
         var connectedMap = {};
@@ -143,10 +186,12 @@
           var connected = connectedMap[d.id] || {};
           linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
           nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
         }).on("mouseleave", function(){
           hideTooltip();
           linkSel.attr("stroke-opacity", 0.38);
           nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
         });
         linkSel.on("mousemove", function(event, d){
           showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
@@ -162,6 +207,28 @@
       var t;
       new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
     }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
   }
   if (window.d3 && d3.sankey) { render(); return; }
   if (!window.__sankeyD3Load) {
@@ -230,14 +297,53 @@
       var rect = container.getBoundingClientRect();
       var w = rect.width, h = rect.height;
       if (w < 50 || h < 50) return;
-      svg.attr("viewBox", [0,0,w,h]);
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
       gMain.selectAll("*").remove();
       if (!DATA.nodes.length) return;
       try {
-        var nodesCopy = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
-        var linksCopy = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
-        var sankeyGen = d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(12).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,h-10]]);
-        var graph = sankeyGen({nodes:nodesCopy, links:linksCopy});
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
         var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
           .attr("d", d3.sankeyLinkHorizontal())
           .attr("stroke", function(d){ return d.source.color; })
@@ -253,10 +359,14 @@
           .attr("rx", 1);
         nodeSel.append("text")
           .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
-          .attr("y", function(d){ return (d.y0+d.y1)/2; })
+          .attr("y", function(d){ return d._labelY; })
           .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
           .attr("dominant-baseline", "middle")
-          .style("font", "500 10.5px 'Noto Serif TC', serif")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
           .attr("fill", "#333")
           .text(function(d){ return d.label; });
         var connectedMap = {};
@@ -269,10 +379,12 @@
           var connected = connectedMap[d.id] || {};
           linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
           nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
         }).on("mouseleave", function(){
           hideTooltip();
           linkSel.attr("stroke-opacity", 0.38);
           nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
         });
         linkSel.on("mousemove", function(event, d){
           showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
@@ -288,6 +400,28 @@
       var t;
       new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
     }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
   }
   if (window.d3 && d3.sankey) { render(); return; }
   if (!window.__sankeyD3Load) {
@@ -347,14 +481,53 @@
       var rect = container.getBoundingClientRect();
       var w = rect.width, h = rect.height;
       if (w < 50 || h < 50) return;
-      svg.attr("viewBox", [0,0,w,h]);
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
       gMain.selectAll("*").remove();
       if (!DATA.nodes.length) return;
       try {
-        var nodesCopy = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
-        var linksCopy = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
-        var sankeyGen = d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(12).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,h-10]]);
-        var graph = sankeyGen({nodes:nodesCopy, links:linksCopy});
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
         var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
           .attr("d", d3.sankeyLinkHorizontal())
           .attr("stroke", function(d){ return d.source.color; })
@@ -370,10 +543,14 @@
           .attr("rx", 1);
         nodeSel.append("text")
           .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
-          .attr("y", function(d){ return (d.y0+d.y1)/2; })
+          .attr("y", function(d){ return d._labelY; })
           .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
           .attr("dominant-baseline", "middle")
-          .style("font", "500 10.5px 'Noto Serif TC', serif")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
           .attr("fill", "#333")
           .text(function(d){ return d.label; });
         var connectedMap = {};
@@ -386,10 +563,12 @@
           var connected = connectedMap[d.id] || {};
           linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
           nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
         }).on("mouseleave", function(){
           hideTooltip();
           linkSel.attr("stroke-opacity", 0.38);
           nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
         });
         linkSel.on("mousemove", function(event, d){
           showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
@@ -405,6 +584,28 @@
       var t;
       new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
     }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
   }
   if (window.d3 && d3.sankey) { render(); return; }
   if (!window.__sankeyD3Load) {
@@ -452,14 +653,53 @@
       var rect = container.getBoundingClientRect();
       var w = rect.width, h = rect.height;
       if (w < 50 || h < 50) return;
-      svg.attr("viewBox", [0,0,w,h]);
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
       gMain.selectAll("*").remove();
       if (!DATA.nodes.length) return;
       try {
-        var nodesCopy = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
-        var linksCopy = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
-        var sankeyGen = d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(12).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,h-10]]);
-        var graph = sankeyGen({nodes:nodesCopy, links:linksCopy});
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
         var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
           .attr("d", d3.sankeyLinkHorizontal())
           .attr("stroke", function(d){ return d.source.color; })
@@ -475,10 +715,14 @@
           .attr("rx", 1);
         nodeSel.append("text")
           .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
-          .attr("y", function(d){ return (d.y0+d.y1)/2; })
+          .attr("y", function(d){ return d._labelY; })
           .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
           .attr("dominant-baseline", "middle")
-          .style("font", "500 10.5px 'Noto Serif TC', serif")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
           .attr("fill", "#333")
           .text(function(d){ return d.label; });
         var connectedMap = {};
@@ -491,10 +735,12 @@
           var connected = connectedMap[d.id] || {};
           linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
           nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
         }).on("mouseleave", function(){
           hideTooltip();
           linkSel.attr("stroke-opacity", 0.38);
           nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
         });
         linkSel.on("mousemove", function(event, d){
           showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
@@ -510,6 +756,28 @@
       var t;
       new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
     }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
   }
   if (window.d3 && d3.sankey) { render(); return; }
   if (!window.__sankeyD3Load) {
