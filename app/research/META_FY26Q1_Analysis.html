@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>META — FY Q1 2026 法說會分析 · Q&A話術偵測 / CapEx上修拆解 / 產品線 / 供應鏈 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #1d4ed8; color: #1d4ed8; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #1d4ed8; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink:0; margin-left:10px; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #1d4ed8; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 14px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -24px; transform: translateX(-50%); text-align: center; font-size: 11px; color:#333; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 2px; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.prior .dot { background: #c2600a; }
+  .band-marker.mid .dot { background: #1d4ed8; }
+  .band-marker.ceil .dot { background: #b91c1c; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap:wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 230px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 140px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .seg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .seg-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .seg-card.a { border-top-color: #1d4ed8; }
+  .seg-card.b { border-top-color: #15803d; }
+  .seg-card.c { border-top-color: #c2600a; }
+  .seg-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .seg-card.a h4 { color: #1d4ed8; }
+  .seg-card.b h4 { color: #15803d; }
+  .seg-card.c h4 { color: #c2600a; }
+  .seg-card ul { padding-left: 14px; }
+  .seg-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .node.hot { background: #fef2f2; border-color: #f0c0c0; color:#b91c1c; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .sc-layer { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px 14px; margin-bottom:10px; border-left:4px solid #94a3b8; }
+  .sc-layer.up { border-left-color:#b91c1c; }
+  .sc-layer.mid { border-left-color:#1d4ed8; }
+  .sc-layer.down { border-left-color:#15803d; }
+  .sc-layer h4 { font-size:12px; font-weight:700; color:#1a1a2e; margin-bottom:6px; }
+  .sc-item { font-size:12px; line-height:1.6; color:#333; margin-bottom:5px; }
+  .sc-item b { color:#1a1a2e; }
+  .sc-src { font-size:10.5px; color:#8a94a6; }
+  .conf { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:8px; border:1px solid; margin-left:4px; vertical-align:middle; }
+  .conf.hi { color:#15803d; border-color:#a3dab1; }
+  .conf.mid { color:#92400e; border-color:#f0d090; }
+  .conf.lo { color:#b91c1c; border-color:#f0aaaa; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space:nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .subtle { color:#888; font-size:11px; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap:wrap; }
+  .stat-box { flex: 1; min-width:120px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #1d4ed8; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Meta Platforms（META）— FY Q1 2026 法說會分析</h1>
+  <p>Q&amp;A 話術偵測 / 全年 CapEx 上修至 $125–145B 深度拆解 / 產品線與 AI 引擎 / 供應鏈 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026/4/29（季末 2026/3/31）&nbsp;·&nbsp; 交叉比對 10-Q（2026/3/31）、FY2025 10-K、Form 4 內部人申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" onclick="sw('capex',this)">CapEx 上修拆解</div>
+    <div class="tab" onclick="sw('prod',this)">產品線與 AI 引擎</div>
+    <div class="tab" onclick="sw('supply',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- ============ Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題（含追問）</div></div>
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">邏輯缺口／話術迴避</div></div>
+    </div>
+    <div class="card" style="border-left:4px solid #b45309;">
+      <div class="card-title">本場 Q&A 的主旋律</div>
+      <p>九位分析師中有七位的核心提問，最終都指向<b>同一件事：$1,250–1,450 億的 AI CapEx 到底何時、以何種形式回收</b>。管理層（尤其 Zuckerberg）反覆以「我們看的是形狀，不是精確計畫」「品質重於時程」「賦能個人的宏大願景」等定性敘事回應，全程未提供任何可驗證的 ROIC 門檻、產品上線時程表或 2027 CapEx 區間。本 tab 的本質是<b>話術偵測</b>——標記「分析師問量化、管理層答願景」的每一處落差。盤後股價下跌約 7%，正是市場對這種「投資確定、回收模糊」不對稱的即時定價。</p>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brian Nowak（Morgan Stanley）</div><div class="qa-topic">未來 12–24 個月，你在盯哪些訊號來確保這些 CapEx 能產生健康 ROIC？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">投在 Muse 與基建上的鉅額投資，你用哪些關鍵指標（Meta AI、Muse 進展、核心演算法）來確認自己走在能產生健康 ROIC 的正確路徑上？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Zuckerberg 開場先說「這是個很技術性的問題」，接著給出四階段通則：①技術上能否交付足以撐起好產品的品質 → ②產品如何規模化 → ③監etisation → ④拉高效率邁向獲利。但明確表示「我們沒有一個很精確的計畫去算每個產品每月怎麼長」，只有「對形狀（shape）的概念」。收尾把具體財務問題丟給 Susan，Susan 未補充任何量化門檻。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Nowak 問的是「你在盯哪些<b>可驗證的訊號／門檻</b>」，這是要一份 KPI 清單；Zuckerberg 回的是一套人人都懂的四階段商業通則（build→scale→monetise→efficiency），沒有點名任何一個具體的先行指標、ROIC 目標值、或「若低於某水準就減速」的煞車條件。這是本場最典型的「要儀表板、給哲學」——也正是盤後股價下跌的核心：投資規模精確（$125–145B），回收條件模糊。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Brian Nowak:</b> "What are the key factors you're watching over the next 12 to 24 months... to make sure that you're on the right path to generating healthy ROIC on all this CapEx?"<br><br><b>Zuckerberg:</b> "I don't... I mean, like, I don't think we have a very precise plan for exactly how each product is going to scale month-over-month... I think we have a sense of the shape of where these things need to be."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mark Shmulik（Bernstein）</div><div class="qa-topic">團隊分工（訓練 vs 出貨）× 2027 CapEx 是否也會像同業一樣大幅跳升</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Muse Spark 出來後，團隊重心怎麼在「更多訓練 run／個人智慧特化」與「更快出貨產品」之間分配？追問 Susan：同業今晚已暗示 2027 CapEx 可能顯著跳升，能否給個維度幫我們思考今年的回報/牽引如何影響 2027？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Zuckerberg：兩條 loop 並行——研究團隊持續爬「智慧階梯」（下一批更先進模型已在訓練），產品團隊現在「終於被解鎖」能在自家強模型上蓋東西（先前只能用舊模型或別家 API 原型）。Susan：<b>不提供 2027 CapEx 具體展望</b>，稱正處於「非常動態的規劃過程」；並說出關鍵一句——「我們的經驗是，我們<b>一直在低估</b>自己的算力需求」，且內部使用案例也很有吸引力；強調會保留彈性，若最後不需要那麼多，可以放慢上線或減少未來支出。</div></div>
+        <div class="flag-box obs"><div class="q-label">⚑ 觀察（原創前瞻風險，見風險矩陣）</div><div class="q-text">「拒絕給 2027 數字」＋「我們一直低估算力需求」＋「規劃非常動態」——三者合在一起，實質上是一次<b>2027 CapEx 將再顯著上修的軟性預告</b>，只是包裝成「保有彈性」。真正未被追問的是：折舊軌跡（D&A 本季已 YoY +54%）何時觸頂、相對 AI 營收落在哪裡。管理層給了「可以放慢」的下行選項，卻迴避了更可能的上行情境的量化。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Susan Li:</b> "We aren't providing a specific outlook for 2027 CapEx... Our experience so far has been that we have continued to underestimate our Compute needs, even as we have been ramping capacity significantly... if we end up not needing as much as we anticipate, we can choose to bring it online more slowly."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Eric Sheridan（Goldman Sachs）</div><div class="qa-topic">代理式（agentic）算力如何延伸到消費者與企業商業模式 × SMB/企業機會</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">把 agentic compute 放到消費者與企業面前，媒體參與與商業（commerce）如何隨時間變得更 agentic？在你過去產品速度較慢的 SMB/企業端，你看到什麼機會？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Susan：近期最大焦點是深化既有社群參與、讓廣告更個人化、幫 SMB 找客戶——這些是「最直覺、最相鄰」的機會。更 agentic 的能力（代理互相互動、形成商業生態系）「比較遠」。消費者代理目前聚焦於「能替你做事」的體驗，變現機會「隨時間」到來，可想像「commission 結構或 premium 方案」。商業端：business AIs 每週對話已 &gt;1,000 萬（年初 100 萬），目前對多數商家<b>免費</b>，長期才會建立變現模式。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">商業化被連續下修到「further out」「隨時間」「你可以想像」——沒有任何時間表或定價機制。business AIs 從 100 萬→1,000 萬對話成長 10 倍是真實牽引，但<b>目前免費、且明說變現模式尚未建立</b>；換言之這 tab 全季最亮眼的 agentic 牽引數字，暫時對營收零貢獻。這與 CapEx 已經上修形成張力：算力成本先發生，商業化「further out」。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Susan Li:</b> "Business AIs today are currently free for most businesses on our messaging apps. As we make more progress... we expect that we will also work towards establishing a longer-term monetization model... You can imagine commission structures or a premium offering."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Youssef Squali（Truist）</div><div class="qa-topic">EssilorLuxottica 其他品牌眼鏡上市的門檻與 2026 成功定義（銷量）× 10% 裁員：AI 效率 vs 瘦身</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Ray-Ban/Oakley 表現很好，但 EssilorLuxottica 旗下品牌更多，今年推出其他品牌眼鏡的「gating factor」是什麼？以銷量看，怎樣算成功的 2026？＋（Susan）10% 裁員有多少是 AI 帶來的效率、多少只是維持精實？員工需求相對營收成長會怎麼走？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Susan 兩題都由她回答，並「先答第二題」：公司最適規模「未來會是多少，我們其實不知道」；正非常聚焦用 AI 工具大幅提升生產力，工程師產出正在加速，帶著「用工具做更多產品」的偏好；同時持續評估組織結構。眼鏡題：Q1 銷售強勁，正從上一代 Ray-Ban Meta 轉向新一代（更長電池、更高解析度錄影），對搭載 Meta Neural Band 的 Ray-Ban Meta display 眼鏡興趣濃厚。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口（兩題皆未正面回答）</div><div class="q-text">Squali 問的兩個具體問題——①新品牌眼鏡的<b>gating factor</b>、②2026 的<b>成功銷量門檻</b>——Susan 完全沒有回答任何一個：沒有提 EssilorLuxottica 其他品牌的時程或限制條件，也沒有給任何單位數的銷量目標，只重述現有產品賣得好。裁員題同樣未拆分「AI 效率」vs「瘦身」的比例，以「最適規模未知」帶過。這是本場「一次迴避兩個量化問題」的密度最高之處。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Susan Li:</b> "We don't really know what the optimal size of the company will be in the future... we're very focused on leveraging AI tools to substantially increase our productivity, and we're seeing that reflected in the accelerating output from our engineers."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Justin Post（Bank of America）</div><div class="qa-topic">Muse Spark 花了約 10 個月；接下來 9 個月消費者/企業產品的上線節奏</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Muse Spark 大約 10 個月做出來，步調不錯；這對你要開發的新產品是什麼樣的解鎖？未來 9 個月在消費者或企業產品上，產品節奏會如何？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Zuckerberg：領域移動很快，很滿意這個實驗室是「從成立到擁有一個被廣泛接受的強模型」跑最快的，視為對整個投入的重大驗證。但明說<b>無法講具體節奏</b>——一因不想洩露競爭敏感資訊、二因「我們更在意品質而非命中特定日期」。名言：「外面有很多 agent，但沒幾個是我會想給我媽用的」——品質門檻重於發布週次。並說團隊「不是每季才跟我 check-in 一次，而是日拱一卒」。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">直接被問「未來 9 個月的產品 cadence」，回答是「無法講 cadence」。對研究導向的公司，「品質重於日期」是合理的；但疊加 Nowak 的 ROIC 題與 Shmulik 的 2027 CapEx 題一起看，形成一個結構性不對稱：<b>投入端（CapEx、承諾）給到 2026–27 的精確數字，產出端（產品上線、變現）一律「無法給時程」</b>。市場能建模的是成本，不是回收。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Zuckerberg:</b> "There aren't that many [agents] that I would want to give to my mother. I think getting to like that quality bar is something that I care about more than hitting a specific week for launching."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ross Sandler（Barclays）</div><div class="qa-topic">新消費 agent（OpenClaw/Poke/Dreamer）如何改變策略 × 實驗室會不會走向 coding / 遞迴自我改進</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">從 OpenClaw 到較消費友善的 Poke、你們剛收購的 Dreamer——這些新想法如何改變 Meta AI/Dreamer 的方向？實驗室會留在消費賽道，還是也要像別人一樣走 coding 與遞迴自我改進（RSI）？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Zuckerberg：OpenClaw 這類系統「給了很興奮的一瞥」，但今天很粗糙（要本地安裝、進 terminal、配置一堆東西），只有數十萬到數百萬人能搞定；Meta 要做的是<b>把同樣體驗做到夠 polished、夠簡單、基建全幫你弄好、就是能用</b>，讓可觸及人數從百萬級跳到十億級——企業端亦然（做網站、做產品、成長）。關於 RSI：坦言「自我改進很重要，因為沒有領先模型就沒有領先產品；未來模型必須能自我改進」，是「table stakes」；但強調「大家把 coding 和自我改進劃等號劃得太過頭」，coding 只是其中一個成分，不會因此變成開發者工具公司。</div></div>
+        <div class="flag-box obs"><div class="q-label">⚑ 觀察</div><div class="q-text">一個誠實的自我定位訊號：Zuckerberg 承認遞迴自我改進是「table stakes」（不做就不是領先實驗室），同時淡化 coding。這暗示 Meta 在「模型自我改進」這條主流賽道上選擇了<b>差異化路徑（消費 agent 優先、而非 coding/RSI 優先）</b>——這是策略選擇，但也意味著若 RSI 最終由 coding 能力主導，Meta 的路線存在被動風險。這條沒有量化，屬定性策略分歧。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Zuckerberg:</b> "I actually think people conflate coding with self-improvement more than they should. Coding is one ingredient for the model self-improving. It's not the only thing... Does that make us a developer tools company? Not necessarily."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ron Josey（Citigroup）</div><div class="qa-topic">個人 agent 是短/中/長期？× 把使用者互動序列長度加倍為何能驅動更多使用</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Spark 已上線、更多模型在開發，個人 agent 的機會你看成短、中、還是長期？（Susan）IG/FB 這種規模下，把使用者互動序列長度加倍是怎麼驅動更多使用的？空間還很大嗎？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Zuckerberg：會有短期版本，也有巨大上行；agent 是「交付能力的產品載具」，今年是確立這個載具的關鍵期；模型改進會持續非常久，短中長期都有很多可做。Susan（給出全場最紮實的量化答覆）：推薦系統還有很多改進空間——持續強化資料基建（訓更多資料、更長互動歷史、更大模型架構）、更個人化（重新設計內容檢索、依興趣廣度調整推薦多樣性）、LLM 驅動的「自然語言調整你的演算法」功能；序列長度只是 Q1 眾多改進之一，後面 roadmap 很長。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口（僅第一小題）</div><div class="q-text">「短/中/長期？」被回以「短期也有、長期也有，很多可做」——等於沒有選。相對地，Susan 的推薦系統答覆是本場少數<b>具體且可信</b>的部分（呼應 Financials：IG Reels 時長 +10%、FB 影片時長 +8% 創四年最大單季增幅），量價可覆核。兩相對照更凸顯：<b>核心廣告/推薦引擎的敘事扎實可量化，AI agent 的敘事扎實度明顯較低</b>。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Susan Li:</b> "Sequence length... is one of really many improvements we made in Q1. There is a big roadmap of further improvements going forward."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Doug Anmuth（JPMorgan）</div><div class="qa-topic">從小模型進到 Muse Spark/LLM 在廣告的解鎖 × Manus 交易的戰略意義與現況</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">廣告從用小模型走到 Muse Spark/未來 LLM，參與度與變現有哪些關鍵解鎖？Manus 對 Meta 發展 agentic 產品的戰略意義、技術與交易現況？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Susan：Manus「仍在處理細節，目前<b>沒有更新</b>」。廣告：正推進架構以善用更大模型。歷史上不用 GEM 這種大架構做 inference（太貴、延遲太嚴——要在毫秒內找到對的廣告），而是用大模型把知識轉移給輕量 runtime 模型；去年下半年推出的 adaptive ranking model 讓他們能用到「兆級參數」LLM-scale 複雜度、與底層晶片協同設計維持次秒速度；並智慧路由——判斷轉換機率高時才導向更耗算力的 inference 模型，兼顧效能與 inference ROI。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Manus 交易被以一句「沒有更新」帶過，交易狀態、金額、技術整合全不透明（呼應同場 Dreamer 收購、Scale AI 級投資的整體「買買買」但揭露極少的模式，見 Financials 現金流：FY2025 非上市股權投資購買達 $183 億）。廣告答覆技術細節豐富，但<b>完全沒有把 LLM 化的廣告架構換算成任何營收/ARPU 貢獻數字</b>——技術精確、財務貢獻模糊，是本場的重複模式。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Susan Li:</b> "On Manus, we're still working through the details, so we don't have an update right now."</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ken Gawrelski（Wells Fargo）</div><div class="qa-topic">Muse Spark 的購物/commerce 深挖與 2021–22 電商教訓 × 對核心業務成長軌跡的能見度</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Spark 提到 health 與 shopping 兩個垂直，能否深談 shopping/commerce？2021–22 那波 IG/FB 電商推進有什麼可套用的教訓？有沒有下一代 marketplace 型商業的機會？（Susan）在你已是產業超大占比下，卻仍以約兩倍於產業的速度成長——對這種持續表現的能見度如何？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Zuckerberg 自稱給「較高層次（loftier）」的答覆：AI agent 要好，就得把整個 stack 從模型、基建到 agent 全部自建優化——這就是為何要做前沿模型＋這波鉅額投資。核心是一個賭注——<b>「個人、以及個人在乎的事，在未來會更重要」</b>，與業界「打造一個中央化系統來做完社會所有生產性工作」的敘事「非常不同」。「我沒聽到任何其他實驗室在談他們要打造一個很會購物的 AI」；shopping/local/社交脈絡/健康/視覺理解都是 personal superintelligence 的元素。Susan：Q2 guide 已內含 macro 區間與持續的參與度/廣告優化工作；以 ROI 為本的預算流程確保資助所有能驅動未來成長的廣告專案，衡量影響的能力「相當穩健」，對前方投資機會「感覺良好」。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Gawrelski 問了三個很具體的東西——shopping 的機制深挖、<b>2021–22 電商失敗的教訓</b>、下一代 marketplace 機會；Zuckerberg 一個都沒正面回答，全部升維成「賦能個人 vs 中央化 AI」的哲學宣言。2021–22 那波 Facebook/IG Shops 大幅收縮、Live Shopping 關閉是有據可查的挫敗，管理層選擇完全不觸碰「教訓」二字。Susan 對「成長能見度」的回答則是流程性語言（「ROI 預算流程」「感覺良好」），除了 Q2 guide 外沒有給任何前瞻數字。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Zuckerberg:</b> "I don't hear any other labs out there talking about how they're building an AI that's really good at shopping... empowering people to do the things that matter in their lives, whether that's local or understanding social context or shopping or personal health..."</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CapEx ============ -->
+  <div id="panel-capex" class="panel">
+    <div class="section-title">本季特殊事件深度拆解：全年 CapEx 上修至 $125–145B（記憶體漲價驅動）＋ 單季 $107B 承諾跳升</div>
+    <div class="card" style="border-left:4px solid #b91c1c;">
+      <div class="card-title">為何這是本季的「特殊交易/事件」</div>
+      <p>Meta 本季<b>財報全面超預期</b>（營收 $56.3B/+33%、營業利益率 41%、調整後 EPS $7.31 勝市場 $6.79），股價盤後卻<b>下跌約 7%</b>。市場懲罰的不是這一季，而是這一季<b>揭露的未來投入</b>：全年 CapEx 指引由 $115–135B 上修至 <b>$125–145B</b>（中點 +$10B 至 $135B），Zuckerberg 明說「大部分是因為<b>零組件成本上升、尤其記憶體漲價</b>」；同時本季契約承諾（contractual commitments）單季暴增 <b>$107B</b>（多年期雲端協議＋基建採購）。本 tab 拆解這筆「投入確定、回收未定」的資本承諾。</p>
+    </div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>全年 CapEx 指引 <b>$125–145B</b>（原 $115–135B，中點 $135B，+$10B）</li>
+          <li>Q1 實際 CapEx（含融資租賃本金）$19.8B；購置不動產廠房設備現金流出 $19.0B</li>
+          <li>不動產廠房設備淨額單季 +$18.4B → <b>$194.8B</b>（QoQ +10.4%）</li>
+          <li>本季契約承諾單季跳升 <b>$107B</b>（多年期雲端＋基建採購協議）</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>期限／結構</h4>
+        <ul>
+          <li>非可取消契約承諾：2026 年到期約 <b>$42.25B</b>、2027 年 <b>$47.65B</b></li>
+          <li>另有 5 年內最高 <b>$14.72B</b> 雲端容量「或有」承諾（可視雲端商供給調降）</li>
+          <li>多年期雲端協議「今年與 2027 年陸續上線」→ 屬 opex，非 capex</li>
+          <li>自建算力三路並進：Broadcom 客製矽 &gt;1GW ＋ AMD 晶片 ＋ 新 NVIDIA 系統</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>財務承諾／護欄</h4>
+        <ul>
+          <li>全年<b>總費用指引維持不變</b> $162–169B；重申全年營業利益高於 2025</li>
+          <li>Q1 自由現金流仍達 $12.4B、現金+有價證券 $81.2B</li>
+          <li>但利息費用 YoY <b>+134%</b>（$562M，債務融資），FY2025 舉債 $29.9B</li>
+          <li>Q1 <b>零股票回購</b>（去年同期 $12.75B）——資本回饋讓位給基建</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>「大部分是記憶體漲價」——<b>漲價（買貴）</b> vs <b>加量（買多）</b>的拆分完全未揭露</li>
+          <li>ROIC 訊號模糊（Nowak 題）；2027 CapEx 拒答＋「一直低估算力需求」（Shmulik 題）</li>
+          <li>折舊攤銷已 YoY +54% 至 $6.0B，觸頂時點 vs AI 營收落點未知</li>
+          <li>agent/business AI 變現「further out」、目前免費——回收端時程全缺</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">全年 CapEx 指引區間：舊 vs 新（含融資租賃本金，十億美元）</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%; background:#f3d9d9;"></div>
+        <div class="band-fill" style="left:0%; width:50%; background:#dbe8fd;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>$125B<br>新下限</div>
+        <div class="band-marker prior" style="left:50%;"><div class="dot"></div>$135B<br>舊上限＝新中點</div>
+        <div class="band-marker ceil" style="left:100%;"><div class="dot"></div>$145B<br>新上限</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#dbe8fd;"></span>與舊指引重疊區（$125–135B）</span>
+        <span><span class="sw" style="background:#f3d9d9;"></span>本次新增上行區（$135–145B）</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">新指引下限（$125B）已高於舊指引中點（$125B）；新上限（$145B）較舊上限（$135B）再加 $10B。整個區間<b>平移上抬 $10B</b>。相較 FY2025 實際 CapEx（購置 PP&E $69.7B ＋ 融資租賃本金 $2.5B ≈ $72.2B），2026 年中點 $135B 代表<b>YoY 近乎翻倍</b>。管理層將增量歸因於「記憶體等零組件漲價」為主、「支援未來年度產能的額外資料中心成本」為輔——前者若屬實，意味增量支出中有相當比例買到的是「同樣的算力、更高的價格」。</p>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問：盡職調查式追問清單</h4>
+      <ol>
+        <li><b>記憶體漲價 vs 加量，拆分是多少？</b> 管理層說 CapEx 上修「大部分是記憶體漲價」，卻未給任何拆分。若這 $10B 增量的多數是 HBM/DRAM 單價上漲（產業正處記憶體短缺循環），則增量 CapEx <b>買不到等比例的增量算力</b>——是純粹的成本/利潤率拖累，而非能產生 ROI 的成長投資，卻被計入「基建投資」的成長敘事。這是本季最關鍵、也最被迴避的一個數字。</li>
+        <li><b>$107B 單季承諾跳升，遠大於 $10B 的 CapEx 指引上修——資產負債表承諾的前傾程度遠超 P&L。</b> 這批多年期雲端協議屬 opex（2026–27 上線），有多少已反映在「維持不變」的 $162–169B 全年費用指引裡？若 AI 利用率落後於承諾上線速度，未來幾季的利潤率下修風險有多大？</li>
+        <li><b>Susan Li「我們一直低估算力需求」＋拒答 2027，實為 2027 CapEx 再上修的軟性預告。</b> D&A 已 YoY +54%；折舊軌跡何時觸頂、相對 AI 營收落在哪個時點？在 agent 變現「further out」的情況下，折舊先行、營收後至的剪刀差會壓縮哪幾季的營業利益率？</li>
+        <li><b>Q1 零回購（去年同期 $12.75B）＋ FY2025 舉債 $29.9B ＋ 利息費用 YoY +134%。</b> 資本回饋是否被結構性地讓位給基建融資、會持續多久？在 CapEx 近乎翻倍、且以部分債務支應的情況下，$12.4B 的 Q1 FCF 還有多少緩衝空間？此題全場無人追問。</li>
+      </ol>
+    </div>
+
+    <div class="section-title">立場對照：CapEx 上修＋$107B 承諾 對 Meta vs 對股東/市場</div>
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>對 Meta（公司戰略）</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>在記憶體/算力短缺循環中<b>提前鎖定產能</b>，$107B 承諾＋多年期雲端＝供給保險</li>
+          <li>Broadcom 客製矽（&gt;1GW）＋AMD＋NVIDIA 三路，長期建立「Meta Compute」效率護城河</li>
+          <li>核心廣告/推薦引擎（Reels +10%、adaptive ranking +1.6%）持續把算力變現，形成正循環</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>資本密集度陡升、折舊先行；ROI 未經驗證，agent 變現「further out」</li>
+          <li>記憶體單價曝險——增量 CapEx 可能買到「同算力、更高價」</li>
+          <li>$107B 前傾承諾在 AI 需求證實前先鎖死，彈性被自己的合約削弱</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4>對股東／市場</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>本季基本面全面超預期：營收 +33%、營業利益率 41%、FCF 仍 $12.4B</li>
+          <li>ARPU $15.66 勝預期，廣告量價齊揚（曝光 +19%、單價 +12%）</li>
+          <li>費用指引維持不變、營業利益仍將高於 2025——利潤引擎未失速</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>盤後股價 <b>−7%</b>：CapEx 上修＋用戶成長不及＋零回購三重失望</li>
+          <li>回收時程全缺（ROIC 訊號、產品 cadence、2027 CapEx 皆拒答/模糊）</li>
+          <li>隨 CapEx 近乎翻倍，FCF 壓縮與 EPS 稀釋（折舊）風險上行</li>
+        </ul>
+      </div>
+    </div>
+    <p class="subtle">來源：法說會 Zuckerberg 開場＋Susan Li CFO 展望；10-Q Note 8 承諾（$42.25B/$47.65B/$14.72B）；10-Q 現金流量表（CapEx、回購、利息）；FY2025 10-K 現金流量表；Nowak/Shmulik/Post Q&A。</p>
+  </div>
+
+  <!-- ============ Product ============ -->
+  <div id="panel-prod" class="panel">
+    <div class="section-title">營收結構（2026 Q1，YoY%）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">Family of Apps — 廣告</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#1d4ed8;">$55,024M</div></div>
+        <div class="rev-val">+33% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Family of Apps — 其他（WhatsApp 付費訊息/訂閱）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:2%; background:#60a5fa;">$885M</div></div>
+        <div class="rev-val">+74% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Reality Labs（VR/AR 硬體）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:1%; background:#c2600a;">$402M</div></div>
+        <div class="rev-val">−2% YoY</div>
+      </div>
+    </div>
+    <p class="subtle" style="margin-top:-6px; margin-bottom:16px;">⚑ 條長以廣告 $55,024M 為 100% 基準示意。廣告佔總營收 97.7%——Meta 本質仍是廣告公司；所有 AI/agent/眼鏡敘事的財務意義，最終都要回到「能否提升廣告參與度與 ARPU」。RL 營收僅 $402M 卻承載 $4.0B 營業虧損（見 Financials）。</p>
+
+    <div class="section-title">六大產品/技術支柱</div>
+    <div class="seg-grid">
+      <div class="seg-card a">
+        <h4>Muse Spark / MSL</h4>
+        <ul>
+          <li>Meta Superintelligence Labs 首個模型，Muse 家族第一步</li>
+          <li>過去 10 個月建立團隊到廣被接受的強模型，Zuckerberg 視為重大驗證</li>
+          <li>下一批更先進模型「已在訓練中」（持續 loop）</li>
+          <li>定位：climbing the scaling ladder → 個人/商業 agent</li>
+        </ul>
+      </div>
+      <div class="seg-card a">
+        <h4>Meta AI（助理）</h4>
+        <ul>
+          <li>由 Muse Spark 驅動，跨 FoA 直接對話＋獨立 App/網站</li>
+          <li>更新後 sessions/user <b>雙位數%</b> 增長；App 常居應用商店前段</li>
+          <li>領先領域：視覺理解、健康、購物、社交內容、local、遊戲創作</li>
+          <li>測試期每次模型迭代參與度加速上升</li>
+        </ul>
+      </div>
+      <div class="seg-card b">
+        <h4>個人 + 商業 Agent</h4>
+        <ul>
+          <li>願景：理解你的目標、日夜替你達成、有問題再回報</li>
+          <li>business AIs 每週對話 &gt;1,000 萬（年初 100 萬，+10x）</li>
+          <li>目前對多數商家<b>免費</b>；變現（commission/premium）「further out」</li>
+          <li>Meta Ads AI connectors 本週開放 beta（接自家 ad 帳戶到 AI agent）</li>
+        </ul>
+      </div>
+      <div class="seg-card b">
+        <h4>推薦系統（核心引擎）</h4>
+        <ul>
+          <li>IG Reels 時長 <b>+10%</b>；FB 影片時長 +8%（四年最大單季增幅）</li>
+          <li>Q1 將 IG 互動序列長度<b>加倍</b>；同日貼文佔推薦 Reels &gt;30%（一年前 2 倍）</li>
+          <li>AI 自動翻譯/配音影片：FB、IG 各 &gt;5 億人每週觀看</li>
+          <li>下一代：foundation model + LLM-based recommender（今年先驗證架構）</li>
+        </ul>
+      </div>
+      <div class="seg-card b">
+        <h4>廣告 AI（變現引擎）</h4>
+        <ul>
+          <li>Adaptive ranking（兆級參數 LLM-scale）擴至站外轉換：+1.6% 轉換率</li>
+          <li>GEM 架構＋Lattice：landing page view 廣告 +6% 轉換率</li>
+          <li>value optimization suite 年化營收 run rate &gt;$20B（YoY 翻倍）</li>
+          <li>partnerships ads run rate &gt;$10B（YoY 翻倍）；8M 廣告主用 gen-AI 創意工具</li>
+        </ul>
+      </div>
+      <div class="seg-card c">
+        <h4>AI 眼鏡 + Meta Compute</h4>
+        <ul>
+          <li>AI 眼鏡日活躍用戶 YoY <b>x3</b>；史上最快成長的消費電子類別之一</li>
+          <li>Ray-Ban Meta Optics（全日配戴）；Oakley；Ray-Ban Meta display + Neural Band</li>
+          <li>Meta Compute：Broadcom 客製矽 &gt;1GW ＋ AMD ＋ NVIDIA，主打效率領先</li>
+          <li>RL：仍是 VR 最大投資者，但轉向讓 VR 業務「可持續」</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">因果鏈：更強模型 → 更深理解 → 參與度 → 廣告 ARPU → 資助更多算力</div>
+      <div class="flow-chain">
+        <span class="node">Muse Spark / MSL 模型</span><span class="arrow">→</span>
+        <span class="node">首次「第一性原理」理解用戶在乎什麼</span><span class="arrow">→</span>
+        <span class="node">推薦更相關（Reels +10%、同日貼文 &gt;30%）</span><span class="arrow">→</span>
+        <span class="node">參與度創新高（FB 影片 +8%）</span><span class="arrow">→</span>
+        <span class="node">廣告量價齊揚（曝光 +19%、單價 +12%）</span><span class="arrow">→</span>
+        <span class="node">ARPU $15.66、廣告 +33%</span><span class="arrow">→</span>
+        <span class="node hot">資助 $125–145B CapEx</span><span class="arrow">↺</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">這條「algorithm flywheel」是本季<b>可量化、可覆核</b>的成長引擎——與 agent/眼鏡等「further out」敘事形成對照。Zuckerberg 說法：「Meta 歷史上第一次，我們能從第一性原理理解你在乎什麼」，把推薦從「統計模式」升級為「內容語意理解」。風險在於循環末端：$125–145B 的算力投入，能否持續由前端的廣告 ARPU 提升來合理化——這正是 Nowak ROIC 題的核心，也是股價 −7% 的來源。</p>
+    </div>
+  </div>
+
+  <!-- ============ Supply chain ============ -->
+  <div id="panel-supply" class="panel">
+    <div class="section-title">供應鏈結構：算力（記憶體→晶片→資料中心）＋ 眼鏡</div>
+    <div class="card" style="border-left:4px solid #c2600a;">
+      <div class="card-title">資料來源與信心度說明（務必先讀）</div>
+      <p>與晶片廠（如 MU/TSMC）不同，Meta 的 10-K/10-Q <b>並未逐一列名晶片/記憶體供應商</b>，僅在風險因子概括揭露「技術基建大部分由第三方提供，能否持續創新取決於<b>零組件、電力與網路容量</b>的持續可得」。因此本 tab 的供應商身分主要來自<b>法說會明確點名</b>（Broadcom/AMD/NVIDIA/記憶體）＋<b>公開產業資訊</b>，並逐項標注信心度：<span class="conf hi">高</span>＝filing 或法說會明載；<span class="conf mid">中</span>＝法說會提及但未點名對象；<span class="conf lo">低</span>＝公開資訊推斷、filing 未載。</p>
+    </div>
+
+    <div class="sc-layer up">
+      <h4>▲ 上游一：AI 算力晶片與加速器</h4>
+      <div class="sc-item"><b>NVIDIA</b>——「新 NVIDIA 系統」持續 rollout，仍為訓練/推論主力 GPU 供應商。<span class="conf hi">高</span> <span class="sc-src">來源：法說會 Zuckerberg「the new NVIDIA systems that we're rolling out」</span></div>
+      <div class="sc-item"><b>AMD</b>——「significant amount of AMD chips」用以補足 NVIDIA 系統（Instinct MI 系列）。<span class="conf hi">高</span> <span class="sc-src">來源：法說會 Zuckerberg</span></div>
+      <div class="sc-item"><b>Broadcom</b>——共同開發 Meta 客製矽（MTIA 加速器），本年 rollout <b>&gt;1GW</b>；Meta Compute 效率戰略核心。<span class="conf hi">高</span> <span class="sc-src">來源：法說會 Zuckerberg「custom silicon that we're developing with Broadcom」</span></div>
+      <div class="sc-item"><b>TSMC</b>——MTIA 客製矽與加速器晶圓代工（Meta 未於 filing/法說會點名，屬產業公開資訊）。<span class="conf lo">低</span> <span class="sc-src">來源：公開產業資訊，filing 未載</span></div>
+    </div>
+
+    <div class="sc-layer up">
+      <h4>▲ 上游二：記憶體（本季 CapEx 上修的主因，最集中的單點風險）</h4>
+      <div class="sc-item"><b>HBM / DRAM 記憶體</b>——Zuckerberg 明指 CapEx 上修「大部分因零組件成本上升、<b>尤其記憶體漲價</b>」。記憶體是本季供應鏈的<b>核心變數</b>：處於產業短缺/漲價循環，直接侵蝕增量 CapEx 的算力產出效率。<span class="conf hi">高</span> <span class="sc-src">來源：法說會 Zuckerberg「higher component costs, particularly memory pricing」</span></div>
+      <div class="sc-item">供應對象（<b>SK Hynix / Samsung / Micron</b> 三大 HBM/DRAM 廠）——法說會未點名，屬產業結構推斷。<span class="conf lo">低</span> <span class="sc-src">來源：公開產業資訊</span></div>
+    </div>
+
+    <div class="sc-layer up">
+      <h4>▲ 上游三：資料中心、伺服器、電力、第三方雲端</h4>
+      <div class="sc-item"><b>第三方雲端容量</b>——多年期雲端協議「今年與 2027 陸續上線」以加速擴充；另有 5 年內最高 $14.72B 或有承諾。屬 opex，將部分基建移出資產負債表、轉為對雲端商的依賴。<span class="conf hi">高</span> <span class="sc-src">來源：法說會 Susan Li；10-Q Note 8（$14.72B 五年或有雲端容量）</span></div>
+      <div class="sc-item"><b>伺服器 ODM／網路設備／資料中心建置／電力</b>——非可取消承諾主要投向「伺服器與網路基建、資料中心、RL 硬體」，2026 到期 $42.25B、2027 $47.65B。<span class="conf hi">高</span> <span class="sc-src">來源：10-Q Note 8；10-K 風險因子「components, power, and network capacity」</span></div>
+    </div>
+
+    <div class="sc-layer mid">
+      <h4>● 中游：Meta（自建 + 委外的混合算力平台）</h4>
+      <div class="sc-item">自建資料中心（PP&E 淨額 $194.8B）＋ Broadcom/AMD/NVIDIA 三路晶片 ＋ 第三方雲端 → 訓練（Muse 家族）＋ 推論（Meta AI、agent、推薦、廣告）。「Meta Compute」initiative 目標＝<b>建置算力的效率領先</b>，作為長期戰略優勢。<span class="conf hi">高</span> <span class="sc-src">來源：法說會 Zuckerberg；10-Q 資產負債表</span></div>
+    </div>
+
+    <div class="sc-layer up">
+      <h4>▲ 上游四：AI 眼鏡供應鏈</h4>
+      <div class="sc-item"><b>EssilorLuxottica</b>——Ray-Ban、Oakley 鏡框與品牌組合合作夥伴；Zuckerberg 提「EssilorLuxottica 旗下品牌更多」，暗示更多品牌待推。<span class="conf mid">中</span> <span class="sc-src">來源：法說會 Squali 提問脈絡；品牌合作為公開資訊</span></div>
+      <div class="sc-item"><b>Qualcomm</b>（眼鏡 SoC）、顯示/光學模組供應商、<b>Meta Neural Band</b>（EMG 腕帶輸入）——filing/法說會未點名晶片對象。<span class="conf lo">低</span> <span class="sc-src">來源：公開產業資訊；Neural Band 為法說會提及之產品</span></div>
+    </div>
+
+    <div class="sc-layer down">
+      <h4>▼ 下游：客戶（廣告主為主，無單一客戶集中）</h4>
+      <div class="sc-item"><b>廣告主</b>——營收 97.7% 來自廣告；客群以 SMB 為主（8M 廣告主使用 gen-AI 創意工具）。10-Q 營收附註<b>未揭露任何單一客戶佔比達 10%</b>，客戶集中度低是 Meta 相對晶片廠的結構性優勢。<span class="conf hi">高</span> <span class="sc-src">來源：10-Q Note 2 營收（無 10% 客戶揭露）</span></div>
+      <div class="sc-item"><b>WhatsApp 商業/付費訊息 + 訂閱</b>（FoA 其他 $885M/+74%）；<b>Commerce/affiliate</b>（creator 標記商品、零售商佣金，測試中）。<span class="conf hi">高</span> <span class="sc-src">來源：10-Q Note 2；法說會 Susan Li commerce 段落</span></div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">供應鏈風險流向：記憶體短缺 → CapEx 通膨 → 利潤率</div>
+      <div class="flow-chain">
+        <span class="node hot">記憶體/HBM 短缺與漲價</span><span class="arrow">→</span>
+        <span class="node">零組件成本上升</span><span class="arrow">→</span>
+        <span class="node hot">CapEx 指引上修 $10B（$125–145B）</span><span class="arrow">→</span>
+        <span class="node">資料中心（自建＋雲端 $107B 承諾）</span><span class="arrow">→</span>
+        <span class="node">訓練/推論算力</span><span class="arrow">→</span>
+        <span class="node">Meta AI／agent／推薦／廣告</span><span class="arrow">→</span>
+        <span class="node">若變現落後 → 折舊先行、利潤率承壓</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">此鏈的關鍵單點是<b>最上游的記憶體</b>：它既是本季 CapEx 上修的主因，也是「增量投入買不到等比例算力」風險的來源（詳見風險矩陣高風險項）。Meta 客戶端集中度低（下游穩健），風險幾乎全部集中在上游算力供應鏈的價格與供給。</p>
+    </div>
+  </div>
+
+  <!-- ============ Risk ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">「記憶體漲價驅動的 CapEx 上修」——增量投入可能買到「同算力、更高價」，卻被計入成長敘事</div>
+        把四條分散線索拼起來：①法說會 Zuckerberg 將 CapEx 上修主因歸於「零組件成本上升、<b>尤其記憶體漲價</b>」；②本季契約承諾<b>單季跳升 $107B</b>，遠大於 $10B 的指引上修；③折舊攤銷已 <b>YoY +54%</b>（$6.0B）；④Susan Li 拒答 2027 CapEx 並自承「一直低估算力需求」。合起來的原創推論是：<b>若這 $10B 增量的多數來自 HBM/DRAM 單價上漲（而非產能增加），則增量 CapEx 買不到等比例的增量算力——它是被包裝成「成長投資」的利潤率/ROI 拖累</b>；同時 $107B 前傾承諾在 AI 變現（agent「further out」、business AI 免費）證實前先行鎖死。全場<b>無一位分析師要求管理層拆分「漲價 vs 加量」</b>，管理層也未主動揭露，構成本季最具原創性、且直接連結股價 −7% 的前瞻風險。
+        <div class="risk-source">來源：法說會 Zuckerberg 開場（memory pricing）／Susan Li 展望（拒答 2027、underestimate compute）；10-Q Note 8（$107B 承諾、$42.25B/$47.65B）；10-Q 現金流量表（D&A $5,999M vs 去年 $3,900M）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">AI CapEx 的 ROI／回收時程全面模糊——投入端精確、產出端拒答</div>
+        Nowak 直接問 ROIC 訊號，Zuckerberg 僅回「有形狀的概念、沒有精確計畫」；Post 問產品 cadence，回「無法給時程、品質重於日期」；Sheridan/agent 變現「further out」、business AI 免費。與此對照，投入端（CapEx $125–145B、承諾 $107B、費用 $162–169B）全給到 2026–27 的精確數字。這種<b>「成本可建模、回收不可建模」</b>的結構性不對稱，是盤後股價下跌約 7% 的直接原因（市場同時對用戶成長不及、Q1 零回購反應）。隨 CapEx 近乎翻倍、折舊先行，若廣告 ARPU 的提升速度跟不上算力折舊，未來數季營業利益率下修風險上行。
+        <div class="risk-source">來源：法說會 Nowak／Post／Sheridan Q&A；Yahoo Finance／CNBC 盤後 −7% 報導；10-Q 現金流量表（Q1 回購 $0 vs 去年 $12,754M）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">EU/US 監管——DMA 罰款已定、DSA 未成年人程序、US 青少年訴訟 2026 開庭「可能導致重大損失」</div>
+        Susan Li 收尾明確點名「EU 與 US 的監管逆風可能顯著影響業務與財務」，並提「青少年相關議題持續受檢視、2026 年有額外庭審、可能最終導致重大損失」。10-Q Note 8 揭露：①EU 針對「訂閱以移除廣告」consent model，2025/4 已作出<b>不合規最終裁定並開罰</b>（DMA Art. 5(2)）；②DSA Art. 28/34/35 針對未成年人系統性風險的正式程序；③US 社群媒體青少年成癮產品責任訴訟（含 COPPA、兒少安全指控）已集中審理；④FTC 尋求禁止將未成年人資料用於商業目的、變更董事會組成、限制新產品。屬持續性、可能升級的法律曝險，但多為已知存量，非本季新增單一重大事件。
+        <div class="risk-source">來源：法說會 Susan Li 收尾；10-Q Note 8 Commitments and Contingencies（DMA/DSA/COPPA/FTC/青少年訴訟）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">用戶成長首次出現 QoQ 下滑——外部事件遮蔽、且成長重心移向低變現區</div>
+        Family DAP 3 月 3.56B，較 12 月<b>QoQ 微幅下滑</b>，管理層歸因於伊朗網路中斷＋俄羅斯封鎖 WhatsApp，並強調「排除這些影響則 QoQ 為正」。但這是市場報導中股價下跌的原因之一（「missed on user growth」）。同時廣告曝光成長「部分來自較低變現區域」——量成長但質稀釋。外部事件的解釋合理，惟用戶成長從「穩定遞增」轉為「需要註腳解釋」，本身即是一個需要後續追蹤的訊號。
+        <div class="risk-source">來源：法說會 Zuckerberg／Susan Li（DAP、伊朗/俄羅斯）；10-Q 地域營收；CNBC 盤後報導</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人交易訊號：CEO 僅慈善贈與、無現金賣出；COO 為程式化 10b5-1——相對乾淨</div>
+        Form 4 交叉比對：<b>CEO Zuckerberg</b> 於 5/7 僅申報一筆 code G（慈善<b>贈與</b>）8,663,023 股、價格 $0——非現金套現，屬既定捐贈模式，訊號中性偏正面。<b>COO Javier Olivan</b> 全期規律賣出，但各月批量份數幾乎完全相同（如 4/20、4/27、5/11 均為 926+82+57+82+408＝1,555 股），明顯是<b>預設 10b5-1 計畫的程式化執行</b>，即使包含法說會前 2 天（4/27 @$670）與法說會後（5/11 @$604，反而更低價）也不支持「搶跑」解讀。兩位董事（Kimmitt 4/15 @$667、Alford 5/1 @$614）為小額賣出。未見 CEO/CFO 於法說會前的機會性集中賣出——相較部分同業，本季內部人訊號相對乾淨。附帶：Form 4 成交價亦印證股價脈絡——法說會前 ~$670 → 會後 5 月初跌至 $604–614（約 −10%）→ 7/13 回到 $661。
+        <div class="risk-source">來源：SEC EDGAR Form 4（accession 0000950103-26-007078 Zuckerberg／-006451、-006068、-005766、-007167 Olivan／-005904 Kimmitt／-006874 Alford）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">稅務一次性項目膨脹 reported EPS——建模須用 ex-benefit $7.31，非 $10.44</div>
+        本季 reported 稅率 −23%、reported EPS $10.44，係因認列 <b>$8.03B 一次性 CAMT/R&D 稅務利益</b>（2026/2/18 U.S. Treasury Notice 2026-7），部分沖回 2025 Q3 因 One Big Beautiful Bill Act 認列的 <b>$15.93B</b> 費用。排除此利益後淨利 $18.7B、EPS <b>$7.31</b>（此即市場拿來比較、且勝過 $6.79 共識的數字）。10-Q 另揭露：若特定未認列稅務利益未來實現，尚有 <b>$11.98B</b> 潛在利益；已提列利息與罰金 $2.83B；2010 年 IRS 移轉訂價案持續中；且 2026 年起仍受 CAMT 規範。<b>建模與 YoY 比較一律應採 ex-benefit 口徑</b>，勿線性外推本季 reported 稅率。
+        <div class="risk-source">來源：10-Q Note 7 Income Taxes（$8.03B/$15.93B/$11.98B/$2.83B、Notice 2026-7、OBBBA、Facebook v. Comm'r）；法說會 Susan Li 稅務說明</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。資料來源：Meta FY Q1 2026 法說會逐字稿、10-Q（2026/3/31）、FY2025 10-K、SEC EDGAR Form 4。財報數字以官方申報為準。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) { header.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>
