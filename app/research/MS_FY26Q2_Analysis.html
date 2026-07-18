@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS — FY Q2 2026 — Q&A / Workplace NNA引擎與AI CapEx週期 / 業務板塊 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 24px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; left: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -22px; transform: translateX(-50%); text-align: center; font-size: 11px; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 2px; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 210px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 130px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .seg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .seg-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .seg-card.is { border-top-color: #2563eb; }
+  .seg-card.wm { border-top-color: #15803d; }
+  .seg-card.im { border-top-color: #c2600a; }
+  .seg-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .seg-card.is h4 { color: #1d4ed8; }
+  .seg-card.wm h4 { color: #15803d; }
+  .seg-card.im h4 { color: #c2600a; }
+  .seg-card ul { padding-left: 14px; }
+  .seg-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.2; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stat-box { flex: 1; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Morgan Stanley (MS) — FY Q2 2026 Earnings Call Analysis">Morgan Stanley (MS) — FY Q2 2026 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis / Workplace NNA Engine &amp; AI CapEx Supercycle / Business Platform / Risk Matrix &nbsp;·&nbsp; Call Date: July 15, 2026 &nbsp;·&nbsp; Cross-referenced with 10-Q for the period ended March 31, 2026 (Q2 10-Q not yet filed) and Form 4 filings">Q&amp;A 問答分析 / Workplace淨新增資產(NNA)引擎與AI CapEx資本形成週期 / 業務板塊 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年7月15日 &nbsp;·&nbsp; 交叉比對截至2026/3/31財季10-Q（Q2 10-Q尚未申報）與Form 4申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="Workplace NNA Engine &amp; AI CapEx Cycle" onclick="sw('cap',this)">Workplace NNA引擎與AI CapEx週期</div>
+    <div class="tab" data-en="Business Platform" onclick="sw('biz',this)">業務板塊</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl" data-en="Logic Gaps">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ebrahim Poonawala（Bank of America）</div><div class="qa-topic">Workplace通路是否已達「flow高峰」× WM利潤率能否挑戰30中段</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">本季Workplace通路帶動的NNA成長，是否已經是「高峰」？IPO活動＋整合式招攬效果疊加下，未來一年到中期，NNA成長還能不能更好，還是現在已經是天花板？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sharon Yeshaya：以「多年投資的成果」定調，揭露MS在前100大獨角獸公司的Workplace管道中已佔70%，並列舉401K、E*TRADE關係、儲蓄型產品等其他Workplace入口；強調IPO backlog持續墊高、未來會有更多轉換機會，但明確表示flow「本質上會有起伏（ebb and flow）」，公司現階段聚焦的是留客與轉介至顧問式服務（LeadIQ referral模型），而非追求單季flow極大化。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Poonawala直接問的是「是否已達高峰、現在是第幾局」，Sharon全程未正面回答「峰值」這個詞，也沒有給出任何前瞻性的NNA成長率或範圍指引，只用「這是長期賽局（long game）」帶過。同樣地，Ted Pick被追問WM利潤率能否挑戰30中段時，僅表示「30是我們多次達到的基準，但不是我們要解的題」，同樣拒絕給出具體目標區間或時間表——兩題都是分析師想要一個可驗證的前瞻數字，管理層兩次都以「長期紀律」的敘事帶過。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Ebrahim Poonawala:</b> "Are we at peak flows as far as the workplace channel is concerned when we look at the NNA growth... or can we do better? Just kind of what inning are we in terms of growth tied to the workplace channel."<br><br><b>Sharon Yeshaya:</b> "We have about 70% of the top 100 unicorns by market cap in terms of our workplace pipeline... Of course, that will ebb and flow. We've seen that... What we're focused on now is really making sure that what we're doing is retaining those clients."<br><br><b>Ebrahim Poonawala (follow-up):</b> "The average shareholder... would think that this pre-tax margin is probably drifting into the low 30s or even the mid-30s over the medium term. Is that a reasonable assumption?"<br><br><b>Ted Pick:</b> "The reality is that 30 is a benchmark now we've hit a number of times, but it's not a number we're solving for... That's something that would be addressed at the end of the year."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Glenn Schorr（Evercore）</div><div class="qa-topic">NNA新戶vs既有客戶拆分未揭露 × 為何堅持保留超額資本</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">本季$148B的NNA中，新戶與既有客戶各佔多少？IPO資產何時真正入帳，是否有既定vesting時程？另外，為什麼在報酬率已經很高的情況下，仍選擇保留這麼高的超額資本，而不是把槓桿用滿？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sharon：「是一個混合體」，未給出具體佔比，僅承認「很難精確告訴你界線在哪」；vesting時程「依個案而定」，本季恰好有不只一筆大型IPO集中在同一季完成解禁，才造就這樣的數字；並揭露一個具體統計數字——MS目前的Workplace關係數已達2000萬（「不久前我們談的還是1000萬、1200萬、1400萬」）。Ted：以「過去10季累積$18B CET1」與「300-350bp超額資本」定調財務實力這個支柱，強調資本會優先用於餵養整合型業務、其次才是併購式擴張，重申15年成功整合紀錄與嚴格的併購紀律（文化契合優先於交易條件）。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Schorr連問兩次量化問題（新戶/既有戶佔比、vesting時程細節），Sharon兩次都以「難以精確界定」帶過，僅用「2000萬關係」這個總量數字取代真正被問到的拆分數據。更值得注意的是：Ted在回答「為何保留這麼多資本」時，通篇只談CET1（累積$18B、300-350bp緩衝），完全沒有主動提及Firm合併層級的SLR——而根據10-Q與財務補充交叉比對，MS的Firm SLR實際上已從2Q25的5.5%降至2Q26的4.9%，同期SLR監管要求本身也在2026/1/1從5.0%降至3.5%（詳見風險矩陣）。管理層選擇性地只用寬鬆的CET1緩衝說故事，迴避了緊繃得多的SLR這條線，而全場沒有任何一位分析師追問SLR，形成本場法說會最大的「未被問到、也未被揭露」缺口。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Glenn Schorr:</b> "Maybe you could talk a little bit about new versus existing clients... I'm curious to see when the recognition comes in, meaning does everything come in on the IPO or is there a vesting schedule?"<br><br><b>Sharon Yeshaya:</b> "It would be a little difficult to exactly tell you where that is... there were large IPOs, more than one that took place over the quarter, and that's largely what you're seeing here... We're currently at 20 million relationships... it's not that long ago, we were talking about 10, we were talking about 12, we were talking about 14."<br><br><b>Glenn Schorr (follow-up):</b> "Do you keep this capital base this high for a reason?... why not run the optionality?"<br><br><b>Ted Pick:</b> "The pillar of financial strength of this firm is something that we have put some substance behind in accreting $18 billion of CET1 over the last 10 quarters... We have, depending on how you measure it, 300 to 350 basis points of excess CET1 capital."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mike Mayo（Wells Fargo Securities）</div><div class="qa-topic">AI CapEx「$10兆」推算 × MS實際承接比例拒答</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">去年Ted說市場正接近「WOW」時刻，能否具體量化這波AI CapEx超級週期的規模？如果真的是「$10兆」這個數量級，MS在募資中能扮演多大比重的角色——10%、20%、50%？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Ted提供了整場法說會最詳盡的量化推演：2026年資料中心CapEx原估$575B、實際約$850B；2027年展望從$700B上修至$1.3T；2028年可能達$1.5T；引用研究團隊Katy Huberty的「每次科技週期帶來十倍算力提升」框架，類比雲端運算週期（約$1兆）推算AI運算週期最終規模約為「$10兆」，據此估計目前約處於這個十年週期的10%-15%階段。被追問MS的實際承接比例時，Ted明確拒絕給百分比，僅表示「會是有意義的規模（meaningful）」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Ted一方面提供了異常精確的總量估算（$575B→$850B→$1.3T→$1.5T，10-15%進度），另一方面在被要求把這個總量換算成「MS自己能承接多少」時，立刻切回「早期、無法量化」的立場——這種「總量精確、自身曝險模糊」的不對稱回答模式，讓分析師難以把這個宏大敘事轉換為對MS自身IB/Equities營收的具體財測貢獻。Ted自己也承認「token定價、企業採購模式」等變數可能讓這個週期在6-18個月內出現波動，但沒有任何情境測試量化MS本身在「recalibration」情境下的backlog或financing曝險。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Mike Mayo:</b> "It's about a year ago when you said we were approaching the moment of wow... Can you put any numbers around this?"<br><br><b>Ted Pick:</b> "The forecast for 2026 on data center CapEx... was that $575 billion would be spent this year, and it's coming in at about $850 billion. That for 2027... is now projected at $1.3 trillion. 2028 could be at $1.5 trillion... You're basically looking at us being around 10%-15% of the way through the investment cycle."<br><br><b>Mike Mayo (follow-up):</b> "How much involvement would you have in raising capital? Is it 10%, 20%, 50%?"<br><br><b>Ted Pick:</b> "On that one, I'd say I wouldn't attach a percentage to it, but I would say it's going to be meaningful."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Chris McGratty（KBW）</div><div class="qa-topic">IB pipeline地域/歷史對比 × 交易業務永續性歸因於「監管正常化」</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">目前IB pipeline的水準，和歷史相比、地域分布上有什麼特徵？另外提到的sponsor評論能否再說明。追問：交易業務（equities/FICC）能不斷創新高，多少是結構性優勢帶來，永續性如何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sharon：目前完成/宣布的水準「尚未回到歷史高點」，pipeline正在地域上「擴散」——不只美洲，亞洲與海外的pipeline也在增加；本輪週期先從債務發行開始，接著是IG/非IG，現在輪到股權端，sponsor（PE）端的完整週期「尚未真正出現」。Ted：把M&A環境轉強歸因於雙主軸——AI驅動的規模化壓力，以及「監管正常化週期（normalization of regulation cycle）」，即政府與監理機關現在對「合理、審慎的整併」抱持較開放態度，相較於過去金融壓抑、過度監管、疫情、暴力升息等時期的環境明顯改善。追問交易業務時，Ted與Sharon皆強調「地域廣泛化」（不再只是中國，現在是印度、日本、中國、韓國、台灣都被提及）與MUFG夥伴關係「比以往任何時候都更緊密」（2.0平台整合研究、股票內容與外匯）。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Ted把本輪M&A/IB繁榮的驅動力之一，明確歸因於「監管正常化週期」——即反壟斷與併購審查政策轉向寬鬆，而非純粹市場需求或AI基建本身。這是一個政策依賴、可能隨政府更迭而反轉的外生變數，卻被包裝成與AI並列的結構性順風；沒有任何分析師追問這個監管寬鬆的可持續性，或量化其對本季IB backlog的邊際貢獻比重。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Chris McGratty:</b> "My question on the IB pipeline... contextualize it today versus historical periods, biases geographically, untapped potential, then also unpack the sponsor comment."<br><br><b>Sharon Yeshaya:</b> "We're not yet at the levels that we've seen historically... there's pipeline in Asia, there's pipeline abroad... we have not yet seen that complete cycle from the sponsors yet."<br><br><b>Ted Pick:</b> "The urgency, in our view, is twofold... The first is AI... The second is this... a normalization of regulation cycle, where... folks in the administration and amongst the regulator want to approve reasonable, rational, well-considered transactions."<br><br><b>Chris McGratty (follow-up):</b> "Can you just speak to the mix of the trading business between finance and intermediation, where you see that going?"<br><br><b>Ted Pick:</b> "We're also an Asia house. Very much an Asia house. As you know, we're 25% owned by MUFG... The interaction with our partners is more intense than it's ever been."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Steven Chubak（Wolfe Research）</div><div class="qa-topic">RIA低價競爭Workplace通路——完全未被正面回應</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">媒體報導指出，較小型的RIA正以更激進的定價策略搶攻Workplace通路的客戶轉換率，MS打算如何強化這塊業務的競爭護城河、維持過去的高轉換率？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sharon：從企業覆蓋（corporate coverage）談起，強調整合型公司關係、財務健康顧問、技術驅動的顧客-顧問配對能力、產品/另類資產的廣度，均非小型機構能複製；並再次強調本季逾半NNA來自IPO，這種規模的企業關係本身就無法被小型機構複製。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Chubak問題的關鍵字是「更激進的定價（more aggressive pricing）」——這是一個直接指向費率競爭與潛在費基壓縮的問題，但Sharon整段回答完全沒有提到MS自己的定價策略、費率結構，或是否感受到費率壓力，只談廣度與規模優勢。這與GS法說會上管理層對「量化資訊」的迴避模式如出一轍：分析師問的是「價格」，管理層答的是「規模」，迴避了真正可能影響費基資產(fee-based assets)利潤率的核心變數。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Steven Chubak:</b> "There was some press coverage this quarter just highlighting efforts by smaller RIAs employing more aggressive pricing to compete for some of that business. Was hoping you could speak to how the competitive landscape's evolving in workplace and the steps that you're taking just to widen your competitive moat."<br><br><b>Sharon Yeshaya:</b> "With no disrespect to smaller institutions, they will not have that type of breadth... The final point is when you think about this quarter, and you just look alone at the NNA, as we said, just over half is coming from IPOs. You're not going to be able to have that corporate relationship at a much smaller level."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Erika Najarian（UBS）</div><div class="qa-topic">Equities的Asia依賴度與定價權——量化黑箱</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Equities數字驚人，Ted也說是Asia House、AI週期才走了10-15%，這種背景下，Asia交易活動的持久性如何？另外，融資業務（financing）是否已經開始出現定價權（pricing power）？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Ted：坦言「確實有一些定價槓桿」，但同時強調生態系中還有很多參與者擁有額外資本可以投入，持久性取決於一連串總體「未知數」（通膨受控、地緣政治平靜、波動度既不過熱也不至於risk-off）能否持續共存；重申規模與全球布局讓龍頭投行持續「拿到更多wallet」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Najarian明確問的是「Asia交易活動對Equities數字的具體貢獻」與「定價權的量化程度」，Ted的回答完全沒有拆分Asia佔Equities營收的比重（財務補充僅揭露Asia佔「整體」淨營收17%、YoY+71%，但未拆分至Equities/FICC子業務層級），也沒有量化「一些定價槓桿」到底反映在利差或費率的多少個bp——與GS法說會上管理層被問及Asia集中度時同樣選擇定性語言帶過的模式一致。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Erika Najarian:</b> "How durable is some of the activity on the equities trading side that's coming out of Asia? ...whether or not the financing providers have gained some pricing power this quarter."<br><br><b>Ted Pick:</b> "I would say there is some pricing leverage. There are also a lot of folks in the ecosystem who have additional capital they can put forward... It helps, by the way, to have the kind of scale and global reach that we have."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Gerard Cassidy（RBC）</div><div class="qa-topic">如何預先偵測AI週期「破裂」訊號——僅有精神喊話，無具體監控指標</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">目前對AI CapEx前景樂觀，但歷史上網路泡沫、2021年SPAC熱潮最終都退燒——MS具體在盯什麼指標，一旦出現裂縫能提前準備？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Ted：以「higher highs, higher lows」的口號回應，強調團隊經歷過夠多週期，「眼睛時刻睜著」，目標是維持獲得健康本益比所需要的「韌性」，但同時坦言「無法解決總體經濟週期或市場錯置」，只能持續做「耐久的長期特許業務」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Cassidy問的是「具體在看哪些指標」，Ted整段回答沒有點名任何一個可觀察、可追蹤的量化指標（例如信用利差、槓桿倍數、token定價、企業CapEx/營收比等），只用「我們的眼睛一直睜著」這類精神性語言帶過，是本場法說會中最典型的「以文化/紀律敘事取代具體監控框架」的回答，也是與Mike Mayo那題「拒絕給出MS承接比例百分比」相呼應的同一種迴避模式。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Gerard Cassidy:</b> "What are you guys keeping an eye on so that if something starts to crack and go the other way, you guys can prepare for it?"<br><br><b>Ted Pick:</b> "We keep our eyes on everything. I think we're just born to think that way... Higher highs to demonstrate operating leverage, but higher lows... We've kept our eyes open because it's been the unleashing of a new environment where geopolitics are back in the frame."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Workplace NNA Engine & AI CapEx Cycle Panel -->
+  <div id="panel-cap" class="panel">
+    <div class="section-title">本季特殊事件深度拆解：Workplace通路淨新增資產(NNA)引擎 × AI CapEx資本形成超級週期</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>Wealth Management淨新增資產(NNA) $148.1B，創歷史紀錄，QoQ +25%、YoY +150%</li>
+          <li>Stock plan IPO flows佔本季NNA「略高於一半」（管理層原話），足以抵銷季節性稅款流出</li>
+          <li>Stock plan unvested public assets單季暴增：$475B（Q1）→$658B（Q2），+39% QoQ</li>
+          <li>Fee-based asset flows $39.1B；Wealth+Investment Management合計客戶資產達 $10.088T 里程碑</li>
+          <li>Workplace關係數已達2000萬（Sharon原話：「不久前還在談1000萬、1200萬、1400萬」）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>結構／機制</h4>
+        <ul>
+          <li>頂端獨角獸管道：MS佔前100大獨角獸市值公司Workplace管道70%</li>
+          <li>轉換機制：LeadIQ轉介模型 + 401K/E*TRADE等其他Workplace入口 → 顧問式服務(advisor-led)</li>
+          <li>vesting時程「依個案而定」，本季多筆大型IPO集中同季解禁，非常態化節奏</li>
+          <li>10-Q揭露：MSSB/E*TRADE現金掃存(cash sweep)集體訴訟——與本季NII受惠於「掃存餘額」是同一收入來源的兩面</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>資本佔用</h4>
+        <ul>
+          <li>Wealth Management平均普通股權益僅$28.7B（佔Firm整體27%），卻貢獻稅前利潤$2.697B</li>
+          <li>WM Return on Average Tangible Common Equity達53%，遠高於Firm整體26.6%——極輕資本業務</li>
+          <li>存款$436B為WM放款（$195.7B）與NII（$2.254B）的主要資金來源，年化平均存款成本2.54%</li>
+          <li>Firm合併層級CET1（Standardized）14.8%，較11.8%要求高出約300bp緩衝</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>「是否已達flow高峰」——Poonawala直接提問，管理層未正面回答，僅稱會有「起伏」</li>
+          <li>$148B NNA中新戶vs既有客戶佔比、具體涉及哪些IPO案件，管理層兩次追問下均未量化</li>
+          <li>RIA低價競爭Workplace客戶轉換——Chubak提問後，管理層完全未回應定價策略本身</li>
+          <li>Cash sweep集體訴訟（含RICO主張）的潛在追溯負債規模未揭露，卻與本季NII驅動因子高度相關</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問：盡職調查式追問清單</h4>
+      <ol>
+        <li>$148B NNA中「略高於一半」為Workplace IPO流入，具體美元金額、涉及哪幾筆具名IPO交易、以及剩餘不到一半的新戶/既有戶拆分比例，管理層兩次追問下均未揭露——若下季無同等規模的巨型IPO解禁，NNA是否會出現顯著的季度落差？</li>
+        <li>Stock plan unvested public assets單季暴增39%至$658B，代表尚有大量已上市但未解禁的股票獎酬部位；這批部位的後續解禁時程表是否已知，是否代表Q3/Q4仍有類似規模的flow可期，還是本季已提前消化了大部分待轉換部位？</li>
+        <li>面對Chubak點名的RIA低價競爭，管理層完全沒有回應定價／費率策略本身，只談規模優勢——這是否代表fee-based assets的實質費率（fee-based assets as a % of advisor-led client assets，本季48%，與上季持平）已隱含承受一定壓力，只是尚未反映在整體資產規模成長的稀釋效應中？</li>
+        <li>Cash sweep集體訴訟（*Estate of Sherlip v. Morgan Stanley*、*In re E*TRADE Cash Sweep Litigation*）指控MSSB/E*TRADE未就掃存產品支付合理利率，部分援引RICO三倍損害賠償條款；若這類訴訟不利，對Wealth Management過去數年靠掃存餘額擴大賺取的NII利差，追溯負債曝險規模有多大？</li>
+      </ol>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">CET1 資本緩衝：門檻 vs 實際值（Firm合併層級，Standardized，2026 Q2）</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>11.8%<br>監管要求</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>14.8%<br>實際值（+300bp）</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>監管最低要求（含各項緩衝）</span>
+        <span><span class="sw" style="background:#15803d;"></span>2026 Q2 實際值</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">Ted Pick法說會原話：「過去10季累積$18B CET1，緩衝至少300個基點」，與10-Q揭露的11.8%要求、財務補充揭露的14.8%實際值互相印證。但同一份10-Q顯示Firm合併層級SLR緩衝遠比CET1緊繃——實際SLR僅4.9%-5.0%，較3.5%要求緩衝約140-150bp，且監理要求本身於2026/1/1才從5.0%驟降至3.5%；管理層在法說會通篇只講寬鬆的CET1，未提及緊繃許多的SLR，詳見風險矩陣。</p>
+    </div>
+
+    <div class="section-title">立場對照：Workplace NNA引擎 對 Morgan Stanley vs 對 Workplace客戶（股票獎酬計畫參與者）</div>
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>對 Morgan Stanley</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>NNA創紀錄$148B，總客戶資產跨越$10T里程碑，鞏固業界龍頭地位</li>
+          <li>Workplace管道形成低成本獲客漏斗，2000萬關係為龐大的顧問式服務轉換基礎</li>
+          <li>費基資產(fee-based assets)持續擴大至$3.022T，帶動WM稅前利潤率達30.5%</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>NNA紀錄高度依賴少數巨型IPO集中解禁，具有「episodic」而非穩定遞增的性質</li>
+          <li>掃存存款利差是NII成長主要驅動之一，但同時是集體訴訟（含RICO主張）的核心爭議標的</li>
+          <li>RIA低價競爭壓力浮現，管理層迴避正面回應定價策略</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4>對 Workplace客戶（股票獎酬計畫參與者）</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>透過LeadIQ等技術媒合，取得財務教育、顧問轉介與整合式財富管理服務</li>
+          <li>企業覆蓋（corporate coverage）帶來的一站式股票獎酬解禁、稅務規劃、投資建議整合服務</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>現金掃存餘額可能被以低於市場行情的利率計息（集體訴訟核心指控），客戶端議價力有限</li>
+          <li>轉換為顧問式(advisor-led)服務後，需接受MS的費率結構，缺乏RIA等低價替代方案的透明比較</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Platform Panel -->
+  <div id="panel-biz" class="panel">
+    <div class="section-title">業務板塊營收（2026 Q2，YoY%）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">Institutional Securities（總計，創紀錄）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#2563eb;">$11,040M</div></div>
+        <div class="rev-val">+44% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Investment Banking（合計）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:22%; background:#60a5fa;">$2,437M</div></div>
+        <div class="rev-val">+58% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Equity（Trading）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:57%; background:#1d4ed8;">$6,300M</div></div>
+        <div class="rev-val">+69% YoY，創紀錄</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Fixed Income（Trading）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:22%; background:#3b82f6;">$2,455M</div></div>
+        <div class="rev-val">+13% YoY</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— Other</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:1%; background:#94a3b8;">$(152)M</div></div>
+        <div class="rev-val">2Q25: $202M</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Wealth Management（總計，創紀錄）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:80%; background:#15803d;">$8,856M</div></div>
+        <div class="rev-val">+14% YoY，稅前利潤率30.5%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Investment Management（總計）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:15%; background:#c2600a;">$1,646M</div></div>
+        <div class="rev-val">+6% YoY</div>
+      </div>
+    </div>
+    <p style="color:#888; font-size:11px; margin-top:-8px; margin-bottom:16px;">⚑ 條狀長度以Institutional Securities $11,040M為100%基準做相對比例示意，非精確線性刻度；三大板塊淨營收扣除跨部門沖銷($194M)後合計為Firm淨營收$21,348M。</p>
+
+    <div class="section-title">三大板塊摘要</div>
+    <div class="seg-grid">
+      <div class="seg-card is">
+        <h4>Institutional Securities</h4>
+        <ul>
+          <li>Advisory $798M：完成M&amp;A交易增加，尤以美洲為主；產業別涵蓋工業、科技、醫療</li>
+          <li>Equity Underwriting $851M：受惠IPO市場暢旺、follow-on與可轉債活動強勁</li>
+          <li>Fixed Income Underwriting $788M：投資級與非投資級發債均創佳績，創單季紀錄</li>
+          <li>Equity trading創紀錄，Asia表現突出；Prime brokerage、Cash、Derivatives均全面走強</li>
+          <li>Fixed Income：Credit/證券化商品放款成長彌補FX波動度歷史低點的拖累</li>
+          <li>撥備$71M主因公司放款與擔保融資設施組合成長；Trading VaR季增至$56M</li>
+        </ul>
+      </div>
+      <div class="seg-card wm">
+        <h4>Wealth Management</h4>
+        <ul>
+          <li>資產管理費收入$5,261M創紀錄，主因市場上揚與費基資金流入累積效果</li>
+          <li>淨新增資產(NNA) $148.1B創紀錄；費基資產流入$39.1B</li>
+          <li>淨利息收入(NII) $2,254M，QoQ+4%，主因存款餘額與放款成長；預期Q3小幅續增</li>
+          <li>存款成長至$436B，放款餘額$195.7B（QoQ+5%）</li>
+          <li>10-Q揭露：MSSB/E*TRADE現金掃存集體訴訟正在進行中</li>
+        </ul>
+      </div>
+      <div class="seg-card im">
+        <h4>Investment Management</h4>
+        <ul>
+          <li>AUM達$2.004T創紀錄，長期淨流入$7.5B，主因另類資產/解決方案與固定收益策略需求</li>
+          <li>Parametric AUM超過$7600億，持續作為整合平台差異化重點</li>
+          <li>績效相關收入$130M，主要反映私募基金的按市值計價收益</li>
+          <li>淨流入結構分化：股票淨流出$12.5B（連續多季），固定收益+$7.3B，另類/解決方案+$12.7B</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">因果鏈敘事：AI CapEx超級週期 → Workplace NNA引擎</div>
+      <div class="flow-chain">
+        <span class="node">AI CapEx資本形成需求擴大(10-15%進度)</span><span class="arrow">→</span>
+        <span class="node">晚期私募獨角獸加速IPO</span><span class="arrow">→</span>
+        <span class="node">MS佔前100大獨角獸Workplace管道70%</span><span class="arrow">→</span>
+        <span class="node">股票獎酬計畫解禁(unvested public assets +39% QoQ)</span><span class="arrow">→</span>
+        <span class="node">Workplace NNA創紀錄$148.1B</span><span class="arrow">→</span>
+        <span class="node">LeadIQ轉介至顧問式服務</span><span class="arrow">→</span>
+        <span class="node">費基資產擴大至$3.022T</span><span class="arrow">→</span>
+        <span class="node">WM稅前利潤率30.5%創紀錄</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">這條因果鏈是整場法說會反覆被提及的核心敘事（Workplace、IPO、NNA相關詞彙合計出現20次以上），但如Q&amp;A Tab中Ebrahim Poonawala與Glenn Schorr兩題所示，鏈條中「新戶vs既有戶轉換率」「vesting實際節奏」等關鍵轉換環節，管理層均未提供可驗證的量化數字。</p>
+    </div>
+  </div>
+
+  <!-- Risk Matrix Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">現金掃存集體訴訟 × 本季NII「掃存餘額」順風敘事——同一收入來源的兩面</div>
+        法說會與財務補充同步強調「NII優於預期，主因掃存餘額（sweep balances）高於預期＋放款成長」，年化加權平均存款成本期末2.60%／期均2.54%；但10-Q Note 13揭露，MSSB與E*TRADE Securities自2024年起被列為多起集體訴訟被告（*Estate of Sherlip v. Morgan Stanley*、*In re E*TRADE Cash Sweep Litigation*），指控其未就經紀/顧問/退休帳戶的現金掃存產品支付合理利率，部分訴狀援引RICO三倍損害賠償條款，公司同時正回應多州證券監理機關問詢。管理層在法說會上把掃存餘額成長包裝為單純的客戶信任度與留存率正面訊號，未提及這條收入線同時是集體訴訟風險敞口的成長來源——本報告判斷此為本季最具原創性的前瞻風險。
+        <div class="risk-source">來源：10-Q Note 13 Contingencies—Legal；財務補充p.7 Wealth Management存款成本揭露；法說會Sharon Yeshaya NII評論</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">Firm合併層級SLR緩衝遠比CET1緊繃，且全場無人提問——監理紅利依賴度未被檢視</div>
+        交叉比對10-Q與財務補充可拼出管理層全程未主動揭露的風險鏈：MS已於2026/1/1提前採用修訂版eSLR標準，使Firm合併層級SLR要求由2025/12的5.0%驟降至3.5%（降幅150bp，與同業高盛在同一季度採用的同一套聯準會新規完全一致，屬於整個銀行業的監理紅利，非MS個別優化）；但即便有這150bp的監理鬆綁，MS的Firm實際SLR仍從2Q25的5.5%降至2Q26的4.9%，緩衝僅約140bp，遠低於CET1約300bp的緩衝空間。Glenn Schorr提問「為何保留這麼高資本」時，Ted通篇只回答CET1，完全未提及SLR這條更緊繃的線；更值得注意的是，本場法說會**沒有任何一位分析師**追問SLR（相較於高盛法說會上Christian Bolu曾就此追問），使這個結構性依賴監理鬆綁、且緩衝相對單薄的指標，完全未受到市場檢視。
+        <div class="risk-source">來源：10-Q「The Firm's Regulatory Capital and Capital Ratios」eSLR揭露；財務補充p.5 SLR趨勢；法說會Glenn Schorr提問／Ted Pick回應（僅談CET1）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">AI CapEx週期「recalibration」風險——IB backlog與Equities record高度依賴週期延續</div>
+        Ted Pick本人主動承認AI基建週期「不會是直線發展」，未來6-18個月可能出現「recalibration」，且token定價、企業採購模式仍高度不確定；但本季Institutional Securities創紀錄的$11.0B營收（尤其Equity trading +69% YoY、Investment Banking +58% YoY）已高度依賴這個週期的延續。若週期降溫，IB backlog的兌現速度與equities/prime業務的活躍度可能同步承壓，而管理層被問及具體監控指標時（Gerard Cassidy提問），僅以「眼睛時刻睜著」等精神性語言回應，未點名任何可觀察、可驗證的量化監控指標。
+        <div class="risk-source">來源：法說會Mike Mayo／Gerard Cassidy提問；Ted Pick回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">M&amp;A/IB繁榮的「監管正常化週期」政策依賴</div>
+        Ted Pick明確將本輪IB backlog與M&amp;A繁榮的驅動力之一，歸因於「監管正常化週期」——即政府與監理機關對「合理、審慎的整併」轉向較開放的態度，而非純粹AI基建需求或市場自然回溫。這代表MS本季招牌成長引擎之一，實質上綁定於當前反壟斷／併購審查政策的寬鬆度，屬於可能隨政府更迭或政策轉向而反轉的外生變數，全場沒有分析師追問這個政策寬鬆的持續性或量化其對本季IB revenue的邊際貢獻。
+        <div class="risk-source">來源：法說會Chris McGratty提問／Ted Pick回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Workplace NNA「高峰」疑慮與RIA低價競爭——雙雙未獲正面回應</div>
+        Ebrahim Poonawala直接提問Workplace通路NNA是否已達高峰，管理層僅以「長期賽局」帶過，未提供前瞻性成長率指引；Steven Chubak另提問RIA以更低費率競爭Workplace客戶轉換，Sharon的回答完全未觸及MS自身的定價策略或費率壓力，只強調規模與整合服務優勢。兩題合併來看，指向同一個未被驗證的問題：本季創紀錄的NNA與費基資產成長，有多少是可持續的結構性優勢，多少是本季恰好集中的巨型IPO解禁週期性效果，疊加尚未顯現的費率壓縮風險。
+        <div class="risk-source">來源：法說會Ebrahim Poonawala／Steven Chubak提問</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人交易訊號：乾淨窗口，與GS同期形成對照組</div>
+        Form 4顯示CEO Ted Pick全期無任何申報；CFO Sharon Yeshaya與Co-President Daniel Simkowitz於4月中旬的申報為慈善贈與（code G），非出售套現；僅Chief Legal/Admin Officer Eric Grossman、Co-President Andrew Saperstein、Chief Client Officer Mandell Crawley三位非CEO/CFO高管於4/16-4/20小額出售（均價$187-190），距7/15法說會約13週，早於典型財報前緘默期；財報前6週（6/2-7/15）全體高管與董事均無交易活動。此模式與高盛同期「CEO/CFO/CLO/CAO四位最高層於法說會前4-11週窗口內一致性出售」形成鮮明對比，較不支持「內部人搶跑」的解讀角度。
+        <div class="risk-source">來源：SEC EDGAR Form 4申報（accession 0001628280-26-026008、0001628280-26-025796、0001628280-26-025791、0001628280-26-025790、0001628280-26-025789）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">歷史遺留反壟斷訴訟——多數已進入和解／駁回尾聲，非本季新增重大風險</div>
+        10-Q Note 13揭露的利率交換反壟斷（Interest Rate Swaps Antitrust Litigation）、VRDO反壟斷（City of Philadelphia v. Bank of America）、英國公債反壟斷（U.K. Government Bond Matter）、IKB RMBS訴訟等，均為多年歷史遺留案件，多數已達成和解或進入上訴尾聲階段，非本季新增或升級的個別重大訴訟；真正具備前瞻性、且與本季敘事直接相關的法律風險是前述的現金掃存集體訴訟。
+        <div class="risk-source">來源：10-Q Note 13 Contingencies—Legal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+let isEn = false;
+function toggleLang() {
+  isEn = !isEn;
+  document.getElementById('langBtn').textContent = isEn ? '繁體中文' : 'English';
+  document.querySelectorAll('[data-en]').forEach(el => {
+    if (isEn) {
+      if (!el.dataset.zh) el.dataset.zh = el.innerHTML;
+      el.innerHTML = el.dataset.en;
+    } else {
+      if (el.dataset.zh) el.innerHTML = el.dataset.zh;
+    }
+  });
+}
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
