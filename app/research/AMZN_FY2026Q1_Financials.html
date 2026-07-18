@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon.com (AMZN) FY2026 Q1 — 完整財務分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab { padding: 9px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.na { border-top-color: #15803d; }
+  .bu-card.intl { border-top-color: #c2600a; }
+  .bu-card.aws { border-top-color: #2563eb; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 190px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .bar-num { width: 130px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; }
+
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .note { font-size: 11px; color: #444; margin-top: 8px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.6; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Amazon.com, Inc.（AMZN）— FY2026 Q1 完整財務分析</h1>
+  <p>損益表 / 業務部門 / 資產負債表 / 現金流量 / 估值觀察 &nbsp;·&nbsp; 法說會日期：2026年4月29日（季末：2026年3月31日）&nbsp;·&nbsp; 數字取自FY2026 Q1 10-Q（SEC EDGAR，2026/4/30申報）與法說會逐字稿／簡報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- Income Statement -->
+  <div id="panel-inc" class="panel active">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$181.5B</div><div class="kpi-lbl">季營收</div><div class="kpi-sub">YoY +16.6%（F/X調整後+15%）</div></div>
+      <div class="kpi"><div class="kpi-val">$2.78</div><div class="kpi-lbl">稀釋EPS（GAAP）</div><div class="kpi-sub">YoY +74.8%，含Anthropic股權利得</div></div>
+      <div class="kpi"><div class="kpi-val">13.1%</div><div class="kpi-lbl">營業利益率</div><div class="kpi-sub">歷史最高（去年同期11.8%）</div></div>
+      <div class="kpi"><div class="kpi-val">16.7%</div><div class="kpi-lbl">淨利率</div><div class="kpi-sub">去年同期11.0%</div></div>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">盈餘品質提醒</strong>：本季淨利$30,255M中，約$16.8B稅前（$4.5B重分類利得＋$12.3B公允價值上調）來自單一持股Anthropic nonvoting preferred stock的估值變動，稅效化後估計約$12.8B為非營運性利得。剔除後估算「核心淨利」約$17.5B，與去年同期$17.1B大致持平——與營業利益扎實成長29.6%的訊號明顯不同調，詳見下方及Analysis.html風險矩陣。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">GAAP損益表（單季，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>Q1 2026</th><th>Q1 2025</th><th>YoY</th></tr>
+        <tr><td>淨產品銷售</td><td>$71,304</td><td>$63,970</td><td class="pos">+11.5%</td></tr>
+        <tr><td>淨服務銷售</td><td>$110,215</td><td>$91,697</td><td class="pos">+20.2%</td></tr>
+        <tr><td><strong>總淨銷售額</strong></td><td><strong>$181,519</strong></td><td>$155,667</td><td class="pos">+16.6%</td></tr>
+        <tr><td>銷貨成本</td><td>$87,463</td><td>$76,976</td><td>+13.6%</td></tr>
+        <tr><td>物流費用（Fulfillment）</td><td>$27,289</td><td>$24,593</td><td>+11.0%</td></tr>
+        <tr><td>技術與基礎設施</td><td>$29,567</td><td>$22,994</td><td class="neu">+28.6%</td></tr>
+        <tr><td>行銷費用</td><td>$10,314</td><td>$9,763</td><td>+5.6%</td></tr>
+        <tr><td>管理費用</td><td>$2,587</td><td>$2,628</td><td>-1.6%</td></tr>
+        <tr><td>其他營業費用（收入），淨額</td><td>$447</td><td>$308</td><td>—</td></tr>
+        <tr><td>總營業費用</td><td>$157,667</td><td>$137,262</td><td>+14.9%</td></tr>
+        <tr><td><strong>營業利益</strong></td><td><strong class="pos">$23,852</strong></td><td>$18,405</td><td class="pos">+29.6%</td></tr>
+        <tr><td>營業利益率</td><td class="pos">13.1%</td><td>11.8%</td><td>+1.3pp</td></tr>
+        <tr><td>利息收入</td><td>$1,135</td><td>$1,066</td><td>—</td></tr>
+        <tr><td>利息費用</td><td>($800)</td><td>($541)</td><td>—</td></tr>
+        <tr><td>其他收入（費用），淨額</td><td class="pos">$15,647</td><td>$2,749</td><td>+469%</td></tr>
+        <tr><td>非營業收入合計</td><td>$15,982</td><td>$3,274</td><td>—</td></tr>
+        <tr><td>稅前淨利</td><td>$39,834</td><td>$21,679</td><td>+83.7%</td></tr>
+        <tr><td>所得稅費用</td><td>($9,560)</td><td>($4,553)</td><td>—</td></tr>
+        <tr><td>有效稅率（估算）</td><td class="neu">~24.0%</td><td>~21.0%</td><td>+3.0pp</td></tr>
+        <tr><td>權益法投資活動，淨額</td><td>($19)</td><td>$1</td><td>—</td></tr>
+        <tr><td><strong>淨利</strong></td><td><strong class="pos">$30,255</strong></td><td>$17,127</td><td class="pos">+76.6%</td></tr>
+        <tr><td>稀釋每股盈餘</td><td><strong>$2.78</strong></td><td>$1.59</td><td class="pos">+74.8%</td></tr>
+        <tr><td>基本每股盈餘</td><td>$2.82</td><td>$1.62</td><td>—</td></tr>
+        <tr><td>稀釋加權平均股數（百萬股）</td><td>10,874</td><td>10,793</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 「其他收入（費用），淨額」$15,647M的拆解：市場性股權證券估值($889M)、股權權證估值($398M)、可供出售債券證券利得重分類+$4,479M（源自Anthropic可轉換公司債部分轉換為優先股）、私公司股權投資公允價值上調+$12,328M（主要為Anthropic優先股）、匯兌利得+$160M、其他($33M)。前兩項合計約$16.8B即為Anthropic相關利得，構成上方盈餘品質提醒的計算基礎。技術與基礎設施費用YoY+28.6%，成長速度僅次於AWS營收成長（+28.4%），顯示AI基礎設施的折舊/攤銷已成為僅次於銷貨成本的第二大變動成本項目。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY2026 Q2（6月季）財測</div>
+      <table>
+        <tr><th>項目</th><th>財測區間</th></tr>
+        <tr><td>淨銷售額</td><td>$194B – $199B</td></tr>
+        <tr><td>營業利益</td><td>$20B – $24B</td></tr>
+        <tr><td>F/X影響</td><td>YoY逆風約10個基點</td></tr>
+        <tr><td>財測內嵌事項</td><td>年度薪酬週期帶動的股權薪酬季節性上升；北美segment約$1B YoY成本增加（Amazon Leo衛星製造/發射）；燃油通膨推升運輸成本（部分由FBA附加費抵銷）</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 財測前提：多數主要地區（含美國）Prime Day落在Q2，澳洲/巴西/印度/日本則落在Q3（2025年Prime Day全數落在Q3）——與去年同期基準不同，財測比較時應留意此節慶時點差異對YoY增速的影響，而非單純的業務動能變化。</div>
+  </div>
+
+  <!-- Business Units -->
+  <div id="panel-bu" class="panel">
+    <div class="section-title">三大分部營收與獲利（Q1 2026 vs Q1 2025，百萬美元）</div>
+    <div class="bu-grid">
+      <div class="bu-card na">
+        <div class="bu-name">North America</div>
+        <div class="bu-abbr">占總營收57%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$104,143<span class="bu-delta">+12.1%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業費用</span><span class="bu-stat-val">$95,876（去年$87,046）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益</span><span class="bu-stat-val pos">$8,267<span class="bu-delta">+41.5%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val pos">7.9%（去年6.3%）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:79%; background:#15803d;"></div></div>
+      </div>
+      <div class="bu-card intl">
+        <div class="bu-name">International</div>
+        <div class="bu-abbr">占總營收22%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$39,789<span class="bu-delta">+18.7%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業費用</span><span class="bu-stat-val">$38,365（去年$32,496）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益</span><span class="bu-stat-val pos">$1,424<span class="bu-delta">+40.0%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val pos">3.6%（去年3.0%）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:36%; background:#c2600a;"></div></div>
+      </div>
+      <div class="bu-card aws">
+        <div class="bu-name">AWS</div>
+        <div class="bu-abbr">占總營收21%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$37,587<span class="bu-delta">+28.4%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業費用</span><span class="bu-stat-val">$23,426（去年$17,720）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益</span><span class="bu-stat-val pos">$14,161<span class="bu-delta">+22.6%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val neu">37.7%（去年39.5%）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:38%; background:#2563eb;"></div></div>
+      </div>
+    </div>
+    <div class="note yellow">⚑ AWS是三個分部中唯一營業利益率YoY<strong>下滑</strong>的分部（-1.8pp），儘管營收成長28.4%是三者最快——AWS營業費用YoY+32.2%，快於營收成長，代表AI基礎設施相關折舊/營運成本目前仍侵蝕AWS的規模經濟效益。北美與國際分部的營益率反而雙雙擴張（+1.6pp／+0.6pp），顯示零售端的效率改善（物流網路優化、機器人自動化部署）本季效果優於AWS端的AI資本支出效益釋放速度。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">收入分類細項（依產品/服務性質，百萬美元）</div>
+    <div class="bar-row"><div class="bar-lbl">Online stores</div><div class="bar-wrap"><div class="bar-fill" style="width:100%; background:#15803d;">$64,254</div></div><div class="bar-num">35.4%／+11.9%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Third-party seller services</div><div class="bar-wrap"><div class="bar-fill" style="width:65%; background:#2563eb;">$41,578</div></div><div class="bar-num">22.9%／+13.9%</div></div>
+    <div class="bar-row"><div class="bar-lbl">AWS</div><div class="bar-wrap"><div class="bar-fill" style="width:59%; background:#1d4ed8;">$37,587</div></div><div class="bar-num">20.7%／+28.4%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Advertising services</div><div class="bar-wrap"><div class="bar-fill" style="width:27%; background:#c2600a;">$17,243</div></div><div class="bar-num">9.5%／+23.9%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Subscription services</div><div class="bar-wrap"><div class="bar-fill" style="width:21%; background:#94a3b8;">$13,427</div></div><div class="bar-num">7.4%／+14.6%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Physical stores</div><div class="bar-wrap"><div class="bar-fill" style="width:9%; background:#7b7e87;">$5,785</div></div><div class="bar-num">3.2%／+4.6%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Other</div><div class="bar-wrap"><div class="bar-fill" style="width:3%; background:#b0b3bd;">$1,645</div></div><div class="bar-num">0.9%／+25.4%</div></div>
+    <div class="note">⚑ 條狀長度以Online stores（$64,254M）為100%基準做相對比例示意；右側百分比為占總營收（$181,519M）比重／YoY成長率。Third-party seller services（$41.6B）在絕對金額上仍高於AWS（$37.6B），是公司規模最大的單一收入類別之一，但法說會Q&amp;A完全未被分析師提及（見Analysis.html技術與產品線Tab）。</div>
+  </div>
+
+  <!-- Balance Sheet -->
+  <div id="panel-bs" class="panel">
+    <div class="section-title">資產負債表摘要（GAAP，百萬美元）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>項目</th><th>2026/3/31</th><th>2025/12/31</th><th>變化</th></tr>
+        <tr><td>現金及約當現金</td><td>$101,816</td><td>$86,810</td><td class="pos">+$15,006</td></tr>
+        <tr><td>有價證券</td><td>$41,273</td><td>$36,219</td><td class="pos">+$5,054</td></tr>
+        <tr><td>存貨</td><td>$36,534</td><td>$38,325</td><td class="neg">-$1,791</td></tr>
+        <tr><td>應收帳款淨額及其他</td><td>$75,532</td><td>$67,729</td><td class="pos">+$7,803</td></tr>
+        <tr><td>流動資產合計</td><td>$255,155</td><td>$229,083</td><td class="pos">+$26,072</td></tr>
+        <tr><td>財產與設備，淨額</td><td class="neu">$397,458</td><td>$357,025</td><td class="neu">+$40,433</td></tr>
+        <tr><td>營運租賃資產</td><td>$88,741</td><td>$86,054</td><td>+$2,687</td></tr>
+        <tr><td>商譽</td><td>$23,449</td><td>$23,273</td><td>+$176</td></tr>
+        <tr><td>其他資產</td><td class="neu">$151,827</td><td>$122,607</td><td class="neu">+$29,220</td></tr>
+        <tr><td><strong>總資產</strong></td><td><strong>$916,630</strong></td><td>$818,042</td><td>+$98,588</td></tr>
+        <tr><td>流動負債合計</td><td>$216,756</td><td>$218,005</td><td>-$1,249</td></tr>
+        <tr><td>長期租賃負債</td><td>$90,814</td><td>$87,339</td><td>+$3,475</td></tr>
+        <tr><td>長期負債</td><td class="neg">$119,074</td><td>$65,648</td><td class="neg">+$53,426（+81.4%）</td></tr>
+        <tr><td>其他長期負債</td><td>$48,072</td><td>$35,985</td><td>+$12,087</td></tr>
+        <tr><td><strong>股東權益合計</strong></td><td><strong>$441,914</strong></td><td>$411,065</td><td>+$30,849</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資本結構警訊</strong>：長期負債單季暴增81.4%（$65.6B→$119.1B），源自3月一次性發行約$53.4B新公司債（票息2.800%~4.850%，到期日跨2028至2064年）。「其他資產」增加$29.2B幾乎全部來自私公司股權投資（Anthropic+OpenAI）帳面價值由$16.2B增至$48.1B。財產與設備淨額單季增加$40.4B，反映AWS/AI基礎設施建設持續加速。三者合計顯示本季資產負債表的擴張，同時由「舉債」與「股權投資」兩個此前較少見的大規模動作驅動，而非單純的營運性資產累積。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Anthropic／OpenAI股權投資帳面價值追蹤</div>
+      <table>
+        <tr><th>項目</th><th>2025/12/31</th><th>2026/3/31</th><th>變化</th></tr>
+        <tr><td>Anthropic nonvoting preferred stock</td><td>$14.8B</td><td>$32.0B</td><td class="pos">+$17.2B</td></tr>
+        <tr><td>私公司股權投資合計（Anthropic+OpenAI）</td><td>$16.2B</td><td>$48.1B</td><td class="pos">+$31.9B</td></tr>
+        <tr><td>其中：Q1新投入OpenAI Series C優先股</td><td>—</td><td>$15.0B</td><td>新增</td></tr>
+        <tr><td>OpenAI額外股權承諾書（尚未動用）</td><td>—</td><td>$35.0B</td><td>資產負債表外承諾，最晚2028/12/31前須履約</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 若含尚未動用的$35.0B OpenAI承諾，Amazon對這兩家AI實驗室的合計潜在股權暴露將達約$83.1B（已投入$48.1B＋未動用承諾$35.0B）。此規模已接近Amazon單季總股東權益增量（$30.8B）的近三倍，是理解本季資產負債表擴張最關鍵的單一因素。</div>
+  </div>
+
+  <!-- Cash Flow -->
+  <div id="panel-cf" class="panel">
+    <div class="section-title">現金流量摘要（單季，百萬美元）</div>
+    <div class="cf-section">
+      <div class="cf-header">營業活動現金流</div>
+      <div class="cf-row"><span class="cf-lbl">淨利</span><span class="cf-val">$30,255（去年$17,127）</span></div>
+      <div class="cf-row"><span class="cf-lbl">折舊與攤銷（財產設備/內容成本/租賃資產等）</span><span class="cf-val">$18,945（去年$14,262）</span></div>
+      <div class="cf-row"><span class="cf-lbl">股權薪酬</span><span class="cf-val">$4,032（去年$3,689）</span></div>
+      <div class="cf-row"><span class="cf-lbl">非營業收入（費用），淨額</span><span class="cf-val">($15,632)（去年($2,817)）</span></div>
+      <div class="cf-row"><span class="cf-lbl">遞延所得稅</span><span class="cf-val">$12,798（去年$507）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">營業活動現金流（單季）</span><span class="cf-val">$26,032（去年$17,015）</span></div>
+    </div>
+    <div class="note">⚑ TTM營業現金流由$113.9B升至$148.5B（+30.4% YoY），管理層強調此為健康的營運現金生成力持續增長的證據；但如下方所示，TTM資本支出成長速度已幾乎追平，抵銷了絕大部分的營業現金流增量。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">投資活動現金流</div>
+      <div class="cf-row"><span class="cf-lbl">財產與設備購置</span><span class="cf-val neg">($44,203)（去年($25,019)）</span></div>
+      <div class="cf-row"><span class="cf-lbl">併購／非市場性投資及其他，淨額</span><span class="cf-val neg">($15,408)（去年$48）</span></div>
+      <div class="cf-row"><span class="cf-lbl">有價證券出售與到期</span><span class="cf-val">$17,686（去年$7,737）</span></div>
+      <div class="cf-row"><span class="cf-lbl">有價證券購置</span><span class="cf-val neg">($23,256)（去年($13,333)）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">投資活動現金流（單季）</span><span class="cf-val neg">($64,212)（去年($29,803)）</span></div>
+    </div>
+    <div class="note red">⚑ 「併購／非市場性投資及其他，淨額」($15,408M)幾乎全部為<strong>Q1投入OpenAI Series C優先股的$15.0B</strong>，MD&amp;A明確揭露此投資以「現有現金」支應。財產與設備購置$44.2B（單季現金資本支出口徑為$43.2B，兩者差異來自財務租賃等會計處理細節）YoY+76.7%，是本季投資活動現金流暴增的最主要單一驅動。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">融資活動現金流</div>
+      <div class="cf-row"><span class="cf-lbl">發行長期債券所得款項</span><span class="cf-val pos">$53,441（去年$746）</span></div>
+      <div class="cf-row"><span class="cf-lbl">短期債務發行（淨額）與其他</span><span class="cf-val">$6,018（去年$1,815）</span></div>
+      <div class="cf-row"><span class="cf-lbl">短期債務償還與其他</span><span class="cf-val neg">($6,109)（去年($2,082)）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">融資活動現金流（單季）</span><span class="cf-val pos">$52,767（去年($47)）</span></div>
+    </div>
+    <div class="note red">⚑ 融資活動現金流由去年同期近乎持平（僅($47)M）轉為單季+$52.8B，幾乎完全由3月發行的$53.4B新公司債驅動（多檔票息2.800%~4.850%，到期日2028~2064年）。這是本季現金流量表中最大的單一結構性變化——AI/AWS資本支出的資金來源正明顯轉向舉債。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">自由現金流（TTM，法說會揭露）</div>
+      <div class="cf-row"><span class="cf-lbl">TTM營業現金流</span><span class="cf-val">$148,531（去年同期$113,903）</span></div>
+      <div class="cf-row"><span class="cf-lbl">TTM財產設備購置，淨額</span><span class="cf-val neg">($147,299)（去年($87,978)）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">TTM自由現金流</span><span class="cf-val neg">$1,232（去年$25,925，-95.2% YoY）</span></div>
+    </div>
+    <div class="note red">⚑ TTM自由現金流由$25.9B崩落至僅$1.2B——本質上已歸零。這代表過去四個季度累計的營運現金生成力，幾乎被同期資本支出完全吸收，AWS/AI基礎設施建設的資金負擔已達到「內生現金流無法完全覆蓋」的臨界點，與本季新增$53.4B公司債＋$15B OpenAI股權投資（現金支應）的時序完全吻合。</div>
+  </div>
+
+  <!-- Valuation -->
+  <div id="panel-val" class="panel">
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資料限制</strong>：本報告未取得法說會日（2026/4/29）或申報日的官方收盤價、市值或分析師共識預估，僅能以Form 4申報中揭露的歷史成交價作為方向性參考區間，並非官方股價數據，所有P/E估算均為粗略推算，不應作為投資決策依據。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Form 4申報中觀察到的股價區間（作為方向性參考）</div>
+      <table>
+        <tr><th>時間點</th><th>參考價格</th><th>來源</th></tr>
+        <tr><td>2026年4月1日（法說會前約4週）</td><td>$210.50</td><td>Douglas Herrington 10b5-1賣股申報</td></tr>
+        <tr><td>2026年4月14-24日（法說會前1-2週）</td><td>$245.00 – $260.00</td><td>Herrington／Rubinstein 10b5-1賣股申報</td></tr>
+        <tr><td>2026年4月30日-5月4日（法說會後1-4個交易日）</td><td>$273.02 – $275.00</td><td>Rubinstein／Jassy／Herrington賣股申報</td></tr>
+        <tr><td>2026年5月15-22日（法說會後約3週）</td><td>$261.74 – $268.53</td><td>多位高階主管RSU既得後部分出售申報</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 以上區間顯示，股價由法說會前約4週的$210.50，一路走高至法說會後1-4個交易日的$273-275（漲幅約+30%），符合「AWS加速成長至28% YoY＋淨利+76.6%」優於預期結果的市場反應；隨後至5月中下旬回落至約$262-268，較高點小幅收斂但仍較法說會前基期高出約25-28%。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">粗略估值觀察（估算值，見上方限制說明）</div>
+      <table>
+        <tr><th>指標</th><th>估算值</th><th>意義</th></tr>
+        <tr><td>GAAP稀釋EPS（單季年化）</td><td>$11.12（=$2.78×4）</td><td>假設本季GAAP EPS水準全年延續的簡化估算，非官方財測，且含約$16.8B一次性Anthropic利得</td></tr>
+        <tr><td>估算「核心」稀釋EPS（單季年化）</td><td>≈$6.44（估算核心淨利$17.5B÷10,874M股×4）</td><td>剔除Anthropic股權利得後的估算值，見損益表Tab盈餘品質提醒</td></tr>
+        <tr><td>粗估P/E（GAAP年化EPS，以法說會後$273-275區間）</td><td>≈24.6x–24.7x</td><td>使用含一次性利得的GAAP EPS，可能低估真實估值倍數</td></tr>
+        <tr><td>粗估P/E（核心年化EPS，以法說會後$273-275區間）</td><td>≈42.4x–42.7x</td><td>剔除Anthropic利得後的估算倍數，較能反映市場對「核心」獲利能力的定價</td></tr>
+        <tr><td>股東權益（GAAP，2026/3/31）</td><td>$441,914M</td><td>會計股東權益，非市值，兩者不可直接類比</td></tr>
+        <tr><td>流通在外普通股（2026/3/31）</td><td>10,754M股</td><td>另有195M股股權獎酬尚未歸屬</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ GAAP年化P/E（≈24.6x）與剔除Anthropic一次性利得後的核心年化P/E（≈42.4x）之間存在近乎<strong>1.7倍</strong>的落差——這正是本報告損益表Tab反覆強調的盈餘品質問題在估值端的直接體現：若市場僅依表面GAAP EPS定價，可能系統性低估了目前的實際估值倍數；反之，若按核心盈餘能力定價，AMZN目前的估值水準遠高於表面數字所暗示。兩種算法的落差幅度，本身就是本季財報最值得留意的解讀陷阱。</div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
