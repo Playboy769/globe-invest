@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lam Research (LRCX) — FY2026 Q3 — Q&A問答分析 / NAND $40B轉換提前 / 技術與產品線 / 供應鏈 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 100px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 24px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; left: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -22px; transform: translateX(-50%); text-align: center; font-size: 11px; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 2px; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 190px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 150px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .tech-card.nand { border-top-color: #2563eb; }
+  .tech-card.dram { border-top-color: #15803d; }
+  .tech-card.foundry { border-top-color: #c2600a; }
+  .tech-card.csbg { border-top-color: #7b7e87; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.nand h4 { color: #1d4ed8; }
+  .tech-card.dram h4 { color: #15803d; }
+  .tech-card.foundry h4 { color: #c2600a; }
+  .tech-card.csbg h4 { color: #444; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.2; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Lam Research Corporation (LRCX) — FY2026 Q3 法說會分析</h1>
+  <p>Q&amp;A 問答分析 / NAND $40B轉換提前拉貨深度拆解 / 技術與產品線 / 供應鏈 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年4月22日（季末：2026年3月29日）&nbsp;·&nbsp; 交叉比對 FY2026 Q3 10-Q（申報於2026/4/23）與 FY2025 10-K（申報於2025/8/11）及 Form 4 申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('nand',this)">NAND $40B轉換提前拉貨</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('supply',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">14</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Timothy Arcuri（UBS）</div><div class="qa-topic">毛利率提前達標的拆解 × 神秘「史上最大新晶圓廠」專案</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">6月季毛利率財測50.5%，看起來已提前達到「50%以上」目標模型，這是如何做到的？另外追問：市場上出現一個「史上最大」的新晶圓廠專案，這個新客戶是否已經找上Lam？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bettinger：4-5年前開始的產能佈局貼近客戶策略（縮短運輸、降低人力成本、優化供應鏈）是自助式改善，加上工具可靠性提升降低安裝/保固支出，共同推升毛利率；並明確建議投資人「將全年毛利率維持在6月財測水準」建模，暗示後續季度不再有結構性上修空間。Archer補充：無法評論特定客戶，但半導體業出現更多新進入者並不意外，2026年WFE財測已反映「今年能執行的量能有限」，更多專案排隊代表未來機會。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Bettinger明確要求投資人把毛利率「維持在6月財測水準」建模，等於主動宣告本季起毛利率結構性擴張已經到頂——但同時WFE財測上修至$140B、2027年也被稱為「compelling growth」，形成「營收持續上修、毛利率卻不再上修」的組合，未來財測超預期若要實現，只能靠營收槓桿而非毛利率槓桿。另外，Arcuri明確問的是「這個特定新晶圓廠專案是否已成為Lam的新機會」，Archer完全迴避是否為傳統客戶名單以外的新進入者，僅泛稱「更多公司會進入半導體業」，未正面回應這是否代表客戶基礎正在擴大到非傳統IDM/晶圓代工廠之外。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Timothy Arcuri:</b> "The guidance is great. It's 50.5%. Sounds like despite mix being against you're kind of already at your target model, right?... can you deconstruct how you got here so fast?"<br><br><b>Douglas Bettinger:</b> "I would encourage you to kind of keep it roughly in the levels that we just guided you to in June. This is going to kind of level out at where it's at, I think, for the rest of the year."<br><br><b>Timothy Arcuri (follow-up):</b> "There's been a big, massive new fab project... bigger than anything we've ever seen before... are you seeing signs of these huge new fab projects, sort of the customer base expanding?"<br><br><b>Tim Archer:</b> "Obviously, we can't comment on any specific customer. Clearly the environment right now is such that there's just not enough compute, there's not enough memory in the world... I don't think it's a surprise that more companies around the world will start to enter into the semiconductor space."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">C.J. Muse（Cantor Fitzgerald）</div><div class="qa-topic">2027年見度與供應鏈備貨 × CSBG升級業務可持續性</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">與客戶超過18-24個月的對話中，是否已看到真正的排產與交期鎖定意願？另外，CSBG的升級業務動能是否可持續，全年成長怎麼看？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Archer：確認已與2028年開幕的新廠客戶展開規劃對話（工程師招聘/培訓地點等），視2026年WFE為「今年能執行的量能」的展現。Bettinger：2027年「感覺會是相當不錯的一年」；CSBG方面，產業稼動率高帶動零件/服務動能強勁，預期後續季度大致維持現有水準，「或許會再高一點」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Bettinger對2027年僅以「感覺不錯」定性帶過，未提供任何量化區間；更關鍵的是，CSBG成長guide為「大致持平、或許略升」，而非「顯著加速」——這與後面Stacy Rasgon追問的「$40B轉換支出集中在未來2年」的量能推算存在明顯落差，詳見「NAND $40B轉換提前拉貨」Tab。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>C.J. Muse:</b> "Can you kind of speak to your discussions, conversations exceeding 18, 24 months, whether you're starting to see real slotting and desire to lock in time frames for delivery?"<br><br><b>Tim Archer:</b> "We have customers who clearly announced fabs with openings in 2028. There's no reason not to start having conversations with them..."<br><br><b>Douglas Bettinger:</b> "It feels like it's setting up to be a pretty good year in 2027 right now based on what we can see."<br><br><b>C.J. Muse (follow-up):</b> "Curious if kind of the upgrade business that you're seeing is sustainable..."<br><br><b>Douglas Bettinger:</b> "I think it's going to kind of sustain roughly at these levels as we go through the remaining quarters in the calendar year, maybe up a little bit."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Harlan Sur（JPMorgan）</div><div class="qa-topic">生產力貨幣化 × 長期營運利潤率目標何時更新</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Dextro／Equipment Intelligence等生產力工具如何貨幣化？另外，OpEx環比成長5%（6月季隱含7%），已推升營運利潤率超越35%長期目標，何時會更新長期財務框架？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Archer：主要透過服務與部分新機台銷售貨幣化，Dextro的精準度與可重複性提升良率與稼動率。Bettinger：坦承「已經高於先前給的模型」，並明確承認「我們知道需要給出更新的框架，我們會這麼做」，但未給出具體時間點。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Bettinger親口承認公司已運行在超越自己先前公開長期模型（35%營運利潤率）之上，且明確表態「我們知道需要更新」，卻連續兩次拒絕給出時間表（"we haven't bottomed out on exactly when"）——這是一個管理層自己承認過時、卻不設時限修正的公開財務框架，留下模型與實際表現的落差沒有正式追認，可能造成市場對「新常態」利潤率水準的錯誤定錨。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Harlan Sur:</b> "Given the leverage, it's allowing you to actually exceed your long-term operating margin targets of 35%... when is the team going to update its long-term targets?"<br><br><b>Douglas Bettinger:</b> "We're talking internally about the fact that we're above the previous model that we gave, and yeah, I know we need to give you an updated framework, and we will do that later in the year. We haven't bottomed out on exactly when or exactly how we're going to do it, but we know we need to, and we will be doing that."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Atif Malik（Citi）</div><div class="qa-topic">NAND市場翻轉的成因 × 客戶預付款下滑與WFE成長的矛盾</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">NAND目前僅占營收12%，但公司卻大談全年成長與$40B提前拉貨，90天內到底發生了什麼變化？另外，客戶預付款降至4年低點，卻同時看好WFE成長，這兩件事如何自洽？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Archer：AI資料中心對NAND需求上升（提及KV Cache），加上2025年初時約2/3的裝機基礎仍停留在100+層舊技術，如今需要200層以上才能滿足資料中心對更高容量QLC的需求，觸發加速轉換。Bettinger：預付款下滑的客戶群（多為中小型客戶）本來就不是成長最快的族群，兩者並不矛盾。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Bettinger的「兩者不矛盾」回應是定性斷言，未提供任何量化數字說明究竟是哪個客戶層級（大型IDM vs 中小型晶圓廠）正在驅動WFE上修，也未拆解預付款占比下滑對應的具體客戶名單或營收比重變化——投資人無法獨立驗證「成長最快的客戶不需要預付款」這個說法背後的具體客戶結構。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Atif Malik:</b> "It seems like near term, NAND is still low, like 12% of sales, but something has changed versus 90 days ago... What has changed in the NAND market?"<br><br><b>Tim Archer:</b> "Most of the installed base at that time, early 2025, about 2/3 of it was still running in the 1XX 100-plus layer technologies... now you need to be 200 layer plus."<br><br><b>Atif Malik (follow-up):</b> "You talked about customer down payments at the lowest level in four years, and you're also talking about WFE growing in next year. Can you reconcile those 2 comments?"<br><br><b>Douglas Bettinger:</b> "The group of customers that generally provide the down payments aren't the ones that are growing the quickest, and that's absolutely what we're seeing going on right now."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Melissa Weathers（Deutsche Bank）</div><div class="qa-topic">記憶體週期「這次不一樣」論 × 去風險化行動的具體性</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">管理層是否認同這波AI驅動的記憶體需求週期「這次真的不一樣」？在追求上檔的同時，具體採取了哪些去風險化行動？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Archer：不願直接使用「downturn」或類似字眼，強調這次週期的差異在於蝕刻/沉積強度隨3D scaling大幅提升，帶動SAM擴張加上份額增加；即便週期見頂，Dextro／Equipment Intelligence等能力讓公司「不需要像過去那樣大幅擴張固定成本」即可支援客戶。Bettinger：記憶體對AI運算架構的關鍵性「可能是有史以來最高」，觀察到的是產業「紀律型投資」而非過熱。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Archer聲稱Dextro／EI讓公司「不需要那麼多固定成本擴張」即可應對週期波動，但全程沒有給出任何具體數字說明這些能力實際降低了多少固定成本比例、或在假設性下行情境中能節省多少支出——這是一個聽起來很有說服力、但完全無法被量化驗證的「去風險化」敘述。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Melissa Weathers:</b> "I guess, do you ascribe to the view that this memory cycle is, I won't say the D word, but there's a change this time around? What kind of actions are you taking to de-risk the cyclical side of things..."<br><br><b>Tim Archer:</b> "Doug talked about a lot of our operational investments we've made. In many cases, some of the things we've talked about, Dextro Cobots, Equipment Intelligence, these are all kinds of capabilities that in many ways allow us to support our customers without so much of the fixed cost scaling that we had to make in the past."<br><br><b>Douglas Bettinger:</b> "The criticality of it maybe is more than it's ever been from my point of view... I observe, maybe I'll use a different D word, disciplined investment."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Srinivas Pajjuri（RBC Capital Markets）</div><div class="qa-topic">中國需求持平 vs 公司中國營收下滑 × CSBG結構性成長辯證</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">中國需求環境如何？未來幾季展望為何？另外，CSBG過去幾年維持雙位數成長，這次是否看到加速跡象，是否具備結構性？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bettinger：中國WFE年增率大致持平、或許略升，但公司中國營收占比將因全球跨國客戶成長更快而持續下滑，且6月季中國營收「將較目前水準下滑」。CSBG方面：稼動率已「相當滿載」，難再進一步提升，後續季度大致持平；Reliant（成熟製程相關）今年持平，真正成長來自受惠於蝕刻/沉積強度提升的先進製程。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Bettinger把「中國WFE持平」與「Lam中國營收下滑」並列陳述，但兩者其實是不同層次的概念——前者是產業總量，後者是Lam自身的客戶組合效應（全球客戶成長排擠中國占比）。這個區分對投資人判讀「中國需求是否真的疲弱」至關重要，但管理層未主動點明這個區別，容易讓聽眾誤把「Lam中國營收下滑」直接等同於「中國半導體需求轉弱」。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Srinivas Pajjuri:</b> "Can you talk about what you're seeing in terms of the demand environment in China? As you go through the next few quarters, what's your expectations?"<br><br><b>Douglas Bettinger:</b> "I think WFE in China is flattish year-over-year from 2025 - 2026. Maybe it's up a little bit... China as a percent of the overall revenue is coming down... We expect that China revenue in the June quarter will decline from these levels."<br><br><b>Srinivas Pajjuri (follow-up):</b> "Are you seeing any acceleration in terms of your services and spares business? Is this something structural in your view going forward?"<br><br><b>Douglas Bettinger:</b> "I don't know that utilization can get any higher than it is. Frankly, it's pretty full out right now."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Vivek Arya（Bank of America）</div><div class="qa-topic">客戶LTA提升見度 vs Lam不需預付款的選擇 × 毛利率持久性</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">記憶體客戶紛紛簽訂長期採購協議(LTA)鎖定價格，這如何轉化為Lam的見度與定價權？是否也會要求客戶預付款鎖定產能？另外，50.5%毛利率的持久性如何，若記憶體價格明年下滑是否仍可持續甚至擴張？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Archer：轉化為更長的對話見度（客戶蓋廠當下就開始討論），有助於提前備妥資源與供應鏈。Bettinger：明確表示「我們不需要預付款，我們的業務能產生充裕的自由現金流」。毛利率方面：Archer強調改善根植於「真正的價值或效率」（自身營運效率＋設備帶來的客戶價值），非機會主義或一次性，因此認為可持續。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">記憶體客戶正利用當前供應緊張環境，透過LTA向下游客戶鎖定價格與條件以強化自身議價地位，但Bettinger明確表示Lam「不需要」比照要求客戶預付款來鎖定自身產能與見度——這是一個耐人尋味的不對稱：Lam的客戶正積極運用其對下游的談判籌碼，Lam自己卻主動放棄對上游（自己）議價籌碼的類似運用，僅以「我們現金流充裕」帶過，未說明為何不利用當前產能吃緊的環境爭取更多鎖定性條款。毛利率持久性的回答也完全是定性語言（「根植於真正價值」），沒有任何具體數字佐證這個「可持續性」的論點。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Vivek Arya:</b> "Should we expect customers to start putting down payments to secure your capacity also? If not, why not?"<br><br><b>Douglas Bettinger:</b> "We don't need down payments. We generate ample free cash flow from the business we run."<br><br><b>Vivek Arya (follow-up):</b> "The gross margins that you're seeing, the 50.5%, how durable are they?... do you still think these gross margins are sustainable and maybe you can even expand from these?"<br><br><b>Tim Archer:</b> "They're not leveraging the opportunity, and they're not transactional in nature. They're really founded in fundamental value delivered to the customer."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Stacy Rasgon</div><div class="qa-topic">$40B升級支出的時間壓縮邏輯 × 2027年WFE成長應該更強的反向質疑</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">若$40B升級支出「大多在2027年底前完成」，這幾百億美元應該大量反映在服務業務，為何CSBG成長沒有明顯加速？另外，今年WFE成長受限於無塵室空間，明年無塵室釋出後，WFE年增金額是否應該比今年更大？這個邏輯哪裡有問題？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bettinger：$40B裡面除了升級，也包含全新設備採購（含突破瓶頸所需的新機台，以及產業轉向鉬（Molybdenum）材料所需的新設備），並非全部計入服務業務；升級去年（2025）已經很強勁，未來1-2年會延續。對明年WFE成長邏輯：拒絕評論明年WFE的確切量級，但「就我們現在看到的，明年WFE會很不錯地成長」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口（原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Rasgon的邏輯本質上是：今年WFE成長被無塵室空間「卡住」，代表的是**供給端瓶頸**而非需求見頂；明年無塵室釋出後，如果需求依然強勁，WFE的**年增金額**理論上應該比今年更大（而非成長率持平或放緩）。Bettinger並未反駁這個邏輯，只是拒絕給出量化數字——這種「不反駁、但也不確認」的回應方式，反而更像是對這個看多邏輯的默認，值得作為2027年WFE上檔空間的獨立推論依據。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Stacy Rasgon:</b> "You also talked about the $40 billion in upgrade spending pretty much all happening by the end of 2027... it almost feels like we should have tens of billions of upgrade spending happening between now and the end of next year... Why shouldn't that be a pretty big driver of services growth?"<br><br><b>Douglas Bettinger:</b> "In that $40 billion number, yeah, there's upgrades for sure, but there's also new equipment purchases, right?... There's also some new equipment as the industry moves to Molybdenum."<br><br><b>Stacy Rasgon (follow-up):</b> "Those clean rooms start to come online into next year. Does that suggest to me that the sequential growth of WFE next year ought to be even stronger on a dollar basis than it is in 2026?... What's wrong with that logic?"<br><br><b>Douglas Bettinger:</b> "I'm going to decline to comment on the exact magnitude of WFE next year, but we do firmly, as we sit here today, look at clean rooms are going to be more available next year... WFE is going to be nicely growing next year."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Krish Sankar（TD Cowen）</div><div class="qa-topic">WFE上修的驅動細分 × PECVD市占提升的來源</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">WFE財測從$135B上修至$140B+，主要驅動是NAND、CPU吃緊還是純AI強度？另外，第三方市占數據顯示Lam去年在PECVD大幅提升市占，是哪個垂直領域驅動的？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bettinger：與稍早回覆James Schneider相同，「每個環節都稍微變強」，並非單一客戶群驅動。PECVD方面：先進封裝（尤其underfill應用）是關鍵貢獻者之一，加上NAND高層數轉換帶動的VECTOR DT背面應力管理等應用也計入PECVD範疇。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">這是本場法說會第二次，分析師直接問「WFE上修的驅動細分」（先是James Schneider，這裡是Sankar），管理層兩次都用幾乎一字不差的「everything is a little bit stronger／everything is just a little bit better」帶過，未拆解任何NAND/DRAM/Logic的量化貢獻比重。同一句話重複出現兩次，形成一個一致的迴避模式，而非單一個案的資訊限制——詳見風險矩陣。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Krish Sankar:</b> "I just want to follow up on an earlier question on the upgrade to the WFE numbers, the $135 billion going to $140 billion plus. Is there a way to segment? Was the bigger driver NAND? Was it CPU tightness, or was it just AI strength?"<br><br><b>Douglas Bettinger:</b> "Again, Krish, what I said is everything got a little bit stronger because everybody got a little bit more clean room. It's not any one component of the customer base. Everything is just a little bit better."<br><br><b>Krish Sankar (follow-up):</b> "It looks like the 3rd-party market share data came out, and you folks gained share in PECVD quite a bit last year... which vertical drove that PECVD share gain?"<br><br><b>Douglas Bettinger:</b> "One area I think that sometimes is underappreciated is the use of PECVD in underfill and advanced packaging, honestly, and that was a key contributor."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Vijay Rakesh（Mizuho）</div><div class="qa-topic">HBM3→HBM4含量提升拒絕量化 × High Bandwidth Flash投資時程</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">DRAM年增45%表現亮眼，HBM3轉HBM4層數提高約50%，能否量化每10萬片晶圓的設備含量提升？另外，High Bandwidth Flash（HBF）的資本支出是否已經開始加溫，2027年展望如何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bettinger：確認含量「明顯會提升」，trade ratio對產業更具挑戰性因此需要更多設備，但「沒有給出每10K晶圓的具體美元數字」。Archer：HBF的製程流程仍在發展中，把時程判斷交由客戶（SanDisk、SK Hynix皆已公開談論），但只要是3D scaling架構，Lam的SAM機會就會增加。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">HBM3→HBM4的設備含量提升，是本場法說會管理層被要求量化「先進技術帶來多少增量設備需求」的第三次機會（NAND轉換、DRAM 1c dielectric SAM之後），但同樣以「明顯會提升，但沒有具體數字」帶過。三次類似提問、三次拒絕量化，形成整場法說會一貫的模式：管理層樂於用「SAM擴張」「份額提升」等定性敘述描繪成長故事，卻始終不願意提供任何可供投資人獨立建模的單位經濟數字。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Vijay Rakesh:</b> "When you look at HBM3 going to HBM4 with the higher layer count, I think 50% higher, is there a way to look at what your content uplift is per 100,000 wafers..."<br><br><b>Douglas Bettinger:</b> "Yeah, clearly, it goes up. We haven't given specific numbers around it, but obviously the higher stack requires more equipment... We haven't given a specific number on it, though, in terms of $ per 10K."<br><br><b>Vijay Rakesh (follow-up):</b> "When you look at High Bandwidth Flash, are you seeing investments of CapEx ticking up there? Is that something you're seeing into 2027?"<br><br><b>Tim Archer:</b> "I'd probably leave it to our customers to talk about their timing on these kinds of new technologies... I think these devices and the exact process flows and such are still being worked through."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAND $40B Conversion Deep-Dive Panel -->
+  <div id="panel-nand" class="panel">
+    <div class="section-title">本季特殊事件深度拆解：NAND $40B 轉換支出提前拉貨</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>2025年初首次揭露：約$40B轉換支出將分數年投入，把既有NAND裝機產能升級至200層以上</li>
+          <li>2025年初裝機基礎約2/3仍停留在100+層舊技術，需轉換才能達到AI資料中心要求的高層數QLC容量</li>
+          <li>整體產業裝機晶圓產能預估將較歷史高點下滑逾20%（至今年底），因轉換過程中舊機台暫時離線</li>
+          <li>今年資料中心NAND位元需求預期將超越PC與行動裝置合計</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>結構／期限</h4>
+        <ul>
+          <li>最新財測：轉換將「提前」，多數支出將於2027年底前完成（相較最初「分數年」的模糊時間框架已明顯壓縮）</li>
+          <li>兩階段框架：先轉換（最快達到更高容量的路徑）→ 再回補綠地產能（因轉換本身會暫時降低總產能）</li>
+          <li>$40B並非全屬升級，亦包含突破瓶頸所需的全新機台，以及產業轉向鉬（Molybdenum）材料所需的新設備</li>
+          <li>Lam擁有業界最大的3D NAND裝機基礎，被定位為此波轉換浪潮中份額增益的主要受益者</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾／受益業務線</h4>
+        <ul>
+          <li>CSBG（客戶支援業務，含服務/備品/升級）本季首次突破$20億，為轉換浪潮的主要承接業務線之一</li>
+          <li>先進封裝營收成長（2026年預期逾50%）與NAND轉換存在部分技術重疊（PECVD underfill應用）</li>
+          <li>對話涉及Vantex/Flex（介電蝕刻）、Kiyo（導體蝕刻）、Strata/ALTUS Halo ALD/VECTOR DT（沉積）等既有NAND產品線</li>
+          <li>Reliant（成熟製程相關業務）今年持平，成長集中在受惠於蝕刻/沉積強度提升的先進製程端</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>CSBG本季服務業務guide為「大致持平、或許略升」，與「$40B提前壓縮至~2年完成」的敘事在量體上並不完全吻合</li>
+          <li>「多數支出於2027年底前完成」——2028年是否會出現轉換浪潮結束、綠地產能尚未完全補上的空窗期，管理層未觸及</li>
+          <li>轉換造成的>20%裝機產能下滑，是否會在2026年形成NAND位元供給的暫時性緊縮，進而支撐現貨價格，管理層未主動連結討論</li>
+          <li>鉬材料轉換的規模與時程幾乎僅一筆帶過，尚缺乏具體量化揭露</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問：盡職調查式追問清單</h4>
+      <ol>
+        <li>「多數支出於2027年底前完成」的$40B之中，究竟有多少比例會計入CSBG（服務/升級，較高毛利、經常性）、又有多少比例會計入新機台系統營收（一次性、資本財）？管理層對Rasgon的回應暗示新機台占比不小，但CSBG成長guide並未同步顯著加速，兩者之間的量體落差需要投資人自行拼湊，而非管理層主動拆解。</li>
+        <li>若轉換浪潮的「多數」真的在2027年底前完成，2028年是否會出現NAND WFE的結構性空窗期（轉換需求已消化、綠地產能建設尚未追上）？管理層對「eventually you need to add greenfield back」的用詞相當模糊，未給出時間帶。</li>
+        <li>裝機產能下滑逾20%是否已經、或即將反映在NAND現貨/合約價格上？如果轉換本身造成的暫時性供給緊縮疊加AI需求成長，NAND定價環境可能比單純的「需求驅動」敘事更為有利，這是管理層完全沒有主動點出的潛在正面連結。</li>
+        <li>「產業轉向鉬材料」這句話幾乎是一筆帶過，鉬（取代鎢作為字元線金屬）若真的是本輪轉換的一部分，其規模、對Lam現有ALTUS/Kiyo等產品線的增量機會，以及具體時程，都值得後續法說會追蹤是否有更完整揭露。</li>
+      </ol>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">轉換支出時程壓縮：原始揭露 vs 最新財測</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>2025年初<br>「分數年」（模糊）</div>
+        <div class="band-marker target" style="left:50%;"><div class="dot"></div>2026 Q3法說會<br>「提前」拉貨</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>多數支出<br>2027年底前完成</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>原始時間框架（2025年初首次揭露）</span>
+        <span><span class="sw" style="background:#2563eb;"></span>本季更新：時程壓縮訊號</span>
+        <span><span class="sw" style="background:#15803d;"></span>最新財測：明確設定完成期限</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">從「分數年投入」到「多數於2027年底前完成」，代表原本估計要花數年才能消化的$40B支出，被壓縮進約2-3年的窗口內——這正是Rasgon質疑CSBG成長guide為何沒有同步加速的邏輯起點。</p>
+    </div>
+
+    <div class="section-title">立場對照：NAND $40B轉換提前拉貨 對Lam Research vs 對NAND客戶（SK Hynix／SanDisk／Samsung等）</div>
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>對 Lam Research</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>業界最大3D NAND裝機基礎，天然享有轉換浪潮的份額增益</li>
+          <li>CSBG首次站上$20億季營收，裝機基礎持續複利成長</li>
+          <li>轉換+綠地雙軌需求，理論上創造比單純轉換更長的營收尾巴</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>「提前拉貨」意味需求前置，2027年底後可能出現轉換相關營收的自然放緩</li>
+          <li>CSBG guide未見加速，暗示部分轉換支出實際上落在新機台端而非管理層原先描繪的服務業務紅利</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4>對 NAND客戶（記憶體製造商）</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>加速轉換是達到200+層QLC容量、滿足AI資料中心需求的最快路徑</li>
+          <li>轉換造成的暫時性產能緊縮，理論上有助於支撐NAND定價環境</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>被迫在$40B「維持競爭力」型轉換資本支出之外，未來仍需追加綠地資本支出才能恢復/擴大總產能——形同短期內「付兩次錢」</li>
+          <li>轉換期間裝機產能下滑逾20%，短期內犧牲部分出貨量以換取長期技術升級</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technology & Product Lines Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">業務板塊營收（FY2026 Q3，系統營收占比）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">Foundry</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#c2600a;">54%</div></div>
+        <div class="rev-val">QoQ持平，YoY +35%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Memory（合計）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:72%; background:#15803d;">39%</div></div>
+        <div class="rev-val">較上季34%提升</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— DRAM（創紀錄）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:50%; background:#22a35e;">27%</div></div>
+        <div class="rev-val">較上季23%提升，YoY +45%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">— NAND</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:22%; background:#7fd19f;">12%</div></div>
+        <div class="rev-val">較上季11%略升</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Logic &amp; Other</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:13%; background:#94a3b8;">7%</div></div>
+        <div class="rev-val">與上季持平</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">CSBG（客戶支援，創紀錄）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#2563eb;">$2.1B</div></div>
+        <div class="rev-val">QoQ +6%，YoY +25%，首見$20億+單季</div>
+      </div>
+    </div>
+    <p style="color:#888; font-size:11px; margin-top:-8px; margin-bottom:16px;">⚑ 條狀長度以各分類自身100%基準做相對比例示意（Foundry/Memory/Logic為系統營收占比；CSBG為獨立公布之季營收金額），非跨列統一線性刻度。</p>
+
+    <div class="section-title">技術與產品線摘要</div>
+    <div class="tech-grid">
+      <div class="tech-card nand">
+        <h4>NAND</h4>
+        <ul>
+          <li>Vantex／Flex：業界最高功率密度介電通道孔蝕刻，市場領先地位</li>
+          <li>Kiyo導體蝕刻：客戶因更佳缺陷表現與良率，甚至在量產中途切換至Kiyo</li>
+          <li>Strata、ALTUS Halo ALD、VECTOR DT：高層數轉換帶動沉積需求成長</li>
+          <li>目標：以最大3D NAND裝機基礎，追求跑贏整體NAND WFE成長（詳見「NAND $40B轉換」Tab）</li>
+        </ul>
+      </div>
+      <div class="tech-card dram">
+        <h4>DRAM</h4>
+        <ul>
+          <li>產業轉向1c世代，字元線介電材料由傳統氮化矽爐管製程轉向先進ALD碳化矽低介電常數層</li>
+          <li>Striker碳化物方案：獨特電漿源技術，位元線間距電容可降低逾60%</li>
+          <li>Striker系ALD方案已是所有主要記憶體大廠位元線間距應用的標準工具</li>
+          <li>1c節點介電沉積SAM預期成長逾20%</li>
+        </ul>
+      </div>
+      <div class="tech-card foundry">
+        <h4>晶圓代工／邏輯 ＋ 先進封裝</h4>
+        <ul>
+          <li>本季在一家關鍵晶圓代工邏輯客戶取得該客戶的首次介電蝕刻雙贏單（該客戶的第一次介電蝕刻導入）</li>
+          <li>2025日曆年為Lam的晶圓代工邏輯業務創紀錄年份，2026延續動能</li>
+          <li>先進封裝：銅電鍍與TSV蝕刻經驗，2026日曆年營收成長預期逾50%</li>
+        </ul>
+      </div>
+      <div class="tech-card csbg">
+        <h4>CSBG（客戶支援業務群）</h4>
+        <ul>
+          <li>本季首見$20億+單季營收，服務業務較上季雙位數（mid-teens）成長</li>
+          <li>Equipment Intelligence：與一家關鍵晶圓代工邏輯客戶簽署新協議（關鍵沉積應用）；一家頂級記憶體客戶將於R&amp;D端導入以加速NAND/DRAM新節點爬坡</li>
+          <li>Dextro協作機器人：本季涵蓋Lam工具類型擴至8種（上季6種）；新一代Dextro運算力提升10倍且體積更小；本季起首次出貨用於沉積機台的Dextro</li>
+          <li>裝機基礎逾10萬個反應腔，為服務/升級業務的長期複利基礎</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">因果鏈敘事：AI資料中心需求 → Lam SAM擴張與CSBG複利成長</div>
+      <div class="flow-chain">
+        <span class="node">AI資料中心KV Cache／記憶體階層需求上升</span><span class="arrow">→</span>
+        <span class="node">NAND容量需求加速（200層以上QLC）</span><span class="arrow">→</span>
+        <span class="node">$40B轉換支出提前拉貨（多數2027年底前完成）</span><span class="arrow">→</span>
+        <span class="node">蝕刻／沉積強度隨層數提升</span><span class="arrow">→</span>
+        <span class="node">Lam SAM占WFE比重擴大（2026年略高於30%中段，目標30%後段）</span><span class="arrow">→</span>
+        <span class="node">DRAM 1c節點Striker ALD份額鞏固</span><span class="arrow">→</span>
+        <span class="node">先進封裝逾50%成長疊加</span><span class="arrow">→</span>
+        <span class="node">CSBG裝機基礎複利（逾10萬反應腔＋Dextro/EI滲透）</span><span class="arrow">→</span>
+        <span class="node">CSBG首見$20億+單季，長期營收韌性提升</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">這條因果鏈是管理層整場法說會的核心敘事骨幹，但如Q&amp;A Tab中多位分析師的提問所示，鏈條中「蝕刻/沉積強度提升」「SAM擴張」等關鍵環節，管理層均未提供可獨立驗證的量化轉換係數（$/晶圓、$/10K等）。</p>
+    </div>
+  </div>
+
+  <!-- Supply Chain Panel -->
+  <div id="panel-supply" class="panel">
+    <div class="card">
+      <div class="card-title">製造與研發據點（來源：FY2025 10-K Item 2 Properties）</div>
+      <p>Lam採高度垂直整合的自有製造模式，10-K未揭露任何第三方合約代工（contract manufacturing）安排——與部分同業將整機組裝外包給第三方的模式不同，Lam將次組裝、組裝與測試主要集中在自有廠區內完成：</p>
+      <ul>
+        <li><strong>美國加州 Fremont ／ Livermore</strong>——執行總部與主要研發／製造據點，多數廠區自有</li>
+        <li><strong>美國 Oregon Tualatin</strong>——主要研發／製造據點，自有</li>
+        <li><strong>美國 Ohio</strong>——製造／倉儲據點，自有</li>
+        <li><strong>馬來西亞</strong>——目前網路中<strong>最大廠區</strong>，自有；法說會確認2026年下半年將啟用<strong>第二座馬來西亞廠</strong>，規模與首座相近，用於支應明年需求擴張</li>
+        <li><strong>南韓 Yongin, Gyeonggi</strong>——主要研發／製造據點，自有</li>
+        <li><strong>台灣</strong>——製造／倉儲據點，自有</li>
+        <li><strong>奧地利 Salzburg／Villach</strong>——主要研發據點；Villach為租賃，租約含續約或買斷選擇權</li>
+      </ul>
+      <p style="margin-top:8px;">⚑ 此外於美國、中國、歐洲、印度、日本、南韓、東南亞、台灣等地另設服務、技術支援與銷售據點（非製造性質）。來源：FY2025 10-K, Item 2 Properties。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">供應鏈關係圖：製造據點 → Lam Research → 下游裝置終端市場（FY2026 Q3 實際營收）</div>
+      <div id="sankeyEmbed_lrcx1" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"my","label":"馬來西亞（最大廠區＋籌建第二廠）","color":"#2563eb"},{"id":"ca","label":"美國加州 Fremont/Livermore","color":"#2563eb"},{"id":"or","label":"美國 Oregon Tualatin","color":"#2563eb"},{"id":"kr","label":"南韓 Yongin","color":"#2563eb"},{"id":"tw","label":"台灣","color":"#2563eb"},{"id":"at","label":"奧地利 Salzburg/Villach","color":"#2563eb"},{"id":"oh","label":"美國 Ohio","color":"#2563eb"},{"id":"lam","label":"Lam Research（FY26 Q3 合併營收 $5.84B）","color":"#1a1a2e"},{"id":"foundry","label":"Foundry（54%，約$3.15B）","color":"#c2600a"},{"id":"dram","label":"DRAM（27%，約$1.58B，創紀錄）","color":"#15803d"},{"id":"nand","label":"NAND（12%，約$0.70B）","color":"#7fd19f"},{"id":"logic","label":"Logic & Other（7%，約$0.41B）","color":"#94a3b8"}],"links":[{"source":"my","target":"lam","value":1752},{"source":"ca","target":"lam","value":1168},{"source":"or","target":"lam","value":876},{"source":"kr","target":"lam","value":701},{"source":"tw","target":"lam","value":584},{"source":"at","target":"lam","value":467},{"source":"oh","target":"lam","value":292},{"source":"lam","target":"foundry","value":3154},{"source":"lam","target":"dram","value":1577},{"source":"lam","target":"nand","value":701},{"source":"lam","target":"logic","value":409}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_lrcx1");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">⚑ 左側製造據點→Lam的流量為<strong>示意性相對權重</strong>（依10-K揭露之敘述性重要性排序估算：馬來西亞為最大廠區+籌建中第二廠，故給予最高權重；Lam未逐廠揭露實際產值占比，此處按各廠權重比例反推使總流量與右側實際營收數字對齊，非精確產值數字）。右側Lam→裝置終端市場的數字為FY2026 Q3法說會實際揭露之系統營收占比換算金額（Foundry 54%／DRAM 27%／NAND 12%／Logic&amp;Other 7%，基準為$5.84B總營收），來源：FY2026 Q3法說會逐字稿。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">下游客戶集中度（來源：FY2025 10-K Note 19 Segment, Geographic Information, and Major Customers）</div>
+      <ul>
+        <li>FY2025：<strong>兩家客戶合計占總營收約32%</strong>（分別約17%與15%），無其他個別客戶達10%門檻</li>
+        <li>FY2024：一家客戶占總營收約17%</li>
+        <li>FY2023：兩家客戶合計占總營收約38%（分別約22%與16%）</li>
+        <li>10-K正文明確點名：「近三個財年（FY2023-FY2025）最重要客戶包括Samsung Electronics Company, Ltd.與Taiwan Semiconductor Manufacturing Company」（10-K未逐一對應customer與百分比，僅列出集中度區間與公司名單）</li>
+        <li>「我們僅有限數量的關鍵客戶」為10-K風險因子章節明文標題之一：少數大型客戶貢獻公司絕大部分出貨、營收、現金流與獲利，任一客戶的決策變化都可能造成業績大幅波動</li>
+      </ul>
+      <p style="margin-top:8px;">⚑ 兩大客戶合計占比從FY2023的38%降至FY2025的32%，方向上是集中度下降，但仍遠高於10%重大客戶揭露門檻兩倍以上——與Q&amp;A Tab中管理層對「WFE成長客戶結構」持續拒絕量化的模式相呼應：真正驅動本季與明年WFE上修的客戶，很可能就落在這兩大客戶（或其同儕）之中，但10-K揭露框架本身即不要求逐一具名對應百分比。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">地理營收集中度（10-K全年 vs 本季法說會）</div>
+      <table>
+        <tr><th>地區</th><th>FY2025全年（10-K）</th><th>FY2026 Q3（法說會）</th><th>備註</th></tr>
+        <tr><td>中國</td><td>34%（$6.21B）</td><td>34%（較上季35%略降）</td><td>guide：6月季將續降</td></tr>
+        <tr><td>南韓</td><td>22%（$4.13B）</td><td>23%（創紀錄單季金額）</td><td>本季DRAM強度貢獻</td></tr>
+        <tr><td>台灣</td><td>19%（$3.45B）</td><td>23%（創紀錄單季金額）</td><td>本季占比高於全年均值</td></tr>
+        <tr><td>日本</td><td>10%（$1.88B）</td><td>—（未單獨揭露）</td><td>—</td></tr>
+        <tr><td>美國</td><td>7%（$1.38B）</td><td>—（未單獨揭露）</td><td>—</td></tr>
+        <tr><td>東南亞</td><td>5%（$0.84B）</td><td>—（未單獨揭露）</td><td>—</td></tr>
+        <tr><td>非美國銷售合計占比</td><td>93%</td><td>—</td><td>近三年皆91-93%區間</td></tr>
+      </table>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">⚑ 本季南韓與台灣占比（23%／23%）皆高於FY2025全年均值（22%／19%），且雙雙創單季金額新高——與Q&amp;A Tab中DRAM創紀錄營收（+45% YoY）及先進封裝成長高度吻合，顯示本季地理組合的變化主要是記憶體與先進封裝需求集中在南韓/台灣客戶所致，而非單純的中國佔比下滑機械效應。來源：FY2025 10-K Note 19；FY2026 Q3法說會逐字稿。</p>
+    </div>
+  </div>
+
+  <!-- Risk Matrix Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">$40B NAND轉換「提前拉貨」與CSBG guide不加速的量體落差</div>
+        管理層將原本「分數年」的$40B NAND轉換支出時程壓縮為「多數於2027年底前完成」，理論上意味著巨額支出將在約2-3年內集中消化；但當Stacy Rasgon直接追問這是否該大幅推升CSBG（服務/升級）成長時，Bettinger的回應是「$40B不全是升級，也含新機台採購」，且CSBG成長guide僅維持「大致持平、或許略升」，並未同步上修。這意味著轉換浪潮的財務效益，可能相當比例會反映在新機台系統營收（一次性、資本財屬性）而非管理層先前描繪的CSBG服務業務長期複利效益——若2027年底轉換浪潮結束，屆時新機台需求可能同步降溫，而CSBG卻未曾因此顯著擴大裝機基礎外的服務黏著度。
+        <div class="risk-source">來源：法說會Stacy Rasgon與C.J. Muse提問／Douglas Bettinger回應交叉比對</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">WFE上修驅動細分、技術含量uplift，管理層一貫拒絕量化——形成系統性迴避模式</div>
+        本場法說會至少三次，分析師直接要求量化具體驅動因子（James Schneider問WFE上修的產品領域細分、Krish Sankar問WFE上修的客戶群細分、Vijay Rakesh問HBM3→HBM4的每萬片晶圓設備含量提升），管理層三次均以幾乎相同的定性語言帶過（「everything is a little bit stronger」重複兩次、「沒有給出具體數字」）。這種一致性的迴避模式，使投資人無法獨立驗證2026年WFE上修至$140B、以及DRAM/NAND SAM擴張論述背後的真實驅動集中度，也難以排除本輪成長高度集中於少數customer或少數技術轉換節點的可能性。
+        <div class="risk-source">來源：法說會James Schneider、Krish Sankar、Vijay Rakesh提問／Douglas Bettinger、Tim Archer回應交叉比對</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">毛利率結構性擴張已見頂的隱性宣告</div>
+        Bettinger主動要求投資人「將全年毛利率維持在6月季guide（50.5%）水準」建模，等同宣告本季起毛利率不再具備結構性上修空間；但同一場法說會WFE財測上修至$140B、且2027年被稱為「compelling growth」。若此組合成立，代表未來財測若要超預期，只能依賴營收槓桿而非毛利率槓桿——與過去幾季「營收與毛利率同步超預期」的模式不同，值得後續驗證實際毛利率是否真的如guide所言「持平」，或僅是管理層刻意壓低預期的保守化處理。
+        <div class="risk-source">來源：法說會Timothy Arcuri提問／Douglas Bettinger回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">長期營運利潤率模型已過時但無更新時間表</div>
+        Bettinger公開承認公司目前的營運表現已超越自己先前給出的長期35%營運利潤率模型，且明確表態「我們知道需要更新框架」，卻連續拒絕給出具體時間點（僅稱「稍後今年會做」）。在管理層自行承認舊模型已不適用、卻未設定修正期限的情況下，市場對Lam「新常態」利潤率水準的定錨可能持續存在落差，直到正式更新前都缺乏官方參考基準。
+        <div class="risk-source">來源：法說會Harlan Sur提問／Douglas Bettinger回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">客戶預付款降至4年低點，驅動客戶結構未量化拆解</div>
+        管理層將客戶預付款降至4年最低點，歸因於「提供預付款的客戶不是成長最快的客戶群」，但全程未提供任何量化數字說明究竟是哪個客戶層級、哪些具體客戶正在驅動WFE上修與DRAM/Foundry成長。疊加10-K揭露的客戶集中度（兩大客戶合計占FY2025營收約32%），投資人難以獨立驗證「預付款下滑」與「WFE成長」兩件事同時成立背後真實的客戶結構變化。
+        <div class="risk-source">來源：法說會Atif Malik提問／Douglas Bettinger回應；FY2025 10-K Note 19客戶集中度揭露</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">「史上最大新晶圓廠專案」客戶身分未確認——潛在新客戶基礎擴張未經證實</div>
+        Timothy Arcuri明確提及市場上出現一個「比以往任何規模都大」的新晶圓廠專案，並直接詢問這是否代表Lam的客戶基礎正擴大到傳統IDM/晶圓代工廠名單之外；Archer全程未正面確認或否認，僅泛稱「更多公司會進入半導體業」。若這確實代表非傳統業者（如specific雲端/AI基礎設施業者）自建晶圓廠，將是Lam潛在可尋址市場的實質擴張，但目前僅為市場臆測層級，未經公司證實。
+        <div class="risk-source">來源：法說會Timothy Arcuri提問／Tim Archer回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">中國WFE持平 vs Lam中國營收下滑：兩個不同層次概念被並列陳述</div>
+        Bettinger在同一段回答中，先陳述「中國WFE年增大致持平、或許略升」（產業總量層次），接著立即陳述「Lam中國營收占比將持續下滑、6月季中國營收將較目前下滑」（公司客戶組合層次）。兩者實際上是不同維度的觀察（前者為產業需求、後者為Lam自身全球客戶組合排擠效應），但管理層未主動釐清區別，容易讓聽眾誤將「Lam中國營收下滑」直接等同於「中國半導體需求轉弱」的訊號。
+        <div class="risk-source">來源：法說會Srinivas Pajjuri提問／Douglas Bettinger回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人交易訊號：全數為出售/例行稅務代扣，無買進，且法說會前七週有清晰空窗期</div>
+        法說會前約7-8週（2026年2月27日至3月4日）的Form 4申報顯示：CEO Timothy Archer僅有RSU既得與例行稅務代扣股票（無自主性賣股）；CFO Douglas Bettinger透過現金選擇權行使＋賣出方式，於3月2日與3月4日合計出售約90,386股（價格約$224-230，申報未附Rule 10b5-1計畫註記）；Chief Legal Officer Ava Harter同期小額出售4,000股與1,500股（$232.50／$222.66）。3月11日至4月27日之間<strong>無任何Form 4申報</strong>，形成一段與法說會前交易窗口關閉相符的空窗期。法說會後：Harta於4月27日以現金選擇權行使方式出售6,010股（$258.66，較3月初價位高出約12-15%）；SVP Neil Fernandes於5月1日依<strong>2025年11月17日即已設立</strong>的Rule 10b5-1既定交易計畫出售18,170股（$255.14）。整體型態符合例行既得後稅務代扣與選擇權到期前變現，加上CLO與SVP的賣股均發生在財報公布後、股價已因優於預期結果走高之後，較符合利多後例行變現，而非任何領先財報的機會主義訊號。
+        <div class="risk-source">來源：SEC EDGAR Form 4申報（accession 0001343600-26-000007、0001469469-26-000005、0001469469-26-000007、0001642415-26-000004、0001642415-26-000006、0001642415-26-000008、0000707549-26-000024）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
