@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alphabet (GOOG) — FY Q1 2026 Financials — 損益 / 部門 / 資產負債 / 現金流 / 估值</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height:1.5; }
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+  .container { max-width: 940px; margin: 0 auto; padding: 16px 24px 40px; }
+  .tabs { display: flex; flex-wrap:wrap; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; }
+  .tab { padding: 10px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; } .panel.active { display: block; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+  .kpi { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px; text-align:center; }
+  .kpi .v { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi .l { font-size: 11px; color:#666; margin-top:3px; }
+  .kpi .d { font-size: 11px; margin-top:3px; font-weight:600; }
+  .up { color:#15803d; } .down { color:#b91c1c; }
+  .card { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:14px; margin-bottom:12px; }
+  .card-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.5px; color:#2563eb; margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; }
+  th { color:#555; background:#f5f6fa; padding:7px 10px; text-align:right; font-size:11px; border-bottom:1px solid #e2e4ea; }
+  th:first-child { text-align:left; }
+  td { padding:7px 10px; border-bottom:1px solid #eee; text-align:right; color:#333; }
+  td:first-child { text-align:left; }
+  td strong, th:first-child { color:#1a1a2e; }
+  tr.total td { font-weight:700; background:#fafbfd; border-top:2px solid #e2e4ea; }
+  tr.sub td:first-child { padding-left:22px; color:#666; }
+  .flag { font-size:11px; color:#7a2020; background:#fef2f2; border:1px solid #f5b5b5; border-radius:6px; padding:8px 10px; margin-top:8px; line-height:1.55; }
+  .flag b { color:#b91c1c; }
+  .flag.obs { background:#eff6ff; border-color:#a9c9f5; color:#1e3a6e; } .flag.obs b { color:#1d4ed8; }
+  .seg-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:12px; }
+  .seg { border-radius:8px; padding:12px; border:1px solid; }
+  .seg.s1 { background:#eff6ff; border-color:#a9c9f5; } .seg.s2 { background:#f0fdf4; border-color:#a3dab1; } .seg.s3 { background:#fdf2f8; border-color:#f0aac8; }
+  .seg h4 { font-size:12px; font-weight:700; margin-bottom:6px; } .seg.s1 h4{color:#1d4ed8;} .seg.s2 h4{color:#15803d;} .seg.s3 h4{color:#b91c6a;}
+  .seg .big { font-size:19px; font-weight:700; color:#1a1a2e; } .seg .sub { font-size:11px; color:#666; margin:2px 0 6px; }
+  .seg ul { padding-left:15px; } .seg li { font-size:11px; margin-bottom:3px; line-height:1.5; color:#333; }
+  .bridge { display:flex; align-items:flex-end; gap:6px; height:150px; margin:14px 0 6px; }
+  .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .bar { width:100%; border-radius:4px 4px 0 0; display:flex; align-items:flex-start; justify-content:center; color:#fff; font-size:10px; font-weight:700; padding-top:3px; }
+  .bar-lbl { font-size:10px; color:#666; margin-top:4px; text-align:center; line-height:1.3; }
+  .section-title { font-size:13px; font-weight:700; margin-bottom:10px; }
+  .note { font-size:11px; color:#94a3b8; margin-top:6px; line-height:1.5; }
+  .footer { font-size:11px; color:#94a3b8; text-align:center; margin-top:20px; }
+  .meaning { color:#555; text-align:left; font-size:11px; line-height:1.5; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Alphabet (GOOG) — FY Q1 2026 Financial Layer">Alphabet（GOOG）— FY 2026 Q1 財報量化層</h1>
+  <p data-en="Income Statement / Segments / Balance Sheet / Cash Flow / Valuation &nbsp;·&nbsp; All figures per the 10-Q for the period ended Mar 31, 2026 (supersede rounded call figures)">損益表 / 業務部門 / 資產負債表 / 現金流量 / 估值觀察 &nbsp;·&nbsp; 所有數字依截至 2026/3/31 財季 10-Q（優先於法說會口述的四捨五入值）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Income Statement" onclick="sw('is',this)">損益表</div>
+    <div class="tab" data-en="Segments" onclick="sw('seg',this)">業務部門</div>
+    <div class="tab" data-en="Balance Sheet" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" data-en="Cash Flow" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" data-en="Valuation" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- Income Statement -->
+  <div id="panel-is" class="panel active">
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">$109.9B</div><div class="l" data-en="Revenue">營收</div><div class="d up">+21.8% YoY</div></div>
+      <div class="kpi"><div class="v">$39.7B</div><div class="l" data-en="Operating Income (36.1% margin)">營業利益（營益率36.1%）</div><div class="d up">+29.7% YoY</div></div>
+      <div class="kpi"><div class="v">$62.6B</div><div class="l" data-en="Net Income">淨利</div><div class="d up">+81.2% YoY</div></div>
+      <div class="kpi"><div class="v">$5.11</div><div class="l" data-en="Diluted EPS">稀釋 EPS</div><div class="d up">+81.9% YoY</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-en="Consolidated Income Statement — Line by Line ($M, Q1 vs Q1)">合併損益表——逐行（百萬美元，Q1 對 Q1）</div>
+      <table>
+        <tr><th data-en="Line">項目</th><th>Q1 2025</th><th>Q1 2026</th><th data-en="YoY">年增</th></tr>
+        <tr><td data-en="Revenues"><strong>營收</strong></td><td>90,234</td><td><strong>109,896</strong></td><td class="up">+21.8%</td></tr>
+        <tr class="sub"><td data-en="Cost of revenues">營收成本</td><td>36,361</td><td>41,271</td><td>+13.5%</td></tr>
+        <tr class="sub"><td data-en="Research &amp; development">研發費用</td><td>13,556</td><td>17,032</td><td class="down">+25.6%</td></tr>
+        <tr class="sub"><td data-en="Sales &amp; marketing">銷售與行銷</td><td>6,172</td><td>7,606</td><td class="down">+23.2%</td></tr>
+        <tr class="sub"><td data-en="General &amp; administrative">一般與管理</td><td>3,539</td><td>4,291</td><td>+21.2%</td></tr>
+        <tr><td data-en="Total costs &amp; expenses">總成本與費用</td><td>59,628</td><td>70,200</td><td>+17.7%</td></tr>
+        <tr class="total"><td data-en="Income from operations">營業利益</td><td>30,606</td><td>39,696</td><td class="up">+29.7%</td></tr>
+        <tr><td data-en="Other income (expense), net">其他收入（費用）淨額</td><td>11,183</td><td>37,716</td><td class="up">+237%</td></tr>
+        <tr><td data-en="Income before income taxes">稅前淨利</td><td>41,789</td><td>77,412</td><td>+85.2%</td></tr>
+        <tr class="sub"><td data-en="Provision for income taxes (eff. rate)">所得稅（有效稅率）</td><td>7,249 (17.3%)</td><td>14,834 (19.2%)</td><td>—</td></tr>
+        <tr class="total"><td data-en="Net income">淨利</td><td>34,540</td><td>62,578</td><td class="up">+81.2%</td></tr>
+        <tr><td data-en="Diluted EPS">稀釋 EPS</td><td>$2.81</td><td>$5.11</td><td class="up">+81.9%</td></tr>
+      </table>
+      <div class="flag"><b data-en="⚑ Reading: the headline is two very different stories.">⚑ 解讀：表面數字是兩個截然不同的故事。</b> <span data-en="Operating income grew a strong-but-normal +30%. Net income &quot;+81%&quot; and EPS &quot;+82%&quot; are driven overwhelmingly by the $37.7B in Other income — up from $11.2B — which the cash-flow statement identifies as −$36.8B of gains on debt/equity securities (mostly unrealized; see Cash Flow tab). Strip the non-operating gain and after-tax core EPS is roughly $2.6–2.7. The operating business is the +30% line; the +82% is a mark-to-market artifact that reverses if the equity portfolio is written down.">營業利益成長強勁但正常的 +30%。淨利「+81%」與 EPS「+82%」壓倒性地來自 $377億的其他收入——從 $112億跳升——現金流量表指認其為 −$368億的債務／股權證券利得（多為未實現；見現金流 tab）。剝除非營業利得後，稅後核心 EPS 約 $2.6–2.7。營業本業是那條 +30% 的線；+82% 是一個「若股權投組被減記就會反轉」的按市值計價假象。</span></div>
+      <div class="flag obs"><b data-en="⚑ R&amp;D +26% outpaced revenue.">⚑ 研發 +26% 超過營收增速。</b> <span data-en="R&amp;D rose faster than revenue (+26% vs +22%), driven by AI-talent compensation and depreciation — the P&amp;L cost of the AI arms race is now visible in opex, and the CFO flagged depreciation and energy as ongoing pressure as CapEx ramps.">研發成長快於營收（+26% vs +22%），由 AI 人才薪酬與折舊驅動——AI 軍備競賽的損益成本現已在營業費用中可見，CFO 並示警折舊與能源將隨 CapEx 爬升而持續構成壓力。</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-en="Guidance &amp; Outlook (as given on the call)">財測與展望（法說會給出）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th data-en="Prior">先前</th><th data-en="Updated">更新</th></tr>
+        <tr><td data-en="FY2026 CapEx">FY2026 CapEx</td><td>$175–185B</td><td><strong>$180–190B</strong></td></tr>
+        <tr><td data-en="FY2027 CapEx">FY2027 CapEx</td><td>—</td><td data-en="&quot;Significantly increase&quot; vs 2026">相對 2026「大幅增加」</td></tr>
+        <tr><td data-en="FX tailwind to revenue">營收匯率順風</td><td>+3pp (Q1)</td><td>~+1pp (Q2)</td></tr>
+        <tr><td data-en="Wiz impact on Cloud OM">Wiz 對 Cloud 營益率</td><td>—</td><td data-en="Low-single-digit-ppt headwind, rest of 2026">低個位數百分點逆風，2026 剩餘</td></tr>
+        <tr><td data-en="Quarterly dividend">季度股利</td><td>—</td><td class="up" data-en="+5%">+5%</td></tr>
+      </table>
+      <div class="note" data-en="CapEx raise ($5B) is attributed specifically to including the Intersect acquisition (closed March), not a demand-driven organic raise. Q1 CapEx was $35.7B (~60% servers, ~40% data centers &amp; networking).">CapEx 上修（$50億）明確歸因於納入 Intersect 併購（3 月完成），而非需求驅動的有機上修。Q1 CapEx 為 $357億（約 60% 伺服器、約 40% 資料中心與網通）。</div>
+    </div>
+  </div>
+
+  <!-- Segments -->
+  <div id="panel-seg" class="panel">
+    <div class="seg-grid">
+      <div class="seg s1"><h4 data-en="Google Services">Google Services</h4><div class="big">$89.6B</div><div class="sub" data-en="Revenue +16.0% YoY · OI $40.6B · OM 45.3%">營收 +16.0% · 營益 $406億 · 營益率 45.3%</div><ul>
+        <li data-en="Search &amp; other $60.4B (+19%)">Search & other $604億（+19%）</li>
+        <li data-en="YouTube ads $9.9B (+11%)">YouTube 廣告 $99億（+11%）</li>
+        <li data-en="Network $7.0B (−4%)">Network $70億（−4%）</li>
+        <li data-en="Subs/platforms/devices $12.4B (+19%)">訂閱/平台/裝置 $124億（+19%）</li>
+      </ul></div>
+      <div class="seg s2"><h4 data-en="Google Cloud">Google Cloud</h4><div class="big">$20.0B</div><div class="sub" data-en="Revenue +63.4% YoY · OI $6.6B · OM 32.9%">營收 +63.4% · 營益 $66億 · 營益率 32.9%</div><ul>
+        <li data-en="OM was 17.8% a year ago — +15pp">營益率去年為 17.8%——+15pp</li>
+        <li data-en="OI tripled YoY ($2.18B → $6.60B)">營益年增 3 倍（$21.8億→$66.0億）</li>
+        <li data-en="AI solutions the #1 growth driver; +~800%">AI 解決方案為首要成長驅動；+約 800%</li>
+        <li data-en="Now includes Wiz (headwind ahead)">現含 Wiz（逆風在後）</li>
+      </ul></div>
+      <div class="seg s3"><h4 data-en="Other Bets">Other Bets</h4><div class="big">$0.41B</div><div class="sub" data-en="Revenue −8.7% YoY · Operating loss −$2.1B">營收 −8.7% · 營業損失 −$21億</div><ul>
+        <li data-en="Loss widened from −$1.23B YoY">虧損自 −$12.3億擴大</li>
+        <li data-en="Verily deconsolidated (Q1)">Verily 已解除合併（Q1）</li>
+        <li data-en="GFiber → Astound merger (Q4)">GFiber → Astound 合併（Q4）</li>
+        <li data-en="Waymo the retained priority">Waymo 為保留的優先項</li>
+      </ul></div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-en="Segment Operating Income Bridge ($M)">部門營業利益橋接（百萬美元）</div>
+      <table>
+        <tr><th data-en="Segment">部門</th><th>Q1 2025 OI</th><th>Q1 2026 OI</th><th data-en="Margin '26">'26 營益率</th></tr>
+        <tr><td data-en="Google Services">Google Services</td><td>32,682</td><td>40,589</td><td>45.3%</td></tr>
+        <tr><td data-en="Google Cloud">Google Cloud</td><td>2,177</td><td>6,598</td><td>32.9%</td></tr>
+        <tr><td data-en="Other Bets">Other Bets</td><td>(1,226)</td><td>(2,100)</td><td>—</td></tr>
+        <tr><td data-en="Alphabet-level activities">Alphabet 層級活動</td><td>(3,027)</td><td>(5,391)</td><td>—</td></tr>
+        <tr class="total"><td data-en="Total operating income">總營業利益</td><td>30,606</td><td>39,696</td><td>36.1%</td></tr>
+      </table>
+      <div class="flag"><b data-en="⚑ Alphabet-level costs nearly doubled (−$3.0B → −$5.4B).">⚑ Alphabet 層級成本近乎翻倍（−$30億 → −$54億）。</b> <span data-en="Corporate/unallocated costs grew +78%, a bigger drag than Other Bets. Combined with the widening Other-Bets loss, the two non-segment lines subtracted $7.5B from operating income vs $4.3B a year ago — worth watching as the AI-infra and legal/&quot;other matters&quot; costs (cited under G&amp;A) scale.">企業／未分攤成本成長 +78%，比 Other Bets 更大的拖累。加上 Other Bets 虧損擴大，這兩條非部門線合計自營業利益扣掉 $75億（去年為 $43億）——隨著 AI 基礎設施與法律／「其他事項」成本（G&A 提及）擴大，值得追蹤。</span></div>
+      <div class="flag obs"><b data-en="⚑ Cloud margin cross-check.">⚑ Cloud 毛利交叉驗證。</b> <span data-en="Cloud OI tripled to $6.6B on +63% revenue — clear operating leverage. But the 10-Q segment detail shows Cloud &quot;other costs &amp; expenses&quot; jumped +50% ($4.67B → $6.99B) on capacity/depreciation, while the margin still rose — meaning revenue and pricing outran the cost ramp this quarter. The open question (unanswered on the call) is durability once the Wiz headwind and heavier depreciation land.">Cloud 營益增為 3 倍達 $66億、營收 +63%——明顯營運槓桿。但 10-Q 部門明細顯示 Cloud「其他成本與費用」因產能／折舊跳增 +50%（$46.7億→$69.9億），毛利仍上升——代表本季營收與訂價跑贏了成本爬升。未解問題（法說會未答）是：一旦 Wiz 逆風與更重折舊落地後的可持續性。</span></div>
+    </div>
+  </div>
+
+  <!-- Balance Sheet -->
+  <div id="panel-bs" class="panel">
+    <div class="card">
+      <div class="card-title" data-en="Balance Sheet — Mar 31 2026 vs Dec 31 2025 ($M)">資產負債表——2026/3/31 對 2025/12/31（百萬美元）</div>
+      <table>
+        <tr><th data-en="Line">項目</th><th>Dec 31 '25</th><th>Mar 31 '26</th><th data-en="Change">變動</th></tr>
+        <tr><td data-en="Cash, equivalents &amp; marketable securities">現金、約當現金與市場性證券</td><td>126,843</td><td>126,840</td><td>~0</td></tr>
+        <tr><td data-en="Non-marketable securities">非市場性證券</td><td>68,687</td><td>106,946</td><td class="up">+38,259</td></tr>
+        <tr><td data-en="Property &amp; equipment, net">不動產與設備淨額</td><td>246,597</td><td>281,020</td><td class="up">+34,423</td></tr>
+        <tr><td data-en="Goodwill">商譽</td><td>33,380</td><td>57,774</td><td>+24,394</td></tr>
+        <tr><td data-en="Intangible assets, net">無形資產淨額</td><td>1,283</td><td>9,444</td><td>+8,161</td></tr>
+        <tr class="total"><td data-en="Total assets">總資產</td><td>595,281</td><td>703,919</td><td>+108,638</td></tr>
+        <tr><td data-en="Long-term debt">長期負債</td><td>46,547</td><td>77,501</td><td class="down">+30,954</td></tr>
+        <tr><td data-en="Total liabilities">總負債</td><td>180,016</td><td>225,173</td><td>+45,157</td></tr>
+        <tr><td data-en="Retained earnings">保留盈餘</td><td>324,055</td><td>384,024</td><td>+59,969</td></tr>
+        <tr class="total"><td data-en="Total stockholders' equity">股東權益總額</td><td>415,265</td><td>478,746</td><td>+63,481</td></tr>
+      </table>
+      <div class="flag"><b data-en="⚑ The quarter's balance-sheet story is three big deltas.">⚑ 本季資產負債表的故事是三個大變動。</b> <span data-en="(1) Non-marketable securities +$38.3B — this is where the $36.8B unrealized investment gain lives; the reported net-income beat is sitting on the asset side of the balance sheet, not in cash. (2) PP&amp;E +$34.4B — the CapEx build made visible. (3) Long-term debt +$31.0B and goodwill +$24.4B / intangibles +$8.2B — the debt raise funded the Wiz ($29.5B) and Intersect acquisitions. Total assets grew $109B in a single quarter, ~two-thirds of it from investment mark-ups and capex rather than operating retained cash.">(1) 非市場性證券 +$383億——這正是 $368億未實現投資利得所在；帳面淨利 beat 坐落在資產負債表的資產側、而非現金。(2) 不動產與設備 +$344億——CapEx 建置具象化。(3) 長期負債 +$310億、商譽 +$244億／無形 +$82億——舉債資助了 Wiz（$295億）與 Intersect 併購。總資產單季成長 $1,090億，其中約三分之二來自投資評價上調與資本支出、而非營運保留現金。</span></div>
+      <div class="flag obs"><b data-en="⚑ Deferred income taxes swung sharply.">⚑ 遞延所得稅劇烈擺動。</b> <span data-en="Deferred tax assets fell from $9.1B to $2.0B and the cash-flow line for deferred taxes swung +$6.9B (vs −$1.2B PY), consistent with taxes accrued on the large investment gains. The 19.2% effective rate (up from 17.3%) reflects the same gains entering taxable income.">遞延稅資產自 $91億降至 $20億，現金流量的遞延稅項擺動 +$69億（去年 −$12億），與大額投資利得計提的稅一致。19.2% 有效稅率（自 17.3% 上升）反映同一批利得進入應稅所得。</span></div>
+    </div>
+  </div>
+
+  <!-- Cash Flow -->
+  <div id="panel-cf" class="panel">
+    <div class="card">
+      <div class="card-title" data-en="Cash Flow Summary ($M, Q1 vs Q1)">現金流量摘要（百萬美元，Q1 對 Q1）</div>
+      <table>
+        <tr><th data-en="Line">項目</th><th>Q1 2025</th><th>Q1 2026</th></tr>
+        <tr><td data-en="Net income">淨利</td><td>34,540</td><td>62,578</td></tr>
+        <tr class="sub"><td data-en="+ Depreciation of PP&amp;E">＋不動產設備折舊</td><td>4,487</td><td>6,482</td></tr>
+        <tr class="sub"><td data-en="+ Stock-based compensation">＋股票薪酬</td><td>5,516</td><td>6,751</td></tr>
+        <tr class="sub"><td data-en="− Gain on debt/equity securities">－債務/股權證券利得</td><td>(9,960)</td><td>(36,804)</td></tr>
+        <tr class="total"><td data-en="Operating cash flow">營運現金流</td><td>36,150</td><td>45,790</td></tr>
+        <tr><td data-en="− CapEx (purchases of PP&amp;E)">－資本支出</td><td>(17,197)</td><td>(35,674)</td></tr>
+        <tr class="total"><td data-en="= Free cash flow">＝自由現金流</td><td>18,953</td><td>10,116</td></tr>
+        <tr><td data-en="Acquisitions, net of cash">併購（扣除取得現金）</td><td>(340)</td><td>(33,621)</td></tr>
+        <tr><td data-en="Repurchases of stock">庫藏股買回</td><td>(15,068)</td><td><strong>0</strong></td></tr>
+        <tr><td data-en="Dividend payments">股利支付</td><td>(2,434)</td><td>(2,542)</td></tr>
+        <tr><td data-en="Proceeds from debt, net">舉債淨流入</td><td>4,532</td><td>31,379</td></tr>
+      </table>
+      <div class="flag"><b data-en="⚑ Free cash flow nearly halved despite net income nearly doubling.">⚑ 淨利近乎翻倍，自由現金流卻近乎腰斬。</b> <span data-en="FCF fell $19.0B → $10.1B because (a) $36.8B of the net-income gain is non-cash and added back in OCF, and (b) CapEx doubled to $35.7B. The single most striking capital line: buybacks went to exactly $0 (from $15.1B a year ago) while Alphabet raised $31.4B of new debt. Cash for the Wiz/Intersect acquisitions ($33.6B) and the doubled capex was funded by debt and a suspended buyback — not by internally-generated free cash flow, which no longer covers it.">FCF 自 $190億→$101億，因為 (a) 淨利中 $368億是非現金、在營運現金流被加回，且 (b) CapEx 翻倍到 $357億。最醒目的資本線：買回歸零（去年 $151億），同時 Alphabet 淨舉新債 $314億。Wiz／Intersect 併購的現金（$336億）與翻倍的資本支出，是由舉債與暫停買回支應——而非內部產生的自由現金流，後者已不足以覆蓋。</span></div>
+      <div class="note" data-en="Also in financing: $3.2B &quot;proceeds from sale of interest in consolidated entities&quot; — the Verily deconsolidation. Dividend raised +5% but at ~$2.5B/quarter it is small relative to the $180–190B FY26 CapEx guide.">融資活動另含 $32億「出售合併個體權益所得」——即 Verily 解除合併。股利上調 +5%，但約 $25億／季相對 $1,800–1,900億 FY26 CapEx guidance 甚小。</div>
+    </div>
+  </div>
+
+  <!-- Valuation -->
+  <div id="panel-val" class="panel">
+    <div class="card">
+      <div class="card-title" data-en="Valuation Ratios — With Interpretation">估值比率——附意義欄</div>
+      <table>
+        <tr><th data-en="Metric">指標</th><th data-en="Q1 FY2026">FY2026 Q1</th><th data-en="What it means / skeptic's read">意義／懷疑者解讀</th></tr>
+        <tr><td data-en="Operating margin">營業利益率</td><td>36.1%</td><td class="meaning" data-en="Up 2.2pp YoY — the clean profitability signal, driven by Cloud operating leverage and Services scale. This is the number to anchor on, not net margin.">年增 2.2pp——乾淨的獲利訊號，由 Cloud 營運槓桿與 Services 規模驅動。應以此為錨，而非淨利率。</td></tr>
+        <tr><td data-en="Net margin (reported)">淨利率（帳面）</td><td>56.9%</td><td class="meaning" data-en="Optically enormous but distorted: $37.7B non-operating investment gains inflate it. Ex-OI&amp;E, net margin normalizes to roughly the low-30s%.">表面驚人但被扭曲：$377億非營業投資利得灌大。剔除 OI&E 後，淨利率回歸約 30% 出頭。</td></tr>
+        <tr><td data-en="Reported diluted EPS (Q1)">帳面稀釋 EPS（Q1）</td><td>$5.11</td><td class="meaning" data-en="Includes the one-time equity gain. Annualized naively → ~$20.4 run-rate, which overstates earnings power.">含一次性股權利得。粗略年化 → 約 $20.4 run-rate，高估了獲利能力。</td></tr>
+        <tr><td data-en="Core EPS ex-investment gains (est.)">核心 EPS 剔除投資利得（估）</td><td>~$2.6–2.7</td><td class="meaning" data-en="Tax-affecting the $36.8B gain (~19%) and removing it leaves ~$32–33B core net income → this is the operating earnings the multiple should be applied to.">將 $368億利得稅後調整（約 19%）並剔除後，剩約 $32–33億…實為 $320–330億核心淨利 → 這才是倍數該套用的營業獲利。</td></tr>
+        <tr><td data-en="Implied P/E on reported vs core (@ ~$371)">帳面 vs 核心隱含本益比（約 $371）</td><td>~18x vs ~35x</td><td class="meaning" data-en="At the post-earnings ~$371 reference price: annualized reported EPS implies a cheap ~18x, but annualized CORE operating EPS implies ~35x. The market is not paying 18x — it is paying a growth multiple on the operating business, which the reported P/E masks.">以財報後約 $371 參考價：年化帳面 EPS 隱含便宜的約 18x，但年化「核心」營業 EPS 隱含約 35x。市場付的不是 18x——它為營業本業付成長倍數，而帳面本益比把這點掩蓋了。</td></tr>
+        <tr><td data-en="Cloud backlog / annualized Cloud rev">Cloud backlog／年化 Cloud 營收</td><td>~5.8x</td><td class="meaning" data-en="$462B backlog vs ~$80B annualized Cloud revenue — a deep multi-year pipeline, but &gt;50% converts only over 24 months and it now blends lumpy TPU hardware, so it is not a clean forward-ARR proxy.">$4,620億 backlog 對約 $800億年化 Cloud 營收——深厚的多年期管線，但 &gt;50% 需 24 個月才轉換、且現已混入 lumpy TPU 硬體，因此不是乾淨的前瞻 ARR 代理指標。</td></tr>
+        <tr><td data-en="Net debt position">淨負債部位</td><td data-en="Net cash">仍為淨現金</td><td class="meaning" data-en="$126.8B cash+securities vs $77.5B long-term debt = still net cash ~$49B. Balance sheet is not stretched — but the direction of travel (buyback→0, debt +$31B) is what matters, not the current level.">$1,268億現金+證券 對 $775億長期債＝仍淨現金約 $490億。資產負債表未緊繃——但重點是行進方向（買回→0、舉債 +$310億），而非當前水位。</td></tr>
+      </table>
+      <div class="flag"><b data-en="⚑ The valuation trap this quarter:">⚑ 本季的估值陷阱：</b> <span data-en="A naive screen sees &quot;EPS +82%, P/E ~18x&quot; and reads Alphabet as cheap. Both inputs are distorted by the same $36.8B non-operating gain. The honest frame is: operating income +30%, Cloud inflecting, core operating P/E in the mid-30s — a high-quality growth compounder priced as one, not a value stock. The risks that would compress this (see Analysis → Risk Matrix) are earnings quality reversing, Cloud's supply cap, and the debt-financed capex trajectory — none of which the reported P/E reflects.">粗略篩選看到「EPS +82%、本益比約 18x」就把 Alphabet 讀成便宜。兩個輸入都被同一筆 $368億非營業利得扭曲。誠實的框架是：營業利益 +30%、Cloud 拐點、核心營業本益比落在 30 多倍——一檔高品質成長複利股、被如此定價，而非價值股。會壓縮它的風險（見 Analysis → 風險矩陣）是獲利品質反轉、Cloud 供給封頂、以及舉債支應的資本支出軌跡——這些帳面本益比都沒反映。</span></div>
+      <div class="note" data-en="Share-price references (~$342 Apr 25 → ~$371 Apr 30 post-earnings → ~$391 mid-May) are from Form 4 transaction prices, used only to illustrate multiples. Share count ~12.1B (Class A+B+C). All ratios illustrative; for informational purposes only — not investment advice.">股價參考（約 $342 於 4/25 → 約 $371 於 4/30 財報後 → 約 $391 於 5 月中）取自 Form 4 交易價，僅用以示意倍數。股數約 121 億股（Class A+B+C）。所有比率僅為示意；僅供資訊參考，非投資建議。</div>
+    </div>
+  </div>
+
+  <div class="footer" data-en="All figures per Alphabet's 10-Q (period ended Mar 31, 2026) and FY2025 10-K, cross-referenced with the Q1 FY2026 earnings call. For informational purposes only — not investment advice.">所有數字依 Alphabet 10-Q（截至 2026/3/31）與 FY2025 10-K，交叉比對 FY2026 Q1 法說會。僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>
