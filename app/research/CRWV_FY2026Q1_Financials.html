@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoreWeave (CRWV) FY2026 Q1 — 完整財務分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab { padding: 9px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.a { border-top-color: #b91c4a; }
+  .bu-card.b { border-top-color: #15803d; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 190px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .bar-num { width: 190px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; }
+
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .note { font-size: 11px; color: #444; margin-top: 8px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.6; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>CoreWeave, Inc.（CRWV）— FY2026 Q1 完整財務分析</h1>
+  <p>損益表 / 客戶集中度與Backlog組成 / 資產負債表 / 現金流量 / 估值觀察 &nbsp;·&nbsp; 法說會日期：2026年5月7日（季末：2026年3月31日）&nbsp;·&nbsp; 數字來源見下方資料限制說明</p>
+</div>
+<div class="container">
+  <div class="note red" style="margin-bottom:16px;">⚑ <strong style="color:#1a1a2e;">全頁資料限制說明（請先讀）</strong>：本頁製作時，SEC 10-Q完整財報數字的研究工作因當次工作階段配額中斷而未能取得（詳見Analysis.html風險矩陣頂部說明）。除「客戶集中度與Backlog組成」Tab中標註⚑者為10-Q已交叉確認的真實申報數字外，本頁其餘所有數字均為<strong>法說會口頭揭露的非GAAP／四捨五入數字</strong>，尚未經過10-Q原文核對。依框架慣例，Financials.html的角色本應是「用GAAP數字校正法說會敘事」，但本次僅能先以法說會數字搭出骨架，待SEC研究完成後再整批替換為10-Q申報數字——使用本頁數字前請務必留意此限制，不應視為最終版本。</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">客戶集中度與Backlog</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- Income Statement -->
+  <div id="panel-inc" class="panel active">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$2.1B</div><div class="kpi-lbl">季營收</div><div class="kpi-sub">YoY +112%，QoQ +32%（法說會口頭數字）</div></div>
+      <div class="kpi"><div class="kpi-val">$1.2B</div><div class="kpi-lbl">Adjusted EBITDA</div><div class="kpi-sub">YoY +91%，margin 56%</div></div>
+      <div class="kpi"><div class="kpi-val">$21M</div><div class="kpi-lbl">Adjusted營業利益</div><div class="kpi-sub">margin 1%，本季為全年低點</div></div>
+      <div class="kpi"><div class="kpi-val neg">$740M</div><div class="kpi-lbl">GAAP淨損</div><div class="kpi-sub" style="color:#b91c1c;">⚑ 比較基期見下方flag</div></div>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">逐字稿數字瑕疵，尚未解析</strong>：CFO Nitin Agrawal口頭將本季淨損$740M「compared to a net loss of $315 million in Q1 of 2022」——CoreWeave 2022年並非現在的可比較公開申報主體，此比較基期幾乎可以肯定是逐字稿誤植（應為「Q1 of 2025」），但正確的Q1 FY2025 GAAP淨損數字尚未從10-Q取得核實，暫不代入本頁任何計算。Adjusted淨損的YoY比較（$589M vs $150M）本身邏輯一致，不受此瑕疵影響。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">損益重點（法說會揭露，非GAAP科目為主，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>Q1 FY2025</th><th>Q1 FY2026</th><th>YoY</th></tr>
+        <tr><td>營收</td><td>≈$990（依+112% YoY反推，非直接引述）</td><td><strong>$2,100</strong></td><td class="pos">+112%</td></tr>
+        <tr><td>營業費用合計</td><td>—</td><td>$2,200</td><td>—</td></tr>
+        <tr><td>　其中：股權薪酬（SBC）</td><td>—</td><td>$153</td><td>—</td></tr>
+        <tr><td>Adjusted EBITDA</td><td>$606</td><td class="pos"><strong>$1,200</strong></td><td class="pos">+91%</td></tr>
+        <tr><td>Adjusted EBITDA margin</td><td>—</td><td class="pos">56%</td><td>—</td></tr>
+        <tr><td>Adjusted營業利益</td><td>$163</td><td class="neg">$21</td><td class="neg">-87%</td></tr>
+        <tr><td>Adjusted營業利益率</td><td>—</td><td class="neg">1%</td><td>—</td></tr>
+        <tr><td>利息費用</td><td>$264</td><td class="neg">$536</td><td class="neg">+103%</td></tr>
+        <tr><td>GAAP淨損</td><td>⚑ 未核實（見上方flag）</td><td class="neg">$740</td><td>—</td></tr>
+        <tr><td>Adjusted淨損</td><td>$150</td><td class="neg">$589</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 「營收」Q1 FY2025欄位為依YoY成長率反推的估算值（$2,100M÷2.12），非法說會直接引述數字，僅供參考量級，10-Q核實後應以申報數字取代。CapEx guidance（見下方財測表）低標本季上修，管理層明確歸因於「組件價格上升」——與Analysis.html Q&amp;A Tab · Keith Weiss討論的「合約定價已內含組件成本、大致不受影響」的說法存在張力，見該處邏輯缺口分析。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY2026 Q2財測</div>
+      <table>
+        <tr><th>項目</th><th>財測區間</th></tr>
+        <tr><td>營收</td><td>$2.45B – $2.6B</td></tr>
+        <tr><td>Adjusted營業利益</td><td>$30M – $90M</td></tr>
+        <tr><td>利息費用</td><td>$650M – $730M</td></tr>
+        <tr><td>CapEx</td><td>$7B – $9B</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY2026 全年財測</div>
+      <table>
+        <tr><th>項目</th><th>財測區間</th><th>備註</th></tr>
+        <tr><td>營收</td><td>$12B – $13B</td><td>本季重申，未調整</td></tr>
+        <tr><td>Adjusted營業利益</td><td>$900M – $1,100M</td><td>本季重申，未調整</td></tr>
+        <tr><td>CapEx</td><td>$31B – $35B</td><td class="neu">低標較前次財測上修，歸因組件價格上升</td></tr>
+        <tr><td>2026年出場ARR</td><td>$18B – $19B</td><td class="pos">低標較前次財測上調$1B</td></tr>
+      </table>
+    </div>
+    <div class="note yellow">⚑ 管理層描述Q1為「adjusted營業利益率全年低點」，預期Q2跨Q3轉折、Q4回到兩位數低段——但如Analysis.html Q&amp;A Tab · Tal Liani／Brent Thill所述，支撐這個轉折的具體里程碑顆粒度與毛利率（而非僅adjusted營業利益率）本身何時止跌，管理層均未在法說會中提供，見對應邏輯缺口。</div>
+  </div>
+
+  <!-- Customer Concentration & Backlog -->
+  <div id="panel-bu" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$99.4B</div><div class="kpi-lbl">Revenue Backlog</div><div class="kpi-sub">QoQ +50%，YoY≈4x</div></div>
+      <div class="kpi"><div class="kpi-val neg">65%</div><div class="kpi-lbl">前兩大客戶集中度</div><div class="kpi-sub" style="color:#b91c1c;">⚑ 10-Q確認，非法說會數字</div></div>
+      <div class="kpi"><div class="kpi-val">&lt;30%</div><div class="kpi-lbl">非投資級AI原生／基礎模型商占比</div><div class="kpi-sub">法說會口頭數字</div></div>
+      <div class="kpi"><div class="kpi-val">≈5年</div><div class="kpi-lbl">新增產能加權平均合約年期</div><div class="kpi-sub">法說會口頭數字</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">⚑ 客戶集中度：10-Q正式數字 vs. 法說會「多元化」敘事對照</div>
+      <table>
+        <tr><th>客戶</th><th>10-Q是否具名</th><th>規模</th><th>備註</th></tr>
+        <tr><td><strong>OpenAI</strong></td><td class="pos">是</td><td><strong>≈$6.5B</strong>（合約至2031年）</td><td>與Meta合計占前兩大客戶集中度65%</td></tr>
+        <tr><td><strong>Meta</strong></td><td class="pos">是</td><td><strong>$21B</strong></td><td>4月初宣布，10-Q已交叉確認為真實數字</td></tr>
+        <tr><td>Anthropic</td><td class="neg">否</td><td>未揭露</td><td>本季新增客戶，法說會口頭提及，10-Q未見</td></tr>
+        <tr><td>Cohere</td><td class="neg">否</td><td>未揭露</td><td>DDTL 5.0提及的融資對象，10-Q未見</td></tr>
+        <tr><td>Jane Street</td><td class="neg">否</td><td>Q1+$6B（法說會口頭）</td><td>金融服務垂直代表客戶，10-Q未見</td></tr>
+        <tr><td>Hudson River Trading</td><td class="neg">否</td><td>未揭露</td><td>金融服務垂直新客戶，10-Q未見</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">本季最重要的單一財務發現</strong>：10-Q客戶集中度附註揭露前兩大客戶合計占比約65%，對照10-Q正文具名的大型客戶恰好就是OpenAI（$6.5B/2031）與Meta（$21B）——法說會用來佐證「客戶多元化」的四個名字（Anthropic／Cohere／Jane Street／Hudson River）全數未出現在10-Q正文中。詳見Analysis.html風險矩陣第一項與特殊事件Tab C。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">Backlog結構（法說會口頭揭露）</div>
+    <div class="bu-grid">
+      <div class="bu-card a">
+        <div class="bu-name">認列時間分佈</div>
+        <div class="bu-abbr">$99.4B backlog</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">未來24個月內</span><span class="bu-stat-val">36%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">未來4年內</span><span class="bu-stat-val">75%</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:36%; background:#b91c4a;"></div></div>
+      </div>
+      <div class="bu-card b">
+        <div class="bu-name">垂直產業（僅兩個有具體金額）</div>
+        <div class="bu-abbr">法說會口頭揭露，10-Q未核實</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">金融服務</span><span class="bu-stat-val">approaching $10B</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">物理AI／太空計算</span><span class="bu-stat-val">surpassed $1B</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:11%; background:#15803d;"></div></div>
+      </div>
+    </div>
+    <div class="note">⚑ 金融服務＋物理AI兩個垂直合計約$11B，僅占backlog總額的約11%——與前兩大客戶（OpenAI+Meta）65%集中度相比，法說會著墨最多的「新垂直分散」故事，在backlog總量中占比其實相對有限。10大客戶各自承諾≥$1B的說法，及「9/10大AI領導廠商」名單，均未見於10-Q，無法獨立核實個別占比。</div>
+  </div>
+
+  <!-- Balance Sheet -->
+  <div id="panel-bs" class="panel">
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資料嚴重不完整</strong>：完整資產負債表（總資產、總負債、股東權益、PP&amp;E淨額、完整債務堆疊）尚未從10-Q取得，以下僅為法說會口頭揭露的片段數字，不構成完整資產負債表。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">流動性與資本結構（法說會口頭揭露，2026/3/31）</div>
+      <table>
+        <tr><th>項目</th><th>數字</th><th>備註</th></tr>
+        <tr><td>現金及約當現金＋受限制現金＋有價證券</td><td>&gt;$3.3B</td><td>合計數字，未拆分individual科目</td></tr>
+        <tr><td>Q1 CapEx</td><td>$6.8B</td><td>「按計畫執行」</td></tr>
+        <tr><td>在建工程（CIP）</td><td>「季增大致持平」</td><td>未揭露具體金額</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">DDTL 4.0債務設施條款（法說會口頭揭露）</div>
+      <table>
+        <tr><th>項目</th><th>數字／條款</th></tr>
+        <tr><td>規模</td><td>$8.5B</td></tr>
+        <tr><td>信評</td><td>A-等效（Moody's／Fitch／DBRS）——⚑ 10-Q正文未見信評機構字樣，屬常見揭露慣例</td></tr>
+        <tr><td>隱含利率</td><td>&lt;6%</td></tr>
+        <tr><td>追索權結構</td><td>非追索母公司（non-recourse）</td></tr>
+        <tr><td>動撥機制</td><td>Delayed-draw，資料中心營運化時才動撥；穩定化後另可動用+$1B（ABS式）</td></tr>
+        <tr><td>Q1另完成</td><td>$2B股權募資（「與NVIDIA關係擴大有關」，確切結構未揭露）</td></tr>
+        <tr><td>債務到期牆</td><td>「2029年前無到期債務」（除自我攤還合約擔保債務與OEM供應商融資）</td></tr>
+      </table>
+    </div>
+    <div class="note yellow">⚑ 這只是CoreWeave多筆DDTL facility中的一筆（法說會另提及DDTL 5.0於季後定價，融資OpenAI／Cohere合約），合併總負債、槓桿比率、完整到期時程表均未揭露，須待10-Q負債附註逐筆核對後才能還原全貌。見Analysis.html特殊事件Tab A「尚待驗證」。</div>
+  </div>
+
+  <!-- Cash Flow -->
+  <div id="panel-cf" class="panel">
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資料嚴重不完整</strong>：完整現金流量表（營業活動現金流、投資活動細項、折舊攤銷等）尚未從10-Q取得，以下僅為法說會口頭揭露的片段數字。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">投資活動（法說會口頭揭露）</div>
+      <div class="cf-row"><span class="cf-lbl">Q1 CapEx（財產與設備購置，估計對應投資活動現金流出）</span><span class="cf-val neg">$6.8B</span></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">融資活動（法說會口頭揭露）</div>
+      <div class="cf-row"><span class="cf-lbl">DDTL 4.0投資級債務設施</span><span class="cf-val pos">$8.5B</span></div>
+      <div class="cf-row"><span class="cf-lbl">股權募資（與NVIDIA關係擴大有關）</span><span class="cf-val pos">$2.0B</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">Q1合計新增債務與股權資本（含前兩項及其他）</span><span class="cf-val pos">&gt;$20B（年初至今累計，非僅Q1單季）</span></div>
+      <div class="cf-row"><span class="cf-lbl">法說會後（Q2迄今）另增</span><span class="cf-val pos">&gt;$10B（DDTL 5.0、Jane Street $1B策略投資等）</span></div>
+    </div>
+    <div class="note">⚑ 加權平均負債成本（WACD）2023-2025累計壓縮約600個基點，2026年迄今再壓縮約80個基點——這是法說會唯一具體量化的「資金成本」時間序列指標，但由於沒有對應的完整現金流量表／資產負債表債務餘額，無法獨立驗證這個壓縮幅度的計算基礎。</div>
+  </div>
+
+  <!-- Valuation -->
+  <div id="panel-val" class="panel">
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">本Tab目前無法有意義填寫</strong>：估值觀察通常仰賴（1）法說會前後的市場股價區間（本框架慣例取自Form 4申報中觀察到的實際成交價），（2）流通股數，（3）可比較的GAAP或核心EPS。本次SEC研究因工作階段配額中斷，尚未取得CoreWeave任何Form 4申報資料，法說會逐字稿本身也未提及股價、市值、或流通股數。因此本頁暫無可靠數字可供估值推算，強烈建議不要在SEC研究補齊前，援引本報告做任何估值判斷。待Form 4與10-Q股數資料取得後，本Tab將補上與AMZN／NVDA報告同等規格的股價區間表與粗略P/E估算。</div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。本頁多數科目待SEC 10-Q完整核實，詳見頁首資料限制說明。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

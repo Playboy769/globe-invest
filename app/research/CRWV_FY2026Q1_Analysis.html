@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoreWeave (CRWV) — FY2026 Q1 — Q&A問答分析 / DDTL融資＋NVIDIA＋Meta·Anthropic新約 / 技術與平台 / 供應鏈 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 100px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 24px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; left: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -22px; transform: translateX(-50%); text-align: center; font-size: 11px; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 2px; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 190px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 190px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .tech-card.gpu { border-top-color: #2563eb; }
+  .tech-card.storage { border-top-color: #15803d; }
+  .tech-card.software { border-top-color: #c2600a; }
+  .tech-card.other { border-top-color: #7b7e87; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.gpu h4 { color: #1d4ed8; }
+  .tech-card.storage h4 { color: #15803d; }
+  .tech-card.software h4 { color: #c2600a; }
+  .tech-card.other h4 { color: #444; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.2; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  table { color: #333; width: 100%; border-collapse: collapse; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: left; }
+  td { color: #333; padding: 8px 12px; border-bottom: 1px solid #eee; }
+  td strong { color: #1a1a2e; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>CoreWeave, Inc.（CRWV）— FY2026 Q1 法說會分析</h1>
+  <p>Q&amp;A 問答分析 / DDTL投資級融資＋NVIDIA關係擴大＋Meta·Anthropic新客戶三象限拆解 / 技術與平台 / 供應鏈 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年5月7日（季末：2026年3月31日）&nbsp;·&nbsp; 財務數字以SEC 10-Q申報為準，法說會口頭數字僅供敘事參考</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('special',this)">DDTL融資＋NVIDIA＋新客戶</div>
+    <div class="tab" onclick="sw('tech',this)">技術與平台</div>
+    <div class="tab" onclick="sw('supply',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Keith Weiss（Morgan Stanley）</div><div class="qa-topic">CapEx組件成本轉嫁機制 × NVIDIA關係質變與5GW定位</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Weiss一次問了三件事：（1）較高的組件成本如何在合約中轉嫁、對獲利能力的最終影響為何——並點名這是本季法說會後股價逆風的主因之一；（2）NVIDIA關係本季究竟發生了什麼「根本性變化」；（3）法說會新提到的5GW，該如何放進2030年8GW active power目標的脈絡裡理解。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Mike Intrator將CoreWeave定位為「success-based company」——合約定價本身已內含所有必要組件成本，因此「很大程度上」不受組件價格通膨影響，目標仍是稍早Nitin提到的「中段20%」單位毛利。NVIDIA方面，本季最重要的兩件事是CoreWeave軟體方案取得NVIDIA「參考架構」認證，以及5GW的機會性擴充空間；但同時強調過去12個月已「獨立於NVIDIA或任何人」取得2GW、本季400MW。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Weiss明確問的是「較高組件成本如何轉嫁、對獲利能力的最終影響」，Mike的回答通篇是定性語言（「我們很擅長」「我們想得很多」「從效率角度打造公司」），唯一具體錨點「中段20%」單位毛利，其實是Nitin開場白已給過、泛用於所有「已爬升」合約的標準數字，並非針對「組件成本上升」這個具體變數的量化答案——沒有任何美元金額或百分比說明組件成本上升對毛利率的實際侵蝕／保護程度。更值得注意的是，Mike一方面強調NVIDIA關係「本季有重大進展」，另一方面立刻補充過去12個月2GW、本季400MW「完全不需要NVIDIA或任何人的支持」——這兩句話在同一段回答裡互相削弱對方的重要性，5GW實際機制（選擇權？優先取得權？與GPU供應排序的連動？）也完全未被說明。此外，Nitin稍早才將全年CapEx財測下修區間的低標上調，明確歸因於「組件價格上升」；若合約真如Mike所說「很大程度上」被保護，CapEx財測為何仍需要因組件成本而上修，這個張力回答中並未被自己言明或調和。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Keith Weiss:</b> "Can you explain to us how the higher component pricing works through the contract and how that ultimately affects your profitability?... What fundamentally changed in that relationship this quarter?"<br><br><b>Mike Intrator:</b> "...we are a success-based company, which means that we build our contracts to incorporate the cost of all of the components... by and large, we are insulated from the price inflation..." / "...in the last 12 months, CoreWeave has secured 2 GW worth of infrastructure. Within the last quarter, we have secured 400 MW... independent of any support from NVIDIA or anyone else."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brent Thill（Jefferies）</div><div class="qa-topic">H1→H2調整後營業利益隱含11倍成長（$81M→$919M）的信心基礎</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Thill用財測反推：上半年（Q1實際$21M＋Q2財測中值約$60M）約$81M調整後營業利益，對應全年財測中值約$1.0B，隱含下半年需貢獻約$919M——換算超過11倍於上半年。他直接問：什麼支撐這個下半年利潤建構的信心？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Nitin重申「一切都由active power與產能爬升排程決定，且非線性」，並列舉一串「重申／上調財測」項目（全年營收、全年調整後營業利益、active power目標、2026出場ARR下限上調）作為信心指標；Mike補充供應鏈韌性（無單一資料中心供應商佔比逾17%、多家OEM/ODM）作為執行面的信心來源。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Thill問的是「什麼給你們這個信心」，Nitin的回答本質上是同義反覆——「我們有信心，因為我們重申了財測」，但被問到的正是這份財測本身的可信度，重申動作不構成獨立於財測之外的證據。「非線性」一詞只是重述開場白已解釋過的爬坡機制（進場後1-2個月僅認列成本、第3個月起毛利轉常態化至中段20%），並未提供任何新的顆粒度——例如支撐Q4轉為兩位數低段調整後營業利益率所需準時達成的具體GW／資料中心里程碑數量，或任一里程碑延遲的敏感度分析。Mike的供應鏈韌性回答則是關於「硬體能否準時交付」的CapEx／執行風險緩解，與「下半年營業利益金額為何是上半年的11倍以上」這個關於產能利用率／貢獻毛利爬升時點的問題，屬於相鄰但非直接對應的論點。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Brent Thill:</b> "$81 million in EBITDA on the front half, but you're guiding the $919 million in the second half on the bottom line. What's giving you conviction in the bottom line build in the back half of the year?"<br><br><b>Nitin Agrawal:</b> "...everything in our business is defined by active power and capacity ramp schedules, which are not necessarily linear... We are reaffirming our full year guidance... All of these are indicators in the conviction that we have on our execution plan..."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mark Murphy（JPMorgan）</div><div class="qa-topic">舊約成本轉嫁空間 × Q1營收上檔為何不流入全年財測</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">（1）對於已簽約但尚未滿載運轉、且簽約後組件／能源成本已上升的舊合約，其毛利結構是否已與原先建模不同？是否有機制轉嫁成本或重新協商這些既有合約？（2）鑑於Q1訂單／執行／客戶多元化／募資全面優於預期、且Q1營收已有「明顯上檔」，為何不將此上檔直接反映進全年營收財測——技術上等於隱含下半年營收財測反而被下修？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">（1）Mike談CapEx因組件通膨「小幅」上調，並強調「新簽約時」已用手上採購單定價、電力成本在合約期間內是「合約明訂」故可預先掌握，藉此在新約中「有效轉嫁」成本以保護目標毛利。（2）Nitin：2026年產能「基本上已售罄」，Q1的上檔沒有反映在2026營收財測，而是反映在上調2026出場ARR下限、及2027年逾$30B ARR中已有75%以上簽約——超額需求被導向未來年度的backlog/ARR而非拉升今年營收。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Murphy問的明確是「已經簽約、但尚未滿載的舊合約」在成本上升後的處境，Mike的回答卻整段轉向說明「新簽約時」如何定價——用「未來怎麼做」回答「現有合約現在怎麼樣」，沒有正面回應舊合約是否正承受毛利壓縮，也未提及是否曾與既有客戶重新協商條款；電力成本「合約明訂」的說法只回答了能源這一項變數，組件／硬體成本在舊合約簽署當下是否也已鎖定，同樣未被觸及。（2）的回答本身邏輯尚屬自洽（產能上限解釋了上檔為何不流向今年營收），但這個解釋的一個推論是：本次「重申」全年財測，某種程度上更接近產能上限的機械性結果，而非管理層主觀信心的展現——這個角度管理層未曾自己點出。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Mark Murphy:</b> "Is the margin profile of this previously signed contract slightly different than originally contemplated?... What holds you back from just passing through that revenue upside into the full year revenue guidance?"<br><br><b>Mike Intrator:</b> "When we are pricing our deals, we are pricing them with purchase orders in hand... We understand what the power cost is going to be today, next year, and out through the term of the contract, because that is contractually delivered to us."<br><b>Nitin Agrawal:</b> "We pretty much remain sold out for our 2026 capacity... it's also inflecting... in 75% of our 2027 ARR."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Tal Liani（Bank of America）</div><div class="qa-topic">Backlog認列時點機制 × 五季毛利率下滑78%→68%的驅動因子</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">（1）backlog何時轉為認列營收——是否取決於資料中心完工＋實際流量上線，因此會出現特定季度的「跳躍式」認列？（2）毛利率過去五季從78%一路降至68%，技術與基礎設施費用成長速度也快於營收，未來兩年毛利率改善的驅動因子是什麼？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Nitin：毛利動態「主要是時間點問題，不是經濟結構問題」——取得powered shell後即開始認列租賃／電力成本與折舊，1-2個月整備期只有成本、沒有營收，第3個月起貢獻毛利轉正、常態化至中段20%；過去一年active power近乎三倍成長，故整體毛利率被大量「新爬坡」機組拖累；預期Q2到Q3之間轉折向上。營收認列：GPU部署、測試、交付客戶時點認列，資料中心／data hall上線後開始按合約期間直線認列。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Liani的問題明確點名一個「五季、10個百分點的持續性下滑」，而非單一季度的雜訊——Nitin的回答只解釋了「爬坡機組拖累毛利」這個機制本身，卻沒有處理「為何這個拖累是持續向下的趨勢、而非圍繞某個穩態水準的雜訊」這個更深的子問題。若拖累純粹來自基期中固定比例的新機組，理論上應收斂到穩態阻力、而非逐季創新低；要嘛是新增產能相對既有基期的比例正在放大（與「近一年active power近乎三倍」的說法一致，但Nitin從未把這個算術明確攤開驗證趨勢確實完全由組合效應解釋），要嘛是除時間點效應外還有其他非時間性因素同時牽動毛利（例如新約定價、組件通膨直接進了COGS）——這兩種可能性從未被管理層自己拆解區分。此外，Liani問題中「technology and infrastructure expenses成長快於營收」這個具體子點，在Nitin的回答中完全沒有被單獨回應。Mike事後補充的規模類比（50MW基期+300MW新增 vs. 2,000MW基期+50MW新增）更直接觸及「這是規模尚小階段的暫時現象」這個論點，但同樣沒有給出毛利率（而非調整後營業利益率）本身預期何時止跌回升的具體時間點。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Tal Liani:</b> "Gross margin has been going down throughout. I look at the last five quarters. We started at 78%, now 68%... I see also technology and infrastructure expenses went up more than revenue growth, so what are the drivers for that to improve?"<br><br><b>Nitin Agrawal:</b> "The margin dynamic in our business is predominantly timing-based, not economic... By month three... contribution margins stabilize, normalizing to a ramped contract in about mid-20s."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Amit Daryanani（Evercore）</div><div class="qa-topic">推論運算占耗電比重 × 2026財測組件採購鎖定比例</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">（1）推論（inference）佔目前已安裝基礎設施耗電量的比重成長多快？這對H100/A100等機種未來12-18個月的使用率與訂約經濟性有何意涵？（2）對應$12B-$13B的2026年營收財測，GPU、記憶體等組件採購目前鎖定了多少比例，還有多少必須持續確保？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">（1）Mike坦言無法精確歸屬個別運算屬於訓練或推論（基礎設施可雙向彈性調度），但用耗電量反推估計「已明顯超過50%」用於推論，並描述客戶「先用最先進機種訓練、再把該機種下放用於推論、同時引進下一代機種訓練」的世代接力模式，藉此解釋H100/A100/H200為何全數售罄且價格持續上升。（2）「絕大多數」2026年所需組件已經鎖定——採購單已下、基礎設施與電力已確保。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">（1）的「明顯超過50%」是本場法說會少數真正給出方向性數字的回答，值得正面記錄，但Mike自己也承認這是用耗電量反推的估計法（「這一直在變動」），而非按工作負載計量的精確歸屬，數字應視為方向性而非精確值。（2）相對明顯是本場最值得標記的迴避之一：Daryanani明確問的是「多少比例」，Mike給的是「絕大多數」這種程度副詞，沒有任何百分比——對照管理層在法說會其他地方對能給數字的項目都毫不吝嗇給出精確百分比（backlog未來24個月佔36%、四年內佔75%、逾90%保留實例客戶採用兩項以上產品、75%用三項以上、2027年ARR逾75%已簽約等），偏偏在「組件採購鎖定比例」這個Keith Weiss開場就點名是本季股價逆風主因的問題上，管理層選擇不給對應精確數字——這種「該給數字的地方選擇性不給」的模式本身就是一種訊號。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Amit Daryanani:</b> "As you think about the $12 billion-$13 billion in revenues for calendar 2026, how much of component procurement is locked in already... versus you still have to work your way and get those things locked in?"<br><br><b>Mike Intrator:</b> "The overwhelming majority of it is locked in already, right? For 2026, as we said, we are virtually sold out."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Nehal Chokshi（Northland Capital Markets）</div><div class="qa-topic">單季新增簽約電力節奏放緩 × Allocate用詞與未分配容量池增減</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">（1）本季新增400MW簽約電力，雖較上季200MW回升，但仍低於2025年2Q/3Q時600-700MW/季的節奏——長期而言，每季合理的新增電力節奏該怎麼估？（2）用backlog反推：約$100B backlog大略對應約2GW已簽約容量，總簽約容量3.4-3.5GW，故約還有1.4GW待「分配」——用「allocate」而非「sell」是否準確？這個可分配容量池，相較一季前是在擴大還是縮小？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">（1）Mike拒絕給出具體每季數字，強調管線「非常、非常龐大」，重申過去12個月累計2GW，並提出自建資料中心作為除第三方租賃外的新槓桿。（2）同意「allocate」用詞準確，將其定位為「需求遠超供給、可以挑選客戶」的稀有處境，但把問題後半段（容量池增減）轉向一個新論點——電力已經不是唯一瓶頸，人力、記憶體、儲存才是——未直接回答容量池本身是擴大還是縮小。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Chokshi的（1）明確點出一個與「需求爆棚、全面售罄」敘事略顯矛盾的具體數據——本季400MW雖季增，但仍明顯低於2025年2Q/3Q高峰的600-700MW/季，Mike的回答完全沒有處理「為何節奏仍低於去年高峰」這個減速本身，而是用「過去12個月累計2GW」這種變動較平滑、掩蓋單季節奏波動的統計數字帶過。（2）的兩段式提問中，Mike只回答了前半（用詞是否準確），後半「容量池是擴大還是縮小」始終未獲正面回應，反而拋出一個新論點——「限制因素不只是電力，還有人力、記憶體、儲存」——這個新論點本身頗值得單獨留意（等於管理層主動承認瓶頸正從單一的「電力」擴散到多個面向），但因為是在迴避原問題的過程中順帶提及，既沒有被進一步量化，Chokshi也未追問，就這樣被輕輕帶過收尾。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Nehal Chokshi:</b> "That's up from 200 MW in 2Q 2025, but below the 600-700 MW per quarter in 2Q and 3Q 2025... what's kind of like the right way to think about how much incremental power you can bring in each quarter?" / "...is the amount to allocate or sell... increasing or decreasing relative to a quarter ago?"<br><br><b>Mike Intrator:</b> "There's no exact number that I can give you... the limiting factor isn't just power, it's labor, it's memory, it's storage..."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Event Deep-Dive Panel (triple quadrant) -->
+  <div id="panel-special" class="panel">
+    <div class="section-title">特殊事件 A：DDTL 4.0／5.0 投資級融資機制</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>DDTL 4.0規模達$8.5B，號稱史上首筆以HPC基礎設施擔保的投資級delayed draw term loan</li>
+          <li>三大信評機構（Moody's、Fitch、DBRS）均給予A-等效評等；隱含融資成本低於6%，且認購倍數充分超額</li>
+          <li>年初至今合計已取得逾$20B債務與股權資本；法說會後至今（Q2迄今）又新增逾$10B</li>
+          <li>Q1加權平均負債成本較2023-2025累計壓縮約600個基點，2026年迄今再壓縮約80個基點</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限／結構</h4>
+        <ul>
+          <li>非追索母公司（non-recourse to CoreWeave Inc.）</li>
+          <li>資本僅於資料中心真正營運化時才動撥（delayed-draw結構，貼合部署時程、避免資金閒置carry）</li>
+          <li>內建ABS式動撥條款：合約穩定化後可再動用額外$1B</li>
+          <li>除自我攤還的合約擔保債務與OEM供應商融資外，2029年前無到期債務</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾／生態綁定</h4>
+        <ul>
+          <li>Q1同時完成$2B股權募資，法說會描述為「與NVIDIA關係擴大有關」</li>
+          <li>法說會後隨即定價DDTL 5.0（首筆於公開貸款市場聯貸的DDTL），專用於融資OpenAI與Cohere合約，定價較初始行銷區間再收窄50個基點</li>
+          <li>管理層稱「已為現有OpenAI承諾取得全部所需融資」——即特定客戶的算力交付能力已與特定debt facility直接掛鉤</li>
+          <li>S&amp;P將企業評等展望由穩定上調至正向；Jane Street另追加$1B策略性投資</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>「史上首筆」的宣稱為管理層自述，法說會未引用任何獨立第三方驗證來源；10-Q本文亦未見Moody's/Fitch/DBRS評等字樣（10-Q正文通常不會逐筆覆述個別債券發行的信評結果，屬常見揭露慣例，非可疑訊號，但也代表評等細節目前僅能以法說會口頭揭露為準）</li>
+          <li>$2B股權募資「與NVIDIA關係擴大有關」的確切結構（NVIDIA是否為直接認股方）未在法說會說明，10-Q關係人交易附註待確認</li>
+          <li>非追索、逐約專案融資模式若成為「新常態」，合併資產負債表的總槓桿、各facility到期牆全貌，法說會僅片段揭露個別交易，完整負債結構仍待10-Q負債附註逐筆核對</li>
+          <li>⚑ <strong>部分澄清</strong>：「已為OpenAI全部承諾取得融資」所指的合約規模，10-Q已具名揭露OpenAI合約總額約$6.5B（合約期至2031年）——DDTL 5.0規模與此數字的對應關係仍待進一步核對，但至少客戶合約本身的量級已可交叉驗證，不再是完全的黑箱</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">融資結構演進：從一般企業信用到HPC資產專案融資</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>2023–2025<br>WACD累計壓縮約600bp</div>
+        <div class="band-marker target" style="left:50%;"><div class="dot"></div>DDTL 4.0（本季）<br>首筆投資級、A-評等、非追索</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>DDTL 5.0（法說會後）<br>公開市場聯貸，較區間再收窄50bp</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>早期：一般企業信用逐步壓低成本</span>
+        <span><span class="sw" style="background:#2563eb;"></span>本季：首筆投資級評等、非追索、契約掛鉤</span>
+        <span><span class="sw" style="background:#15803d;"></span>季後：擴大到公開聯貸市場，定價續收窄</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">⚑ 融資成本壓縮的軌跡本身相當扎實可驗證（連續多筆facility定價收窄、信評展望上調），但每一步都伴隨「與特定客戶合約掛鉤」的結構（DDTL 5.0明確綁定OpenAI/Cohere），代表CoreWeave的資產負債表正在從單一企業信用，演變為一系列可拆解的專案融資組合——好處是風險隔離、壞處是總體槓桿與到期牆的全貌更難從法說會口頭揭露一次看清，見「尚待驗證」欄。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">特殊事件 B：NVIDIA關係擴大與5GW容量選項</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>5GW的機會性擴充空間，對比CoreWeave 2030年8GW active power目標，佔比達62.5%</li>
+          <li>對比之下，過去12個月CoreWeave已「獨立於NVIDIA」取得2GW，本季400MW</li>
+          <li>CoreWeave軟體方案取得NVIDIA正式「參考架構」認證</li>
+          <li>Q1同時完成$2B股權募資，法說會描述為「與NVIDIA關係擴大有關」</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限／結構</h4>
+        <ul>
+          <li>5GW的具體機制（選擇權／優先取得權／與GPU供應排序的連動）法說會中未說明</li>
+          <li>未揭露5GW的定價、期限、或觸發條件</li>
+          <li>「參考架構」認證屬技術／市場驗證性質，非直接財務承諾</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾／生態綁定</h4>
+        <ul>
+          <li>NVIDIA同時是CoreWeave最主要的GPU供應商、策略夥伴，及（可能透過$2B募資）股權關係人——三重身分疊加</li>
+          <li>CoreWeave GPU機隊（A100/H100/H200/L40S）全線漲價、接近全數售罄，NVIDIA供貨排序對CoreWeave營運槓桿有直接影響</li>
+          <li>管理層將5GW定位為「加速取得基礎設施」的選項，隱含未來可能進一步依賴NVIDIA的資源或背書</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>$2B募資中NVIDIA的確切角色（直接認股 vs. 巧合時點的公開發行）——10-Q股權與關係人交易附註待查</li>
+          <li>Mike在同一段回答中先強調NVIDIA關係「本季有重大進展」、後又強調CoreWeave「完全不需要NVIDIA或任何人的支持」即可取得2GW/400MW——兩種敘事並存但未自我調和，見Q&amp;A Tab · Keith Weiss</li>
+          <li>5GW選擇權是否對CoreWeave有任何財務對價或排他性承諾，未揭露</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">簽約電力 → NVIDIA機會性選項 → 2030主動電力目標</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:70%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>3.5GW+<br>目前已簽約（本季+400MW）</div>
+        <div class="band-marker target" style="left:62%;"><div class="dot"></div>5GW<br>NVIDIA機會性選項（機制未揭露）</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>8GW<br>2030年主動電力目標</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>已簽約容量（實際、可追蹤）</span>
+        <span><span class="sw" style="background:#2563eb;"></span>NVIDIA選項（規模最大，但條件未知）</span>
+        <span><span class="sw" style="background:#15803d;"></span>長期目標（2030年）</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">5GW選項的數字大小本身即等同於整個2030年目標的六成以上——這使它成為理解CoreWeave長期產能路徑時無法忽略的單一最大變數，但法說會對其機制、定價、觸發條件的說明遠遠少於其數字量級應得的篇幅。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">特殊事件 C：Meta／Anthropic新客戶簽約</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>Anthropic本季新增為客戶（支援Claude模型家族開發與部署）</li>
+          <li>Meta「多筆新訂單」，含4月初宣布的$21B協議——⚑ <strong>已於10-Q交叉確認為真實數字</strong></li>
+          <li>⚑ <strong>新確認</strong>：10-Q另具名揭露OpenAI合約總額約$6.5B、合約期至2031年——法說會通篇未提及此一具體金額</li>
+          <li>「全球四大頂尖AI模型開發商」現皆為CoreWeave客戶，海外前10大AI領導廠商中9家亦是；Q1整體新簽約規模逾$40B，backlog成長至近$100B（近乎4倍YoY）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限／結構</h4>
+        <ul>
+          <li>Meta $21B協議於4月初宣布——落在Q1季度結束（3/31）之後，屬於季後事件</li>
+          <li>OpenAI合約期至2031年，是目前唯一有明確終止年份可查的大型客戶合約</li>
+          <li>Anthropic未揭露具體簽約金額或年期（相較之下，同季Jane Street明確揭露「+$6B」）；新客戶承諾「多數計入2027年目標」，隱含近兩年才會實質貢獻營收</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾／生態綁定</h4>
+        <ul>
+          <li>⚑ <strong>本季最重要的單一新發現</strong>：10-Q揭露前兩大客戶合計占比約65%——對照具名的兩大客戶正是OpenAI（$6.5B/2031）與Meta（$21B），可推知這兩者合計即撐起營收／backlog約三分之二</li>
+          <li>10大客戶各自承諾至少$1B以上支出（法說會口徑）；OpenAI、Cohere合約由DDTL 5.0專案融資支持，形成資本與客戶收入的連動循環</li>
+          <li>金融服務垂直（Jane Street、Hudson River Trading）backlog已approaching $10B；物理AI／太空計算垂直（World Labs、PhysicsX、Sunday Robotics）已surpassed $1B——但兩者規模相較65%集中度而言僅是零頭</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>⚑ <strong>關鍵落差</strong>：Anthropic、Cohere、Jane Street、Hudson River Trading——法說會用來佐證「客戶多元化」的四個名字，10-Q正文全數未提及。可能是各自規模低於具名揭露門檻（支持「長尾但真實」的多元化），也可能是65%集中度下這些客戶目前貢獻確實微小——兩種解讀都指向同一個結論：多元化敘事目前僅有法說會口頭佐證，尚未有正式財報文件對應</li>
+          <li>Meta $21B協議是否已計入法說會揭露的$99.4B backlog數字，或屬季後增量，10-Q季後事件附註待進一步確認</li>
+          <li>65%集中度的計算基礎（營收或backlog）、以及是否OpenAI與Meta各自占比，待完整10-Q客戶集中度附註引註後補上精確拆分</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">立場對照：客戶多元化＋高度集中並存 對CoreWeave vs. 對AI實驗室客戶</div>
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>對 CoreWeave</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>客戶多元化降低對單一實驗室依賴——金融服務、物理AI等新垂直已分別達$10B、$1B+規模</li>
+          <li>四大頂尖模型商全數上車，強化平台不可或缺的市場地位</li>
+          <li>Q1單季新簽約逾$40B，印證需求廣度而非僅集中一兩筆大單</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>最大的個別新聞（Meta $21B）與最具名的新客戶（Anthropic）均未揭露具體合約年期或明確backlog貢獻拆分</li>
+          <li>10大客戶各自≥$1B的高度集中結構下，任一家實驗室商業化不如預期都可能對backlog產生非線性衝擊</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4>對 AI實驗室客戶（Meta／Anthropic／OpenAI／Cohere）</h4>
+        <div class="pro">利</div>
+        <ul>
+          <li>透過CoreWeave取得專屬產能與DDTL專案融資支持的供給保障，不必自建資料中心即可鎖定多年期運算資源</li>
+          <li>參與CoreWeave的訂單規模越大，議價籌碼（如優先分配、客製條款）可能越強</li>
+        </ul>
+        <div class="con">弊</div>
+        <ul>
+          <li>OpenAI／Cohere的算力供給實質上與CoreWeave自身的舉債能力綁定（DDTL 5.0專案融資）——若CoreWeave融資環境轉弱，可能回頭影響其對這些實驗室的交付能力或條件</li>
+          <li>接受「allocate」式的稀缺分配邏輯，意味議價地位部分取決於CoreWeave主觀認定其「策略重要性」，而非單純市場定價</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問：盡職調查式追問清單（涵蓋三大事件）</h4>
+      <ol>
+        <li>DDTL 4.0／5.0非追索、逐約專案融資結構下，CoreWeave對外部投資人揭露的合併負債總額、槓桿比率、以及各筆DDTL到期時程分別是多少？「新常態」的contract-linked融資模式，長期是否會讓CoreWeave的資產負債表演變成一系列彼此獨立的專案融資組合，而非傳統企業信用可比較的槓桿指標？</li>
+        <li>$2B股權募資「與NVIDIA關係擴大有關」的確切結構是什麼——NVIDIA是直接認股方，還是巧合時點的公開發行？NVIDIA同時身兼CoreWeave的GPU供應商、策略夥伴、（可能的）股權投資人與5GW容量選項的另一方，這種多重身分是否構成需要揭露的關係人交易或潛在利益衝突？</li>
+        <li>Meta $21B協議於4月初（Q1季末後）才宣布，是否已計入本季揭露的$99.4B backlog，還是屬於Q2起才認列的增量？管理層在描述backlog成長時，是否曾將季後才簽的合約與季內數字並列陳述而未明確切割時點？</li>
+        <li>400MW的本季新增簽約電力，相較2025年2Q/3Q的600-700MW/季高峰仍有落差——這個節奏放緩，是需求端降溫，還是資料中心供給端（電力、土地、勞動力）的暫時性瓶頸？管理層被追問「可分配容量池是否正在縮小」時並未正面回答，這個缺口應優先在下一季法說會追問。</li>
+        <li>Nehal Chokshi問答中段管理層首度承認「限制因素不只是電力，還有人力、記憶體、儲存」——這是否代表CoreWeave的擴張瓶頸正從單一、可用資本解決的「電力」問題，擴散到更難用金錢直接解決的人力／供應鏈問題？</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Technology & Platform Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">營收backlog組成（FY2026 Q1，依垂直產業）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">AI實驗室／大型客戶／其他企業<br><span style="font-weight:400;color:#888;">（法說會未進一步拆分的殘值）</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#2563eb;">≈$87.9B</div></div>
+        <div class="rev-val">≈88%／backlog殘值，未單獨揭露</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">金融服務</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:12%; background:#15803d;">≈$10B</div></div>
+        <div class="rev-val">≈10%／Jane Street +$6B（Q1）、Hudson River Trading</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">物理AI／太空計算</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:2%; background:#c2600a;">$1B+</div></div>
+        <div class="rev-val">≈1%+／World Labs、PhysicsX、Sunday Robotics</div>
+      </div>
+    </div>
+    <p style="color:#888; font-size:11px; margin-top:-8px; margin-bottom:16px;">⚑ 條狀長度以backlog總額$99.4B為100%基準做相對比例示意。金融服務與物理AI是法說會唯二具體揭露美元規模的垂直（分別"approaching $10B"與"surpassed $1B"），其餘近九成backlog（AI實驗室、其他企業）僅有質化描述（「四大模型商」「9/10大AI領導廠商」「10位客戶各≥$1B」），沒有加總金額或個別佔比——見風險矩陣。</p>
+
+    <div class="section-title">GPU機隊世代接續狀態</div>
+    <div class="band-card" style="margin-bottom:16px;">
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>Ampere／Hopper<br>全線漲價、largely sold out</div>
+        <div class="band-marker target" style="left:50%;"><div class="dot"></div>Blackwell<br>持續放量，同樣漲價／sold out</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>Vera Rubin（次世代）<br>已簽署初始deals</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>舊世代（A100/H100/H200/L40S，全數售罄、價格上升）</span>
+        <span><span class="sw" style="background:#2563eb;"></span>當前世代（Blackwell，同步放量與漲價）</span>
+        <span><span class="sw" style="background:#15803d;"></span>次世代（Vera Rubin，剛簽初始合約）</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">⚑ 與AMZN/NVDA等同業一樣，CoreWeave呈現「多世代同時供不應求」的模式——但差異在於CoreWeave並非晶片設計商，而是承接全系列NVIDIA機種並以「訓練→推論下放→引進新世代訓練」的世代接力邏輯延續舊機種需求壽命，這正是Q&amp;A Tab · Amit Daryanani問答中Mike所描述的機制。</p>
+    </div>
+
+    <div class="section-title">四大平台支柱（各自朝$100M+ ARR邁進）</div>
+    <div class="tech-grid">
+      <div class="tech-card gpu">
+        <h4>GPU雲端核心</h4>
+        <ul>
+          <li>A100/H100/H200/L40S平均定價本季QoQ全數上升，近期產能largely sold out</li>
+          <li>Ampere、Hopper、Blackwell三代機種法說會口頭確認全數接近售罄</li>
+          <li>本季簽署初始Vera Rubin（次世代）合約，同時持續變現Blackwell/Hopper/Ampere產能</li>
+          <li>Flex Reservations與現貨定價（spot pricing）本季新推出，上線即雙雙超額認購</li>
+        </ul>
+      </div>
+      <div class="tech-card storage">
+        <h4>儲存（Storage）</h4>
+        <ul>
+          <li>管理層描述「持續快速倍增」，目標年底前ARR突破$100M</li>
+          <li>AI Object Storage＋零出口費（zero-egress）為基礎，疊加CoreWeave Interconnect（與Google Cloud合作）</li>
+          <li>逾90%的保留實例客戶採用兩項以上產品、逾75%採用三項以上——儲存是最常見的第二／第三項採用產品之一</li>
+        </ul>
+      </div>
+      <div class="tech-card software">
+        <h4>軟體（Software）</h4>
+        <ul>
+          <li>目標年底前ARR突破$100M；本季推出CoreWeave Trust Center協助企業客戶滿足安全／合規需求</li>
+          <li>CoreWeave Omni：可將完整雲端堆疊部署於客戶自有資料中心與自有GPU上——雲端、企業、主權客戶（sovereign customers）初期詢問度高</li>
+          <li>SUNK Anywhere、LOTA Cross-Cloud等多雲工具，定位為降低客戶多雲管理摩擦、同時提高CoreWeave錢包佔比</li>
+          <li>案例：Perplexity（推論工作負載）＋Weights &amp; Biases（訓練／微調）；Advaita Bio（生物數據分析，工作流程由數週壓縮至數分鐘）</li>
+        </ul>
+      </div>
+      <div class="tech-card other">
+        <h4>CPU＋網路（Networking）</h4>
+        <ul>
+          <li>CPU、網路業務各自目標年底前ARR突破$100M，管理層稱成長軌跡與儲存業務相近</li>
+          <li>五個平台層（GPU/CPU/儲存/網路/軟體）需協同運作才能「解鎖加速運算的完整潛力」——是CoreWeave多產品交叉銷售敘事的核心論點</li>
+          <li>近50座資料中心的建置複雜度涵蓋電力、冷卻、網路、伺服器、軟體編排五個階段，CPU與網路是其中直接受益於資料中心規模擴張的兩個層面</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">因果鏈敘事：客戶多元化 → backlog暴衝 → 電力擴張 → 融資創新 → 利潤率反轉論</div>
+      <div class="flow-chain">
+        <span class="node">企業／AI實驗室需求多元化（金融服務＋物理AI新垂直，疊加四大模型商全數上車）</span><span class="arrow">→</span>
+        <span class="node">Q1單季新簽約破紀錄逾$40B</span><span class="arrow">→</span>
+        <span class="node">backlog衝上近$100B（近乎4倍YoY）</span><span class="arrow">→</span>
+        <span class="node">帶動3.5GW+簽約電力、突破1GW active power里程碑</span><span class="arrow">→</span>
+        <span class="node">DDTL投資級融資創新壓低資金成本（WACD年初至今再降80bp）</span><span class="arrow">→</span>
+        <span class="node">資金投入CapEx轉換為營收產能</span><span class="arrow">→</span>
+        <span class="node">調整後營業利益率Q1觸底（1%），管理層預期Q2跨Q3反轉、Q4回到兩位數低段</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">這條因果鏈末端的「利潤率反轉」尚未在毛利率數字上獲得印證——過去五季毛利率持續下滑（78%→68%，見Q&amp;A Tab · Tal Liani），管理層將其歸因為「時間點而非經濟結構問題」，但趨勢的持續下滑本身是否純粹是爬坡機組組合效應，管理層從未自己完整拆解驗證，仍待下季或10-Q毛利明細檢視是否另有非時間性因素同時牽動。</p>
+    </div>
+  </div>
+
+  <!-- Supply Chain Panel -->
+  <div id="panel-supply" class="panel">
+    <div class="card">
+      <div class="card-title">供應鏈揭露程度說明</div>
+      <p>⚑ <strong>信心度：中，部分已於10-Q交叉確認</strong>。SEC研究因當次工作階段配額中斷，尚未取得完整10-K/10-Q供應鏈條文與正式引註（accession number／Item編號），下方內容仍以法說會逐字稿為主要依據，但以下兩點已由10-Q文本交叉確認、可信度上調：（1）NVIDIA為CoreWeave<strong>唯一</strong>GPU供應商，10-Q並具名提及<strong>台積電（TSMC）</strong>為NVIDIA自身的上游供應商（即CoreWeave風險因子語言中出現的次級供應鏈節點）；（2）10-Q客戶集中度附註揭露<strong>前兩大客戶合計占比約65%</strong>，可推知即為OpenAI與Meta（見特殊事件Tab C）。其餘項目——「近50座資料中心、單一資料中心供應商佔比不逾17%」、「多家OEM、ODM」、電力／公用事業供應商——仍僅為法說會口頭揭露，未具名個別廠商，待完整10-K Item 1／Item 1A覆核後更新信心度。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">供應鏈關係圖：上游投入 → CoreWeave → 下游營收backlog（依垂直產業，FY2026 Q1）</div>
+      <div id="sankeyEmbed_crwv1" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"tsmc","label":"台積電TSMC（NVIDIA的晶圓代工廠，10-Q具名揭露為次級供應鏈節點）","color":"#94a3b8"},{"id":"nvidia","label":"NVIDIA（⚑ 10-Q確認為CoreWeave唯一GPU供應商）","color":"#2563eb"},{"id":"dc","label":"資料中心租賃夥伴（近50處，單一佔比≤17%，未具名）","color":"#2563eb"},{"id":"oem","label":"OEM/ODM伺服器製造商（多家，未具名）","color":"#2563eb"},{"id":"power","label":"電力／公用事業供應商（未具名）","color":"#2563eb"},{"id":"crwv","label":"CoreWeave（FY26 Q1營收 $2.1B，backlog $99.4B）","color":"#1a1a2e"},{"id":"top2","label":"⚑ 前兩大客戶：OpenAI（$6.5B/2031）＋Meta（$21B）合計≈65%（10-Q確認）","color":"#b91c4a"},{"id":"ailabs","label":"其他AI實驗室／企業客戶（backlog殘值，未進一步拆分）","color":"#7b7e97"},{"id":"fin","label":"金融服務（Jane Street／Hudson River Trading，backlog≈$10B，法說會口頭揭露，未見於10-Q）","color":"#15803d"},{"id":"physai","label":"物理AI／太空計算（World Labs／PhysicsX／Sunday Robotics，backlog≈$1B+，法說會口頭揭露）","color":"#c2600a"}],"links":[{"source":"tsmc","target":"nvidia","value":300},{"source":"nvidia","target":"crwv","value":300},{"source":"dc","target":"crwv","value":280},{"source":"oem","target":"crwv","value":220},{"source":"power","target":"crwv","value":180},{"source":"crwv","target":"top2","value":646},{"source":"crwv","target":"ailabs","value":233},{"source":"crwv","target":"fin","value":100},{"source":"crwv","target":"physai","value":15}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_crwv1");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">⚑ 上游（TSMC／NVIDIA／資料中心／OEM-ODM／電力）節點的流量寬度為示意性相對權重，實際採購金額未揭露；NVIDIA為10-Q確認的唯一GPU供應商，TSMC則是10-Q提及、身處NVIDIA自身供應鏈的次級節點。下游「前兩大客戶」節點（OpenAI＋Meta≈65%）為10-Q客戶集中度附註的真實比例換算；金融服務與物理AI為法說會口頭揭露的具體backlog數字；「其他AI實驗室／企業客戶」為backlog總額扣除前述三者後的殘值，非公司官方拆分口徑，且如特殊事件Tab C所述，Anthropic／Cohere／Jane Street／Hudson River均未見於10-Q正文。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">供應鏈相關發言摘錄（法說會逐字稿）</div>
+      <ul>
+        <li>「我們在約50座資料中心營運，沒有任何單一資料中心供應商佔我們active infrastructure逾17%。」——Mike Intrator，回應Brent Thill提問</li>
+        <li>「我們有多家OEM、ODM……真正建立起橫跨所有必要交付組件的韌性供應鏈。」——Mike Intrator</li>
+        <li>「近6-9個月，特定組件出現明顯短缺，價格上升，這是整個產業的共同現象。」——Mike Intrator，回應Keith Weiss提問</li>
+        <li>「限制因素不只是電力，還有人力、記憶體、儲存。」——Mike Intrator，回應Nehal Chokshi提問（見風險矩陣）</li>
+      </ul>
+      <p style="margin-top:8px;">⚑ 以上四段均為法說會口頭發言，未見對應的10-K／10-Q書面揭露佐證（待SEC Cross-Reference Notes補齊後更新）。相較於晶片製造商10-K慣常揭露的具名供應商與集中度百分比，CoreWeave目前對外揭露的供應鏈語言仍以定性描述為主。</p>
+    </div>
+  </div>
+
+  <!-- Risk Matrix Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高（10-Q證實，本季最重要發現）</div>
+      <div class="risk-text">
+        <div class="risk-title">前兩大客戶集中度達65%：10-Q正式數字與法說會「客戶多元化」敘事之間的落差</div>
+        10-Q客戶集中度附註揭露前兩大客戶合計占比約65%；10-Q正文具名的大型客戶恰好就是OpenAI（合約總額約$6.5B，期至2031年）與Meta（$21B，與法說會一致），可推知這兩家合計即撐起營收／backlog約三分之二。相對地，法說會用來說明「風險正在分散」的整套敘事——金融服務垂直（Jane Street本季+$6B、Hudson River Trading）、物理AI垂直（World Labs、PhysicsX、Sunday Robotics）、本季新增的Anthropic、以及DDTL 5.0提及的Cohere——這些名字全數<strong>未出現</strong>在10-Q正文中。這不必然代表管理層誤導（各客戶規模很可能確實低於具名揭露門檻），但意味著「多元化」目前僅是法說會口頭敘事，尚未有正式財報文件對應；真正決定CoreWeave集中度風險的數字，是尚未在法說會中被任何分析師提及或追問的65%。此為SEC研究因工作階段配額中斷前，唯一已完整核實的重大發現，其餘章節多數風險判斷仍待完整10-Q/10-K覆核。
+        <div class="risk-source">來源：CoreWeave FY2026 Q1 10-Q客戶集中度附註（SEC EDGAR，經中斷前研究確認，完整accession number待補）；交叉比對法說會Mike Intrator多段客戶敘事（特殊事件Tab C）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">NVIDIA三重身分＋DDTL專案融資的自我循環：供應商、（可能的）股東、容量選項對手方彼此疊加</div>
+        本季CoreWeave同時揭露：（1）NVIDIA持續作為GPU核心供應商，機隊全線漲價、接近售罄；（2）CoreWeave軟體取得NVIDIA「參考架構」認證，並取得5GW「機會性」容量選項；（3）Q1完成$2B股權募資，法說會描述為「與NVIDIA關係擴大有關」，但確切結構未說明。與此同時，CoreWeave透過DDTL 5.0專案融資支持對OpenAI、Cohere的算力交付。把這幾條線放在一起看：NVIDIA、CoreWeave、AI實驗室客戶之間可能形成「供應商即潛在股東、客戶的算力交付又依賴對供應商生態圈相關契約的舉債」的多重綁定結構——任一環節（NVIDIA GPU供貨排序、AI實驗室商業化進度、CoreWeave自身舉債能力）出現變化，都可能透過這個網絡放大衝擊。管理層在法說會中是分開、片段式地描述這三件事，從未主動並陳解釋其相互關係，也未說明$2B募資的真實交易對手結構。
+        <div class="risk-source">來源：法說會Mike Intrator／Nitin Agrawal多段發言交叉比對（Q&amp;A Tab · Keith Weiss；特殊事件Tab B／A）；10-Q關係人交易與股權附註待SEC Cross-Reference Notes核實</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">毛利率五連降（78%→68%）的解釋尚未被管理層自證，唯一被明確追問的長趨勢問題</div>
+        Tal Liani指出過去五季毛利率從78%持續降至68%，管理層將其完全歸因於「爬坡機組時間點效應」（新產能上線初期只有成本、沒有營收）。但這個解釋能否完整說明「持續性下滑趨勢」本身、而非僅是「存在一次性拖累」，管理層從未攤開算式驗證——若拖累純屬固定比例新機組的組合效應，理論上應收斂至穩態阻力而非逐季創新低；究竟是新增產能佔基期比例持續放大（近一年active power近乎三倍成長，使該解釋仍屬合理），或另有組件通膨、新約定價等非時間性因素同時牽動COGS，尚無法從法說會口頭揭露中區分。Liani同時提出的「技術與基礎設施費用成長快於營收」子問題，管理層完全未回應。
+        <div class="risk-source">來源：法說會Tal Liani提問／Nitin Agrawal＋Mike Intrator回應（Q&amp;A Tab）；實際毛利明細待10-Q損益表核實</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">組件採購鎖定比例——管理層全場唯一選擇不給精確數字的關鍵問題，且正是股價逆風主因</div>
+        Keith Weiss開場即點名組件成本上升是本季法說會後股價逆風的主因之一；Amit Daryanani進一步直接問「2026年$12B-$13B營收財測對應的組件採購，鎖定了多少比例」，管理層僅答「絕大多數」，無任何精確百分比。對照管理層在法說會其他地方對能給數字的項目毫不吝嗇（backlog未來24個月佔36%、四年內佔75%、逾90%保留實例客戶採用兩項以上產品、75%採用三項以上、2027年ARR逾75%已簽約等），偏偏在這個被兩位不同分析師先後點名的敏感問題上不給精確數字，模式本身具有訊號意義。
+        <div class="risk-source">來源：法說會Amit Daryanani提問／Mike Intrator回應，交叉比對Keith Weiss開場發言（Q&amp;A Tab）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">單季新增簽約電力節奏明顯低於2025年高峰，「可分配容量池增減」的具體提問未獲正面回答</div>
+        本季新增400MW簽約電力，雖較上季200MW回升，但仍明顯低於2025年2Q/3Q時600-700MW/季的節奏。Nehal Chokshi進一步追問約1.4GW「可分配」容量池相較一季前是擴大還是縮小，管理層未直接回答，反而順帶承認「限制因素已從電力擴散到人力、記憶體、儲存」——這個瓶頸擴散的admission本身未被進一步量化或追問，值得下季法說會優先跟進。
+        <div class="risk-source">來源：法說會Nehal Chokshi提問／Mike Intrator回應（Q&amp;A Tab）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Meta $21B協議與Anthropic新約的揭露時點／backlog計入口徑不明</div>
+        Meta $21B協議於Q1季末（3/31）後的4月初才宣布，法說會敘事將其與Q1內數字並陳描述，但未明確說明是否已計入揭露的$99.4B backlog；Anthropic新約則完全未揭露金額或年期，兩者均須待10-Q季後事件／backlog附註核實。
+        <div class="risk-source">來源：法說會Mike Intrator開場發言（特殊事件Tab C）；10-Q Note待SEC Cross-Reference Notes核實</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">DDTL非追索專案融資模式若成為「新常態」，合併負債總額與到期牆全貌需逐筆核對10-Q才能還原</div>
+        管理層稱DDTL式的非追索、逐約專案融資「將成為CoreWeave的新常態」，但法說會僅片段揭露個別facility（4.0與5.0）的條款，未提供合併口徑的總負債、槓桿比率、或完整到期時程表。
+        <div class="risk-source">來源：法說會Nitin Agrawal發言（特殊事件Tab A）；10-Q負債附註待SEC Cross-Reference Notes核實</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低（待驗證）</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人交易訊號——待Form 4申報資料核實</div>
+        本節待SEC EDGAR Form 4申報資料（法說會前後窗口）核實後補齊，包括CEO Mike Intrator、CFO Nitin Agrawal於印刷前後是否有10b5-1計畫例行賣股、RSU既得處置、或任何非例行性大額交易。
+        <div class="risk-source">來源：SEC EDGAR Form 4申報，CIK待確認（見SEC Cross-Reference Notes）</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

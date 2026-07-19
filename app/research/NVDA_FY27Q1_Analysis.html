@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA (NVDA) — FY2027 Q1 — Q&A / Vera CPU×Anthropic×Rubin宣稱 / 技術與產品線 / 供應鏈 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height:1.5; }
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #2563eb; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #eff6ff; }
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+  .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.65; color: #333; margin-bottom:6px; }
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap:10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink:0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-text { line-height: 1.65; color: #333; }
+  .flag-box { background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #7a2020; }
+  .flag-box.obs { background: #eff6ff; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+  .flag-box.obs .q-text { color: #1e3a6e; }
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+  .sca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .sca-box { border-radius: 8px; padding: 12px; }
+  .sca-box.blue { background: #eff6ff; border: 1px solid #a9c9f5; }
+  .sca-box.green { background: #f0fdf4; border: 1px solid #a3dab1; }
+  .sca-box.orange { background: #fff7ed; border: 1px solid #f0c090; }
+  .sca-box.red { background: #fef2f2; border: 1px solid #f0aab8; }
+  .sca-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .sca-box.blue h4 { color: #1d4ed8; }
+  .sca-box.green h4 { color: #15803d; }
+  .sca-box.orange h4 { color: #c2600a; }
+  .sca-box.red h4 { color: #b91c4a; }
+  .sca-box ul { padding-left: 15px; }
+  .sca-box li { margin-bottom: 4px; line-height: 1.55; color: #333; }
+  .dd-list { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:14px 14px 14px 30px; margin-bottom:12px; }
+  .dd-list li { margin-bottom:8px; line-height:1.6; color:#333; }
+  .stance-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 240px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; white-space:nowrap; }
+  .rev-val { width: 130px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid; }
+  .tech-card.dram { background: #eff6ff; border-color: #a9c9f5; }
+  .tech-card.nand { background: #f5f3ff; border-color: #c7b8f0; }
+  .tech-card.hbm { background: #f0fdf4; border-color: #a3dab1; }
+  .tech-card.pkg { background: #fff7ed; border-color: #f0c090; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 15px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.55; color: #333; }
+  .chain-layer { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px; margin-bottom:10px; }
+  .chain-layer h4 { font-size:12px; font-weight:700; margin-bottom:8px; }
+  .chain-up h4 { color:#c2600a; } .chain-core h4 { color:#2563eb; } .chain-down h4 { color:#15803d; }
+  .node { display:inline-block; background:#f5f6fa; border:1px solid #d5d9e2; border-radius:6px; padding:5px 9px; margin:3px 4px 3px 0; font-size:12px; }
+  .node .src { color:#94a3b8; font-size:10px; }
+  .conf-hi { border-left:3px solid #15803d; } .conf-mid { border-left:3px solid #c2600a; } .conf-lo { border-left:3px solid #b91c4a; }
+  .price-band { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-bar { height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; margin: 6px 0; font-size: 12px; font-weight: 600; }
+  .band-ceiling { background: #eff6ff; color: #1d4ed8; border: 1px solid #a9c9f5; }
+  .band-floor { background: #fff7ed; color: #c2600a; border: 1px solid #f0c090; }
+  .band-label { font-size: 11px; color: #888; margin: 2px 0; }
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border: 1px solid #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border: 1px solid #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border: 1px solid #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.65; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap:wrap; }
+  .stat-box { flex: 1; min-width:120px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .note { font-size:11px; color:#94a3b8; margin-top:6px; line-height:1.5; }
+  .footer { font-size:11px; color:#94a3b8; text-align:center; margin-top:20px; }
+  table { width:100%; border-collapse: collapse; }
+  th { color:#555; background:#f5f6fa; padding:7px 10px; text-align:right; font-size:11px; border-bottom:1px solid #e2e4ea; }
+  th:first-child { text-align:left; }
+  td { padding:7px 10px; border-bottom:1px solid #eee; text-align:right; color:#333; }
+  td:first-child { text-align:left; }
+  td strong, th:first-child { color:#1a1a2e; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="NVIDIA Corporation (NVDA) — FY2027 Q1 Earnings Call Analysis">NVIDIA Corporation（NVDA）— FY2027 Q1 法說會分析</h1>
+  <p data-en="Q&amp;A Analysis / Special Item Deep Dive (Vera CPU × Anthropic × Vera Rubin Claims) / Technology &amp; Product Lines / Supply Chain / Risk Matrix &nbsp;·&nbsp; Call Date: May 20, 2026 &nbsp;·&nbsp; Cross-referenced with the 10-Q for the period ended Apr 26, 2026, the FY2026 10-K, and Form 4 filings">Q&A 問答分析 / 本季特殊事件深度拆解（Vera CPU × Anthropic × Vera Rubin 宣稱）/ 技術與產品線 / 供應鏈 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年5月20日 &nbsp;·&nbsp; 交叉比對截至2026/4/26財季10-Q、FY2026 10-K 與 Form 4 內部人申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="Special Item: Vera CPU × Anthropic × Rubin Claims" onclick="sw('special',this)">特殊事件深度拆解</div>
+    <div class="tab" data-en="Technology &amp; Product Lines" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" data-en="Supply Chain" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- ============ Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl" data-en="Core Questions">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl" data-en="Logic Gaps">邏輯缺口</div></div>
+    </div>
+    <div class="card" style="border-left:3px solid #2563eb;">
+      <div class="card-title" data-en="Read This Tab As Rhetoric-Detection, Not Summary">本 tab 的本質是話術偵測，不是摘要</div>
+      <p data-en="One device dominates this call: whenever an analyst asks for a number — a market-share percentage, a TAM breakdown, an incremental-revenue estimate, a ramp-slope comparison — management substitutes a near-verbatim redeployment of the same two-part market segmentation speech (hyperscale vs. the fragmented &quot;AI native / enterprise / industrial / sovereign&quot; category). That framework is genuinely informative the first time (Joseph Moore's question) and is repeated, almost word for word, in at least four subsequent answers as a way to avoid quantifying share, growth-rate ceilings, or TAM composition. Separately, Jensen opens the Q&amp;A by correcting Colette's own prepared-remarks dividend figure live on air — worth noting as its own footnote.">整場法說會有一個主導手法：只要分析師要一個數字——市佔率、TAM 拆分、增量營收估計、爬坡斜率比較——管理層就用幾乎逐字相同的兩段式市場區隔說法（hyperscale vs. 碎片化的「AI native／企業／工業／主權」類別）取代回答。這套框架第一次出現時（Joseph Moore 的問題）確實有資訊量，但之後至少四個回答中幾乎逐字重複，作為迴避量化份額、成長率上限或 TAM 組成的手法。另外，Jensen 在 Q&A 一開場就當場更正 Colette 開場白中自己講錯的股利數字——值得另外記一筆。</p>
+    </div>
+
+    <!-- Joseph Moore -->
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Joseph Moore (Morgan Stanley)">Joseph Moore（Morgan Stanley）</div><div class="qa-topic" data-en="Why the segmentation change? Competitive differences? The CPU surprise">為何重分類財務揭露？兩區塊競爭差異？CPU 數字意外之處</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Three parts in one turn: (1) what drove the new Data Center / Edge Computing (Hyperscale / ACIE) segmentation, and the philosophy behind it? (2) any competitive differences between the two segments? (3) how does the &quot;surprising&quot; CPU revenue number split across the two segments?">一次問了三件事：(1) 是什麼促成新的 Data Center／Edge Computing（Hyperscale／ACIE）分類？背後哲學為何？(2) 兩區塊之間有沒有競爭面的差異？(3) 「意外」的 CPU 營收數字在兩區塊間如何分配？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Jensen opens by correcting Colette: the dividend increase is $0.01→$0.25, not $0.01→$0.20 as she said in prepared remarks. Then a long philosophical answer: AI and computing are diverse across language/industry, where it runs (hyperscale cloud, AI natives, enterprise/industrial on-prem, edge), and how it's governed (public cloud vs. regulated/confidential/sovereign). NVIDIA is unique in building every layer via &quot;extreme co-design.&quot; Segments reduce to three buckets: hyperscale clouds (accelerate their workloads + bring ecosystem business); AI natives/enterprise/industrial on-prem/sovereign AI (fastest-growing, needs the full stack because building it alone is hard); and the robotic edge (cars, robots, AI-RAN base stations — &quot;personal AI&quot;). Hyperscale go-to-market is simple (5–6 customers); the rest addresses ~250,000 companies and needs NVIDIA's full acceleration-library breadth.">Jensen 開場先更正 Colette：股利調升是 $0.01→$0.25，不是她開場白講的 $0.01→$0.20。接著給了一段很長的哲學性回答：AI 與運算力在語言／產業、運行位置（hyperscale 雲端、AI native、企業／工業自建、邊緣）、治理方式（公有雲 vs. 受監管／機密／主權）上都很多元。NVIDIA 獨特之處在於用「極致協同設計」把每一層都自己做。分類收斂成三塊：hyperscale 雲端（加速其工作負載＋帶去生態系業務）；AI native／企業／工業自建／主權 AI（成長最快，因為單靠自己蓋很難，需要完整堆疊）；機器人邊緣（車、機器人、AI-RAN 基地台——「個人 AI」）。Hyperscale 的市場開發簡單（5–6 個客戶）；其餘要面對約 25 萬家公司，需要 NVIDIA 完整的加速函式庫廣度。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="Of three sub-questions, only #1 (philosophy) got a full answer. #2 (competitive differences between segments) was never addressed — no named competitor was compared segment-by-segment. #3 (how the CPU surprise splits across segments) was not answered at all in this turn; a partial answer only surfaces four questions later (Vivek Arya). The live on-air correction of the CFO's own prepared-remarks number is unusual — either a scripting error in Colette's script or a last-minute board decision inserted after her remarks were finalized.">三個子問題中只有 #1（哲學）得到完整回答。#2（兩區塊的競爭差異）完全沒被處理——沒有逐區塊比較任何具名競爭者。#3（CPU 意外數字如何分配到兩區塊）在這一輪完全沒答，要到四題之後（Vivek Arya）才浮現部分答案。當場更正 CFO 自己開場白數字是不尋常的一幕——要嘛是 Colette 講稿本身寫錯，要嘛是開場白定稿後才拍板的臨時董事會決議。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Moore:</b> "What drove the change in segmentation? What's the philosophy behind giving us the numbers that way? Can you talk about any competitive differences between the two segments and this kind of surprising CPU number that you talked about? How do you see that across the two segments as well?"<br><br><b>Huang:</b> "First of all, Colette meant to say we're increasing our quarterly dividends from $0.01-$0.25... on the segmentation and the description of the business. We wanted you to understand our business better. AI is very diverse and computing is diverse... The easiest go-to-market, of course, is the hyperscaler, because there are only five or six of them. The rest of them, the rest of the industry represents a couple of 250,000 companies around the world."</div></div>
+      </div>
+    </div>
+
+    <!-- Ben Reitzes -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Ben Reitzes (Melius Research)">Ben Reitzes（Melius Research）</div><div class="qa-topic" data-en="Grow faster than hyperscaler capex? Does hyperscaler capex keep growing?">是否比 hyperscaler capex 成長更快？capex 是否延續成長？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Data Center ex-China grew ~120% this quarter, guided ~100%; hyperscaler capex is forecast to grow 90–100% this year. Is the goal for NVIDIA to grow faster than hyperscaler capex — do you endorse that view — and do you still see hyperscaler capex growing after this year?">Data Center ex-China 本季成長約 120%、guidance 約 100%；hyperscaler capex 預估今年成長 90–100%。NVIDIA 的目標是否是成長快於 hyperscaler capex——你是否認同這個看法——且今年之後你是否仍看好 hyperscaler capex 繼續成長？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="&quot;We should be growing faster than hyperscale capex&quot; — confirmed directly. Reason given: the two-category framework again. Category 1 (hyperscale, $1T this year, growing toward $3–4T) — &quot;compute is revenue, compute is profit.&quot; Category 2 (AI natives, enterprise/industrial on-prem, sovereign — hundreds/thousands of companies) growing even faster in the long run. Notes NVIDIA is &quot;growing share in the hyperscalers&quot; because of the new Anthropic partnership.">「我們應該要比 hyperscale capex 成長更快」——直接確認。給的理由又是那套雙區塊框架。第一類（hyperscale，今年 $1兆，朝 $3–4兆邁進）——「運算力就是營收，運算力就是利潤」。第二類（AI native、企業／工業自建、主權——數百上千家公司）長期成長更快。並提到 NVIDIA 因為新的 Anthropic 夥伴關係正在「hyperscaler 內部搶份額」。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="The directional confirmation (&quot;yes, faster&quot;) is real, but the actual number asked for — a 2027-and-beyond hyperscaler capex growth rate — gets zero figure, only the same $1T→$3–4T-by-decade-end range already stated in prepared remarks. &quot;Growing share in the hyperscalers&quot; from Anthropic is asserted with no share percentage attached, so it cannot be checked against Ben's own 100–120% growth figures.">方向性確認（「對，更快」）是真的，但實際被問到的數字——2027 年以後的 hyperscaler capex 成長率——完全沒有給出，只重複了開場白已經講過的 $1兆→年代末 $3–4兆區間。「在 hyperscaler 內部因 Anthropic 搶份額」被斷言卻沒附任何份額百分比，因此無法對照 Ben 自己提出的 100–120% 成長數字驗證。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Reitzes:</b> "Your Data Center business, ex-China, grew about 120% in the quarter, and then you're guiding about 100%. CapEx at the hyperscalers is forecast by many... to grow 90%-100% this year... is the goal for the company to grow faster than hyperscaler CapEx?"<br><br><b>Huang:</b> "We should be growing faster than hyperscale CapEx. The reason for that is illustrated by the segmentation that I just described... If you look at that segment, it started growing after the AI ecosystem developed in the hyperscale."</div></div>
+      </div>
+    </div>
+
+    <!-- CJ Muse -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="CJ Muse (Cantor Fitzgerald)">CJ Muse（Cantor Fitzgerald）</div><div class="qa-topic" data-en="Vera Rubin's effect on inference market share into late 2026/2027">Vera Rubin 對 2026 末／2027 推論市佔的影響</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="With investors focused on inference market share, how do Vera Rubin and &quot;Extreme Co-Engineering&quot; affect NVIDIA's inference share trajectory into late 2026 and 2027?">投資人聚焦推論市佔，Vera Rubin 與「極致協同工程」如何影響 NVIDIA 進入 2026 年末與 2027 年的推論市佔軌跡？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="&quot;We are growing share in inference, and we're growing share very quickly.&quot; Cites a growing roster of frontier model companies (Cursor, Perplexity, TML, Reflection) and the new Anthropic partnership (&quot;coverage of Anthropic has been largely zero until just recently&quot;), secured across Azure/AWS/CoreWeave. Claims Vera Rubin &quot;will surely be more successful than even Grace Blackwell.&quot; Redeploys the two-category framework again: in the fragmented second category, &quot;the vast majority of that is NVIDIA.&quot;">「我們在推論上正在拿下份額，而且拿得很快。」引用日益增加的前沿模型公司名單（Cursor、Perplexity、TML、Reflection）與全新 Anthropic 夥伴關係（「對 Anthropic 的覆蓋率直到最近都幾乎是零」），已在 Azure／AWS／CoreWeave 上敲定。宣稱 Vera Rubin「肯定會比 Grace Blackwell 還要成功」。再度搬出雙區塊框架：在碎片化的第二類別中，「絕大多數是 NVIDIA」。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="Zero market-share percentage is given anywhere — current or projected — despite the question asking directly for a share trajectory. &quot;Vast majority is NVIDIA&quot; is an unfalsifiable claim with no named competitor comparison or number. This is the fourth of eight answers to redeploy the two/three-category segmentation speech nearly verbatim as a pivot device rather than answering the specific question asked.">從頭到尾沒有給出任何市佔率百分比——無論現況或預測——儘管問題直接要求份額軌跡。「絕大多數是 NVIDIA」是一個無法證偽的宣稱，沒有具名競爭者比較或數字。這是八個回答中第四次幾乎逐字重複雙／三區塊分類說法，作為轉移話題的手法、而非回答被問到的具體問題。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Muse:</b> "How do you see Vera Rubin and your Extreme Co-Engineering impacting your share of the inference market as we look into late 2026, 2027?"<br><br><b>Huang:</b> "We are growing share and inference, and we're growing share and inference very quickly... Vera Rubin's going to be even more successful than Grace Blackwell at this point... That segment, all of the inference, 100% of that, the vast majority of that is NVIDIA."</div></div>
+      </div>
+    </div>
+
+    <!-- Timothy Arcuri -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Timothy Arcuri (UBS)">Timothy Arcuri（UBS）</div><div class="qa-topic" data-en="LPX/CPX traction — the unmentioned Groq connection">LPX／CPX 進展——通話中未提及的 Groq 關聯</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="What traction is NVIDIA getting with LPX (previously discussed as up to ~20% of the fast-inference market), and how does it fit the broader platform strategy?">NVIDIA 在 LPX 上的進展如何（先前討論過快速推論市場最高約 20%），這如何融入更廣的平台策略？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="LPX is designed for low latency / high token rate, but has low throughput, low model-size capacity, and weaker context processing — not broad use cases, intended for a narrow set of premium, high-token-rate services. &quot;LPX and other SRAM-based decode focused... accelerators will be a niche product for some time to come.&quot; &quot;Today it's a lot less than 20%,&quot; possibly reaching 20% &quot;someday.&quot;">LPX 是為低延遲／高 token 速率設計，但吞吐量低、模型容量小、上下文處理能力較弱——不是廣泛使用情境，鎖定小群高 token 速率的高端服務。「LPX 與其他 SRAM 型、聚焦解碼的……加速器在未來一段時間內仍會是利基產品。」「今天遠低於 20%」，「某天」或許能到 20%。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Undisclosed Connection">⚑ 未點破的關聯</div><div class="q-text" data-en="NVIDIA's own Q1 FY2027 10-Q (Note 7) discloses $3,957M of &quot;accrued purchase consideration... related to the Groq, Inc. non-exclusive license agreement,&quot; and the FY2026 10-K risk factors describe a Groq IP license that &quot;required significant, nonrefundable payments.&quot; Groq is publicly known for SRAM-based, low-latency inference chips — the exact profile Jensen just described for &quot;LPX.&quot; The call never mentions Groq by name in this answer. This is not necessarily a disclosure violation (the license is disclosed in filings), but the verbal framing of LPX as a purely in-house NVIDIA product line, without connecting it to a nearly $4B licensed-IP liability sitting on the balance sheet, is worth flagging as an analytical gap between what's said on the call and what's in the filing made the same day.">NVIDIA 自己的 Q1 FY2027 10-Q（附註 7）揭露 $3,957百萬「應計採購對價……與 Groq, Inc. 非專屬授權協議有關」，FY2026 10-K 風險因子也描述了一項「要求重大、不可退還款項」的 Groq IP 授權。Groq 以 SRAM 型、低延遲推論晶片聞名於外界——正是 Jensen 剛才描述「LPX」的特徵。這段回答中通話全程未提及 Groq。這未必構成揭露違規（授權本身有在申報文件揭露），但把 LPX 描述成純內部 NVIDIA 產品線、卻不連結資產負債表上近 $40億的授權 IP 負債，是通話所述與同一天申報文件之間值得標記的分析缺口。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Arcuri:</b> "I wanted to ask about the traction you're getting with some of these custom merchant things you're doing, stuff like CPX and LPX... you've talked before about fast instance being, I think, 20% of the market."<br><br><b>Huang:</b> "The LPX is designed for low latency and high token rate, but its throughput is low... I expect that LPX and other SRAM-based decode focused, high token rate generated, focused accelerators will be a niche product for some time to come... I think today it's a lot less than 20%."</div></div>
+      </div>
+    </div>
+
+    <!-- Vivek Arya -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Vivek Arya (Bank of America Securities)">Vivek Arya（Bank of America Securities）</div><div class="qa-topic" data-en="Is CPU incremental or cannibalistic? Does $20B include Vera Rubin?">CPU 是增量還是蠶食？$200億是否已含 Vera Rubin？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Is agentic-driven CPU demand incremental workload, or does it cannibalize what the GPU would otherwise do? And is the $20B figure standalone Vera CPU, or already included in the Vera Rubin number?">agentic 驅動的 CPU 需求是增量工作負載，還是蠶食原本 GPU 該做的事？$200億數字是獨立 Vera CPU，還是已含在 Vera Rubin 數字裡？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Confirms directly: the $20B is standalone CPU only. Lays out four Vera use cases: (1) bundled with Rubin GPUs (~2 GPUs per Vera), (2) standalone Vera CPU, (3) Vera + CX9 for storage software stacks, (4) Vera + CX9 for confidential computing/security. Explains agentic framing: an agent's &quot;harness&quot; (orchestration, I/O, tool use, memory management) runs on CPU; &quot;thinking&quot; (inference) runs on GPU; billions of future agents spinning off sub-agents each need both.">直接確認：$200億是純獨立 CPU。列出 Vera 的四種使用情境：(1) 與 Rubin GPU 綁售（約每台 Vera 配 2 顆 GPU）、(2) 獨立 Vera CPU、(3) Vera + CX9 用於儲存軟體堆疊、(4) Vera + CX9 用於機密運算／安全。解釋 agentic 框架：代理的「harness」（協調、IO、工具使用、記憶體管理）跑在 CPU 上；「思考」（推論）跑在 GPU 上；未來數十億個會衍生子代理的代理，兩者都需要。</div></div>
+        <div class="flag-box obs"><div class="q-label" data-en="⚑ Observation — Most Directly Answered Question of the Call">⚑ 觀察——本場最直接被回答的一題</div><div class="q-text" data-en="Unlike most of the call, the scope question ($20B standalone, four use cases) gets a clean, checkable answer. But &quot;incremental vs. cannibalistic&quot; — the actual binary Vivek asked — is never explicitly resolved; Jensen's harness/thinking framework implies incrementality (new economy needs both) without confirming that existing customers aren't reallocating GPU budget toward CPU spend. Worth noting as a partial-not-full answer, in contrast to the fully-answered scope half.">與整場通話多數段落不同，範圍問題（$200億純獨立、四種使用情境）得到乾淨、可查核的回答。但 Vivek 實際問的二選一——「增量 vs. 蠶食」——始終未被明確回答；Jensen 的 harness／thinking 框架暗示增量性（新經濟兩者都需要），卻未確認既有客戶是否正把 GPU 預算挪去 CPU 支出。值得記為「部分回答」而非「完整回答」，與範圍那一半的完整回答形成對比。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Arya:</b> "Is this cannibalizing what the GPU would have done otherwise? ...the $20 billion number that you gave, is that for standalone Vera CPUs or is that already included in that Vera as part of Vera Rubin?"<br><br><b>Huang:</b> "The $20 billion is for a standalone CPU. Remember, we have Vera is used in three ways, four ways... All of the thinking happens on GPUs. All of the orchestration essentially runs on CPUs."</div></div>
+      </div>
+    </div>
+
+    <!-- Stacy Rasgon -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Stacy Rasgon (Bernstein Research)">Stacy Rasgon（Bernstein Research）</div><div class="qa-topic" data-en="Where do neoclouds sit? Will the AI-cloud category grow faster?">Neocloud 歸在哪一類？AI cloud 類別會成長更快嗎？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Are neoclouds classified under Hyperscale or under the AI-cloud (ACIE) category? The two look about the same magnitude now — is management suggesting the AI-cloud side will grow faster going forward?">Neocloud 是歸在 Hyperscale 還是 AI cloud（ACIE）類別？兩者現在看起來規模差不多——管理層是否在暗示 AI cloud 那側今後會成長更快？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="&quot;Correct&quot; — one-word confirmation that neoclouds sit in the second (AI-cloud) category. Explains why: AI natives don't design their own chips, can't assemble a data center from unrelated parts, have near-zero tolerance for time-to-first-token, and need the most &quot;rentable&quot; architecture — which is NVIDIA's. Expects the second category to have developed slower than hyperscale historically (hyperscale had better data-center capability and consumer-app tolerance for imperfection) but to be structurally larger long-term (&quot;$50 trillion–$80 trillion of the world's economy&quot;). &quot;I expect the second category to still grow faster, but both are going to grow incredibly fast.&quot;">「對」——一個字確認 neocloud 歸在第二類（AI cloud）。解釋原因：AI native 不自己設計晶片，無法拼湊零件組出資料中心，對「首個 token 生成時間」幾乎零容忍，需要最「可租用」的架構——也就是 NVIDIA 的架構。預期第二類過去發展比 hyperscale 慢（hyperscale 有較好的資料中心能力與對消費應用不完美的容忍度），但長期結構上更大（「世界經濟的 $50兆–$80兆」）。「我預期第二類仍會成長更快，但兩者都會非常快速地成長。」</div></div>
+        <div class="flag-box obs"><div class="q-label" data-en="⚑ Observation — A Real Number Sat Right There, Unused">⚑ 觀察——現成數字就在手邊卻沒被引用</div><div class="q-text" data-en="This is a relatively direct answer — the categorization is confirmed cleanly, and a growth-rate direction (second category grows faster) is given. But Stacy's premise (&quot;both about the same magnitude now&quot;) is never confirmed with the actual figures, even though the very 10-Q filed that same day shows it almost exactly: Hyperscale $37,869M vs. ACIE $37,377M — a 1.3% gap. Simply citing those two numbers would have directly answered the question with data management already possessed; instead it stayed qualitative.">這是相對直接的一個回答——分類被乾淨地確認，也給了成長方向（第二類更快）。但 Stacy 的前提（「現在規模差不多」）從未被實際數字證實，儘管同一天申報的 10-Q 幾乎精確顯示了這點：Hyperscale $378.69億 vs. ACIE $373.77億，差距僅 1.3%。單純引用這兩個數字就能用管理層手上已有的資料直接回答問題；結果仍停留在定性層次。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Rasgon:</b> "Where do you put the neoclouds across those two segments?... They're both about the same magnitude now."<br><br><b>Huang:</b> "Correct."<br><br><b>Huang (cont.):</b> "I expect the second category to still grow faster, but both are going to grow incredibly fast."</div></div>
+      </div>
+    </div>
+
+    <!-- James Schneider -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="James Schneider (Goldman Sachs)">James Schneider（Goldman Sachs）</div><div class="qa-topic" data-en="Sizing the upside above the $1T Blackwell/Rubin visibility">$1兆 Blackwell/Rubin 可見度之外的上行如何量化</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="The $1T Blackwell/Rubin revenue visibility (from GTC) excludes LPX, Rubin CPX, and Vera CPU racks. Will Vera CPU be the biggest source of upside above that $1T? Are there other product combinations that expand the addressable TAM further?">GTC 提到的 $1兆 Blackwell/Rubin 營收可見度排除了 LPX、Rubin CPX 與 Vera CPU racks。Vera CPU 會是超過這 $1兆 的最大上行來源嗎？還有沒有其他產品組合能進一步擴大可觸及 TAM？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Names three incremental components: (1) continued growth in frontier-AI-model share; (2) standalone Vera CPU, not included in the $1T — &quot;I expect that to be the second largest&quot;; (3) LPX, given its SRAM architecture serves a distinct low-latency niche. Closes: the combination of Vera Rubin and LPX will &quot;address the entire spectrum of AI from pre-training to post-training to inference agentic systems.&quot;">列出三個增量成分：(1) 前沿 AI 模型份額持續成長；(2) 獨立 Vera CPU，未含在 $1兆 內——「我預期這會是第二大」；(3) LPX，其 SRAM 架構服務於獨特的低延遲利基。結尾：Vera Rubin 與 LPX 的組合將「涵蓋 AI 從預訓練到後訓練到推論 agentic 系統的整個光譜」。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="Asked explicitly to size the incremental TAM, management gives zero new dollar figures — only re-cites the already-known $20B CPU number and an ordinal ranking (&quot;second largest&quot;) with no stated total or denominator, and no ranking for #1 (frontier-share growth) or #3 (LPX) at all. This is the second time in the call (after Ben Reitzes) that a direct &quot;give us a sense of the magnitude&quot; request converts into a ranking instead of a number.">明確被要求量化增量 TAM，管理層卻沒給出任何新的美元數字——只重複已知的 $200億 CPU 數字，加上一個沒有總量或分母的序位排名（「第二大」），且對 #1（前沿份額成長）與 #3（LPX）完全沒給排名。這是本場通話第二次（繼 Ben Reitzes 之後）把直球的「請給個規模感」要求轉換成排名、而非數字。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Schneider:</b> "Could you maybe give us a sense about whether the Vera CPUs are going to be the biggest source of upside above and beyond that $1 trillion?"<br><br><b>Huang:</b> "We didn't include any Vera CPU, standalone CPU in that number. I expect that to be the second largest... The combination, we'll be able to address the entire spectrum of AI from pre-training to post-training to inference agentic systems through the combination of Vera Rubin and LPX."</div></div>
+      </div>
+    </div>
+
+    <!-- Joshua Buchalter -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Joshua Buchalter (TD Cowen)">Joshua Buchalter（TD Cowen）</div><div class="qa-topic" data-en="Will Vera Rubin ramp as fast as GB200's record ramp?">Vera Rubin 爬坡會跟 GB200 的紀錄爬坡一樣快嗎？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Colette called GB300 the fastest ramp in company history. Vera Rubin uses a similar rack but new silicon — should investors expect a similar ramp slope, or something more gradual given the new architecture?">Colette 稱 GB300 是公司史上最快的爬坡。Vera Rubin 使用類似機櫃但矽晶層是全新的——投資人該預期類似的爬坡斜率，還是因新架構而更緩和？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Colette (not Jensen) answers: &quot;hard to say at this point.&quot; Confirms production starts Q3 FY2027, ramping into Q4. Demand is &quot;already planned,&quot; with POs in place and &quot;almost all of our major customers ready to go&quot; — the gating factor is production readiness of complex systems, not demand. &quot;Q1 of next year certainly is going to be very big as well.&quot;">Colette（不是 Jensen）回答：「現階段很難說。」確認 Q3 FY2027 開始生產，Q4 進入爬坡。需求「已經規劃好」，POs 已到位，「幾乎所有主要客戶都準備就緒」——瓶頸在於複雜系統的生產就緒度，而非需求。「明年 Q1 肯定也會非常大。」</div></div>
+        <div class="flag-box obs"><div class="q-label" data-en="⚑ Observation — An Honest Hedge, Not a Rhetorical Dodge">⚑ 觀察——誠實的保留，而非話術迴避</div><div class="q-text" data-en="Unlike the segmentation-speech pattern elsewhere on this call, this is a bounded, specific hedge: Colette declines exactly one comparison (ramp slope vs. GB200) while still committing to a concrete sequence (Q3 start, Q4 ramp, big Q1 next year). Notably it's the CFO, not the CEO, fielding a product-timing question — and &quot;hard to say&quot; for a not-yet-shipped, newly-taped-out architecture is a defensible answer rather than an evasion.">與本場通話其他地方的分類話術模式不同，這是一個有界、具體的保留：Colette 只拒絕一項比較（爬坡斜率 vs. GB200），同時仍承諾了具體的時序（Q3 開始、Q4 爬坡、明年 Q1 也很大）。值得注意的是接手產品時程問題的是 CFO 而非 CEO——對一個尚未出貨、全新流片架構說「很難說」，是站得住腳的答案、而非迴避。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Buchalter:</b> "Does that mean we should expect a similar slope to the Vera Rubin ramp as the GB200, or should it be a bit more gradual given the new silicon?"<br><br><b>Kress:</b> "It's hard to say at this point what will be a faster ramp. We have demand already planned. We've got POs, we've got almost all of our major customers ready to go... Q1 of next year certainly is going to be very big as well."</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Special Item ============ -->
+  <div id="panel-special" class="panel">
+    <div class="section-title" data-en="Special Item of the Quarter: Three Narratives Building the Growth Bridge Beyond the $1T Blackwell/Rubin Number">本季特殊事件：三個共同建構「$1兆 Blackwell/Rubin 之外」成長橋接的敘事</div>
+    <div class="card"><p data-en="Vera CPU (a brand-new $200B TAM), the deepened Anthropic partnership, and the Vera Rubin vs. Blackwell 35x/10x performance claims are the three pillars management used this call to argue growth extends well past the already-huge $1T Blackwell+Rubin (2025–2027) revenue visibility reiterated in guidance. All three share a common trait: they are almost entirely verbal disclosures. Anthropic does not appear anywhere in the 10-Q filed the same day or the FY2026 10-K; Vera CPU's $200B TAM is Jensen's own figure with no third-party sizing cited; the 35x/10x Rubin claims describe a product that has not yet shipped a single production unit.">Vera CPU（全新 $200B TAM）、深化的 Anthropic 夥伴關係、以及 Vera Rubin 相對 Blackwell 的 35x/10x 效能宣稱，是管理層本場通話用來論證成長遠超越 guidance 中重申的、已經非常龐大的 $1兆 Blackwell+Rubin（2025–2027）營收可見度的三根支柱。三者有一個共同特徵：幾乎完全是口頭揭露。Anthropic 沒有出現在同一天申報的 10-Q 或 FY2026 10-K 任何一處；Vera CPU 的 $200B TAM 是 Jensen 自己的數字，沒有引用任何第三方測算；35x/10x 的 Rubin 宣稱描述的是一款尚未出貨任何生產單位的產品。</p></div>
+
+    <div class="section-title" data-en="① Vera CPU — A Brand-New $200B TAM">① Vera CPU——全新 $200B TAM</div>
+    <div class="sca-grid">
+      <div class="sca-box blue"><h4 data-en="Scale">規模</h4><ul>
+        <li data-en="Nearly $20B of total standalone CPU revenue visibility this year — confirmed as excluding any Vera bundled with Rubin GPUs.">今年近 $200億 純獨立 CPU 營收可見度——已確認不含與 Rubin GPU 綁售的 Vera。</li>
+        <li data-en="Opens a $200B TAM &quot;we have never addressed before&quot; (Colette, prepared remarks).">開啟一個「我們從未觸及過」的 $200B TAM（Colette 開場白）。</li>
+        <li data-en="Four use cases: bundled w/ Rubin (~2:1), standalone CPU, Vera+CX9 storage stack, Vera+CX9 confidential computing.">四種使用情境：與 Rubin 綁售（約 2:1）、獨立 CPU、Vera+CX9 儲存堆疊、Vera+CX9 機密運算。</li>
+        <li data-en="Custom Arm cores, co-designed with Rubin GPUs and NVLink; vs. x86: 1.5x perf/core, 2x perf/watt, 4x density/rack.">客製 Arm 核心，與 Rubin GPU、NVLink 協同設計；相對 x86：每核效能 1.5x、效能/瓦 2x、機櫃密度 4x。</li>
+      </ul></div>
+      <div class="sca-box green"><h4 data-en="Timing">期限</h4><ul>
+        <li data-en="Production shipments of Vera Rubin (incl. Vera) start H2 FY2027, specifically Q3.">Vera Rubin（含 Vera）生產出貨於 FY2027 下半年開始，具體為 Q3。</li>
+        <li data-en="Ramping into Q4 FY2027; &quot;Q1 of next year... very big as well&quot; (Colette).">Q4 FY2027 進入爬坡；「明年 Q1……也會非常大」（Colette）。</li>
+        <li data-en="$20B visibility is for &quot;this year&quot; — implying a fast on-ramp from a Q3 start.">$200億 可見度是「今年」——暗示從 Q3 開始就要快速起量。</li>
+      </ul></div>
+      <div class="sca-box orange"><h4 data-en="Financial Commitment / Cost">財務承諾／成本</h4><ul>
+        <li data-en="Not broken out as a separate P&amp;L line in the 10-Q/10-K — folded into Compute &amp; Networking.">10-Q／10-K 中未拆出獨立損益項目——併入 Compute & Networking。</li>
+        <li data-en="&quot;We'll be supply constrained throughout the entire life of Vera Rubin&quot; (Jensen) — Vera CPU shares TSMC/CoWoS/HBM capacity with the already sold-out Rubin GPU line.">「Vera Rubin 整個生命週期我們都會處於供給受限」（Jensen）——Vera CPU 與已經售罄的 Rubin GPU 產線共用 TSMC／CoWoS／HBM 產能。</li>
+      </ul></div>
+      <div class="sca-box red"><h4 data-en="Yet To Be Verified">尚待驗證</h4><ul>
+        <li data-en="The $200B TAM figure has no cited third-party market-sizing methodology.">$200B TAM 數字沒有引用任何第三方市場測算方法論。</li>
+        <li data-en="&quot;Second largest&quot; upside ranking (James Schneider Q&amp;A) has no stated total or denominator.">「第二大」上行排名（James Schneider 問答）沒有標明總量或分母。</li>
+        <li data-en="Whether shared fab/packaging constraints mean fast CPU growth necessarily comes at the expense of GPU allocation, or vice versa.">共用晶圓／封裝產能是否意味著 CPU 快速成長必然以排擠 GPU 配額為代價，或反之。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title" data-en="② The Deepened Anthropic Partnership">② 深化的 Anthropic 夥伴關係</div>
+    <div class="sca-grid">
+      <div class="sca-box blue"><h4 data-en="Scale">規模</h4><ul>
+        <li data-en="&quot;Our coverage of Anthropic has been largely zero until just recently&quot; (Jensen) — a newly-activated relationship.">「我們對 Anthropic 的覆蓋率直到最近都幾乎是零」（Jensen）——一段剛啟動的關係。</li>
+        <li data-en="Anthropic joins the named frontier-lab roster alongside OpenAI, Gemini, Meta, MSL, Microsoft AI, TML, Reflection, Perplexity, Cursor.">Anthropic 加入具名前沿實驗室名單，與 OpenAI、Gemini、Meta、MSL、Microsoft AI、TML、Reflection、Perplexity、Cursor 並列。</li>
+        <li data-en="Compute delivered via third-party clouds: AWS, Azure, CoreWeave, and &quot;SpaceXAI&quot; (as stated on the call — verify against xAI's actual corporate structure).">運算力透過第三方雲端交付：AWS、Azure、CoreWeave 與「SpaceXAI」（通話原文如此——需與 xAI 實際公司結構核對）。</li>
+      </ul></div>
+      <div class="sca-box green"><h4 data-en="Timing">期限</h4><ul>
+        <li data-en="Capacity bring-online described only as &quot;this year and next year&quot; — no specific dates or milestones.">產能上線僅描述為「今年與明年」——沒有具體日期或里程碑。</li>
+      </ul></div>
+      <div class="sca-box orange"><h4 data-en="Financial Commitment / Cost">財務承諾／成本</h4><ul>
+        <li data-en="Zero dollar figure given anywhere on the call for the Anthropic arrangement.">通話全程沒有為 Anthropic 這項安排給出任何美元數字。</li>
+        <li data-en="Not mentioned anywhere in the 10-Q filed the same day, nor in the FY2026 10-K (filed Feb 2026, which predates the deepened deal) — a purely verbal disclosure with no SEC paper trail yet.">同一天申報的 10-Q 完全未提及，FY2026 10-K（2026 年 2 月申報，早於此次深化合作）也未提及——目前純屬口頭揭露，尚無 SEC 文件紀錄。</li>
+      </ul></div>
+      <div class="sca-box red"><h4 data-en="Yet To Be Verified">尚待驗證</h4><ul>
+        <li data-en="Total contract value and duration.">合約總金額與期限。</li>
+        <li data-en="Whether this is incremental demand, or capacity re-allocated from existing hyperscaler commitments — since it runs on AWS/Azure/CoreWeave, it is demand pull-through for those hyperscalers' own NVIDIA orders, not a direct NVIDIA-Anthropic transaction.">這是增量需求，還是從既有 hyperscaler 承諾中重新分配的產能——由於運行在 AWS／Azure／CoreWeave 上，這其實是拉動這些 hyperscaler 自身 NVIDIA 訂單的需求，而非 NVIDIA 與 Anthropic 之間的直接交易。</li>
+        <li data-en="&quot;SpaceXAI&quot; corporate identity — the phrase recurs identically twice in the transcript, so unlikely a one-off slip, but not otherwise independently attested.">「SpaceXAI」的公司身分——這個詞在逐字稿中一字不差重複出現兩次，不太像單純口誤，但目前沒有其他獨立來源可核實。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title" data-en="③ Vera Rubin vs. Blackwell — the 35x / 10x Claims">③ Vera Rubin 對 Blackwell——35x／10x 宣稱</div>
+    <div class="price-band">
+      <div class="band-label" data-en="Rubin vs. Blackwell — Colette's prepared-remarks claim">Rubin 對 Blackwell——Colette 開場白宣稱</div>
+      <div class="band-bar band-ceiling"><span data-en="UP TO 35× — inference throughput">最高 35× ——推論吞吐量</span><span data-en="7 chips × 5 racks, pre-shipment claim">7 種晶片 × 5 種機櫃，尚未出貨的宣稱</span></div>
+      <div class="band-bar band-floor"><span data-en="UP TO 10× — AI factory revenue">最高 10× ——AI factory 營收</span><span data-en="No disclosed workload/utilization methodology">未揭露工作負載／使用率測算方法</span></div>
+      <div class="band-label" data-en="For comparison — MLPerf, already-shipping Blackwell Ultra/GB300 (real benchmark data, not a Rubin claim)">對照——MLPerf，已出貨的 Blackwell Ultra/GB300（真實跑分資料，非 Rubin 宣稱）</div>
+      <div style="text-align:center; color:#888; padding: 4px 0; font-size:12px;" data-en="2.7× throughput increase, −60% cost-per-token vs. 6 months ago — swept every MLPerf inference benchmark">2.7× 吞吐量提升、每 token 成本較 6 個月前 −60%——橫掃所有 MLPerf 推論基準測試</div>
+    </div>
+    <div class="card"><p data-en="Google's A5X bare-metal instances (up to 960,000 Rubin GPUs across multiple sites) are cited as an early-adopter reference for Rubin — but this is a capacity commitment, not a performance validation of the 35x/10x figures. Rubin production starts Q3 FY2027, which is still in the future relative to the call date; the 35x/10x claims describe a product with zero production shipments to date.">Google 的 A5X 裸機執行個體（跨多站點最高可支援 960,000 顆 Rubin GPU）被引用為 Rubin 的早期採用者參照——但這是產能承諾，不是對 35x/10x 數字的效能驗證。Rubin 生產於 FY2027 Q3 開始，相對通話日仍是未來式；35x/10x 宣稱描述的是一款迄今零生產出貨的產品。</p></div>
+
+    <div class="section-title" data-en="Core Questions — Due-Diligence Follow-ups Management Left Open">核心疑問——管理層留白的盡職調查追問</div>
+    <ol class="dd-list">
+      <li data-en="What is the actual dollar size and duration of the Anthropic compute commitment? Never stated in any form.">Anthropic 運算承諾的實際金額與期限為何？從未以任何形式揭露。</li>
+      <li data-en="Does the Vera CPU $200B TAM assume incremental fab/packaging capacity, or does it draw on the same constrained TSMC/CoWoS allocation as Blackwell/Rubin GPUs?">Vera CPU 的 $200B TAM 假設的是增量晶圓／封裝產能，還是動用與 Blackwell/Rubin GPU 相同、已受限的 TSMC／CoWoS 配額？</li>
+      <li data-en="Is the 35x inference throughput / 10x AI factory revenue claim based on real deployment data or NVIDIA's own pre-launch modeling, and under what workload/utilization assumptions?">35x 推論吞吐量／10x AI factory 營收宣稱，是基於真實部署數據還是 NVIDIA 自身的發表前建模？採用什麼工作負載／使用率假設？</li>
+      <li data-en="Since Anthropic's NVIDIA compute is provisioned through AWS/Azure/CoreWeave rather than a direct NVIDIA supply contract, how much of the &quot;Anthropic win&quot; is a demand pull-through story for those hyperscalers' own capex, versus a direct de-risking of NVIDIA's own order book?">既然 Anthropic 的 NVIDIA 運算力是透過 AWS/Azure/CoreWeave 提供、而非直接對 NVIDIA 的供應合約，「拿下 Anthropic」這個故事有多少是在拉動這些 hyperscaler 自身 capex 的需求、多少是直接降低 NVIDIA 自身訂單簿的風險？</li>
+      <li data-en="Verify &quot;SpaceXAI&quot; against xAI's actual corporate structure — the phrase recurs identically twice in the transcript.">核對「SpaceXAI」與 xAI 實際公司結構的關係——這個詞在逐字稿中一字不差出現兩次。</li>
+      <li data-en="Vera CPU racks, LPX, and Rubin CPX are all explicitly excluded from the $1T Blackwell+Rubin headline figure. As this list of excluded-but-touted product lines grows, what stops the $1T anchor from becoming a moving goalpost that always sits below whatever the newest headline number is?">Vera CPU racks、LPX、Rubin CPX 全都被明確排除在 $1兆 Blackwell+Rubin 頭條數字之外。隨著這份「被排除卻被大力宣傳」的產品清單愈來愈長，什麼能阻止 $1兆 這個錨點變成一個不斷移動、永遠低於最新頭條數字的球門？</li>
+    </ol>
+
+    <div class="section-title" data-en="Two-Sided Stance: Good for NVIDIA vs. Good for the Customer (Vera CPU &amp; Anthropic)">雙欄立場：對 NVIDIA vs 對客戶（Vera CPU 與 Anthropic）</div>
+    <div class="stance-grid">
+      <div class="sca-box blue"><h4 data-en="For NVIDIA — Upside / Risk">對 NVIDIA——利／弊</h4><ul>
+        <li data-en="↑ Genuinely new $200B TAM never previously addressed by NVIDIA.">↑ NVIDIA 從未觸及過的真正新增 $200B TAM。</li>
+        <li data-en="↑ Anthropic adds a fourth major frontier-lab anchor, reducing reliance on OpenAI alone.">↑ Anthropic 增加第四個主要前沿實驗室錨點客戶，降低對 OpenAI 單一依賴。</li>
+        <li data-en="↑ Deepens the co-design moat (Vera + Rubin + NVLink) versus merchant CPU/GPU combinations.">↑ 深化協同設計護城河（Vera + Rubin + NVLink），相對通用市售 CPU/GPU 組合。</li>
+        <li data-en="↓ CPU competes with GPU for the same constrained fab/packaging capacity — success in one may cannibalize the other's supply.">↓ CPU 與 GPU 爭奪同一批受限的晶圓／封裝產能——一方成功可能蠶食另一方的供給。</li>
+        <li data-en="↓ Anthropic's compute runs on third-party clouds — NVIDIA's claim on that revenue is indirect, contingent on those hyperscalers' own capex decisions.">↓ Anthropic 的運算力跑在第三方雲端——NVIDIA 對這塊營收的主張是間接的，取決於這些 hyperscaler 自身的 capex 決策。</li>
+      </ul></div>
+      <div class="sca-box green"><h4 data-en="For the Customer — Upside / Risk">對客戶——利／弊</h4><ul>
+        <li data-en="↑ Anthropic secures guaranteed access to scarce Blackwell/Rubin capacity across multiple clouds, de-risking its own compute roadmap.">↑ Anthropic 取得跨多雲端存取稀缺 Blackwell/Rubin 產能的保障，降低自身運算路線圖風險。</li>
+        <li data-en="↑ Hosting hyperscalers gain a committed anchor tenant justifying their own NVIDIA capex.">↑ 承載的 hyperscaler 獲得一個承諾的錨點客戶，為自身 NVIDIA capex 提供正當性。</li>
+        <li data-en="↓ Vera CPU locks customers deeper into NVIDIA's full stack (Arm cores + NVLink + CX9), raising switching costs vs. x86 alternatives.">↓ Vera CPU 讓客戶更深地綁進 NVIDIA 全端（Arm 核心＋NVLink＋CX9），提高相對 x86 替代方案的轉換成本。</li>
+        <li data-en="↓ None of the Anthropic arrangement's terms (pricing, minimum commitments, duration) are disclosed, so counterparties and investors alike cannot assess whether it is favorably priced.">↓ Anthropic 這項安排的條款（訂價、最低承諾量、期限）完全未揭露，交易對手與投資人皆無從判斷訂價是否有利。</li>
+      </ul></div>
+    </div>
+    <p class="note" data-en="Sources: Q1 FY2027 earnings call (Colette's prepared remarks on Vera/Rubin claims; Jensen's Q&amp;A answers on Anthropic, CPU scope, and LPX); 10-Q Note 7 (Groq accrual, cross-referenced in the Q&amp;A tab); 10-Q Note 13 (market-platform revenue, used for the Supply Chain tab's Sankey). Anthropic terms and the 35x/10x Rubin claims are not corroborated by any SEC filing as of this report.">資料來源：Q1 FY2027 法說會（Colette 開場白中 Vera/Rubin 宣稱；Jensen 問答中 Anthropic、CPU 範圍、LPX 的回答）；10-Q 附註 7（Groq 應計項目，於 Q&A tab 交叉引用）；10-Q 附註 13（市場平台營收，用於供應鏈 tab 的 Sankey 圖）。Anthropic 條款與 35x/10x 的 Rubin 宣稱截至本報告製作時未有任何 SEC 申報文件佐證。</p>
+  </div>
+
+  <!-- ============ Technology ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title" data-en="Revenue by Market Platform — Q1 FY2027 ($M, YoY %, share of total)">分市場平台營收 — FY2027 Q1（百萬美元、年增率、佔總營收比）</div>
+    <div class="rev-chart">
+      <div class="rev-row"><div class="rev-name" data-en="Hyperscale">Hyperscale</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:100%;background:#059669;">46%</div></div><div class="rev-val">$37,869M / +115%</div></div>
+      <div class="rev-row"><div class="rev-name" data-en="AI Clouds, Industrial &amp; Enterprise (ACIE)">AI Clouds／Industrial／Enterprise（ACIE）</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:98.7%;background:#10b981;">46%</div></div><div class="rev-val">$37,377M / +74%</div></div>
+      <div class="rev-row"><div class="rev-name" data-en="Edge Computing">Edge Computing</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:16.8%;background:#0ea5e9;">8%</div></div><div class="rev-val">$6,369M / +29%</div></div>
+    </div>
+    <p class="note" data-en="Bar width scaled to Hyperscale = 100%. This is NVIDIA's newly-adopted reporting framework this quarter (recast comparatives). Reportable-segment view (different accounting cut, same total): Compute &amp; Networking $74,550M (+88% YoY) / Graphics $7,065M (+58% YoY). Source: 10-Q Note 13.">長條寬度以 Hyperscale = 100% 縮放。這是 NVIDIA 本季新採用的報告框架（比較期已重編）。可報告部門觀點（不同會計切法、總額相同）：Compute & Networking $745.50億（+88% YoY）／Graphics $70.65億（+58% YoY）。來源：10-Q 附註 13。</p>
+    <hr class="divider">
+    <div class="section-title" data-en="The Extreme-Co-Design Stack (Four Layers)">極致協同設計堆疊（四層）</div>
+    <div class="tech-grid">
+      <div class="tech-card dram"><h4 data-en="① Data Center Compute">① 資料中心運算</h4><ul>
+        <li data-en="Blackwell (GB300, NVL72) drove the majority of Q1 shipments; Blackwell Ultra swept every MLPerf inference benchmark.">Blackwell（GB300、NVL72）驅動 Q1 多數出貨；Blackwell Ultra 橫掃所有 MLPerf 推論基準測試。</li>
+        <li data-en="Full-stack innovation: 2.7× throughput increase, −60% cost-per-token on GB300 vs. 6 months ago.">全端創新：GB300 吞吐量較 6 個月前提升 2.7×、每 token 成本 −60%。</li>
+        <li data-en="Vera Rubin: 7 purpose-built chips across 5 accelerated racks; production starts Q3 FY2027.">Vera Rubin：7 種專用晶片橫跨 5 種加速機櫃；FY2027 Q3 開始生產。</li>
+        <li data-en="$1T cumulative Blackwell+Rubin revenue visibility, 2025 through calendar 2027 (reiterated in guidance).">$1兆 Blackwell+Rubin 累計營收可見度，2025 年至 2027 年（guidance 重申）。</li>
+      </ul></div>
+      <div class="tech-card nand"><h4 data-en="② Networking">② 網通</h4><ul>
+        <li data-en="Spectrum-X (end-to-end Ethernet for AI) is now larger than all Ethernet network peers combined.">Spectrum-X（AI 專用端到端 Ethernet）現已大於所有 Ethernet 網通同業總和。</li>
+        <li data-en="InfiniBand grew &gt;4× YoY on next-gen XDR technology deployments.">InfiniBand 在下一代 XDR 技術部署下年增 &gt;4×。</li>
+        <li data-en="Data center networking revenue $15B, nearly tripled YoY (part of Compute &amp; Networking segment).">資料中心網通營收 $150億，年增近三倍（屬 Compute & Networking 部門）。</li>
+        <li data-en="NVLink72 / NVLink Fusion lets hyperscalers integrate custom CPUs/XPUs with the NVIDIA platform.">NVLink72／NVLink Fusion 讓 hyperscaler 能把客製 CPU/XPU 整合進 NVIDIA 平台。</li>
+      </ul></div>
+      <div class="tech-card hbm"><h4 data-en="③ CPU (Grace → Vera)">③ CPU（Grace → Vera）</h4><ul>
+        <li data-en="Vera: custom Arm cores, co-designed with Rubin GPUs and NVLink; 1.5× perf/core, 2× perf/watt, 4× density/rack vs. x86.">Vera：客製 Arm 核心，與 Rubin GPU、NVLink 協同設計；相對 x86 效能/核 1.5×、效能/瓦 2×、機櫃密度 4×。</li>
+        <li data-en="Four use cases: bundled w/ Rubin, standalone, Vera+CX9 storage, Vera+CX9 confidential computing (world's first end-to-end confidential-computing platform).">四種使用情境：與 Rubin 綁售、獨立、Vera+CX9 儲存、Vera+CX9 機密運算（全球首個端到端機密運算平台）。</li>
+        <li data-en="Nearly $20B standalone CPU revenue visibility this year; new $200B TAM.">今年近 $200億 純獨立 CPU 營收可見度；全新 $200B TAM。</li>
+      </ul></div>
+      <div class="tech-card pkg"><h4 data-en="④ Edge / Physical AI">④ 邊緣／實體 AI</h4><ul>
+        <li data-en="Physical AI revenue &gt;$9B over the trailing 12 months.">實體 AI 營收過去 12 個月 &gt;$90億。</li>
+        <li data-en="Uber partnership: robotaxi fleet across ~30 cities, 4 continents by 2028.">Uber 夥伴關係：2028 年前於約 30 座城市、4 大洲部署 robotaxi 車隊。</li>
+        <li data-en="Edge Computing platform: PCs, game consoles, workstations, AI-RAN base stations, robotics, automotive — $6.4B this quarter, robust Blackwell workstation demand offsetting softer consumer PC demand.">Edge Computing 平台：PC、遊戲主機、工作站、AI-RAN 基地台、機器人、車用——本季 $64億，強勁的 Blackwell 工作站需求抵銷較疲弱的消費 PC 需求。</li>
+      </ul></div>
+    </div>
+    <hr class="divider">
+    <div class="section-title" data-en="The Causal Chain Management Is Selling">管理層在推銷的因果鏈</div>
+    <div class="card"><p data-en="CPU-to-GPU workload migration (search, ads, recommenders) + the one-shot→reasoning→agentic transition since ChatGPT → revenue acceleration across &quot;the AI cake&quot; (energy, chips, infrastructure, models, applications) → hyperscale CapEx scaling from ~$1T this year toward $3–4T by decade end, plus a second, more fragmented AI-native/enterprise/industrial/sovereign category growing even faster long-term → funds the next generation of Blackwell/Rubin/Vera silicon → repeat. The bull case is that NVIDIA's &quot;extreme co-design&quot; (chips+networking+systems+software, one architecture) captures value at every layer of that stack simultaneously. The bear counter (see Risk Matrix) is that three of this quarter's growth pillars — Vera CPU's TAM, the Anthropic deal, and the Rubin 35x/10x claims — are entirely narrative-stage, unquantified in any filing, while the one number that IS filed and auditable (net income +211% YoY) is itself inflated by a large non-operating investment gain.">CPU 轉 GPU 的工作負載遷移（搜尋、廣告、推薦系統）＋自 ChatGPT 以來 one-shot→推理→agentic 的轉型 → 「AI 蛋糕」各層（能源、晶片、基礎設施、模型、應用）營收加速 → hyperscale CapEx 從今年約 $1兆 朝年代末 $3–4兆 擴大，加上更碎片化的第二類別（AI native／企業／工業／主權）長期成長更快 → 資助下一代 Blackwell／Rubin／Vera 晶片 → 循環。多頭論述是 NVIDIA 的「極致協同設計」（晶片＋網通＋系統＋軟體、單一架構）能同時在堆疊每一層都攫取價值。空頭反駁（見風險矩陣）是本季三根成長支柱——Vera CPU 的 TAM、Anthropic 交易、Rubin 的 35x/10x 宣稱——全部停留在敘事階段、沒有任何申報文件量化，而「真正」有申報、可查核的那個數字（淨利年增 +211%）本身又被一筆龐大的非營業投資利得墊高。</p></div>
+  </div>
+
+  <!-- ============ Supply Chain ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="section-title" data-en="Supply Chain — Structured From the 10-K, 10-Q &amp; Call (with source &amp; confidence notes)">供應鏈——自 10-K、10-Q 與法說會結構化整理（含出處與信心註記）</div>
+    <div class="flag-box obs" style="margin-bottom:12px;"><div class="q-label" data-en="Reading Note">解讀註記</div><div class="q-text" data-en="Unlike a diversified platform company, NVIDIA's 10-K names its foundry, memory, and assembly partners directly (Item 1, &quot;Manufacturing&quot;) — high-confidence, filing-sourced data. What it does NOT disclose is any dollar allocation across those named suppliers, so the upstream side of the Sankey diagram below uses illustrative relative weights (flagged in the chart caption), while the NVIDIA→market-platform flow uses the real Note 13 revenue split. Downstream customers remain unnamed in the filings themselves (per NVIDIA's standard practice), even though several are named on the call.">與多元化平台型公司不同，NVIDIA 的 10-K 直接點名其代工、記憶體與組裝夥伴（Item 1「Manufacturing」）——這是高信心、有申報文件來源的資料。文件「沒有」揭露的是這些具名供應商之間的金額分配，因此下方 Sankey 圖的上游側採用示意性相對權重（於圖說中標明），NVIDIA→市場平台的流向則使用附註 13 的真實營收拆分。下游客戶在申報文件本身仍未具名（NVIDIA 一貫做法），即便法說會上點名了其中幾家。</div></div>
+
+    <div class="chain-layer chain-up"><h4 data-en="▲ Upstream — Suppliers to NVIDIA">▲ 上游——NVIDIA 的供應商</h4>
+      <div class="node conf-hi" data-en="TSMC — primary logic foundry <span class='src'>10-K Item 1</span>">TSMC — 主力邏輯晶圓代工 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi" data-en="Samsung Electronics — foundry &amp; memory <span class='src'>10-K Item 1</span>">Samsung Electronics — 晶圓代工與記憶體 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi" data-en="SK Hynix — memory (incl. HBM) <span class='src'>10-K Item 1</span>">SK Hynix — 記憶體（含 HBM）<span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi" data-en="Micron Technology — memory <span class='src'>10-K Item 1</span>">Micron Technology — 記憶體 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi" data-en="Hon Hai Precision (Foxconn) — assembly/test/packaging <span class='src'>10-K Item 1</span>">Hon Hai Precision（Foxconn）— 組裝測試封裝 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi" data-en="Wistron Corporation — assembly/test/packaging <span class='src'>10-K Item 1</span>">Wistron Corporation — 組裝測試封裝 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi" data-en="Fabrinet — assembly/test/packaging <span class='src'>10-K Item 1</span>">Fabrinet — 組裝測試封裝 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-mid" data-en="Groq, Inc. — non-exclusive IP license, $3,957M accrued <span class='src'>10-Q Note 7</span>">Groq, Inc. — 非專屬 IP 授權，應計 $39.57億 <span class="src">10-Q 附註 7</span></div>
+      <div class="node conf-mid" data-en="CoWoS advanced packaging (via TSMC) <span class='src'>10-K Item 1</span>">CoWoS 先進封裝（透過 TSMC）<span class="src">10-K Item 1</span></div>
+    </div>
+
+    <div class="chain-layer chain-core"><h4 data-en="● Core — NVIDIA's Extreme-Co-Design Platform">● 核心——NVIDIA 極致協同設計平台</h4>
+      <div class="node" data-en="Compute &amp; Networking segment: $74,550M (+88% YoY)">Compute & Networking 部門：$745.50億（+88% YoY）</div>
+      <div class="node" data-en="Graphics segment: $7,065M (+58% YoY)">Graphics 部門：$70.65億（+58% YoY）</div>
+      <div class="node" data-en="~42,000 employees, 38 countries, ~80% technical roles">約 42,000 名員工，38 國，約 80% 技術職</div>
+      <div class="node" data-en="$76.7B cumulative R&amp;D investment since inception">自成立以來累計研發投資 $767億</div>
+      <p class="note" data-en="Jensen's stated differentiation: the only company that builds every layer — chips, systems, networking, software — via extreme co-design, then keeps the platform open for partners to integrate.">Jensen 明言的差異化：唯一一家透過極致協同設計自己打造每一層——晶片、系統、網通、軟體——同時保持平台開放讓夥伴整合的公司。</p>
+    </div>
+
+    <div class="chain-layer chain-down"><h4 data-en="▼ Downstream — Customers &amp; Distribution">▼ 下游——客戶與通路</h4>
+      <div class="node conf-mid" data-en="3 unnamed direct customers: 21%, 17%, 16% of Q1 FY27 revenue <span class='src'>10-Q Note 13</span>">3 家未具名直接客戶：分佔 Q1 FY27 營收 21%、17%、16% <span class="src">10-Q 附註 13</span></div>
+      <div class="node conf-mid" data-en="1 unnamed &quot;AI research and deployment company&quot; — indirect, via cloud-service purchases <span class='src'>10-Q Note 13</span>">1 家未具名「AI 研究與部署公司」——間接，透過雲端服務採購 <span class="src">10-Q 附註 13</span></div>
+      <div class="node conf-hi" data-en="Named frontier labs (call only): Anthropic, OpenAI, xAI, Meta, Mistral AI, Gemini, MSL, Microsoft AI, TML, Reflection, Perplexity, Cursor <span class='src'>call</span>">具名前沿實驗室（僅法說會）：Anthropic、OpenAI、xAI、Meta、Mistral AI、Gemini、MSL、Microsoft AI、TML、Reflection、Perplexity、Cursor <span class="src">法說會</span></div>
+      <div class="node conf-hi" data-en="Named hyperscalers/clouds (call only): Microsoft (Fairwater), AWS, Google Cloud, CoreWeave <span class='src'>call</span>">具名 hyperscaler／雲端（僅法說會）：Microsoft（Fairwater）、AWS、Google Cloud、CoreWeave <span class="src">法說會</span></div>
+      <div class="node conf-hi" data-en="Uber — robotaxi partnership, ~30 cities by 2028 <span class='src'>call</span>">Uber — robotaxi 夥伴關係，2028 年前約 30 座城市 <span class="src">法說會</span></div>
+      <div class="node conf-mid" data-en="Sovereign/national customers across ~40 countries (~$50T of GDP) <span class='src'>call</span>">主權／國家級客戶遍及約 40 國（約 $50兆 GDP）<span class="src">法說會</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-en="Supply-Chain Flow: Upstream Suppliers → NVIDIA → Market Platform">供應鏈流向：上游供應商 → NVIDIA → 市場平台</div>
+      <p class="note" data-en="Upstream link widths are an illustrative relative-weighting estimate (NVIDIA does not disclose per-supplier dollar allocation); they are scaled to sum to total revenue purely so the diagram balances visually. The NVIDIA→Data Center/Edge Computing and Data Center→Hyperscale/ACIE flows are the real, filed revenue figures from 10-Q Note 13 ($M).">上游連結寬度為示意性相對權重估計（NVIDIA 未揭露個別供應商的金額分配）；為使圖形視覺上平衡，總和被縮放至等於總營收。NVIDIA→Data Center/Edge Computing 與 Data Center→Hyperscale/ACIE 的流向則是 10-Q 附註 13 真實申報的營收數字（百萬美元）。</p>
+      <div id="sankeyEmbed_nvdaSupplyChain" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"tsmc","label":"TSMC 台積電（晶圓代工主力）","color":"#2563eb"},{"id":"samsung","label":"Samsung Electronics（晶圓代工／記憶體）","color":"#7c3aed"},{"id":"hynix","label":"SK Hynix（HBM 記憶體）","color":"#9333ea"},{"id":"micron","label":"Micron Technology（記憶體）","color":"#a855f7"},{"id":"foxconn","label":"Hon Hai／Foxconn（組裝測試封裝）","color":"#ea580c"},{"id":"wistron","label":"Wistron（組裝測試封裝）","color":"#f97316"},{"id":"fabrinet","label":"Fabrinet（組裝測試封裝）","color":"#fb923c"},{"id":"nvda","label":"NVIDIA Corporation","color":"#16a34a"},{"id":"dc","label":"Data Center（$75,246M）","color":"#0d9488"},{"id":"edge","label":"Edge Computing（$6,369M）","color":"#0ea5e9"},{"id":"hyperscale","label":"Hyperscale（$37,869M）","color":"#059669"},{"id":"acie","label":"AI Clouds／Industrial／Enterprise（$37,377M）","color":"#10b981"}],"links":[{"source":"tsmc","target":"nvda","value":34000},{"source":"samsung","target":"nvda","value":8000},{"source":"hynix","target":"nvda","value":12000},{"source":"micron","target":"nvda","value":8500},{"source":"foxconn","target":"nvda","value":12000},{"source":"wistron","target":"nvda","value":4500},{"source":"fabrinet","target":"nvda","value":2615},{"source":"nvda","target":"dc","value":75246},{"source":"nvda","target":"edge","value":6369},{"source":"dc","target":"hyperscale","value":37869},{"source":"dc","target":"acie","value":37377}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_nvdaSupplyChain");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-en="Customer Concentration &amp; Geography (10-Q Note 13)">客戶集中度與地理分布（10-Q 附註 13）</div>
+      <table>
+        <tr><th data-en="Metric">指標</th><th data-en="Q1 FY2026">Q1 FY2026</th><th data-en="Q1 FY2027">Q1 FY2027</th></tr>
+        <tr><td data-en="Top 3 direct customers (% of revenue)">前 3 大直接客戶（佔營收%）</td><td data-en="2 customers: 16%, 14%">2 家：16%、14%</td><td data-en="3 customers: 21%, 17%, 16%">3 家：21%、17%、16%</td></tr>
+        <tr><td data-en="Top 3 direct customers (% of A/R)">前 3 大直接客戶（佔應收帳款%）</td><td data-en="n/a (see FY26 10-K: 25%/18%/13% at year-end)">n/a（見FY26 10-K：年底25%/18%/13%）</td><td data-en="30%, 18%, 16%">30%、18%、16%</td></tr>
+        <tr><td data-en="Revenue outside the US">美國以外營收佔比</td><td>42%</td><td>22%</td></tr>
+        <tr><td data-en="China revenue (incl. Hong Kong)">中國營收（含香港）</td><td data-en="$9,659M (incl. $4.6B Hopper)">$96.59億（含 $46億 Hopper）</td><td data-en="$4,550M (zero Hopper/H200 shipments)">$45.50億（零 Hopper／H200 出貨）</td></tr>
+      </table>
+      <div class="note" data-en="Ex-US share fell mechanically as China Hopper shipments went to zero, not from a broader demand shift. Customer concentration is rising faster in accounts-receivable terms (30/18/16%) than in revenue terms (21/17/16%) — worth watching as a leading indicator.">美國以外佔比下滑主要是中國 Hopper 出貨歸零的機械性效果，而非更廣泛的需求轉變。客戶集中度在應收帳款端（30/18/16%）上升得比營收端（21/17/16%）更快——值得作為領先指標追蹤。</div>
+    </div>
+    <p class="note" data-en="Confidence key: green border = named directly in the 10-K/10-Q; orange = disclosed but unnamed, or named only on the call. No customer or supplier concentration is disclosed by name in any filing — NVIDIA discloses percentages only, consistent with its standard practice.">信心度圖例：綠邊＝10-K／10-Q 直接具名；橘邊＝有揭露但未具名，或僅於法說會具名。任何申報文件皆未具名揭露客戶或供應商集中度——NVIDIA 僅揭露百分比，符合其一貫做法。</p>
+  </div>
+
+  <!-- ============ Risk ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title" data-en="Risk Matrix — Disclosed vs. Undisclosed / Inferred From the Numbers">風險矩陣——已揭露 vs 未揭露／從數字反推</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="⭐ Original Forward Risk: Reported Net Income Growth (+211%) Materially Outruns Operating Income Growth (+147%) — Both Are Real, But Only One Is Repeatable">⭐ 獨創前瞻風險：帳面淨利成長（+211%）明顯超過營業利益成長（+147%）——兩者都是真的，但只有一個可重複</div>
+        <span data-en="No analyst raised this. Operating income of $53.5B (+147% YoY) is the clean, revenue-driven number — already an extraordinary beat with no asterisk. But Other income swung from –$180M to +$15.9B, driven by $13.4B of unrealized gains on publicly-held equity securities and $2.6B on non-marketable securities (10-Q MD&amp;A). Tax-effecting operating income alone at the quarter's 16.6% effective rate implies &quot;core&quot; net income of roughly $44.6B and core diluted EPS of roughly $1.83 — versus the reported $58.3B / $2.39. The FY2026 10-K separately discloses NVIDIA holds a stake in Intel common stock among its public-equity investments; the Q1 FY27 filing does not itemize which holdings drove this quarter's $13.4B gain, but the mechanism — a chipmaker's own reported earnings partly riding on a mark-to-market swing in equity stakes — is the same earnings-quality pattern seen elsewhere in this AI cycle. These gains reverse with any portfolio markdown.">沒有任何分析師提出這點。$535億 營業利益（+147% YoY）是乾淨、由營收驅動的數字——本身已是無需任何但書的驚人 beat。但其他收入從 –$1.8億 擺盪到 +$159億，由 $134億 公開持有股權證券未實現利得與 $26億 非市場性證券利得驅動（10-Q MD&A）。僅將營業利益以本季 16.6% 有效稅率稅後調整，隱含「核心」淨利約 $446億、核心稀釋 EPS 約 $1.83——相對帳面 $583億／$2.39。FY2026 10-K 另外揭露 NVIDIA 的公開股權投資中含有 Intel 普通股部位；Q1 FY27 申報文件未逐項列出本季 $134億 利得來自哪些持股，但這個機制——晶片廠自身帳面獲利有一部分乘著股權部位按市值計價的擺盪——與本輪 AI 週期中其他公司出現的獲利品質模式如出一轍。這些利得會隨任何投組評價下修而反轉。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="China / H200: Zero Revenue Recognized, 25% Tariff Exposure, and a Foreclosed Data-Center Market">中國／H200：零認列營收、25% 關稅曝險、且資料中心市場仍被封鎖</div>
+        <span data-en="H200 licenses were granted from Feb 2026, but &quot;to date, we have not generated any revenue under the H200 licensing program, and do not yet know whether any imports will be allowed into China&quot; — and any product that does ship is subject to a 25% import tariff NVIDIA &quot;may not be able to pass along.&quot; The 10-Q states NVIDIA remains &quot;effectively foreclosed from competing in China's data center computing/compute market&quot; and that this foreclosure &quot;helped our competitors build larger developer and customer ecosystems to challenge us worldwide.&quot; China revenue (incl. HK) fell from $9.7B to $4.6B YoY with zero Hopper shipments this quarter, vs. $4.6B a year ago. Upside optionality exists if licensing resolves favorably, but it is entirely excluded from guidance and dependent on both USG and Chinese-government approval simultaneously — a dual veto that has not been satisfied in over a year of shifting rules.">H200 授權自 2026 年 2 月起發放，但「迄今為止，我們尚未在 H200 授權計畫下產生任何營收，也還不知道是否會被允許進口到中國」——且任何真的出貨的產品都要負擔 25% 的進口關稅，NVIDIA「可能無法將其轉嫁」給客戶。10-Q 陳述 NVIDIA 仍「實質上被排除在中國資料中心運算市場之外」，且這種排除「幫助我們的競爭對手在全球建立起更大的開發者與客戶生態系」。中國營收（含香港）年減自 $97億 降至 $46億，本季零 Hopper 出貨、去年同期則有 $46億。若授權朝有利方向解決，存在上行選擇權，但目前完全被排除在 guidance 之外，且同時仰賴美國政府與中國政府雙重核准——這個雙重否決在一年多變動不斷的規則下始終未能被滿足。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Customer Concentration Is Accelerating — and Rising Faster in Receivables Than in Revenue">客戶集中度正在加速——且應收帳款端上升得比營收端更快</div>
+        <span data-en="Three direct customers now account for 21%+17%+16% = 54% of total revenue, up from two customers at 16%+14% = 30% a year ago. More striking: the same three customers represent 30%+18%+16% = 64% of accounts receivable — a materially higher concentration than in revenue, and one that rose from 25%/18%/13% just one quarter earlier (per the FY2026 10-K year-end disclosure). Separately, one unnamed &quot;AI research and deployment company&quot; is flagged as contributing &quot;a meaningful amount&quot; of revenue indirectly via cloud-service purchases — a second, unquantified layer of concentration risk on top of the direct-customer numbers. A payment delay or order pushout from any one of these counterparties would have an outsized balance-sheet impact.">三家直接客戶現佔總營收 21%+17%+16% = 54%，高於去年同期兩家客戶的 16%+14% = 30%。更醒目的是：同樣三家客戶佔應收帳款 30%+18%+16% = 64%——集中度明顯高於營收端，且較僅僅一季前（FY2026 10-K 年底揭露的 25%/18%/13%）又上升了。另外，一家未具名「AI 研究與部署公司」被標記為透過雲端服務採購間接貢獻「相當金額」的營收——這是在直接客戶數字之上、另一層未量化的集中度風險。這些交易對手中任何一家延遲付款或訂單推遲，都會對資產負債表造成不成比例的衝擊。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="LPX / Groq: A Nearly $4B Licensed-IP Liability the Call Never Connected to the Product Being Discussed">LPX／Groq：一筆近 $40億 的授權 IP 負債，通話中從未與正在討論的產品連結</div>
+        <span data-en="See Q&amp;A tab (Arcuri question) for the full detail: 10-Q Note 7 discloses $3,957M accrued for a Groq, Inc. non-exclusive IP license; the FY2026 10-K risk factors describe &quot;significant, nonrefundable payments&quot; under that arrangement. Groq's public profile (SRAM-based, low-latency inference) matches Jensen's description of &quot;LPX&quot; feature-for-feature, yet Groq is never named in connection with LPX on the call. Not a disclosure violation — the license is in the filings — but a transparency gap between the verbal product narrative and the balance-sheet reality investors would need to connect themselves.">完整細節見 Q&A tab（Arcuri 提問）：10-Q 附註 7 揭露 $39.57億 應計於 Groq, Inc. 非專屬 IP 授權；FY2026 10-K 風險因子描述該安排下「重大、不可退還的款項」。Groq 對外的公開形象（SRAM 型、低延遲推論）與 Jensen 對「LPX」逐項特徵的描述完全吻合，然而通話中從未把 Groq 與 LPX 連結在一起提及。這不構成揭露違規——授權本身有在申報文件中揭露——但在口頭產品敘事與投資人需要自行拼湊的資產負債表現實之間，存在透明度缺口。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="The Growth Bridge Beyond $1T Is Entirely Narrative-Stage">$1兆 之外的成長橋接完全停留在敘事階段</div>
+        <span data-en="See Special Item tab for full detail. Vera CPU's $200B TAM, the Anthropic partnership, and the Rubin 35x/10x claims — the three pillars used to argue growth extends past the already-large $1T Blackwell+Rubin number — share zero dollar-figure corroboration in any SEC filing as of this report. Anthropic does not appear in the 10-Q filed the same day or the FY2026 10-K. This does not make the claims false, but it means the market is pricing verbal commitments that have not yet crossed into contractual or filed disclosure.">完整細節見特殊事件 tab。Vera CPU 的 $200B TAM、Anthropic 夥伴關係、Rubin 的 35x/10x 宣稱——這三根用來論證成長超越已經很龐大的 $1兆 Blackwell+Rubin 數字的支柱——截至本報告製作時，在任何 SEC 申報文件中都沒有金額佐證。Anthropic 沒有出現在同一天申報的 10-Q 或 FY2026 10-K 中。這不代表這些宣稱是假的，但意味著市場正在為尚未跨入合約化或申報揭露階段的口頭承諾定價。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Supply Chain Remains Asia-Concentrated, and Vera CPU Adds a New Claim on the Same Constrained Capacity">供應鏈仍高度集中於亞洲，Vera CPU 又為同一批受限產能新增一項需求</div>
+        <span data-en="The 10-K states the supply chain is &quot;mainly concentrated in Asia&quot; (TSMC, Samsung, SK Hynix, Foxconn, Wistron, Fabrinet) despite years of stated intent to diversify into the U.S. and Latin America. Jensen states NVIDIA expects to &quot;be supply constrained throughout the entire life of Vera Rubin&quot; — and since Vera CPU shares the same fab/CoWoS-packaging pipeline as Rubin GPUs, the new $200B CPU TAM is not obviously additive capacity; it may compete with GPU allocation. Manufacturing/supply/capacity commitments reached $119B this quarter (Note 10), with $95B due within FY2027 alone — a large, front-loaded, largely non-cancellable financial commitment riding on continued demand.">10-K 陳述供應鏈「主要集中於亞洲」（TSMC、Samsung、SK Hynix、Foxconn、Wistron、Fabrinet），儘管多年來一直聲稱要分散至美國與拉丁美洲。Jensen 表示 NVIDIA 預期「Vera Rubin 整個生命週期都會處於供給受限」——而由於 Vera CPU 與 Rubin GPU 共用同一條晶圓／CoWoS 封裝產線，全新的 $200B CPU TAM 未必是明顯的增量產能；它可能與 GPU 配額互相競爭。製造／供應／產能承諾本季達 $119億（附註 10），其中 $95億 須於 FY2027 內支付——一筆龐大、前置、多數不可取消的財務承諾，賭注押在需求持續不墜。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low" data-en="Low">低</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Insider Signal Is Procedural, Not Directional — Blackout Held, Then Routine 10b5-1 Resumption">內部人訊號屬於程序性、非方向性——法說會前後靜默期照舊，之後照常恢復 10b5-1</div>
+        <span data-en="Form 4 review (full 2026 issuer feed): zero filings between 03/24 and 05/29, a clean ~9-week blackout bracketing the May 20 print — standard trading-window policy, not a discretionary pause. CEO Jensen Huang's post-print filing (06/23, transaction 06/17) is Code &quot;F&quot; — tax withholding on vesting, not a discretionary open-market sale. CFO Colette Kress resumed her long-standing 10b5-1 plan (adopted March 2025) at the same cadence as prior quarters. A cluster of 8 independent directors filed small, routine 10b5-1 sales on 06/29 (transaction date 06/25) — standard quarterly pattern, immaterial size (e.g., 625 shares for one director). No acceleration, no first-time discretionary selling, and no bullish signal either — this window is entirely explained by procedure.">Form 4 檢視（完整 2026 年 issuer 申報）：03/24 至 05/29 之間零申報，乾淨的約 9 週靜默期橫跨 5 月 20 日財報——標準交易窗口政策，非自主性暫停。CEO Jensen Huang 財報後的申報（06/23，交易日 06/17）代碼為「F」——歸屬時的扣稅，非自主性公開市場賣出。CFO Colette Kress 以與前幾季相同的節奏恢復其長期存在的 10b5-1 計畫（2025 年 3 月採用）。8 位獨立董事於 06/29 集中申報小額、例行的 10b5-1 賣出（交易日 06/25）——標準季度模式，金額微不足道（例如一位董事僅 625 股）。沒有加速、沒有首次自主性賣出，也沒有看多訊號——這個窗口完全能以程序解釋。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer" data-en="Prepared from the Q1 FY2027 earnings call transcript cross-referenced with the 10-Q (period ended Apr 26, 2026), the FY2026 10-K, and Form 4 filings. For informational purposes only — not investment advice.">依 FY2027 Q1 法說會逐字稿，交叉比對 10-Q（截至 2026/4/26）、FY2026 10-K 與 Form 4 申報整理。僅供資訊參考，非投資建議。</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) { header.parentElement.classList.toggle('open'); }
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>
