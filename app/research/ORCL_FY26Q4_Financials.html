@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oracle Corporation（ORCL）FY Q4 2026 — 完整財務分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #b91c1c; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #fef2f2; }
+  .container { max-width: 980px; margin: 0 auto; padding: 16px 24px 40px; }
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab { padding: 9px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #b91c1c; color: #b91c1c; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #b91c1c; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #b91c1c; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #b91c1c; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.a { border-top-color: #b91c1c; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.c { border-top-color: #6d28d9; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap:8px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; text-align:right; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 220px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space:nowrap; }
+  .bar-num { width: 130px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; }
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #b91c1c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap:10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; text-align:right; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .note { font-size: 11px; color: #444; margin-top: 8px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #b91c1c; line-height: 1.6; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.blue { border-left-color: #2563eb; }
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Oracle Corporation (ORCL) — FY Q4 2026 Full Financial Analysis">Oracle Corporation（ORCL）— FY Q4 2026 完整財務分析</h1>
+  <p data-en="Income Statement / Business Offerings (Cloud Infra vs. Cloud Apps vs. Software vs. Services vs. Hardware) / Balance Sheet / Cash Flow &amp; Capital Allocation / Valuation &nbsp;·&nbsp; Call Date: Jun 10, 2026 (FQ4 &amp; FY2026, period ended May 31, 2026) &nbsp;·&nbsp; Cross-referenced with the FY2026 10-K (filed 2026/6/22) and the Q4 8-K/EX-99.1 press release">損益表 / 業務線（Cloud Infra vs. Cloud Apps vs. Software vs. Services vs. Hardware）/ 資產負債表 / 現金流量與資本配置 / 估值觀察 &nbsp;·&nbsp; 法說會日期：2026年6月10日（FQ4暨FY2026，季末2026年5月31日）&nbsp;·&nbsp; 交叉比對FY2026 10-K（2026/6/22申報）與Q4 8-K/EX-99.1新聞稿</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Income Statement" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" data-en="Business Offerings" onclick="sw('bu',this)">業務線</div>
+    <div class="tab" data-en="Balance Sheet" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" data-en="Cash Flow &amp; Capital Allocation" onclick="sw('cf',this)">現金流量與資本配置</div>
+    <div class="tab" data-en="Valuation" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ Income Statement ============ -->
+  <div id="panel-inc" class="panel active">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$19,184M</div><div class="kpi-lbl" data-en="Q4 Total Revenue">Q4總營收</div><div class="kpi-sub" data-en="+21% YoY (+20% constant currency)">YoY+21%（固定匯率+20%）</div></div>
+      <div class="kpi"><div class="kpi-val">45%</div><div class="kpi-lbl" data-en="Q4 Non-GAAP Operating Margin">Q4非GAAP營業利益率</div><div class="kpi-sub" data-en="GAAP margin 32% ($6,133M)">GAAP營益率32%（$6,133M）</div></div>
+      <div class="kpi"><div class="kpi-val">$1.45 / $2.11</div><div class="kpi-lbl" data-en="Q4 Diluted EPS — GAAP / Non-GAAP">Q4稀釋EPS — GAAP／Non-GAAP</div><div class="kpi-sub" data-en="Non-GAAP ex-investment gains: $2.03">排除一次性投資利得後Non-GAAP：$2.03</div></div>
+      <div class="kpi"><div class="kpi-val">$0.50</div><div class="kpi-lbl" data-en="Declared Quarterly Dividend / Share">宣布季度股利／股</div><div class="kpi-sub" data-en="Record date 7/10/2026, paid 7/24/2026">股權登記日7/10、發放日7/24</div></div>
+    </div>
+    <div class="note" data-en="All figures below are officially disclosed GAAP/non-GAAP numbers from the 8-K/EX-99.1 press release (Q4 &amp; FY26 condensed statements and reconciliation tables) and the FY2026 10-K.">以下數字均取自8-K/EX-99.1新聞稿（Q4暨FY26簡明損益表與GAAP/non-GAAP調節表）及FY2026 10-K官方揭露數字。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Condensed Statement of Operations — Q4 (Three Months Ended May 31, $M)">簡明損益表 — Q4（三個月，截至5/31，百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th>Q4 FY26</th><th>Q4 FY25</th><th data-en="YoY">YoY</th></tr>
+        <tr class="section-head"><td colspan="4" data-en="Revenues">營收</td></tr>
+        <tr><td data-en="Cloud">Cloud</td><td>$9,913</td><td>$6,737</td><td class="pos">+47%</td></tr>
+        <tr><td data-en="Software">Software</td><td>$6,824</td><td>$6,968</td><td class="neg">(2%)</td></tr>
+        <tr><td data-en="Hardware">Hardware</td><td>$924</td><td>$850</td><td class="pos">+9%</td></tr>
+        <tr><td data-en="Services">Services</td><td>$1,523</td><td>$1,348</td><td class="pos">+13%</td></tr>
+        <tr class="total"><td data-en="Total Revenues">總營收</td><td>$19,184</td><td>$15,903</td><td class="pos">+21%</td></tr>
+        <tr class="section-head"><td colspan="4" data-en="Operating Expenses">營業費用</td></tr>
+        <tr><td data-en="Cloud and Software">Cloud and Software</td><td>$5,224</td><td>$3,343</td><td class="neg">+56%</td></tr>
+        <tr><td data-en="Hardware">Hardware</td><td>$293</td><td>$252</td><td class="neg">+16%</td></tr>
+        <tr><td data-en="Services">Services</td><td>$1,155</td><td>$1,145</td><td class="neg">+1%</td></tr>
+        <tr><td data-en="Sales and Marketing">Sales and Marketing</td><td>$2,068</td><td>$2,306</td><td class="pos">(10%)</td></tr>
+        <tr><td data-en="Research and Development">Research and Development</td><td>$2,613</td><td>$2,654</td><td class="pos">(2%)</td></tr>
+        <tr><td data-en="General and Administrative">General and Administrative</td><td>$444</td><td>$467</td><td class="pos">(5%)</td></tr>
+        <tr><td data-en="Amortization of Intangibles">無形資產攤銷</td><td>$431</td><td>$544</td><td class="pos">(21%)</td></tr>
+        <tr><td data-en="Restructuring and Other">重組及其他</td><td>$823</td><td>$83</td><td class="neg">+899%</td></tr>
+        <tr class="total"><td data-en="Total Operating Expenses">營業費用合計</td><td>$13,051</td><td>$10,794</td><td>+21%</td></tr>
+        <tr class="total"><td data-en="Operating Income (GAAP)">營業利益（GAAP）</td><td>$6,133</td><td>$5,109</td><td class="pos">+20%</td></tr>
+        <tr><td data-en="Interest Expense">利息費用</td><td>$(1,438)</td><td>$(978)</td><td class="neg">+47%</td></tr>
+        <tr><td data-en="Non-Operating Income, Net">業外收支淨額</td><td>$675</td><td>$20</td><td>—</td></tr>
+        <tr class="total"><td data-en="Income Before Income Taxes">稅前淨利</td><td>$5,370</td><td>$4,151</td><td class="pos">+29%</td></tr>
+        <tr><td data-en="Provision for Income Taxes">所得稅費用</td><td>$1,066</td><td>$724</td><td class="neg">+47%</td></tr>
+        <tr class="total"><td data-en="Net Income">淨利</td><td>$4,304</td><td>$3,427</td><td class="pos">+26%</td></tr>
+        <tr><td data-en="Net Income Available to Common">歸屬普通股淨利</td><td>$4,223</td><td>$3,427</td><td>—</td></tr>
+        <tr><td data-en="Diluted EPS">稀釋EPS</td><td>$1.45</td><td>$1.19</td><td class="pos">+21%</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;" data-en="One-time gains distort headline non-GAAP growth">一次性利得扭曲表面Non-GAAP成長率</strong><span data-en=" — Q4/FY26 GAAP and non-GAAP results include one-time net investment gains (from the Ampere chip business sale and Bloom Energy warrants). Excluding these, Q4 non-GAAP EPS is $2.03 (+20% USD, not +24%) and FY26 non-GAAP EPS is $6.83 (+13% USD, not +27%). Restructuring and other expenses also jumped 899% YoY in Q4 ($83M to $823M) — a real cash cost excluded from non-GAAP operating income, tied to efficiency actions management cited as offsetting gross-margin pressure elsewhere on the call.">——Q4／FY26 GAAP與non-GAAP數字均含一次性淨投資利得（出售Ampere晶片業務與Bloom Energy認股權證）。排除後，Q4 non-GAAP EPS實為$2.03（USD+20%，非+24%），FY26 non-GAAP EPS實為$6.83（USD+13%，非+27%）。另外Q4重組及其他費用YoY暴增899%（$8,300萬→$8.23億）——這是被排除在non-GAAP營業利益之外的真實現金成本，對應管理層在法說會上提及、用以抵銷其他業務毛利率壓力的效率行動。</span></div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="GAAP → Non-GAAP Reconciliation — Q4 ($M)">GAAP → Non-GAAP 調節表 — Q4（百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th data-en="Q4 FY26 GAAP">Q4 FY26 GAAP</th><th data-en="Adjustments">調整項</th><th data-en="Q4 FY26 Non-GAAP">Q4 FY26 Non-GAAP</th></tr>
+        <tr><td data-en="Total Operating Expenses">營業費用合計</td><td>$13,051</td><td class="neg">$(2,457)</td><td>$10,594</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Stock-based Compensation">&nbsp;&nbsp;股票薪酬</td><td>$1,203</td><td class="neg">$(1,203)</td><td>$0</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Amortization of Intangibles">&nbsp;&nbsp;無形資產攤銷</td><td>$431</td><td class="neg">$(431)</td><td>$0</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Restructuring and Other">&nbsp;&nbsp;重組及其他</td><td>$823</td><td class="neg">$(823)</td><td>$0</td></tr>
+        <tr class="total"><td data-en="Operating Income">營業利益</td><td>$6,133</td><td class="pos">$2,457</td><td>$8,590</td></tr>
+        <tr><td data-en="Operating Margin %">營業利益率</td><td>32%</td><td>—</td><td>45%</td></tr>
+        <tr class="total"><td data-en="Net Income">淨利</td><td>$4,304</td><td class="pos">$1,930</td><td>$6,234</td></tr>
+        <tr><td data-en="Diluted EPS">稀釋EPS</td><td>$1.45</td><td>—</td><td>$2.11</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Full-Year FY26 vs FY25 ($M)">FY26 全年 vs FY25（百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th>FY26</th><th>FY25</th><th data-en="YoY">YoY</th></tr>
+        <tr><td data-en="Total Revenues">總營收</td><td>$67,357</td><td>$57,399</td><td class="pos">+17%</td></tr>
+        <tr><td data-en="GAAP Operating Income">GAAP營業利益</td><td>$20,606（31%）</td><td>$17,678（31%）</td><td class="pos">+17%</td></tr>
+        <tr><td data-en="Non-GAAP Operating Income">Non-GAAP營業利益</td><td>$28,926（43%）</td><td>$25,033（44%）</td><td class="pos">+16%</td></tr>
+        <tr><td data-en="GAAP Net Income">GAAP淨利</td><td>$17,087</td><td>$12,443</td><td class="pos">+37%</td></tr>
+        <tr><td data-en="GAAP Diluted EPS">GAAP稀釋EPS</td><td>$5.83</td><td>$4.34</td><td class="pos">+34%</td></tr>
+        <tr><td data-en="Non-GAAP Diluted EPS">Non-GAAP稀釋EPS</td><td>$7.63</td><td>$6.03</td><td class="pos">+27%</td></tr>
+        <tr><td data-en="Non-GAAP EPS ex-investment gains">Non-GAAP EPS（排除一次性投資利得）</td><td>$6.83</td><td>—</td><td class="pos">+13%</td></tr>
+        <tr><td data-en="Effective Tax Rate — GAAP">有效稅率 — GAAP</td><td>12.6%</td><td>12.1%</td><td>—</td></tr>
+        <tr><td data-en="Effective Tax Rate — Non-GAAP">有效稅率 — Non-GAAP</td><td>19.9%</td><td>19.7%</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note yellow" data-en="FY26's low 12.6% GAAP effective tax rate (vs 19.9% non-GAAP) mainly reflects the U.S. One Big Beautiful Bill Act (OBBBA, signed 2025/7/4) remeasurement — the 10-K's own footnote calls out a $933M net tax expense from remeasuring a deferred tax liability recorded back in FY2021, which the company excludes from non-GAAP. Investors comparing GAAP EPS growth (+34%) to non-GAAP EPS growth (+27%, or +13% ex-investment gains) should anchor on the ex-investment-gains figure for a like-for-like read on underlying earnings power.">FY26 GAAP有效稅率低至12.6%（相對non-GAAP的19.9%），主因美國OBBBA法案（2025/7/4簽署生效）的重評估影響——10-K自身註腳指出，重評估FY2021認列之遞延稅負債產生$9.33億淨稅務費用，公司已將此排除在non-GAAP之外。投資人在比較GAAP EPS成長（+34%）與non-GAAP EPS成長（+27%，或排除投資利得後+13%）時，應以排除投資利得後的數字作為基本盈餘能力的同口徑比較基準。</div>
+  </div>
+
+  <!-- ============ Business Offerings ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="section-title" data-en="Oracle Reports as a Single Operating Segment — Offering-Level Detail Below">Oracle僅揭露單一營運分部——以下為業務線層級細節</div>
+    <div class="bu-grid">
+      <div class="bu-card a">
+        <div class="bu-name" data-en="Cloud Infrastructure (IaaS)">Cloud Infrastructure（IaaS）</div>
+        <div class="bu-abbr" data-en="OCI — compute, GPU, storage, networking">OCI——運算、GPU、儲存、網路</div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Q4 FY26 Revenue">Q4 FY26營收</span><span class="bu-stat-val">$5,787M<span class="bu-delta">+93% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="FY26 Full-Year Revenue">FY26全年營收</span><span class="bu-stat-val">$18,101M<span class="bu-delta">+77% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="% of Total Revenue (Q4)">佔總營收比重（Q4）</span><span class="bu-stat-val">30.2%</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:93%; background:#b91c1c;"></div></div>
+      </div>
+      <div class="bu-card b">
+        <div class="bu-name" data-en="Cloud Applications (SaaS)">Cloud Applications（SaaS）</div>
+        <div class="bu-abbr" data-en="Fusion ERP/HCM/CX + industry apps">Fusion ERP/HCM/CX＋產業應用</div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Q4 FY26 Revenue">Q4 FY26營收</span><span class="bu-stat-val">$4,126M<span class="bu-delta">+10% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="FY26 Full-Year Revenue">FY26全年營收</span><span class="bu-stat-val">$15,888M<span class="bu-delta">+11% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="% of Total Revenue (Q4)">佔總營收比重（Q4）</span><span class="bu-stat-val">21.5%</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:10%; background:#2563eb;"></div></div>
+      </div>
+      <div class="bu-card c">
+        <div class="bu-name" data-en="Software (License + Support)">Software（授權＋支援）</div>
+        <div class="bu-abbr" data-en="On-premise legacy license + support">地端傳統授權＋支援</div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Q4 FY26 Revenue">Q4 FY26營收</span><span class="bu-stat-val">$6,824M<span class="bu-delta neg">(2%) YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="FY26 Full-Year Revenue">FY26全年營收</span><span class="bu-stat-val">$24,541M<span class="bu-delta neg">(1%) YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="% of Total Revenue (Q4)">佔總營收比重（Q4）</span><span class="bu-stat-val">35.6%</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:5%; background:#94a3b8;"></div></div>
+      </div>
+    </div>
+    <div class="note" data-en="Software remains Oracle's single largest revenue category by dollars (35.6% of Q4 revenue) despite being in structural decline — the &quot;AI infrastructure story&quot; narrative can obscure that more than a third of revenue still comes from a shrinking on-premise license/support base.">Software仍是Oracle以美元計最大的單一營收類別（佔Q4營收35.6%），儘管處於結構性下滑——「AI基礎設施故事」的敘事，可能讓人忽略超過三分之一的營收仍來自正在萎縮的地端授權／支援業務。</div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Quarterly Revenue Trend by Offering — FY25 Q1 through FY26 Q4 ($M)">分季營收趨勢按業務線 — FY25 Q1 至 FY26 Q4（百萬美元）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Offering">業務線</th><th>FY25 Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>FY26 Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr>
+        <tr><td data-en="Cloud">Cloud</td><td>5,623</td><td>5,937</td><td>6,210</td><td>6,737</td><td>7,186</td><td>7,977</td><td>8,914</td><td>9,913</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Cloud Infrastructure">&nbsp;&nbsp;Cloud Infrastructure</td><td>—</td><td>—</td><td>—</td><td>2,995</td><td>3,347</td><td>4,079</td><td>4,888</td><td>5,787</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Cloud Applications">&nbsp;&nbsp;Cloud Applications</td><td>—</td><td>—</td><td>—</td><td>3,742</td><td>3,839</td><td>3,898</td><td>4,026</td><td>4,126</td></tr>
+        <tr><td data-en="Software">Software</td><td>5,766</td><td>6,064</td><td>5,926</td><td>6,968</td><td>5,721</td><td>5,877</td><td>6,119</td><td>6,824</td></tr>
+        <tr><td data-en="Hardware">Hardware</td><td>655</td><td>728</td><td>703</td><td>850</td><td>670</td><td>776</td><td>714</td><td>924</td></tr>
+        <tr><td data-en="Services">Services</td><td>1,263</td><td>1,330</td><td>1,291</td><td>1,348</td><td>1,349</td><td>1,428</td><td>1,443</td><td>1,523</td></tr>
+        <tr class="total"><td data-en="Total Revenues">總營收</td><td>13,307</td><td>14,059</td><td>14,130</td><td>15,903</td><td>14,926</td><td>16,058</td><td>17,190</td><td>19,184</td></tr>
+        <tr><td data-en="Total Revenue YoY%">總營收YoY%</td><td>7%</td><td>9%</td><td>6%</td><td>11%</td><td class="pos">12%</td><td class="pos">14%</td><td class="pos">22%</td><td class="pos">21%</td></tr>
+        <tr><td data-en="Cloud Infrastructure YoY%">Cloud Infrastructure YoY%</td><td>45%</td><td>52%</td><td>49%</td><td>52%</td><td class="pos">55%</td><td class="pos">68%</td><td class="pos">84%</td><td class="pos">93%</td></tr>
+      </table>
+    </div>
+    <div class="note blue" data-en="Cloud Infrastructure's YoY growth rate accelerated every single quarter of FY26 (55%→68%→84%→93%) — the cleanest, most unambiguous acceleration curve in the entire release, and the anchor for the FY27 guide of 58&ndash;64% cloud revenue growth in Q1 alone.">Cloud Infrastructure的YoY成長率在FY26每一季都在加速（55%→68%→84%→93%）——這是整份財報中最乾淨、最不含糊的加速曲線，也是FY27指引中Q1雲端營收成長58-64%的立論基礎。</div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Geographic Revenue — FY26 Full Year ($M)">地區營收 — FY26全年（百萬美元）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Region">地區</th><th>FY26</th><th>FY25</th><th data-en="YoY">YoY</th><th data-en="% of Total">佔比</th></tr>
+        <tr><td data-en="Americas">Americas</td><td>$44,478</td><td>$36,339</td><td class="pos">+22%</td><td>66.0%</td></tr>
+        <tr><td data-en="Europe/Middle East/Africa">Europe/Middle East/Africa</td><td>$15,297</td><td>$14,025</td><td class="pos">+9%</td><td>22.7%</td></tr>
+        <tr><td data-en="Asia Pacific">Asia Pacific</td><td>$7,582</td><td>$7,035</td><td class="pos">+8%</td><td>11.3%</td></tr>
+        <tr class="total"><td data-en="Total Revenues">總營收</td><td>$67,357</td><td>$57,399</td><td>+17%</td><td>100%</td></tr>
+      </table>
+    </div>
+    <div class="note" data-en="Americas grew faster (+22%) than the company average (+17%) and gained share (64.7%→66.0% of total) — consistent with the U.S.-concentrated data-center site list (Texas, New Mexico, Michigan, Wisconsin) discussed on the call.">Americas成長速度（+22%）快於公司整體平均（+17%），佔比也隨之提升（64.7%→66.0%）——與法說會提及的資料中心工地清單高度集中於美國本土（德州、新墨西哥、密西根、威斯康辛）相互印證。</div>
+  </div>
+
+  <!-- ============ Balance Sheet ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="section-title" data-en="Balance Sheet Key Items ($M, 10-K Officially Disclosed)">資產負債表關鍵項目（百萬美元，10-K官方揭露）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Item">項目</th><th>2026/5/31</th><th>2025/5/31</th><th data-en="YoY">YoY</th></tr>
+        <tr class="section-head"><td colspan="4" data-en="Assets">資產</td></tr>
+        <tr><td data-en="Cash and Cash Equivalents">現金及約當現金</td><td>$31,289</td><td>$10,786</td><td class="pos">+190%</td></tr>
+        <tr><td data-en="Marketable Securities">有價證券</td><td>$605</td><td>$417</td><td class="pos">+45%</td></tr>
+        <tr><td data-en="Trade Receivables, Net">應收帳款淨額</td><td>$10,385</td><td>$8,558</td><td class="pos">+21%</td></tr>
+        <tr><td data-en="Total Current Assets">流動資產合計</td><td>$46,567</td><td>$24,579</td><td class="pos">+89%</td></tr>
+        <tr><td data-en="Property, Plant &amp; Equipment, Net">不動產廠房設備淨額</td><td>$99,957</td><td>$43,522</td><td class="pos">+130%</td></tr>
+        <tr><td data-en="Operating Lease ROU Assets">營運租賃使用權資產</td><td>$29,690</td><td>$13,145</td><td class="pos">+126%</td></tr>
+        <tr><td data-en="Goodwill">商譽</td><td>$62,261</td><td>$62,207</td><td>+0%</td></tr>
+        <tr class="total"><td data-en="Total Assets">總資產</td><td>$261,759</td><td>$168,361</td><td class="pos">+55%</td></tr>
+        <tr class="section-head"><td colspan="4" data-en="Liabilities">負債</td></tr>
+        <tr><td data-en="Notes Payable, Current">短期借款</td><td>$7,199</td><td>$7,271</td><td>(1%)</td></tr>
+        <tr><td data-en="Accounts Payable">應付帳款</td><td>$10,977</td><td>$5,113</td><td class="neg">+115%</td></tr>
+        <tr><td data-en="Deferred Revenues (Current)">遞延收入（流動）</td><td>$9,916</td><td>$9,387</td><td>+6%</td></tr>
+        <tr><td data-en="Total Current Liabilities">流動負債合計</td><td>$41,764</td><td>$32,643</td><td class="neg">+28%</td></tr>
+        <tr><td data-en="Notes Payable, Non-Current">長期借款</td><td>$122,342</td><td>$85,297</td><td class="neg">+43%</td></tr>
+        <tr><td data-en="Operating Lease Liabilities, Non-Current">營運租賃負債（非流動）</td><td>$26,648</td><td>$11,536</td><td class="neg">+131%</td></tr>
+        <tr class="total"><td data-en="Total Liabilities">總負債</td><td>$218,703</td><td>$147,392</td><td class="neg">+48%</td></tr>
+        <tr class="section-head"><td colspan="4" data-en="Stockholders' Equity">股東權益</td></tr>
+        <tr><td data-en="Preferred Stock (New Series D Mandatory Convertible)">特別股（新發行Series D強制可轉換）</td><td>$4,954</td><td>$0</td><td data-en="New">新增</td></tr>
+        <tr><td data-en="Accumulated Deficit">累積虧損</td><td>$(4,309)</td><td>$(15,481)</td><td class="pos">收斂</td></tr>
+        <tr class="total"><td data-en="Total Stockholders' Equity">股東權益總額</td><td>$43,056</td><td>$20,969</td><td class="pos">+105%</td></tr>
+        <tr class="total"><td data-en="Total Liabilities &amp; Equity">負債及股東權益總額</td><td>$261,759</td><td>$168,361</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;" data-en="Balance sheet structurally transformed within a single year">資產負債表一年內結構性重塑</strong><span data-en=" — PP&amp;E net +130% YoY ($43.5B→$100.0B), long-term debt +43% YoY ($85.3B→$122.3B), and a brand-new $5.0B mandatory convertible preferred stock issuance together describe a company shifting from a software-licensing balance sheet to a capital-intensive infrastructure operator's balance sheet within twelve months. Total liabilities (+48%) grew faster than total assets (+55% but concentrated in PP&amp;E, a slower-turning asset class than cash or receivables) — leverage is rising in lockstep with the physical buildout.">——PP&E淨額YoY+130%（$435億→$1,000億）、長期借款YoY+43%（$853億→$1,223億），加上全新發行的$50億強制可轉換特別股，三者合計描繪出一家公司在十二個月內，從軟體授權型資產負債表快速轉型為資本密集型基礎設施營運商資產負債表的畫面。總負債成長（+48%）與總資產成長（+55%，但集中在PP&E這類週轉較慢的資產）幾乎同步——槓桿正隨實體建置同步攀升。</span></div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Capital Structure &amp; Credit Considerations">資本結構與信用考量</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th data-en="Detail">說明</th></tr>
+        <tr><td data-en="Total Debt (Current + Non-Current)">總借款（流動＋非流動）</td><td>$129,541M（2025: $92,568M，YoY+40%）</td></tr>
+        <tr><td data-en="New Preferred Stock">新發行特別股</td><td data-en="6.50% Series D Mandatory Convertible Preferred, $4,954M net proceeds">6.50% Series D強制可轉換特別股，淨募資$4,954M</td></tr>
+        <tr><td data-en="Management's Stated Priority">管理層宣示優先事項</td><td data-en="Preserve investment-grade credit rating while funding the capital investment program">在資助資本投資計畫的同時，維持投資等級信評</td></tr>
+        <tr><td data-en="FY27 Financing Plan">FY27融資計畫</td><td data-en="~$40B debt + equity, incl. announced $20B ATM equity issuance; no additional debt planned in CY2026">約$400億債務加股權融資，含已公告$200億ATM增發；不預期2026年內再舉新債</td></tr>
+      </table>
+    </div>
+    <div class="note yellow" data-en="Management explicitly frames the credit rating as at risk in the abstract (&quot;a downgrade could... increase the interest amounts we pay&quot; per the 10-K's own risk factors) while simultaneously guiding to another ~$40B of debt+equity raising in FY27 on top of the $129.5B already outstanding. The preferred stock issuance (paying a fixed 6.50% dividend) is itself a signal that pure debt capacity was becoming a live constraint even before the FY27 raise.">管理層一方面在抽象層次承認信評有下行風險（10-K自身風險因子稱「評等調降……可能增加我們支付的利息金額」），另一方面卻又在已有$1,295億未償還借款的基礎上，指引FY27再籌措約$400億債務加股權。發行支付固定6.50%股利的特別股本身，就是一個訊號——顯示在FY27再融資之前，純債務融資空間已逐漸成為實質限制。</div>
+  </div>
+
+  <!-- ============ Cash Flow & Capital Allocation ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="section-title" data-en="Cash Flow Statement — FY26 vs FY25 ($M)">現金流量表 — FY26 vs FY25（百萬美元）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Item">項目</th><th>FY26</th><th>FY25</th></tr>
+        <tr><td data-en="Net Income">淨利</td><td>$17,087</td><td>$12,443</td></tr>
+        <tr><td data-en="Depreciation">折舊</td><td>$7,623</td><td>$3,867</td></tr>
+        <tr><td data-en="Amortization of Intangibles">無形資產攤銷</td><td>$1,671</td><td>$2,307</td></tr>
+        <tr><td data-en="Stock-Based Compensation">股票薪酬</td><td>$4,811</td><td>$4,674</td></tr>
+        <tr><td data-en="Increase in Deferred Revenue from Customer Prepayments (Financing Component)">客戶預付款（重大融資成分）遞延收入增加</td><td>$4,592</td><td>$0</td></tr>
+        <tr class="total"><td data-en="Net Cash Provided by Operating Activities (GAAP)">營運活動現金流入淨額（GAAP）</td><td>$31,977</td><td>$20,821</td></tr>
+        <tr><td data-en="Capital Expenditures (Gross, GAAP)">資本支出（毛額，GAAP）</td><td>$(55,663)</td><td>$(21,215)</td></tr>
+        <tr class="total"><td data-en="Net Cash Used for Investing Activities">投資活動現金流出淨額</td><td>$(51,854)</td><td>$(21,711)</td></tr>
+        <tr><td data-en="Proceeds from Debt Issuance, Net">舉借淨額</td><td>$46,093</td><td>$19,548</td></tr>
+        <tr><td data-en="Proceeds from Preferred Stock Issuance, Net">特別股發行淨額</td><td>$4,954</td><td>$0</td></tr>
+        <tr><td data-en="Dividends Paid">股利發放</td><td>$(5,787)</td><td>$(4,743)</td></tr>
+        <tr class="total"><td data-en="Net Cash Provided by Financing Activities">融資活動現金流入淨額</td><td>$40,284</td><td>$1,098</td></tr>
+        <tr class="total"><td data-en="Ending Cash and Cash Equivalents">期末現金及約當現金</td><td>$31,289</td><td>$10,786</td></tr>
+      </table>
+    </div>
+    <div class="note" data-en="The $4,592M &quot;increase in deferred revenues from customer prepayments with significant financing component&quot; is the accounting home of the BYOH/prepaid deposits discussed extensively on the call — it flows through operating cash flow (boosting the headlined +54% OCF growth), even though economically it functions like customer-provided financing for CapEx.">$4,592M的「客戶預付款（重大融資成分）遞延收入增加」，正是法說會上大篇幅討論的BYOH／預付訂金的會計歸屬——它計入營運現金流（推高了法說會標榜的+54% OCF成長），儘管在經濟實質上更接近客戶為CapEx提供的融資。</div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Net Cash Outlay for Capital Expenditures — Trailing 4-Quarter ($M, Company Non-GAAP Measure)">Net Cash Outlay for CapEx — Trailing 4季（百萬美元，公司自訂非GAAP指標）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Item">項目</th><th>FY25 Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>FY26 Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr>
+        <tr><td data-en="Capital Expenditures (GAAP)">資本支出（GAAP）</td><td>(7,855)</td><td>(10,745)</td><td>(14,933)</td><td>(21,215)</td><td>(27,414)</td><td>(35,477)</td><td>(48,250)</td><td>(55,663)</td></tr>
+        <tr><td data-en="Less: Other ST Financing Related to CapEx">減：其他短期融資相關CapEx</td><td>0</td><td>0</td><td>0</td><td>1,422</td><td>3,380</td><td>2,620</td><td>4,089</td><td>3,345</td></tr>
+        <tr><td data-en="Less: Customer Prepayments">減：客戶預付款</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>4,592</td></tr>
+        <tr class="total"><td data-en="Net Cash Outlay for CapEx">Net Cash Outlay for CapEx</td><td>(7,855)</td><td>(10,745)</td><td>(14,933)</td><td>(19,793)</td><td>(24,034)</td><td>(32,857)</td><td>(44,161)</td><td>(47,726)</td></tr>
+      </table>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Free Cash Flow — Trailing 4-Quarter ($M, Company Non-GAAP Measure)">Free Cash Flow — Trailing 4季（百萬美元，公司自訂非GAAP指標）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Item">項目</th><th>FY25 Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>FY26 Q1</th><th>Q2</th><th>Q3</th><th>Q4</th></tr>
+        <tr><td data-en="GAAP Operating Cash Flow (trailing 4Q)">GAAP營運現金流（trailing 4季）</td><td>19,126</td><td>20,287</td><td>20,745</td><td>20,821</td><td>21,534</td><td>22,296</td><td>23,514</td><td>31,977</td></tr>
+        <tr><td data-en="Capital Expenditures (trailing 4Q)">資本支出（trailing 4季）</td><td>(7,855)</td><td>(10,745)</td><td>(14,933)</td><td>(21,215)</td><td>(27,414)</td><td>(35,477)</td><td>(48,250)</td><td>(55,663)</td></tr>
+        <tr class="total"><td data-en="Free Cash Flow (trailing 4Q)">Free Cash Flow（trailing 4季）</td><td>11,271</td><td>9,542</td><td>5,812</td><td>(394)</td><td class="neg">(5,880)</td><td class="neg">(13,181)</td><td class="neg">(24,736)</td><td class="neg">(23,686)</td></tr>
+        <tr><td data-en="FCF as % of Net Income">FCF／淨利比率</td><td>103%</td><td>82%</td><td>48%</td><td>(3%)</td><td class="neg">(47%)</td><td class="neg">(85%)</td><td class="neg">(153%)</td><td class="neg">(139%)</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑⚑ <strong style="color:#1a1a2e;" data-en="Free cash flow has been negative for four straight quarters and was never mentioned on the call">自由現金流已連續四季為負，法說會全程未提及</strong><span data-en=" — Trailing four-quarter FCF flipped negative in FQ4 FY25 (&minus;$394M) and has deteriorated every quarter since, reaching &minus;$23,686M in FQ4 FY26. Management's own prepared remarks cited only &quot;cash flow from operations of $32 billion, up 54%&quot; — a true statement that omits the $55.7B of capital expenditure funding it. This is the single most important number this report can surface that the earnings call itself never said aloud.">——Trailing 4季FCF自FQ4 FY25起轉負（-$3.94億），此後每季持續惡化，至FQ4 FY26達-$236.86億。管理層自己的開場白只引用了「營運現金流$320億，成長54%」——這句話本身沒有錯，但省略了背後支應它的$557億資本支出。這是本份報告能夠指出、卻在整場法說會中從未被大聲說出口的最重要數字。</span></div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Capital Allocation Summary — FY26">資本配置摘要 — FY26</div>
+    <div class="cf-section">
+      <div class="cf-row"><span class="cf-lbl" data-en="Dividends Paid">股利發放</span><span class="cf-val">$5,787M</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Debt Issued, Net">舉借淨額</span><span class="cf-val">$46,093M</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Preferred Equity Issued, Net">特別股發行淨額</span><span class="cf-val">$4,954M</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Common Stock Repurchases + Tax Withholding">普通股回購＋稅務代扣</span><span class="cf-val">$(206)M</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl" data-en="Net External Financing Raised">淨外部融資籌集額</span><span class="cf-val">$40,284M</span></div>
+    </div>
+    <div class="note" data-en="Share buybacks are essentially paused ($206M vs $1,500M in FY25) while dividends continue to grow (+22% YoY) and debt/preferred issuance fund the buildout — a capital allocation posture consistent with a company prioritizing balance-sheet capacity for growth CapEx over shareholder returns via buybacks in the near term.">股票回購幾乎暫停（FY26僅$206M，相對FY25的$1,500M），股利仍持續成長（YoY+22%），而債務／特別股發行則用以支應建置——這樣的資本配置態勢，與一家近期優先保留資產負債表空間以支應成長性CapEx、而非透過回購回饋股東的公司相符。</div>
+  </div>
+
+  <!-- ============ Valuation ============ -->
+  <div id="panel-val" class="panel">
+    <div class="section-title" data-en="Valuation Observations">估值觀察</div>
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Ratios &amp; Their Meaning">比率表與其意義</div>
+      <table>
+        <tr><th data-en="Metric">指標</th><th data-en="Value">數值</th><th data-en="Meaning">意義</th></tr>
+        <tr><td data-en="Post-Earnings Trading Range (6/24/2026)">法說會後成交價區間（2026/6/24）</td><td>$156.06&ndash;$162.996</td><td data-en="Derived from a director's Form 4 sale disclosure two weeks post-call — an independent market data point, not a company-reported figure">源自董事Form 4出售揭露，法說會後兩週——為獨立市場數據點，非公司自行揭露</td></tr>
+        <tr><td data-en="Diluted Shares Outstanding (FY26)">稀釋股數（FY26）</td><td>2,914M</td><td data-en="Weighted-average diluted, full year">全年加權平均稀釋股數</td></tr>
+        <tr><td data-en="Implied Market Cap (using $160 midpoint)">隱含市值（以$160中值計）</td><td>≈$466B</td><td data-en="2,914M shares × $160; a rough anchor, not a precise valuation">2,914M股 × $160；為粗略錨點，非精確估值</td></tr>
+        <tr><td data-en="Trailing Non-GAAP P/E (ex-investment gains, FY26 EPS $6.83)">Trailing Non-GAAP P/E（排除投資利得，FY26 EPS $6.83）</td><td>≈23.4x</td><td data-en="At $160/share; the &quot;clean&quot; earnings multiple, stripping the one-time Ampere/Bloom gains">以$160股價計；這是剔除一次性Ampere/Bloom利得後的「乾淨」盈餘倍數</td></tr>
+        <tr><td data-en="Forward Non-GAAP P/E (FY27 guide EPS $8.05)">Forward Non-GAAP P/E（FY27指引EPS $8.05）</td><td>≈19.9x</td><td data-en="Market is pricing meaningfully below a typical hyperscaler-infrastructure multiple, likely reflecting the negative-FCF and leverage concerns this report surfaces">市場定價明顯低於典型超大規模雲端基礎設施股的倍數，可能反映本報告指出的負FCF與槓桿疑慮</td></tr>
+        <tr><td data-en="RPO / TTM Revenue">RPO／TTM營收</td><td>9.5x</td><td data-en="$638B RPO vs $67.4B TTM revenue — an unusually large backlog cushion, but only 12% converts within 12 months">$6,380億RPO相對$674億TTM營收——異常龐大的訂單緩衝，但僅12%於12個月內轉換為營收</td></tr>
+        <tr><td data-en="Net Debt (Debt &minus; Cash)">淨負債（借款減現金）</td><td>$98,252M</td><td data-en="$129,541M total debt less $31,289M cash; rising fast (FY25: $81,782M) as the buildout is debt-funded">總借款$129,541M減現金$31,289M；隨舉債支應建置而快速攀升（FY25：$81,782M）</td></tr>
+        <tr><td data-en="Dividend Yield (at $160, $2.00 annualized)">股利殖利率（以$160股價、年化$2.00計）</td><td>≈1.25%</td><td data-en="Modest yield; capital priority is clearly growth CapEx, not income return">殖利率不高；資本配置優先順序明顯是成長性CapEx，而非收益型回饋</td></tr>
+      </table>
+    </div>
+    <div class="note yellow" data-en="⚑ Reading the forward P/E of ~20x against FY27's guided +34% revenue growth and +18% EPS growth (ex-investment gains) implies the market is not paying a full growth multiple for Oracle's AI infrastructure story — plausibly because the deeply negative trailing FCF, the RPO-to-revenue conversion-timing gap flagged in Analysis.html, and the rapid leverage build are all discounting the growth number. Whether that skepticism is justified is exactly the question the BYOH/prepaid due-diligence list in Analysis.html is trying to pressure-test.">⚑ 以約20倍的Forward P/E對比FY27指引的+34%營收成長與+18% EPS成長（排除投資利得後），意味著市場並未給予Oracle的AI基礎設施故事一個完整的成長股倍數——這很可能是因為深度轉負的trailing FCF、Analysis.html中指出的RPO轉營收時序落差，以及快速攀升的槓桿，共同對這個成長數字打了折扣。這種懷疑是否合理，正是Analysis.html中BYOH／預付合約盡職調查清單試圖驗證的問題。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="FY27 Guidance Summary">FY27財測指引摘要</div>
+      <table>
+        <tr><th data-en="Metric">指標</th><th data-en="Full Year FY27">FY27全年</th><th data-en="Q1 FY27">Q1 FY27</th></tr>
+        <tr><td data-en="Total Revenue Growth">總營收成長</td><td>+34%（固定匯率／constant currency）</td><td>+27%–29%（USD）</td></tr>
+        <tr><td data-en="Total Revenue (Confirmed Target)">總營收（確認目標）</td><td>$90B</td><td>—</td></tr>
+        <tr><td data-en="Cloud Revenue Growth">雲端營收成長</td><td>—</td><td>+58%–64%（USD）</td></tr>
+        <tr><td data-en="Non-GAAP EPS">Non-GAAP EPS</td><td>$8.05（+18% ex-investment gains）</td><td>$1.72–$1.76（+17%–20% USD）</td></tr>
+        <tr><td data-en="Net Cash Outlay for CapEx">Net Cash Outlay for CapEx</td><td>≈$70B</td><td>—</td></tr>
+        <tr><td data-en="Financing Plan">融資計畫</td><td>≈$40B債務＋股權（含已公告$20B ATM增發）</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note" data-en="Long-term targets reaffirmed at the most recent Analyst Day: +31% revenue CAGR, +28% EPS CAGR through FY2030.">最近一次法說會日重新確認的長期目標：+31%營收CAGR、+28% EPS CAGR，至FY2030。</div>
+  </div>
+
+  <div class="foot-note" data-en="For informational purposes only. Not investment advice. All figures sourced from Oracle's FY2026 10-K and Q4 FY2026 8-K/EX-99.1 press release.">僅供資訊參考，非投資建議。所有數字均取自Oracle FY2026 10-K與Q4 FY2026 8-K/EX-99.1新聞稿。</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>

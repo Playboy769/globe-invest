@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oracle (ORCL) — FY Q4 2026 — Q&A / BYOH與預付合約拆解 / 技術與業務平台 / 供應鏈 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height:1.5; }
+  .lang-toggle { position: absolute; top: 20px; right: 24px; background: #fff; border: 1px solid #d5d9e2; color: #b91c1c; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+  .lang-toggle:hover { background: #fef2f2; }
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+  .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; }
+  .tab { padding: 10px 16px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #b91c1c; color: #b91c1c; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #b91c1c; margin-bottom: 8px; }
+  .card p { line-height: 1.65; color: #333; margin-bottom:6px; }
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top:2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink:0; margin-left:10px; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-text { line-height: 1.65; color: #333; }
+  .flag-box { background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #7a2020; }
+  .flag-box.obs { background: #eff6ff; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+  .flag-box.obs .q-text { color: #1e3a6e; }
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+  .sca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .sca-box { border-radius: 8px; padding: 12px; }
+  .sca-box.blue { background: #eff6ff; border: 1px solid #a9c9f5; }
+  .sca-box.green { background: #f0fdf4; border: 1px solid #a3dab1; }
+  .sca-box.orange { background: #fff7ed; border: 1px solid #f0c090; }
+  .sca-box.red { background: #fef2f2; border: 1px solid #f0aab8; }
+  .sca-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .sca-box.blue h4 { color: #1d4ed8; }
+  .sca-box.green h4 { color: #15803d; }
+  .sca-box.orange h4 { color: #c2600a; }
+  .sca-box.red h4 { color: #b91c4a; }
+  .sca-box ul { padding-left: 15px; }
+  .sca-box li { margin-bottom: 4px; line-height: 1.55; color: #333; }
+  .dd-list { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:14px 14px 14px 30px; margin-bottom:12px; }
+  .dd-list li { margin-bottom:8px; line-height:1.6; color:#333; }
+  .stance-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col ul { padding-left: 14px; }
+  .stance-col li { font-size: 12px; margin-bottom: 5px; line-height: 1.55; color: #333; }
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 220px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; white-space:nowrap; }
+  .rev-val { width: 150px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid; }
+  .tech-card.dram { background: #eff6ff; border-color: #a9c9f5; }
+  .tech-card.nand { background: #f5f3ff; border-color: #c7b8f0; }
+  .tech-card.hbm { background: #f0fdf4; border-color: #a3dab1; }
+  .tech-card.pkg { background: #fff7ed; border-color: #f0c090; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 15px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.55; color: #333; }
+  .chain-layer { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px 14px; margin-bottom:10px; border-left:4px solid #94a3b8; }
+  .chain-layer.up { border-left-color:#c2600a; }
+  .chain-layer.mid { border-left-color:#2563eb; }
+  .chain-layer.down { border-left-color:#15803d; }
+  .chain-layer h4 { font-size:12px; font-weight:700; margin-bottom:8px; }
+  .chain-layer.up h4 { color:#c2600a; }
+  .chain-layer.mid h4 { color:#2563eb; }
+  .chain-layer.down h4 { color:#15803d; }
+  .sc-item { font-size:12px; line-height:1.65; color:#333; margin-bottom:7px; }
+  .sc-item b { color:#1a1a2e; }
+  .sc-src { font-size:10.5px; color:#8a94a6; }
+  .conf { display:inline-block; font-size:9.5px; font-weight:700; padding:1px 6px; border-radius:8px; border:1px solid; margin-left:4px; vertical-align:middle; white-space:nowrap; }
+  .conf.hi { color:#15803d; border-color:#a3dab1; }
+  .conf.mid { color:#92400e; border-color:#f0d090; }
+  .conf.lo { color:#b91c1c; border-color:#f0aaaa; }
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border:1px solid; white-space:nowrap; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.65; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap:wrap; }
+  .stat-box { flex: 1; min-width:120px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #b91c1c; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .note { font-size:11px; color:#94a3b8; margin-top:6px; line-height:1.5; }
+  .footer { font-size:11px; color:#94a3b8; text-align:center; margin-top:20px; padding-top:12px; border-top:1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <button id="langBtn" class="lang-toggle" onclick="toggleLang()">English</button>
+  <h1 data-en="Oracle Corporation (ORCL) — FY Q4 2026 Earnings Call Analysis">Oracle Corporation（ORCL）— FY Q4 2026 法說會分析</h1>
+  <p data-en="Q&amp;A Rhetoric Detection / BYOH &amp; Prepaid Infrastructure Contracts Deep Dive / Technology &amp; Business Platforms / Supply Chain / Risk Matrix &nbsp;·&nbsp; Call Date: Jun 10, 2026 (FQ4 &amp; FY2026 full-year results, period ended May 31, 2026) &nbsp;·&nbsp; Cross-referenced with the FY2026 10-K (filed 2026/6/22), the Q4 8-K/EX-99.1 press release, and Form 4 insider filings">Q&amp;A 話術偵測 / BYOH 與預付基礎設施合約深度拆解 / 技術與業務平台 / 供應鏈 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年6月10日（FQ4 暨 FY2026 全年結算，季末2026年5月31日）&nbsp;·&nbsp; 交叉比對 FY2026 10-K（2026/6/22申報）、Q4 8-K/EX-99.1新聞稿、Form 4 內部人申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-en="Q&amp;A Analysis" onclick="sw('qa',this)">Q&A 問答分析</div>
+    <div class="tab" data-en="BYOH / Prepaid Deals" onclick="sw('sca',this)">BYOH／預付合約拆解</div>
+    <div class="tab" data-en="Technology &amp; Platforms" onclick="sw('tech',this)">技術與業務平台</div>
+    <div class="tab" data-en="Supply Chain" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- ============ Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl" data-en="Core Questions">核心問題（含追問）</div></div>
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl" data-en="Logic Gaps / Omissions">邏輯缺口／話術迴避</div></div>
+    </div>
+    <div class="card" style="border-left:4px solid #b45309;">
+      <div class="card-title" data-en="Read This Tab As Rhetoric-Detection, Not Summary">本 tab 的本質是話術偵測，不是摘要</div>
+      <p data-en="Only six analysts got through in a call dominated by prepared remarks (three speakers, five data-center site updates, a new CFO's introduction). Every quantitative ask &mdash; the real component-cost pass-through mechanism, the ROIC math behind &quot;high-20s%,&quot; the BYOH/prepaid share of future RPO &mdash; was answered with a qualitative reassurance framework instead of a number. Separately, and more strikingly: not one analyst asked about free cash flow, which SEC filings show went to a trailing-four-quarter figure of &minus;$23.7B this quarter even as management repeatedly cited operating cash flow &quot;up 54%.&quot; That absence is itself a signal worth flagging.">整場法說會被三位講者的開場白與五個資料中心工地進度報告占去大半篇幅，只留六位分析師發問。每個量化提問——長約中真正的成本轉嫁機制、「高20%區間」ROIC 背後的算式、BYOH／預付合約占未來 RPO 的比例——管理層都用定性的安撫框架回答，而非給出數字。更值得注意的是：全場沒有一位分析師問到自由現金流（Free Cash Flow）——根據 SEC 申報文件，本季 trailing 4-quarter 自由現金流已達 <b>-$237億</b>，管理層卻反覆只強調「營運現金流成長54%」。這個「沒人問」本身就是一個訊號，值得記錄。</p>
+    </div>
+
+    <!-- DiFucci -->
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="John DiFucci (Guggenheim Securities)">John DiFucci（Guggenheim Securities）</div><div class="qa-topic" data-en="Component cost pass-through mechanism in long-term contracts &times; long-term target reconfirmation from the new CFO">長約中零組件成本轉嫁機制 × 新任CFO對長期目標的再確認</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question (Part 1)">問題核心（第一部分）</div><div class="q-text" data-en="CapEx came in higher than expected this quarter, and memory/component costs have risen industry-wide. Even though most Q3/Q4 large AI contracts are prepaid or BYOH, Oracle still has many other contracts. Can management explain, for investors, how the long-term contracts between Oracle, end customers and suppliers actually handle rising component costs?">本季 CapEx 高於預期，記憶體等零組件成本業界普遍上漲。即便Q3、Q4大部分大型AI合約是預付或BYOH，Oracle仍有許多其他合約——能否向投資人解釋，Oracle與終端客戶、供應商之間的長約，實際如何處理零組件成本上升？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Clay: The Q4 CapEx increase itself is mostly about timing, not component prices &mdash; part of his job is to accelerate spend to get ramped revenue sooner. On cost mechanism: when Oracle has certainty (capacity already deployed, or all input costs already locked), it signs fixed-price contracts; when costs are too far out or supply-chain risk is high, it uses floating-cost mechanisms instead. He says this protects Oracle from &quot;sitting there with reduced margins.&quot;">Clay：Q4 CapEx 增加主要是時序問題，不是零組件價格問題——他的工作之一就是設法加速支出以更快取得成長中的營收。成本機制上：當 Oracle 有把握（產能已部署，或所有成本已鎖定）時簽固定價格合約；當成本太遠期或供應鏈風險高時，改用浮動成本機制。他表示這能確保 Oracle 不會「坐視毛利率被侵蝕」。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="Clay describes the fixed-vs-floating decision rule only in the abstract &mdash; no disclosure of what share of the contract book is fixed-price vs floating, no worked example of a floating-cost pass-through, and no acknowledgment that floating-cost contracts by definition mean Oracle's own margin certainty is lower on exactly the newest, largest, least-visible deals (the ones &quot;too far out&quot; to lock). &quot;Robust set of mechanisms&quot; is asserted, not shown.">Clay 只在抽象層面描述固定/浮動的判斷原則——沒有揭露合約組合中固定價格與浮動成本各占多少比例，沒有給出浮動成本轉嫁的實際案例，也沒有承認「浮動成本合約」按定義就代表 Oracle 自身毛利率的確定性，恰恰在最新、最大、能見度最低的那些合約上（也就是「太遠期而無法鎖定」的那批）反而最低。「一套很強健的機制」是斷言，不是佐證。</div></div>
+        <div class="q-block" style="margin-top:12px;"><div class="q-label q" data-en="Core Question (Part 2)">第二問：新任CFO能否為長期目標背書？</div><div class="q-text" data-en="Hilary is a new CFO with only a couple of months' tenure &mdash; can she comment on whether Oracle's long-term targets (from the recent Analyst Day) still hold?">Hilary 到任僅兩個月——她能否評論 Oracle 近期法說會日設定的長期目標是否仍然成立？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Hilary: &quot;Full reconfirmation from my side on the long-term targets&quot; &mdash; citing RPO buildup as the basis for belief.">Hilary：「我這邊完全重新確認長期目標」——理由是 RPO 的累積提供了信心基礎。</div></div>
+        <div class="flag-box obs"><div class="q-label flag" data-en="⚑ Observation">⚑ 觀察</div><div class="q-text" data-en="A CFO two months into the job giving a blanket, unqualified reconfirmation of multi-year CAGR targets (+31% revenue, +28% EPS through FY2030) reads as continuity messaging rather than independent scrutiny &mdash; there is no discussion of what she personally re-underwrote versus what she inherited. That is a normal and expected answer for a new CFO's first call, but it means the &quot;reconfirmation&quot; carries less incremental information than the market may be pricing in.">一位到任僅兩個月的CFO，對橫跨多年的CAGR目標（營收+31%、EPS+28%至FY2030）給出毫無保留的全面重新確認，讀起來更像是延續性的公關語言，而非獨立審視後的結論——她並未說明自己實際重新驗證了哪些假設、哪些只是照單全收前手的框架。這是新任CFO首場法說會的正常且預期反應，但意味著這句「重新確認」所承載的增量資訊，可能低於市場願意賦予的份量。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>DiFucci:</b> "You spent a little bit more this quarter on CapEx than we expected... Can you explain that to investors, like when it comes to these very long-term contracts, like between you and the end customer and the suppliers?"<br><br><b>Clay Magouyrk:</b> "...any increase in CapEx that is not due to component prices from our perspective, that's largely around timing... When we know those costs, we will then do fixed price contracts. Times that we don't know those costs... we then do not do fixed price contracts with our customers... we have, I think, a very robust set of mechanisms to ensure that Oracle is not sitting there with reduced margins."<br><br><b>DiFucci:</b> "...Can you just comment on those long-term targets at all? I know you've only been there a couple of months."<br><br><b>Hilary Maxson:</b> "...we're reconfirming those long-term targets in the sense of the CAGRs that we put into the slide today. We feel comfortable with that... Full reconfirmation from my side on the long-term targets."</div></div>
+      </div>
+    </div>
+
+    <!-- Zelnick -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Brad Zelnick (Deutsche Bank)">Brad Zelnick（Deutsche Bank）</div><div class="qa-topic" data-en="How should investors evaluate returns during this heavy-investment period?">投資人該如何評估重資本投入期間的回報？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Coming from a capital-intensive industry outside tech, how does Hilary suggest investors evaluate Oracle's progress and returns during this period of heavy investment?">Hilary 過去來自科技業以外的資本密集型產業，她建議投資人在這波重資本投入期間，該如何評估 Oracle 的進度與回報？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Hilary offers a &quot;back of envelope&quot; ROIC framework: after-tax operating margin plus depreciation, divided by gross investment at the project level. She estimates steady-state ROIC in the &quot;high 20s%&quot; once a large project's revenue has ramped, excluding upside like GPUs not needing replacement. BYOH-type structures should have even higher ROIC given preserved/improved margins.">Hilary 給出一套「概略估算」的 ROIC 框架：稅後營業利益加折舊，除以專案層級的毛額投資。她估計大型專案營收爬坡完成後，穩態 ROIC 落在「高20%區間」，且未計入諸如GPU不需汰換等上行空間。BYOH類結構因毛利率可維持或改善，ROIC應更高。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="The formula is disclosed, but none of its inputs are: no project-level depreciation schedule, no useful-life assumption for GPUs (the single biggest driver of whether &quot;high 20s%&quot; survives a hardware refresh cycle), and &quot;steady state&quot; is undefined in years. This is precise-sounding math built on unstated assumptions &mdash; useful as a framework, not yet verifiable as a number.">公式本身被揭露了，但其輸入變數全部沒有：沒有專案層級的折舊時程表，沒有GPU使用年限假設（這是「高20%區間」能否撐過硬體汰換週期的最關鍵變數），且「穩態」所需年數也未定義。這是一套聽起來精確、實則建立在未言明假設上的算式——作為思考框架有用，但目前還無法被驗證為一個具體數字。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Zelnick:</b> "...how would you suggest that investors evaluate Oracle's progress and returns during this period of heavy investment?"<br><br><b>Hilary Maxson:</b> "...What we see is return on invested capital in the high 20s at a steady state, once the revenues have ramped for large projects at the project level. That doesn't take into account upsides like who knows if the GPUs don't need to be replaced over the long term... I'm just calculating return on invested capital as after-tax operating margin plus depreciation divided by gross investment, so total gross CapEx at the project level."</div></div>
+      </div>
+    </div>
+
+    <!-- Moerdler -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Mark Moerdler (Bernstein)">Mark Moerdler（Bernstein）</div><div class="qa-topic" data-en="Competitive landscape as Neoclouds, SpaceX and others enter AI data centers">Neocloud、SpaceX等新進者投入AI資料中心的競爭格局</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="With so many vendors entering AI data centers &mdash; Neoclouds, even SpaceX building data centers in space &mdash; where does Oracle see itself competitively, and how does rising industry capacity affect (1) customer retention/renewals, (2) new customer capture, (3) margins?">隨著大量廠商投入AI資料中心——Neocloud、甚至SpaceX的太空資料中心——Oracle如何看待自身的競爭定位？產業產能增加將如何影響：①客戶續約留存、②新客戶取得、③毛利率？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Clay pivots entirely to relationship quality: cites the 97.5% global GPU utilization rate and the 49%-of-customers/92%-of-GPUs renewal stat as evidence of satisfaction. On margins, he asserts that over time Oracle can achieve &quot;higher and higher margins&quot; while &quot;offering lower and lower prices&quot; through R&amp;D-driven efficiency &mdash; without addressing what new supply from competitors does to Oracle's own pricing power.">Clay 完全轉向以「客戶關係品質」回應：引用97.5%的全球GPU使用率與「49%客戶續約、涵蓋92%GPU」的數據作為滿意度佐證。毛利率部分，他斷言隨時間推移Oracle能靠研發驅動的效率同時做到「毛利率越來越高」與「報價越來越低」——但完全沒有回應競爭對手新增產能對Oracle自身訂價能力的影響。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="Moerdler asked a three-part quantifiable question (retention / new-customer capture / margin) about competitive supply pressure; Clay answered zero of the three with a number, and the &quot;higher margins + lower prices simultaneously&quot; claim is asserted without reconciling how that squares with the 10-K's own admission that Oracle &quot;at times has to accept less favorable terms with suppliers to minimize supply constraints&quot; &mdash; i.e., Oracle's own cost side is under pressure even before competitor pricing pressure is considered.">Moerdler 問的是三個可量化的部分（留存／新客戶取得／毛利率）在競爭產能上升下的影響；Clay 對三者都沒有給出任何數字，而「毛利率越來越高、報價卻越來越低」這個說法，也完全沒有解釋這要如何與10-K自己承認的「為降低供應限制，有時必須接受對Oracle較不利的供應商條款」互相調和——換言之，在還沒考慮競爭對手訂價壓力之前，Oracle自身的成本端就已承壓。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Moerdler:</b> "...how do you see that increase in capacity impacting your ability to, one, retain customers, renew contracts, two, capture new customers, and three, maintain or improve margins?"<br><br><b>Clay Magouyrk:</b> "...our global GPU utilization rate is 97.5%... I think there's ways that Oracle gets higher and higher margins, but we actually can offer lower and lower prices to our customers."</div></div>
+      </div>
+    </div>
+
+    <!-- Bachman -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Keith Bachman (BMO Capital Markets)">Keith Bachman（Bank of Montreal）</div><div class="qa-topic" data-en="Outcome-based pricing and token bundles &mdash; which modules, and what growth impact?">成果導向訂價與代幣包——涉及哪些模組？對成長的影響為何？</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="What's the rationale for moving to outcome-based pricing and rolling out token packages? Which application modules (ERP, HCM, etc.) does this apply to, and how might it affect growth?">轉向成果導向訂價、推出代幣包的邏輯是什麼？涉及哪些應用模組（ERP、HCM等）？可能如何影響成長？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Mike gives several vertical examples (construction value-under-management, hospitality upsell %, healthcare patient throughput) and says the model is now being expanded fleet-wide across Fusion and industry apps. Token bundles: 33 customers pre-purchased in a &quot;limited rollout&quot; this quarter, citing Aon and Liberty Energy by name.">Mike 舉了多個垂直產業案例（建築在管價值、飯店業upsell百分比、醫療病患通量），並表示此模式現正擴展至整個Fusion與產業應用機隊。代幣包：本季「有限度推出」中已有33個客戶預購，並點名Aon與Liberty Energy。</div></div>
+        <div class="flag-box"><div class="q-label flag" data-en="⚑ Logic Gap">⚑ 邏輯缺口</div><div class="q-text" data-en="&quot;33 customers&quot; and &quot;limited rollout&quot; against a customer base serving tens of thousands of enterprises is a rounding error &mdash; no revenue contribution, no run-rate, no timeline for full-fleet rollout was given, despite Bachman explicitly asking about growth impact. The examples are illustrative, not quantified.">相對於服務數萬家企業的客戶基礎而言，「33個客戶」與「有限度推出」是統計上的捨入誤差——儘管 Bachman 明確問了對成長的影響，管理層完全沒有給出營收貢獻、run-rate，或全面推出的時程。所舉案例僅供說明，未被量化。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Bachman:</b> "...how do you think this reduces friction, and is this related to what modules?... how do you think this might impact growth?"<br><br><b>Mike Sicilia:</b> "...In Q4, we started a limited rollout of our token bundles and had 33 customers, like Aon Services Corporation and Liberty Energy, pre-purchase tokens..."</div></div>
+      </div>
+    </div>
+
+    <!-- Lenschow -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Raimo Lenschow (Barclays)">Raimo Lenschow（Barclays）</div><div class="qa-topic" data-en="The classic business &mdash; database momentum vs Azure/OCI, and applications growth deceleration">傳統核心業務——資料庫對Azure/OCI的動能、應用軟體成長放緩</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="Beyond the AI story, what's happening in the classic database business against OCI/Azure competition? Applications growth ticked down slightly &mdash; what's the read on the &quot;classic&quot; non-AI business given market noise about a SaaS slowdown?">除了AI敘事之外，傳統資料庫業務對上OCI/Azure的競爭現況如何？應用軟體成長率略降——在市場對SaaS放緩有雜音的情況下，如何解讀「傳統」非AI業務？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Mike is comparatively forthcoming here: double-digit apps growth on a $4.1B quarterly run-rate, SaaS deferred revenue +16% (growing faster than in-quarter revenue), multi-cloud database revenue +404% YoY with bookings +325%, tokens +3.25x. He frames any &quot;SaaS apocalypse&quot; concern as a lagging worry from prior quarters that mission-critical customers have moved past.">Mike 在此相對坦誠：應用軟體在$41億季度run-rate上雙位數成長，SaaS遞延收入+16%（成長快於當季認列營收），多雲資料庫營收YoY+404%、訂單+325%，代幣用量成長3.25倍。他將「SaaS末日論」的疑慮定性為前幾季的滯後性擔憂，任務關鍵型客戶已經走出這個階段。</div></div>
+        <div class="flag-box obs"><div class="q-label flag" data-en="⚑ Observation (Not a Gap)">⚑ 觀察（非缺口）</div><div class="q-text" data-en="This is the most number-dense answer of the call and largely checks out against the 10-K/press release: Cloud Applications revenue was indeed $4,126M in Q4 (+10% YoY), consistent with &quot;$4.1B, up 10%.&quot; The one caveat worth carrying forward: Software license revenue (the traditional on-prem proxy) fell (6%) YoY in Q4 and (9%) for the full year &mdash; a genuine structural decline that the &quot;classic business is healthy&quot; framing glosses over by only discussing Applications and Database, not on-premise Software licensing.">這是全場數字密度最高的回答，且與10-K／新聞稿數字大致吻合：Q4 Cloud Applications營收確實為$41.26億（YoY+10%），與「$41億、+10%」一致。唯一值得留意的但書：Software license營收（傳統地端授權的代理指標）Q4 YoY下滑(6%)、全年下滑(9%)——這是真實的結構性衰退，而「傳統業務健康」的敘事框架只談了Applications與Database，刻意迴避了地端Software授權本身。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Lenschow:</b> "...Can you address a little bit what you're seeing on the database side?... Can you talk to what you see in the classic business?"<br><br><b>Mike Sicilia:</b> "...double-digit growth on an in-quarter run rate of $4.1 billion is pretty good... our deferred position in the quarter grew by 16%... they grew cloud database 29% in the quarter, with... multi-cloud revenue growing at 4X, tokens growing 3.25X..."</div></div>
+      </div>
+    </div>
+
+    <!-- Materne -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst" data-en="Kirk Materne (Evercore ISI)">Kirk Materne（Evercore ISI）</div><div class="qa-topic" data-en="BYOH/prepaid mix trajectory &times; reconciling the $70B CapEx guide with the $20&ndash;25B prepayment exclusion">BYOH／預付合約比例走向 × $700億CapEx指引與$200-250億預付款排除項的對帳</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q" data-en="Core Question">問題核心</div><div class="q-text" data-en="About 12% of RPO now relates to BYOH/prepaid deals &mdash; where could that mix go? What's the value differentiation of BYOH deals versus GPU-included deals? And on the CapEx guide: the $70B net cash outlay figure excludes $20&ndash;25B in prepayments &mdash; can management walk through that reconciliation?">目前約12%的RPO與BYOH／預付合約相關——這個比例未來可能走向何方？BYOH合約相對於含GPU合約的價值差異化在哪？CapEx指引方面：$700億淨現金支出數字排除了$200-250億的預付款——能否說明這個對帳關係？</div></div>
+        <div class="q-block"><div class="q-label a" data-en="Management Response">管理層回應</div><div class="q-text" data-en="Clay: explicitly declines to forecast the future mix &mdash; &quot;I can't tell you exactly the mixture&quot; &mdash; framing it as an evolving business model shaped by accelerator diversity and customer preference; emphasizes that what Oracle actually sells beyond capital is design, security, networking and operational care of the cluster. Hilary: gives a clean, specific reconciliation &mdash; FY27 net cash outlay for CapEx ≈$70B excludes $20&ndash;25B of customer prepayments/timing differences tied to third-party manufacturers (not vendor financing); collecting cash upfront lowers Oracle's funding need and improves ROIC versus the traditional pay-then-collect sequence.">Clay：明確拒絕預測未來比例——「我沒辦法告訴你確切的組合」——將其定性為由加速器多樣性與客戶偏好共同形塑的演進中商業模式；強調Oracle在資本之外真正銷售的是叢集的設計、資安、網路與維運照護。Hilary：給出乾淨具體的對帳——FY27淨現金CapEx支出約$700億，排除了與第三方製造商相關（非供應商融資）的$200-250億客戶預付款/時序差異；提前收款降低了Oracle的融資需求，也比傳統「先付後收」的順序有更好的ROIC。</div></div>
+        <div class="flag-box obs"><div class="q-label flag" data-en="⚑ Honest Admission, Still a Gap">⚑ 誠實的坦承，但仍是缺口</div><div class="q-text" data-en="Clay's refusal to forecast the mix is more candid than most of the call's deflections &mdash; but it still leaves the single most decision-relevant number (what share of the next leg of RPO will be capital-light BYOH/prepaid versus capital-heavy Oracle-funded) undisclosed. Hilary's CapEx reconciliation, by contrast, is genuinely precise and matches the 8-K's Net Cash Outlay table exactly ($47,726M FY26 actual vs. the ~$70B FY27 guide) &mdash; the clearest piece of quantitative disclosure in the entire Q&amp;A.">Clay 拒絕預測比例的態度，比全場多數迴避手法都來得坦誠——但仍讓最具決策意義的數字（下一輪RPO中，資本較輕的BYOH／預付與資本較重的Oracle自建各占多少）維持未揭露狀態。相對地，Hilary 的CapEx對帳非常精確，與8-K揭露的Net Cash Outlay表完全吻合（FY26實際$477.26億 vs FY27指引約$700億）——是整場問答中最清晰的量化揭露。</div></div>
+        <div class="orig-box"><div class="orig-label" data-en="Verbatim Transcript">逐字稿原文</div><div class="orig-text"><b>Materne:</b> "...about 12% of RPO is now related to these type of deals. When you look at the pipeline, where do you think that split could ultimately go?..."<br><br><b>Clay Magouyrk:</b> "...I can't tell you exactly the mixture of when we do bring your own hardware versus when we do prepay versus when we bring the capital..."<br><br><b>Hilary Maxson:</b> "...for 2027... we expect around $70 billion in net cash outlay for capital expenditures. That does exclude the $20 billion-$25 billion in repayments that we will collect... it's just associated with third-party manufacturers. Not vendor financing..."</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BYOH / Prepaid Deals ============ -->
+  <div id="panel-sca" class="panel">
+    <div class="section-title" data-en="BYOH / Prepaid AI Infrastructure Contracts &mdash; Full Structure">BYOH／預付 AI 基礎設施合約 — 完整架構</div>
+    <div class="card" style="border-left:4px solid #2563eb;">
+      <div class="card-title" data-en="Why This Is Oracle's Equivalent of a &quot;Special Transaction&quot;">為何這是本季 Oracle 的「特殊交易」</div>
+      <p data-en="Instead of taking 100% of the capital risk of building AI data centers, Oracle is increasingly having large AI customers either prepay for GPU capacity in advance, or supply the GPU hardware themselves (&quot;bring your own hardware,&quot; BYOH) while Oracle builds, secures, networks and operates the surrounding cluster. This quarter alone, $67B of new AI infrastructure contracts were signed, the majority BYOH or prepaid &mdash; pushing the cumulative BYOH/prepaid total to $75B against a record $638B RPO.">Oracle 不再100%自行承擔興建AI資料中心的資本風險，而是讓越來越多大型AI客戶，要麼提前預付GPU產能費用，要麼自行提供GPU硬體（「自帶硬體」BYOH），Oracle 則負責興建、資安、網路與叢集周邊維運。單本季就簽下$670億新AI基礎設施合約，其中多數為BYOH或預付——使累計BYOH／預付總額達到$750億，佔創紀錄的$6,380億RPO的一部分。</p>
+    </div>
+    <div class="sca-grid">
+      <div class="sca-box blue">
+        <h4 data-en="Scale">規模</h4>
+        <ul>
+          <li data-en="$67B in new AI infrastructure contracts signed this quarter, majority BYOH or prepaid">本季新簽$670億AI基礎設施合約，多數為BYOH或預付</li>
+          <li data-en="Cumulative BYOH/prepaid total now $75B">累計BYOH／預付總額達$750億</li>
+          <li data-en="Total RPO $638B, up 363% YoY, up $85B QoQ">總RPO $6,380億，YoY+363%，QoQ+$850億</li>
+          <li data-en="Materne cites ~12% of RPO tied to BYOH/prepaid structures (unconfirmed by management)">Materne 提及約12%的RPO與BYOH／預付結構相關（管理層未直接確認）</li>
+          <li data-en="Four customers each contracted &gt;$8B this quarter">本季有四家客戶個別簽約金額超過$80億</li>
+        </ul>
+      </div>
+      <div class="sca-box green">
+        <h4 data-en="Duration &amp; Delivery Timeline">期限與交付時程</h4>
+        <ul>
+          <li data-en="FY26 delivered &gt;1.2 GW to customers; FQ1 FY27 alone approaching ~1 GW">FY26 全年交付客戶逾1.2GW；FY27 Q1單季就將接近1GW</li>
+          <li data-en="Abilene, TX: 42% delivered today, +35% within 90 days">德州Abilene：目前已交付42%，未來90天內再交付+35%</li>
+          <li data-en="Shackelford TX / Doña Ana NM: customer delivery begins H1 CY2027">德州Shackelford／新墨西哥Doña Ana：客戶交付於2027上半年開始</li>
+          <li data-en="Saline MI / Port Washington WI: customer delivery begins H2 CY2027">密西根Saline／威斯康辛Port Washington：客戶交付於2027下半年開始</li>
+        </ul>
+      </div>
+      <div class="sca-box orange">
+        <h4 data-en="Financial Commitments">財務承諾</h4>
+        <ul>
+          <li data-en="Prepaid/BYOH contracts carry &quot;no degradation in margin&quot; vs. traditional contracts (asserted, not itemized)">預付／BYOH合約毛利率「相較傳統合約無任何折損」（僅為斷言，未逐項揭露）</li>
+          <li data-en="Steady-state ROIC estimated in the high-20s%, back-of-envelope methodology">穩態ROIC概略估算落在高20%區間</li>
+          <li data-en="FY27 funding plan: ~$40B debt + equity, incl. the announced $20B ATM equity issuance; no additional debt planned in CY2026">FY27資金計畫：約$400億債務加股權融資，含已公告$200億ATM增發；不預期2026年內再舉新債</li>
+          <li data-en="FY27 net cash outlay for CapEx ≈$70B, excluding $20&ndash;25B of prepayment/timing offsets">FY27淨現金CapEx支出約$700億，不含$200-250億預付款／時序沖抵項</li>
+        </ul>
+      </div>
+      <div class="sca-box red">
+        <h4 data-en="Still Unverified">尚待驗證</h4>
+        <ul>
+          <li data-en="Exact forward split of RPO between BYOH/prepaid and traditional Oracle-funded capacity">RPO未來在BYOH／預付與Oracle自建產能之間的確切比例</li>
+          <li data-en="Who bears GPU technology-obsolescence risk when Oracle still owns the prepaid hardware">當Oracle仍持有預付硬體的所有權時，GPU技術淘汰風險由誰承擔</li>
+          <li data-en="Whether the 2027H2 delivery sites (Saline, Port Washington) stay on schedule given the 10-K's own disclosed power/site/GPU-availability risk factors">Saline、Port Washington等2027下半年交付工地，能否在10-K自行揭露的電力／場址／GPU供給風險因子下維持時程</li>
+          <li data-en="Margin comparability across the growing mix of contract types over a multi-year execution horizon">在多年期執行期間，日益多元的合約類型之間，毛利率是否真正可比</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4 data-en="What This Structure Means for Oracle">對 Oracle 的意義</h4>
+        <ul>
+          <li data-en="Cuts the amount of capital Oracle itself must raise to build AI data centers">大幅降低Oracle自身建置AI資料中心所需籌措的資本</li>
+          <li data-en="Collecting cash upfront (vs. pay-then-collect) mechanically improves reported ROIC">提前收款（相對於先付後收）機械性地改善帳面ROIC</li>
+          <li data-en="But Oracle is increasingly a data-center design/operations/security service business layered on top of customer- or Oracle-owned silicon &mdash; a lower-margin-per-asset, higher-volume model if margin parity claims don't hold over time">但Oracle正日益轉型為疊加在客戶或自有晶片之上的資料中心設計／維運／資安服務業——若「毛利率無折損」的說法無法長期成立，這將是單位資產毛利較低、但量更大的模式</li>
+          <li data-en="Execution risk scales with delivery pace: Clay himself calls these &quot;extremely complex clusters that require constant care and feeding&quot;">執行風險隨交付速度同步放大：Clay 自己形容這些是「需要持續照料維護的極複雜叢集」</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4 data-en="What This Structure Means for Customers">對客戶的意義</h4>
+        <ul>
+          <li data-en="Guaranteed priority access to capacity in a supply-constrained GPU/power market">在GPU／電力供給吃緊的市場中，取得產能的優先保障</li>
+          <li data-en="BYOH customers keep control of, and depreciation exposure to, their own chips">BYOH客戶保有自有晶片的控制權，同時也自行承擔其折舊曝險</li>
+          <li data-en="Prepaid customers effectively provide Oracle interest-free short-term financing for the buildout in exchange for locked-in capacity">預付客戶實質上以無息短期融資協助Oracle建置，換取鎖定的產能保障</li>
+          <li data-en="No disclosed penalty/refund mechanism if delivery timelines (2027H2 sites) slip">若交付時程（2027下半年工地）延誤，未揭露任何罰則或退款機制</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dd-list">
+      <div class="section-title" style="margin-bottom:10px;" data-en="Due-Diligence Follow-Ups">核心疑問：盡職調查式追問清單</div>
+      <ol>
+        <li data-en="What is the actual margin delta (in bp) between BYOH/prepaid contracts and traditional GPU-as-a-service contracts &mdash; &quot;at or better&quot; is a qualitative claim with no bp/pp figure disclosed anywhere.">BYOH／預付合約與傳統GPU即服務合約之間的實際毛利率差異（以基點計）為何——「相同或更優」是定性說法，全篇未揭露任何基點／百分點數字。</li>
+        <li data-en="On prepaid deals where Oracle retains hardware ownership, what is the depreciation schedule assumption for GPUs, and how does it interact with the ROIC math Hilary described?">在Oracle保留硬體所有權的預付合約中，GPU的折舊時程假設為何？這與Hilary所述的ROIC算式如何互動？</li>
+        <li data-en="What contractual remedies exist if a customer's prepaid deposit outpaces delivered capacity value, or if a data center delivery (Saline, Port Washington) slips past its H2 CY2027 target given power/GPU supply risk?">若客戶預付金額超前於已交付的產能價值，或若資料中心交付（Saline、Port Washington）因電力／GPU供給風險延誤超過2027下半年目標，合約上有何救濟機制？</li>
+        <li data-en="Headcount (141,000 employees, only 2,000 in Hardware) versus the pace of physical buildout (1.2 GW delivered in FY26, ~1 GW in FQ1 FY27 alone) &mdash; is operational capacity scaling with delivery pace?">員工人數（141,000人，其中硬體部門僅2,000人）相對於實體建置速度（FY26交付1.2GW，FY27 Q1單季近1GW）——維運人力是否跟得上交付速度？</li>
+        <li data-en="RPO's own recognition schedule (12% within 12 months) implies only ~$76B of the $638B RPO converts to revenue in the next year &mdash; against a $90B FY27 total revenue guide, meaning most of FY27's incremental revenue must come from net-new bookings and/or an accelerating RPO-to-revenue conversion rate that was never explicitly reconciled on the call.">RPO自身的認列排程（12個月內12%）意味著$6,380億RPO中僅約$760億會在未來12個月轉為營收——相對於FY27總營收指引$900億，代表FY27大部分增量營收必須來自淨新增訂單及／或加速的RPO轉營收速度，而這在法說會上從未被明確對帳說明。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============ Technology & Platforms ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title" data-en="Q4 FY26 Revenue by Offering">FY26 Q4 各業務線營收</div>
+    <div class="rev-chart">
+      <div class="rev-row"><div class="rev-name" data-en="Cloud Infrastructure (IaaS)">Cloud Infrastructure（IaaS）</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#b91c1c;">$5,787M &nbsp;+93% YoY</div></div><div class="rev-val">30% of total</div></div>
+      <div class="rev-row"><div class="rev-name" data-en="Cloud Applications (SaaS)">Cloud Applications（SaaS）</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:71%; background:#2563eb;">$4,126M &nbsp;+10% YoY</div></div><div class="rev-val">22% of total</div></div>
+      <div class="rev-row"><div class="rev-name" data-en="Software (license + support)">Software（授權＋支援）</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#6d28d9;">$6,824M &nbsp;(2%) YoY</div></div><div class="rev-val">36% of total</div></div>
+      <div class="rev-row"><div class="rev-name" data-en="Services">Services</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:26%; background:#15803d;">$1,523M &nbsp;+13% YoY</div></div><div class="rev-val">8% of total</div></div>
+      <div class="rev-row"><div class="rev-name" data-en="Hardware">Hardware</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:16%; background:#c2600a;">$924M &nbsp;+9% YoY</div></div><div class="rev-val">5% of total</div></div>
+    </div>
+    <div class="note" data-en="Bar widths are scaled within each row's own value for readability, not to a shared axis; see Financials.html for exact percent-of-total figures. Source: 8-K/EX-99.1 Supplemental Analysis of GAAP Revenues.">長條寬度僅為各列自身數值的視覺比例，非共用軸；精確佔比請見 Financials.html。資料來源：8-K/EX-99.1 GAAP營收補充分析表。</div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Three Business Platforms">三大業務平台</div>
+    <div class="tech-grid">
+      <div class="tech-card dram">
+        <h4 data-en="Cloud Applications — Fusion &amp; Industry Suites">Cloud Applications — Fusion 與產業套件</h4>
+        <ul>
+          <li data-en="1,000+ AI agents delivered across application suites over the past year">過去一年跨應用套件累計交付逾1,000個AI代理</li>
+          <li data-en="300+ customers went live on Fusion alone in the quarter">單季Fusion即有逾300家客戶上線</li>
+          <li data-en="Named wins: Exelon (utilities), Wright County Sheriff (public safety), Westfield Insurance (Fusion ERP), Piraeus Bank (Oracle Banking)">具名案例：Exelon（公用事業）、Wright County警局（公共安全）、Westfield Insurance（Fusion ERP）、Piraeus Bank（Oracle Banking）</li>
+          <li data-en="US Dept. of Veterans Affairs: 14 medical centers live, 29,000 clinicians, 500,000 veterans served">美國退伍軍人事務部：14個醫療中心上線，服務29,000名臨床人員、50萬名退伍軍人</li>
+          <li data-en="US Office of Personnel Management: agency-wide Fusion HCM award announced (post-quarter, not in Q4 bookings)">美國人事管理局：機構全面採用Fusion HCM（於季後宣布，未計入Q4訂單）</li>
+          <li data-en="New pricing: outcome-based models (e.g. per-candidate-screened, per-upsell%) + token bundles, 33 customers in limited rollout">新訂價：成果導向模式（如每篩選候選人計價、按upsell百分比計價）＋代幣包，本季33客戶有限度試行</li>
+        </ul>
+      </div>
+      <div class="tech-card hbm">
+        <h4 data-en="Cloud Infrastructure — OCI">Cloud Infrastructure — OCI</h4>
+        <ul>
+          <li data-en="97.5% global GPU utilization rate">全球GPU使用率97.5%</li>
+          <li data-en="35,000 GPUs from 59 customers came up for renewal in Q4; 49% of customers renewed, covering 92% of those GPUs; remaining 8% largely resold to other customers same quarter">Q4有35,000顆GPU、來自59家客戶到期續約；49%客戶續約，涵蓋92%GPU；剩餘8%多數同季轉售給其他客戶</li>
+          <li data-en="&quot;Acceleron&quot; proprietary networking technology cited for highest-performance, lowest-cost networking">自有網路技術「Acceleron」，主打最高效能、最低成本的網路架構</li>
+          <li data-en="Long-term margin profile guided at 30&ndash;40% for OCI">OCI長期毛利率指引為30-40%</li>
+          <li data-en="Named win: Vodafone &mdash; OCI Dedicated Region + multi-cloud database + apps, up to 60% faster processes">具名案例：Vodafone——OCI專用區域＋多雲資料庫＋應用軟體，流程最快提速60%</li>
+        </ul>
+      </div>
+      <div class="tech-card pkg">
+        <h4 data-en="Database — Multi-Cloud Acceleration">Database — 多雲加速</h4>
+        <ul>
+          <li data-en="Cloud database revenue +29% YoY in Q4; multi-cloud database revenue +404% YoY, bookings +325% YoY">Q4雲端資料庫營收YoY+29%；多雲資料庫營收YoY+404%，訂單YoY+325%</li>
+          <li data-en="New: Oracle AI Agent Memory (agent context/memory library), Oracle Deep Data Security (row/column-level AI access controls)">新功能：Oracle AI Agent Memory（代理上下文／記憶庫）、Oracle Deep Data Security（列／欄級AI存取控管）</li>
+          <li data-en="Multi-cloud database now unlocking new regions and partnerships, including with competitor clouds">多雲資料庫持續開拓新地區與合作夥伴，包含與競爭對手雲端平台合作</li>
+          <li data-en="Named win: Claro (LatAm telecom, 30M subscribers) &mdash; OCI + Field Service + Oracle AI Data Platform">具名案例：Claro（拉美電信商，3,000萬用戶）——OCI＋Field Service＋Oracle AI Data Platform</li>
+        </ul>
+      </div>
+      <div class="tech-card nand">
+        <h4 data-en="Five Flagship Data Center Sites">五大旗艦資料中心工地</h4>
+        <ul>
+          <li data-en="Abilene, TX: 42% delivered, +35% within 90 days, remainder next quarter">德州Abilene：已交付42%，90天內再交付35%，餘量下季完成</li>
+          <li data-en="Shackelford, TX: 115MW online, &gt;1 month ahead of schedule; customer delivery H1 CY2027">德州Shackelford：115MW已上線，提前逾一個月；客戶交付於2027上半年</li>
+          <li data-en="Doña Ana, NM: powered by Bloom Energy fuel cells; customer delivery H1 CY2027">新墨西哥Doña Ana：由Bloom Energy燃料電池供電；客戶交付於2027上半年</li>
+          <li data-en="Saline, MI: network core ahead of schedule; customer delivery H2 CY2027">密西根Saline：網路核心提前完工；客戶交付於2027下半年</li>
+          <li data-en="Port Washington, WI: customer delivery H2 CY2027">威斯康辛Port Washington：客戶交付於2027下半年</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title" data-en="Long-Term Demand Narrative">長期需求場景敘事</div>
+      <p data-en="Management's core thesis is that AI infrastructure demand dwarfs the pre-AI cloud market (&quot;makes the existing cloud infrastructure market look small&quot;), that Oracle's full-stack position (infrastructure + database + applications) puts it at the center of enterprise AI conversations, and that agentic coding is cited as the clearest current proof point of AI value &mdash; including internally at Oracle itself. The new outcome-based and token-based pricing models are framed as the mechanism for converting that demand into revenue without customers over-committing budget upfront.">管理層的核心論點是：AI基礎設施需求遠超越AI之前的雲端市場（「讓現有雲端基礎設施市場相形見絀」）；Oracle的全端定位（基礎設施＋資料庫＋應用軟體）使其站上企業AI對話的核心；agentic coding（代理式程式協作）被引用為當前AI價值最明確的證明點——包括在Oracle內部自身的使用。新的成果導向與代幣制訂價模式，被定位為在不讓客戶預先過度承諾預算的前提下，把這股需求轉化為營收的機制。</p>
+    </div>
+  </div>
+
+  <!-- ============ Supply Chain ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="section-title" data-en="Supply Chain / Value Chain — from the FY2026 10-K">供應鏈／價值鏈 — 源自 FY2026 10-K</div>
+
+    <div class="card" style="border-left:4px solid #b91c1c;">
+      <div class="card-title" data-en="Supplier → Oracle → Customer Flow (Illustrative Sankey)">供應商 → Oracle → 客戶 流向圖（示意 Sankey）</div>
+      <p data-en="Node/link values are relative and illustrative (scaled to the largest flow), not exact dollar figures — Oracle discloses none of the underlying supplier or large-customer contract values. Every relationship drawn here is sourced from the cards below or the FY2026 10-K/8-K/earnings call as cited; the diagram visualizes those sourced facts, it does not add new ones. Hover a node or link for detail.">節點／連結數值為相對規模示意（依最大流量縮放），非精確金額——Oracle並未揭露任何具體供應商或大型客戶合約金額。圖中每一條關係均取材自下方卡片或FY2026 10-K／8-K／法說會逐字稿（出處見下方文字），此圖僅將已有出處的事實視覺化，不新增未查證的資訊。滑鼠移至節點或連結可看細節。</p>
+      <div id="sankeyEmbed_s1r15s4" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+      <script>
+      (function(){
+        var DATA = {"nodes":[{"id":"gpu","label":"GPU / AI Accelerator Suppliers","color":"#c2600a"},{"id":"memory","label":"Memory Device Suppliers","color":"#c2600a"},{"id":"components","label":"Single-/Sole-Source Hardware Components","color":"#92400e"},{"id":"mfg","label":"Third-Party Manufacturing Partners","color":"#92400e"},{"id":"dclease","label":"Third-Party Data Center Lease Providers","color":"#78350f"},{"id":"power","label":"Power / Energy Suppliers (incl. Bloom Energy Fuel Cells)","color":"#78350f"},{"id":"oracle","label":"Oracle Corporation","color":"#b91c1c"},{"id":"oci","label":"Cloud Infrastructure (OCI)","color":"#1d4ed8"},{"id":"apps","label":"Cloud Applications (SaaS)","color":"#2563eb"},{"id":"db","label":"Database (Multi-Cloud)","color":"#1e40af"},{"id":"byoh","label":"BYOH / Prepaid AI Infrastructure Customers (unnamed hyperscale-scale)","color":"#15803d"},{"id":"vodafone","label":"Vodafone","color":"#16a34a"},{"id":"va","label":"US Dept. of Veterans Affairs","color":"#16a34a"},{"id":"opm","label":"US Office of Personnel Management","color":"#16a34a"},{"id":"claro","label":"Claro (LatAm Telecom, 30M subscribers)","color":"#16a34a"},{"id":"other_named","label":"Other Named Customers (Exelon, Westfield Insurance, Piraeus Bank, NHS SBS, Oldest, QXO, Wright County Sheriff)","color":"#22c55e"}],"links":[{"source":"gpu","target":"oracle","value":35},{"source":"memory","target":"oracle","value":20},{"source":"components","target":"oracle","value":12},{"source":"mfg","target":"oracle","value":25},{"source":"dclease","target":"oracle","value":18},{"source":"power","target":"oracle","value":11},{"source":"oracle","target":"oci","value":58},{"source":"oracle","target":"apps","value":41},{"source":"oracle","target":"db","value":22},{"source":"oci","target":"byoh","value":54},{"source":"oci","target":"vodafone","value":4},{"source":"apps","target":"vodafone","value":3},{"source":"apps","target":"va","value":8},{"source":"apps","target":"opm","value":6},{"source":"apps","target":"claro","value":2},{"source":"apps","target":"other_named","value":22},{"source":"db","target":"claro","value":12},{"source":"db","target":"other_named","value":10}]};
+        function render(){
+          var container = document.getElementById("sankeyEmbed_s1r15s4");
+          if (!container) return;
+          var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+          var gMain = svg.append("g");
+          var tooltip = document.createElement("div");
+          tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+          container.appendChild(tooltip);
+          function showTooltip(event, text){
+            var rect = container.getBoundingClientRect();
+            tooltip.textContent = text;
+            tooltip.style.display = "block";
+            tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+            tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+          }
+          function hideTooltip(){ tooltip.style.display = "none"; }
+          function draw(){
+            var rect = container.getBoundingClientRect();
+            var w = rect.width, h = rect.height;
+            if (w < 50 || h < 50) return;
+            svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+            gMain.selectAll("*").remove();
+            if (!DATA.nodes.length) return;
+            try {
+              var nodePadding = 16;
+              function makeGen(extentH){
+                return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+              }
+              var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+              var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+              var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+              var colCounts = {};
+              graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+              var maxPerColumn = 0;
+              for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+              var virtualH = Math.max(h, maxPerColumn*26);
+              var graph;
+              if (virtualH > h) {
+                var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+                var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+                graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+              } else {
+                graph = graph1;
+                virtualH = h;
+              }
+              svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+              var k = Math.min(1, h / virtualH);
+              var fontSize = Math.min(10.5/k, 10.5/0.45);
+              var minSep = fontSize + 3;
+              var dodgeGroups = {};
+              graph.nodes.forEach(function(d){
+                var anchorLeft = d.x0 < w/2;
+                var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+                var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+                (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+              });
+              Object.keys(dodgeGroups).forEach(function(gkey){
+                var arr = dodgeGroups[gkey];
+                arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+                var prevY = null;
+                arr.forEach(function(d){
+                  var y = (d.y0+d.y1)/2;
+                  if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+                  d._labelY = y;
+                  prevY = y;
+                });
+              });
+              var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+                .attr("d", d3.sankeyLinkHorizontal())
+                .attr("stroke", function(d){ return d.source.color; })
+                .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+                .attr("stroke-opacity", 0.38);
+              var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+              nodeSel.append("rect")
+                .attr("x", function(d){ return d.x0; })
+                .attr("y", function(d){ return d.y0; })
+                .attr("width", function(d){ return d.x1-d.x0; })
+                .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+                .attr("fill", function(d){ return d.color; })
+                .attr("rx", 1);
+              nodeSel.append("text")
+                .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+                .attr("y", function(d){ return d._labelY; })
+                .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+                .attr("dominant-baseline", "middle")
+                .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+                .style("paint-order", "stroke")
+                .style("stroke", "#fff")
+                .style("stroke-width", "3px")
+                .style("stroke-linejoin", "round")
+                .attr("fill", "#333")
+                .text(function(d){ return d.label; });
+              var connectedMap = {};
+              graph.links.forEach(function(l){
+                (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+                (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+              });
+              nodeSel.on("mousemove", function(event, d){
+                showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+                var connected = connectedMap[d.id] || {};
+                linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+                nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+                nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+              }).on("mouseleave", function(){
+                hideTooltip();
+                linkSel.attr("stroke-opacity", 0.38);
+                nodeSel.select("rect").attr("opacity", 1);
+                nodeSel.select("text").attr("opacity", 1);
+              });
+              linkSel.on("mousemove", function(event, d){
+                showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+                linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+              }).on("mouseleave", function(){
+                hideTooltip();
+                linkSel.attr("stroke-opacity", 0.38);
+              });
+            } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+          }
+          draw();
+          if (window.ResizeObserver) {
+            var t;
+            new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+          }
+          if (window.IntersectionObserver) {
+            new IntersectionObserver(function(entries){
+              if (entries[0].isIntersecting) draw();
+            }).observe(container);
+          }
+          var pollTries = 0;
+          var pollId = setInterval(function(){
+            pollTries++;
+            if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+            var pr = container.getBoundingClientRect();
+            if (pr.width >= 50 && pr.height >= 50) draw();
+          }, 400);
+          container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+        }
+        if (window.d3 && d3.sankey) { render(); return; }
+        if (!window.__sankeyD3Load) {
+          window.__sankeyD3Load = new Promise(function(resolve){
+            var s1 = document.createElement("script");
+            s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+            s1.onload = function(){
+              var s2 = document.createElement("script");
+              s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+              s2.onload = resolve;
+              document.head.appendChild(s2);
+            };
+            document.head.appendChild(s1);
+          });
+        }
+        window.__sankeyD3Load.then(render);
+      })();
+      </script>
+    </div>
+
+    <div class="chain-layer up">
+      <h4 data-en="Upstream — Manufacturing &amp; Components">上游 — 製造與零組件</h4>
+      <div class="sc-item" data-en="Oracle outsources nearly all hardware manufacturing: &quot;We rely on third-party manufacturing partners to produce most of our hardware products... and we distribute most of our hardware products from these partners' facilities.&quot; <span class=&quot;conf hi&quot;>High confidence</span>">Oracle 幾乎將全部硬體製造外包：「我們依賴第三方代工夥伴生產大部分硬體產品……並多數直接從這些夥伴的工廠出貨。」<span class="conf hi">高信心</span><span class="sc-src" data-en=" — 10-K Item 1, &quot;Manufacturing&quot;"> — 10-K Item 1「Manufacturing」</span></div>
+      <div class="sc-item" data-en="Sole/single-source risk disclosed for &quot;certain hardware components,&quot; though no supplier is named. <span class=&quot;conf mid&quot;>Medium confidence</span> (concentration confirmed, identity not disclosed)">「特定硬體零組件」被揭露為單一供應商風險，但未點名任何供應商。<span class="conf mid">中信心</span>（集中度已確認，供應商身分未揭露）<span class="sc-src" data-en=" — 10-K Item 1"> — 10-K Item 1</span></div>
+      <div class="sc-item" data-en="GPU and memory-device supply explicitly flagged as competitive/constrained: Oracle &quot;at times has to accept less favorable terms with suppliers to minimize supply constraints,&quot; raising excess/obsolescence risk. <span class=&quot;conf hi&quot;>High confidence</span>">GPU與記憶體元件供給被明確列為緊俏／有競爭壓力：Oracle「有時必須接受對自身較不利的供應商條款以降低供給限制」，並因此提高過剩／淘汰風險。<span class="conf hi">高信心</span><span class="sc-src" data-en=" — 10-K Item 1A Risk Factors"> — 10-K Item 1A 風險因子</span></div>
+      <div class="sc-item" data-en="Neither NVIDIA, AMD, nor any other chip/component supplier is named anywhere in the 10-K &mdash; a disclosure gap consistent with management's on-call refusal to name customers or pricing specifics. <span class=&quot;conf lo&quot;>Low confidence on identity; the omission itself is high-confidence</span>">全篇10-K未點名NVIDIA、AMD或任何其他晶片／零組件供應商——這個揭露空白與管理層在法說會上拒絕點名客戶或具體訂價的作風一致。<span class="conf lo">供應商身分信心度低；但「未揭露」這件事本身信心度高</span></div>
+    </div>
+    <div class="chain-layer mid">
+      <h4 data-en="Midstream — Oracle's Own Operations">中游 — Oracle 自身營運</h4>
+      <div class="sc-item" data-en="141,000 full-time employees (49,000 US / 92,000 international); by function: R&amp;D 43,000, Services 34,000, Cloud &amp; Software 26,000, Sales &amp; Marketing 25,000, G&amp;A 11,000, Hardware only 2,000. <span class=&quot;conf hi&quot;>High confidence</span>">全職員工141,000人（美國49,000／海外92,000）；依職能：研發43,000、服務34,000、雲端與軟體26,000、業務行銷25,000、一般行政11,000、硬體僅2,000。<span class="conf hi">高信心</span><span class="sc-src" data-en=" — 10-K Item 1, Human Capital Resources"> — 10-K Item 1「Human Capital Resources」</span></div>
+      <div class="sc-item" data-en="Data-center capacity is built via a mix of owned build-out and &quot;long-term lease commitments with third-party data center providers.&quot; <span class=&quot;conf hi&quot;>High confidence</span>">資料中心產能透過自建與「向第三方資料中心業者承租的長期租約」混合方式取得。<span class="conf hi">高信心</span><span class="sc-src" data-en=" — 10-K Item 1A"> — 10-K Item 1A</span></div>
+      <div class="sc-item" data-en="Power/energy availability explicitly named as a constraint on data-center buildout pace, globally, due to surging AI compute demand. <span class=&quot;conf hi&quot;>High confidence</span>">電力／能源可得性被明確列為資料中心建置速度的全球性瓶頸，肇因於AI運算需求的爆發性成長。<span class="conf hi">高信心</span><span class="sc-src" data-en=" — 10-K Item 1A"> — 10-K Item 1A</span></div>
+    </div>
+    <div class="chain-layer down">
+      <h4 data-en="Downstream — Named Customers This Quarter">下游 — 本季具名客戶</h4>
+      <div class="sc-item" data-en="Enterprise/government verticals named on the call: Exelon, Wright County Sheriff's Office, Westfield Insurance, Piraeus Bank, US Dept. of Veterans Affairs, US Office of Personnel Management, Claro, UK NHS Shared Business Services, Oldest (Brazilian retailer), QXO, Vodafone. <span class=&quot;conf hi&quot;>High confidence (verbatim from transcript)</span>">法說會具名的企業／政府客戶：Exelon、Wright County警局、Westfield Insurance、Piraeus Bank、美國退伍軍人事務部、美國人事管理局、Claro、英國NHS Shared Business Services、Oldest（巴西零售商）、QXO、Vodafone。<span class="conf hi">高信心（逐字稿直接引用）</span></div>
+      <div class="sc-item" data-en="Large-scale AI infrastructure (hyperscaler-scale) customers behind the $75B BYOH/prepaid total and the four &gt;$8B Q4 contracts are never named &mdash; management declined to characterize even how many of the large/medium SCA-style agreements are data-center-related when directly asked. <span class=&quot;conf lo&quot;>Low confidence / deliberate opacity</span>">貢獻$750億BYOH／預付總額、以及本季四筆逾$80億合約背後的大型AI基礎設施（超大規模雲端業者等級）客戶，全數未被點名——面對直接提問，管理層甚至拒絕說明大型／中型類SCA協議中有多少屬於資料中心相關。<span class="conf lo">信心度低／刻意留白</span></div>
+      <div class="sc-item" data-en="No customer concentration percentage (e.g. any single customer &gt;10% of revenue) is disclosed anywhere in the 10-K. <span class=&quot;conf mid&quot;>Medium confidence — absence of disclosure does not confirm absence of concentration</span>">10-K全篇未揭露任何客戶集中度百分比（如單一客戶占營收逾10%）。<span class="conf mid">中信心——未揭露不代表不存在集中度</span></div>
+    </div>
+    <div class="note" data-en="No SEC filing discloses named chip suppliers or named large AI-infrastructure customers for Oracle; this is consistent across the 10-K, the 8-K press release and the earnings call itself. Where the framework calls for confidence-graded value-chain mapping, the graded confidence above reflects that structural opacity rather than any single missing document.">目前無任何SEC申報文件揭露Oracle的具名晶片供應商或具名大型AI基礎設施客戶；此點在10-K、8-K新聞稿與法說會逐字稿中一致。上方信心度標註反映的是這種結構性的資訊不透明，而非單一文件缺漏所致。</div>
+  </div>
+
+  <!-- ============ Risk Matrix ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title" data-en="Risk Matrix — Disclosed vs. Undisclosed on This Call">風險矩陣：法說會中已揭露 vs. 未揭露</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Trailing Free Cash Flow Is Deeply Negative — and Was Never Mentioned on the Call">Trailing 自由現金流深度轉負——法說會全程未提及</div>
+        <span data-en="Company-disclosed trailing four-quarter free cash flow fell to &minus;$23.7B in FQ4 FY26 (from &minus;$394M a year earlier), even as management repeatedly cited operating cash flow growth of 54%. The entire gap is capital expenditure ($55.7B gross FY26 CapEx). No analyst asked about it, and management never volunteered the figure or the phrase &quot;free cash flow&quot; on the call.">公司自行揭露的trailing 4季自由現金流，FQ4 FY26已降至<b>-$237億</b>（去年同期為-$3.94億），期間管理層卻反覆強調營運現金流成長54%。差距全數來自資本支出（FY26毛額CapEx達$557億）。全場無分析師提問，管理層也從未主動提及此數字或「自由現金流」一詞。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high" data-en="High">高</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="GPU / Power Supply Constraints Could Delay 2027H2 Delivery Sites">GPU／電力供給限制可能延誤2027下半年交付工地</div>
+        <span data-en="Two of the five flagship sites (Saline, MI and Port Washington, WI) target customer delivery only in H2 CY2027, right as the 10-K's own risk factors flag &quot;competitive&quot; GPU/memory supply and globally &quot;constrained&quot; power availability for AI compute. A slip here would directly threaten the FY27 revenue guide, which depends on continued megawatt delivery acceleration.">五大旗艦工地中有兩個（密西根Saline、威斯康辛Port Washington）將客戶交付目標訂在2027下半年，恰好與10-K自身風險因子中揭露的「競爭激烈」GPU／記憶體供給及全球「吃緊」的AI運算電力供給時間點重疊。若此處延誤，將直接威脅仰賴持續加速交付百萬瓦容量的FY27營收指引。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="RPO Recognition Schedule vs. FY27 Revenue Guide Tension">RPO認列排程與FY27營收指引之間的張力</div>
+        <span data-en="Only ~12% of the $638B RPO is expected to convert to revenue in the next 12 months (~$76B), against a $90B FY27 total revenue guide. Management says both the 12% and 34% (13&ndash;36 month) conversion rates are &quot;expected to accelerate,&quot; but gave no bridge reconciling the gap for FY27 specifically.">$6,380億RPO中僅約12%（約$760億）預期於未來12個月內轉為營收，相對於FY27總營收指引$900億。管理層表示12%與34%（13-36個月）的轉換率「預期將加速」，但未針對FY27具體給出對帳橋接。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Debt-Funded Buildout Pressures the Balance Sheet and Credit Rating">舉債驅動的建置壓力衝擊資產負債表與信評</div>
+        <span data-en="Long-term debt rose from $85.3B to $122.3B YoY (+43%); total assets grew mostly via PP&amp;E (+130% YoY to $100.0B). FY27 plans ~$40B of additional debt+equity financing. Management states preserving investment-grade credit is a priority, but the pace of leverage growth is a genuine multi-year risk if RPO-to-revenue conversion disappoints.">長期借款YoY由$853億增至$1,223億（+43%）；總資產成長主要來自PP&E（YoY+130%達$1,000億）。FY27計畫再籌措約$400億債務加股權融資。管理層表示維持投資等級信評為優先事項，但若RPO轉營收不如預期，槓桿成長速度本身即是真實的多年期風險。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="New Capacity Entrants (Neoclouds, SpaceX, etc.) — Margin Question Left Unanswered">新進產能業者（Neocloud、SpaceX等）——毛利率問題未獲回答</div>
+        <span data-en="Clay's answer to Moerdler asserted Oracle can simultaneously raise margins and cut prices as R&amp;D efficiency compounds, without reconciling this against the 10-K's own admission that Oracle sometimes accepts worse supplier terms to secure GPU/memory supply. If industry-wide capacity additions compress pricing before Oracle's efficiency gains materialize, margin guidance is at risk.">Clay 回應Moerdler時斷言，隨研發效率累積，Oracle能同時做到毛利率提升與報價下降，但未與10-K自身承認的「有時須接受較不利供應商條款以確保GPU／記憶體供給」相互調和。若產業整體新增產能在Oracle效率提升兌現之前先壓低了訂價，毛利率指引將面臨風險。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med" data-en="Med">中</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="On-Premise Software License Revenue Still Structurally Declining">地端Software授權營收仍呈結構性下滑</div>
+        <span data-en="Software license revenue fell (6%) YoY in Q4 and (9%) for FY26 &mdash; the &quot;classic business is healthy&quot; framing in the Q&amp;A only discussed Applications and Database, leaving the on-premise licensing decline unaddressed.">Software license營收Q4 YoY下滑(6%)、FY26全年下滑(9%)——問答中「傳統業務健康」的敘事框架只談了Applications與Database，未觸及地端授權的下滑。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low" data-en="Low">低</div>
+      <div class="risk-text">
+        <div class="risk-title" data-en="Jeffrey Henley's Post-Earnings Option Exercise &amp; Sale — Likely Routine">Jeffrey Henley法說會後選擇權履約與出售——可能為例行性</div>
+        <span data-en="On 6/24/2026 (two weeks after the call), director Jeffrey Henley exercised deep-in-the-money options ($40.93 strike) for 400,000 shares and sold 359,068 of them at $156&ndash;$163. The strike price implies a decade-plus-old grant; timing falls in the normal post-earnings trading window. Reads as routine diversification of a long-held equity grant rather than a signal about the quarter, though the realized price range ($156&ndash;$163) is a useful independent data point on how the market re-rated the stock post-call.">2026/6/24（法說會後兩週），董事Jeffrey Henley履約深度價內選擇權（履約價$40.93）取得40萬股，並以$156-163出售35.9萬股。履約價顯示這是十年以上的舊授予；時點落在法說會後的正常交易窗口內。讀起來更像是長期股票獎酬的例行分散化，而非對本季業績的訊號，但其實際成交價區間（$156-163）可作為市場法說會後重新評價股價的獨立參考數據。</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer" data-en="For informational purposes only. Not investment advice. All figures sourced from Oracle's FY2026 10-K, Q4 FY2026 8-K/EX-99.1 press release, Form 4 filings, and the Q4 FY2026 earnings call transcript.">僅供資訊參考，非投資建議。所有數字均取自Oracle FY2026 10-K、Q4 FY2026 8-K/EX-99.1新聞稿、Form 4申報文件與Q4 FY2026法說會逐字稿。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+function toggleLang() {
+  var body = document.body;
+  body.classList.toggle('lang-en');
+  var isEn = body.classList.contains('lang-en');
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.zh === undefined) el.dataset.zh = el.innerHTML;
+    el.innerHTML = isEn ? el.dataset.en : el.dataset.zh;
+  });
+  document.getElementById('langBtn').textContent = isEn ? '中文' : 'English';
+}
+</script>
+</body>
+</html>
