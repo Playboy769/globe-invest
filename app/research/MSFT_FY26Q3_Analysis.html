@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft (MSFT) — FY2026 Q3 — Q&amp;A問答分析 / OpenAI關係重組 / 技術與產品線 / 供應鏈 / 風險矩陣</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+  .flag-box.obs { border-left-color: #2563eb; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 100px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 210px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .rev-val { width: 150px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .tech-card.c1 { border-top-color: #2563eb; }
+  .tech-card.c2 { border-top-color: #15803d; }
+  .tech-card.c3 { border-top-color: #6d28d9; }
+  .tech-card.c4 { border-top-color: #c2600a; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.c1 h4 { color: #1d4ed8; }
+  .tech-card.c2 h4 { color: #15803d; }
+  .tech-card.c3 h4 { color: #6d28d9; }
+  .tech-card.c4 h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .chain-layer { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .chain-layer h4 { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .chain-up h4 { color: #c2600a; } .chain-core h4 { color: #2563eb; } .chain-down h4 { color: #15803d; }
+  .node { display: inline-block; background: #f5f6fa; border: 1px solid #d5d9e2; border-radius: 6px; padding: 5px 9px; margin: 3px 4px 3px 0; font-size: 12px; }
+  .node .src { color: #94a3b8; font-size: 10px; }
+  .conf-hi { border-left: 3px solid #15803d; } .conf-mid { border-left: 3px solid #c2600a; } .conf-lo { border-left: 3px solid #b91c4a; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .note { font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.5; }
+  .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Microsoft Corporation（MSFT）— FY2026 Q3 法說會分析</h1>
+  <p>Q&amp;A 問答分析 / OpenAI 關係重組（股權法會計＋IP非獨家化）／ 技術與產品線 / 雲端基礎設施供應鏈 / 風險矩陣 &nbsp;·&nbsp; 法說會日期：2026年4月29日（財季：FY2026 Q3，截至2026年3月31日，即2026年1–3月）&nbsp;·&nbsp; 交叉比對 FY2026 Q3 10-Q（申報於2026/4/29）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('special',this)">OpenAI 關係重組</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+  </div>
+
+  <!-- ============ Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+    <div class="card" style="border-left:3px solid #2563eb;">
+      <div class="card-title">本 tab 的本質是話術偵測，不是摘要</div>
+      <p>整場法說會有一個貫穿始終的模式：只要分析師要一個具體數字或機制——CapEx如何轉成營收的時間差、第三方夥伴分配比例、設備汰換支出規模、消費/座位混合的3–5年展望、IT預算增量從何而來——管理層就把它轉換成定性的「user+usage」「license+consumption」「ROI很有信心」敘事。這個「座位制轉消費制」的框架被搬出來回答了至少三個不同角度的問題（demand來源、CapEx信心、E7訂價哲學），但每一次都停在概念層，沒有落回一個可驗證的數字。另外，Kirk Materne問到OpenAI協議變化時，管理層完全沒有揭露修約中最實質的讓步——IP從獨家變成非獨家——只強調拿到了什麼、沒提放棄了什麼。</p>
+    </div>
+
+    <!-- Keith Weiss -->
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Keith Weiss（Morgan Stanley）</div><div class="qa-topic">需求如何轉化為短期bookings × 長期「這些錢究竟從哪裡來」</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">(1) 短期而言，強勁需求如何轉化為commercial bookings？座位制與消費制不同的簽約週期會如何影響？(2) 長期而言，是什麼在支撐這股需求？換句話說，這一切究竟由誰買單？CIO調查顯示整體IT支出預期並未上升、GDP成長也沒有加速，那麼錢從哪裡來？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：bookings本來就有週期性與大型多年期Azure合約帶來的波動；把座位制業務重新框架成「license業務＋consumption業務」，未來bookings的樣貌會不同、會多一個像Azure一樣的計量表；短期內可能看不到反映在bookings上。Satya：任何per-user業務（生產力、coding、資安）都會變成per-user+usage業務，coding已經在規模化發生；錢從某個業務的eval與outcome而來——成本因代理而下降、或營收因工作流被壓縮而上升；重點是「密集用戶與密集使用」而非過去的座位覆蓋率動作。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Keith問的是一個具體、尖銳的總體經濟悖論：IT預算沒有加速、GDP沒有加速，那麼AI增量支出從哪裡「淨增量」而來（而不是從既有IT預算裡重新分配）？管理層兩人都沒有正面回答這個「淨增量 vs 重新分配」的區別——Amy把問題轉成bookings會計呈現方式的解釋，Satya把問題轉成「eval創造價值就會有人付錢」的同義反覆，沒有給出任何總經或產業層級的資金來源證據。同一個「錢從哪來」的問題在本場稍後被Rishi Jaluria用不同角度再問一次，管理層給出幾乎相同的非量化答案——重複出現本身就是訊號：這是全場最沒被回答清楚的問題。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Keith Weiss:</b> "…our overall IT spending expectations aren't increasing, and GDP growth isn't really increasing. At some point, like, how does this get paid for? Are you starting to see the indications of where those dollars are gonna come from?"<br><br><b>Satya Nadella:</b> "…where these dollars gonna come from? At the end of the day, it'll come from some eval and outcome that a business has… That's what you broadly start seeing… It may not be, by the way, pure seat coverage type of motions like in the past. This is more about getting intense users and intense usage…"</div></div>
+      </div>
+    </div>
+
+    <!-- Karl Keirstead -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Karl Keirstead（UBS）</div><div class="qa-topic">下半年CapEx躍升約$1,200億的落地信心 × 第三方夥伴／自建分配框架</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">CapEx guidance意味著下半年（calendar）要有一次相當可觀的躍升，粗估約$1,200億。對於克服物理零組件供給限制、達成這個數字，信心來自哪裡？是否涉及更多使用第三方夥伴？增量產能在第三方與自建之間如何分配？有沒有一個框架可以參考？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：對克服供應鏈物理限制「感覺相當好」；部分是短期資產（CPU/GPU/儲存）能較快到位；價格因素能幫忙理解量的變化，價格影響數字時代表更偏短期資產；Azure Q4 guide 39–40% constant currency代表能用效率手段平衡供給；Copilot使用量在coding、生產力、資安都在不同軌跡上加速；下半年CapEx反映把交付速度與「revenue-ready」時間盡量壓縮的努力。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Karl明確問了兩個子問題——「是否涉及更多使用第三方夥伴」與「第三方vs自建的分配框架」——Amy的回答通篇沒有提到任何第三方產能夥伴的名字或比例，只重複「短期資產」「效率」等籠統詞彙。相較於其他雲端巨頭在本季法說會上會具名列出與外部算力供應商的合作規模，MSFT管理層在被直接問到「第三方夥伴」時完全迴避具體化，這使得$1,200億下半年躍升裡有多少依賴外部產能、多少是自建，仍是投資人拿不到的資訊。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Karl Keirstead:</b> "…Does it involve the greater use of partners? How are you thinking about allocating that increased capacity between third party and first party?"<br><br><b>Amy Hood:</b> "…I actually feel quite good about our ability to work through the physical sort of limitations… a lot of that is far more short-term in nature, being able to get CPUs, GPUs, storage, put in place…"</div></div>
+      </div>
+    </div>
+
+    <!-- Brent Thill -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brent Thill（Jefferies）</div><div class="qa-topic">AI為何比市場預期更有利於毛利率——跨雲端巨頭的產業論點</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">市場普遍擔心AI很燒錢，但今晚Microsoft、Google、Amazon都show出更高的毛利率。投資人漏看了什麼？為什麼AI長期而言可能對產業毛利率更有利？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：這輪AI週期的毛利率位置已經比雲端轉型當年更好；消費/使用制訂價能更好捕捉價值；OpenAI夥伴關係的IP對MSFT免權利金、能直接嘉惠毛利；自研硬體堆疊能把利潤留在infra層；效率工作（硬體＋軟體雙軌）持續在做。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Brent的問題前提——「今晚都show出更高毛利率」——套用在MSFT自己身上其實有張力：公司毛利率本季為68%（年減）、Microsoft Cloud毛利率66%（年減），且Q4 guidance明確指引Cloud毛利率將進一步降到約64%。Amy完全沒有指出、也沒有修正這個前提與MSFT自身數字之間的落差，而是順著問題的框架給出一段通用產業敘事，迴避了「那你自己這季及下季的毛利率都在下滑，你的答案怎麼解釋這個」的直接矛盾。</div></div>
+      </div>
+    </div>
+
+    <!-- Mark Moerdler -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mark Moerdler（Bernstein Research）</div><div class="qa-topic">CapEx與營收成長速度的落差 × 設備汰換支出規模與時間落差</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">CapEx成長速度與營收成長速度之間有落差，讓投資人不安。能否說明時間落差怎麼運作，以及有多少CapEx是用於設備汰換或自用（first party），以建立對核心業務健康度與毛利率的信心？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：Azure規模與加速的成長率（Q4 guide 39–40% CC）本身就是佐證；約三分之一CapEx投入15年期資產或lumpy的租賃時點；書面業務（book of business）還有超過$6,000億尚待交付的營收（不含Copilot座位加速前的部分）；把資本盡快轉成「revenue-ready」是重點。Satya補充：TAM的類別經濟學已被驗證（連Excel/coding的外掛都在爆量），模型能力是指數型的，必須提前布局CapEx才能接住需求。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Mark問的兩個具體量化問題——「時間落差」與「多少CapEx是設備汰換／自用」——都沒有得到數字。Amy的回答用$6,000億「book of business」作為信心佐證，但這是一個存量backlog數字，並未回答CapEx轉換成營收的實際月數/季數時間差，也完全沒有拆出「汰換」佔CapEx的比例。Satya的補充（「模型能力是指數型的」「Agent mode在Excel裡本來不work、後來突然work了」）是敘事層的信心喊話，不是Mark要的財務時間模型。</div></div>
+      </div>
+    </div>
+
+    <!-- Gabriela Borges -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Gabriela Borges（Goldman Sachs）</div><div class="qa-topic">Copilot採用的學習心得——什麼有效、什麼無效——如何餵入E7與Cowork策略</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">過去三個月Microsoft在Copilot上打下技術與商業里程碑，能否分享採用歷程中的學習心得？什麼在起作用、什麼沒有起作用？這些學習如何形塑E7策略與Copilot Cowork策略？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Satya：以形態演進描述——chat with reasoning（搭Work IQ）→ agents（Researcher/Analyst及客製代理）→ edit mode → 完整委派任務的Cowork；週使用強度已達Outlook等級、是日常使用習慣；智慧的關鍵是「多模型＋情境context」加上「與模型解耦的harness」（如Critique/Council、GitHub Copilot的Rubber Duck、Excel裡用Opus生成、用Codex檢查）；最終收斂到user+usage的訂價模式。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Gabriela明確問了兩件事：「什麼有效」與「什麼無效」。Satya的整段回答100%是正面敘事——產品形態演進、使用強度創紀錄、多模型harness優勢——沒有一句話提到任何摩擦點、失敗學習或負面訊號。這是全場最乾淨的一次「半題被完全丟棄」：對「what's not working」的直接沉默，本身就值得標注為管理層在公開法說會上刻意維持的敘事紀律，而非真的沒有反面學習可講。</div></div>
+      </div>
+    </div>
+
+    <!-- Kirk Materne -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Kirk Materne（Evercore ISI）</div><div class="qa-topic">OpenAI協議變化的建模／財務意涵 × 模型多元化的機會</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">能否談談OpenAI協議的變化，從建模或財務角度，跟幾週前相比有什麼今天該注意的地方？這是否也是Microsoft繼續在模型上多元化的機會？在這個新框架下，還有什麼是投資人該知道的重點？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Satya：整體對OpenAI夥伴關係「感覺良好」，強調win-win；重點是IP——拿到免權利金、完整IP使用權直到2032年，且計畫充分運用；OpenAI同時是Microsoft的大客戶（AI加速器與其他運算），要服務好他們；也持有OpenAI股權。Amy：兩個重點——營收分潤延續到2030年，帶來可預測性；以及IP免權利金、同時取消了Microsoft對OpenAI的分潤義務。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">管理層完整敘述了這次修約「拿到什麼」（IP到2032年、免權利金、分潤可預測到2030年），卻完全沒有提到「放棄了什麼」——修約後Microsoft對OpenAI IP的使用權已從獨家（exclusive）變成非獨家（non-exclusive），OpenAI現在可以透過其他雲端供應商銷售API存取權。這是本季度對Azure護城河最實質的一項變化，Kirk問的正是「投資人該知道的重點」，但管理層的答案只給了利多側、完全省略了獨家性喪失這個利空側，也沒有主動提及本會計年度已認列的一次性重估利得（詳見「OpenAI 關係重組」tab）如何美化了本季與前幾季的財報數字。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Amy Hood:</b> "…having the revenue share exist through 2030, and the predictability of that is a real positive for us. And then… the IP, thinking about that as royalty-free, with the elimination of our rev share to them."</div></div>
+      </div>
+    </div>
+
+    <!-- Rishi Jaluria -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Rishi Jaluria（RBC Capital Markets）</div><div class="qa-topic">E7偏座位制 vs 消費制的哲學矛盾 × 3–5年後的混合展望</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">剛發表的E7以座位制為主、僅有部分消費元素，等於在座位制上加碼；但客戶似乎仍偏好座位制的可預測性（尤其在其他公司AI用量失控的案例之後）。如何把這些元素整合在一起、同時維持客戶預算的可預測性並持續擴大消費？把時間拉到3–5年後，座位制 vs 消費制的混合會長什麼樣子？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Satya：座位制訂價本質上是「某種消費權利的入場券」——把消費包打包進座位方便採購；超過額度後轉為純消費計價、有長期承諾可拿折扣，這就是「發展方向」；客戶會用eval評估token的價值——是否改善營收、提升效率；IT預算將被「業務成果」與「從OpEx其他項目重新分配」兩股力量重塑。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Rishi直接要一個3–5年後座位制vs消費制「混合比例」的展望，Satya完全沒有給任何數字或區間，只重申「這是發展方向」的定性語言。更值得注意的是，「IT預算靠業務成果與OpEx重新分配來擴張」這句話，與Keith Weiss在全場開頭問的「淨增量 from 何處」問題本質相同、答案也幾乎逐字重複——同一個未被量化的宏觀假設，在法說會頭尾各被問一次，管理層兩次都用同一套未經驗證的框架帶過，卻始終沒有提出任何外部證據（如客戶案例的具體ROI數字）佐證。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Special Item: OpenAI ============ -->
+  <div id="panel-special" class="panel">
+    <div class="section-title">本季特殊事件：OpenAI 關係重組——股權法會計波動 × IP 從獨家變非獨家</div>
+    <div class="card"><p>這是本季真正結構性改變、卻在法說會上被最輕描淡寫帶過的項目。Kirk Materne是唯一直接問到這件事的分析師，管理層的回答完整敘述了「拿到什麼」、隻字未提「放棄了什麼」。整理10-Q與周邊揭露後，這次重組同時牽動三件事：(1) Microsoft持股比例與會計處理方式、(2) IP使用權從獨家變成非獨家、(3) 雙方分潤義務重新設計。三者疊加的淨效果，是把Microsoft與OpenAI的關係從一個近乎封閉的基礎設施依存，轉成一個更像財務投資＋開放客戶關係的組合——但也讓Microsoft自身的財報（尤其是EPS）從此帶有一個由OpenAI自身損益驅動、Microsoft無法控制的波動因子。</p></div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue"><h4>規模</h4><ul>
+        <li>Microsoft持有OpenAI約27%股權（as-converted基礎），採權益法（equity method）入帳。</li>
+        <li>總出資承諾$130億，截至2026年3月31日已出資$118億。</li>
+        <li>九個月累計認列OpenAI投資淨利得$59億，相對去年同期是淨損$27億——一來一回擺動約$86億，主要來自2025年10月一次資本重組帶來的股權稀釋利得（時點落在FY26 Q2、即2025年10–12月季度，非本季）。</li>
+      </ul></div>
+      <div class="quad-box green"><h4>期限</h4><ul>
+        <li>IP授權期限延長至明確的2032年——取代原本綁定模糊「AGI達成」門檻的舊條款，消除了原本的不確定性觸發點。</li>
+        <li>OpenAI對Microsoft的20%營收分潤延續至2030年，但改為有上限（cap），達到上限後義務即終止；上限的具體金額在法說會與周邊揭露中均未揭露。</li>
+        <li>本季（2026年1–3月）認列的OpenAI股權法損益淨額很小（＄942M GAAP other income vs Amy口頭引用的「排除OpenAI影響後＄961M」，兩者相減意味本季OpenAI股權法影響僅約-$1,900萬）——真正的大幅利得已於前一季度入帳，本季只是餘波。</li>
+      </ul></div>
+      <div class="quad-box orange"><h4>財務承諾／成本</h4><ul>
+        <li>權益法會計代表Microsoft每季都要按比例認列OpenAI（一個仍在燒錢的實體）的損益，使「Other income, net」這條線天生帶有一個Microsoft無法控制的波動來源——這正是管理層每季都要說「adjusted for OpenAI impact」的原因。</li>
+        <li>OpenAI同時是Microsoft最大的Azure客戶之一（AI加速器與一般運算），因此Microsoft對OpenAI有雙重曝險：投資人身分（股權法波動）與供應商身分（產能分配優先序、營收認列）。</li>
+        <li>IP變成非獨家後，Microsoft失去了「OpenAI只能透過Azure跑」這個原本近乎鎖定的護城河條款。</li>
+      </ul></div>
+      <div class="quad-box red"><h4>尚待驗證</h4><ul>
+        <li>20%分潤的具體上限金額、目前已使用多少額度——法說會與公開資料均未揭露。</li>
+        <li>IP非獨家化後，OpenAI是否已經或正在與其他雲端供應商洽談基礎設施合作，這會不會實質稀釋Azure在OpenAI運算支出中的佔比。</li>
+        <li>$59億九個月淨利得中，一次性重估部分與可能持續存在的常態波動部分如何拆分——投資人是否該預期像去年同期$27億虧損那樣的反向波動會在未來季度重演。</li>
+        <li>除了獨家性之外，這次修約是否還有未揭露的讓步（例如模型存取時程、微調權限、機房共置安排）。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title">核心疑問——管理層留白的盡職調查追問</div>
+    <div class="diligence-box"><ol>
+      <li>20%營收分潤的固定上限金額是多少？截至目前累計分潤是否已接近上限、還是才剛起步？上限一旦達成，Microsoft的一項可預測收入來源就會消失，這對未來財測模型有直接影響。</li>
+      <li>IP從獨家變非獨家之後，Azure在OpenAI總運算支出中的佔比是否已經、或預期會下降？如果OpenAI開始向其他雲端供應商採購產能，這是否代表Microsoft主動用IP獨家性換取了分潤與2032年期限的確定性，但代價是未來Azure在OpenAI這個最大AI客戶身上的收入佔比會被稀釋？</li>
+      <li>權益法認列的OpenAI損益，未來是否會持續造成類似本季「adjusted vs GAAP」的落差？如果OpenAI繼續大幅燒錢，Microsoft是否需要每季認列相應比例的虧損，進而拖累「Other income, net」？</li>
+      <li>本季管理層在多處引用「adjusted for OpenAI impact」的EPS成長率（21%/18% CC）而非GAAP成長率（23%），這個調整口徑未來會不會成為每季常態揭露項目？如果是，投資人該如何獨立驗證調整前後的差異是否合理、有無被選擇性使用來平滑波動。</li>
+      <li>除了分潤上限與IP獨家性之外，這次修約是否還交換了其他未揭露的權利（模型存取優先權、微調權限、資料共用範圍）？管理層在回答Kirk Materne時只描述了正面條款，值得在下次法說會或10-K中追問完整條款清單。</li>
+    </ol></div>
+
+    <div class="section-title">雙欄立場：對 Microsoft vs 對 OpenAI</div>
+    <div class="stance-grid">
+      <div class="stance-col"><h4>對 Microsoft — 利／弊</h4><ul>
+        <li>↑ 用一個模糊、可能提前觸發的「AGI達成」條款，換成一個確定、可規劃的2032年硬期限。</li>
+        <li>↑ 20%分潤延續到2030年，帶來現金流可預測性（即使有上限）。</li>
+        <li>↑ 本財年已認列淨$59億的一次性重估利得，美化了整體EPS成長敘事。</li>
+        <li>↓ 喪失IP獨家性——OpenAI現在可透過其他雲端供應商銷售API存取權，稀釋Azure對OpenAI工作負載的結構性鎖定。</li>
+        <li>↓ 權益法會計把Microsoft自身的季度盈餘，跟一個自己無法控制、仍在燒錢的被投資公司損益綁在一起。</li>
+      </ul></div>
+      <div class="stance-col"><h4>對 OpenAI — 利／弊</h4><ul>
+        <li>↑ 擺脫「只能用Azure」的獨家基礎設施限制，取得運算來源多元化與議價空間。</li>
+        <li>↑ 對Microsoft的20%分潤義務從開放式變成有上限，長期而言負擔可預期地封頂。</li>
+        <li>↓ 仍背負對Microsoft整體$130億的出資／夥伴承諾架構，經濟上與Microsoft高度綁定（Microsoft持股約27%）。</li>
+        <li>↓ 失去原本「直到AGI」這種對自身更有利、時間點模糊、理論上可能更早或更晚觸發的彈性條款，換成硬性2032年邊界。</li>
+      </ul></div>
+    </div>
+    <p class="note">資料來源：FY2026 Q3法說會（Satya/Amy對Kirk Materne提問的回應，及Amy多處「adjusted for OpenAI impact」措辭）；10-Q關於OpenAI權益法投資與IP條款揭露（經第三方摘要交叉整理，直接存取sec.gov本次遇到403限制，詳見SEC Cross-Reference Notes文件的資料限制註記）。</p>
+  </div>
+
+  <!-- ============ Technology ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">分部營收 — FY2026 Q3（百萬美元、年增率、佔總營收比）</div>
+    <div class="rev-chart">
+      <div class="rev-row"><div class="rev-name">Productivity and Business Processes</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:100%;background:#2563eb;">42%</div></div><div class="rev-val">$35,013M / +17%</div></div>
+      <div class="rev-row"><div class="rev-name">Intelligent Cloud</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:99%;background:#15803d;">42%</div></div><div class="rev-val">$34,681M / +30%</div></div>
+      <div class="rev-row"><div class="rev-name">More Personal Computing</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:38%;background:#c2600a;">16%</div></div><div class="rev-val">$13,192M / −1%</div></div>
+    </div>
+    <p class="note">長條寬度以PBP=100%縮放。三大分部規模已相當接近（PBP $350億、IC $347億），但成長動能落差極大——IC以+30%遙遙領先，MPC是唯一衰退的分部（−1%，主要受Windows OEM存貨去化與記憶體漲價壓抑PC市場拖累）。來源：Microsoft IR分部營收頁與10-Q。</p>
+    <hr class="divider">
+    <div class="section-title">AI業務關鍵指標</div>
+    <div class="tech-grid">
+      <div class="tech-card c1"><h4>① 規模與成長</h4><ul>
+        <li>AI業務年化營收（ARR）突破$370億，年增123%。</li>
+        <li>Microsoft Cloud營收$545億（+29%，CC+25%）；Cloud毛利率66%（年減），Q4 guide進一步降至約64%。</li>
+        <li>Azure與其他雲端服務+40%（CC+39%），管理層明言「需求持續超過可用產能」。</li>
+      </ul></div>
+      <div class="tech-card c2"><h4>② 自研矽晶片與基礎設施</h4><ul>
+        <li>Maia 200 AI加速器：token/美元優於現役機隊逾30%，已在Iowa、Arizona上線。</li>
+        <li>Cobalt CPU：部署於近半數資料中心區域，客戶含Databricks、Siemens、Snowflake。</li>
+        <li>新GPU「dock-to-live」時間年初至今縮短近20%；Wisconsin Fairwater資料中心提前六週上線；本季新增約1GW產能，兩年內整體footprint翻倍在軌。</li>
+      </ul></div>
+      <div class="tech-card c3"><h4>③ 模型與Agent平台</h4><ul>
+        <li>Foundry：逾1萬客戶用過一種以上模型，5千用過開源模型，用Anthropic與OpenAI模型的客戶數季增2倍；300+客戶今年將在Foundry處理逾1兆tokens（季增30%）。</li>
+        <li>自研模型MAI-Transcribe-1（GPU效率+67%）、MAI-Image-2（效率+260%），已用於Bing、PowerPoint等第一方場景，並開放給Shutterstock、WPP等商業客戶。</li>
+        <li>Fabric：付費客戶3.5萬（+60% YoY）；OneLake資料量近4倍年增；同時使用Foundry+Fabric的客戶逾1.5萬（+60%）。</li>
+      </ul></div>
+      <div class="tech-card c4"><h4>④ Copilot 產品家族與GitHub</h4><ul>
+        <li>M365 Copilot付費座位突破2,000萬，季增250%YoY（史上最快）；5萬席以上大客戶數年增4倍；Accenture單一客戶逾74萬席（史上最大單）。</li>
+        <li>Copilot週互動強度已追平Outlook；月活躍使用量年初至今+6倍；查詢量季增近20%。</li>
+        <li>GitHub Copilot近14萬組織採用，企業訂閱數年增近3倍；本週剛宣布轉為usage-based訂價（2026/6/1生效）。</li>
+      </ul></div>
+    </div>
+    <hr class="divider">
+    <div class="section-title">管理層在推銷的因果鏈</div>
+    <div class="card"><p>基礎設施投資（新資料中心、Maia/Cobalt自研晶片、CapEx上看$400億/季）→ 推論效率提升（本季推論吞吐量+40%）→ Copilot與Foundry使用強度創紀錄（週互動追平Outlook、tokens處理量季增30%）→ 座位制與消費制雙軌收費同步擴張 → 資助下一代模型與晶片 → 循環。這個敘事在本季法說會上被反覆用「user+usage」措辭包裝，用來回答demand、CapEx信心、E7訂價哲學三個不同角度的問題。牛市論點是這個飛輪自我強化；熊市反駁（見風險矩陣）是：CapEx guidance（CY2026 $1,900億）已明確超出市場共識約$350億，其中$250億是「零組件價格通膨」而非新增產能，且法說會後股價應聲下跌，顯示市場對這個因果鏈的「資本效率」環節仍有疑慮。</p></div>
+  </div>
+
+  <!-- ============ Value Chain ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="section-title">雲端基礎設施供應鏈 — 自10-Q、法說會與周邊揭露結構化整理（含出處與信心註記）</div>
+    <div class="flag-box obs" style="margin-bottom:12px;"><div class="q-label">資料限制註記</div><div class="q-text">Microsoft不是傳統製造業申報公司，10-Q對零組件供應商的揭露遠比半導體公司籠統。以下上游節點混合了法說會具名資訊（信心高）、10-Q籠統風險因子（信心中）與公開報導（信心較低，已標註）。因本次sec.gov直接存取遇到403限制，數個第三方彙整的數字（如未起租資料中心租約$1,966億）僅單一來源、未能交叉驗證，列為信心較低。</div></div>
+
+    <div class="chain-layer chain-up"><h4>▲ 上游 — Microsoft基礎設施的投入</h4>
+      <div class="node conf-hi">NVIDIA — GPU <span class="src">法說會</span></div>
+      <div class="node conf-hi">AMD — GPU <span class="src">法說會</span></div>
+      <div class="node conf-hi">自研：Maia 200（AI加速器）、Cobalt（CPU）、Azure Boost（網通/安全/虛擬化晶片）<span class="src">法說會</span></div>
+      <div class="node conf-mid">OpenAI — 雙重角色：IP授權來源（非獨家、至2032年）＋Azure大客戶 <span class="src">法說會＋10-Q</span></div>
+      <div class="node conf-mid">代工製造商／單一或有限來源零組件 <span class="src">10-K慣例風險因子（籠統）</span></div>
+      <div class="node conf-mid">融資租賃資料中心設施（本季新增$47億）<span class="src">10-Q</span></div>
+      <div class="node conf-lo">未起租資料中心租約承諾約$1,966億（單一來源彙整，未交叉驗證）<span class="src">公開彙整，信心較低</span></div>
+      <div class="node conf-mid">記憶體（DRAM/NAND）漲價——本季壓抑Windows OEM毛利與PC市場 <span class="src">法說會</span></div>
+    </div>
+
+    <div class="chain-layer chain-core"><h4>● 核心 — Microsoft垂直整合堆疊</h4>
+      <div class="node">基礎設施：Azure、資料中心（本季+1GW，兩年footprint翻倍在軌）</div>
+      <div class="node">自研晶片：Maia 200、Cobalt CPU、Azure Boost</div>
+      <div class="node">模型層：多模型選擇（OpenAI／Anthropic／開源）＋自研MAI-Transcribe-1／MAI-Image-2</div>
+      <div class="node">情境／資料層：Work IQ（17EB+資料）、Fabric OneLake、Foundry、Purview</div>
+      <div class="node">應用層：M365 Copilot、GitHub Copilot、Security Copilot、Dynamics 365、LinkedIn</div>
+      <p class="note">Satya描述的核心差異化：把harness與模型解耦，讓客戶能用多模型（Critique/Council、Rubber Duck）同時享有Microsoft自有的情境資料護城河（Work IQ）——而非單押任何一家模型供應商。</p>
+    </div>
+
+    <div class="chain-layer chain-down"><h4>▼ 下游 — 客戶與通路</h4>
+      <div class="node conf-hi">企業旗艦客戶：Accenture（74萬+席，史上最大單）、Bayer、Johnson &amp; Johnson、Mercedes、Roche（各9萬席以上承諾）<span class="src">法說會</span></div>
+      <div class="node conf-hi">Azure/Cobalt企業客戶：Databricks、Siemens、Snowflake <span class="src">法說會</span></div>
+      <div class="node conf-hi">Foundry商業客戶：Shutterstock、WPP <span class="src">法說會</span></div>
+      <div class="node conf-hi">垂直應用案例：HSBC（Dynamics 365代理，issue resolution -30%）<span class="src">法說會</span></div>
+      <div class="node conf-hi">開發者：GitHub Copilot近14萬組織 <span class="src">法說會</span></div>
+      <div class="node conf-hi">消費者：Windows月活躍裝置16億+、Bing MAU突破10億、LinkedIn 13億會員、M365消費版近9,500萬訂閱 <span class="src">法說會</span></div>
+      <div class="node conf-hi">OpenAI — 同時是Azure大客戶（AI加速器＋一般運算）<span class="src">法說會</span></div>
+    </div>
+    <p class="note">集中度：法說會與10-Q均未揭露單一客戶10%以上集中度（多元化企業客戶基礎）。唯一值得留意的「集中」是OpenAI的雙重身分——既是IP夥伴／投資標的、又是Azure的重要收入來源，使其成為供應鏈上下游都出現的特殊節點。綠邊=法說會/申報文件高信心來源；橘＝籠統申報揭露或推論；紅＝僅公開彙整、未交叉驗證。</p>
+  </div>
+
+  <!-- ============ Risk ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title">風險矩陣 — 已揭露 vs 未揭露／從數字反推</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">⭐ 獨創前瞻風險：EPS成長敘事已悄悄依賴一個Microsoft無法控制的OpenAI股權法波動因子</div>
+        <span>本季GAAP淨利+23%、EPS $4.27（+23%），但管理層在法說會上反覆引用的卻是「adjusted for OpenAI impact」的21%／18% CC——一個比GAAP數字更低的口徑。九個月累計來看，OpenAI投資淨利得從去年同期虧損$27億大幅擺動為今年獲利$59億，波動幅度高達約$86億，主要來自一次2025年10月的資本重組重估利得（落在前一季，非本季）。這意味著：往後只要OpenAI自身的估值或損益出現任何重新評價，Microsoft的「Other income, net」與GAAP EPS都會跟著劇烈擺動，而管理層目前的因應方式是每季用「adjusted」口徑把這個波動從敘事中抹平——但沒有一位分析師在本場法說會上追問這個調整口徑的具體計算方式、或要求管理層承諾未來持續揭露GAAP與adjusted的逐季拆分。這是一個尚未被市場充分定價的財報品質風險。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">CapEx指引超共識$350億、股價應聲下跌——市場已在質疑資本效率，管理層對「第三方vs自建」與「設備汰換佔比」兩題都沒有正面回答</div>
+        <span>CY2026 CapEx guidance約$1,900億，較市場共識（約$1,550億）高出約$350億，其中$250億被歸因於「零組件價格通膨」而非新增產能——換言之，超出共識的部分裡有更大比例是在為同樣的產能付更多錢，而非買到更多產能。財報後隔日（4月30日）股價下跌約4–5%，收在約$402–408美元區間，市場報導普遍將跌勢歸因於CapEx規模與後續毛利壓力疑慮。法說會上Karl Keirstead與Mark Moerdler分別追問「第三方夥伴分配比例」與「設備汰換支出規模」，管理層兩題都只給了定性保證（「感覺相當好」「效率工作」），沒有任何一題给出可驗證的數字或框架。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Azure/Intelligent Cloud的高成長是供給封頂、非需求封頂，且管理層明言「至少到2026年底都會維持受限」</div>
+        <span>Amy明確表示「強勁且持續成長的客戶需求持續超過供給」，且「即使有這些額外投資與持續加速GPU/CPU/儲存產能上線的努力，我們預期至少到2026年都會維持受限（constrained）」。這代表Azure 39–40% CC的Q4 guidance本身就是供給允許的上限、而非需求的真實水位——與GOOG、AMZN等同業本季法說會揭露的「supply-capped, not demand-capped」屬於同一模式。同時，commercial bookings納入OpenAI的Azure承諾後反而年減4–6%（CC），與RPO年增99%的敘事存在張力，管理層在法說會上並未口頭調和這個落差。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">「誰來買單」這個總體經濟問題被問了兩次、答案幾乎逐字重複、始終未量化——座位制轉消費制的商業模式轉型缺乏可驗證的財務模型</div>
+        <span>Keith Weiss在全場開頭、Rishi Jaluria在全場結尾，分別從「短期demand能否轉bookings」與「3–5年後座位/消費混合展望」兩個角度問了本質相同的問題——IT預算沒有加速成長，AI增量支出的「淨增量」資金從何而來？管理層兩次都用「eval創造價值」「業務成果與OpEx重新分配」等定性語言帶過，沒有提供任何外部驗證的客戶ROI案例、也沒有給任何座位/消費混合比例的數字展望。E7產品被Rishi點名為「偏座位制加碼」，與管理層口頭強調的消費制轉型敘事存在方向上的張力，管理層未在此正面解釋這個產品決策與敘事的落差。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">OpenAI IP從獨家變非獨家——Azure護城河出現一個此前不存在的裂縫，管理層未主動揭露</div>
+        <span>本季修約後，OpenAI對Microsoft IP的使用權從獨家（且原本綁定模糊的「AGI達成」門檻）變成非獨家、有明確2032年期限，OpenAI現在可透過其他雲端供應商銷售API存取權。Kirk Materne直接問到協議變化的財務與建模意涵時，管理層完整敘述了「拿到什麼」（IP到2032年、免權利金、分潤可預測到2030年）卻完全沒有主動提及「放棄了什麼」（獨家性）。這個變化的實際影響——OpenAI是否已經或計畫向其他雲端採購產能、Azure在OpenAI運算支出中的佔比是否會被稀釋——目前完全沒有數字可驗證，需留意後續季度Azure與OpenAI相關收入的揭露變化。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人訊號中性——CEO新交易計畫在法說會前以開放窗口正常方式建立，首筆交易排在Q4財報之後</div>
+        <span>Satya Nadella於2026年3月8日（開放交易窗口內、早於4月29日法說會）採用新的Rule 10b5-1交易計畫，計畫執行到2026年9月4日，首筆交易要等到2026年8月31日（連結一項績效股票獎勵的既定歸屬時點）才會發生——換言之，圍繞本次Q3財報並沒有排定任何CEO自主性交易。第三方追蹤網站統計的90天內部人淨賣出金額（約$22億）反映的是既有計畫下的例行RSU歸屬與強制扣稅賣出，並非針對本次財報時點的自主性操作。沒有內部人紅旗訊號。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">依FY2026 Q3法說會逐字稿，交叉比對10-Q（截至2026/3/31，申報於2026/4/29）與周邊公開揭露整理；部分數字因sec.gov直接存取本次遇到403限制而依賴第三方彙整來源，詳見SEC Cross-Reference Notes文件。僅供資訊參考，非投資建議。</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) { header.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>
