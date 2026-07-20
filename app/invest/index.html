@@ -1759,20 +1759,26 @@ function ivClearSearch(){
     // anyone who already has that bad value saved from before this fix shipped.
     let collapsedNow=null;try{collapsedNow=JSON.parse(localStorage.getItem('iv_panel_collapsed'));}catch(e){}
     const collapsedKeys=['fw',null,'ed'];
-    if(saved&&saved.length===3){
+    // Legacy (pre-2026-07-12) saves stored raw pixel widths, which stay fixed no matter
+    // how the window/split-screen viewport changes afterward — including ending up
+    // narrower than the current wrap, which the overflow check below can't catch (it only
+    // fires when panels sum to MORE than the wrap, never less). A px width saved while the
+    // window was docked to half the screen would otherwise stay stuck that narrow forever,
+    // even after the window is restored to full width. Discard legacy px saves outright
+    // instead of trying to detect over/underflow for them.
+    const isLegacyPx=saved&&saved.some(v=>typeof v==='string'&&v.endsWith('px'));
+    if(isLegacyPx){try{localStorage.removeItem('iv_col_w');}catch(e){}}
+    if(saved&&saved.length===3&&!isLegacyPx){
       panels.forEach((p,i)=>{
         const k=collapsedKeys[i];
         if(k&&collapsedNow&&collapsedNow[k])return;
         p.style.flex='0 0 '+saved[i];
       });
-      // Old saves stored raw pixel widths, which are only valid for the browser
-      // zoom level (or window width) they were captured at. If zoom changed since
-      // then, three flex-shrink:0 fixed-px panels can sum to more than the wrap is
-      // now wide, and the layout visibly overflows instead of shrinking to fit.
-      // Detect that and self-heal to the panels' CSS-default flex ratio.
-      // getBoundingClientRect() right after a synchronous style write forces the
-      // browser to resolve layout immediately, so this doesn't need to wait a
-      // frame (and mustn't: requestAnimationFrame never fires for a backgrounded
+      // Percentage saves stay valid across zoom/window changes, but rounding can still
+      // push their sum a hair over 100% of the wrap. Detect that and self-heal to the
+      // panels' CSS-default flex ratio. getBoundingClientRect() right after a synchronous
+      // style write forces the browser to resolve layout immediately, so this doesn't need
+      // to wait a frame (and mustn't: requestAnimationFrame never fires for a backgrounded
       // tab, which would leave the overflow unfixed indefinitely).
       const wrapEl=document.getElementById('iv-wrap');
       const totalW=panels.reduce((s,p)=>s+p.getBoundingClientRect().width,0);
