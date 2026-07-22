@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arm Holdings plc（ARM）— FY2026 Q4 — Q&amp;A／AGI CPU深度拆解／業務線／供應鏈與生態系／風險矩陣</title>
+<title>Arm Holdings plc（ARM）— FY2026 Q4 — Q&amp;A／AGI CPU深度拆解／業務線／供應鏈與生態系／風險矩陣／損益表／業務線與交易組合／資產負債表／現金流量與資本配置／估值觀察</title>
 <style>
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #f5f6fa; color: #1a1a2e; font-size: 13px; }
   .page-header { padding: 20px 24px 0; position: relative; }
@@ -115,6 +116,60 @@
   .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
   .note { font-size:11px; color:#94a3b8; margin-top:6px; line-height:1.5; }
   .footer { font-size:11px; color:#94a3b8; text-align:center; margin-top:20px; padding-top:12px; border-top:1px solid #eee; }
+
+  /* ---- Financials (quantitative) styles ---- */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #15803d; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #15803d; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #15803d; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.a { border-top-color: #15803d; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.c { border-top-color: #6d28d9; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap:8px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; text-align:right; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 220px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space:nowrap; }
+  .bar-num { width: 130px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; }
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap:10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; text-align:right; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .fnote { font-size: 11px; color: #444; margin-top: 8px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #15803d; line-height: 1.6; }
+  .fnote.yellow { border-left-color: #c2600a; }
+  .fnote.red { border-left-color: #b91c1c; }
+  .fnote.blue { border-left-color: #2563eb; }
 </style>
 </head>
 <body>
@@ -130,9 +185,14 @@
     <div class="tab" data-en="Business Lines" onclick="sw('tech',this)">業務線</div>
     <div class="tab" data-en="Supply Chain &amp; Ecosystem" onclick="sw('chain',this)">供應鏈與生態系</div>
     <div class="tab" data-en="Risk Matrix" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" data-en="Income Statement" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" data-en="Business Lines &amp; Deal Mix" onclick="sw('bu',this)">業務線與交易組合</div>
+    <div class="tab" data-en="Balance Sheet" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" data-en="Cash Flow &amp; Capital Allocation" onclick="sw('cf',this)">現金流量與資本配置</div>
+    <div class="tab" data-en="Valuation" onclick="sw('val',this)">估值觀察</div>
   </div>
 
-  <!-- ================= TAB 1: Q&A ================= -->
+<!-- ================= TAB 1: Q&A ================= -->
   <div id="panel-qa" class="panel active">
     <div class="stat-row">
       <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl" data-en="Analysts">分析師提問</div></div>
@@ -412,7 +472,7 @@
         </ul>
       </div>
     </div>
-    <div class="note" data-en="RPO declining (-7% Y/Y) while ACV grows (+22% Y/Y) is a notable divergence: it means new committed-fee bookings (ACV) are healthy, but the pool of unearned/unbilled backlog (RPO) is shrinking because revenue is converting out of backlog faster than new backlog is being added — worth cross-checking against the Financials.html valuation tab for whether this signals decelerating forward bookings once the conversion catches up.">RPO下滑（年減7%）而ACV成長（年增22%）呈現值得注意的背離：代表新簽約承諾費用（ACV）健康，但未認列／未開立發票的積壓訂單池（RPO）正在縮小，因為營收從積壓訂單轉出的速度快於新積壓訂單的補充——值得與Financials.html估值分頁交叉核對，確認這是否預示一旦轉換速度追上後，未來新簽約動能將放緩。</div>
+    <div class="note" data-en="RPO declining (-7% Y/Y) while ACV grows (+22% Y/Y) is a notable divergence: it means new committed-fee bookings (ACV) are healthy, but the pool of unearned/unbilled backlog (RPO) is shrinking because revenue is converting out of backlog faster than new backlog is being added — worth cross-checking against this file's Valuation tab for whether this signals decelerating forward bookings once the conversion catches up.">RPO下滑（年減7%）而ACV成長（年增22%）呈現值得注意的背離：代表新簽約承諾費用（ACV）健康，但未認列／未開立發票的積壓訂單池（RPO）正在縮小，因為營收從積壓訂單轉出的速度快於新積壓訂單的補充——值得與本檔案「估值觀察」分頁交叉核對，確認這是否預示一旦轉換速度追上後，未來新簽約動能將放緩。</div>
   </div>
 
   <!-- ================= TAB 4: Supply Chain & Ecosystem ================= -->
@@ -677,6 +737,253 @@
         <span data-en="Mobile unit growth flipping negative this quarter is real but concentrated at the low end, and Arm's revenue exposure there is increasingly decoupled from unit volume due to rising Armv9/CSS royalty rates — management's characterization of this as low-impact is consistent with the multi-year trend already visible in the data.">本季行動裝置出貨量翻轉為負成長確有其事，但集中於低階市場，且Arm在此的營收曝險因Armv9／CSS版稅率上升而愈來愈與出貨量脫鉤——管理層將此定調為低影響的說法，與資料中已可見的多年期趨勢一致。</span>
       </div>
     </div>
+  </div>
+
+<!-- ============ Income Statement ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$1,490M</div><div class="kpi-lbl" data-en="Q4 Total Revenue">Q4總營收</div><div class="kpi-sub" data-en="+20% YoY (record quarter)">YoY+20%（單季新高）</div></div>
+      <div class="kpi"><div class="kpi-val">29.4% / 49.1%</div><div class="kpi-lbl" data-en="Q4 Operating Margin — GAAP / Non-GAAP">Q4營業利益率 — GAAP／Non-GAAP</div><div class="kpi-sub neg" data-en="Down from 33.0% / 52.8% a year ago">較去年同期33.0%／52.8%下滑</div></div>
+      <div class="kpi"><div class="kpi-val">$0.29 / $0.60</div><div class="kpi-lbl" data-en="Q4 Diluted EPS — GAAP / Non-GAAP">Q4稀釋EPS — GAAP／Non-GAAP</div><div class="kpi-sub" data-en="+45% / +9% YoY">YoY+45%／+9%</div></div>
+      <div class="kpi"><div class="kpi-val">17.4% / 10.2%</div><div class="kpi-lbl" data-en="Operating Cash Flow Margin / Non-GAAP FCF Margin">營運現金流利率／Non-GAAP FCF利率</div><div class="kpi-sub" data-en="$260M OCF / $152M FCF">$260M營運現金流／$152M FCF</div></div>
+    </div>
+    <div class="fnote" data-en="All figures below are officially disclosed GAAP/non-GAAP numbers from the Q4 FY26 6-K/Exhibit 99.2 condensed financial statements and GAAP-to-non-GAAP reconciliation tables.">以下數字均取自FY26 Q4 6-K／附件99.2簡明財務報表與GAAP-to-non-GAAP調節表官方揭露數字。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Condensed Statement of Operations — Q4 (Three Months Ended March 31, $M)">簡明損益表 — Q4（三個月，截至3/31，百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th>Q4 FY26</th><th>Q4 FY25</th><th data-en="YoY">YoY</th></tr>
+        <tr class="section-head"><td colspan="4" data-en="Revenue">營收</td></tr>
+        <tr><td data-en="License and Other Revenue">授權及其他營收</td><td>$819</td><td>$634</td><td class="pos">+29%</td></tr>
+        <tr><td data-en="Royalty Revenue">版稅營收</td><td>$671</td><td>$607</td><td class="pos">+11%</td></tr>
+        <tr class="total"><td data-en="Total Revenue">總營收</td><td>$1,490</td><td>$1,241</td><td class="pos">+20%</td></tr>
+        <tr><td data-en="Cost of Sales (GAAP)">營收成本（GAAP）</td><td>$(32)</td><td>$(28)</td><td class="neg">+14%</td></tr>
+        <tr class="total"><td data-en="Gross Profit (GAAP)">毛利（GAAP）</td><td>$1,458</td><td>$1,213</td><td class="pos">+20%</td></tr>
+        <tr><td data-en="Gross Margin (GAAP)">毛利率（GAAP）</td><td>97.9%</td><td>97.7%</td><td>—</td></tr>
+        <tr class="section-head"><td colspan="4" data-en="Operating Expenses (GAAP)">營業費用（GAAP）</td></tr>
+        <tr><td data-en="Research and Development">研發費用</td><td>$(698)</td><td>$(546)</td><td class="neg">+28%</td></tr>
+        <tr><td data-en="Selling, General and Administrative">銷售管理費用</td><td>$(320)</td><td>$(257)</td><td class="neg">+25%</td></tr>
+        <tr><td data-en="Disposal, Restructuring &amp; Other, Net">處分、重組及其他淨額</td><td>$(2)</td><td>$—</td><td>nm</td></tr>
+        <tr class="total"><td data-en="Total Operating Expenses">營業費用合計</td><td>$(1,020)</td><td>$(803)</td><td class="neg">+27%</td></tr>
+        <tr class="total"><td data-en="Operating Income (GAAP)">營業利益（GAAP）</td><td>$438</td><td>$410</td><td class="pos">+7%</td></tr>
+        <tr><td data-en="Income (Loss) from Equity Investments, Net">股權投資損益淨額</td><td>$20</td><td>$(290)</td><td>—</td></tr>
+        <tr><td data-en="Interest Income, Net">利息收入淨額</td><td>$28</td><td>$27</td><td class="pos">+4%</td></tr>
+        <tr><td data-en="Other Non-Operating Income (Loss), Net">其他業外損益淨額</td><td>$(5)</td><td>$(3)</td><td>—</td></tr>
+        <tr class="total"><td data-en="Income Before Income Taxes">稅前淨利</td><td>$481</td><td>$144</td><td class="pos">+234%</td></tr>
+        <tr><td data-en="Income Tax Benefit (Expense)">所得稅利益（費用）</td><td>$(168)</td><td>$66</td><td>—</td></tr>
+        <tr class="total"><td data-en="Net Income">淨利</td><td>$313</td><td>$210</td><td class="pos">+49%</td></tr>
+        <tr><td data-en="Diluted EPS">稀釋EPS</td><td>$0.29</td><td>$0.20</td><td class="pos">+45%</td></tr>
+        <tr><td data-en="Diluted Weighted-Avg Shares">稀釋加權平均股數</td><td>1,068M</td><td>1,065M</td><td>+0.3%</td></tr>
+      </table>
+    </div>
+    <div class="fnote red">⚑ <strong style="color:#1a1a2e;" data-en="GAAP operating margin compressed 3.6pp YoY (33.0%→29.4%) as R&amp;D growth (+28%) outran revenue growth (+20%)">GAAP營業利益率年減3.6個百分點（33.0%→29.4%），研發費用成長（+28%）超越營收成長（+20%）</strong><span data-en=" — Q4 GAAP net income growth (+49%) looks strong, but it is flattered by a swing in 'income from equity investments, net' from a $290M loss a year ago to a $20M gain this quarter (a one-time-flavored $310M swing) and a large prior-year tax benefit ($66M) that flipped to a $168M expense this year. Stripped of those two non-operating/tax items, core operating profitability actually compressed: GAAP operating income grew only +7% on +20% revenue growth, because R&amp;D (+28%) and SG&amp;A (+25%) both grew faster than revenue — consistent with management's own framing of 'continuing to increase investment in R&amp;D' ahead of the AGI CPU ramp.">——Q4 GAAP淨利成長（+49%）表面強勁，但主要受惠於「股權投資損益淨額」由去年同期虧損2.9億美元轉為本季獲利2,000萬美元（一次性色彩濃厚的3.1億美元擺動），以及去年同期高達6,600萬美元的稅務利益，今年反轉為1.68億美元的稅務費用。若剔除這兩項業外／稅務項目，核心營業獲利能力實際上是在壓縮：GAAP營業利益在營收成長20%的情況下僅成長7%，原因是研發費用（+28%）與銷管費用（+25%）成長速度雙雙超越營收——與管理層自身「持續加碼研發投資」以迎接AGI CPU放量的說法一致。</span></div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="GAAP → Non-GAAP Reconciliation — Q4 ($M)">GAAP → Non-GAAP 調節表 — Q4（百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th data-en="Q4 FY26 GAAP">Q4 FY26 GAAP</th><th data-en="Adjustments">調整項</th><th data-en="Q4 FY26 Non-GAAP">Q4 FY26 Non-GAAP</th></tr>
+        <tr><td data-en="Gross Profit">毛利</td><td>$1,458</td><td class="pos">+$7</td><td>$1,465</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Share-based Compensation (equity-settled)">&nbsp;&nbsp;股票薪酬（權益結算）</td><td colspan="2">$261</td><td>—</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Employer Taxes Related to SBC, Net of R&amp;D Credit">&nbsp;&nbsp;SBC相關雇主稅（扣除研發抵減）</td><td colspan="2">$29</td><td>—</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Acquisition-related / Restructuring, Net">&nbsp;&nbsp;併購相關／重組淨額</td><td colspan="2">$3</td><td>—</td></tr>
+        <tr><td data-en="Operating Income">營業利益</td><td>$438</td><td class="pos">+$293</td><td>$731</td></tr>
+        <tr><td data-en="Operating Margin %">營業利益率</td><td>29.4%</td><td>—</td><td>49.1%</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;(Income) Loss from Equity Investments, Net">&nbsp;&nbsp;股權投資（損益）淨額</td><td colspan="3">$(20)</td></tr>
+        <tr><td data-en="&nbsp;&nbsp;Income Tax Effect on Non-GAAP Adjustments">&nbsp;&nbsp;非GAAP調整項之所得稅效應</td><td colspan="3">$55</td></tr>
+        <tr class="total"><td data-en="Net Income">淨利</td><td>$313</td><td class="pos">+$328</td><td>$641</td></tr>
+        <tr><td data-en="Diluted EPS">稀釋EPS</td><td>$0.29</td><td>—</td><td>$0.60</td></tr>
+      </table>
+    </div>
+    <div class="fnote" data-en="Non-GAAP adjustments are dominated by share-based compensation ($261M of the $293M operating-income bridge, or 89%) — SBC is a genuine, growing, non-cash cost of running Arm (FY26 full-year SBC was $1,052M, up 28% YoY per the cash flow statement), and the associated cash cost of tax withholding on vested shares ($529M FY26, up from $120M FY25) is a real cash outflow the non-GAAP operating-income figure does not capture.">非GAAP調整項絕大部分來自股票薪酬（2.93億美元營業利益調節橋接中的2.61億美元，佔89%）——SBC是Arm營運中真實且持續成長的非現金成本（依現金流量表，FY26全年SBC達10.52億美元，年增28%），而歸屬歸屬股份代扣稅款的現金支出（FY26為5.29億美元，較FY25的1.20億美元大增）則是non-GAAP營業利益數字未能反映的真實現金流出。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Full-Year Comparison — FY2026 vs. FY2025 ($M, GAAP unless noted)">全年度比較 — FY2026 vs. FY2025（百萬美元，除註明外皆為GAAP）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th>FY2026</th><th>FY2025</th><th data-en="YoY">YoY</th></tr>
+        <tr><td data-en="Total Revenue">總營收</td><td>$4,920</td><td>$4,007</td><td class="pos">+23%</td></tr>
+        <tr><td data-en="Royalty Revenue">版稅營收</td><td>$2,613</td><td>—</td><td class="pos">+21%</td></tr>
+        <tr><td data-en="License and Other Revenue">授權及其他營收</td><td>$2,307</td><td>—</td><td class="pos">+25%</td></tr>
+        <tr><td data-en="Gross Profit / Margin">毛利／毛利率</td><td>$4,799 / 97.5%</td><td>$3,886 / 97.0%</td><td class="pos">+23%</td></tr>
+        <tr><td data-en="Operating Income (GAAP) / Margin">營業利益（GAAP）／利益率</td><td>$900 / 18.3%</td><td>$831 / 20.7%</td><td class="pos">+8%</td></tr>
+        <tr><td data-en="Operating Income (Non-GAAP) / Margin">營業利益（Non-GAAP）／利益率</td><td>$2,115 / 43.0%</td><td>$1,871 / 46.7%</td><td class="pos">+13%</td></tr>
+        <tr><td data-en="Net Income">淨利</td><td>$904</td><td>$792</td><td class="pos">+14%</td></tr>
+        <tr><td data-en="Diluted EPS (GAAP) / (Non-GAAP)">稀釋EPS（GAAP）／（Non-GAAP）</td><td>$0.85 / $1.77</td><td>$0.75 / $1.63</td><td class="pos">+13% / +9%</td></tr>
+        <tr><td data-en="Operating Cash Flow / Non-GAAP FCF">營運現金流／Non-GAAP FCF</td><td>$1,524 / $882</td><td>$397 / $99</td><td class="pos">+284% / +791%</td></tr>
+      </table>
+    </div>
+    <div class="fnote blue" data-en="Both GAAP and non-GAAP operating margin compressed year-over-year for the full year (18.3%→ down from 20.7%; 43.0%→ down from 46.7%) even as revenue grew 23% — this is a full-year confirmation, not just a Q4 quirk, that opex (especially R&amp;D, +34% GAAP YoY for the full year) is currently growing faster than revenue as Arm invests ahead of the AGI CPU ramp. Full-year operating cash flow nearly quadrupled (+284%) on working-capital timing and tax-payment timing, per management commentary — a much larger swing than the underlying earnings growth, so should not be read as a clean run-rate.">全年GAAP與non-GAAP營業利益率皆年減（GAAP自20.7%降至18.3%；non-GAAP自46.7%降至43.0%），即便營收成長23%——這是全年度的確認，而非僅Q4的個別現象，顯示Arm目前正提前於AGI CPU放量投資，使營業費用（尤其研發費用全年GAAP年增34%）成長速度超越營收。全年營運現金流成長近四倍（+284%），依管理層說法係受營運資金時點與稅款繳納時點影響——擺動幅度遠大於底層獲利成長，不應視為乾淨的常態化跑率。</div>
+  </div>
+
+  <!-- ============ Business Lines & Deal Mix ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="section-title" data-en="Arm Reports Revenue as License vs. Royalty Only — No Dollar Breakdown by End Market">Arm僅按授權vs.版稅揭露營收——未按終端市場揭露金額細分</div>
+    <div class="fnote yellow" data-en="Arm's 6-K/20-F disclosures split revenue only into License and Other vs. Royalty. There is no disclosed dollar breakdown by end-market category (Cloud AI/data center, Edge AI, Physical AI/automotive, smartphone) — management's per-category commentary on the call is entirely qualitative (e.g. 'data center royalty more than doubled'). The metrics below (ACV, RPO, license counts) are the only publicly quantified license-engine indicators; treat the bar chart as directional deal-count/mix context, not a revenue-dollar bridge.">Arm的6-K／20-F揭露僅將營收拆分為授權及其他 vs. 版稅兩類。並未按終端市場類別（雲端AI／資料中心、邊緣AI、實體AI／車用、智慧型手機）揭露金額細分——管理層在法說會上對各類別的評論完全是定性描述（例如「資料中心版稅逾倍成長」）。以下指標（ACV、RPO、授權家數）是唯一公開量化的授權引擎指標；請將長條圖視為方向性的交易組合脈絡，而非營收金額對帳橋接。</div>
+
+    <div class="bu-grid">
+      <div class="bu-card a">
+        <div class="bu-name" data-en="License and Other Revenue">授權及其他營收</div>
+        <div class="bu-abbr" data-en="55% of total revenue">佔總營收55%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Q4 FY26 Revenue">Q4 FY26營收</span><span class="bu-stat-val">$819M<span class="bu-delta">+29% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Incl. SoftBank related-party contribution">內含SoftBank關係人貢獻</span><span class="bu-stat-val">$200M<span class="bu-delta">flat QoQ</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:55%; background:#15803d;"></div></div>
+      </div>
+      <div class="bu-card b">
+        <div class="bu-name" data-en="Royalty Revenue">版稅營收</div>
+        <div class="bu-abbr" data-en="45% of total revenue">佔總營收45%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Q4 FY26 Revenue">Q4 FY26營收</span><span class="bu-stat-val">$671M<span class="bu-delta">+11% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="Data-center royalty (qualitative)">資料中心版稅（定性）</span><span class="bu-stat-val" data-en="&gt;2x YoY">逾2倍年增</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:45%; background:#2563eb;"></div></div>
+      </div>
+      <div class="bu-card c">
+        <div class="bu-name" data-en="ACV / RPO (License Engine Backlog)">ACV／RPO（授權引擎積壓訂單）</div>
+        <div class="bu-abbr" data-en="Annualized contract value / remaining performance obligations">年化合約價值／剩餘履約義務</div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="ACV">ACV</span><span class="bu-stat-val">$1,660M<span class="bu-delta">+22% YoY</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl" data-en="RPO">RPO</span><span class="bu-stat-val">$2,071M<span class="bu-delta neg">(7)% YoY</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:34%; background:#6d28d9;"></div></div>
+      </div>
+    </div>
+    <div class="fnote red" data-en="ACV growing +22% YoY while RPO shrinks (7)% YoY is a genuine divergence worth watching — see the Valuation tab for the forward-looking read on this.">ACV年增22%，RPO卻年減7%，是值得留意的真實背離——相關前瞻性解讀請見估值觀察分頁。</div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="License Access Program Mix (Deal-Count Proxy)">授權存取方案組合（交易數代理指標）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Program">方案</th><th data-en="Extant Licenses, Q4 FY26">FY26 Q4存續授權家數</th><th data-en="Extant Licenses, Q4 FY25">FY25 Q4存續授權家數</th><th data-en="QoQ Change">單季變化</th></tr>
+        <tr><td data-en="Arm Total Access">Arm Total Access</td><td>56</td><td>44</td><td class="pos">+6 QoQ</td></tr>
+        <tr><td data-en="Arm Flexible Access">Arm Flexible Access</td><td>329</td><td>314</td><td class="pos">+11 QoQ</td></tr>
+      </table>
+    </div>
+    <div class="fnote" data-en="Arm Total Access licenses now cover more than half of Arm's top-30 customers — the subscription-style access programs (unlimited access to a library of current/future IP) are Arm's leading indicator of future royalty-bearing chip designs, since customers on these programs are deepening their commitment to Arm IP ahead of actual chip tape-outs.">Arm Total Access授權現已涵蓋Arm前30大客戶中逾半數——這類訂閱式存取方案（可無限存取現有／未來IP庫）是Arm未來將產生版稅之晶片設計的領先指標，因為採用這類方案的客戶正在晶片量產前就加深對Arm IP的承諾。</div>
+
+    <div class="divider"></div>
+    <div class="section-title" data-en="Royalty Growth Drivers — Directional Commentary Only (No $ Disclosed)">版稅成長動能——僅為方向性評論（未揭露金額）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th data-en="Category">類別</th><th data-en="Directional Commentary">方向性評論</th><th data-en="Confidence">信心度</th></tr>
+        <tr><td data-en="Cloud AI / Data Center">雲端AI／資料中心</td><td data-en="Data-center royalty &gt;2x YoY for 2nd consecutive year; largest contributor to royalty growth">資料中心版稅連續第2年逾2倍年增；版稅成長最大貢獻來源</td><td class="pos" data-en="High (verbatim)">高（逐字引用）</td></tr>
+        <tr><td data-en="Smartphone / Edge">智慧型手機／終端</td><td data-en="Unit growth flipping negative this quarter, low-end concentrated; revenue growth continues via Armv9/CSS rate uplift">本季出貨量翻負，集中於低階；營收透過Armv9/CSS費率提升持續成長</td><td class="pos" data-en="High (verbatim)">高（逐字引用）</td></tr>
+        <tr><td data-en="Edge AI / Physical AI (ADAS, auto)">邊緣AI／實體AI（ADAS、車用）</td><td data-en="Double-digit growth, continued share gains">雙位數成長，持續搶占份額</td><td class="pos" data-en="High (verbatim)">高（逐字引用）</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ Balance Sheet ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Condensed Balance Sheet ($M)">簡明資產負債表（百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th>Mar 31, 2026</th><th>Mar 31, 2025</th><th data-en="Change">變化</th></tr>
+        <tr class="section-head"><td colspan="4" data-en="Assets">資產</td></tr>
+        <tr><td data-en="Cash and Cash Equivalents">現金及約當現金</td><td>$2,751</td><td>$2,085</td><td class="pos">+32%</td></tr>
+        <tr><td data-en="Short-term Investments">短期投資</td><td>$850</td><td>$740</td><td class="pos">+15%</td></tr>
+        <tr><td data-en="Accounts Receivable, net">應收帳款淨額</td><td>$1,300</td><td>$1,107</td><td class="pos">+17%</td></tr>
+        <tr><td data-en="Contract Assets">合約資產</td><td>$977</td><td>$642</td><td class="neg">+52%</td></tr>
+        <tr><td data-en="Prepaid Expenses &amp; Other Current Assets">預付費用及其他流動資產</td><td>$358</td><td>$256</td><td>+40%</td></tr>
+        <tr class="total"><td data-en="Total Current Assets">流動資產合計</td><td>$6,236</td><td>$4,830</td><td class="pos">+29%</td></tr>
+        <tr><td data-en="Property and Equipment, net">不動產及設備淨額</td><td>$772</td><td>$354</td><td class="neg">+118%</td></tr>
+        <tr><td data-en="Operating Lease ROU Assets">營運租賃使用權資產</td><td>$379</td><td>$320</td><td>+18%</td></tr>
+        <tr><td data-en="Equity Investments">股權投資</td><td>$387</td><td>$565</td><td class="neg">(31)%</td></tr>
+        <tr><td data-en="Goodwill">商譽</td><td>$1,623</td><td>$1,620</td><td>+0.2%</td></tr>
+        <tr><td data-en="Intangible Assets, net">無形資產淨額</td><td>$230</td><td>$151</td><td>+52%</td></tr>
+        <tr><td data-en="Other Non-current Assets (incl. deferred tax, contract assets)">其他非流動資產（含遞延所得稅、合約資產）</td><td>$1,007</td><td>$1,052</td><td>(4)%</td></tr>
+        <tr class="total"><td data-en="Total Assets">資產總計</td><td>$10,703</td><td>$8,932</td><td class="pos">+20%</td></tr>
+        <tr class="section-head"><td colspan="4" data-en="Liabilities">負債</td></tr>
+        <tr><td data-en="Accrued Compensation &amp; Benefits">應計薪酬及福利</td><td>$154</td><td>$140</td><td>+10%</td></tr>
+        <tr><td data-en="Tax Liabilities">應付稅款</td><td>$106</td><td>$124</td><td>(15)%</td></tr>
+        <tr><td data-en="Contract Liabilities (current)">合約負債（流動）</td><td>$294</td><td>$209</td><td class="neg">+41%</td></tr>
+        <tr><td data-en="Other Current Liabilities">其他流動負債</td><td>$486</td><td>$456</td><td>+7%</td></tr>
+        <tr class="total"><td data-en="Total Current Liabilities">流動負債合計</td><td>$1,040</td><td>$929</td><td>+12%</td></tr>
+        <tr><td data-en="Non-current Contract Liabilities">非流動合約負債</td><td>$752</td><td>$702</td><td>+7%</td></tr>
+        <tr><td data-en="Non-current Operating Lease Liabilities">非流動營運租賃負債</td><td>$393</td><td>$316</td><td>+24%</td></tr>
+        <tr><td data-en="Other Non-current Liabilities">其他非流動負債</td><td>$232</td><td>$146</td><td>+59%</td></tr>
+        <tr class="total"><td data-en="Total Liabilities">負債總計</td><td>$2,417</td><td>$2,093</td><td>+15%</td></tr>
+        <tr class="section-head"><td colspan="4" data-en="Shareholders' Equity">股東權益</td></tr>
+        <tr><td data-en="Additional Paid-in Capital">額外實收資本</td><td>$3,467</td><td>$2,922</td><td>+19%</td></tr>
+        <tr><td data-en="Accumulated Other Comprehensive Income">累積其他綜合損益</td><td>$370</td><td>$372</td><td>(1)%</td></tr>
+        <tr><td data-en="Retained Earnings">保留盈餘</td><td>$4,447</td><td>$3,543</td><td class="pos">+26%</td></tr>
+        <tr class="total"><td data-en="Total Shareholders' Equity">股東權益總計</td><td>$8,286</td><td>$6,839</td><td class="pos">+21%</td></tr>
+        <tr class="total"><td data-en="Total Liabilities and Equity">負債及股東權益總計</td><td>$10,703</td><td>$8,932</td><td>+20%</td></tr>
+      </table>
+    </div>
+    <div class="fnote red">⚑ <strong style="color:#1a1a2e;" data-en="Contract assets from related parties jumped from $152M to $646M year-over-year — a &gt;4x increase, the single largest balance-sheet swing on the statement">關係人合約資產由1.52億美元暴增至6.46億美元——年增逾4倍，是報表中單一最大的科目變動</strong><span data-en=" — Total contract assets grew 52% YoY ($642M→$977M), but the related-party portion alone (disclosed in the balance-sheet footnote, most plausibly tied to the SoftBank technology-licensing/design-services arrangement given its $200M/quarter revenue contribution) more than quadrupled. This means Arm has recognized substantially more revenue from related parties than it has actually billed/collected, increasing working-capital and related-party counterparty exposure at the same time the 20-F flags SoftBank dependence as a named risk factor.">——合約資產總額年增52%（6.42億美元→9.77億美元），但關係人部分（於資產負債表附註揭露，最可能與每季貢獻2億美元營收的SoftBank技術授權／設計服務安排相關）單獨即成長逾4倍。這代表Arm已認列遠高於實際開立發票／收款金額的關係人營收，在20-F將SoftBank依賴列為具名風險因子的同時，也同步提高了營運資金與關係人交易對手曝險。</span></div>
+    <div class="fnote yellow" data-en="PP&amp;E more than doubled YoY (+118%, $354M→$772M) consistent with the sharp rise in capex disclosed in the cash flow statement — direct balance-sheet evidence of Arm building out physical infrastructure ahead of the AGI CPU silicon ramp. Arm carries no disclosed debt on this condensed balance sheet — total liabilities of $2,417M are almost entirely operating in nature (contract liabilities, leases, tax, compensation), and total equity of $8,286M against $2,417M of liabilities leaves the balance sheet essentially unlevered.">不動產廠房設備淨額年增逾一倍（+118%，3.54億美元→7.72億美元），與現金流量表揭露的資本支出大幅攀升一致——是Arm在AGI CPU矽晶片放量前積極建置實體基礎設施的直接資產負債表證據。此份簡明資產負債表未揭露任何負債性借款——負債總計24.17億美元幾乎全為營運性質（合約負債、租賃、稅款、薪酬），股東權益總計82.86億美元相對負債24.17億美元，使資產負債表實質上幾乎無槓桿。</div>
+  </div>
+
+  <!-- ============ Cash Flow & Capital Allocation ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Condensed Cash Flow Statement — Q4 &amp; FY2026 ($M)">簡明現金流量表 — Q4與FY2026（百萬美元）</div>
+      <table>
+        <tr><th data-en="Item">項目</th><th>Q4 FY26</th><th>Q4 FY25</th><th>FY26</th><th>FY25</th></tr>
+        <tr><td data-en="Net Income">淨利</td><td>$313</td><td>$210</td><td>$904</td><td>$792</td></tr>
+        <tr><td data-en="D&amp;A">折舊攤銷</td><td>$71</td><td>$49</td><td>$249</td><td>$183</td></tr>
+        <tr><td data-en="Share-based Compensation">股票薪酬</td><td>$261</td><td>$193</td><td>$1,052</td><td>$820</td></tr>
+        <tr><td data-en="Working Capital &amp; Other Changes">營運資金及其他變動</td><td>$(385)</td><td>$(194)</td><td>$(681)</td><td>$(1,180)</td></tr>
+        <tr class="total"><td data-en="Net Cash from Operating Activities">營運活動現金流淨額</td><td>$260</td><td>$258</td><td>$1,524</td><td>$397</td></tr>
+        <tr><td data-en="Net Cash Used in Investing Activities">投資活動現金流淨額</td><td>$(201)</td><td>$(188)</td><td>$(325)</td><td>$(35)</td></tr>
+        <tr><td data-en="Net Cash Used in Financing Activities">融資活動現金流淨額</td><td>$(105)</td><td>$(27)</td><td>$(548)</td><td>$(202)</td></tr>
+        <tr><td data-en="FX Effect on Cash">匯率變動影響</td><td>$(10)</td><td>$6</td><td>$15</td><td>$2</td></tr>
+        <tr class="total"><td data-en="Net Change in Cash">現金淨變動</td><td>$(56)</td><td>$49</td><td>$666</td><td>$162</td></tr>
+        <tr><td data-en="Cash, End of Period">期末現金</td><td>$2,751</td><td>$2,085</td><td>$2,751</td><td>$2,085</td></tr>
+      </table>
+    </div>
+    <div class="fnote" data-en="Q4 operating cash flow ($260M) roughly matched Q4 net income ($313M) — a healthy quality-of-earnings signal for the quarter — but the full-year swing (FY26 operating cash flow of $1,524M vs. FY25's $397M, a nearly 4x increase against net income growth of only ~14%) is driven almost entirely by working-capital and tax-payment timing per management commentary, not repeatable operating leverage.">Q4營運現金流（2.6億美元）大致與Q4淨利（3.13億美元）相當——本季獲利品質訊號健康——但全年度的擺動幅度（FY26營運現金流15.24億美元，相對FY25的3.97億美元，成長近4倍，遠超約14%的淨利成長）依管理層說法幾乎完全由營運資金與稅款繳納時點驅動，並非可重複的營運槓桿改善。</div>
+
+    <div class="divider"></div>
+    <div class="cf-section">
+      <div class="cf-header" data-en="Non-GAAP Free Cash Flow Bridge — FY2026 ($M)">Non-GAAP自由現金流橋接 — FY2026（百萬美元）</div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Net Cash from Operating Activities">營運活動現金流淨額</span><span class="cf-val">$1,524</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Less: Purchases of Property and Equipment">減：不動產及設備採購</span><span class="cf-val neg" data-en="(Note: displayed as negative below)">$(545)</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Less: Purchases of Intangible Assets">減：無形資產採購</span><span class="cf-val">$(30)</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Less: Payments of Intangible Asset Obligations">減：無形資產義務款項</span><span class="cf-val">$(67)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl" data-en="Non-GAAP Free Cash Flow">Non-GAAP自由現金流</span><span class="cf-val">$882</span></div>
+    </div>
+    <div class="fnote red">⚑ <strong style="color:#1a1a2e;" data-en="PP&amp;E capex surged 149% YoY ($219M→$545M) — the single largest driver of the OCF-to-FCF gap, and the clearest cash-flow-statement evidence of AGI CPU ramp spending">不動產廠房設備資本支出年增149%（2.19億美元→5.45億美元）——是營運現金流與自由現金流缺口的最大單一驅動因素，也是現金流量表中AGI CPU放量支出最明確的證據</strong><span data-en=" — This is consistent with the balance sheet's 118% YoY jump in net PP&amp;E and management's stated intent to keep investing ahead of the AGI CPU ramp. Watch this line closely in FY27 guidance: if the AGI CPU business truly scales toward the guided ~$1B FY27+FY28 revenue, capex intensity should keep rising well before that revenue is recognized.">——這與資產負債表中不動產廠房設備淨額年增118%的走勢一致，也符合管理層明確表示將持續為AGI CPU放量提前投資的說法。應密切留意此科目在FY27財測中的走向：若AGI CPU業務真的朝財測的FY27+FY28合計約10億美元營收規模邁進，資本支出強度理應在該筆營收正式認列前就持續攀升。</span></div>
+
+    <div class="divider"></div>
+    <div class="cf-section">
+      <div class="cf-header" data-en="Financing Activities Detail — SBC Cash Cost Is Rising Fast">融資活動明細——股票薪酬現金成本快速上升</div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Payments of Withholding Tax on Vested Shares, FY26">股份歸屬代扣稅款支付，FY26</span><span class="cf-val">$(529)</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Payments of Withholding Tax on Vested Shares, FY25">股份歸屬代扣稅款支付，FY25</span><span class="cf-val">$(120)</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Y/Y Change">年變化</span><span class="cf-val neg">+341%</span></div>
+      <div class="cf-row"><span class="cf-lbl" data-en="Proceeds from Employee Stock Purchase Plan, FY26">員工認股計畫收入，FY26</span><span class="cf-val">$74</span></div>
+    </div>
+    <div class="fnote yellow" data-en="This is a real, growing cash outflow that non-GAAP EPS ($1.77 for FY26) does not capture — SBC withholding-tax cash payments alone consumed $529M in FY26, more than half of Non-GAAP FCF ($882M). Combined with FY26 equity-settled SBC of $1,052M (21% of total revenue), share-based compensation is Arm's largest single cost line after cost of sales, and its cash-cost footprint is expanding faster than revenue.">這是non-GAAP EPS（FY26為1.77美元）未能反映的真實且持續成長的現金流出——僅SBC代扣稅款現金支付一項，FY26即耗用5.29億美元，超過Non-GAAP FCF（8.82億美元）的一半。加上FY26權益結算SBC達10.52億美元（占總營收21%），股票薪酬是Arm除營收成本外最大的單一成本科目，且其現金成本足跡的擴張速度快於營收。</div>
+  </div>
+
+  <!-- ============ Valuation ============ -->
+  <div id="panel-val" class="panel">
+    <div class="fnote yellow" data-en="Arm's earnings materials do not disclose a stock price or market capitalization. The price context below is reconstructed from SEC Form 4 insider-transaction filings (May 19 &ndash; June 3, 2026), which record actual executed transaction prices &mdash; treat these as data points, not an official company-disclosed valuation, and note they reflect a fast-moving post-earnings rally rather than a single stable valuation level.">Arm的財報資料並未揭露股價或市值。以下的股價脈絡係依SEC Form 4內部人交易申報（2026年5月19日至6月3日）重建，該申報記錄實際成交價格——請將其視為資料點，而非公司官方揭露的估值，並注意這反映的是財報後快速變動的漲勢，而非單一穩定的估值水準。</div>
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Implied Valuation at Two Reference Prices (Form 4-derived, not company-disclosed)">兩個參考價位的隱含估值（源自Form 4，非公司揭露）</div>
+      <table>
+        <tr><th data-en="Metric">指標</th><th data-en="At $209 (May 19, RSU-vest withholding price)">$209（5/19，RSU歸屬代扣參考價）</th><th data-en="At $415 (June 3, most recent Form 4 price)">$415（6/3，最新Form 4成交價）</th></tr>
+        <tr><td data-en="Implied Market Cap (~1,064M shares issued)">隱含市值（約10.64億股已發行）</td><td>~$222B</td><td>~$442B</td></tr>
+        <tr><td data-en="P/E on FY26 GAAP Diluted EPS ($0.85)">FY26 GAAP稀釋EPS（$0.85）本益比</td><td>~246x</td><td>~488x</td></tr>
+        <tr><td data-en="P/E on FY26 Non-GAAP Diluted EPS ($1.77)">FY26 Non-GAAP稀釋EPS（$1.77）本益比</td><td>~118x</td><td>~235x</td></tr>
+        <tr><td data-en="Price / FY26 Sales ($4,920M)">股價／FY26營收比</td><td>~45x</td><td>~90x</td></tr>
+        <tr><td data-en="Price / Book Value ($8,286M equity)">股價／帳面淨值比</td><td>~27x</td><td>~53x</td></tr>
+      </table>
+    </div>
+    <div class="fnote red">⚑ <strong style="color:#1a1a2e;" data-en="Even at the pre-rally reference price, ARM traded at valuation multiples that price in near-flawless execution of the AGI CPU thesis for years to come">即便在漲勢前的參考價位，ARM的估值倍數也已隱含未來多年幾近完美執行AGI CPU論點的假設</strong><span data-en=" — At ~118x non-GAAP earnings and ~45x sales even before the post-earnings ~98% rally to $415, the market was already pricing substantial forward growth well beyond the current ~43% non-GAAP operating margin and 23% revenue growth. This is the direct financial-statement counterpart to the Risk Matrix tab: the central open question from the Q&amp;A (whether the doubled $2B of AGI CPU 'demand' converts into guided, supply-secured revenue) is not a minor modeling detail — at these multiples, it is close to the entire investment thesis. A valuation this rich also has essentially no margin for error on the medium-confidence risks flagged elsewhere in this report (RPO decline, licensee channel-conflict exposure, light chip-business OpEx assumptions).">——即便在財報後上漲約98%至415美元之前，ARM在約118倍non-GAAP盈餘、約45倍營收的估值下，市場已經在為遠超目前約43% non-GAAP營益率與23%營收成長的未來成長進行定價。這正是「風險矩陣」分頁在財務報表端的直接對應：Q&amp;A中懸而未決的核心問題（翻倍至20億美元的AGI CPU「需求」能否轉化為已獲供應保障、納入財測的營收）並非次要的建模細節——在這樣的估值倍數下，這幾乎等同於整個投資論點。如此高的估值本身，對本報告其他部分標注的中信心度風險（RPO下滑、授權客戶通路衝突曝險、晶片業務OpEx假設偏低）幾乎沒有容錯空間。</span></div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title" data-en="Guidance Summary">財測彙總</div>
+      <table>
+        <tr><th data-en="Period">期間</th><th data-en="Metric">指標</th><th data-en="Guidance">財測</th></tr>
+        <tr><td data-en="Q1 FY27">Q1 FY27</td><td data-en="Total Revenue">總營收</td><td>$1.26B ± $50M</td></tr>
+        <tr><td data-en="Q1 FY27">Q1 FY27</td><td data-en="Royalty / License Revenue">版稅／授權營收</td><td data-en="Both up ~20% YoY">兩者皆年增約20%</td></tr>
+        <tr><td data-en="Q1 FY27">Q1 FY27</td><td data-en="Non-GAAP Operating Expense">Non-GAAP營業費用</td><td>~$760M</td></tr>
+        <tr><td data-en="Q1 FY27">Q1 FY27</td><td data-en="Non-GAAP Diluted EPS">Non-GAAP稀釋EPS</td><td>$0.40 ± $0.04</td></tr>
+        <tr><td data-en="FY27">FY27（全年）</td><td data-en="Royalty &amp; License Revenue Growth">版稅與授權營收成長</td><td data-en="~20% Y/Y each, roughly even across quarters; license back-half weighted ~60/40">各約年增20%，各季大致平均；授權營收下半年占比約60/40偏重下半年</td></tr>
+        <tr><td data-en="FY27">FY27（全年）</td><td data-en="AGI CPU Revenue (FY27+FY28 combined)">AGI CPU營收（FY27+FY28合計）</td><td data-en="~$1B, unchanged despite $2B stated demand">約10億美元，儘管已宣稱20億美元需求仍維持不變</td></tr>
+        <tr><td data-en="FY2031 (long-term target)">FY2031（長期目標）</td><td data-en="AGI CPU Revenue">AGI CPU營收</td><td>$15B</td></tr>
+        <tr><td data-en="FY2031 (long-term target)">FY2031（長期目標）</td><td data-en="IP Revenue">IP營收</td><td>$10B</td></tr>
+        <tr><td data-en="FY2031 (long-term target)">FY2031（長期目標）</td><td data-en="Total Revenue">總營收</td><td>$25B</td></tr>
+        <tr><td data-en="FY2031 (long-term target)">FY2031（長期目標）</td><td data-en="EPS">EPS</td><td data-en="&gt;$9">逾9美元</td></tr>
+      </table>
+    </div>
+    <div class="fnote blue" data-en="At the FY2031 target of $25B revenue and $9+ EPS, the implied non-GAAP net income (~1,068M diluted shares &times; $9 &asymp; $9.6B) would represent roughly a 15x increase from FY26's $641M non-GAAP net income over five years &mdash; a ~72% CAGR. Even judged purely against management's own long-term targets, the current valuation multiples require the market to believe this trajectory is highly likely to be realized largely on schedule; any material slippage in the AGI CPU supply-chain conversion timeline (the central open question flagged throughout this report) would mechanically compress the multiple far more than it would dent the underlying business.">以FY2031目標營收250億美元、EPS逾9美元計算，隱含的non-GAAP淨利（約10.68億股稀釋股數 &times; 9美元 &asymp; 96億美元）相對FY26的6.41億美元non-GAAP淨利，五年內約成長15倍——約當72%的年複合成長率。即便單純以管理層自身設定的長期目標來檢視，目前的估值倍數都要求市場相信這條成長軌跡極有可能大致依原訂時程實現；本報告中反覆標注的核心懸而未決問題——AGI CPU供應鏈轉換時程——任何實質性的延宕，對估值倍數的壓縮幅度，都將遠大於對底層業務本身的損傷。</div>
   </div>
 
   <div class="footer" data-en="For informational purposes only. Not investment advice.">僅供資訊參考，非投資建議。</div>
