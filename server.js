@@ -544,6 +544,29 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Lists the published earnings-call reports under /research so CausalFrame's
+  // "insert earnings call report" picker can offer them without hardcoding a list.
+  if (req.url === '/api/research-reports' && req.method === 'GET') {
+    try {
+      const dir = path.join(APP_DIR, 'research');
+      const names = fs.existsSync(dir) ? fs.readdirSync(dir) : [];
+      const reports = names
+        .map(fn => {
+          const m = fn.match(/^([A-Z0-9]+)_(.+)_(Analysis|Financials)\.html$/);
+          if (!m) return null;
+          return { ticker: m[1], period: m[2], kind: m[3], filename: fn, url: '/research/' + fn };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.ticker.localeCompare(b.ticker) || a.period.localeCompare(b.period) || a.kind.localeCompare(b.kind));
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(reports));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   // OpenGraph metadata for CausalFrame's link-preview embed cards
   if (req.url.startsWith('/api/og-fetch') && req.method === 'GET') {
     try {
