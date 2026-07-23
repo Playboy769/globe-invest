@@ -200,6 +200,16 @@ body.dark .cf-file-rename:hover{color:#ccc;background:#2a2a2a}
 .cf-file-move{position:absolute;top:9px;right:54px;opacity:0;font-size:11px;color:#ccc;background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:5px;transition:opacity .12s,color .12s,background .12s;font-family:inherit;line-height:1}
 .cf-file-card:hover .cf-file-move{opacity:1}
 .cf-file-move:hover{color:#0a0a0a;background:#ebebeb}
+.cf-file-pin{position:absolute;top:9px;right:78px;opacity:0;font-size:11px;color:#ccc;background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:5px;transition:opacity .12s,color .12s,background .12s;font-family:inherit;line-height:1}
+.cf-file-card:hover .cf-file-pin{opacity:1}
+.cf-file-pin:hover{color:#0a0a0a;background:#ebebeb}
+.cf-file-pin.active{opacity:1;color:#a87a2e}
+.cf-file-pin.active:hover{background:#f5ede0}
+.cf-file-star{position:absolute;top:9px;right:99px;opacity:0;font-size:12px;color:#ccc;background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:5px;transition:opacity .12s,color .12s,background .12s;font-family:inherit;line-height:1}
+.cf-file-card:hover .cf-file-star{opacity:1}
+.cf-file-star:hover{color:#0a0a0a;background:#ebebeb}
+.cf-file-star.active{opacity:1;color:#c99a2e}
+.cf-file-star.active:hover{background:#f7f0dc}
 .cf-folder-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;min-width:155px;padding:5px;overflow:hidden}
 .cf-folder-picker-item{padding:7px 12px;border-radius:7px;cursor:pointer;font-size:12px;color:#444;white-space:nowrap}
 .cf-folder-picker-item:hover{background:#f5f5f5}
@@ -663,6 +673,14 @@ body.dark .cf-folder-del{color:#444}
 body.dark .cf-folder-files{border-left-color:#2a2a2a}
 body.dark .cf-file-move{color:#444}
 body.dark .cf-file-move:hover{color:#aaa;background:#2a2a2a}
+body.dark .cf-file-pin{color:#444}
+body.dark .cf-file-pin:hover{color:#aaa;background:#2a2a2a}
+body.dark .cf-file-pin.active{color:#c99a4e}
+body.dark .cf-file-pin.active:hover{background:#2e2415}
+body.dark .cf-file-star{color:#444}
+body.dark .cf-file-star:hover{color:#aaa;background:#2a2a2a}
+body.dark .cf-file-star.active{color:#d4b04a}
+body.dark .cf-file-star.active:hover{background:#2e2815}
 body.dark .cf-folder-picker{background:#1a1a1a;border-color:#2a2a2a;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 body.dark .cf-folder-picker-item{color:#aaa}
 body.dark .cf-folder-picker-item:hover{background:#252525}
@@ -1262,6 +1280,16 @@ function renameFile(id, name) {
   if (f) { f.name = name.trim()||'Untitled'; saveFiles(); updateFilename(); }
 }
 
+function toggleFilePin(id) {
+  const f = files.find(x => x.id === id); if (!f) return;
+  f.pinned = !f.pinned; saveFiles(); renderFeed();
+}
+
+function toggleFileStar(id) {
+  const f = files.find(x => x.id === id); if (!f) return;
+  f.starred = !f.starred; saveFiles(); renderFeed();
+}
+
 function updateFilename() {
   const name = activeFile().name;
   const wm = document.getElementById('cf-watermark');
@@ -1520,16 +1548,22 @@ function renderFeed() {
         </div>
       </div>
       <button class="cf-file-move" data-mv="${f.id}" title="Move to folder">⊞</button>
+      <button class="cf-file-star${f.starred?' active':''}" data-star="${f.id}" title="${f.starred?'Unstar':'Star'}">${f.starred?'★':'☆'}</button>
+      <button class="cf-file-pin${f.pinned?' active':''}" data-pin="${f.id}" title="${f.pinned?'Unpin':'Pin to top'}">${f.pinned?'⚑':'⚐'}</button>
       <button class="cf-file-rename" data-ren="${f.id}" title="Rename">✎</button>
       <button class="cf-file-del" data-del="${f.id}" title="Delete">✕</button>`;
     return card;
   }
+  // Pinned files float to the top of their list (top-level or within a
+  // folder); Array.prototype.sort is stable so unpinned relative order
+  // (newest-first, from files.unshift) is preserved.
+  const sortPinnedFirst = arr => [...arr].sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0));
 
-  files.filter(f => !f.folderId || !validFdIds.has(f.folderId))
+  sortPinnedFirst(files.filter(f => !f.folderId || !validFdIds.has(f.folderId)))
     .forEach(f => list.appendChild(mkCard(f, false)));
 
   folders.forEach(fd => {
-    const fdFiles = files.filter(f => f.folderId === fd.id);
+    const fdFiles = sortPinnedFirst(files.filter(f => f.folderId === fd.id));
     const row = document.createElement('div');
     row.className = 'cf-folder-row';
     row.dataset.fdid = fd.id;
@@ -1549,7 +1583,7 @@ function renderFeed() {
 
   list.querySelectorAll('.cf-file-card').forEach(card => {
     card.addEventListener('click', e => {
-      if (e.target.closest('[data-del],[data-ren],[data-mv]')) return;
+      if (e.target.closest('[data-del],[data-ren],[data-mv],[data-pin],[data-star]')) return;
       if (e.target.closest('[contenteditable="true"]')) return;
       openFile(card.dataset.fid);
     });
@@ -1558,6 +1592,10 @@ function renderFeed() {
     btn.addEventListener('click', e => { e.stopPropagation(); deleteFile(btn.dataset.del); }));
   list.querySelectorAll('[data-mv]').forEach(btn =>
     btn.addEventListener('click', e => { e.stopPropagation(); showFolderPicker(btn.dataset.mv, btn); }));
+  list.querySelectorAll('[data-pin]').forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); toggleFilePin(btn.dataset.pin); }));
+  list.querySelectorAll('[data-star]').forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); toggleFileStar(btn.dataset.star); }));
 
   function startRename(nameEl) {
     const id = nameEl.dataset.fid;
