@@ -493,13 +493,19 @@ body.dark .iv-pf-inp:focus{border-color:#666;background:#1e1e1e}
 .iv-wl-title{font-size:9px;color:#bbb;text-transform:uppercase;letter-spacing:.12em;font-family:'Calibri',sans-serif;font-weight:600}
 .iv-wl-add{font-size:16px;color:#ccc;cursor:pointer;line-height:1;transition:color .15s;user-select:none}
 .iv-wl-add:hover{color:#0a0a0a}
-.iv-wl-item{display:flex;align-items:flex-start;gap:7px;padding:4px 0;cursor:default}
+.iv-wl-item{display:flex;align-items:flex-start;gap:5px;padding:4px 0;cursor:default;border-radius:4px;transition:background .12s ease}
+.iv-wl-item[draggable]{cursor:grab}
+.iv-wl-item[draggable]:active{cursor:grabbing}
+.iv-wl-item.wl-drag-over{background:rgba(10,10,10,0.05)}
+.iv-wl-handle{flex-shrink:0;width:10px;margin-top:4px;font-size:10px;line-height:1;letter-spacing:-1px;color:#ddd;user-select:none}
 .iv-wl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;cursor:pointer;margin-top:4px}
 .iv-wl-text{font-size:var(--iv-ed-fz,13px);font-family:'Calibri',sans-serif;color:#444;flex:1;cursor:pointer;min-width:0;white-space:normal;overflow-wrap:break-word;line-height:1.4}
 .iv-wl-del{font-size:11px;color:#ddd;cursor:pointer;padding:0 2px;flex-shrink:0;transition:color .15s;margin-top:2px}
 .iv-wl-del:hover{color:#b55}
 body.dark .iv-wl{border-color:#2a2a2a}
 body.dark .iv-wl-text{color:#aaa}
+body.dark .iv-wl-item.wl-drag-over{background:rgba(255,255,255,0.06)}
+body.dark .iv-wl-handle{color:#444}
 </style>
 </head>
 <body>
@@ -2458,12 +2464,40 @@ function ivWLAdd(){
   _ivWL.push({id:_ivId(),text:txt,color:'#ddd',mod:new Date().toISOString()});
   _ivWLSave();ivWLRender();
 }
+let _ivWLDrag=null;
 function ivWLRender(){
   const el=document.getElementById('iv-wl-list');if(!el)return;
   el.innerHTML='';
   _ivWL.forEach(item=>{
     const row=document.createElement('div');
     row.className='iv-wl-item';
+    row.draggable=true;
+    row.addEventListener('dragstart',()=>{_ivWLDrag=item.id;});
+    row.addEventListener('dragover',e=>{
+      if(!_ivWLDrag||_ivWLDrag===item.id)return;
+      e.preventDefault();e.dataTransfer.dropEffect='move';
+      row.classList.add('wl-drag-over');
+    });
+    row.addEventListener('dragleave',()=>row.classList.remove('wl-drag-over'));
+    row.addEventListener('drop',e=>{
+      e.preventDefault();
+      row.classList.remove('wl-drag-over');
+      const srcId=_ivWLDrag;_ivWLDrag=null;
+      if(!srcId||srcId===item.id)return;
+      const fromIdx=_ivWL.findIndex(x=>x.id===srcId);
+      const toIdx=_ivWL.findIndex(x=>x.id===item.id);
+      if(fromIdx<0||toIdx<0)return;
+      const [moved]=_ivWL.splice(fromIdx,1);
+      _ivWL.splice(toIdx,0,moved);
+      _ivWLSave();ivWLRender();
+    });
+    row.addEventListener('dragend',()=>{
+      _ivWLDrag=null;
+      document.querySelectorAll('.iv-wl-item.wl-drag-over').forEach(r=>r.classList.remove('wl-drag-over'));
+    });
+    const handle=document.createElement('span');
+    handle.className='iv-wl-handle';handle.textContent='⋮⋮';handle.title='拖曳排序';
+    row.appendChild(handle);
     const dot=document.createElement('span');
     dot.className='iv-wl-dot';dot.style.background=item.color;
     dot.title='點擊換色';
