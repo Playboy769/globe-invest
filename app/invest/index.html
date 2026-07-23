@@ -1750,64 +1750,51 @@ function ivClearSearch(){
     document.getElementById('iv-feed'),
     document.getElementById('iv-editor')
   ];
+  // Ratios are applied as flex-grow (shrink:1, basis:0%), not a fixed flex-basis —
+  // so the browser itself keeps every panel proportional to the wrap's *current*
+  // width on every reflow (window resize, browser zoom, split-screen), the same way
+  // the 3/3/2 CSS defaults already behave. This replaces the old scheme (flex-shrink:0
+  // + a fixed px/percent basis, self-healed only once at page load), which could only
+  // ever be corrected by a reload and could bake in a sum >100% if a drag was captured
+  // while panels were already clamped at their min-width.
   try{
-    const saved=JSON.parse(localStorage.getItem('iv_col_w'));
-    // Skip restoring a saved width for a panel that starts out collapsed: pre-fix builds
-    // could persist a collapsed panel's 8px sliver here (see savePanels below), and applying
-    // that as its flex-basis left it stuck too narrow forever after — even once uncollapsed.
-    // Falling back to the panel's CSS default flex is a one-time, self-healing reset for
-    // anyone who already has that bad value saved from before this fix shipped.
+    const saved=JSON.parse(localStorage.getItem('iv_col_ratio'));
+    // Skip restoring a saved ratio for a panel that starts out collapsed: it could
+    // persist a collapsed panel's 8px sliver here (see savePanels below), and applying
+    // that as its flex-grow left it stuck too narrow forever after — even once uncollapsed.
     let collapsedNow=null;try{collapsedNow=JSON.parse(localStorage.getItem('iv_panel_collapsed'));}catch(e){}
     const collapsedKeys=['fw',null,'ed'];
-    // Legacy (pre-2026-07-12) saves stored raw pixel widths, which stay fixed no matter
-    // how the window/split-screen viewport changes afterward — including ending up
-    // narrower than the current wrap, which the overflow check below can't catch (it only
-    // fires when panels sum to MORE than the wrap, never less). A px width saved while the
-    // window was docked to half the screen would otherwise stay stuck that narrow forever,
-    // even after the window is restored to full width. Discard legacy px saves outright
-    // instead of trying to detect over/underflow for them.
-    const isLegacyPx=saved&&saved.some(v=>typeof v==='string'&&v.endsWith('px'));
-    if(isLegacyPx){try{localStorage.removeItem('iv_col_w');}catch(e){}}
-    if(saved&&saved.length===3&&!isLegacyPx){
+    if(saved&&saved.length===3&&saved.every(n=>typeof n==='number'&&n>0)){
       panels.forEach((p,i)=>{
         const k=collapsedKeys[i];
         if(k&&collapsedNow&&collapsedNow[k])return;
-        p.style.flex='0 0 '+saved[i];
+        p.style.flex=saved[i]+' 1 0%';
       });
-      // Percentage saves stay valid across zoom/window changes, but rounding can still
-      // push their sum a hair over 100% of the wrap. Detect that and self-heal to the
-      // panels' CSS-default flex ratio. getBoundingClientRect() right after a synchronous
-      // style write forces the browser to resolve layout immediately, so this doesn't need
-      // to wait a frame (and mustn't: requestAnimationFrame never fires for a backgrounded
-      // tab, which would leave the overflow unfixed indefinitely).
-      const wrapEl=document.getElementById('iv-wrap');
-      const totalW=panels.reduce((s,p)=>s+p.getBoundingClientRect().width,0);
-      if(wrapEl&&totalW>wrapEl.getBoundingClientRect().width+4){
-        panels.forEach(p=>{p.style.flex='';});
-        try{localStorage.removeItem('iv_col_w');}catch(e){}
-      }
     }
   }catch(e){}
   function lockPanels(){panels.forEach(p=>{p.style.flex='0 0 '+p.getBoundingClientRect().width+'px';});}
-  // A collapsed panel's rect is the 8px sliver, not its real width — baking that into
-  // iv_col_w would permanently lose the width to restore to on next uncollapse, since this
-  // is the only place panel widths get persisted. Keep whatever was last saved for it instead.
+  // A collapsed panel's rect is the 8px sliver, not its real ratio — baking that into
+  // iv_col_ratio would permanently lose the ratio to restore to on next uncollapse, since
+  // this is the only place panel widths get persisted. Keep whatever was last saved for it.
   const _IV_COL_KEYS=['fw',null,'ed'];
   function savePanels(){
     try{
-      let prev=null;try{prev=JSON.parse(localStorage.getItem('iv_col_w'));}catch(e){}
-      // Persist as a percentage of the wrap's width, not raw pixels — a percentage
-      // stays valid if the browser's zoom level or window width changes later,
-      // where a fixed pixel value would not (see the overflow self-heal above).
-      const wrapW=document.getElementById('iv-wrap').getBoundingClientRect().width||1;
-      const widths=panels.map((p,i)=>{
+      let prev=null;try{prev=JSON.parse(localStorage.getItem('iv_col_ratio'));}catch(e){}
+      // Normalize against the panels' own width sum, not the wrap's width — so the
+      // three ratios always add up to exactly 100 even if they were captured while
+      // one or more panels were clamped at their min-width (which would otherwise
+      // bake in a corrupt, permanently-overflowing split).
+      const rawW=panels.map(p=>p.getBoundingClientRect().width);
+      const totalW=rawW.reduce((s,w)=>s+w,0)||1;
+      const ratios=panels.map((p,i)=>{
         const k=_IV_COL_KEYS[i];
         if(k&&_ivPanelCollapsed[k]&&prev&&prev[i])return prev[i];
-        const pct=(p.getBoundingClientRect().width/wrapW*100).toFixed(4)+'%';
-        p.style.flex='0 0 '+pct;
-        return pct;
+        const ratio=+(rawW[i]/totalW*100).toFixed(4);
+        p.style.flex=ratio+' 1 0%';
+        return ratio;
       });
-      localStorage.setItem('iv_col_w',JSON.stringify(widths));
+      localStorage.setItem('iv_col_ratio',JSON.stringify(ratios));
+      try{localStorage.removeItem('iv_col_w');}catch(e){}
     }catch(e){}
   }
   [document.getElementById('iv-rh1'),document.getElementById('iv-rh2')].forEach((h,hi)=>{
