@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom Energy Corporation — Q1 2026 法說會分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab { padding: 9px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 12.5px; white-space: nowrap; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+  .flag-box.obs { border-left-color: #1d4ed8; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 12px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { border-radius: 8px; padding: 12px; border: 1px solid #e2e4ea; border-left: 4px solid; background: #fff; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 230px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .rev-val { width: 90px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid #e2e4ea; background: #fff; border-top: 3px solid; }
+  .tech-card.dram { border-top-color: #2563eb; }
+  .tech-card.nand { border-top-color: #6d28d9; }
+  .tech-card.hbm { border-top-color: #15803d; }
+  .tech-card.pkg { border-top-color: #c2600a; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 100px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { color: #333; width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: right; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { color: #333; padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  td strong { color: #1a1a2e; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid #2563eb; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { color: #1a1a2e; font-weight: 600; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 170px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .bar-num { width: 70px; font-size: 12px; font-weight: 600; text-align: right; }
+
+  .note { font-size: 11px; color: #555; margin-top: 8px; padding: 8px 12px; background: #eff6ff; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.6; }
+  .note.yellow { background: #fffbeb; border-left-color: #c2600a; color: #7a5c00; }
+  .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+  .source-note { font-size: 11px; color: #888; margin-top: 8px; line-height: 1.6; }
+  .limit-box { font-size: 11px; color: #7a5c00; background: #fffbeb; border-left: 3px solid #c2600a; border-radius: 6px; padding: 8px 12px; margin-top: 8px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Bloom Energy Corporation — Q1 2026 法說會分析</h1>
+  <p>Q&amp;A問答分析 / Oracle Project Jupiter深度拆解 / 技術與產能擴張 / 供應鏈與客戶集中度 / 風險矩陣 / 損益表 / 業務部門 / 資產負債表 / 現金流量 / 估值觀察　·　法說會日期：2026年4月28日（財季結束：2026年3月31日，Bloom財年與日曆年一致）　·　交叉比對SEC 10-Q、10-K與Form 4申報文件</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A問答分析</div>
+    <div class="tab" onclick="sw('sep',this)">Oracle Project Jupiter深度拆解</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產能擴張</div>
+    <div class="tab" onclick="sw('supply',this)">供應鏈與客戶集中度</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">13</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口／觀察</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mark Strouse（JPMorgan）</div><div class="qa-topic">新任CFO對「規模放大後毛利率怎麼走」正面拒答；服務合約年限說法與過往揭露不一致</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題一：隨產能放大到3GW、4GW、5GW，這門生意的毛利率結構該怎麼想？</div>
+          <div class="q-text">這是新任CFO Simon Edwards（到職僅兩週）在電話會議上被問到的第一個問題，直指投資人最關心的「營收成長之後，毛利率能撐多久／撐多高」的核心。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Simon：先讚美公司規劃執行的紀律，接著把本季毛利率擴張完全歸因於「營收成長超越成本成長」這個籠統敘述，未拆解規模效應、產能利用率、原料成本曲線等結構性因子；提到會投資在go-to-market與技術創新領域；最後明確表態「長期指引，我認為現在還不是我們會提供的東西」（&quot;I don't think that's something we'll provide right now&quot;）。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口：本場法說會被問「規模放大後毛利率如何」的問題共出現三次（Strouse對Simon、後面Maheep Mandloi問operating leverage、Vikram Bagri問CCGT溢價侵蝕的tipping point），每一次都沒有得到任何量化答案</div>
+          <div class="q-text">Simon對這題的回答完全停留在「規模效應存在」的定性層次，沒有給出任何邊際毛利率、單位經濟效益（unit economics）或產能利用率目標的數字，並直接聲明現階段不提供長期指引——這對一家剛把全年營收guide中值從60%上修到80% YoY成長、同時毛利率guide從32%上修到34%的公司而言，是一個相當大的資訊真空：投資人被要求相信「規模會帶來槓桿」，卻拿不到任何可供建模的邊際貢獻率或產能利用率錨點。兩週新任CFO第一次登場就選擇不表態，是可以理解的謹慎，但這代表整場法說會裡，反覆被問到的「放大到5GW甚至更大規模後，經濟效益長什麼樣子」這個問題，始終沒有得到正面回答（見下方Maheep Mandloi、Vikram Bagri條目，構成貫穿全場的同一個缺口）。</div>
+        </div>
+        <div class="q-block" style="margin-top:12px;">
+          <div class="q-label q">問題二（追問KR）：資料中心服務合約年限是否從過去講的6-7年，拉長到10年以上？</div>
+          <div class="q-text">KR：強調產品銷售與服務「100%綁約率」（100% attach rate），沒有一筆交易是不含服務的；資料中心機會平均落在10-15年區間；定位為長期年金型（annuity）營收來源。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label flag">⚑ 觀察：合約年限的說法本身就是對外溝通口徑的正向修正，但沒有任何一筆已簽約合約的年限或金額被具體點名核實</div>
+          <div class="q-text">KR用「10-15年，大概那個範圍」（&quot;10-15 years, somewhere in that range&quot;）取代過去法說會提過的6-7年區間，等於用同一次回答同時完成了「確認過去說法」與「上修展望」兩件事，但全程沒有引用任何一筆實際簽約合約作為佐證，也沒有交代這個更長年限是否已經反映在Q1財務數字或全年guide中，還是純屬對未來新簽約案件的預期。100%綁約率的說法同樣缺乏可供交叉驗證的合約筆數或金額基礎。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Mark Strouse:</b> "If you look at 3 GW, 4 GW, 5 GW, whatever it might be, of annual capacity, how you're thinking about the margins in this business."<br><br><b>Simon Edwards:</b> "...as it relates to longer term guidance here, I don't think that's something we'll provide right now."<br><br><b>Mark Strouse（追問）:</b> "I think in the past you've said some of these data center contracts have been, you know, somewhere around six or seven years in duration. I'm curious if you're seeing any change there, potentially longer than, you know, 10 years or so."<br><br><b>KR Sridhar:</b> "Even with the data center opportunities, on average, it's 10-15 years, somewhere in that range."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">David Arcaro（Morgan Stanley）</div><div class="qa-topic">定價問題被完全哲學化迴避；供應鏈/勞動力壓力問題只給敘事、不給任何量化指標</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題一：在其他替代方案成本都在上升的環境下，Bloom是否有機會維持或調漲價格？</div>
+          <div class="q-text">這是一個直接的定價權（pricing power）問題，问的是Bloom能不能在當前環境下實際把價格往上調。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：完全拒絕用「跟引擎、渦輪機比價格」的框架回答，轉而談論「創造的價值不同」（消除備援柴油機、電網超建成本等），並重申「我們從不看別人的定價」；承認會為業務創造利潤，但呼籲把這個問題導回Simon剛才「不提供長期指引」的答案。</div>
+        </div>
+        <div class="q-block" style="margin-top:12px;">
+          <div class="q-label q">問題二：規模快速放大之際，供應鏈能否跟上？是否看到勞動力或上游原料的壓力？</div>
+          <div class="q-text">KR：用「工廠人力數量從200MW/年到近10倍產能，人數維持不變」的敘事回答，歸功於自動化與員工升級（upskilling）；供應鏈比照同一套「Bloom way」文化要求供應商；坦承「steep ramps可能會有speed bumps」但不擔心。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口：兩個問題都被問及「能不能量化」，但兩個回答都沒有任何一個數字——沒有定價漲幅、沒有毛利率影響、沒有供應商名單、沒有前置交期（lead time）、沒有庫存周轉天數</div>
+          <div class="q-text">David Arcaro的第一個問題本質是想知道Bloom有沒有把「其他替代方案漲價」轉換成自己的定價權——KR的回答完全沒有正面回應「是否在調漲價格」這個是非題，只給出一段關於「我們創造不同價值」的哲學性敘述。第二個問題問的是勞動力與上游材料的具體壓力點，KR給出的「200MW時的員工數＝10倍產能時的員工數維持不變」是個引人注目但完全未經佐證的說法（沒有具體員工人數、沒有指出是哪個工廠、哪個產線），且完全沒有提及任何具體供應商、原料類別（陶瓷、不鏽鋼、電子元件等Bloom固態氧化物燃料電池的關鍵投入）、或前置交期數字。「speed bumps但不擔心」是純定性語言，沒有給投資人任何可以驗證的量化基礎。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>David Arcaro:</b> "I'm wondering if you're seeing opportunities to hold pricing or potentially seeing projects with increased price opportunities..."<br><br><b>KR Sridhar:</b> "We don't look at anybody else's pricing and what they do."<br><br><b>David Arcaro（追問）:</b> "We've seen labor, as an example, become a constraint elsewhere. Wondering if you're seeing pressure there or in upstream materials."<br><br><b>KR Sridhar:</b> "...the number of employees on the shop floor will be the same. You know, not almost equal, will be the same."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Chris Dendrinos（RBC Capital Markets）</div><div class="qa-topic">「連續性產能擴張」新口徑背後沒有觸發指標；5GW以上需要新廠，但時程與資本支出完全未揭露</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：上季講的是「客戶下單才擴產能」，這季改口「連續性擴產能」，三個月內發生了什麼變化？超過5GW現有廠房產能後，是否需要不同的觸發條件才會蓋新廠？</div>
+          <div class="q-text">分析師精準抓到管理層敘事口徑的轉變（從被動回應訂單，變成主動、持續地加產能），並追問這個轉變的邊界在哪裡。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：用「類比撥盤 vs 數位step function」的比喻描述產能擴張節奏的轉變，將原因歸結於「需求成長速度已經明顯超越其他電力供應商能創造的速度」；對於5GW以上是否需要新廠，明確回答「Absolutely」——現有廠已經被榨到接近極限，不論怎麼創新，都需要新廠；但「什麼時候蓋、蓋在哪裡」完全取決於市場需要什麼時候到位，沒有給出具體時程或資本支出規劃。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label flag">⚑ 觀察：管理層自己承認「5GW現有廠房已接近榨乾」，但這個關鍵資訊的揭露方式相當被動——是靠分析師追問才浮現，而非在開場稿主動揭露</div>
+          <div class="q-text">開場稿裡KR多次強調「現有製造足跡可以達到5GW/年」，語氣聽起來像是留有餘裕的產能上限；但被Dendrinos追問後才承認「我不知道還能再從中榨出多少」（&quot;I don't know how much more we can milk out of it&quot;），且「無論如何都需要新廠」。這代表5GW實際上更接近當前產能的天花板，而不是留有安全邊際的規劃產能——這個細節值得放進供給端風險評估，尤其是考量公司同時宣稱「不是產能受限」（見開場稿）與guide全年營收上看$38億（隱含產能利用率已經相當吃緊）。新廠的資本支出規劃、選址、時程都完全沒有揭露。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Chris Dendrinos:</b> "Is there a step function between going to 5 GW and then maybe going beyond 5 GW? You know, do you need to see something different from like a customer commitment schedule to add physical footprint..."<br><br><b>KR Sridhar:</b> "Absolutely... that existing facility was 5 GW... I don't know how much more we can milk out of it. No matter what we do, we are going to need new factories as we go forward."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Nick Amicucci（Evercore ISI）</div><div class="qa-topic">「積壓訂單有多少比例是AI訓練」這個直接問題被完全繞開，改用羅德島比喻回答</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：目前的backlog是否幾乎全部綁定AI訓練（training）需求？推論（inference）是否會是下一波成長動能，因為不需要空污許可、選址更容易？</div>
+          <div class="q-text">這是一個明確的是非題兼比例題：backlog裡training vs. 其他用途（inference、C&amp;I）的組成比例。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：沒有回答backlog組成比例，轉而重新框定問題——inference的總GW需求會比training更大，但會分散在更貼近人口密集區的邊緣場景；接著用「Oracle 2.45GW相當於整個羅德島州的用電容量，若用CCGT會耗用羅德島州居民一天淋浴用水量、產生等同全州汽車的NOx排放」這個生動類比，來論證「連偏遠小鎮蓋傳統電廠都會被抵制，遑論inference更貼近城市」的邏輯，藉此帶出inference是巨大機會的結論。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口：分析師問的是backlog的組成比例（一個當下、可回答的事實），管理層給的是一段關於未來inference機會規模的敘事（一個無法驗證的展望）——是非題被換成了願景題</div>
+          <div class="q-text">Amicucci的假設「backlog幾乎全部是AI training」從頭到尾沒有被KR確認或否認。羅德島類比雖然生動、有記憶點，但完全沒有回答「Bloom現在簽的合約，有多少是訓練用資料中心、多少是C&amp;I、多少（如果有的話）已經是inference」這個具體問題。考量到inference被KR自己定性為「未來巨大機會」而非「當前已發生的backlog組成」，這代表目前揭露的backlog實質上仍是以大型訓練資料中心與既有C&amp;I業務為主，inference是尚未反映在數字裡的選擇權（optionality），而非已兌現的成長動能——這個區分對評估短中期營收可預測性很關鍵，但整段回答刻意模糊了這個界線。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Nick Amicucci:</b> "Is it fair to say too that the vast majority, if not all of the backlog currently is probably tethered towards your, towards like AI training?"<br><br><b>KR Sridhar:</b> "Inference is gonna be much bigger than training in terms of total gigawatt need, but it is going to be not concentrated in the multi-gigawatt data centers that you're looking at... that is the capacity of the state of Rhode Island in one single data center..."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Manav Gupta（UBS）</div><div class="qa-topic">近乎業配式提問，KR以玩笑帶過，沒有實質新資訊被追問出來</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：Bloom的超級電容架構是否讓客戶大幅減少甚至免除電池備援？隨Hopper/Rubin世代轉向800V DC，Bloom是否能繞開變壓器、開關設備、整流器的長交期瓶頸？</div>
+          <div class="q-text">這兩個問題的措辭本身已經高度預設了「Bloom的答案應該是肯定的」，屬於本場法說會裡對公司最友善、最少對抗性的提問。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：先開玩笑問Manav要不要來Bloom上班（&quot;you're making a very good sales pitch here for Bloom&quot;），然後確認電池需求極少或為零，並強調800V DC轉換是「必然」（inevitable），因為全球銅與變壓器供給都不夠。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label flag">⚑ 觀察：本場法說會分析師群整體提問對抗性偏低，這一組交流是最明顯的例子——沒有任何後續追問把「電池需求趨近於零」或「800V DC轉換必然發生」這兩個論斷量化或釘住時間表</div>
+          <div class="q-text">相較於AMD、TXN等同期法說會常見的「分析師直接點破管理層迴避」（如Stacy Rasgon對AMD的連續追問），本場整體分析師語氣友善、缺乏交叉驗證，這一組問答尤其明顯——沒有人追問「電池備援減少到什麼程度、以什麼指標衡量」，也沒有人追問「800V DC轉換的具體時間表，Bloom在其中扮演什麼角色、是否已有客戶簽約採用這個路徑」。這不是管理層的邏輯缺口，而是整場法說會提問品質的結構性觀察，值得放進風險矩陣一併記錄——本季法說會提供的「未被挑戰的樂觀敘事密度」偏高。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Manav Gupta:</b> "Your solution with ultracapacitor and high reliability needs minimal battery backup, and in some cases, no battery backup. Can you talk about that?"<br><br><b>KR Sridhar:</b> "Hey, Manav. Thank you. Do you wanna come work for us? You're making a very good sales pitch here for Bloom."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ben Kallo（Baird）</div><div class="qa-topic">新通路（中游/天然氣公司）與國際市場問題都被「80/20法則」與定性描述帶過，沒有規模或時程</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：除了現有的hyperscaler與公用事業客戶，是否有新通路（如中游天然氣公司）？國際業務是否只是落後美國的延遲成長區塊？</div>
+          <div class="q-text">這是一個關於成長來源多元化的問題，試圖釐清除了已知的AI資料中心與公用事業之外，還有哪些具體、可能被低估的成長引擎。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：確認AI業務打法是C&amp;I playbook的「rinse and repeat」，70-80%營收來自回頭客；公用事業客戶因法規變化（rate base）帶來新興趣；「工廠回流美國」被提及為潛在機會但語焉不詳（「我們team full engaged in it」）；國際市場明確定性為「落後、會有停頓期」，類比俄羅斯/歐洲天然氣事件與卡達天然氣事件對其他國家發展造成的延遲。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label flag">⚑ 觀察：「中游天然氣公司」這個具體提問的通路被完全忽略，KR的回答裡沒有任何字提及這個新通路</div>
+          <div class="q-text">Ben Kallo明確問了「是否有新通路，像是中游和天然氣公司」，KR的回答完整跳過這個具體提問，只泛談公用事業（utility）與工廠回流。這代表管理層可能還沒有把「中游/天然氣公司」視為值得特別著墨的獨立通路，或者刻意不展開——無論何者，這都是一個被直接問到、卻在回答中完全消失的問題，讀者不應把「KR談了很多utility」誤讀成「KR回答了中游天然氣公司這個問題」。國際市場的「會有delay」定性描述同樣沒有給出任何時間表或市場優先順序。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Ben Kallo:</b> "Is there a new channel like, you know, midstream and gas companies, something like that?"<br><br><b>KR Sridhar:</b> "With the utility scale customers, for the first time, I think they are seeing favorable regulation that allows them to rate base and offer better solutions to their customers."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Colin Rusch（Oppenheimer）</div><div class="qa-topic">兩段式提問，「參與專案層級經濟效益」的後半段被完整跳過，只回答了安裝速度</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：安裝時間的節奏未來會如何演變？Bloom是否有機會把可用產能轉化為「參與客戶專案層級經濟效益」（project level economics）的角色，例如財務參與或持股？</div>
+          <div class="q-text">第二部分問的是一個實質的商業模式問題：Bloom是否會從單純賣設備／服務，演變成對客戶專案有財務參與權益的角色。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：只回答了第一部分——現場安裝時間已縮短近一個數量級（改用skid式預組裝方案，減少現場挖掘、澆置、配管工程），能比任何競爭技術更快讓100MW專案上線。第二部分「專案層級經濟效益參與」完全沒有被提及。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口：一個兩段式問題，管理層只回答了對自己有利的前半段（安裝速度，一個純技術優勢敘事），對後半段（是否會用資本或股權參與客戶專案經濟效益，一個涉及資本配置與風險承擔的問題）完全沒有回應，也沒有分析師追問</div>
+          <div class="q-text">「參與project level economics」如果成真，代表Bloom可能從單純的設備/服務供應商，轉型為對客戶專案有財務曝險（無論是收入分潤、持股或聯合融資）的角色——這對資本結構、風險輪廓、與估值模型都有實質影響，是一個值得深入的問題。KR的回答完全聚焦在容易回答、對公司形象加分的安裝速度創新，讓這個更敏感的商業模式問題不著痕跡地消失，且提問人Colin Rusch也沒有追問澄清，是本場問答節奏最快、資訊密度流失最明顯的一次交換。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Colin Rusch:</b> "If you could talk a little bit about the potential to leverage some of your available capacity into participation in project level economics for some of your customers."<br><br><b>KR Sridhar:</b> "We have close to one order of magnitude reduction in the field time that it takes for us to be able to install our systems..."（全程未提及project level economics）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Maheep Mandloi（Mizuho Securities）</div><div class="qa-topic">本場「最大邏輯缺口」：兩段式問題中，唯一被問到的量化題（放大到5GW的營運槓桿）被完全跳過，只回答了容易的那一半</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：隨產量放大到5GW，該如何思考營運槓桿（operating leverage）？5GW裡有多少比例會轉換成服務業務需求？</div>
+          <div class="q-text">這是全場第三次、也是最直接的一次「放大到5GW後經濟效益如何」提問，與Mark Strouse對Simon的第一題本質相同。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：「我會很快回答……答案很簡單。我們只談商業產品產能。我們一律把服務需求另外估算，兩者分開處理。給你的數字，就是我們的商業產品營收產能。」——只回答了第二部分（服務需求是否包含在5GW數字裡：不包含），第一部分（營運槓桿如何演變）完全沒有觸及。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 本場最大邏輯缺口：放大到5GW的營運槓桿問題，全場被三位不同分析師以不同角度問了三次（Strouse問Simon、Mandloi問KR、Bagri問CCGT替代效應的tipping point），三次都沒有得到任何量化答案</div>
+          <div class="q-text">Maheep Mandloi的問法已經非常直接、且刻意拆成兩個獨立子問題方便管理層分別作答，但KR選擇的策略是：用「我很快回答」開場、實際只回答容易的第二子問題（產能定義口徑）、對真正困難的第一子問題（營運槓桿本身）保持沉默，而且沒有回頭補答。這與Mark Strouse對Simon的第一題、以及Vikram Bagri收尾問題（見下方）形成完整的三角印證：整場法說會裡，「Bloom規模放大之後，單位經濟效益/邊際貢獻率/營運槓桿」這個對評估$34-38億營收guide是否能轉換成對應獲利成長至關重要的問題，從頭到尾沒有得到任何一次量化回答，三次提問都被不同方式迴避。投資人目前只能依賴Q1實際發生的毛利率與營業利益率擴張（280bps毛利率、逾1300bps營業利益率）作為唯一的實證資料點，缺乏管理層自己給出的前瞻框架可供建模未來季度。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Maheep Mandloi:</b> "Just on the operating leverage, how should we think about that with the volumes going to 5 GW here? Then separately on the service needs, like how much of that 5 GW would be for the service needs in the future here?"<br><br><b>KR Sridhar:</b> "I'm gonna be very quick with that answer. The answer is very simple. We only talk about commercial product capacity. We always bake in our service requirements on its own."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Vikram Bagri（Citi）</div><div class="qa-topic">CCGT溢價侵蝕的「tipping point」問題被完整轉化為使命宣言式收尾，且被KR拿來充當整場閉幕詞</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心：CCGT價格今年已上漲10-20%，如果CCGT溢價隨時間被侵蝕，會不會讓Bloom對CCGT的市佔搶奪更明顯？這個轉折的「tipping point」是什麼——是定價下降、是技術被更廣泛理解、還是規模驗證？</div>
+          <div class="q-text">這是一個結構清晰的定量/定性混合問題，明確要求KR定義一個轉折點的觸發條件。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">KR：明確表態「這對我們而言不是一個tipping point」，援引十年前公用事業智庫對電力產業「向下螺旋」的錯誤預測作類比，重申「不是零和賽局」「我們不看別人怎麼定價、不去想成本、不去想彈性」；最後把整段回答直接轉為整場電話會議的收尾陳述——用一連串「如果你不同意我下面任何一句陳述，你可以看空Bloom；否則你會跟我們一起有精彩的旅程」的修辭作結。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口：分析師明確要求定義一個「轉折點」，管理層的回答是「這個概念本身不適用於我們」——本質上是拒絕這個問題的前提，而非回答它</div>
+          <div class="q-text">Vikram Bagri的問題設計得很精巧：不管答案是「已經到了tipping point」還是「還沒到，要等X條件」，都會提供有用的資訊。KR選擇的第三條路——否定「tipping point」這個框架本身適用於Bloom——技術上迴避了直接回答，同時把這個迴避包裝成一種更宏大的公司哲學論述（「不看競爭對手定價」「不是零和賽局」），並順勢把它擴大成整場電話會議的閉幕辭。這種把最後一題的直接提問轉化為公司使命宣言的處理方式，讓Bagri原本想釘住的「CCGT溢價侵蝕速度與市佔轉移節奏」這個具體、可能影響未來幾年市佔預測模型的變數，完全沒有得到任何錨點數字（無論是價格差距的百分比、還是市佔轉移的時間表）。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Vikram Bagri:</b> "I'm just trying to understand what's the tipping point where you see pronounced market share gains from CCGT and that premium sort of like getting eroded over time."<br><br><b>KR Sridhar:</b> "This is, for us, it's not a tipping point... This is not a zero-sum game. We don't care about what anybody else in the business does and who buys what from anybody else... If you bet against any one of the statements that I made, you can bet against Bloom. Otherwise, you've got a great ride with us."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Event: Oracle Project Jupiter Deep Dive -->
+  <div id="panel-sep" class="panel">
+    <div class="section-title">Oracle Project Jupiter深度拆解——本季最大單一新聞，但商業條款幾乎完全未揭露</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>交易規模與結構</h4>
+        <ul>
+          <li>Oracle於法說會前一晚宣布Project Jupiter新電力方案——位於新墨西哥州的多GW AI工廠，最高2.45GW電力區塊</li>
+          <li>取代原本規劃的燃氣渦輪機與備援柴油發電機，「100% Bloom」——KR在開場稿中重複這個措辭三次以上</li>
+          <li>完工後將是全球最大的孤島式（islanded）微電網設施之一</li>
+          <li>KR明確定調這不是一次性專案，而是Bloom「先建立燈塔客戶信譽、再擴散至同垂直領域其他一線客戶」playbook的最新實例（延續Q3法說會提出的框架）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>涉及機制</h4>
+        <ul>
+          <li>Oracle轉向Bloom-only方案的兩大官方理由：（1）回應居民對空污、用水、噪音、電價上升的疑慮，做負責任的企業公民；（2）建立電網獨立、乾淨的AI工廠，追求更高可靠度與更快速度</li>
+          <li>主服務協議（MSA）設計具地理彈性——若某基地進度加快、另一基地延遲，Bloom部署可以跟著客戶「移動」，KR描述為「Bloom跟著GPU準備好把電力轉換成token與營收的地方走」</li>
+          <li>模組化copy-exact系統具備可攜性與通用性，符合幾乎所有司法管轄區的空氣品質規定，是支撐MSA地理彈性條款的技術基礎</li>
+          <li>KR強調公司「提前於需求投資」——擴產能、建庫存、供應鏈多元化、強化資產負債表，且由於資本密集度低，這些投資對股東的風險本質上低於傳統電力業者做同等規模投資</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾與規模線索（間接推算，非直接揭露）</h4>
+        <ul>
+          <li>KR提及「每延遲一季，客戶就損失數億美元的AI營收與競爭優勢」，用以論證速度的價值——但這是對客戶端機會成本的描述，不是Bloom自身交易金額</li>
+          <li>「目前資料中心backlog逾半數來自Oracle以外的其他hyperscaler、neocloud與colocation業者」——代表Oracle並非backlog中唯一或甚至最大的單一客戶，但backlog總金額、Oracle佔比、Project Jupiter個案金額，全部沒有揭露任何數字</li>
+          <li>全年營收guide上修至$34-38億（中值+80% YoY），時間點與Oracle宣布同一天，市場自然會把guide上修與Jupiter交易聯繫在一起，但管理層從未明確表態guide上修中有多少比例來自Jupiter、多少來自其他既有pipeline</li>
+          <li>現有製造足跡5GW/年，且承認「已接近榨乾」（見Q&amp;A頁籤Chris Dendrinos條目）——2.45GW的單一專案理論上就佔用現有年產能近半，若這筆訂單需要在合理時間內交付，對產能排程的實質排擠效應同樣未被揭露</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證 / 未揭露</h4>
+        <ul>
+          <li><strong style="color:#b91c4a;">SEC交叉查核結果：「Project Jupiter」「2.45GW」「100% Bloom」這幾個詞，窮盡搜尋10-Q全文、8-K本文、Ex-99.1新聞稿全文後，完全沒有出現在任何一份Bloom自己的SEC申報文件中</strong>——這是整份報告SEC查核中最重大的落差。目前這筆交易的規模與排他性，完全只有法說會口頭陳述為依據，沒有任何Bloom自身申報文件可供驗證（不排除Oracle自己另外申報、但不會出現在Bloom的CIK下，本次查核僅涵蓋Bloom自身EDGAR記錄）</li>
+          <li>整場Q&amp;A沒有任何一位分析師問到Project Jupiter的合約金額、簽約年限、分期交付時間表，或是否為Bloom史上最大單筆訂單</li>
+          <li>「100% Bloom」、「取代原規劃的燃氣渦輪機與柴油發電機」等說法均為管理層單方陳述，沒有Oracle方的公開確認內容被引用或交叉比對</li>
+          <li>2.45GW是「最高」（up to）規模，不是確定交付量——分期時間表、里程碑觸發條件、是否有取消或縮減條款，均未揭露</li>
+          <li>MSA地理彈性條款雖被強調為客戶友善的差異化賣點，但同一個機制也可能代表Bloom對單一客戶的收入確定性較低（部署可被移動，隱含營收確認時間點可能隨之調整）——這個雙面性沒有被任何分析師觸及</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #b91c4a;">
+      <div class="card-title" style="color:#b91c4a;">⚑ SEC揭露的Oracle認股權證——一筆快速膨脹、直接沖抵營收的隱藏項目，法說會全程未提及</div>
+      <p>10-Q附註3（「應付客戶之客戶的股權型對價承諾」）揭露一筆與2025年10月Oracle策略夥伴關係綁定的認股權證：<strong style="color:#1a1a2e;">3,531,073股，履約價$113.28</strong>。公允價值從2025年底的<strong style="color:#1a1a2e;">$5,590萬</strong>，暴增至2026年3月底的<strong style="color:#1a1a2e;">$1.836億</strong>，再到2026年4月9日正式發放時的<strong style="color:#1a1a2e;">$2.613億</strong>——三個月內成長逾4倍，隨Bloom自家股價上漲而膨脹。更關鍵的是，<strong style="color:#1a1a2e;">Q1已經認列$1,280萬作為「營收減項」</strong>，且隨後續Energy Server系統交付，這筆已發放的$2.613億公允價值還會持續沖抵Oracle相關營收。KR Sridhar與Simon Edwards全程沒有提及這筆認股權證、其公允價值暴增，或它作為「本季最大亮點交易的直接反向沖抵項目」這個事實。用於確認Oracle為交易對手方與精確股數的424B7轉售公開說明書，已在法說會前一天（4/27）搶先申報，代表這筆權證的存在其實在法說會召開前就已經是公開資訊。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">核心疑問（盡職調查追問清單）</div>
+      <p>
+      <strong style="color:#1a1a2e;">1) Project Jupiter對Q1與全年guide的實際營收貢獻是多少？</strong> ——guide上修的$3-5億中值區間，有多少可歸因於這筆交易、多少是既有pipeline的自然成長？管理層從未拆解，且SEC申報文件中完全找不到這筆交易的獨立揭露可供交叉核對。<br><br>
+      <strong style="color:#1a1a2e;">2) 2.45GW若真的排入現有5GW年產能，對其他客戶的交付時程有何排擠？</strong> ——尤其在KR自己承認現有廠已「接近榨乾」的背景下，這筆訂單與「不會成為客戶瓶頸」的公開承諾之間如何調和？<br><br>
+      <strong style="color:#1a1a2e;">3) MSA的地理彈性條款，在會計與營收認列上如何處理？</strong> ——若Bloom的部署真的可能因客戶基地進度變化而「移動」，這對已簽約但尚未安裝的訂單，在backlog認列時點與方式上有何影響？<br><br>
+      <strong style="color:#1a1a2e;">4) Oracle認股權證公允價值的持續膨脹，未來還會沖抵多少營收？</strong> ——$2.613億的發放金額只有$1,280萬在Q1認列，代表絕大部分沖抵效果還在未來的交付季度等著發生，這對後續季度「頭條營收數字 vs. 實際對Oracle關係創造的淨經濟價值」之間的落差，需要持續追蹤。
+      </p>
+    </div>
+  </div>
+
+  <!-- Tech / Capacity Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">Q1 FY26 營收結構：產品 vs 服務</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">產品營收<br><span style="color:#666;font-size:11px;font-weight:400;">（Energy Server銷售）</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#1565c0;">$653.3M　史上新高</div></div>
+        <div class="rev-val">87%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">服務營收<br><span style="color:#666;font-size:11px;font-weight:400;">（100%綁約率的年金型業務）</span></div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:15%; background:#7b1fa2; white-space:nowrap;">$61.9M　+15.6% YoY</div></div>
+        <div class="rev-val">8%</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">觀察</div>
+      <p>總營收$751.1M，YoY+130.4%，是公司掛牌以來首次單季YoY成長率突破100%。產品營收是這次爆發性成長的唯一驅動力——服務營收雖然也創新高並連續第9季獲利、連續第4季達雙位數毛利率，但+15.6% YoY的成長速度遠低於總營收增速，代表產品出貨量的爆發是本季故事的絕大部分，服務業務目前仍是相對穩定、緩慢複利的年金型現金流，尚未反映近兩年新簽訂的10-15年期資料中心合約帶來的規模效應（那些合約多半仍在早期履約階段）。</p>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">毛利率與獲利能力：Q1 FY26 vs Q1 FY25</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">整體毛利率</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:78%; background:#0d47a1;">31.5%　+約280bps YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">產品毛利率</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:88%; background:#1976d2;">35.3%　+22bps YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">服務毛利率</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:45%; background:#6a1b9a;">18%　+13pts YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">營業利益率</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:43%; background:#15803d; white-space:nowrap;">17.3%　+逾1,300bps YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">Adj. EBITDA margin</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:48%; background:#c62828; white-space:nowrap;">~19%　+逾1,100bps YoY</div></div>
+        <div class="rev-val">-</div>
+      </div>
+    </div>
+    <div class="note">產品毛利率YoY只上升22個基點，遠低於整體毛利率280個基點的擴張幅度——換言之，本季毛利率擴張的主要驅動力是服務毛利率的大幅改善（+13個百分點）與營業槓桿（規模成長攤薄固定成本），而非產品本身單位經濟效益的顯著提升。這與Q&amp;A頁籤中管理層被三次問到「規模放大後毛利率如何」卻始終未量化拆解的缺口互相呼應：Q1的實際數字顯示，产品面的規模效應目前貢獻相對有限，真正的槓桿來自營業費用攤薄與服務業務的爬升曲線。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">產能擴張：從「訂單觸發」到「連續性擴產」</div>
+    <div class="tech-grid">
+      <div class="tech-card dram">
+        <h4>現有產能</h4>
+        <ul>
+          <li>現有製造足跡可支撐<strong style="color:#1a1a2e;">5GW/年</strong>商業產品產能（不含服務需求，服務另計）</li>
+          <li>KR被追問後承認現有廠房「已接近榨乾」（見Q&amp;A頁籤Dendrinos條目），5GW更接近當前產能天花板而非留有餘裕的規劃值</li>
+          <li>公司定位「不受訂單限制、不受產能限制」——營收成長速度取決於客戶綠地基地建置速度，而非Bloom供電速度</li>
+        </ul>
+      </div>
+      <div class="tech-card nand">
+        <h4>擴產節奏轉變</h4>
+        <ul>
+          <li>從「客戶下單才擴產」轉為「連續性擴產」，每季新增數百MW，取代過去一次性、耗時一年完成的大額擴產模式</li>
+          <li>KR比喻為「類比撥盤持續轉動」，而非「數位step function偶發跳動」</li>
+          <li>5GW以上需要「新廠」——KR明確表態，但時程、選址、資本支出規劃均未揭露</li>
+        </ul>
+      </div>
+      <div class="tech-card hbm">
+        <h4>安裝時間創新</h4>
+        <ul>
+          <li>從「現場挖掘、澆置混凝土、配管、找工班」的傳統模式，轉為「skid式預組裝到場即接」</li>
+          <li>現場安裝時間縮短近一個數量級（one order of magnitude）</li>
+          <li>宣稱100MW專案能以業界最少的現場工時、最快速度完成上線——但此改良過去從未被公開提及，缺乏歷史對照數字佐證改善幅度</li>
+        </ul>
+      </div>
+      <div class="tech-card pkg">
+        <h4>成本曲線</h4>
+        <ul>
+          <li>強調「十年以上持續雙位數成本下降」，是唯一維持下行成本曲線的現場發電技術</li>
+          <li>管理層重申未來仍可期待雙位數成本下降，但驅動因子（規模、材料、設計迭代）未拆解佔比</li>
+          <li>目前定位為「在美國多數市場已具備電網平價競爭力、在近乎所有市場優於離網替代方案」——但沒有給出具體$/kW或$/MWh比較數字</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title">全年展望：guide雙重上修的規模</div>
+      <p><strong style="color:#1a1a2e;">營收guide：</strong>由$31-33億上修至$34-38億，中值成長率由60% YoY上修至80% YoY，下修後區間下緣已經高於原區間上緣。<br><br>
+      <strong style="color:#1a1a2e;">毛利率guide：</strong>由30%（2025年實際）上修至約34%（2026年展望），較原guide再高出2個百分點。<br><br>
+      <strong style="color:#1a1a2e;">獲利guide：</strong>非GAAP營業利益guide $6-7.5億；非GAAP稀釋EPS guide $1.85-2.25（Q1單季非GAAP EPS為$0.44，若簡單四等分年度guide中值，隱含後三季需要加速放量，尤其配合Q3、Q4 Helios式的資料中心裝機節奏）。<br><br>
+      這一連串上修的共同時間點是Oracle Jupiter宣布的隔天，市場直覺會將guide上修與這筆交易掛鉤，但如Oracle深度拆解頁籤所述，管理層從未明確拆分guide上修中Jupiter與既有pipeline的相對貢獻。</p>
+    </div>
+  </div>
+
+  <!-- Supply Chain Panel -->
+  <div id="panel-supply" class="panel">
+    <div class="section-title">供應鏈與客戶集中度</div>
+    <div class="limit-box">資料來源：FY2025 10-K（Item 1／Item 1A／Item 2）與Q1 FY2026 10-Q，信心度：中——製造足跡與客戶集中度數字明確，但供應商端幾乎全為定性描述，無具名供應商或集中度百分比可交叉核對。</div>
+
+    <hr class="divider">
+    <div class="section-title">下游：客戶集中度——本頁籤最重要的發現</div>
+    <div class="card" style="border-left:4px solid #b91c4a;">
+      <div class="card-title" style="color:#b91c4a;">⚑ Q1近半營收來自Bloom自己參股的關聯方合資公司，不是純第三方客戶</div>
+      <p>10-Q附註1（集中度風險）原文：「截至2026年3月31日止三個月，來自兩位客戶（第一位為本公司之關聯方）的營收分別約占總營收50%與12%。截至2025年3月31日止三個月，兩位客戶分別約占37%與29%。」與損益表附註揭露的「關聯方營收$3.733億」精確對應（$373.3M／$751.054M＝49.7%≈50%）。<br><br>這個「關聯方」是<strong style="color:#1a1a2e;">Bolt US Class A JVCo LLC／Bolt US JVCo LLC</strong>——由Brookfield贊助、Bloom自己持有9.9%股權的「AI Fund」專案融資合資企業（10-Q附註7）。換言之，<strong style="color:#1a1a2e;">Q1近半數營收，是把設備賣給一家Bloom自己有財務利益的專案融資載體，而不是完全獨立於Bloom之外的第三方終端客戶</strong>。這在會計與法律上完全合規揭露，但與一般認知的「客戶集中度」性質不同——這類專案融資結構常見於再生能源與電力基礎設施業界（Bloom藉此讓客戶用表外/專案融資方式取得設備），但也代表頭條的「130.4% YoY營收成長」有相當比例是透過自己參股的載體完成，而非單純獨立第三方需求的直接映射。</p>
+    </div>
+    <div class="card">
+      <div class="card-title">應收帳款集中度與地理結構</div>
+      <p><strong style="color:#1a1a2e;">應收帳款信用風險：</strong>同一關聯方單一客戶即占2026年3月底應收帳款約30%（相較2025年底是三個客戶分別占41%/17%/15%）——集中度在單一交易對手身上不減反增，即使應收帳款總額本身是下降的。<br><br>
+      <strong style="color:#1a1a2e;">地理結構劇烈轉變：</strong>美國營收占比從2025年Q1的56%，躍升至2026年Q1的<strong style="color:#1a1a2e;">91%</strong>——國際營收占比大幅萎縮，反映AI/資料中心這波成長幾乎完全集中在美國本土，與KR在法說會上「80/20法則，國際市場會有delay」的說法方向一致。<br><br>
+      <strong style="color:#1a1a2e;">10-Q完全沒有按「資料中心 vs C&amp;I」這類終端市場別揭露營收金額</strong>——Bloom只按產品／安裝／服務／電力這四個會計科目類別揭露營收，從未按垂直市場拆分。這代表法說會上提到的「70-80%回頭客」「逾半數資料中心backlog來自Oracle以外客戶」等說法，全部是管理層自有的內部指標，沒有任何SEC申報文件可供驗證或反駁。</p>
+    </div>
+
+    <hr class="divider">
+    <div class="section-title">上游：製造足跡</div>
+    <div class="tech-grid">
+      <div class="tech-card dram">
+        <h4>Fremont, California</h4>
+        <ul>
+          <li>總計約32.6萬平方英尺：8.9萬平方英尺（2021年4月起營運）＋16.4萬平方英尺（2022年7月起租，2036年2月到期）＋7.3萬平方英尺研發／氫能開發中心（2022年6月啟用）</li>
+          <li>主要製造與研發樞紐</li>
+        </ul>
+      </div>
+      <div class="tech-card nand">
+        <h4>Newark, Delaware</h4>
+        <ul>
+          <li>45.4萬平方英尺租賃廠房＋17.8萬平方英尺自有廠房（「首座專為copy-exact複製設計」的製造中心，另有25英畝可用地供擴產或供應商共置）</li>
+          <li>維修翻新（R&amp;O）廠房13.3萬平方英尺（租約分別於2026/12、2027/4、2030/7到期）</li>
+        </ul>
+      </div>
+      <div class="tech-card hbm">
+        <h4>南韓</h4>
+        <ul>
+          <li>與SK ecoplant合資的全組裝廠，用以「發展在地供應商生態系」</li>
+        </ul>
+      </div>
+      <div class="tech-card pkg">
+        <h4>2025年整併</h4>
+        <ul>
+          <li>Sunnyvale（6萬平方英尺）與Mountain View（4.4萬平方英尺）廠房已於2025年撤出，整併進Fremont</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">上游：供應商與地緣政治風險</div>
+    <div class="card">
+      <div class="card-title">供應商——僅有定性描述，無具名廠商或集中度百分比</div>
+      <p>10-K原文：「我們的供應鏈自創立以來就由我們獨特建立，擁有一群支援汽車、半導體與其他傳統製造業的優質供應商。燃料電池的生產需要稀土元素、特殊合金與工業原料……除了在專用技術與材料特性要求的情況下，我們原料與服務通常有多重供應來源。」供應基礎橫跨北美、亞洲、歐洲與印度，具備壓實、燒結、硬焊與特殊材料製造技術等多元專長。<strong style="color:#7a5c00;">整份10-K與10-Q沒有點名任何一家個別供應商，也沒有任何供應商集中度百分比表格</strong>（相較之下，部分同業會揭露前三大供應商採購占比）——與垂直分散化的零組件策略一致，但也代表這個說法無法用申報文件裡的具體數字獨立驗證。</p>
+    </div>
+    <div class="flag-box">
+      <div class="q-label flag">⚑ 中國／台灣曝險：同一份10-K內部兩段話存在未被自行釐清的張力</div>
+      <div class="q-text">Item 1業務描述：「我們的供應鏈對中國沒有重大曝險」。但Item 1A風險因子卻寫：「中國作為一個國家供應包括稀土金屬與化合物在內的多項組件，這些屬於我們第二層與第三層次組裝供應商的一部分……中美貿易緊張情勢持續升溫，可能影響我們取得這些稀土金屬與組件的能力」；同一節另外提到「我們的產品含有主要來自台灣供應的組件……任何影響台灣的中斷都可能對我們取得這些組件的能力造成不利影響」。最合理的解讀是「第一層（直接、具名）供應商對中國曝險不大，但往上兩層存在未量化的依賴」——這與CoreWeave等同業「NVIDIA→TSMC→台灣地緣政治風險」的揭露邏輯類似，但Bloom自己的申報文件並未把這兩段話彼此對照釐清，兩段話都沒有給出百分比。關稅風險同樣只有定性描述，沒有揭露任何金額影響；Q1 10-Q MD&amp;A提到鋼合金、特殊金屬、電子元件、天然氣連動投入與稀土依賴材料都經歷價格波動。</div>
+    </div>
+  </div>
+
+  <!-- Risk Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title">風險矩陣：法說會中已揭露 vs. SEC申報文件的落差</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">本季最大新聞——Oracle Project Jupiter「2.45GW」「100% Bloom」——窮盡搜尋Bloom自己的SEC申報文件後完全找不到對應揭露</div>
+        <span>10-Q全文、8-K本文、Ex-99.1新聞稿全文都搜尋過，「Jupiter」「2.45」「gigawatt」「GW」這幾個字完全沒有出現；「Oracle」這個字只出現在認股權證附註裡，從未出現在新聞稿或8-K本文。整場Q&amp;A也沒有任何分析師問到這筆交易的合約金額或年限。這代表這筆被管理層定位為「本季里程碑」的交易，規模與排他性目前完全只有口頭陳述為依據。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">Oracle認股權證公允價值三個月暴增逾4倍，且已開始直接沖抵營收，法說會全程未提及</div>
+        <span>10-Q揭露3,531,073股、履約價$113.28的認股權證，公允價值從2025年底$5,590萬，暴增至2026年4月9日發放時的$2.613億。Q1已認列$1,280萬營收減項，後續交付季度還會持續沖抵——這筆權證直接綁在被吹捧為本季亮點的Oracle關係上，卻完全沒有被管理層提及。用於確認交易對手方的424B7在法說會前一天就已申報，代表這項資訊在電話會議前其實已經公開。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">Q1近半數營收來自Bloom自己參股的關聯方合資公司</div>
+        <span>兩位客戶合計占Q1營收62%（約50%＋12%），其中占比較大的一位是Bloom持有9.9%股權的Brookfield贊助專案融資合資公司Bolt US JVCo。這在法律與會計上合規揭露，但代表本季爆發性成長有相當比例是透過自己有財務利益的載體完成，而非完全獨立第三方需求的直接映射，且該關聯方在應收帳款集中度上的占比（~30%）還在季增。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">$1,970萬「特定產品問題」保固準備金，法說會未提及，拖累約300個基點的產品毛利率</div>
+        <span>10-Q揭露Q1新增$1,970萬保固準備金，計入產品銷貨成本，僅描述為「已識別產品問題」，沒有進一步說明問題性質或是否已解決。若排除此準備金，產品毛利率估算約37.3%，比GAAP/非GAAP揭露的34.3%/35.3%高出約300個基點——法說會上Simon Edwards只描述產品毛利率「較去年同期上升22個基點」，未提及這筆一次性沖抵。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">「規模放大後毛利率／營運槓桿如何演變」被三位分析師問三次，全部未獲量化回答（詳見Q&amp;A頁籤）</div>
+        <span>Mark Strouse問新任CFO、Maheep Mandloi問KR、Vikram Bagri問CCGT替代的tipping point，三次提問本質相同，管理層三次都沒有給出邊際貢獻率、產能利用率目標或長期毛利率框架。在guide中值上修至80% YoY成長、毛利率上修至34%的背景下，投資人目前只能依賴Q1實際發生的數字（而非管理層前瞻框架）推算未來季度。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">中國／台灣供應鏈曝險未量化，且10-K內部兩段揭露互相矛盾</div>
+        <span>Item 1業務描述稱「對中國沒有重大曝險」，但Item 1A風險因子承認中國是第二、三層次組裝供應商的稀土與電子元件來源，且產品組件「主要來自台灣」。兩段話都沒有百分比，10-K本身也未釐清這個張力，供應商完全未具名，無法獨立驗證集中度。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">GAAP與非GAAP落差主要由單一項目（股權激勵費用）驅動，且Q1實為公司史上首次GAAP單季獲利的Q1，這個里程碑本身被淡化處理</div>
+        <span>GAAP稀釋EPS $0.23 vs. 法說會強調的非GAAP $0.44，落差91%，其中約99%可歸因於股權激勵費用（$5,700萬，YoY+77%）。這不是揭露瑕疵——調節表已在8-K同日完整申報——但Q1其實是Bloom史上首次在傳統淡季的Q1創造GAAP營業利益與GAAP營業現金流雙轉正的里程碑，這個敘事角度在法說會上被非GAAP優於預期/上修guide的框架蓋過，值得投資人自行留意。</span>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">正面訊號：Form 4顯示CEO與新任CFO在此期間零公開市場賣股，其他高管賣股均為法說會前已排定的10b5-1計畫</div>
+        <span>KR Sridhar本期間唯一活動是股權獎酬既得（含30萬股PSU遞延至2030年），零公開市場賣出；CFO Simon Edwards僅有一筆新進員工RSU授予，零賣出。其他高管（財務長代理人Kurzymski、COO Chitoori、CCO Joshi、CLO Soderberg）的賣股全部依循2025年11月即已排定的10b5-1計畫執行，非法說會後臨時決定。Form 4交易價格隱含股價從3月的$136-150區間，在法說會後（4/29）跳升至$279（+21%），並持續上漲至7月的$300附近——與CoreWeave同期報告中「Form 4價格隱含法說會後大跌」的案例方向相反，屬於支持而非牴觸法說會正面敘事的資料點（惟此數字僅由Form 4交易價格反推，並非獨立市場報價來源）。另有6名董事的Form 4延遲申報約10.5個月，屬合規行政瑕疵，無估值意義。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Income Statement Panel -->
+  <div id="panel-inc" class="panel">
+    <div class="section-title">損益表（GAAP，資料來源：Q1 FY2026 10-Q）</div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$751.1M</div><div class="kpi-lbl">總營收</div><div class="kpi-sub">+130.4% YoY</div></div>
+      <div class="kpi"><div class="kpi-val">30.0%</div><div class="kpi-lbl">GAAP毛利率</div><div class="kpi-sub">+2.8pp YoY</div></div>
+      <div class="kpi"><div class="kpi-val">$72.2M</div><div class="kpi-lbl">GAAP營業利益</div><div class="kpi-sub">去年同期為虧損$19.1M</div></div>
+      <div class="kpi"><div class="kpi-val">$0.23</div><div class="kpi-lbl">GAAP稀釋EPS</div><div class="kpi-sub">去年同期$(0.10)</div></div>
+    </div>
+    <div class="note">Q1 FY2026是Bloom Energy公司歷史上首次在Q1（傳統淡季）單季達成GAAP營業利益與GAAP淨利雙轉正——這個里程碑本身在法說會上被非GAAP數字的框架蓋過，詳見風險矩陣頁籤。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">損益表明細（$千）</div>
+      <table>
+        <tr><th>科目</th><th>Q1 FY2025</th><th>Q1 FY2026</th><th>YoY</th></tr>
+        <tr class="section-head"><td colspan="4">營收</td></tr>
+        <tr><td>產品營收</td><td>211,869</td><td>653,348</td><td class="pos">+208.4%</td></tr>
+        <tr><td>安裝營收</td><td>33,651</td><td>25,931</td><td class="neg">−23.0%</td></tr>
+        <tr><td>服務營收</td><td>53,548</td><td>61,879</td><td class="pos">+15.6%</td></tr>
+        <tr><td>電力營收</td><td>26,953</td><td>9,896</td><td class="neg">−63.3%</td></tr>
+        <tr class="total"><td>總營收</td><td>326,021</td><td>751,054</td><td class="pos">+130.4%</td></tr>
+        <tr class="section-head"><td colspan="4">銷貨成本與毛利</td></tr>
+        <tr><td>總銷貨成本</td><td>237,314</td><td>525,510</td><td>+121.4%</td></tr>
+        <tr class="total"><td>毛利</td><td>88,707</td><td>225,544</td><td class="pos">+154.3%</td></tr>
+        <tr class="subtotal"><td>毛利率</td><td>27.2%</td><td>30.0%</td><td class="pos">+2.8pp</td></tr>
+        <tr class="section-head"><td colspan="4">營業費用</td></tr>
+        <tr><td>研發費用</td><td>40,612</td><td>56,849</td><td>+40.0%</td></tr>
+        <tr><td>銷售與行銷費用</td><td>22,265</td><td>38,439</td><td>+72.6%</td></tr>
+        <tr><td>一般與行政費用</td><td>44,900</td><td>58,066</td><td>+29.3%</td></tr>
+        <tr class="total"><td>營業利益（損失）</td><td>(19,070)</td><td>72,190</td><td class="pos">轉正</td></tr>
+        <tr class="section-head"><td colspan="4">業外損益</td></tr>
+        <tr><td>利息收入</td><td>8,553</td><td>20,601</td><td>+140.9%</td></tr>
+        <tr><td>利息費用</td><td>(14,411)</td><td>(8,604)</td><td>−40.3%</td></tr>
+        <tr><td>採權益法認列之聯屬公司虧損</td><td>—</td><td>(17,002)</td><td class="neu">新增項目</td></tr>
+        <tr><td>其他收入，淨額</td><td>2,048</td><td>6,197</td><td>+202.6%</td></tr>
+        <tr><td>嵌入式衍生工具重評價利益（損失）</td><td>(103)</td><td>754</td><td>—</td></tr>
+        <tr class="total"><td>稅前淨利（損失）</td><td>(22,983)</td><td>74,136</td><td class="pos">轉正</td></tr>
+        <tr><td>所得稅費用</td><td>431</td><td>445</td><td>—</td></tr>
+        <tr><td>淨利（損失）</td><td>(23,414)</td><td>73,691</td><td class="pos">轉正</td></tr>
+        <tr><td>減：非控制權益（南韓合資公司）</td><td>400</td><td>3,038</td><td>—</td></tr>
+        <tr class="total"><td>歸屬普通股股東淨利（損失）</td><td>(23,814)</td><td>70,653</td><td class="pos">轉正</td></tr>
+        <tr><td>基本EPS</td><td>$(0.10)</td><td>$0.25</td><td>—</td></tr>
+        <tr><td>稀釋EPS</td><td>$(0.10)</td><td>$0.23</td><td>—</td></tr>
+        <tr><td>加權平均稀釋股數（千股）</td><td>230,210</td><td>319,708</td><td>+38.9%</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">GAAP vs. 非GAAP（法說會口徑）調節——資料來源：8-K Ex-99.1</div>
+      <table>
+        <tr><th>指標</th><th>GAAP（10-Q）</th><th>非GAAP（法說會口徑）</th><th>差距</th></tr>
+        <tr><td>毛利率</td><td>30.0%</td><td>31.5%</td><td>+1.5pp</td></tr>
+        <tr><td>營業利益</td><td>$72.19M</td><td>$129.71M</td><td class="neu">+$57.5M（+79.7%）</td></tr>
+        <tr><td>營業利益率</td><td>9.6%</td><td>17.3%</td><td>+7.7pp</td></tr>
+        <tr><td>稀釋EPS</td><td>$0.23</td><td>$0.44</td><td class="neu">+91%</td></tr>
+        <tr><td>淨利／調整後淨利</td><td>$70.65M</td><td>$138.06M</td><td>+$67.4M</td></tr>
+        <tr><td>Adjusted EBITDA</td><td>—</td><td>$142.99M</td><td>GAAP無對應科目</td></tr>
+      </table>
+    </div>
+    <div class="note yellow">GAAP營業利益到非GAAP的橋接：股權激勵費用$57,004千＋重組費用$306千＋其他$211千≈$57,521千，幾乎完全等於$57.5M的調整差額——<strong>股權激勵費用（SBC）一項就占了營業利益調整的約99%</strong>。SBC本身YoY成長77.0%（$32,201千→$57,004千），成長速度快於營收成長率之外的另一個值得留意的費用線。損益表認列的SBC總額（$57,004千）與現金流量表SBC加回項目（$48,215千）有約$880萬差異，屬於資本化進存貨/固定資產的正常科目歸屬差異，非異常項目。</div>
+  </div>
+
+  <!-- Business Segment Panel -->
+  <div id="panel-bu" class="panel">
+    <div class="section-title">業務部門：營收結構與毛利率</div>
+    <div class="bu-grid">
+      <div class="bu-card" style="border-top-color:#1565c0;">
+        <div class="bu-name">產品</div>
+        <div class="bu-abbr">Energy Server銷售，占營收87%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q1 FY26營收</span><span class="bu-stat-val">$653.3M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">YoY</span><span class="bu-stat-val pos">+208.4%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">GAAP毛利率</span><span class="bu-stat-val">34.3%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">非GAAP毛利率</span><span class="bu-stat-val">35.3%（+22bps YoY）</span></div>
+      </div>
+      <div class="bu-card" style="border-top-color:#6a1b9a;">
+        <div class="bu-name">服務</div>
+        <div class="bu-abbr">100%綁約率的年金型業務，占營收8%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q1 FY26營收</span><span class="bu-stat-val">$61.9M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">YoY</span><span class="bu-stat-val pos">+15.6%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">非GAAP毛利率</span><span class="bu-stat-val">18%（+13pts YoY）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">獲利連續性</span><span class="bu-stat-val">連9季獲利／連4季雙位數毛利率</span></div>
+      </div>
+      <div class="bu-card" style="border-top-color:#c2600a;">
+        <div class="bu-name">安裝 ＋ 電力</div>
+        <div class="bu-abbr">占營收5%，兩項合計呈現YoY下滑</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">安裝營收</span><span class="bu-stat-val neg">$25.9M（−23.0% YoY）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">電力營收</span><span class="bu-stat-val neg">$9.9M（−63.3% YoY）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">個別毛利率</span><span class="bu-stat-val">未單獨揭露</span></div>
+      </div>
+    </div>
+    <div class="note">產品營收YoY+208.4%是本季全部成長故事的核心，占總營收87%，且是總營收成長率（+130.4%）的主要驅動力。安裝與電力這兩個較小科目雙雙YoY下滑（分別−23.0%與−63.3%），電力營收萎縮幅度尤其大——這通常反映的是已完工電力售電案件（Bloom自持電廠售電）隨舊案到期或轉為其他認列方式而減少，而非新增業務疲軟，但10-Q未進一步說明原因。服務營收+15.6%的成長速度明顯落後總營收，代表這波爆發性成長主要是新設備出貨（產品）驅動，過去簽訂的10-15年期服務合約帶來的複利效應仍在早期階段，尚未反映在服務營收數字裡。</div>
+    <div class="note yellow">法說會提到的「產品毛利率35.3%，YoY+22bps」是非GAAP口徑；GAAP口徑產品毛利率為34.3%，兩者都已經反映Q1新增的$1,970萬「特定產品問題」保固準備金——若排除這筆一次性準備金，估算產品毛利率約37.3%，即規模效應本身對產品毛利率的真實貢獻，被這筆未在法說會提及的保固準備金壓低了約300個基點（詳見風險矩陣頁籤）。</div>
+  </div>
+
+  <!-- Balance Sheet Panel -->
+  <div id="panel-bs" class="panel">
+    <div class="section-title">資產負債表（資料來源：Q1 FY2026 10-Q）</div>
+    <div class="tbl-wrap">
+      <div class="tbl-title">主要科目（$千）</div>
+      <table>
+        <tr><th>科目</th><th>2025/12/31</th><th>2026/3/31</th><th>變動</th></tr>
+        <tr class="section-head"><td colspan="4">資產</td></tr>
+        <tr><td>現金及約當現金</td><td>2,454,108</td><td>2,491,433</td><td class="pos">+37,325</td></tr>
+        <tr><td>限制性現金（流動＋非流動）</td><td>27,472</td><td>26,851</td><td>−621</td></tr>
+        <tr><td>應收帳款，淨額</td><td>371,796</td><td>359,406</td><td class="neg">−12,390</td></tr>
+        <tr><td>合約資產（流動）</td><td>178,928</td><td>242,595</td><td class="pos">+63,667</td></tr>
+        <tr><td>存貨</td><td>643,306</td><td>732,528</td><td class="pos">+89,222</td></tr>
+        <tr class="total"><td>流動資產合計</td><td>3,730,567</td><td>3,954,536</td><td class="pos">+223,969</td></tr>
+        <tr><td>不動產、廠房及設備，淨額</td><td>398,507</td><td>401,088</td><td>+2,581</td></tr>
+        <tr><td>採權益法之聯屬公司投資</td><td>10,037</td><td>23,261</td><td class="pos">+13,224</td></tr>
+        <tr class="total"><td>資產總計</td><td>4,396,711</td><td>4,664,729</td><td class="pos">+268,018</td></tr>
+        <tr class="section-head"><td colspan="4">負債與股東權益</td></tr>
+        <tr><td>遞延營收與客戶預付款（流動）</td><td>100,975</td><td>194,094</td><td class="pos">+93,119（+92%）</td></tr>
+        <tr class="total"><td>流動負債合計</td><td>623,832</td><td>786,804</td><td>+162,972</td></tr>
+        <tr><td>長期有追索權債務</td><td>2,613,726</td><td>2,598,676</td><td>−15,050</td></tr>
+        <tr class="total"><td>負債合計</td><td>3,603,748</td><td>3,716,721</td><td>+112,973</td></tr>
+        <tr><td>歸屬普通股股東權益</td><td>768,641</td><td>921,469</td><td class="pos">+152,828</td></tr>
+        <tr class="total"><td>股東權益合計</td><td>792,963</td><td>948,008</td><td class="pos">+155,045</td></tr>
+      </table>
+    </div>
+    <div class="note">遞延營收與客戶預付款單季暴增92%，直接印證Simon Edwards法說會上「客戶預付款以保留產能」的說法——是本季少數能被資產負債表明確佐證的口頭陳述之一。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">債務結構（附註8，未償還本金，$千）</div>
+      <table>
+        <tr><th>債務工具</th><th>本金</th><th>帳面淨值</th><th>備註</th></tr>
+        <tr><td>0%可轉換優先票據，2030年11月到期</td><td>2,500,000</td><td>2,444,939</td><td>—</td></tr>
+        <tr><td>3.0%綠色可轉換優先票據，2029年6月到期</td><td>75,125</td><td>73,594</td><td>—</td></tr>
+        <tr><td>3.0%綠色可轉換優先票據，2028年6月到期</td><td>81,236</td><td>80,143</td><td>Q1轉換$18,163千為股權（發行976,992股）</td></tr>
+        <tr class="total"><td>有追索權債務合計</td><td colspan="2">2,598,676</td><td>—</td></tr>
+        <tr><td>無追索權債務（南韓合資公司term loan）</td><td colspan="2">3,959</td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note">兩期間所有債務條款均合規（in compliance）。2028年到期的綠色可轉換票據本季有$1,816.3萬被轉換為股權，是股東權益季增的部分來源之一。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">不動產、廠房及設備明細（$千，2026/3/31）</div>
+      <table>
+        <tr><th>類別</th><th>金額</th></tr>
+        <tr><td>車輛、機械與設備</td><td>216,525</td></tr>
+        <tr><td>Energy Server系統</td><td>147,689</td></tr>
+        <tr><td>租賃改良</td><td>131,857</td></tr>
+        <tr><td>在建工程</td><td>91,541</td></tr>
+        <tr><td>建築物</td><td>53,513</td></tr>
+        <tr><td>電腦與軟體</td><td>35,644</td></tr>
+        <tr><td>傢俱設備</td><td>10,693</td></tr>
+        <tr class="subtotal"><td>總額（毛額）</td><td>687,462</td></tr>
+        <tr><td>減：累計折舊</td><td>(286,374)</td></tr>
+        <tr class="total"><td>淨額</td><td>401,088</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">股數與稀釋（附註15）</div>
+      <table>
+        <tr><th>項目</th><th>Q1 FY2025</th><th>Q1 FY2026</th></tr>
+        <tr><td>加權平均基本股數（千股）</td><td>—</td><td>281,719</td></tr>
+        <tr><td>加權平均稀釋股數（千股）</td><td>230,210</td><td>319,708</td></tr>
+        <tr><td>2026/3/31流通在外股數</td><td colspan="2">284,207,963（全數A類普通股）</td></tr>
+      </table>
+    </div>
+    <div class="note yellow">2025年Q1（虧損期間）有6,722萬股潛在股份（可轉換票據5,995.5萬股＋股票選擇權/獎酬726.5萬股）因具反稀釋效果被排除在稀釋EPS計算外——代表公司一旦轉虧為盈、可轉換票據價內程度提高，完全稀釋股數可能較虧損期間帳面股數大幅增加（本季稀釋股數已YoY+38.9%），是評估未來每股指標時必須留意的結構性因素。</div>
+  </div>
+
+  <!-- Cash Flow Panel -->
+  <div id="panel-cf" class="panel">
+    <div class="section-title">現金流量（資料來源：Q1 FY2026 10-Q）</div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$73.6M</div><div class="kpi-lbl">營業活動現金流</div><div class="kpi-sub">去年同期為−$110.7M</div></div>
+      <div class="kpi"><div class="kpi-val">$2.52B</div><div class="kpi-lbl">期末現金總額</div><div class="kpi-sub">含限制性現金</div></div>
+      <div class="kpi"><div class="kpi-val">$26.2M</div><div class="kpi-lbl">資本支出</div><div class="kpi-sub">YoY+83.6%</div></div>
+      <div class="kpi"><div class="kpi-val">+$36.7M</div><div class="kpi-lbl">期間現金淨變動</div><div class="kpi-sub">去年同期為−$119.6M</div></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">營業活動</div>
+      <div class="cf-row"><span class="cf-lbl">Q1 FY2025</span><span class="cf-val neg">$(110,682)千</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">Q1 FY2026</span><span class="cf-val pos">$73,610千</span></div>
+    </div>
+    <div class="cf-section">
+      <div class="cf-header">投資活動</div>
+      <div class="cf-row"><span class="cf-lbl">不動產廠房及設備支出</span><span class="cf-val">$(26,182)千（Q1FY25：$(14,259)千）</span></div>
+      <div class="cf-row"><span class="cf-lbl">投資於聯屬公司</span><span class="cf-val">$(19,848)千（Q1FY25：無此項目）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">投資活動淨現金流出</span><span class="cf-val">$(45,939)千（Q1FY25：$(14,216)千）</span></div>
+    </div>
+    <div class="cf-section">
+      <div class="cf-header">籌資活動</div>
+      <div class="cf-row"><span class="cf-lbl">發行普通股所得</span><span class="cf-val">$15,835千（Q1FY25：$7,651千）</span></div>
+      <div class="cf-row"><span class="cf-lbl">融資義務償還</span><span class="cf-val">$(7,972)千（Q1FY25：$(2,671)千）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">籌資活動淨現金流入</span><span class="cf-val">$7,057千（Q1FY25：$5,130千）</span></div>
+    </div>
+    <div class="cf-section">
+      <div class="cf-header">期末現金水位</div>
+      <div class="cf-row"><span class="cf-lbl">期間現金淨變動</span><span class="cf-val pos">+$36,704千（Q1FY25：$(119,613)千）</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">期末現金＋約當現金＋限制性現金</span><span class="cf-val">$2,518,284千（Q1FY25：$831,358千）</span></div>
+    </div>
+    <div class="note">「$2.52billion現金」與「$73.6M營業現金流入」兩項法說會口頭數字，與10-Q精確吻合，是本季法說會與申報文件對應最乾淨的兩個資料點。營業現金流轉正主要來自獲利能力的階段性躍升、強勁收款，以及前述遞延營收/客戶預付款暴增92%的貢獻——三者互相印證。投資活動現金流出擴大，主要反映資本支出YoY+83.6%（配合產能連續擴張的資本需求）以及首次出現的聯屬公司投資$1,985萬（即Bolt US JVCo等Brookfield合資結構的股權投入，呼應供應鏈與客戶集中度頁籤的關聯方發現）。</div>
+  </div>
+
+  <!-- Valuation Panel -->
+  <div id="panel-val" class="panel">
+    <div class="section-title">估值觀察</div>
+    <div class="limit-box">本頁籤市值與倍數計算，是用Form 4申報中揭露的實際成交價格（而非即時報價來源）反推，僅供參考。$2.518億股（2026/3/31流通在外A類普通股）× 最近一筆Form 4揭露價格 $300.37（2026/7/1，CCO Aman Joshi依10b5-1計畫出售）計算基本市值；股數與價格均來自SEC申報文件，非本報告獨立驗證的即時市場報價。僅供資訊參考，非投資建議。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">隱含估值倍數</div>
+      <table>
+        <tr><th>指標</th><th>數值</th><th>意義</th></tr>
+        <tr><td>流通在外股數（2026/3/31）</td><td>284,207,963股</td><td>10-Q揭露，全數A類普通股</td></tr>
+        <tr><td>Form 4最近成交價（2026/7/1）</td><td>$300.37</td><td>非即時報價，來自CCO 10b5-1計畫賣股申報價格</td></tr>
+        <tr><td>隱含基本市值</td><td>≈$854億</td><td>流通股數×最近Form 4價格，粗略估算</td></tr>
+        <tr><td>FY2026營收guide中值</td><td>$36億</td><td>公司guide中值（$34-38億區間）</td></tr>
+        <tr><td>隱含遠期P/S（FY26 guide中值）</td><td>≈23.7x</td><td>對一家毛利率才剛上修到34%的公司而言，屬於明顯反映持續超高速成長預期的倍數</td></tr>
+        <tr><td>非GAAP EPS guide中值</td><td>$2.05</td><td>guide區間$1.85-2.25中值</td></tr>
+        <tr><td>隱含遠期非GAAP P/E</td><td>≈146x</td><td>市場定價已經內含管理層自己在法說會上三次拒絕量化的「規模化後營運槓桿」假設</td></tr>
+        <tr><td>Q1 FY26 GAAP稀釋EPS簡單年化（×4）</td><td>$0.92</td><td>粗略年化僅供參考，Q1為傳統淡季且未反映後續季度guide隱含的加速放量，隱含P/E≈326x會顯著高估實際情況</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">觀察：市場定價已經領先管理層自己願意量化的程度</div>
+      <p>Q&amp;A頁籤紀錄了本場法說會三次被問到「規模放大後毛利率／營運槓桿如何演變」，管理層三次都沒有給出任何量化框架。但以Form 4揭露價格反推的隱含遠期P/S（約24倍）與非GAAP P/E（約146倍），已經隱含市場預期Bloom不僅能維持80% YoY的營收成長guide，還必須在未來幾年持續大幅擴張營業利益率才能讓這些倍數收斂到合理水準。換言之，<strong style="color:#1a1a2e;">投資人透過股價，已經替管理層拒絕回答的問題給出了一個相當樂觀的答案</strong>——這使得Q&amp;A頁籤中反覆出現的「規模化後經濟效益」缺口，從單純的法說會溝通瑕疵，變成一個與目前市場定價是否合理直接相關的核心變數。這個觀察僅基於Form 4申報價格與guide中值的粗略計算，不構成、也不應被視為投資建議。</p>
+    </div>
+  </div>
+
+  <div class="footer">僅供資訊參考，非投資建議 / For informational purposes only — not investment advice.</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
