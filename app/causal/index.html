@@ -18,6 +18,8 @@
   --cf-edge-neutral:#6b6b6b;
   --cf-tint-pdf:#fdecec;
   --cf-tint-pdf-border:#f0c9c9;
+  --cf-tint-earn:#fff8e6;
+  --cf-tint-earn-border:#e8cf8a;
 }
 body.dark{
   --cf-accent:#c2258f;
@@ -27,6 +29,8 @@ body.dark{
   --cf-edge-neutral:#8a8a8a;
   --cf-tint-pdf:#3a1e1e;
   --cf-tint-pdf-border:#6a3a3a;
+  --cf-tint-earn:#3a3020;
+  --cf-tint-earn-border:#8a7040;
 }
 html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Orchid','Noto Sans TC',serif;font-weight:400;-webkit-font-smoothing:antialiased}
 ::selection{background:#0a0a0a;color:#fff}
@@ -531,6 +535,17 @@ body.dark .cf-diagramref-name{color:#c0aee0}
 body.dark .cf-diagramref-icon{color:#b09ad8}
 body.dark .cf-node.diagramref-node.missing{background:#3a2420;border-color:#7a4a40}
 body.dark .cf-node.diagramref-node.missing .cf-diagramref-icon{color:#c97b6c}
+.cf-node.earnings-node{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:var(--cf-tint-earn);border:1.5px solid var(--cf-tint-earn-border);border-radius:var(--cf-radius);min-width:150px;min-height:90px}
+.cf-node.earnings-node:hover{border-color:#c9a94a}
+.cf-node.earnings-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
+.cf-earnings-icon{font-size:20px;line-height:1}
+.cf-earnings-ticker{font-size:17px;font-weight:600;color:#7a5f1e;text-align:center}
+.cf-earnings-period{font-size:11px;color:#a68a4a;text-align:center}
+body.dark .cf-node.earnings-node{background:var(--cf-tint-earn);border-color:var(--cf-tint-earn-border)}
+body.dark .cf-node.earnings-node:hover{border-color:#b89a50}
+body.dark .cf-node.earnings-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
+body.dark .cf-earnings-ticker{color:#e8cf8a}
+body.dark .cf-earnings-period{color:#c9ac6a}
 
 .cf-diagref-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;width:240px;padding:6px}
 .cf-diagref-picker-search{width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;border:1px solid #e5e5e5;border-radius:7px;padding:6px 8px;margin-bottom:5px;outline:none}
@@ -961,6 +976,9 @@ body.dark #cf-url-ok:hover{background:#fff}
       </button>
       <button class="cf-dock-btn" id="cf-add-diagramref" title="Insert existing diagram">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15a4.5 4.5 0 0 0 6.8.5l2-2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M15 9a4.5 4.5 0 0 0-6.8-.5l-2 2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-earnings" title="Insert earnings call report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6"/><polyline points="14 6 21 6 21 13"/></svg>
       </button>
       <button class="cf-dock-btn" id="cf-add-divider" title="Divider (splits the canvas into zones — dblclick to flip orientation)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
@@ -1410,6 +1428,72 @@ function showDiagramInsertPicker(anchorEl) {
   },{capture:true}),10);
 }
 
+// ── Insert-earnings-report picker ─────────────────────────
+// Reports live in globe-invest's deployed /research folder, listed by its
+// server at runtime — not tracked in this repo, so there's no local `files`
+// array to filter like showDiagramInsertPicker. Empty/failed fetch (e.g. the
+// dev-source preview with no backend) degrades to an explanatory empty state.
+let _earningsReports = null;
+async function fetchEarningsReports() {
+  if (_earningsReports) return _earningsReports;
+  try {
+    const res = await fetch('/api/research-reports');
+    _earningsReports = await res.json();
+  } catch (e) { _earningsReports = []; }
+  return _earningsReports;
+}
+async function showEarningsInsertPicker(anchorEl) {
+  document.querySelectorAll('.cf-diagref-picker').forEach(el=>el.remove());
+  const pk = document.createElement('div'); pk.className='cf-diagref-picker';
+  const search = document.createElement('input');
+  search.className='cf-diagref-picker-search'; search.placeholder='搜尋 ticker…'; search.autocomplete='off';
+  pk.appendChild(search);
+  const list = document.createElement('div'); list.className='cf-diagref-picker-list';
+  list.innerHTML='<div class="cf-diagref-picker-empty">載入中…</div>';
+  pk.appendChild(list);
+  document.body.appendChild(pk);
+  const rect=anchorEl.getBoundingClientRect();
+  pk.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.bottom+4}px`;
+  function renderList(q, reports) {
+    list.innerHTML='';
+    const ql=(q||'').trim().toLowerCase();
+    const shown=reports.filter(r=>!ql||r.ticker.toLowerCase().includes(ql)||r.period.toLowerCase().includes(ql));
+    if(!shown.length){
+      const empty=document.createElement('div'); empty.className='cf-diagref-picker-empty';
+      empty.textContent = reports.length ? '沒有符合的報告' : '找不到 earnings call 報告（需連到已部署的 globe-invest 後端）';
+      list.appendChild(empty);
+      return;
+    }
+    shown.forEach(r=>{
+      const it=document.createElement('div'); it.className='cf-diagref-picker-item';
+      const nameEl=document.createElement('span'); nameEl.textContent=r.ticker+' · '+r.period;
+      it.appendChild(nameEl);
+      const kEl=document.createElement('span'); kEl.className='cf-diagref-picker-folder';
+      kEl.textContent=r.kind==='Financials'?'財報':'分析';
+      it.appendChild(kEl);
+      it.addEventListener('click', ()=>{
+        const {x:cx,y:cy}=spawnPoint();
+        addEarningsRefNode(cx-75,cy-45,r);
+        pk.remove();
+      });
+      list.appendChild(it);
+    });
+  }
+  const reports = await fetchEarningsReports();
+  if(!document.body.contains(pk))return;
+  renderList('', reports);
+  search.addEventListener('input', ()=>renderList(search.value, reports));
+  requestAnimationFrame(()=>{
+    const pr=pk.getBoundingClientRect();
+    if(pr.right>window.innerWidth-8) pk.style.left=(window.innerWidth-pr.width-8)+'px';
+    if(pr.bottom>window.innerHeight-8){pk.style.top='';pk.style.bottom=(window.innerHeight-rect.top+4)+'px';}
+  });
+  requestAnimationFrame(()=>search.focus());
+  setTimeout(()=>document.addEventListener('click',function h(e){
+    if(!pk.contains(e.target)){pk.remove();document.removeEventListener('click',h,{capture:true});}
+  },{capture:true}),10);
+}
+
 // ── Feed render ────────────────────────────────────────────
 function renderFeed() {
   const list = document.getElementById('cf-feed-list');
@@ -1737,7 +1821,7 @@ function renderMinimap() {
     let cls='cf-mm-node', extra='';
     if(n.isBox)cls+=' box';
     else if(n.isCanvas||n.isDiagramRef)cls+=' canvas';
-    else if(n.isImage||n.isEmbed)cls+=' media';
+    else if(n.isImage||n.isEmbed||n.isEarningsRef)cls+=' media';
     else if(n.isText)cls+=' text';
     else if(n.isDivider)cls+=' divider';
     else if(n.color){
@@ -2253,6 +2337,19 @@ function buildNodes() {
       d.appendChild(nameEl);
       const rh=document.createElement('div'); rh.className='cf-node-resize';
       rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
+    } else if (n.isEarningsRef) {
+      d.className='cf-node earnings-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
+      d.style.width=(n.w||150)+'px'; d.style.height=(n.bh||90)+'px';
+      const icon=document.createElement('div'); icon.className='cf-earnings-icon'; icon.textContent='📈';
+      d.appendChild(icon);
+      const tickerEl=document.createElement('div'); tickerEl.className='cf-earnings-ticker';
+      tickerEl.textContent=n.ticker||'?';
+      d.appendChild(tickerEl);
+      const periodEl=document.createElement('div'); periodEl.className='cf-earnings-period';
+      periodEl.textContent=(n.period||'')+(n.kind?' · '+(n.kind==='Financials'?'財報':'分析'):'');
+      d.appendChild(periodEl);
+      const rh2=document.createElement('div'); rh2.className='cf-node-resize';
+      rh2.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh2);
     } else if (n.isDivider) {
       const isH=n.orient==='h';
       d.className='cf-divider '+(isH?'h':'v')+(isSel?' sel':'')+(isMulti?' multi-sel':'');
@@ -2352,7 +2449,7 @@ function buildNodes() {
     }
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
-    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef&&!n.isDivider){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
+    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef&&!n.isEarningsRef&&!n.isDivider){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
     // Every node type gets connection ports, including box/group nodes — a
     // box is a valid edge endpoint just like any other node. A divider is a
     // pure visual line, not a causal factor, so it's excluded here.
@@ -2376,6 +2473,9 @@ function buildNodes() {
     } else if(n.isDiagramRef){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{ev.stopPropagation();enterCanvasNode(n.id);});
+    } else if(n.isEarningsRef){
+      d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
+      d.addEventListener('dblclick',ev=>{ev.stopPropagation();if(n.url)window.open(n.url,'_blank','noopener,noreferrer');});
     } else if(n.isDivider){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{ev.stopPropagation();toggleDividerOrient(n.id);});
@@ -2594,6 +2694,14 @@ function addCanvasNode(x, y) {
 function addDiagramRefNode(x, y, refId) {
   snapshot();
   const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isDiagramRef:true,refId:refId,w:220,bh:130};
+  G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+  return n;
+}
+// An earnings-ref node stores a snapshot of ticker/period/url at insert time —
+// research reports are static published pages, not live data, so nothing to re-resolve on open.
+function addEarningsRefNode(x, y, report) {
+  snapshot();
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isEarningsRef:true,ticker:report.ticker,period:report.period,kind:report.kind,url:report.url,w:150,bh:90};
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
@@ -3810,6 +3918,9 @@ document.getElementById('cf-add-canvas').addEventListener('click',()=>{
 });
 document.getElementById('cf-add-diagramref').addEventListener('click',(ev)=>{
   showDiagramInsertPicker(ev.currentTarget);
+});
+document.getElementById('cf-add-earnings').addEventListener('click',(ev)=>{
+  showEarningsInsertPicker(ev.currentTarget);
 });
 document.getElementById('cf-add-divider').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
