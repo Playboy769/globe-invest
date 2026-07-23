@@ -18,8 +18,8 @@
   --cf-edge-neutral:#6b6b6b;
   --cf-tint-pdf:#fdecec;
   --cf-tint-pdf-border:#f0c9c9;
-  --cf-tint-earn:#fff8e6;
-  --cf-tint-earn-border:#e8cf8a;
+  --cf-tint-earn:#fffbf0;
+  --cf-tint-earn-border:#eeddb0;
 }
 body.dark{
   --cf-accent:#c2258f;
@@ -29,8 +29,8 @@ body.dark{
   --cf-edge-neutral:#8a8a8a;
   --cf-tint-pdf:#3a1e1e;
   --cf-tint-pdf-border:#6a3a3a;
-  --cf-tint-earn:#3a3020;
-  --cf-tint-earn-border:#8a7040;
+  --cf-tint-earn:#332c1e;
+  --cf-tint-earn-border:#726038;
 }
 html,body{height:100%;overflow:hidden;background:#fff;color:#0a0a0a;font-family:'Orchid','Noto Sans TC',serif;font-weight:400;-webkit-font-smoothing:antialiased}
 ::selection{background:#0a0a0a;color:#fff}
@@ -536,16 +536,18 @@ body.dark .cf-diagramref-icon{color:#b09ad8}
 body.dark .cf-node.diagramref-node.missing{background:#3a2420;border-color:#7a4a40}
 body.dark .cf-node.diagramref-node.missing .cf-diagramref-icon{color:#c97b6c}
 .cf-node.earnings-node{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:var(--cf-tint-earn);border:1.5px solid var(--cf-tint-earn-border);border-radius:var(--cf-radius);min-width:150px;min-height:90px}
-.cf-node.earnings-node:hover{border-color:#c9a94a}
+.cf-node.earnings-node:hover{border-color:#d9c17f}
 .cf-node.earnings-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
-.cf-earnings-icon{font-size:20px;line-height:1}
-.cf-earnings-ticker{font-size:17px;font-weight:600;color:#7a5f1e;text-align:center}
-.cf-earnings-period{font-size:11px;color:#a68a4a;text-align:center}
+.cf-earnings-icon{color:#b89a55;line-height:1}
+.cf-earnings-icon svg{display:block}
+.cf-earnings-ticker{font-size:17px;font-weight:400;color:#9c8140;text-align:center}
+.cf-earnings-period{font-size:11px;color:#bfa876;text-align:center}
 body.dark .cf-node.earnings-node{background:var(--cf-tint-earn);border-color:var(--cf-tint-earn-border)}
-body.dark .cf-node.earnings-node:hover{border-color:#b89a50}
+body.dark .cf-node.earnings-node:hover{border-color:#a08850}
 body.dark .cf-node.earnings-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
-body.dark .cf-earnings-ticker{color:#e8cf8a}
-body.dark .cf-earnings-period{color:#c9ac6a}
+body.dark .cf-earnings-icon{color:#c0a25a}
+body.dark .cf-earnings-ticker{color:#d8c090}
+body.dark .cf-earnings-period{color:#b39a5e}
 
 .cf-diagref-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;width:240px;padding:6px}
 .cf-diagref-picker-search{width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;border:1px solid #e5e5e5;border-radius:7px;padding:6px 8px;margin-bottom:5px;outline:none}
@@ -2340,7 +2342,8 @@ function buildNodes() {
     } else if (n.isEarningsRef) {
       d.className='cf-node earnings-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
       d.style.width=(n.w||150)+'px'; d.style.height=(n.bh||90)+'px';
-      const icon=document.createElement('div'); icon.className='cf-earnings-icon'; icon.textContent='📈';
+      const icon=document.createElement('div'); icon.className='cf-earnings-icon';
+      icon.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6"/><polyline points="14 6 21 6 21 13"/></svg>';
       d.appendChild(icon);
       const tickerEl=document.createElement('div'); tickerEl.className='cf-earnings-ticker';
       tickerEl.textContent=n.ticker||'?';
