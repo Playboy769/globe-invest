@@ -879,6 +879,9 @@ if(typeof module!=='undefined'&&module.exports){module.exports={_ivMerge,_ivMerg
       if(note&&document.activeElement!==note){note.value=_ivStore.daily[_ivSelDay]||'';ivNoteResize();}
       if(typeof ivWLRender==='function')ivWLRender();
       if(typeof ivRenderStance==='function')ivRenderStance();
+      // Retry the ?tag= deep link — the entry may have only existed server-side
+      // and just arrived via this sync, not the pre-sync localStorage snapshot.
+      if(!_ivActiveTag&&typeof ivApplyUrlTag==='function')ivApplyUrlTag();
     }else if(groupsChanged){
       ivRenderGroups();ivRenderTags();ivRenderFeed();
     }
@@ -2591,6 +2594,23 @@ ivRenderStance();
 
 ivRestoreDraft();
 ivRenderTags();ivRenderGroups();ivRenderSubs();ivRenderFeed();ivApplyFontSize();ivApplyEdFontSize();ivInitPreview();
+
+// Deep-link entry point: ?tagLayer=<layer>&tagTitle=<title> selects that feed
+// tag on load, e.g. from a CausalFrame quadrant-chart point that references
+// this entry. Two separate params (not one delimited "layer:title" string)
+// since a title can itself legitimately contain a colon.
+// _ivStore starts from localStorage synchronously (see _ivStore init above),
+// so the tag may already be resolvable here; it's also re-applied once the
+// async server sync (_ivSync) lands, in case the entry only exists server-side.
+function ivApplyUrlTag(){
+  try{
+    const params=new URLSearchParams(location.search);
+    const layer=params.get('tagLayer'), title=params.get('tagTitle');
+    if(!layer||!title)return;
+    if(Array.isArray(_ivStore[layer])&&_ivStore[layer].some(e=>e.title===title))ivSelectTag(layer,title);
+  }catch(e){}
+}
+ivApplyUrlTag();
 </script>
 </body>
 </html>
