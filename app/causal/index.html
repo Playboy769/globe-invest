@@ -354,6 +354,7 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-tool.lock-btn{width:26px;color:#bbb}
 .cf-tool.lock-btn.active{background:#fff8e6;color:#c08000;border-radius:6px}
 .cf-tool.trace-btn.active{background:#e8f0ff;color:#4a88dd}
+.cf-tool.link-btn.active{background:#e8f0ff}
 .cf-tool.tbl-btn{width:auto;padding:0 6px;font-size:10.5px;font-weight:600;font-family:'Calibri','Noto Sans TC',sans-serif;letter-spacing:.01em;white-space:nowrap}
 .cf-tool.tbl-font{width:19px;font-size:12px;font-weight:700;font-family:'Calibri',sans-serif}
 .cf-tool.cell-fmt-btn{width:22px;font-size:13px;font-family:Georgia,'Times New Roman',serif}
@@ -382,6 +383,11 @@ body.dark .cf-color-pop{background:#222;border-color:#3a3a3a;box-shadow:0 6px 22
 
 /* ── World (zoomable layer) ──────────────────────────────── */
 #cf-world{position:absolute;top:0;left:0;width:32000px;height:32000px;transform-origin:0 0;pointer-events:none}
+
+/* ── Node ↔ InvestFrame feed link badge (generic, any node type) ──────── */
+.cf-node-feedlink{position:absolute;top:-8px;left:-8px;width:18px;height:18px;border-radius:50%;background:#fff;border:1.3px solid #4a88dd;display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;cursor:pointer;z-index:6;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.cf-node-feedlink:hover{transform:scale(1.12)}
+body.dark .cf-node-feedlink{background:#1e1e1e;border-color:#5a9ce0}
 
 /* ── Node resize handle ──────────────────────────────────── */
 .cf-node-resize{position:absolute;right:-5px;bottom:-5px;width:13px;height:13px;border-radius:3px 3px 7px 3px;background:#fff;border:1.5px solid #b0b0b0;cursor:nwse-resize;opacity:0;transition:opacity .14s,border-color .12s,transform .12s;z-index:4;pointer-events:auto}
@@ -1137,6 +1143,8 @@ body.dark #cf-url-ok:hover{background:#fff}
       <div class="cf-tool trace-btn cf-hide-for-divider" data-act="trace" title="Trace paths (P)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h13"/><path d="M13 6l6 6-6 6"/></svg></div>
       <div class="cf-tool pulse-btn cf-hide-for-divider" data-act="pulse" title="Pulse simulation (S)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 8 12 10 6 14 18 16 12 21 12"/></svg></div>
       <div class="cf-tool del" data-act="del" title="Delete node (Del)">✕</div>
+      <div class="cf-tool-sep cf-linkable-only"></div>
+      <div class="cf-tool link-btn cf-linkable-only" data-act="link-feed" title="連結 / 取消連結 InvestFrame feed 項目">🔗</div>
       <div class="cf-tool-sep cf-divider-only"></div>
       <div class="cf-tool cf-divider-only" data-act="toggle-orient" title="Flip orientation (or dblclick the divider)">⤢</div>
       <div class="cf-tool-sep cf-tbl-only"></div>
@@ -1595,12 +1603,19 @@ async function fetchInvestFeedTags() {
   return _investFeedTags;
 }
 const CF_IV_LAYER_LABEL = {macro:'總經', risk:'風險', industry:'產業'};
-async function showInvestFeedPicker(anchorEl, onPick) {
+async function showInvestFeedPicker(anchorEl, onPick, opts) {
   document.querySelectorAll('.cf-diagref-picker').forEach(el=>el.remove());
   const pk = document.createElement('div'); pk.className='cf-diagref-picker';
   const search = document.createElement('input');
   search.className='cf-diagref-picker-search'; search.placeholder='搜尋 InvestFrame feed…'; search.autocomplete='off';
   pk.appendChild(search);
+  if(opts&&opts.allowSkip){
+    const skip=document.createElement('div'); skip.className='cf-diagref-picker-item';
+    skip.style.color='#999'; skip.style.fontStyle='italic';
+    skip.textContent='— 不連結，直接建立 —';
+    skip.addEventListener('click', ()=>{ onPick(null); pk.remove(); });
+    pk.appendChild(skip);
+  }
   const list = document.createElement('div'); list.className='cf-diagref-picker-list';
   list.innerHTML='<div class="cf-diagref-picker-empty">載入中…</div>';
   pk.appendChild(list);
@@ -2687,6 +2702,19 @@ function buildNodes() {
     // box is a valid edge endpoint just like any other node. A divider is a
     // pure visual line, not a causal factor, so it's excluded here.
     if(!n.isDivider)['t','r','b','l'].forEach(side=>{const p=document.createElement('div');p.className='cf-port '+side;p.addEventListener('pointerdown',ev=>startConnect(n.id,ev,side));d.appendChild(p);});
+    // Generic node↔feed link badge — works the same way regardless of node
+    // type, so it lives in the common tail rather than any one type's branch.
+    if(n.feedRef&&n.feedRef.title){
+      const fl=document.createElement('div'); fl.className='cf-node-feedlink'; fl.textContent='🔗';
+      fl.title=n.feedRef.title+'（開啟 InvestFrame）';
+      fl.addEventListener('pointerdown',ev=>ev.stopPropagation());
+      fl.addEventListener('click',ev=>{
+        ev.stopPropagation();
+        const url='/invest?tagLayer='+encodeURIComponent(n.feedRef.layer)+'&tagTitle='+encodeURIComponent(n.feedRef.title);
+        window.open(url,'_blank','noopener,noreferrer');
+      });
+      d.appendChild(fl);
+    }
     if(n.isTable){
       d.addEventListener('pointerdown',ev=>{d._wasSel=_sel&&_sel.type==='node'&&_sel.id===n.id;onNodeDown(n.id,ev);});
       d.addEventListener('click',ev=>{
@@ -2830,6 +2858,13 @@ function placeTools(){
     nt.querySelectorAll('.cf-tbl-only').forEach(el=>el.style.setProperty('display',isTbl?'flex':'none','important'));
     nt.querySelectorAll('.cf-divider-only').forEach(el=>el.style.setProperty('display',isDivider?'flex':'none','important'));
     nt.querySelectorAll('.cf-hide-for-divider').forEach(el=>el.style.setProperty('display',isDivider?'none':'flex','important'));
+    // "連結 InvestFrame feed" — offered on the same node types the 插入結構
+    // dock flyout inserts (table/canvas/diagramref/earnings/divider/quadrant),
+    // not on every node type.
+    const isLinkable=!!(n.isTable||n.isCanvas||n.isDiagramRef||n.isEarningsRef||n.isDivider||n.isQuadrant);
+    nt.querySelectorAll('.cf-linkable-only').forEach(el=>el.style.setProperty('display',isLinkable?'flex':'none','important'));
+    const linkBtn=nt.querySelector('.link-btn');
+    if(linkBtn)linkBtn.classList.toggle('active',!!(n.feedRef&&n.feedRef.title));
     if(isTbl){
       const curAlign=(n.td&&n.td.align)||'left';
       nt.querySelectorAll('.align-btn').forEach(b=>b.classList.toggle('active',b.dataset.act==='align-'+curAlign));
@@ -4549,7 +4584,23 @@ document.getElementById('cf-node-tools').addEventListener('click', e => {
   else if(b.dataset.act==='cell-bold')toggleTableCellFormat(_sel.id,'bold');
   else if(b.dataset.act==='cell-italic')toggleTableCellFormat(_sel.id,'italic');
   else if(b.dataset.act==='toggle-orient')toggleDividerOrient(_sel.id);
+  else if(b.dataset.act==='link-feed')toggleNodeFeedLink(_sel.id,b);
 });
+// Generic "whole node ↔ InvestFrame feed entry" link, offered on any node
+// type the 插入結構 dock flyout can insert (see isLinkable in placeTools()).
+// Distinct from a quadrant-chart POINT's own feedRef — a node-level link
+// says "this whole thing is about X"; a point-level one is per data point.
+function toggleNodeFeedLink(nodeId, anchorEl){
+  const n=byNode(nodeId); if(!n)return;
+  if(n.feedRef&&n.feedRef.title){
+    snapshot(); n.feedRef=null; buildNodes(); placeTools(); save();
+    return;
+  }
+  showInvestFeedPicker(anchorEl, (tag)=>{
+    if(!tag)return;
+    snapshot(); n.feedRef={layer:tag.layer,title:tag.title}; buildNodes(); placeTools(); save();
+  });
+}
 
 document.getElementById('cf-add').addEventListener('click',()=>{
   const j=(G.nodes.length%6)*20;
@@ -4584,9 +4635,20 @@ document.getElementById('cf-add-divider').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
   addDividerNode(cx,cy);
 });
-document.getElementById('cf-add-quadrant').addEventListener('click',()=>{
-  const {x:cx,y:cy}=spawnPoint();
-  addQuadrantNode(cx-170,cy-170);
+document.getElementById('cf-add-quadrant').addEventListener('click',(ev)=>{
+  showInvestFeedPicker(ev.currentTarget, (tag)=>{
+    const {x:cx,y:cy}=spawnPoint();
+    const n=addQuadrantNode(cx-170,cy-170);
+    if(tag){
+      // Folded into the same undo step as the node creation above (no extra
+      // snapshot()) — undoing "add quadrant chart" should remove the whole
+      // thing, seeded point included, not leave an orphaned empty node.
+      n.feedRef={layer:tag.layer,title:tag.title};
+      const idn=(n._ptSeq=(n._ptSeq||0)+1);
+      n.points.push({id:'p'+idn,name:tag.title,x:0,y:0,color:CF_QUAD_PALETTE[0],size:1,feedRef:{layer:tag.layer,title:tag.title}});
+      buildNodes(); placeTools(); save();
+    }
+  }, {allowSkip:true});
 });
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
