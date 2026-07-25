@@ -9,6 +9,11 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+/* This app always renders its own selection/focus styling (the accent-colored
+   ring via --cf-shadow-sel, custom input borders, etc.) — the browser's native
+   blue focus outline never matches that language, so it's suppressed globally
+   rather than patched per element. */
+*:focus{outline:none}
 :root{
   --cf-radius:8px;
   --cf-accent:#8B0A5F;
@@ -559,6 +564,76 @@ body.dark .cf-earnings-icon{color:#c0a25a}
 body.dark .cf-earnings-ticker{color:#d8c090}
 body.dark .cf-earnings-period{color:#b39a5e}
 
+/* ── Quadrant chart node ─────────────────────────────────── */
+.cf-node.quadrant-node{display:flex;flex-direction:column;padding:0;overflow:hidden;background:#fdfdfd;border:1.5px solid #e0e0e0;border-radius:var(--cf-radius);min-width:220px;min-height:220px;cursor:default}
+.cf-node.quadrant-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
+.cf-node.quadrant-node:hover .cf-box-handle,.cf-node.quadrant-node.sel .cf-box-handle{opacity:1}
+.cf-quad-bar{flex:none;height:30px;box-sizing:border-box;display:flex;align-items:center;gap:2px;padding:0 6px;background:#f7f7f7;border-bottom:1px solid #e8e8e8;cursor:grab}
+.cf-quad-bar-title{flex:1;font-size:10.5px;color:#999;letter-spacing:.04em;font-family:'Calibri','Noto Sans TC','PingFang TC',sans-serif}
+.cf-quad-btn{width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:5px;border:none;background:none;color:#888;cursor:pointer;flex:none;padding:0}
+.cf-quad-btn:hover{background:#e8e8e8;color:#333}
+.cf-quad-btn.active{background:#0a0a0a;color:#fff}
+.cf-quad-body{flex:1;min-height:0;position:relative;background:#fff}
+.cf-quad-body svg{width:100%;height:100%;display:block}
+body.dark .cf-node.quadrant-node{background:#1e1e1e;border-color:#3a3a3a}
+body.dark .cf-node.quadrant-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
+body.dark .cf-quad-bar{background:#242424;border-color:#333}
+body.dark .cf-quad-bar-title{color:#777}
+body.dark .cf-quad-btn{color:#999}
+body.dark .cf-quad-btn:hover{background:#333;color:#eee}
+body.dark .cf-quad-btn.active{background:#e0e0e0;color:#0a0a0a}
+
+/* ── Quadrant settings modal ─────────────────────────────── */
+#cf-quad-overlay{position:fixed;inset:0;z-index:211;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#cf-quad-overlay.on{display:flex}
+.cf-quad-box{background:#fff;border-radius:16px;padding:22px 24px;width:460px;max-width:92vw;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+.cf-quad-modal-title{font-size:14px;font-weight:600;color:#222;margin-bottom:14px;flex:none}
+.cf-quad-modal-body{overflow-y:auto;flex:1;min-height:0;padding-right:2px}
+.cf-quad-sec-title{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#999;margin:16px 0 8px}
+.cf-quad-sec-title:first-child{margin-top:0}
+.cf-quad-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cf-quad-modal-body label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:#777}
+.cf-quad-modal-body input[type=text],.cf-quad-modal-body input[type=number]{font-family:inherit;font-size:12.5px;border:1px solid #e0e0e0;border-radius:7px;padding:7px 9px;outline:none;color:#0a0a0a}
+.cf-quad-modal-body input[type=text]:focus,.cf-quad-modal-body input[type=number]:focus{border-color:#4a88dd}
+.cf-quad-check{flex-direction:row!important;align-items:center;gap:6px!important;font-size:11.5px!important;color:#555!important;margin-top:18px}
+.cf-quad-quadgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cf-quad-qrow{display:flex;gap:6px;align-items:center;background:#f7f7f7;border-radius:8px;padding:5px}
+.cf-quad-qrow input[type=color]{width:26px;height:24px;border:1px solid #e0e0e0;border-radius:5px;padding:1px;background:#fff;cursor:pointer;flex:none}
+.cf-quad-qrow input[type=text]{flex:1;border:none;background:transparent;padding:3px 4px;font-size:11.5px}
+.cf-quad-tpl-row{display:flex;flex-wrap:wrap;gap:6px}
+.cf-quad-tpl-btn{font-family:inherit;font-size:11px;border:1px solid #e0e0e0;border-radius:7px;padding:6px 11px;background:#fff;color:#444;cursor:pointer;transition:all .12s}
+.cf-quad-tpl-btn:hover{background:#f4f4f4;border-color:#ccc}
+.cf-quad-pts{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto}
+.cf-quad-pt-row{display:grid;grid-template-columns:22px 1fr 46px 46px 40px 18px;gap:5px;align-items:center;background:#f7f7f7;border-radius:7px;padding:5px}
+.cf-quad-pt-row input[type=color]{width:22px;height:20px;border:1px solid #e0e0e0;border-radius:5px;padding:1px;background:#fff;cursor:pointer}
+.cf-quad-pt-row input[type=text],.cf-quad-pt-row input[type=number]{border:1px solid #e5e5e5;border-radius:5px;padding:4px 5px;font-size:11px;font-family:inherit}
+.cf-quad-pt-del{border:none;background:none;color:#999;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.cf-quad-pt-del:hover{color:#c33}
+.cf-quad-pts-empty{font-size:11px;color:#aaa;font-style:italic;padding:8px 2px}
+.cf-quad-json-row{display:flex;gap:8px}
+.cf-quad-json-area{width:100%;box-sizing:border-box;margin-top:8px;font-family:'SF Mono',Consolas,monospace;font-size:10.5px;border:1px solid #e0e0e0;border-radius:7px;padding:8px;min-height:70px;resize:vertical;outline:none}
+.cf-quad-json-area:focus{border-color:#4a88dd}
+#cfq-cancel-btn{font-family:inherit;font-size:11.5px;letter-spacing:.05em;border-radius:7px;padding:8px 16px;cursor:pointer;border:1px solid #e4e4e4;background:none;color:#888}
+#cfq-cancel-btn:hover{background:#f4f4f4;color:#0a0a0a}
+#cfq-ok-btn{font-family:inherit;font-size:11.5px;letter-spacing:.05em;border-radius:7px;padding:8px 16px;cursor:pointer;border:1px solid transparent;background:#0a0a0a;color:#fff}
+#cfq-ok-btn:hover{background:#2a2a2a}
+body.dark .cf-quad-box{background:#1e1e1e;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+body.dark .cf-quad-modal-title{color:#e0e0e0}
+body.dark .cf-quad-sec-title{color:#777}
+body.dark .cf-quad-modal-body label{color:#999}
+body.dark .cf-quad-modal-body input[type=text],body.dark .cf-quad-modal-body input[type=number]{background:#141414;border-color:#333;color:#e0e0e0}
+body.dark .cf-quad-check{color:#bbb!important}
+body.dark .cf-quad-qrow{background:#242424}
+body.dark .cf-quad-qrow input[type=text]{color:#ddd}
+body.dark .cf-quad-tpl-btn{background:#1a1a1a;border-color:#333;color:#ccc}
+body.dark .cf-quad-tpl-btn:hover{background:#2a2a2a;border-color:#444}
+body.dark .cf-quad-pt-row{background:#242424}
+body.dark .cf-quad-json-area{background:#141414;border-color:#333;color:#ddd}
+body.dark #cfq-cancel-btn{color:#888;border-color:#333}
+body.dark #cfq-cancel-btn:hover{background:#2a2a2a;color:#e0e0e0}
+body.dark #cfq-ok-btn{background:#e0e0e0;color:#0a0a0a}
+body.dark #cfq-ok-btn:hover{background:#fff}
+
 .cf-diagref-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;width:240px;padding:6px}
 .cf-diagref-picker-search{width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;border:1px solid #e5e5e5;border-radius:7px;padding:6px 8px;margin-bottom:5px;outline:none}
 .cf-diagref-picker-list{max-height:260px;overflow-y:auto}
@@ -1003,6 +1078,9 @@ body.dark #cf-url-ok:hover{background:#fff}
       <button class="cf-dock-btn" id="cf-add-divider" title="Divider (splits the canvas into zones — dblclick to flip orientation)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>
       </button>
+      <button class="cf-dock-btn" id="cf-add-quadrant" title="Insert quadrant chart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="16.5" cy="7.5" r="1.6" fill="currentColor" stroke="none"/></svg>
+      </button>
     </div>
   </div>
   <button class="cf-dock-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">
@@ -1147,6 +1225,17 @@ body.dark #cf-url-ok:hover{background:#fff}
     <div class="cf-url-actions">
       <button id="cf-url-cancel">Cancel</button>
       <button id="cf-url-ok">OK</button>
+    </div>
+  </div>
+</div>
+
+<div id="cf-quad-overlay">
+  <div class="cf-quad-box">
+    <div class="cf-quad-modal-title">象限圖設定</div>
+    <div class="cf-quad-modal-body" id="cf-quad-modal-body"></div>
+    <div class="cf-url-actions">
+      <button id="cfq-cancel-btn">取消</button>
+      <button id="cfq-ok-btn">套用</button>
     </div>
   </div>
 </div>
@@ -2480,6 +2569,28 @@ function buildNodes() {
       d.appendChild(wrap);
       const trh=document.createElement('div'); trh.className='cf-node-resize';
       trh.addEventListener('pointerdown',ev=>startTableResize(n.id,ev)); d.appendChild(trh);
+    } else if (n.isQuadrant) {
+      d.className='cf-node quadrant-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
+      d.style.width=(n.w||300)+'px'; d.style.height=(n.bh||340)+'px';
+      const BH=[{cls:'bh-nw',dir:{n:1,w:1}},{cls:'bh-n',dir:{n:1}},{cls:'bh-ne',dir:{n:1,e:1}},{cls:'bh-e',dir:{e:1}},{cls:'bh-se',dir:{s:1,e:1}},{cls:'bh-s',dir:{s:1}},{cls:'bh-sw',dir:{s:1,w:1}},{cls:'bh-w',dir:{w:1}}];
+      BH.forEach(h=>{const bh=document.createElement('div');bh.className='cf-box-handle '+h.cls;bh.addEventListener('pointerdown',ev=>startBoxResize(n.id,h.dir,ev));d.appendChild(bh);});
+      const qbar=document.createElement('div'); qbar.className='cf-quad-bar';
+      const qbarTitle=document.createElement('span'); qbarTitle.className='cf-quad-bar-title'; qbarTitle.textContent='象限圖';
+      qbar.appendChild(qbarTitle);
+      const qAddBtn=document.createElement('button'); qAddBtn.className='cf-quad-btn'+(_quadAddMode.has(n.id)?' active':''); qAddBtn.title='點擊畫布新增資料點';
+      qAddBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+      qAddBtn.addEventListener('pointerdown',ev=>ev.stopPropagation());
+      qAddBtn.addEventListener('click',ev=>{ev.stopPropagation();toggleQuadAddMode(n.id);});
+      qbar.appendChild(qAddBtn);
+      const qGearBtn=document.createElement('button'); qGearBtn.className='cf-quad-btn'; qGearBtn.title='象限圖設定';
+      qGearBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+      qGearBtn.addEventListener('pointerdown',ev=>ev.stopPropagation());
+      qGearBtn.addEventListener('click',ev=>{ev.stopPropagation();openQuadrantSettings(n.id);});
+      qbar.appendChild(qGearBtn);
+      d.appendChild(qbar);
+      const qbody=document.createElement('div'); qbody.className='cf-quad-body';
+      qbody.appendChild(renderQuadrantSVG(n));
+      d.appendChild(qbody);
     } else {
       d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.color) applyNodeColorAttr(d,n.color);
@@ -2490,7 +2601,7 @@ function buildNodes() {
     }
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
-    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef&&!n.isEarningsRef&&!n.isDivider){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
+    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef&&!n.isEarningsRef&&!n.isDivider&&!n.isQuadrant){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
     // Every node type gets connection ports, including box/group nodes — a
     // box is a valid edge endpoint just like any other node. A divider is a
     // pure visual line, not a causal factor, so it's excluded here.
@@ -2520,6 +2631,9 @@ function buildNodes() {
     } else if(n.isDivider){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{ev.stopPropagation();toggleDividerOrient(n.id);});
+    } else if(n.isQuadrant){
+      d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
+      d.addEventListener('dblclick',ev=>{ev.stopPropagation();openQuadrantSettings(n.id);});
     } else if(n.isEmbed){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{
@@ -2756,6 +2870,20 @@ function addDividerNode(x, y) {
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
+// A quadrant-chart node carries its full dataset (axis/quadrant labels, divider
+// offset, points) inline on the node object — it rides along with the rest of
+// the graph through the existing save()/causal-files round-trip for free, same
+// as table cell data does; no separate persistence path needed.
+function addQuadrantNode(x, y) {
+  snapshot();
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isQuadrant:true,w:300,bh:340,
+    xName:'橫軸名稱',yName:'縱軸名稱',axisRange:10,showGrid:false,
+    divider:{x:0,y:0},
+    quad:{tr:{name:'象限一',color:'#4f46e5'},tl:{name:'象限二',color:'#0891b2'},bl:{name:'象限三',color:'#6b7280'},br:{name:'象限四',color:'#d97706'}},
+    points:[]};
+  G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+  return n;
+}
 function toggleDividerOrient(id){
   const n=byNode(id); if(!n||!n.isDivider)return;
   snapshot();
@@ -2850,6 +2978,357 @@ function startRowResize(nodeId, rowIdx, ev0) {
   document.addEventListener('pointermove',onMove);
   document.addEventListener('pointerup',onUp);
 }
+
+// ── Quadrant chart node — render / drag / settings ──────────
+const CF_QUAD_PALETTE=['#4f46e5','#0891b2','#d97706','#dc2626','#16a34a','#db2777','#7c3aed','#65a30d'];
+const CF_QUAD_TEMPLATES={
+  bcg:{xName:'相對市佔率',yName:'市場成長率',quad:{
+    tr:{name:'明星',color:'#4f46e5'},tl:{name:'問題',color:'#0891b2'},
+    bl:{name:'瘦狗',color:'#6b7280'},br:{name:'金牛',color:'#d97706'}}},
+  risk:{xName:'發生機率',yName:'影響程度',quad:{
+    tr:{name:'極高風險',color:'#dc2626'},tl:{name:'高風險',color:'#d97706'},
+    bl:{name:'低風險',color:'#16a34a'},br:{name:'中風險',color:'#ca8a04'}}},
+  swot:{xName:'有利 ↔ 有害',yName:'內部 ↔ 外部',quad:{
+    tl:{name:'優勢 Strengths',color:'#16a34a'},tr:{name:'劣勢 Weaknesses',color:'#dc2626'},
+    bl:{name:'機會 Opportunities',color:'#2563eb'},br:{name:'威脅 Threats',color:'#d97706'}}},
+  eisenhower:{xName:'緊急程度',yName:'重要程度',quad:{
+    tr:{name:'立即執行',color:'#dc2626'},tl:{name:'排程處理',color:'#2563eb'},
+    bl:{name:'刪除捨棄',color:'#6b7280'},br:{name:'委派他人',color:'#d97706'}}}
+};
+// Runtime-only UI state (which nodes are in "click canvas to add a point" mode)
+// — deliberately NOT stored on the node object so toggling it doesn't pollute
+// the undo stack or get persisted to causal-files.json.
+const _quadAddMode=new Set();
+function _quadPointR(p){ return Math.max(4,Math.min(20,6*(p.size||1))); }
+function _quadGeom(n){
+  const W=n.w||300, H=(n.bh||340)-30, pad=22;
+  const half=Math.max(10,(Math.min(W,H)-pad*2)/2);
+  return {W,H,cx:W/2,cy:H/2,half};
+}
+function _quadToSvg(n,g,x,y){ const r=n.axisRange||10; return {x:g.cx+(x/r)*g.half, y:g.cy-(y/r)*g.half}; }
+function _quadToData(n,g,sx,sy){
+  const r=n.axisRange||10;
+  let x=((sx-g.cx)/g.half)*r, y=((g.cy-sy)/g.half)*r;
+  x=Math.max(-r,Math.min(r,x)); y=Math.max(-r,Math.min(r,y));
+  return {x:Math.round(x*100)/100,y:Math.round(y*100)/100};
+}
+// getBoundingClientRect already reflects the SVG's true on-screen size after
+// every canvas pan/zoom transform, so this ratio conversion self-corrects —
+// no need to divide by the canvas's own zoom scale (vt.s) the way node-resize
+// drags do, since those work in canvas-space px rather than a viewBox ratio.
+function _quadClientToLocal(svgEl,g,evt){
+  const rect=svgEl.getBoundingClientRect();
+  return {sx:(evt.clientX-rect.left)*(g.W/rect.width), sy:(evt.clientY-rect.top)*(g.H/rect.height)};
+}
+function _hex2rgba(hex,a){
+  const h=(hex||'#888888').replace('#','');
+  const r=parseInt(h.substring(0,2),16)||0, gg=parseInt(h.substring(2,4),16)||0, b=parseInt(h.substring(4,6),16)||0;
+  return 'rgba('+r+','+gg+','+b+','+a+')';
+}
+function toggleQuadAddMode(nodeId){
+  if(_quadAddMode.has(nodeId))_quadAddMode.delete(nodeId); else _quadAddMode.add(nodeId);
+  buildNodes();
+}
+function renderQuadrantSVG(n){
+  const SVGNS='http://www.w3.org/2000/svg';
+  const g=_quadGeom(n);
+  const svg=document.createElementNS(SVGNS,'svg');
+  svg.setAttribute('viewBox','0 0 '+g.W+' '+g.H);
+  const elS=(tag,attrs,text)=>{const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!==undefined)e.textContent=text;return e;};
+
+  const bg=elS('rect',{x:0,y:0,width:g.W,height:g.H,fill:'#ffffff'});
+  svg.appendChild(bg);
+
+  const dPos=_quadToSvg(n,g,(n.divider&&n.divider.x)||0,(n.divider&&n.divider.y)||0);
+  const q=n.quad||{};
+  const rectTR=elS('rect',{'data-role':'rect-tr',x:dPos.x,y:g.cy-g.half,width:Math.max(0,(g.cx+g.half)-dPos.x),height:Math.max(0,dPos.y-(g.cy-g.half)),fill:_hex2rgba((q.tr&&q.tr.color)||'#4f46e5',.09)});
+  const rectTL=elS('rect',{'data-role':'rect-tl',x:g.cx-g.half,y:g.cy-g.half,width:Math.max(0,dPos.x-(g.cx-g.half)),height:Math.max(0,dPos.y-(g.cy-g.half)),fill:_hex2rgba((q.tl&&q.tl.color)||'#0891b2',.09)});
+  const rectBL=elS('rect',{'data-role':'rect-bl',x:g.cx-g.half,y:dPos.y,width:Math.max(0,dPos.x-(g.cx-g.half)),height:Math.max(0,(g.cy+g.half)-dPos.y),fill:_hex2rgba((q.bl&&q.bl.color)||'#6b7280',.09)});
+  const rectBR=elS('rect',{'data-role':'rect-br',x:dPos.x,y:dPos.y,width:Math.max(0,(g.cx+g.half)-dPos.x),height:Math.max(0,(g.cy+g.half)-dPos.y),fill:_hex2rgba((q.br&&q.br.color)||'#d97706',.09)});
+  [rectTR,rectTL,rectBL,rectBR].forEach(r=>svg.appendChild(r));
+
+  svg.appendChild(elS('rect',{x:g.cx-g.half,y:g.cy-g.half,width:g.half*2,height:g.half*2,fill:'none',stroke:'#ececec','stroke-width':1}));
+
+  if(n.showGrid){
+    const step=g.half/5;
+    for(let i=-5;i<=5;i++){
+      if(i===0)continue;
+      const gx=g.cx+i*step, gy=g.cy+i*step;
+      svg.appendChild(elS('line',{x1:gx,y1:g.cy-g.half,x2:gx,y2:g.cy+g.half,stroke:'#f2f2f2','stroke-width':1}));
+      svg.appendChild(elS('line',{x1:g.cx-g.half,y1:gy,x2:g.cx+g.half,y2:gy,stroke:'#f2f2f2','stroke-width':1}));
+    }
+  }
+
+  const crossH=elS('line',{'data-role':'cross-h',x1:g.cx-g.half-8,y1:dPos.y,x2:g.cx+g.half+8,y2:dPos.y,stroke:'#0a0a0a','stroke-width':1.75});
+  const crossV=elS('line',{'data-role':'cross-v',x1:dPos.x,y1:g.cy+g.half+8,x2:dPos.x,y2:g.cy-g.half-8,stroke:'#0a0a0a','stroke-width':1.75});
+  svg.appendChild(crossH); svg.appendChild(crossV);
+  const crossHit=elS('circle',{'data-role':'cross-hit',cx:dPos.x,cy:dPos.y,r:9,fill:'#0a0a0a',opacity:0.001,style:'cursor:move;'});
+  const crossDot=elS('circle',{'data-role':'cross-dot',cx:dPos.x,cy:dPos.y,r:3,fill:'#0a0a0a'});
+  svg.appendChild(crossHit); svg.appendChild(crossDot);
+  crossHit.addEventListener('pointerdown',ev=>{ev.stopPropagation();_startQuadDividerDrag(n.id,ev);});
+
+  svg.appendChild(elS('text',{x:g.cx+g.half-4,y:g.cy+14,'text-anchor':'end','font-size':'10.5','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#555','font-weight':'600'},n.xName||'X'));
+  svg.appendChild(elS('text',{x:g.cx+6,y:g.cy-g.half-6,'text-anchor':'start','font-size':'10.5','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#555','font-weight':'600'},n.yName||'Y'));
+
+  const qPos=[
+    {r:rectTR,name:(q.tr&&q.tr.name)||'',color:(q.tr&&q.tr.color)||'#4f46e5'},
+    {r:rectTL,name:(q.tl&&q.tl.name)||'',color:(q.tl&&q.tl.color)||'#0891b2'},
+    {r:rectBL,name:(q.bl&&q.bl.name)||'',color:(q.bl&&q.bl.color)||'#6b7280'},
+    {r:rectBR,name:(q.br&&q.br.name)||'',color:(q.br&&q.br.color)||'#d97706'}
+  ];
+  qPos.forEach(qp=>{
+    const rx=+qp.r.getAttribute('x'), ry=+qp.r.getAttribute('y'), rw=+qp.r.getAttribute('width'), rh=+qp.r.getAttribute('height');
+    if(rw<18||rh<14)return;
+    svg.appendChild(elS('text',{x:rx+rw/2,y:ry+rh/2,'text-anchor':'middle','dominant-baseline':'middle','font-size':'10.5','font-family':"'Calibri','Noto Sans TC',sans-serif",'font-weight':'700',fill:qp.color,opacity:0.85},qp.name));
+  });
+
+  (n.points||[]).forEach(p=>{
+    const pos=_quadToSvg(n,g,p.x,p.y);
+    const gEl=elS('g',{});
+    const rad=_quadPointR(p);
+    const glow=elS('circle',{cx:pos.x,cy:pos.y,r:rad+2,fill:p.color||'#0a0a0a',opacity:0.16});
+    const circ=elS('circle',{cx:pos.x,cy:pos.y,r:rad,fill:p.color||'#0a0a0a',stroke:'#ffffff','stroke-width':1.75,style:'cursor:grab;'});
+    circ.addEventListener('pointerdown',ev=>{ev.stopPropagation();_startQuadPointDrag(n.id,p.id,ev);});
+    circ.addEventListener('dblclick',ev=>{ev.stopPropagation();openQuadrantSettings(n.id,p.id);});
+    const label=elS('text',{x:pos.x,y:pos.y-(rad+6),'text-anchor':'middle','font-size':'9.5','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#222'},p.name||'');
+    gEl.appendChild(glow); gEl.appendChild(circ); gEl.appendChild(label);
+    svg.appendChild(gEl);
+  });
+
+  bg.addEventListener('pointerdown',ev=>{ if(_quadAddMode.has(n.id))ev.stopPropagation(); });
+  bg.addEventListener('click',ev=>{
+    if(!_quadAddMode.has(n.id))return;
+    ev.stopPropagation();
+    const {sx,sy}=_quadClientToLocal(svg,g,ev);
+    const d=_quadToData(n,g,sx,sy);
+    snapshot();
+    const idn=(n._ptSeq=(n._ptSeq||0)+1);
+    if(!n.points)n.points=[];
+    n.points.push({id:'p'+idn,name:'P'+idn,x:d.x,y:d.y,color:CF_QUAD_PALETTE[(idn-1)%CF_QUAD_PALETTE.length],size:1});
+    buildNodes(); save();
+  });
+
+  svg.addEventListener('wheel',ev=>{
+    ev.preventDefault(); ev.stopPropagation();
+    const cur=n.axisRange||10;
+    const next=Math.max(1,Math.min(500,cur*(ev.deltaY>0?1.1:0.9)));
+    n.axisRange=Math.round(next*100)/100;
+    buildNodes(); save();
+  },{passive:false});
+
+  return svg;
+}
+function _startQuadPointDrag(nodeId, pointId, ev){
+  ev.preventDefault();
+  const n=byNode(nodeId); if(!n||!n.isQuadrant)return;
+  const p=(n.points||[]).find(pp=>pp.id===pointId); if(!p)return;
+  const el=_els[nodeId]; if(!el)return;
+  const svg=el.querySelector('.cf-quad-body svg'); if(!svg)return;
+  const circle=ev.currentTarget;
+  const gEl=circle.parentNode;
+  const glow=gEl.querySelector('circle');
+  const label=gEl.querySelector('text');
+  snapshot();
+  function mv(e){
+    const g=_quadGeom(n);
+    const {sx,sy}=_quadClientToLocal(svg,g,e);
+    const d=_quadToData(n,g,sx,sy);
+    p.x=d.x; p.y=d.y;
+    const pos=_quadToSvg(n,g,p.x,p.y);
+    circle.setAttribute('cx',pos.x); circle.setAttribute('cy',pos.y);
+    if(glow){glow.setAttribute('cx',pos.x); glow.setAttribute('cy',pos.y);}
+    if(label){label.setAttribute('x',pos.x); label.setAttribute('y',pos.y-(_quadPointR(p)+6));}
+  }
+  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);save();}
+  document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
+}
+function _startQuadDividerDrag(nodeId, ev){
+  ev.preventDefault();
+  const n=byNode(nodeId); if(!n||!n.isQuadrant)return;
+  const el=_els[nodeId]; if(!el)return;
+  const svg=el.querySelector('.cf-quad-body svg'); if(!svg)return;
+  if(!n.divider)n.divider={x:0,y:0};
+  const rTR=svg.querySelector('[data-role="rect-tr"]'), rTL=svg.querySelector('[data-role="rect-tl"]'),
+        rBL=svg.querySelector('[data-role="rect-bl"]'), rBR=svg.querySelector('[data-role="rect-br"]'),
+        cH=svg.querySelector('[data-role="cross-h"]'), cV=svg.querySelector('[data-role="cross-v"]'),
+        cDot=svg.querySelector('[data-role="cross-dot"]'), cHit=svg.querySelector('[data-role="cross-hit"]');
+  snapshot();
+  function mv(e){
+    const g=_quadGeom(n);
+    const {sx,sy}=_quadClientToLocal(svg,g,e);
+    const d=_quadToData(n,g,sx,sy);
+    n.divider.x=d.x; n.divider.y=d.y;
+    const dPos=_quadToSvg(n,g,d.x,d.y);
+    if(rTR){rTR.setAttribute('x',dPos.x); rTR.setAttribute('y',g.cy-g.half); rTR.setAttribute('width',Math.max(0,(g.cx+g.half)-dPos.x)); rTR.setAttribute('height',Math.max(0,dPos.y-(g.cy-g.half)));}
+    if(rTL){rTL.setAttribute('x',g.cx-g.half); rTL.setAttribute('y',g.cy-g.half); rTL.setAttribute('width',Math.max(0,dPos.x-(g.cx-g.half))); rTL.setAttribute('height',Math.max(0,dPos.y-(g.cy-g.half)));}
+    if(rBL){rBL.setAttribute('x',g.cx-g.half); rBL.setAttribute('y',dPos.y); rBL.setAttribute('width',Math.max(0,dPos.x-(g.cx-g.half))); rBL.setAttribute('height',Math.max(0,(g.cy+g.half)-dPos.y));}
+    if(rBR){rBR.setAttribute('x',dPos.x); rBR.setAttribute('y',dPos.y); rBR.setAttribute('width',Math.max(0,(g.cx+g.half)-dPos.x)); rBR.setAttribute('height',Math.max(0,(g.cy+g.half)-dPos.y));}
+    if(cH){cH.setAttribute('y1',dPos.y); cH.setAttribute('y2',dPos.y);}
+    if(cV){cV.setAttribute('x1',dPos.x); cV.setAttribute('x2',dPos.x);}
+    if(cDot){cDot.setAttribute('cx',dPos.x); cDot.setAttribute('cy',dPos.y);}
+    if(cHit){cHit.setAttribute('cx',dPos.x); cHit.setAttribute('cy',dPos.y);}
+  }
+  function up(){document.removeEventListener('pointermove',mv);document.removeEventListener('pointerup',up);buildNodes();save();}
+  document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
+}
+// Settings modal edits a cloned draft and only commits (one snapshot()) on
+// "套用" — batching template/JSON/points-table edits into a single undo step,
+// same rationale as askUrl() committing only on OK rather than per-keystroke.
+function openQuadrantSettings(nodeId, focusPointId){
+  const n=byNode(nodeId); if(!n||!n.isQuadrant)return;
+  const draft=JSON.parse(JSON.stringify({
+    xName:n.xName||'',yName:n.yName||'',axisRange:n.axisRange||10,showGrid:!!n.showGrid,
+    divider:n.divider||{x:0,y:0},
+    quad:n.quad||{tr:{name:'',color:'#4f46e5'},tl:{name:'',color:'#0891b2'},bl:{name:'',color:'#6b7280'},br:{name:'',color:'#d97706'}},
+    points:n.points||[]
+  }));
+  const ov=document.getElementById('cf-quad-overlay');
+  const body=document.getElementById('cf-quad-modal-body');
+  let firstRender=true;
+
+  function renderPtsTable(){
+    const wrap=document.getElementById('cfq-pts');
+    if(!wrap)return;
+    wrap.innerHTML='';
+    if(!draft.points.length){
+      const empty=document.createElement('div'); empty.className='cf-quad-pts-empty'; empty.textContent='尚無資料點';
+      wrap.appendChild(empty);
+    }
+    draft.points.forEach((p,idx)=>{
+      const row=document.createElement('div'); row.className='cf-quad-pt-row';
+      row.innerHTML=
+        '<input type="color" value="'+(p.color||'#4f46e5')+'">'+
+        '<input type="text" value="'+String(p.name||'').replace(/"/g,'&quot;')+'" placeholder="名稱">'+
+        '<input type="number" value="'+p.x+'" step="0.1" title="X">'+
+        '<input type="number" value="'+p.y+'" step="0.1" title="Y">'+
+        '<input type="number" value="'+(p.size||1)+'" step="0.1" min="0.2" max="5" title="大小">'+
+        '<button class="cf-quad-pt-del" title="刪除">×</button>';
+      const inps=row.querySelectorAll('input');
+      const colorI=inps[0],nameI=inps[1],xI=inps[2],yI=inps[3],sizeI=inps[4];
+      colorI.addEventListener('input',()=>{p.color=colorI.value;});
+      nameI.addEventListener('input',()=>{p.name=nameI.value;});
+      xI.addEventListener('input',()=>{p.x=parseFloat(xI.value)||0;});
+      yI.addEventListener('input',()=>{p.y=parseFloat(yI.value)||0;});
+      sizeI.addEventListener('input',()=>{p.size=Math.max(0.2,parseFloat(sizeI.value)||1);});
+      row.querySelector('.cf-quad-pt-del').addEventListener('click',()=>{draft.points.splice(idx,1);renderBody();});
+      wrap.appendChild(row);
+      if(focusPointId&&firstRender&&p.id===focusPointId){requestAnimationFrame(()=>{row.scrollIntoView({block:'nearest'});nameI.focus();nameI.select();});}
+    });
+    firstRender=false;
+  }
+
+  function renderBody(){
+    body.innerHTML =
+      '<div class="cf-quad-sec-title">軸設定</div>'+
+      '<div class="cf-quad-row2">'+
+        '<label>X 軸名稱<input type="text" id="cfq-xname"></label>'+
+        '<label>Y 軸名稱<input type="text" id="cfq-yname"></label>'+
+      '</div>'+
+      '<div class="cf-quad-row2">'+
+        '<label>軸範圍 ±<input type="number" id="cfq-range" min="1" max="1000" step="0.5"></label>'+
+        '<label class="cf-quad-check"><input type="checkbox" id="cfq-grid"> 顯示格線</label>'+
+      '</div>'+
+      '<div class="cf-quad-sec-title">象限名稱與顏色</div>'+
+      '<div class="cf-quad-quadgrid">'+
+        ['tl','tr','bl','br'].map(k=>'<div class="cf-quad-qrow"><input type="color" id="cfq-c-'+k+'"><input type="text" id="cfq-n-'+k+'" placeholder="'+({tl:'左上',tr:'右上',bl:'左下',br:'右下'}[k])+'"></div>').join('')+
+      '</div>'+
+      '<div class="cf-quad-sec-title">套用範本</div>'+
+      '<div class="cf-quad-tpl-row">'+
+        '<button class="cf-quad-tpl-btn" data-tpl="bcg">BCG 矩陣</button>'+
+        '<button class="cf-quad-tpl-btn" data-tpl="risk">風險矩陣</button>'+
+        '<button class="cf-quad-tpl-btn" data-tpl="swot">SWOT</button>'+
+        '<button class="cf-quad-tpl-btn" data-tpl="eisenhower">艾森豪矩陣</button>'+
+      '</div>'+
+      '<div class="cf-quad-sec-title">資料點（'+draft.points.length+'）</div>'+
+      '<div class="cf-quad-pts" id="cfq-pts"></div>'+
+      '<button class="cf-quad-tpl-btn" id="cfq-addpt" style="margin-top:6px;">＋ 新增資料點</button>'+
+      '<div class="cf-quad-sec-title">JSON</div>'+
+      '<div class="cf-quad-json-row">'+
+        '<button class="cf-quad-tpl-btn" id="cfq-json-export">複製目前資料</button>'+
+        '<button class="cf-quad-tpl-btn" id="cfq-json-import">貼上並套用</button>'+
+      '</div>'+
+      '<textarea id="cfq-json-area" class="cf-quad-json-area" placeholder="貼上 JSON 後按「貼上並套用」"></textarea>';
+
+    document.getElementById('cfq-xname').value=draft.xName;
+    document.getElementById('cfq-yname').value=draft.yName;
+    document.getElementById('cfq-range').value=draft.axisRange;
+    document.getElementById('cfq-grid').checked=draft.showGrid;
+    ['tl','tr','bl','br'].forEach(k=>{
+      if(!draft.quad[k])draft.quad[k]={name:'',color:'#888888'};
+      document.getElementById('cfq-c-'+k).value=draft.quad[k].color||'#888888';
+      document.getElementById('cfq-n-'+k).value=draft.quad[k].name||'';
+    });
+    renderPtsTable();
+
+    document.getElementById('cfq-xname').addEventListener('input',e=>draft.xName=e.target.value);
+    document.getElementById('cfq-yname').addEventListener('input',e=>draft.yName=e.target.value);
+    document.getElementById('cfq-range').addEventListener('input',e=>draft.axisRange=Math.max(0.01,parseFloat(e.target.value)||10));
+    document.getElementById('cfq-grid').addEventListener('change',e=>draft.showGrid=e.target.checked);
+    ['tl','tr','bl','br'].forEach(k=>{
+      document.getElementById('cfq-c-'+k).addEventListener('input',e=>{draft.quad[k].color=e.target.value;});
+      document.getElementById('cfq-n-'+k).addEventListener('input',e=>{draft.quad[k].name=e.target.value;});
+    });
+    body.querySelectorAll('.cf-quad-tpl-btn[data-tpl]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const t=CF_QUAD_TEMPLATES[btn.dataset.tpl]; if(!t)return;
+        draft.xName=t.xName; draft.yName=t.yName;
+        draft.quad=JSON.parse(JSON.stringify(t.quad));
+        renderBody();
+      });
+    });
+    document.getElementById('cfq-addpt').addEventListener('click',()=>{
+      const idn=draft.points.length+1;
+      draft.points.push({id:'p'+Date.now()+'_'+idn,name:'P'+idn,x:0,y:0,color:CF_QUAD_PALETTE[(idn-1)%CF_QUAD_PALETTE.length],size:1});
+      renderBody();
+    });
+    document.getElementById('cfq-json-export').addEventListener('click',()=>{
+      const jsonStr=JSON.stringify({xName:draft.xName,yName:draft.yName,axisRange:draft.axisRange,showGrid:draft.showGrid,divider:draft.divider,quad:draft.quad,points:draft.points},null,2);
+      navigator.clipboard.writeText(jsonStr).then(()=>cfToast('已複製象限圖 JSON')).catch(()=>{document.getElementById('cfq-json-area').value=jsonStr;});
+    });
+    document.getElementById('cfq-json-import').addEventListener('click',()=>{
+      const raw=document.getElementById('cfq-json-area').value.trim();
+      if(!raw)return;
+      try{
+        const obj=JSON.parse(raw);
+        if(obj.xName!==undefined)draft.xName=obj.xName;
+        if(obj.yName!==undefined)draft.yName=obj.yName;
+        if(obj.axisRange!==undefined)draft.axisRange=obj.axisRange;
+        if(obj.showGrid!==undefined)draft.showGrid=obj.showGrid;
+        if(obj.divider)draft.divider=obj.divider;
+        if(obj.quad)draft.quad=obj.quad;
+        if(Array.isArray(obj.points))draft.points=obj.points;
+        renderBody();
+        cfToast('已套用貼上的 JSON');
+      }catch(e){ cfToast('JSON 格式錯誤，無法套用'); }
+    });
+  }
+
+  renderBody();
+  ov.classList.add('on');
+
+  function close(){
+    ov.classList.remove('on');
+    document.getElementById('cfq-ok-btn').removeEventListener('click',onOk);
+    document.getElementById('cfq-cancel-btn').removeEventListener('click',onCancel);
+    ov.removeEventListener('pointerdown',onBackdrop);
+    document.removeEventListener('keydown',onKey);
+  }
+  function onOk(){
+    snapshot();
+    n.xName=draft.xName; n.yName=draft.yName; n.axisRange=draft.axisRange;
+    n.showGrid=draft.showGrid; n.divider=draft.divider; n.quad=draft.quad; n.points=draft.points;
+    buildNodes(); save(); close();
+    cfToast('已更新象限圖設定');
+  }
+  function onCancel(){ close(); }
+  function onBackdrop(e){ if(e.target===ov)onCancel(); }
+  function onKey(e){ if(e.key==='Escape'){e.stopPropagation();onCancel();} }
+  document.getElementById('cfq-ok-btn').addEventListener('click',onOk);
+  document.getElementById('cfq-cancel-btn').addEventListener('click',onCancel);
+  ov.addEventListener('pointerdown',onBackdrop);
+  document.addEventListener('keydown',onKey);
+}
+
 function addEdge(from, to, fromSide, toSide) {
   const ex=G.edges.find(e=>e.from===from&&e.to===to);
   if(ex){select({type:'edge',id:ex.id});return;}
@@ -3966,6 +4445,10 @@ document.getElementById('cf-add-earnings').addEventListener('click',(ev)=>{
 document.getElementById('cf-add-divider').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
   addDividerNode(cx,cy);
+});
+document.getElementById('cf-add-quadrant').addEventListener('click',()=>{
+  const {x:cx,y:cy}=spawnPoint();
+  addQuadrantNode(cx-150,cy-170);
 });
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
