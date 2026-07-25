@@ -2878,7 +2878,7 @@ function addDividerNode(x, y) {
 // as table cell data does; no separate persistence path needed.
 function addQuadrantNode(x, y) {
   snapshot();
-  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isQuadrant:true,w:300,bh:340,
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isQuadrant:true,w:340,bh:340,
     xName:'橫軸名稱',yName:'縱軸名稱',axisRange:10,showGrid:false,
     divider:{x:0,y:0},
     quad:{tr:{name:'象限一',color:'#4f46e5'},tl:{name:'象限二',color:'#0891b2'},bl:{name:'象限三',color:'#6b7280'},br:{name:'象限四',color:'#d97706'}},
@@ -3003,9 +3003,14 @@ const CF_QUAD_TEMPLATES={
 const _quadAddMode=new Set();
 function _quadPointR(p){ return Math.max(4,Math.min(20,6*(p.size||1))); }
 function _quadGeom(n){
-  const W=n.w||300, H=(n.bh||340)-30, pad=32;
-  const half=Math.max(10,(Math.min(W,H)-pad*2)/2);
-  return {W,H,cx:W/2,cy:H/2,half};
+  const W=n.w||300, H=(n.bh||340)-30;
+  // Right margin is wider than the other three — the X-axis name sits to the
+  // right of the plot, level with the axis line, and CJK labels need real
+  // room there (unlike above/below, which have the full node width to work with).
+  const padL=32, padT=32, padB=32, padR=90;
+  const availW=W-padL-padR, availH=H-padT-padB;
+  const half=Math.max(10,Math.min(availW,availH)/2);
+  return {W,H,cx:padL+availW/2,cy:padT+availH/2,half};
 }
 function _quadToSvg(n,g,x,y){ const r=n.axisRange||10; return {x:g.cx+(x/r)*g.half, y:g.cy-(y/r)*g.half}; }
 function _quadToData(n,g,sx,sy){
@@ -3082,12 +3087,12 @@ function renderQuadrantSVG(n){
   svg.appendChild(crossHit); svg.appendChild(crossDot);
   crossHit.addEventListener('pointerdown',ev=>{ev.stopPropagation();_startQuadDividerDrag(n.id,ev);});
 
-  // Y-name tracks the vertical line's actual x (dPos.x), not the square's fixed
-  // center, so it stays aligned once the divider is dragged off-center. X-name
-  // stays right-anchored at the square's own right edge (full-width margin
-  // below has room for CJK text; the line's positive end has none) — the
-  // arrowhead above already carries the "which end is positive" cue.
-  svg.appendChild(elS('text',{x:g.cx+g.half,y:(g.cy+g.half)+20,'text-anchor':'end','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.xName||'X'));
+  // Both names track the actual axis line's position, not the square's fixed
+  // center, so they stay aligned once the divider is dragged off-center.
+  // X-name sits to the right of the plot, vertically centered on the
+  // horizontal line itself (the wide right margin from _quadGeom is sized
+  // for this). Y-name sits centered above the vertical line.
+  svg.appendChild(elS('text',{x:g.cx+g.half+21,y:dPos.y+3.5,'text-anchor':'start','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.xName||'X'));
   svg.appendChild(elS('text',{x:dPos.x,y:g.cy-g.half-18,'text-anchor':'middle','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.yName||'Y'));
 
   const qPos=[
@@ -4468,7 +4473,7 @@ document.getElementById('cf-add-divider').addEventListener('click',()=>{
 });
 document.getElementById('cf-add-quadrant').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
-  addQuadrantNode(cx-150,cy-170);
+  addQuadrantNode(cx-170,cy-170);
 });
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
