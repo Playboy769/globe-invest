@@ -567,22 +567,22 @@ body.dark .cf-earnings-ticker{color:#d8c090}
 body.dark .cf-earnings-period{color:#b39a5e}
 
 /* ── Quadrant chart node ─────────────────────────────────── */
-.cf-node.quadrant-node{display:flex;flex-direction:column;padding:0;overflow:hidden;background:#fdfdfd;border:1.5px solid #e0e0e0;border-radius:var(--cf-radius);min-width:220px;min-height:220px;cursor:default}
-.cf-node.quadrant-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
+.cf-node.quadrant-node{display:flex;flex-direction:column;padding:0;overflow:hidden;background:transparent;border:1px solid transparent;border-radius:var(--cf-radius);min-width:220px;min-height:220px;cursor:default;box-shadow:none}
+.cf-node.quadrant-node:hover{border-color:#ccc}
+.cf-node.quadrant-node.sel{border-color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .cf-node.quadrant-node:hover .cf-box-handle,.cf-node.quadrant-node.sel .cf-box-handle{opacity:1}
-.cf-quad-bar{flex:none;height:30px;box-sizing:border-box;display:flex;align-items:center;gap:2px;padding:0 6px;background:#f7f7f7;border-bottom:1px solid #e8e8e8;cursor:grab}
-.cf-quad-bar-title{flex:1;font-size:10.5px;color:#999;letter-spacing:.04em;font-family:'Calibri','Noto Sans TC','PingFang TC',sans-serif}
-.cf-quad-btn{width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:5px;border:none;background:none;color:#888;cursor:pointer;flex:none;padding:0}
-.cf-quad-btn:hover{background:#e8e8e8;color:#333}
+.cf-quad-bar{flex:none;height:30px;box-sizing:border-box;display:flex;align-items:center;gap:2px;padding:0 4px;background:transparent;cursor:grab}
+.cf-quad-bar-title{flex:1;font-size:10.5px;color:#aaa;letter-spacing:.04em;font-family:'Calibri','Noto Sans TC','PingFang TC',sans-serif}
+.cf-quad-btn{width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:5px;border:none;background:none;color:#999;cursor:pointer;flex:none;padding:0}
+.cf-quad-btn:hover{background:rgba(0,0,0,.06);color:#333}
 .cf-quad-btn.active{background:#0a0a0a;color:#fff}
 .cf-quad-body{flex:1;min-height:0;position:relative;background:#fff}
 .cf-quad-body svg{width:100%;height:100%;display:block}
-body.dark .cf-node.quadrant-node{background:#1e1e1e;border-color:#3a3a3a}
-body.dark .cf-node.quadrant-node.sel{border-color:var(--cf-accent);box-shadow:var(--cf-shadow-sel)}
-body.dark .cf-quad-bar{background:#242424;border-color:#333}
+body.dark .cf-node.quadrant-node:hover{border-color:#555}
+body.dark .cf-node.quadrant-node.sel{border-color:#ccc;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 body.dark .cf-quad-bar-title{color:#777}
 body.dark .cf-quad-btn{color:#999}
-body.dark .cf-quad-btn:hover{background:#333;color:#eee}
+body.dark .cf-quad-btn:hover{background:rgba(255,255,255,.08);color:#eee}
 body.dark .cf-quad-btn.active{background:#e0e0e0;color:#0a0a0a}
 
 /* ── Quadrant settings modal ─────────────────────────────── */
@@ -3003,7 +3003,7 @@ const CF_QUAD_TEMPLATES={
 const _quadAddMode=new Set();
 function _quadPointR(p){ return Math.max(4,Math.min(20,6*(p.size||1))); }
 function _quadGeom(n){
-  const W=n.w||300, H=(n.bh||340)-30, pad=22;
+  const W=n.w||300, H=(n.bh||340)-30, pad=32;
   const half=Math.max(10,(Math.min(W,H)-pad*2)/2);
   return {W,H,cx:W/2,cy:H/2,half};
 }
@@ -3069,8 +3069,8 @@ function renderQuadrantSVG(n){
   svg.appendChild(crossHit); svg.appendChild(crossDot);
   crossHit.addEventListener('pointerdown',ev=>{ev.stopPropagation();_startQuadDividerDrag(n.id,ev);});
 
-  svg.appendChild(elS('text',{x:g.cx+g.half-4,y:g.cy+14,'text-anchor':'end','font-size':'10.5','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#555','font-weight':'600'},n.xName||'X'));
-  svg.appendChild(elS('text',{x:g.cx+6,y:g.cy-g.half-6,'text-anchor':'start','font-size':'10.5','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#555','font-weight':'600'},n.yName||'Y'));
+  svg.appendChild(elS('text',{x:g.cx,y:(g.cy+g.half)+20,'text-anchor':'middle','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.xName||'X'));
+  svg.appendChild(elS('text',{x:g.cx,y:(g.cy-g.half)-14,'text-anchor':'middle','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.yName||'Y'));
 
   const qPos=[
     {r:rectTR,name:(q.tr&&q.tr.name)||'',color:(q.tr&&q.tr.color)||'#4f46e5'},
