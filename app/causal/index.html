@@ -3061,16 +3061,34 @@ function renderQuadrantSVG(n){
     }
   }
 
-  const crossH=elS('line',{'data-role':'cross-h',x1:g.cx-g.half-8,y1:dPos.y,x2:g.cx+g.half+8,y2:dPos.y,stroke:'#0a0a0a','stroke-width':1.75});
-  const crossV=elS('line',{'data-role':'cross-v',x1:dPos.x,y1:g.cy+g.half+8,x2:dPos.x,y2:g.cy-g.half-8,stroke:'#0a0a0a','stroke-width':1.75});
+  // Softer, thinner axis strokes than a flat #0a0a0a — heavy black crosshairs
+  // dominated the chart and fought with the quadrant tints/labels for attention.
+  const AXIS_COLOR='#3a3a3a', AXIS_W=1.3;
+  const markerId='quadArrow_'+n.id;
+  const defs=elS('defs',{});
+  const marker=elS('marker',{id:markerId,markerWidth:'7',markerHeight:'7',refX:'5',refY:'2.5',orient:'auto'});
+  marker.appendChild(elS('path',{d:'M0,0 L5,2.5 L0,5 Z',fill:AXIS_COLOR}));
+  defs.appendChild(marker);
+  svg.appendChild(defs);
+
+  // Each axis gets one arrowhead on its positive end, extended further out than
+  // the opposite end, so the axis name (placed right after the tip) reads as
+  // that axis's own label rather than a caption floating under the whole chart.
+  const crossH=elS('line',{'data-role':'cross-h',x1:g.cx-g.half-6,y1:dPos.y,x2:g.cx+g.half+15,y2:dPos.y,stroke:AXIS_COLOR,'stroke-width':AXIS_W,'marker-end':'url(#'+markerId+')'});
+  const crossV=elS('line',{'data-role':'cross-v',x1:dPos.x,y1:g.cy+g.half+6,x2:dPos.x,y2:g.cy-g.half-15,stroke:AXIS_COLOR,'stroke-width':AXIS_W,'marker-end':'url(#'+markerId+')'});
   svg.appendChild(crossH); svg.appendChild(crossV);
-  const crossHit=elS('circle',{'data-role':'cross-hit',cx:dPos.x,cy:dPos.y,r:9,fill:'#0a0a0a',opacity:0.001,style:'cursor:move;'});
-  const crossDot=elS('circle',{'data-role':'cross-dot',cx:dPos.x,cy:dPos.y,r:3,fill:'#0a0a0a'});
+  const crossHit=elS('circle',{'data-role':'cross-hit',cx:dPos.x,cy:dPos.y,r:9,fill:AXIS_COLOR,opacity:0.001,style:'cursor:move;'});
+  const crossDot=elS('circle',{'data-role':'cross-dot',cx:dPos.x,cy:dPos.y,r:2.5,fill:AXIS_COLOR});
   svg.appendChild(crossHit); svg.appendChild(crossDot);
   crossHit.addEventListener('pointerdown',ev=>{ev.stopPropagation();_startQuadDividerDrag(n.id,ev);});
 
-  svg.appendChild(elS('text',{x:g.cx,y:(g.cy+g.half)+20,'text-anchor':'middle','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.xName||'X'));
-  svg.appendChild(elS('text',{x:g.cx,y:(g.cy-g.half)-14,'text-anchor':'middle','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.yName||'Y'));
+  // Y-name tracks the vertical line's actual x (dPos.x), not the square's fixed
+  // center, so it stays aligned once the divider is dragged off-center. X-name
+  // stays right-anchored at the square's own right edge (full-width margin
+  // below has room for CJK text; the line's positive end has none) — the
+  // arrowhead above already carries the "which end is positive" cue.
+  svg.appendChild(elS('text',{x:g.cx+g.half,y:(g.cy+g.half)+20,'text-anchor':'end','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.xName||'X'));
+  svg.appendChild(elS('text',{x:dPos.x,y:g.cy-g.half-18,'text-anchor':'middle','font-size':'10','font-family':"'Calibri','Noto Sans TC',sans-serif",fill:'#888','font-weight':'600'},n.yName||'Y'));
 
   const qPos=[
     {r:rectTR,name:(q.tr&&q.tr.name)||'',color:(q.tr&&q.tr.color)||'#4f46e5'},
