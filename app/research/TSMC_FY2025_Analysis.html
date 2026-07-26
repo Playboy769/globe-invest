@@ -59,6 +59,12 @@
 </style>
 </head>
 <body>
+<!-- cf-backlinks-widget: shows which CausalFrame canvases reference this report; renders nothing if none do -->
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+<!-- /cf-backlinks-widget -->
+
 <div class="page-header">
   <h1>台積電 TSMC (TSM) — 關係圖總覽</h1>
   <p>供應鏈與客戶集中度（FY2025 20-F，VIS持股已更新註記） / 2Q26 營收分部 / 股權結構（FY2025 20-F）　·　來源：20-F（Accession 0001628280-26-025362，申報日 2026-04-16，會計年度至 2025-12-31）＋ 2Q26 Quarterly Management Report（2026-07-16）　·　詳細出處見 <code>TSM_20-F_Sankey_Source_Notes.md</code> 與 <a href="../TSM_FY2026Q2_Analysis/TSM_FY2026Q2_Analysis.html">TSM_FY2026Q2_Analysis.html</a></p>

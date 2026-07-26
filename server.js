@@ -544,6 +544,33 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Reverse of CausalFrame's "insert earnings call report" node: for every report url,
+  // which saved causal-files.json canvases (recursing into nested .isCanvas sub-graphs)
+  // reference it. Lets a research report page show "referenced in N causal maps" instead
+  // of that link only working one direction (causal map -> report).
+  if (req.url === '/api/causal-backlinks' && req.method === 'GET') {
+    try {
+      const raw = fs.existsSync(CAUSAL_FILE) ? fs.readFileSync(CAUSAL_FILE, 'utf8') : '[]';
+      const filesList = JSON.parse(raw);
+      const index = {};
+      function walk(nodes, fileId, fileName) {
+        (nodes || []).forEach(n => {
+          if (n.isEarningsRef && n.url) {
+            (index[n.url] = index[n.url] || []).push({ fileId, fileName, ticker: n.ticker, period: n.period });
+          }
+          if (n.isCanvas && n.data) walk(n.data.nodes, fileId, fileName);
+        });
+      }
+      filesList.forEach(f => walk((f.data || {}).nodes, f.id, f.name));
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(index));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   // Lists the published earnings-call reports under /research so CausalFrame's
   // "insert earnings call report" picker can offer them without hardcoding a list.
   if (req.url === '/api/research-reports' && req.method === 'GET') {
