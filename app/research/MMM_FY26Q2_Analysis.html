@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MMM — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+  }
+</style>
+</head>
+<body>
+<!-- cf-backlinks-widget: shows which CausalFrame canvases reference this report; renders nothing if none do -->
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+<!-- /cf-backlinks-widget -->
+
+<div class="page-header">
+  <h1>3M Company (MMM) — FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／Madison JV 交易拆解／技術與產品線／供應鏈／風險矩陣／損益表／業務部門／資產負債表／現金流量／估值觀察（共 10 個分頁）
+  &nbsp;·&nbsp; 法說會日期：2026 年 7 月 21 日
+  &nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2 FY2026 Form 10-Q（2026/7/21 申報）、FY2025 Form 10-K（2026/2/3 申報）、2026 年 50 件 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">Madison JV 交易拆解</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ TAB 1: Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">18</div><div class="stat-lbl">核心問題（含追問）</div></div>
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+    <div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。每一則卡片底部附逐字稿原文引用框（未經節錄的原始交換），
+    解讀與缺口判斷一律寫在紅框內，供讀者自行覆核。全場最關鍵的一個結構性事實先講在前面：
+    管理層口中的「organic growth 5.4%」是<b>非 GAAP 調整後</b>數字；同日申報的 10-Q 顯示 <b>GAAP 有機成長為 2.3%、總營收成長 2.4%</b>，
+    兩者差距 3.1 個百分點全部來自「移除 manufactured PFAS products 特別項目」（把去年同期 Corporate 的 $186M PFAS 營收從比較基期扣掉）。
+    整場法說會沒有任何一位分析師問到這件事。</div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Jeff Sprague（Vertical Research）</div><div class="qa-topic">成長來源拆解 × 2 倍 macro 是否為可持續模式｜追問：Madison 為何不入財測、稅率</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">新產品營收超出計畫多少？cross-sell 與客戶流失率下降各扮演什麼角色？最終想問的是：<b>約 2 倍 macro 的成長算式，是否為 3M 可持續的長期模型？</b></div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill Brown：強調「不是 macro 順風、主要是內部表現」；上半年主要靠 commercial excellence（銷售力、定價治理、通路 joint business plan），
+          客戶流失率改善約 200bps（主要來自 SIBG），但「仍然太高」；下半年與 2027 年 innovation 貢獻會更大。
+          給出的唯一量化：<b>今年高於 macro 約 $450M</b>，優於上季預估的 $340–350M。<b>全程沒有回答「2 倍 macro 是否可持續」。</b></div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 1 ─ 承諾算式的缺口被 $450M 這個「好消息」掩蓋</div>
+          <div class="q-text">Investor Day 的承諾是 2025–2027 三年合計高於 macro <b>$10 億</b>。依 Bill 自己在本場給的數字：2025 年「好一點，$100M 出頭」、2026 年「$450M」，
+          累計約 $550M ── 意味著<b>單 2027 一年就必須再做出 $450M 以上</b>才能達標，等於要複製今年這個「最好的一年」的全部增量。
+          Bill 用「we'll come back early next year and talk about next year」帶過，沒有承認這個算式已經把壓力全部後推到最後一年。
+          分析師 Amit Mehrotra 稍後也提到市場原本預期 2027 年 outgrowth 約 $600M ── 若以 $600M 計，三年累計 $1.15B 才勉強達標，但那需要 2027 年再加速 33%。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 2 ─ Madison「對 EPS 財測無重大影響」與 10-Q 揭露的結構不一致</div>
+          <div class="q-text">Anurag 回答 Madison 未納入財測是為了「apple-to-apple」，並稱「does not have a material impact to the EPS guidance range」。
+          但同日申報的 10-Q Note 3 揭露了三件不只是「時點差」的事：① Bain 的少數股權<b>五年後可贖回</b>，須列於永久權益之外（mezzanine），
+          按帳面值與<b>估計贖回值孰高</b>衡量，且明文寫著「<b>affecting net income attributable to 3M</b>」；
+          ② 退場與流動性條款另外形成一個<b>須按公允價值列帳的衍生工具</b>；③ 合資公司動用了 <b>$1.43B 定期貸款</b>（7 月已提取）。
+          換言之，Madison 帶進來的不是一條可加總的營收，而是一組會持續在損益表下方產生波動的結構性項目 ── 這在法說會上完全沒有被描述。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Jeff Sprague:</b> "Hey, thanks. Good morning, everyone. Nice to see the top line here. Bill, I was wondering if you could just even unpack this a little bit more. There's some great detail on these slides, but just kind of looking at the new product launches and the like, closely on track to what you thought, I believe, right? The revenues are coming in better. Do we have a combination of just upside in new product revenue relative to plan? It sounds like cross-sell is a little bit better. Maybe what role kind of reduced churn is playing in all this. I guess really what I want to get to at the end of the question is, an algorithm of roughly two times macro, do you view that as sort of a sustainable model for 3M going forward?"<br><br>
+          <b>Bill Brown:</b> "Good morning, Jeff. That's a great question. Thank you for that. We're very confident in where the growth happens to be. We came in stronger than we had expected in the quarter. It really is a combination of both commercial excellence and innovation excellence, the journey that we've been on for two years that is maturing, I think, very rapidly. It's not really macro tailwind. The macro on the industrial side looks pretty good, but there's some headwinds in the marketplace. It's mostly just internal performance. When you look at just the quarter, we're a little bit better than we had expected. Over the last 12 months at 3%, it's clearly trending above the macro. We think it's pretty good. Mostly driven in the first half from commercial excellence activities. A lot of the things we've laid out in the past around sales force effectiveness, better performance at the front end, pricing governance. We're pushing a lot with our channel partners, joint business plans. Cross-selling is much better. On loyalty, we are getting better on attrition. We've been tracking this very carefully over the last couple of years. We've seen about 200 basis points of improvement in attrition, primarily coming out of our SIBG business. It would take some time for that to turn, but it's starting to turn. It's still too high, but it's actually making some good improvements here. As we look to the back end of the year, we do see the innovation engine contributing even more in the back half. In fact, even greater into 2027, based on just the momentum that we happen to be building here. We feel pretty good. This year, we think we'll be about $450 million above macro in the full year. A little bit better than we thought last quarter, around $340 million-$350 million, and that's largely on the back of good commercial excellence, but the machine churning faster on innovation. All good signs and we're very pleased with the performance in the quarter, and we expect our momentum continue."<br><br>
+          <b>Jeff Sprague:</b> "Great. Maybe just unrelated, follow-up for Anurag. Madison not included in the guide, although it's closed. Is there some peculiarity we need to work through before we dial this in? Just curious on why that wasn't included, and are we looking at a lower tax rate for the year? Thanks."<br><br>
+          <b>Anurag Maheshwari:</b> "Great. Well, thanks for the question, Jeff. No, we just wanted to provide an apple-to-apple guidance from our last earnings call so that we can see how our organic performance has impacted our revenue, EPS, and cash. We have a page at the back of the webcast that has the revenue margin and other information on Madison. It does not have a material impact to the EPS guidance range or the numbers, and we'll incorporate that in our third quarter call. Just for tax, we still plan to be around 20% for the year."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Scott Davis（Melius Research）</div><div class="qa-topic">EBO 光連接器的重大性與擴散路徑｜追問：中國是否重新成為成長引擎</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">EBO（Expanded Beam Optical）看起來有趣，但<b>重大性（materiality）</b>到底多大？如何規模化？Microsoft 之外能否擴散到其他 hyperscaler？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill Brown 給了本場最完整的一組量化：可縮短資料中心線路安裝時間約 <b>85%</b>；<b>100 項專利、50 項申請中</b>；
+          <b>今年營收 $40–50M</b>；未來數年「could be 4x or 5x that or even more」；今年產能翻倍、未來 12–18 個月再翻倍，
+          但「even that isn't anywhere near the volume demand」；已組建 <b>44 家參與者</b>的多方供應協議；
+          <b>今年 TAM 約 $10 億，2028 年成長至 $20 億</b>。中國方面：Q2 雙位數成長、上半年約 8%，內銷／出口約 50/50，逾 5,000 人、6 座工廠。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 3 ─ 分子給得很完整，分母始終沒出現</div>
+          <div class="q-text">Scott 問的字面就是「materiality」。Bill 給出 $40–50M 與「4–5 倍」，但<b>從未把它放回 3M 的營收基數</b>。
+          代入 10-Q：Q2 總營收 $6,500M、年化約 $250 億。EBO 今年 $40–50M 佔比 <b>約 0.18%</b>；
+          即使數年後做到 4–5 倍（$160–250M），也只有 <b>約 0.6–1.0%</b>。
+          對照 TEBG 底下的 Electronics 產品線 Q2 就有 $682M ── EBO 目前規模不到該產品線的 7%。
+          這不是說 EBO 不重要，而是：本季股價敘事中最被放大的一項技術，其可見的財務貢獻在 2028 年前都不足以改變 3M 的成長率，
+          而管理層選擇讓聽眾自行完成這個除法。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 可覆核性註記</div>
+          <div class="q-text">中國「內銷／出口 50/50」「6 座工廠、5,000 人」全部<b>僅見於法說會口述</b>，10-K 與 10-Q 皆無按國別的產能或採購揭露，
+          投資人無法獨立驗證。可覆核的僅有：10-Q Note 2 揭露 China/Hong Kong Q2 營收 <b>$859M</b>（去年同期 $754M，+13.9%），佔全公司 13.2%。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Scott Davis:</b> "This Expanded Beam Optical thing seems interesting, but I'm trying to get a sense, I guess, of a couple things. One is really materiality and how that scales out. It looks like it was launched with Microsoft as kind of the partner. Is there an opportunity for that to scale across more hyperscalers and how do you think about that? I'll just leave that as a little bit of an open-ended to help us understand where the upside is in that market."<br><br>
+          <b>Bill Brown:</b> "Scott, thanks for the question. It's getting quite a bit of excitement, and we're excited internally as well. It's been a technology that's developed several years ago. Just in a nutshell, it's very durable, dust resistant, vibration resistant, fiber optic connection technology. We've proven with a hyperscaler that it can reduce by about 85% the time to revenue, time to install circuits in a data center. We've got about 100 patents in this space, 50 pending. It's very well protected, and we're very excited about this. It's been in testing for several years with Microsoft. We're very pleased that they have qualified us as a technology for the Azure data centers. That's very encouraging. The revenue this year, it was in the $40 million-$50 million range. We do think it will scale over time. Could be 4x or 5x that or even more over the next several years, depending upon our progress here, as well as the adoption of optical technologies in data centers as that transitions. A couple of things are happening here. One, as we continue to develop the technology, each hyperscaler has some uniqueness in their architecture, so that's got to be developed. We've got to scale it both internally and externally. Earlier this year, we announced that we would double our capacity on EBO this year and another doubling over the next year to 18 months. Even that isn't anywhere near the volume demand in the marketplace. We're also working with various contract manufacturers, we're pretty developed on one. The third item in this is that, we will not be successful as a sole provider here. This is about enabling an ecosystem of partners. We formed a multi-supplier agreement. There's 44 players in this agreement all throughout the ecosystem. There's multiple hyperscalers, chip manufacturers, connector manufacturers, and it's about how do you enable the whole ecosystem. All of those things are in place. We're deep in the trials with other hyperscalers. I won't say much more about that. The TAM this year for EBO Technologies is around $1 billion. We think it'll grow to two by 2028. $2 billion, it could be beyond that over time. Again, we've got to be very successful in how we scale this product and make sure we've got good quality, deliver on time, all those basic pieces. We're very encouraged about the progress that we're on, the results that we're seeing. The team's done a great job here, and we're optimistic about the growth in the space."<br><br>
+          <b>Scott Davis:</b> "Okay. That's helpful. Then just a quick follow-up. I'd kind of given up on China, but it sounds like China could potentially be a growth engine for you guys again. Is that an exaggeration, or how do you view the short, medium, long-term kind of China market today versus maybe when you took over the job a couple years back?"<br><br>
+          <b>Bill Brown:</b> "Yeah, good question, Scott. I mean, look, we've been pretty consistent that China's been a very special market for us. It's performing really well. We've got a great team on the ground. We've organized a little bit differently and uniquely there as well as in India, sort of a hybrid organizational model. We have global business groups, but we stood up a team focused on China, based in China, same thing in India, and we're seeing the results. In the second quarter, we were a double-digit growth, first half about 8%. A lot of the performance there, keep in mind again, we're 50/50 between domestic production and export. The domestic economy, from an industrial perspective, remains pretty solid in China, and we're performing well. A lot of it is localizing NPI and a lot of it is commercial execution on the ground. The team is doing a fantastic job. We have more than 5,000 people there, six factories, and again, we're developing more localized technology. The export is the other 50% of the business. That part of the economy has done pretty well, and we feel pretty good about the results, and we'll continue to press it every quarter as we are in Q3 in the back end of the year. Long term, we like our position in China, we like the team that's executing in China, the strategy, and we're pretty optimistic about the future in China."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Amit Mehrotra（UBS）</div><div class="qa-topic">NPI 何時真正轉化為營收、產品分級結構｜追問：毛利率能否回到 high 40s</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">新產品通常要幾季才會 inflect？這些是「真正的新產品」還是所謂 Class 3 的改版產品？2027 年 outgrowth $600M 的預期還成立嗎？
+          追問：Analyst Day 原本的故事是把<b>毛利率</b>從 low 40s 拉回 high 40s，但關稅等因素下毛利率仍卡在 very low 40s ── 結構上還回得去嗎？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill：開發到上市週期約 <b>250 天</b>，2027 年將較基期縮短約 20%；<b>Class 3 目前佔上市數量約 75%</b>，Class 4/5 約 25%，未來升至 30%＋，
+          工業端（TEBG／SIBG）目標 40%＋。毛利率方面：「<b>On gross margins, we're tracking close to mid-40s right now</b>」，
+          並列舉 cost of poor quality 下降、OEE 上升、採購淨節省、Kaizen 場次加倍等，結論是「有能力隨時間達到 high 40s」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 4 ─ 「毛利率接近 mid-40s」與同日 10-Q 的數字對不上（本場最直接的一處）</div>
+          <div class="q-text">依同日申報的 10-Q 損益表：Q2 2026 淨銷售 $6,500M、cost of sales $3,817M ── <b>GAAP 毛利率 = 41.3%</b>（去年同期 42.5%，<b>YoY 下降 1.2pp</b>）；
+          上半年 41.0%；FY2025 全年 39.9%。10-Q MD&amp;A 自己也寫明 cost of sales 佔營收比重<b>上升</b> 1.2pp，主因是 PFAS 製造退出後的成本 dis-synergy、油價上漲與關稅。<br>
+          即使把本季全部 $631M 特別項目都當成 COGS 加回（實際上其中僅 transformation costs 的一部分落在 COGS，多數在 SG&amp;A 與處分損失），
+          毛利率上限也只到約 <b>43.6%</b>。無論用哪一種算法，都到不了「接近 mid-40s」。
+          更值得注意的是提問者 Amit 已經在問題裡把事實講對了（「gross margin being sort of stuck in the very low 40s」），
+          Bill 的回答等於<b>直接改寫了提問前提</b>，而現場無人追問。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 觀察：營益率的擴張並非來自毛利率</div>
+          <div class="q-text">同一份 10-Q 顯示 SG&amp;A 佔營收比重由 19.9% 降至 <b>16.4%（−3.5pp）</b>，主因是「lower net costs from significant litigation」。
+          也就是說，本季調整後營益率 +40bps 的來源是<b>費用端（且與訴訟費用波動高度相關）</b>，毛利端反而是逆風。
+          Bill 在回答中確實提到「both gross margin, but also importantly in SG&amp;A, in IT」，但把兩者並列的措辭掩蓋了兩者<b>方向相反</b>的事實。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Amit Mehrotra:</b> "Thanks. Morning. Bill, Anurag, just hoping to get a little bit more color on NPI in terms of when you typically expect these new products to sort of really inflect. I'm sure it takes a few quarters or maybe a year or two. Anything within the NPI in terms of are these truly new products or increasingly still new products or I know what you call Class 3 products or refresh products, any thought there? I think there was this expectation that maybe $600 million of outgrow next year on year 3 of the plan. Is that still the way to think about the outgrowths from a lot of these actions? Thank you."<br><br>
+          <b>Bill Brown:</b> "Amit, a bunch of good questions. First, on the last piece around the outgrowth next year. Look, this year, we originally said we would be $1 billion over the macro, 2025, 2026, and 2027. Clearly last year we did a bit better than $100 million. This year we'll do more than $300 million, around $450 million. That continues to ramp. We'll come back early next year and talk about next year. Clearly we're performing better than the macro, and it's both commercial excellence as well as in innovation or NPI. Look, on NPI, the progress has been fantastic, and the chart that we put into the webcast, a very important one. It shows this very deep inflection, and we're clearly on the right track here. We typically would launch a product within about, from the beginning of development to launch, it's running around 250 days. It's down substantially than where it was two years ago. By 2027, it's kind of around 20% reduction in overall cycle time. There's some nuances in the data here. We're launching more Class 3s, which are shorter in duration. They're more incremental. The company is pivoting more to what we call Class 4s and Class 5s, and Class 4s are those that move into adjacent markets, and Class 5s are completely new products for new markets going into. The team is focusing more on the 4s and 5s. You'll see more impact in the back half of the year as those products that we started to work on a few years ago start to launch this year and become meaningful in the back half. They'll be even more meaningful into 2027. The engine's moving. The momentum is really building. The team is executing, I think, fantastically well across all these various dimensions. We're launching more, but there's more ideas coming into the front end of the funnel. The health of the pipeline is very good. It's what we're known for, material science and using material science to make differences in the world, and I think we're doing a good job with that."<br><br>
+          <b>Amit Mehrotra:</b> "Okay. That's very helpful. Thanks, Bill. Just as a quick follow-up, when we started, I remember at the Analyst Day, the story originally was really about sort of getting the gross margin from the low 40s to the high 40s where you guys used to be. Obviously with tariffs and all the developments that have happened, you've still been able to move the needle on the operating margin line, much to your credit, despite sort of gross margin being sort of stuck in the very low 40s. Is there an opportunity, do you think, structurally at least, with all that we know now, we can still get back to the high 40% margin on gross margin? If you can just sort of talk about that, just given all the structural dynamics that have occurred over the last couple of years."<br><br>
+          <b>Bill Brown:</b> "Look, Amit, on margins, you can see the chart, up 500 basis points from a couple of years ago. We are making really strong progress here, and it's both gross margin, but also importantly in SG&amp;A, in IT, and other kinds of expenses, indirect costs. We've talked about that quite a bit. There was more to squeeze in that area, more cost to take out than we'd anticipated, and we've done a good job. On gross margins, we're tracking close to mid-40s right now. The company has done a good job. Productivity is really solid. We had great productivity in the quarter. We continue to build momentum. I give you sort of the metrics around that. We are reducing our cost per quality. That came down again. Our operating equipment effectiveness is coming up. We're driving hard on procurement. We're seeing net savings even after inflation. Four-wall spend, we've doubled the number of Kaizen events inside the company. Look, there's a ton of opportunity here just running the network, the distribution side better as it exists today. The next step, really, as we transform, is simplifying, standardizing, automating more of our processes, both on our SG&amp;A side, and I talked a little bit about that in the prepared remarks, but also on the factory side, the network side. There's plenty of headroom here in front of us. We see ourselves marching ahead and with an ability to hit the high 40s over time. The roadmap is relatively clear. It's along the same lines we've been laying out and talking about over the last couple of years. As we get into transformation, we'll see margins continue to expand. We feel good about the performance and optimistic about the future on margins."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Nigel Coe（Wolfe Research）</div><div class="qa-topic">季內營收線性度、訂單與在手訂單｜追問：Consumer 通路去庫存持續多久</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">5.4% 的成長在 4 月到 6 月之間如何分布？出季時的訂單與在手訂單狀況？追問：6 月下半的 Consumer 通路去庫存會持續多久？SIBG／TEBG 的庫存水位如何？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Anurag：季內「比以往更線性」；4、5 月較過往各季前兩月<b>好約 600bps</b>；<b>訂單 YoY +10%、在手訂單 +近 20%</b>；
+          並主動揭露「<b>75% of our business is book and ship</b>」。Bill：SIBG／TEBG 庫存正常；CBG 的 POS（sell-out）約 <b>+2.5%</b>，
+          問題「只是幾家零售商」把週轉水位下調<b>約一週</b>，預期 Q3 隨返校季回補，下半年 Consumer 可望持平至小幅成長。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 5 ─ 「在手訂單 +20%」的可見度被高估了 4 倍</div>
+          <div class="q-text">Anurag 同時說出兩件互相制約的事實，但沒有把它們相乘：既然 <b>75% 是 book and ship</b>（當期接單當期出貨），
+          在手訂單就只覆蓋<b>約 25% 的營收</b>。因此「backlog +20% YoY」對全年營收的可見度貢獻約為 20% × 25% ≈ <b>5%</b> 的營收基數，
+          而不是聽起來的那種「已經看到下半年」。管理層自己也補了一句「so far, the first two weeks, orders and backlog look good」──
+          用兩週的訂單來支撐半年的信心，正是可見度有限的自我證明。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 6 ─ 「一週水位、幾家零售商」無法解釋 Packaging &amp; Expression −10.3%</div>
+          <div class="q-text">Bill 把 Consumer 的疲弱定性為「isolated to a couple of retailers」「about a one-week delta」，且發生在<b>6 月下半</b>（即整季最後兩週）。
+          但 10-Q Note 2 顯示 Consumer 內部並非均勻受損：<b>Packaging and Expression 由 $310M 降至 $278M（−10.3%）、Home Improvement −3.2%</b>，
+          而 Home &amp; Auto Care +3.9%、Consumer Safety +3.2%。單季最後兩週、單一週的補貨水位差，難以在單一產品線造成雙位數的季度衰退；
+          10-Q 的文字也把成因寫得比法說會廣：「<b>Lower U.S. retailer inventory levels</b> more than offset positive POS and share gains」，並未加上「a couple of」這個限定詞。
+          此外 Consumer 部門營益率由 21.1% 降至 20.1%，H1 也降 0.6pp ── 若真是短暫的通路時點差，營益率不應同步走弱。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Nigel Coe:</b> "Thanks. Good morning, everyone. Quite a different pick quarter. I think Bill or Anurag, you mentioned last quarter started off quite weak and it got better through 1Q. I'm just wondering how the 5.4% looked from April through June. Did we start off stronger, got weaker? Any color there? Any updates on how orders and maybe backlog exited the quarter?"<br><br>
+          <b>Anurag Maheshwari:</b> "Yeah. Hey, good morning, Nigel. Hey, it was quite good throughout the course of the quarter. It was more linear than we've typically seen. As you said, we started the quarter with very good backlog. If I look at April and May, it was probably 600 basis points better relative to other first two months of prior quarters. It was quite good as we went into the first two months of the quarter. June, the auto momentum kind of sustained as well because we did our price increases, which came with effect from May 1st. Just through the course of the quarter, we saw very good linearity, and the team executed very well to post a 5.4% growth. We did see similar, as I said, auto momentum in the second quarter, like the first quarter, which strengthened the industrial side of the business. Our orders were up about 10% for the quarter, and backlog about close to 20% up year-over-year. As we get into Q3, we feel good visibility for Q3 and the second half of the year. Obviously, 75% of our business is book and ship, so we have to monitor as we go along. But so far, the first two weeks, orders and backlog look good."<br><br>
+          <b>Nigel Coe:</b> "That's great. That's really encouraging. My next question is really, you mentioned the Consumer channel destock in the second half of June. Just wondering how long do you think this destock will happen? Any intel on how inventories look for 3M products? Then any color on how inventories are looking in SIBG and TE and selling the sell-through color would be helpful as well."<br><br>
+          <b>Bill Brown:</b> "Inventory levels in SIBG and TEBG are normal. There's no discernible trend one way or another. Not a concern. On CBG, look, I think what was encouraging is to continue to see the point of sale growth or sell-out growth around 2.5% in the quarter, which was very positive. We felt good about that. It was really isolated to a couple of retailers, and we saw them step back a little bit in the U.S. channel, step back a little bit in terms of weeks of supply. It was about a one-week delta. As we come into July and into Q3, we think this will normalize here, especially as retailer stock for back-to-school season. We'll keep monitoring it and communicate with investors as we need. We feel it's going to normalize here and help us in the back half of Consumer to be flat to up slightly, is what our expectation would be in the back half of the year."</div>
+        </div>
+      </div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Chigusa Katoku（JPMorgan）</div><div class="qa-topic">財測隱含下半年減速｜追問：本季利潤率驅動因子、2027 目標何時更新</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">有機成長財測雖上調，但<b>相對強勁的 Q2 仍隱含下半年減速</b> ── 是 Consumer／電子的關係、出貨時點，還是保守？
+          追問：本季利潤率走強是 mix、price cost 還是 productivity？<b>你們現在幾乎已經達到 2027 年的利潤率目標，何時會更新目標？</b></div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill：「the second half will be accelerating from the first half」；正面因子為一般工業、安全、半導體／資料中心／航太國防、
+          roofing granules 的低基期，以及定價（全年約 +1.5pp、下半年約 +2pp）。觀察名單：消費電子（下半年裝置生產量預估年減 high teens）、
+          汽車產量、汽車售後（維修理賠件數下滑）、謹慎的美國消費者。
+          Anurag：24.9% 是「the highest we've ever been」，較內部預期高 40bps，主因是營收超標（預期 3%、實際逾 5%）＋ G&amp;A 與供應鏈雙邊 productivity，「broad-based」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 7 ─ 用「vs 上半年」偷換了提問者的「vs Q2」</div>
+          <div class="q-text">Chigusa 問的比較基準是 <b>Q2 的 5.4%</b>，Bill 的回答改用 <b>H1 的 3.3%</b> 當基準，於是「減速」被講成「加速」。
+          用管理層自己的數字驗算：全年有機 &gt;3.5%、H1 為 3.3%，Anurag 另稱下半年為「high threes or better」──
+          即下半年約 <b>3.7–4%</b>，確實<b>低於 Q2 的 5.4%</b>。提問者的前提從頭到尾是對的。
+          Bill 隨後那句「We came in above Q2 rather, we came in about five」在逐字稿上語句破碎，也顯示這段是即興重構而非既定口徑。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 8 ─ 「何時更新 2027 目標」被完全略過，且「歷史最高」是調整後口徑</div>
+          <div class="q-text">Chigusa 的追問有兩段，Anurag <b>只回答了第一段</b>（利潤率驅動因子），對「2027 目標已被提前達成、何時更新」<b>一字未答</b>，
+          主持人也未回頭補問。這是本場唯一一個被完整略過的問題。<br>
+          另外「the highest we've ever been」指的是 <b>adjusted</b> 營益率 24.9%；同日 10-Q 的 <b>GAAP 營益率為 15.1%，YoY 下降 2.9pp</b>
+          （主因 Dyneon 處分損失 $336M 與轉型費用 $100M）。整場法說會中，「24.9%」出現多次，「15.1%」一次也沒出現。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Chigusa Katoku:</b> "Morning. Congrats on a great quarter, and thanks for taking my question. My first question is on organic growth. You've raised your organic growth guidance nicely, but it still implies some deceleration in the second half from the strong second quarter levels. I think pricing should come through when you have some EBO delivery schedules on the back end. What's driving this? Is this Consumer and electronics, or the timing of deliveries, or is this prudence?"<br><br>
+          <b>Bill Brown:</b> "Chigusa, thank you. I mean, look, it's a good question. The fact is the second half will be accelerating from the first half, you mentioned specifically Q2, but it does continue to accelerate. There's some positives here. We continue to see good momentum in general industrial, safety. We see semis, data center, A&amp;D remains pretty strong. I don't know our communicator about the roofing granules business is not very big, but we see some improvements in the back half on easier comps, and we do see some tailwind on pricing. For the year, we'll be up about a point and a half, which implies about two points in the back half. All those things give us encouragement in the back half. Look, the watch items are, number one, is going to be Consumer electronics. The market data indicates a deteriorating production volume of devices, PCs, tablets in the back half of the year, expected to be down high teens. It's lower than it was in the first half. That's a watch area. Auto is stabilizing in general for us, but it's still expected to be down on the build rate year-over-year in the back half. The auto aftermarket business we still think was going to be soft. Repair claims is still expected to be down in the back half of the year. Look, the U.S. consumer remains cautious. As I just commented, we do expect flat to up growth in Consumer in the back half, but the consumer remains cautious and value-focused. Those are the things that we're more cautious about. At the end of the day, we had anticipated being above three in Q3. We came in above Q2 rather, we came in about five. We do expect good momentum going into the back half of the year."<br><br>
+          <b>Chigusa Katoku:</b> "Great. Thanks so much for the color. As a follow-up, I just was wondering if you could give a little bit more color on what drove the strength in margins this quarter. Is it mix, price cost, or productivity? You're pretty much at your 2027 margin target right now in the second quarter. When should we kind of expect to hear about updated targets?"<br><br>
+          <b>Anurag Maheshwari:</b> "Okay. Hey, thanks for the question. We finished the quarter at 24.9% margin, which is the highest we've ever been. This was 40 basis points higher than we thought where we would be. A large part of it was the volume performance relative to the 3%, we came in over 5%, it was also continuation on the productivity side as a combination of both G&amp;A and on the supply chain, which had actually very good productivity for the quarter. I would say it's broad-based between volume and productivity."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Chris Snyder（Morgan Stanley）</div><div class="qa-topic">EBO 競爭格局與 3M 可取得的市佔｜追問：Q2 price cost 與下半年走勢</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">EBO 若 2028 年是 $20 億市場，<b>競爭格局如何？3M 能吃到多少份額？</b>
+          追問：Q2 的 price cost 應該有遞延效應，下半年會不會轉好？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill：3M 目前在資料中心以 TwinAx 銅纜為主，銅轉光是漸進趨勢；EBO 的差異化在於免研磨、免專業人力的快速連接。
+          關鍵句：「<b>We have and we will continue to license other ecosystem players to manufacture that technology</b>… because that's required by hyperscalers.
+          There's no one company or supplier that would provide all of the demand」；目前「$40–50M of a billion dollars」，
+          未來份額「will grow materially」。
+          price cost：Q2 定價 +1.6%、H1 約 +1%、H2 約 +2%；油價通膨全年 $150–175M（原 $125M），以定價「dollar for dollar」對沖，
+          <b>油品的 price cost 為中性</b>，加計其他漲價後「slightly positive」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 9 ─ 「授權他人製造」與「份額將顯著成長」在同一段話裡互相抵銷</div>
+          <div class="q-text">Bill 明確說 hyperscaler <b>要求</b> 多重供應來源，因此 3M 會持續<b>授權其他生態系成員製造 EBO</b>，且對外找代工。
+          這代表 $20 億 TAM 中，3M 能以<b>自有製造毛利</b>取得的部分，結構上被封頂在遠低於 100% 之處，其餘只能收取權利金 ──
+          兩者的每一美元營收含金量差距極大。管理層既沒有拆分「自製 vs 授權」的預期比重，也沒有揭露權利金費率，
+          卻同時給出「share will grow materially」的結論。可覆核性註記：EBO 相關數字<b>在 10-Q 與 10-K 中零揭露</b>，
+          Electronics 產品線整體 Q2 為 $682M，是目前唯一能綁定的財報科目。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 觀察：「dollar for dollar」對沖，在數學上必然稀釋利潤率</div>
+          <div class="q-text">以相同金額的漲價去覆蓋相同金額的成本，分子（毛利）不變、分母（營收）變大，利潤率必然下降 ──
+          Anurag 在準備稿中已自行量化為 <b>20bps</b> 的利潤率影響，並說要用 volume 與 productivity 補回。
+          這段是本場少數「管理層主動把不利的算術講清楚」的地方，值得正面記錄；
+          但它同時意味著：財測中的利潤率擴張，有 20bps 是靠<b>另外找補</b>而來，而非本業改善。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Chris Snyder:</b> "Thank you. I wanted to follow up on the data center conversation, specifically the EBO opportunity. I think you said that this could be a $2 billion market by 2028. I'm just kind of curious, what is the competitive environment here? Just as we try to think about what share of that $2 billion market could accrue to 3M. It feels like a new technology that I would think the company is well positioned from a share perspective. Just any color on that. Thank you."<br><br>
+          <b>Bill Brown:</b> "Yeah, Chris, look, it's a good question. We do play today inside the data center in a couple of ways. We play on sort of copper networking, with our TwinAx product, sold into data centers. There is a gradual transition from copper to fiber that's happening. It's across the data center, across the racks. It eventually will start to move down to the chip, which today is mostly copper-based solutions. We've been playing on the copper side, and optics is going to become a bigger share over time of networking in the data centers. Typically, fiber optic connections are point to point. It's very difficult to do that. The ends have to be polished. It's specialized labor. It takes time. It takes effort. When you're thinking about billions of individual fiber strands being connected in data centers, the market is looking for better solutions here, and EBO connections allows them to do this more quickly, and seamlessly, and more reliably. I think that's kind of an important differentiator. As I mentioned earlier, we've got substantial patent protection around the technology, 100 patents today with another 50 that are pending. We have and we will continue to license other ecosystem players to manufacture that technology, that EBO, Expanded Beam Optical technology, because that's required by hyperscalers. There's no one company or supplier that would provide all of the demand for these hyperscalers, whether it be servers or chips or racks or whatever it happens to be, including EBO connectors. That's the path that we're on. We've got a small share today. It's in the $40 million-$50 million range of a billion dollars. Over time, given our technology and the momentum we think we're building here and our ability to scale, we think our share in that segment will grow materially, and that's what we would expect."<br><br>
+          <b>Chris Snyder:</b> "Thank you. I appreciate that. Maybe if I could follow up on price cost. I would imagine there was some lag on Q2 price cost, just given how quickly the commodities inflated and when we think about the timing of your price actions in April and May. Can you maybe just kind of talk about price cost in Q2? Is it fair to assume that price cost gets better as we look into the back half, just with the incremental price coming through while commodity inflation is still certainly persisting, it does seem like a lot of these petrochemical inputs have eased a bit, versus what we saw earlier in the spring. Thank you."<br><br>
+          <b>Bill Brown:</b> "Look, it's a great question, Chris. Q2, our price was at 1.6%, so it was about in line with what we'd expected. In the first half, it was around a percent. We started the year a little bit lighter. We do see that increasing in the back half of the year to be about 2%. As Anurag mentioned in his commentary, the impact for us this year, embedded in our year, is $150 million-$175 million from oil-based increases. That is up from where we were earlier in the year at $125 million. To your point, there is a bit of a lag in that kind of rolling through the system, we're being adaptable here. We're adjusting as we go. We are trying to offset that dollar for dollar. It will impact margins, we do expect we'll offset the higher price of oil on a dollar for dollar basis through pricing. We're executing this a little bit better. We got on it faster this time, earlier in the quarter. We're being very careful to watch volume here, at the end of the day, I think we're capturing it. Price cost on oil is sort of neutral. Overall, with the other price increases, it'll be slightly positive from where we stand today."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Nicole DeBlase（Deutsche Bank）</div><div class="qa-topic">生產力、stranded cost 與投資的上下半年節奏｜追問：下半年買回節奏</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">生產力、stranded cost、成長投資的展望有無變化？上下半年節奏如何？追問：上半年已買回 $30 億、超出原本 $25 億的全年指引，下半年還買不買？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Anurag：stranded cost 全年仍為 <b>$150M</b>（下半年較多）；投資全年 <b>$225M</b>，「$75M 在上半年、$115M 在下半年」；
+          生產力「明顯優於年初以來的水準」。買回：「continue to be opportunistic and disciplined」，
+          上半年 <b>$3.0B、均價約 $153</b>，未來「繼續機會主義」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 10 ─ 兩個沒被說出口的天花板（本報告的原創前瞻風險，見風險矩陣）</div>
+          <div class="q-text">Anurag 用「opportunistic」回答買回節奏，但同日 10-Q 揭露了兩個硬性上限，兩者都指向<b>下半年買回必須大幅減速</b>：<br>
+          ① <b>授權額度</b>：2025/2 董事會核准的 $7.5B 買回計畫，截至 2026/6/30 <b>僅剩 $1,766M</b>（10-Q Part II Item 2）。
+          以上半年 $3.0B 的速度，剩餘授權只夠約 <b>3.5 個月</b>。<br>
+          ② <b>股東回報承諾</b>：Bill 在準備稿說「Since 2025, we returned $8.6 billion… against our commitment to return $10 billion+ through 2027」──
+          即 2026 下半年到 2027 全年（共 6 個季度）只剩 <b>約 $1.4B</b> 的承諾額度，而<b>光是股利就要花掉約 $2.4B</b>（每季約 $0.40B×6）。
+          承諾本身若不上調，隱含的買回空間近乎為零。<br>
+          ③ 更硬的約束在現金端：10-Q 揭露<b>美國境內現金＋有價證券已由 $2.4B 降至 $0.5B</b>，7 月又為 Madison 提取 $1.43B 定期貸款。<br>
+          分析師已經問到正確的問題（「下半年還買不買」），而回答用一個沒有內容的形容詞（opportunistic）覆蓋了三個可量化的限制。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 算術瑕疵</div>
+          <div class="q-text">Anurag 說投資「$225 million… $75 million in the first half, $115 million in the second half」──
+          上下半年相加為 <b>$190M</b>，與 $225M 差 $35M。可能是口誤或是有部分投資列在其他科目，
+          但這是本場唯一一處管理層自述數字內部不自洽之處，值得在下季法說會追問。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Nicole DeBlase:</b> "Maybe just on productivity and stranded costs and growth investments, had anything shifted at all in that outlook? Anything major to highlight as we consider the cadence in those items between the first half and the second half?"<br><br>
+          <b>Anurag Maheshwari:</b> "Yeah. Overall, Nicole, I would say nothing has changed significantly in terms of the cadence. What's gotten better is productivity, which I'll come to that in a second. Just on the stranded cost, it's still $150 million for the year. More in the second half versus the first half. On investments, we said it's going to be $225 million, and the investments are spread over growth, productivity, and foundation stuff of about $225 million. $75 million in the first half, $115 million in the second half. I wouldn't say anything has changed on those two items. Clearly on the productivity side, as Bill earlier mentioned on supply chain, it's definitely better than what we have seen through the course of the year."<br><br>
+          <b>Nicole DeBlase:</b> "Okay, got it. Thanks, Anurag. I think you guys did like $3 billion of buybacks in the first half, and the prior guidance was for $2.5 billion, so you've already exceeded that. How are you thinking about buyback cadence, if there is any, in the H2 of the year?"<br><br>
+          <b>Anurag Maheshwari:</b> "Listen, we'll continue to be opportunistic and disciplined in just an overall capital allocation framework. As you correctly said, we started the year at $2.5 billion. We found the opportunity to buy more stock. We've done about $3 billion at an average price of about $153 for the first half, and we'll just continue to be opportunistic going forward."</div>
+        </div>
+      </div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Piyush Avasthy（Citi）</div><div class="qa-topic">SIBG 8.2% 成長的來源與可持續性｜追問：Q3／Q4 的營收與利潤率節奏</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">SIBG 本季成長很強，多少來自健康的終端市場、多少來自自身的 commercial excellence 與創新？有沒有提前拉貨？下半年基期轉難，高個位數成長守得住嗎？
+          追問：依 2026 財測，Q3／Q4 的營收與營益率該怎麼抓？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill：<b>IPI 約 1.8%、美國略高於 1%</b>，成長明顯高於 macro，歸因於組織執行；SIBG 除汽車售後偏弱外全面走強；
+          <b>SIBG 訂單成長率 mid-teens</b>、在手訂單 YoY 成長；SIBG 早在 2024 年初就投入 commercial excellence，銷售 AI 工具與 cross-selling 貢獻明顯。
+          <b>對「有無提前拉貨」未作答。</b>
+          Anurag：正常季節性；全年 &gt;3.5%、上半年 3.3%，下半年加速；生產力與轉型專案效益足以蓋過 stranded cost 與投資的增加；
+          下半年 EPS 增加約 $0.30，<b>Q3 與 Q4 平均分配</b>。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 觀察：SIBG 是本季唯一「量價齊揚」的部門，數字可完整覆核</div>
+          <div class="q-text">10-Q 佐證 Bill 的說法：SIBG Q2 營收 $3,091M（+8.2%）、營益 $859M（+16.4%），
+          <b>營益率由 25.8% 升至 27.8%（+2.0pp）</b>，是三大部門中唯一利潤率擴張者。
+          產品線層級：Industrial Adhesives &amp; Tapes +13.0%、Electrical Markets +12.0%、Industrial Specialties +10.9%、Personal Safety +9.4%。
+          唯一衰退的 Automotive Aftermarket −2.7%，與 Bill 的描述一致。此處管理層敘事與 filing 完全對得上。<br>
+          但「有無提前拉貨」這個問題沒有被回答，而 10-Q 也不揭露訂單／在手訂單，
+          因此 mid-teens 的訂單成長率<b>無法從任何公開申報文件覆核</b>。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 稅務時點：上半年的 EPS 是向下半年「借」來的</div>
+          <div class="q-text">Anurag 說下半年 EPS 增加「equal between Q3 and Q4」，並在準備稿提到「earnings will see an impact from tax timing」，但沒有量化。
+          代入 10-Q：<b>上半年調整後有效稅率 18.5%</b>，而全年指引「around 20%」，
+          反推<b>下半年調整後稅率須約 21.5%</b>。以下半年約 $2,270M 的調整後稅前利潤估算，
+          這 3 個百分點的稅率回升約當 <b>$68M</b>、約 <b>$0.13/股</b> 的逆風 ──
+          相當於下半年 $0.30 EPS 增量的 <b>四成以上</b>需要靠營運增量先填掉稅率回升的坑。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Piyush Avasthy:</b> "Good morning, guys, thanks for taking my questions. I wanted to focus on Safety &amp; Industrial segment. Growth in 2Q was very strong. Maybe if you can dig in a bit deeper on the drivers, like how much is healthy end markets versus your own commercial excellence and innovation initiatives. Not sure if there was any pull forward. Ultimately, I want to get a sense of second half dynamics. Comms get slightly tough, but do you see a path to sustaining this high single-digit growth?"<br><br>
+          <b>Bill Brown:</b> "Just in a nutshell, look, IPI is running around 1.82%. U.S. is a little bit less than that, around one, just over 1%. Clearly we're growing well above the macro. I believe it's the performance of the organization, both in terms of commercial excellence as well as innovation. Anurag went through some of the underlying drivers across the divisions of SIBG. It was pretty broad-based. It was strong across all of what they're in except for auto aftermarket was a little bit light, which again, it's a big business, so they've had to overcome that. I think the momentum there is pretty good. As you go into the back end of the year, there's nothing that indicates the industrial market is getting softer. We feel pretty good. As Anurag said, the orders in Q2 was pretty strong. SIBG was up mid-teens, the order growth rate there is pretty good. Backlog is up year-over-year. I think the momentum continues, and again, it really is just the balance of really good commercial excellence. Keep in mind, that team jumped on commercial excellence very early in the process, early into 2024, and have made great progress. I commented earlier about attrition coming down or churn coming down, which has been great. Working hard on the sales force, providing sales AI tools, which makes them more effective and efficient. A lot of work on cross-selling. That's dropping through to the bottom line. I would characterize this as a lot of really good back-to-basic hustle that's happening in SIBG, but also in other businesses. We feel good about the momentum, and even with the tough compares, we think second half will be pretty strong growth as well."<br><br>
+          <b>Piyush Avasthy:</b> "Helpful, Bill. Maybe taking a step back, any additional color on how we should think of 3Q and 4Q in terms of top-line growth and operating margin based on your 2026 guidance? Should we expect normal seasonality? Not sure if there are any other dynamics that we need to be aware of."<br><br>
+          <b>Anurag Maheshwari:</b> "Sure. Let me take that question. You should see the normal seasonality through the course of the year as well. Our guide says we're going to be over 3.5% for the year. The first half was 3.3%, clearly there's going to be acceleration in the second half. You should see a lot more coming from productivity as well, both on the supply chain as well as some of the transformation projects that we have undergoing. We see the benefits of that come through. Both of them will more than mitigate the pickup in stranded costs and investments that we are going to make to ensure that this is sustainable for the future. I would say it's normal seasonality with the EPS growing by $0.30 in the back half, equal between Q3 and Q4."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Deane Dray（RBC Capital Markets）</div><div class="qa-topic">自由現金流大幅超標是否有一次性因素｜追問：記憶體漲價對消費電子的影響</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">自由現金流相對五年平均大幅超標，<b>有沒有一次性因素？</b>提到稅務時點的助益，也提到庫存天數改善 ── 這些可持續嗎？有目標可分享嗎？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Anurag：「It is very strong cash flow just on the back of <b>very strong operational performance</b>… it's just <b>fundamental good operational performance</b> that's driving the free cash flow.」
+          具體只提到庫存天數 YoY 改善 7 天。<b>沒有回答「一次性因素」這個問題，也沒有給出任何目標。</b></div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 ─ 同日 10-Q 對現金流改善給出的解釋，與 CFO 的口頭說法相反</div>
+          <div class="q-text">Deane 問的正是「一次性因素」。10-Q「Cash Flows from Operating Activities」章節的原文寫著：
+          上半年營運現金流 $1.6B，較去年<b>增加 $2.6B</b>，「<b>primarily driven by lower net payments for PFAS-related environmental liabilities and the CAE legal settlement impacted by insurance recoveries</b>」──
+          也就是<b>法律給付時點＋保險理賠回收</b>，而非營運。<br>
+          進一步的口徑落差：依 10-Q，上半年 <b>GAAP 自由現金流＝營運現金流 $1,560M − 資本支出 $448M ＝ $1,112M</b>；
+          管理層在法說會上說的是「For the half, we generated cash flow of <b>$1.9 billion</b>」，兩者相差<b>約 $0.8B</b>，
+          差額規模與 10-Q 另處揭露的「$1.0B CAE／PFAS 給付，部分由 $0.4B 保險回收抵銷」一致。<br>
+          換言之：CFO 被問到一次性因素時，回答「純粹是營運表現」，而公司自己的 10-Q 把改善歸因於一次性的法律給付與保險回收。
+          這是本場最直接的一組口徑衝突，且兩份文件同日發布。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 記憶體那一題是誠實回答，值得正面記錄</div>
+          <div class="q-text">Bill 直接承認消費電子下半年市場預估年減 high teens「largely related to memory shortages and high cost of memory」，
+          並明說「the market is getting weaker because of memory」，沒有淡化。
+          10-Q 亦記載 TEBG 上半年受 auto 與 consumer electronics 疲弱拖累。此處敘事一致。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Deane Dray:</b> "A significant upside in free cash flow, especially compared to your five-year average. Can you talk about any one-timers? There was a reference to the benefit of tax timing, but also some nice improvement in inventory days. Is that also sustainable, and do you have some targets that you can share?"<br><br>
+          <b>Anurag Maheshwari:</b> "Yeah. Thanks. It is very strong cash flow just on the back of very strong operational performance. We obviously have good earnings, and the cash conversion cycle continues to do better on the back of lesser inventory. Our inventory's improved by seven days year-over-year, it's just fundamental good operational performance that's driving the free cash flow."<br><br>
+          <b>Deane Dray:</b> "Great. You didn't call it out exactly, but can you reference any of the impact on memory chip pricing, availability, and how is that rippling through your consumer electronics?"<br><br>
+          <b>Bill Brown:</b> "Well, the consumer electronics was down low single-digits in the quarter, and we do expect the market in the back half of the year to be down. I think it was like high-teens. I think that's largely related to memory shortages and high cost of memory. I think that's rolling through the marketplace. In the quarter, we're performing better than the macro, again, down low single-digits versus where the market happens to be. The market is getting weaker because of memory."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brett Linzey（Mizuho）</div><div class="qa-topic">產能利用率與廠網合理化｜追問：新產品有多少是淨新增、多少只是替換舊 SKU</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">目前產能利用率多少？在成長加速與部分區域審慎之間，如何平衡「合理化」與「擴產」？
+          追問：92 項新產品中，有多少是<b>淨增市佔／TAM 擴張</b>，多少只是替換或蠶食既有 SKU？有沒有一個 net new 對照 gross NPI 的內部指標？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill：追蹤約 <b>300 項資產</b>（涵蓋逾半數產量），利用率約 <b>63.5–64%</b>；整體有大量閒置，但局部瓶頸存在（New Ulm 電纜配件）；
+          理解利用率後才能在資產、廠內單元、乃至工廠之間整併，<b>這是未來三到五年的 transformation</b>。
+          淨新增問題：「When we talk about growth above the macro, a lot of it is going to be net new growth」，
+          隨即轉去談 <b>Class 3 佔 75%、Class 4/5 佔 25%</b>（未來升至 30%＋，工業端目標 40%＋）。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 ─ 被要求的是一個指標，得到的是一個分類</div>
+          <div class="q-text">Brett 問得非常精確：有沒有 <b>net new vs gross NPI</b> 的橋接指標。
+          Bill 用一句沒有數字的「a lot of it is going to be net new growth」帶過，接著回答的是<b>另一個維度</b>（產品分級佔比）。
+          兩者不能互相替代 ── Class 3 定義為「incremental、週期較短」，Bill 自己也說 Class 3 佔 <b>75%</b>，
+          而 incremental 產品正是最容易蠶食既有 SKU 的一類。因此「92 項新產品、全年 350＋」這個被反覆引用的數字，
+          在<b>扣除自我蠶食後的淨貢獻仍是未知數</b>，且管理層明示不提供該指標。<br>
+          可覆核性註記：新產品數量、vitality index、$40 億五年新產品營收<b>全部僅見於法說會</b>，10-Q／10-K 零揭露。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 時程錯位：transformation 的收成期在 Investor Day 的承諾期之外</div>
+          <div class="q-text">Bill 說廠網整併「is going to occur over the <b>next three to five years</b>」，即 2029–2031 才完全收成；
+          但 Investor Day 的承諾期只到 <b>2027</b>。10-Q Note 5 顯示轉型計畫至今的實際規模仍小：
+          Q2 新增稅前費用 $74M、上半年 $118M，應計重整負債僅由 $25M 升至 <b>$66M</b>。
+          （Note 16 的 Corporate special item「transformation costs」Q2 為 $100M、上半年 $166M，
+          差額為加速折舊、據點關閉搬遷等相關成本。）
+          另一佐證：Corporate 的折舊攤銷由去年同期 $21M 跳升至 <b>$55M</b>，正是加速折舊已經開始的痕跡。
+          利用率 63.5–64% 這個數字<b>在 10-K／10-Q 完全沒有揭露</b>，無法覆核。
+          另註：Bill 口稱「100 plants」，10-K Item 2 的正式揭露為<b>美國 48 廠＋海外 60 廠＝108 廠</b>。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Brett Linzey:</b> "My question's on utilization and footprint rationalizations. There's a bit of a tug of war here, right? You've got the secular and cyclical accelerating, but some other areas a little bit more cautious. What's your current capacity utilization across the footprint? As you look at some of the organic growth potentially accelerating here in the back half, how are you balancing rationalization versus expansion? Are you thinking there's further actions as we look into 2026 and 2027, or are you revisiting some of the plans currently given the improvements?"<br><br>
+          <b>Bill Brown:</b> "Look, the way we measure utilization is across about 300 assets across the organization. We continue to increase that we're systematically tracking. There's more than half our volume. It's running around 63.5%, 64%. There's plenty of upside capacity across the overall network in aggregate. As I mentioned in my remarks, there are certain assets in our network that are constrained, and I mentioned one in particular in New Ulm. There's others in New Ulm, which makes electrical connectors. That volume is spiking, so we've got to find ways to unlock capacity. A lot of it's kind of basic at how you run the lines and the workflow and material flow. Over time, there might be some capital there, but overall, utilization is an upside opportunity for us. Fundamentally understanding utilization, how it's measured across individual assets, across the 100 plants we have in the network, allows us to then start to look at how do you consolidate between individual assets, cells within a factory, and factories themselves. That is the unlock of what we call transformation that's going to occur over the next three to five years. It's a longer-term journey, but clearly, as we start to wring out capacity, increase capacity utilization here, we have an opportunity to rationalize the network as well."<br><br>
+          <b>Brett Linzey:</b> "Understood. Thanks. Just to follow up on the new product launches, 92 in the quarter on pace for the 350+. What portion is incremental share or TAM expansion versus replacing or cannibalizing existing SKUs? I guess, is there a metric you guys are looking at that looks at net new contribution internally versus gross NPI that might help us bridge some of the opportunity here over the next couple of years?"<br><br>
+          <b>Bill Brown:</b> "Yeah. Brett, let me look. When we talk about growth above the macro, a lot of it is going to be net new growth, and that's sort of what we articulate that. Class 3 for us is running around 75% of the launches. Class 4s and 5s, which is more new adjacent markets or new product for new markets, that's running around 25%. Over time, that go up to 30%, maybe a little bit better than that. It'll be a little bit higher in the industrial side, so we do expect TEBG and SIBG to get to 40% or beyond 40% Class 4s and 5s, but we're still running as a company around 25% today."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Laurence Alexander（Jefferies）</div><div class="qa-topic">新產品組合的利潤率結構是否也在提升</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">新產品相對核心業務的利潤率差距，過去是顯著的 ── 這個差距是穩定的嗎？隨著整體利潤率上升，
+          <b>新產品管線內含的利潤率是否也在上升</b>？還是說目前只是組合轉移，最終兩者會收斂到某個均衡？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Bill：新產品長期而言會抬高整體利潤率門檻；剛推出時因量小、吸收不足，利潤率不見得高，
+          但隨時間因新功能可支撐更好的定價，加上 design to cost 讓新產品能以更低成本上市，兩者結合可解鎖利潤率。<b>全程沒有任何數字。</b></div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 ─ 本場唯一一個「零量化」的完整回答，且問題本身有兩個分支</div>
+          <div class="q-text">Laurence 的問題其實是二選一：(a) 管線內含利潤率<b>本身</b>在上升，還是 (b) 只是<b>組合</b>轉向高利潤產品、終將收斂？
+          兩者對長期利潤率的意義完全不同 ── 前者是可持續的結構改善，後者是一次性的組合效應。
+          Bill 的回答同時包含兩者的元素（「新功能支撐定價」屬 (a)、「抬高整體門檻」屬 (b)），
+          <b>但沒有選邊、也沒有給出任何新產品毛利率的數字或區間</b>，因此無法據以判斷利潤率擴張是結構性還是一次性。
+          這一題是最後一題，之後直接進入結語，無人追問。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Laurence Alexander:</b> "Can you give a high-level assessment of the margin profile in the new product mix relative to your core businesses? Used to be that was a significant gap, and I'm curious if the gap is stable, that is, as your overall margins are rising, is the margin embedded in the new product pipeline also rising? Should we think about it more as over time, kind of you're just having a mix shift where the higher mix is what's driving the margin lift, but eventually, those two would converge at some equilibrium."<br><br>
+          <b>Bill Brown:</b> "Look, in a nutshell, look, we expect and we do see that margins on new products over time raise the overall margin threshold. As they start, they launch lower volumes. You'll see just absorption or maybe as they may not come in at the higher margin, but they do over time because new features can drive better pricing. Also, new products can come into the marketplace at lower cost. One of the things the team is really focused on is design to cost. We are looking to both bring new features which help us drive price, but also drive cost down in the designs themselves. That combination should allow us to unlock and does allow us to unlock margins through new product introductions."</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title">本場 Q&amp;A 的整體模式</div>
+      <p><b>一、被完整回答的問題集中在「已經很好的部分」。</b>SIBG 的成長拆解、EBO 的技術規格、中國的組織安排、
+      記憶體對消費電子的衝擊 ── 這幾題管理層給了大量細節，且與 10-Q 完全對得上。</p>
+      <p><b>二、被改寫前提或轉移維度的問題，全部集中在「口徑」上。</b>毛利率（Amit）、下半年是加速還是減速（Chigusa）、
+      現金流有無一次性（Deane）、淨新增產品貢獻（Brett）── 四題的共同結構是：分析師問的是 A，回答的是 B，而 B 聽起來比 A 好。</p>
+      <p><b>三、被完全略過的只有一題：</b>Chigusa 問「2027 利潤率目標已提前達成，何時更新目標」，無人回應。
+      這恰好是最能檢驗「still in the early innings」這句話的問題。</p>
+      <p><b>四、最重要的三個數字，分析師一次都沒問到：</b>
+      GAAP 有機成長 2.3%（而非 5.4%）、GAAP 營益率 15.1%（而非 24.9%）、
+      買回授權僅剩 $1,766M。三者都寫在同日申報的 10-Q 裡。</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: Madison JV ============ -->
+  <div id="panel-deal" class="panel">
+    <div class="card">
+      <div class="card-title">交易概覽</div>
+      <p>2026 年 7 月 1 日（Q2 結束後、法說會前 20 天），3M 與 <b>Bain Capital</b> 共同完成對
+      <b>Madison Fire &amp; Rescue</b> 的收購，並將 3M 原有的 <b>Scott SCBA（自給式呼吸器）</b>業務投入同一個合資公司。
+      3M 持股 <b>50.1%</b>、須合併報表；Bain 持 49.9%。</p>
+      <p>Bill Brown 在準備稿中用一句話描述這筆交易：「consolidating it with our Scott SCBA business into a new
+      majority-owned joint venture, <b>receiving $700 million in cash as part of the transaction</b>」，
+      並稱這是「reshaping the portfolio towards higher growth, higher margin businesses… <b>keeping our capital
+      allocation disciplined</b>」的明證。10-Q Note 3 則揭露了法說會上沒有出現的完整結構。</p>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>Madison 收購價 <b>$1.95B</b>（尚待交割調整）</li>
+          <li>合併後 JV 年營收 <b>$800M</b>，高個位數成長</li>
+          <li>JV 利潤率「above our company average」（未給數字；3M Q2 調整後營益率 24.9%）</li>
+          <li>併入 <b>Safety and Industrial</b> 部門（該部門 Q2 營收 $3,091M，故 JV 約當其 <b>26%</b> 的年化增量）</li>
+          <li>3M 於 Q3 收到<b>淨現金約 $0.7B</b></li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限</h4>
+        <ul>
+          <li>2026/7/1 完成交割，<b>Q3 起入帳</b></li>
+          <li>PPA（收購價分攤）明細<b>要到 Q3 才揭露</b></li>
+          <li><b>Bain 的少數股權「五年後可贖回」</b> → 2031 年為關鍵時點</li>
+          <li>融資工具為 <b>364 天期</b>定期貸款，可依借款人要求自交割日起<b>展延至多 12 個月</b></li>
+          <li>2026 財測<b>完全未納入</b> Madison</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾</h4>
+        <ul>
+          <li>2026/4 設立 <b>$1.43B 無擔保定期貸款</b>＋$200M 循環額度（變動利率）</li>
+          <li>6/30 兩者皆未動用；<b>7 月已提取 $1.43B</b> 用於本案</li>
+          <li>借款人為子公司 <b>Fire Safety Platform Holdco, Inc.</b>；主辦行 Morgan Stanley Senior Funding，
+              共同聯貸行 Citibank 與 U.S. Bank（10-Q Exhibit 10.1）</li>
+          <li>3M Company 於該信貸協議中列名為 <b>company</b>（非單純的無追索子公司融資）</li>
+          <li>Bain NCI 須列於<b>永久權益之外</b>（mezzanine），按帳面值與<b>估計贖回值孰高</b>衡量</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>10-Q 明文：贖回價值的變動<b>「affecting net income attributable to 3M」</b>—— 但影響幅度未量化</li>
+          <li>退場與流動性條款另形成一個<b>按公允價值列帳的衍生工具</b>，將帶來每季的損益波動</li>
+          <li>JV 利潤率「高於公司平均」的具體數字未揭露</li>
+          <li>Madison 的商譽／無形資產金額未知（Q3 才公布）</li>
+          <li>$1.43B 定期貸款是否計入 3M 合併負債（合併 50.1% ⇒ <b>應全額合併</b>）</li>
+          <li>Bain 於 2031 年行使贖回權時的資金來源</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="band-card">
+      <div class="section-title">「收到 $7 億現金」這句話的區間定位</div>
+      <p class="q-text" style="margin-bottom:6px;">同一筆交易可以被描述成三種截然不同的事：從 3M 淨流入 $0.7B 現金（管理層版本），
+      到合併報表新增 $1.43B 有息負債（10-Q 版本）。下圖把兩端與中間值放在同一條軸上。</p>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; right:0%;"></div>
+        <div class="band-marker floor" style="left:8%;">3M 淨收現 <b>+$0.7B</b><div class="dot"></div></div>
+        <div class="band-marker target" style="left:47%;">Madison 對價 <b>−$1.95B</b><div class="dot"></div></div>
+        <div class="band-marker actual" style="left:88%;">JV 新增有息負債 <b>+$1.43B</b><div class="dot"></div></div>
+      </div>
+      <div class="band-legend">
+        <span><i class="sw" style="background:#94a3b8"></i>管理層在法說會強調的口徑</span>
+        <span><i class="sw" style="background:#2563eb"></i>交易的實際對價</span>
+        <span><i class="sw" style="background:#15803d"></i>10-Q 揭露、須合併入 3M 報表</span>
+      </div>
+      <div class="note yellow">⚑ 三個數字都是真的，差別只在於<b>選哪一個當主詞</b>。
+      Bill 選的是「receiving $700 million in cash」，並把它與「capital allocation disciplined」連在一起講。
+      但這 $0.7B 的來源，依 10-Q 原文是「reflecting <b>proceeds from the term loan facility and Bain's contribution</b>,
+      net of amounts used to acquire Madison」── 亦即 3M 收到的現金，來自<b>借款與合夥人出資</b>，
+      而非出售資產的價金。以合併報表視角看，3M 貢獻了 SCBA 業務、取回 $0.7B 現金，同時把 $1.43B 的債務併進自己的資產負債表。</div>
+    </div>
+
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>對 3M 而言</h4>
+        <ul>
+          <li>以 50.1% 的持股，取得 <b>100% 的營收與 EBITDA 合併權</b> ── 對「營收成長」與「營益率」兩個對外 KPI 是純加分</li>
+          <li>把 SCBA 這個成熟業務<b>部分變現</b>，同時保留控制權與品牌</li>
+          <li>強化「安全」這個優先垂直領域，且 JV 利潤率高於公司平均 → 有機會拉高 SIBG 的利潤率</li>
+          <li>Q3 淨流入 $0.7B，正好補上美國境內現金由 $2.4B 降至 <b>$0.5B</b> 的缺口</li>
+        </ul>
+        <div class="pro">＋ 對外報表數字全面受益，且不影響 2026 財測的「乾淨度」</div>
+        <div class="con">− 承擔 $1.43B 變動利率負債、2031 年的贖回義務，以及一個每季重評價的衍生工具</div>
+      </div>
+      <div class="stance-col">
+        <h4>對 Bain Capital 而言</h4>
+        <ul>
+          <li>以少數股權（49.9%）取得一個現金流穩定、利潤率高於工業平均的消防安全平台</li>
+          <li><b>五年後可贖回</b>的條款＝明確的退出路徑與時間表，風險顯著低於一般 PE 少數股權</li>
+          <li>贖回價值按「孰高」衡量 → 下檔由帳面值保護，上檔享有成長</li>
+          <li>不必承擔營運責任（3M 合併並主導），但保有退場與流動性條款</li>
+        </ul>
+        <div class="pro">＋ 結構近似「有下檔保護的股權」，且交易槓桿由 JV 自身承擔</div>
+        <div class="con">− 少數股權，無控制權；退出價值取決於 2031 年 3M 的償付能力與意願</div>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問（盡職調查追問清單，建議於 Q3 法說會提出）</h4>
+      <ol>
+        <li><b>贖回價值的機制與上限是什麼？</b>10-Q 只說按「帳面值與估計贖回值孰高」衡量，並明文影響歸屬 3M 的淨利。
+        贖回價格是否掛鉤 EBITDA 倍數、IRR 保底、或第三方估值？若掛鉤 IRR 保底，這筆交易在經濟實質上更接近<b>一筆五年期的結構性負債</b>，
+        而非權益。這決定了 $1.43B 之外還隱含多少未入帳的未來現金義務。</li>
+        <li><b>那個「按公允價值列帳的衍生工具」的名目本金與敏感度是多少？</b>10-Q 只說它存在。
+        若其價值隨 JV 估值或 3M 股價波動，將成為繼 Solventum 持股（本季單季貢獻 +$303M 的非營運損益擺盪）之後，
+        <b>第二個會讓 GAAP EPS 與調整後 EPS 持續脫鉤的來源</b>。</li>
+        <li><b>$1.43B 是否全額計入 3M 的合併總負債與信評評估？</b>3M 目前信評為 Moody's A3／S&amp;P BBB+／Fitch A−（皆 Stable），
+        股東權益僅剩 $2,952M。若這筆債務全額合併，債務／權益比將由 4.2 倍再度上升 —— 三家評等機構是否已納入考量？</li>
+        <li><b>Madison 的 $800M 營收裡，Madison 本身與 3M 原有 SCBA 各佔多少？</b>
+        這決定了「高個位數成長」與「高於公司平均的利潤率」究竟是<b>買來的</b>還是<b>原本就有的</b>。
+        SCBA 原屬 SIBG 的 Personal Safety（Q2 $965M），若 SCBA 佔 JV 營收比重高，
+        則 Q3 起 SIBG 的「營收成長」有一部分只是把既有業務重新標籤。</li>
+        <li><b>Q3 起的「有機成長」如何定義？</b>依 3M 自己的定義，有機成長排除「acquisitions, net of divestitures」的<b>前十二個月</b>影響。
+        Madison 屬併購須排除，但<b>投入 JV 的 SCBA 業務並未離開合併報表</b>，
+        因此 2027 年 Q3 之後，整個 $800M 都會滾入有機成長基數。這對 2027 年「$1B 高於 macro」的達成率有多大幫助？</li>
+        <li><b>為何交易在 7/1 完成，卻選擇不納入財測？</b>Anurag 的理由是「apple-to-apple」。
+        但這同時產生一個效果：2026 全年 EPS 指引 $8.80–8.95 的達成，<b>不需要 Madison 貢獻任何一分錢</b>，
+        而 Q3 起 Madison 的實際貢獻將成為「超標」的來源。這是財測管理的技巧，還是真的只是可比性考量？</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">同季的另一半：被完全沒提的 Dyneon 處分</div>
+      <p>法說會花了整整一段講 Madison 這筆「加法」，但同一季還有一筆規模相當的「減法」，全場<b>一次都沒有提到</b>：</p>
+      <p>10-Q Note 3 揭露，3M 於 <b>2026 Q2 完成 Dyneon GmbH 的處分</b>（PFAS 製造子公司），
+      認列 <b>$324M 稅前處分損失</b>；加上 4 月完成的精密研磨業務出售（年營收約 $130M），
+      本季 loss on business divestitures 合計 <b>$336M</b>，佔營收 <b>5.2%</b>，
+      是 GAAP 營益率由 18.0% 掉到 15.1% 的<b>單一最大原因</b>。
+      兩筆處分的共同特徵是：<b>沒有價金</b>（「The transaction did not involve proceeds」），
+      現金留在被移轉的業務裡，3M 另外還要付一筆錢給買方。</p>
+      <p class="q-text" style="margin-top:8px;"><b>把兩件事放在一起看，本季的投資組合調整是：</b>
+      用一筆需要借 $1.43B 才做得成的收購（Madison）當作「重塑投資組合」的正面案例大講特講，
+      同時用「特別項目」的技術性標籤，讓一筆 $336M 的處分損失完全退出法說會的敘事範圍。
+      兩者都是同一個投資組合策略的產物，只有一半被拿出來說。</p>
+    </div>
+  </div>
+  <!-- ============ TAB 3: 技術與產品線 ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="card">
+      <div class="card-title">15 條產品線的 Q2 營收與 YoY（10-Q Note 2，百萬美元）</div>
+      <p style="margin-bottom:12px;">下圖橫條長度為<b>絕對營收規模</b>（Personal Safety $965M 為滿格），
+      右側數字為金額與 YoY。<span style="color:#2563eb;font-weight:700;">藍</span>＝Safety &amp; Industrial、
+      <span style="color:#15803d;font-weight:700;">綠</span>＝Transportation &amp; Electronics、
+      <span style="color:#c2600a;font-weight:700;">橘</span>＝Consumer、
+      <span style="color:#94a3b8;font-weight:700;">灰</span>＝Corporate。</p>
+
+      <div class="bar-row"><div class="bar-lbl">Personal Safety</div><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#2563eb;">$965M</div></div><div class="bar-num pos">+9.4%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Commercial Branding &amp; Transportation</div><div class="bar-wrap"><div class="bar-fill" style="width:76.4%;background:#15803d;">$737M</div></div><div class="bar-num pos">+7.0%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Electronics</div><div class="bar-wrap"><div class="bar-fill" style="width:70.7%;background:#15803d;">$682M</div></div><div class="bar-num pos">+7.7%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Industrial Adhesives &amp; Tapes</div><div class="bar-wrap"><div class="bar-fill" style="width:66.5%;background:#2563eb;">$642M</div></div><div class="bar-num pos">+13.0%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Automotive &amp; Aerospace</div><div class="bar-wrap"><div class="bar-fill" style="width:50.3%;background:#15803d;">$485M</div></div><div class="bar-num pos">+2.3%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Electrical Markets</div><div class="bar-wrap"><div class="bar-fill" style="width:40.5%;background:#2563eb;">$391M</div></div><div class="bar-num pos">+12.0%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Home Improvement</div><div class="bar-wrap"><div class="bar-fill" style="width:37.5%;background:#c2600a;">$362M</div></div><div class="bar-num neg">−3.2%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Abrasives</div><div class="bar-wrap"><div class="bar-fill" style="width:35.4%;background:#2563eb;">$342M</div></div><div class="bar-num pos">+1.2%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Industrial Specialties</div><div class="bar-wrap"><div class="bar-fill" style="width:33.8%;background:#2563eb;">$326M</div></div><div class="bar-num pos">+10.9%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Home &amp; Auto Care</div><div class="bar-wrap"><div class="bar-fill" style="width:32.9%;background:#c2600a;">$318M</div></div><div class="bar-num pos">+3.9%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Consumer Safety &amp; Well-Being</div><div class="bar-wrap"><div class="bar-fill" style="width:29.9%;background:#c2600a;">$289M</div></div><div class="bar-num pos">+3.2%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Automotive Aftermarket</div><div class="bar-wrap"><div class="bar-fill" style="width:29.3%;background:#2563eb;">$283M</div></div><div class="bar-num neg">−2.7%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Packaging &amp; Expression</div><div class="bar-wrap"><div class="bar-fill" style="width:28.8%;background:#c2600a;">$278M</div></div><div class="bar-num neg">−10.3%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Advanced Materials</div><div class="bar-wrap"><div class="bar-fill" style="width:16.8%;background:#15803d;">$162M</div></div><div class="bar-num pos">+9.5%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Roofing Granules</div><div class="bar-wrap"><div class="bar-fill" style="width:14.7%;background:#2563eb;">$142M</div></div><div class="bar-num pos">+5.2%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Corporate（已退出／處分業務）</div><div class="bar-wrap"><div class="bar-fill" style="width:9.9%;background:#94a3b8;">$96M</div></div><div class="bar-num neg">−64.8%</div></div>
+
+      <div class="note">⚑ 這張圖最該注意的不是最長的那條，而是<b>最短的灰條</b>。Corporate 營收由去年同期 $273M 崩落至 $96M（−$177M），
+      單這一條就吃掉全公司 <b>2.8 個百分點</b>的營收成長。三大部門合計成長 <b>+5.5%</b>（6,071→6,404），
+      但含 Corporate 的全公司只成長 <b>+2.5%</b>（6,344→6,500）。管理層口中的「5.4% 有機成長」，
+      正是把這條灰條從去年基期扣掉之後的結果。<br>
+      ⚑ 第二個該注意的是 Packaging &amp; Expression 的 <b>−10.3%</b>（$310M→$278M）：
+      這是 15 條產品線中衰退幅度最大的一條，也是 Consumer 部門負成長的主要來源，
+      而法說會把 Consumer 的疲弱整體歸因於「幾家零售商的一週庫存水位差」。</div>
+    </div>
+
+    <div class="section-title">技術與產品平台</div>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>EBO — Expanded Beam Optical 光連接器</h4>
+        <div class="meta">狀態：Microsoft Azure 已認證部署（首家 hyperscaler）｜歸屬：TEBG / Electronics</div>
+        <p><b>技術特性</b>：擴束式光耦合，端面不需研磨、耐塵、耐震；宣稱可縮短資料中心線路啟用時間約 <b>85%</b>。<br>
+        <b>智財</b>：100 項已獲專利 + 50 項申請中。<br>
+        <b>規模</b>：2026 年營收 $40–50M（≈全公司 <b>0.18%</b>）；管理層稱未來數年可達 4–5 倍（$160–250M，≈<b>0.6–1.0%</b>）。<br>
+        <b>TAM</b>：2026 約 $1B → 2028 約 $2B。3M 現有份額約 4–5%。<br>
+        <b>產能</b>：2026 年翻倍、未來 12–18 個月再翻倍，管理層自承「仍遠不及市場需求量」；已洽多家代工廠，「有一家相當成熟」。<br>
+        <b>生態系</b>：44 家參與者的多方供應協議；<b>3M 將持續授權他人製造</b>。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>TwinAx — 銅纜高速互連</h4>
+        <div class="meta">狀態：既有出貨中｜歸屬：TEBG / Electronics</div>
+        <p>3M 目前在資料中心的<b>主力</b>產品，屬銅纜網路。Bill 明言「銅轉光是漸進的、會由機櫃間逐步下移到晶片端，
+        而晶片端今天仍以銅為主」。<br>
+        <b>結構性意義</b>：EBO 的成功在一定程度上會<b>侵蝕自家 TwinAx</b> 的市場 ──
+        這是本季敘事中唯一的內部替代關係，管理層未討論淨效果。
+        法說會與 filing 皆未揭露 TwinAx 的營收規模。</p>
+      </div>
+      <div class="tech-card">
+        <h4>Nextel 高性能陶瓷纖維</h4>
+        <div class="meta">狀態：既有技術轉入新應用｜歸屬：TEBG / Advanced Materials（Q2 $162M，+9.5%）</div>
+        <p>10-K Item 1 列為 Advanced Materials 的代表產品（3M™ Nextel™ Ceramic fibers and textiles）。
+        本季法說會提到的<b>新應用是燃料電池</b>，屬 Bill 定義的 Class 4（既有技術進入相鄰市場）。<br>
+        Advanced Materials 是四條 TEBG 產品線中<b>規模最小、成長第二快</b>的一條，
+        但 $162M 的基數意味著即使成長 50% 也只貢獻全公司 1.2pp 的成長。</p>
+      </div>
+      <div class="tech-card">
+        <h4>光學反光膜 — 衛星應用</h4>
+        <div class="meta">狀態：新應用開發中｜歸屬：TEBG / Commercial Branding &amp; Transportation 技術基礎</div>
+        <p>3M 的 Scotchlite／Diamond Grade 反光材料原本用於道路標誌與車隊標識
+        （CBT 為 TEBG 內最大產品線，Q2 $737M，+7.0%）。
+        法說會提到把 light reflective films 應用於<b>太空衛星</b>，屬 Class 5（新產品進入新市場）。
+        目前<b>無任何營收規模揭露</b>，屬敘事階段。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>Scott SCBA + Madison — 消防與救援平台</h4>
+        <div class="meta">狀態：2026/7/1 起 JV 化｜歸屬：SIBG / Personal Safety</div>
+        <p>JV 合併年營收 <b>$800M</b>、高個位數成長、利潤率高於公司平均。
+        3M 持股 50.1% 並合併報表。詳見「Madison JV 交易拆解」分頁。<br>
+        <b>對產品線的意義</b>：Personal Safety 已是 3M 最大單一產品線（Q2 $965M，+9.4%），
+        Q3 起再併入 $800M 的年化營收 → 該產品線將明顯拉開與第二名的距離，
+        並使 SIBG 對全公司的權重進一步上升（Q2 已達 47.6%）。</p>
+      </div>
+      <div class="tech-card r">
+        <h4>NPI「R&amp;D 工廠」— 產品分級制度</h4>
+        <div class="meta">狀態：進行中｜全公司</div>
+        <p><b>數量</b>：Q2 上市 92 項（+44% YoY），上半年 176 項，全年目標 350+，2027 年累計逾 1,000 項。<br>
+        <b>週期</b>：開發到上市約 250 天，2027 年目標再縮短約 20%。<br>
+        <b>分級</b>：Class 3（漸進式改版）<b>佔 75%</b>；Class 4（相鄰市場）＋ Class 5（全新市場）<b>佔 25%</b>，
+        目標升至 30%＋，工業端（SIBG／TEBG）目標 40%＋。<br>
+        <b>商業結果</b>：五年期新產品營收今年約 $40 億；vitality index 今年 mid-teens、明年 20%。<br>
+        <span style="color:#b91c4a;font-weight:600;">⚑ 全部數字僅見於法說會，10-Q／10-K 零揭露，且管理層明示不提供
+        「淨新增 vs 蠶食既有 SKU」的橋接指標。</span>
+        唯一能綁定的財報科目是 R&amp;D 費用：Q2 $302M（+4.9%）、佔營收 4.6%（+0.1pp）──
+        <b>新產品上市數量成長 44%，但 R&amp;D 投入只成長 4.9%</b>，兩者的落差本身就說明了 Class 3 佔比為何是 75%。</p>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="section-title">長期需求場景：三條因果鏈</div>
+      <p class="q-text" style="margin-bottom:10px;"><b>鏈一｜AI 資料中心 → 光互連 → 3M 的位置（本季敘事主軸）</b></p>
+      <div class="flow-chain">
+        <span class="node">AI 訓練/推論算力需求</span><span class="arrow">→</span>
+        <span class="node">機櫃間頻寬瓶頸</span><span class="arrow">→</span>
+        <span class="node">銅纜轉光纖</span><span class="arrow">→</span>
+        <span class="node">數十億條光纖需現場連接</span><span class="arrow">→</span>
+        <span class="node">傳統點對點研磨式連接成為工期瓶頸</span><span class="arrow">→</span>
+        <span class="node">EBO 免研磨快速連接（−85% 工期）</span><span class="arrow">→</span>
+        <span class="node">hyperscaler 要求多重供應源</span><span class="arrow">→</span>
+        <span class="node" style="background:#fff1f2;border-color:#f0aab8;">3M 授權他人製造 → 份額被結構性封頂</span>
+      </div>
+      <div class="note red">⚑ 這條鏈的前六節都對 3M 有利，第七節（hyperscaler 強制多源）把價值捕捉的上限拉了下來。
+      Bill 自己說出了「we will not be successful as a sole provider」與「we will continue to license other ecosystem
+      players to manufacture」，但沒有說明<b>授權收入與自製收入的比重與毛利差</b>。
+      對投資人而言，這意味著 $20 億 TAM 不能直接乘上一個樂觀市佔率來估算 3M 的營收。</div>
+
+      <p class="q-text" style="margin:14px 0 10px;"><b>鏈二｜電網現代化 → 電纜配件 → 產能瓶頸（本季最可覆核的一條）</b></p>
+      <div class="flow-chain">
+        <span class="node">電氣化與資料中心用電成長</span><span class="arrow">→</span>
+        <span class="node">電網升級與擴容</span><span class="arrow">→</span>
+        <span class="node">中壓電纜接續配件需求上升</span><span class="arrow">→</span>
+        <span class="node">New Ulm 廠成為瓶頸</span><span class="arrow">→</span>
+        <span class="node">多週衝刺：鎖定生產排程、改善物料流</span><span class="arrow">→</span>
+        <span class="node">6 月創產量紀錄，增量營收 +$13M</span><span class="arrow">→</span>
+        <span class="node" style="background:#f0fdf4;border-color:#a3dab1;">Electrical Markets Q2 +12.0%（$349M→$391M）</span>
+      </div>
+      <div class="note">⚑ 這是本季唯一一條可以從「單一工廠的作業改善」一路追到「10-Q 產品線營收」的完整因果鏈，
+      且數字互相吻合：$13M 增量約當 SIBG 的 50bps（管理層口徑），而 Electrical Markets 全季增加 $42M。
+      <b>但也要注意它的規模</b>：$13M 佔全公司 Q2 營收的 0.2%，是一個管理故事而非財務事件。</div>
+
+      <p class="q-text" style="margin:14px 0 10px;"><b>鏈三｜PFAS 退出 → 成本 dis-synergy → 三大部門利潤率共同逆風（管理層未串起來的一條）</b></p>
+      <div class="flow-chain">
+        <span class="node">PFAS 訴訟與監管壓力</span><span class="arrow">→</span>
+        <span class="node">2025 年底完成 PFAS 製造退出</span><span class="arrow">→</span>
+        <span class="node">2026 Q2 處分 Dyneon GmbH（−$324M）</span><span class="arrow">→</span>
+        <span class="node">原自製含氟原料改為外購／重新配方</span><span class="arrow">→</span>
+        <span class="node">cost dis-synergies</span><span class="arrow">→</span>
+        <span class="node" style="background:#fff1f2;border-color:#f0aab8;">SIBG／TEBG／CBG 三部門的 10-Q 說明中<b>全部列為利潤率逆風</b></span><span class="arrow">→</span>
+        <span class="node" style="background:#fff1f2;border-color:#f0aab8;">Corporate 營收 −$177M ＋ COGS 率 +1.2pp</span>
+      </div>
+      <div class="note yellow">⚑ 「cost dis-synergies following the exit of PFAS manufacturing」這句話在 10-Q 的三個部門說明中<b>各出現一次</b>，
+      是唯一一個同時拖累三大部門的因子；同時它也是 Corporate 營收崩落與毛利率下滑的共同來源。
+      法說會全程只用「stranded cost $150M」這個中性標籤帶過，沒有把這條鏈串起來 ──
+      而串起來之後會看到：本季所有「調整後」數字之所以好看，前提正是把這條鏈的一大半當成特別項目移出。</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: 供應鏈 ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="note grey">本分頁的資料來源是 <b>FY2025 Form 10-K</b>（Accession 0000066740-26-000014，2026/2/3 申報）
+    與 <b>Q2 FY2026 Form 10-Q</b>（Accession 0000066740-26-000246，2026/7/21 申報）。
+    必須先講清楚一個限制：3M 屬多角化製造商型申報人，其 10-K 的供應鏈揭露<b>極度概括</b> ──
+    Item 1 的「Raw Materials」全文<b>只有兩句話</b>、不點名任何供應商、不揭露原物料成本結構、不揭露任何客戶名單。
+    因此本分頁採兩種呈現：<b>下游</b>用 10-Q Note 2 的逐項金額畫成關係圖（可完整覆核）；
+    <b>上游</b>改用分層卡片並逐條標註出處與信心度，凡 filing 未揭露者一律標明「無法取得」，本報告不做估算填補。</div>
+
+    <div class="card">
+      <div class="card-title">下游關係圖：事業部 → 產品線 → 終端市場（Q2 FY2026，百萬美元）</div>
+      <p style="margin-bottom:10px;">所有節點金額<b>全部取自 10-Q Note 2「Disaggregated Revenue Information」</b>，
+      三大事業部的產品線加總與 Note 16 的部門營收完全一致（$3,091M／$2,066M／$1,247M）。
+      第三層的終端市場歸屬，依 10-K Item 1「Business Segments」表格中各產品線的
+      representative revenue-generating activities 對應；每條產品線<b>整條歸入單一終端</b>，
+      因為 10-K 與 10-Q 均未揭露產品線內部的終端別拆分。滑鼠移到節點或連結可看流量。</p>
+      <div id="sankeyEmbed_mmmq226" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"sibg","label":"Safety & Industrial 3,091","color":"#1d4ed8"},{"id":"tebg","label":"Transportation & Electronics 2,066","color":"#15803d"},{"id":"cbg","label":"Consumer 1,247","color":"#c2600a"},{"id":"corp","label":"Corporate（已退出/處分業務）96","color":"#94a3b8"},{"id":"ps","label":"Personal Safety 965","color":"#3b82f6"},{"id":"iat","label":"Industrial Adhesives & Tapes 642","color":"#3b82f6"},{"id":"em","label":"Electrical Markets 391","color":"#3b82f6"},{"id":"abr","label":"Abrasives 342","color":"#3b82f6"},{"id":"isd","label":"Industrial Specialties 326","color":"#3b82f6"},{"id":"aam","label":"Automotive Aftermarket 283","color":"#3b82f6"},{"id":"rg","label":"Roofing Granules 142","color":"#3b82f6"},{"id":"cbt","label":"Commercial Branding & Transportation 737","color":"#34a853"},{"id":"elec","label":"Electronics 682","color":"#34a853"},{"id":"aero","label":"Automotive & Aerospace 485","color":"#34a853"},{"id":"advm","label":"Advanced Materials 162","color":"#34a853"},{"id":"hi","label":"Home Improvement 362","color":"#e08a3c"},{"id":"hac","label":"Home & Auto Care 318","color":"#e08a3c"},{"id":"cswb","label":"Consumer Safety & Well-Being 289","color":"#e08a3c"},{"id":"pe","label":"Packaging & Expression 278","color":"#e08a3c"},{"id":"m_safety","label":"職業安全與個人防護 965","color":"#1f2937"},{"id":"m_ind","label":"一般工業與耐久財 OEM 1,310","color":"#1f2937"},{"id":"m_grid","label":"電力基建與電網 391","color":"#1f2937"},{"id":"m_auto","label":"汽車售後維修通路 283","color":"#1f2937"},{"id":"m_oem","label":"汽車 OEM 與航太 485","color":"#1f2937"},{"id":"m_build","label":"建築營造（屋頂瓦材） 142","color":"#1f2937"},{"id":"m_sign","label":"商業標識與道路安全 737","color":"#1f2937"},{"id":"m_semi","label":"半導體 / 資料中心 / 消費電子 682","color":"#1f2937"},{"id":"m_advapp","label":"先進材料應用（航太·能源·衛星） 162","color":"#1f2937"},{"id":"m_retail","label":"零售與電商通路 1,247","color":"#1f2937"},{"id":"m_corp","label":"已退出 / 處分業務殘留 96","color":"#94a3b8"}],"links":[{"source":"sibg","target":"ps","value":965},{"source":"sibg","target":"iat","value":642},{"source":"sibg","target":"em","value":391},{"source":"sibg","target":"abr","value":342},{"source":"sibg","target":"isd","value":326},{"source":"sibg","target":"aam","value":283},{"source":"sibg","target":"rg","value":142},{"source":"tebg","target":"cbt","value":737},{"source":"tebg","target":"elec","value":682},{"source":"tebg","target":"aero","value":485},{"source":"tebg","target":"advm","value":162},{"source":"cbg","target":"hi","value":362},{"source":"cbg","target":"hac","value":318},{"source":"cbg","target":"cswb","value":289},{"source":"cbg","target":"pe","value":278},{"source":"ps","target":"m_safety","value":965},{"source":"iat","target":"m_ind","value":642},{"source":"abr","target":"m_ind","value":342},{"source":"isd","target":"m_ind","value":326},{"source":"em","target":"m_grid","value":391},{"source":"aam","target":"m_auto","value":283},{"source":"aero","target":"m_oem","value":485},{"source":"rg","target":"m_build","value":142},{"source":"cbt","target":"m_sign","value":737},{"source":"elec","target":"m_semi","value":682},{"source":"advm","target":"m_advapp","value":162},{"source":"hi","target":"m_retail","value":362},{"source":"hac","target":"m_retail","value":318},{"source":"cswb","target":"m_retail","value":289},{"source":"pe","target":"m_retail","value":278},{"source":"corp","target":"m_corp","value":96}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_mmmq226");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+      <div class="note">⚑ 圖中最需要被解讀的是右側最下方那條灰色的<b>「已退出／處分業務殘留 96」</b>：
+      它去年同期是 $273M。這 15 條真正的產品線加總為 $6,404M、YoY +5.5%，
+      而全公司只有 +2.5% —— 差距完全來自這條正在歸零的灰線。<br>
+      ⚑ 第二個解讀點是<b>集中度</b>：最大的終端「一般工業與耐久財 OEM」$1,310M 僅佔全公司 20.2%，
+      最大的單一產品線 Personal Safety 佔 14.8%。3M 的下游分散度，在製造業裡屬於極端的一端 ——
+      這是它能同時承受消費電子、汽車、美國消費三個終端同時走弱、卻仍交出 5.4% 調整後有機成長的結構性原因。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">客戶集中度 — 一個「揭露缺席」的反推</div>
+      <p>FY2025 10-K <b>完全沒有任何 10% 以上客戶的揭露</b>。依 ASC 280-10-50-42，
+      若單一外部客戶的營收達到合併營收的 10% 以上，即<b>必須</b>揭露該事實、金額與所屬部門。
+      3M 未作此揭露，等同於申報「<b>沒有任何單一客戶達到營收的 10%</b>」。這是可以從法規義務嚴格反推的結論，
+      信心度高，也是 3M 相對半導體、資本財同業最重要的結構性優勢之一。</p>
+      <p><b>但反面同樣要記錄</b>：Consumer 部門（佔全公司 19.2%）本季的衰退，管理層歸因於
+      「<b>several key retailers</b>」在 6 月下半縮減庫存 —— 這證明在這個 20% 的次體系內，通路其實高度集中，
+      只是因為未觸及全公司 10% 門檻而<b>沒有揭露義務</b>。
+      投資人因此無從得知 Consumer 部門對前幾大零售商的實際依存度，
+      而這正是本季唯一出現負成長的部門。這是本報告在供應鏈面向上的主要<b>留白反推</b>。</p>
+    </div>
+
+    <div class="section-title">上游：分層卡片（依 filing 逐條標註出處）</div>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>第一層：原物料與能源投入</h4>
+        <div class="meta">出處：10-K Item 1「Raw Materials」＋ Item 1A 第 8 項風險因子</div>
+        <p>10-K 明文列舉的投入為：<b>components（零組件）、compounds（化合物）、raw materials（原物料）、
+        energy — 且明確括號註明「including oil and natural gas and their derivatives」</b>。<br>
+        Item 1 的完整敘述僅兩句：2025 年價格壓力、關稅與地緣不確定性促使生產者調整產能與重組營運，
+        造成供應緊縮與通膨，但「<b>透過議定的供應合約與運用對供應商群體的規模槓桿加以抵銷</b>」。<br>
+        <span style="color:#b91c4a;font-weight:600;">⚑ 3M 未揭露任何品類的採購金額或佔 COGS 比重，本報告不做估算。</span><br>
+        <b>本季的量化痕跡</b>：油價通膨全年估 $150–175M（原估 $125M）；
+        10-Q MD&amp;A 明列 COGS 率上升 1.2pp 的主因之一為「rising oil prices」。</p>
+      </div>
+      <div class="tech-card r">
+        <h4>第二層：單一／有限來源供應商（唯一的書面承認）</h4>
+        <div class="meta">出處：10-K Item 1A 第 8 項風險因子，原文</div>
+        <p>「…In addition, <b>some of our suppliers are limited- or sole-source suppliers</b>, and our ability
+        to meet our obligations to customers depends on the performance, product quality, and stability of such
+        suppliers and the Company's ability to source adequate alternatives in a cost-effective manner.」<br>
+        <span style="color:#b91c4a;font-weight:600;">⚑ 這是 3M 對單一來源依賴的<b>唯一一次</b>書面揭露，且完全不量化</span> ——
+        未說明家數、品項、佔採購比重，亦未說明是否已有替代來源完成認證。
+        對照法說會：EBO 的擴產瓶頸被描述為「產能翻倍仍遠不及需求」、並已在洽代工廠，
+        但沒有任何一位分析師把這件事與 10-K 的單一來源風險連起來問。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>第三層：PFAS 退出造成的上游結構性斷點</h4>
+        <div class="meta">出處：10-Q Overview、Note 3、三大部門 MD&amp;A</div>
+        <p>3M 已於 <b>2025 年底完成 PFAS 製造退出</b>；2026 Q2 進一步處分 <b>Dyneon GmbH</b>
+        （PFAS 製造子公司），認列 $324M 稅前損失。<br>
+        後果是：原本<b>自製</b>的含氟化合物，現在必須改為外購或以替代材料重新設計配方。
+        10-Q 在 SIBG、TEBG、CBG <b>三個部門的說明中各出現一次</b>
+        「cost dis-synergies following the exit of PFAS manufacturing」，列為共同的利潤率逆風。<br>
+        <b>這是 filing 可直接佐證的一條上游成本上升，且是本季唯一同時影響三大部門的供應鏈因子。</b>
+        法說會的對應標籤是「stranded cost 全年 $150M、下半年較多」。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>第四層：少數的垂直整合 — 礦物粒料</h4>
+        <div class="meta">出處：10-K Item 1 業務描述 ＋ Item 4 Mine Safety Disclosures / Exhibit 95</div>
+        <p>Roofing Granules 使用「natural and color-coated mineral granules for shingles」，
+        而 3M 依 Dodd-Frank 第 1503 條<b>須就其自營礦場申報礦場安全資訊</b>（10-K Item 4 與 Exhibit 95，10-Q 同）。<br>
+        → 這是 3M 供應鏈中<b>少數自有上游</b>的環節。規模不大：Roofing Granules Q2 營收 $142M（全公司 2.2%），
+        但本季 <b>+5.2%</b>，管理層預期下半年因市場復甦與低基期持續改善。</p>
+      </div>
+      <div class="tech-card">
+        <h4>第五層：供應鏈金融</h4>
+        <div class="meta">出處：10-Q Note 7「Supplier Finance Program Obligations」</div>
+        <p>3M 承諾於原到期日（一般為發票日後 90 天內）付款給參與銀行；銀行另與供應商約定可提前付款。
+        <b>2026/6/30 與 2025/12/31 已確認發票餘額各約 $0.3B</b>，列入應付帳款。<br>
+        <b>解讀</b>：兩期持平，佔應付帳款 $3,108M 約 10%，<b>未見異常擴張</b> ——
+        亦即本季應付帳款增加 $406M（2,702→3,108）不是靠拉長供應商帳期做出來的，
+        這對「營運現金流品質」是一個正面的佐證點。</p>
+      </div>
+      <div class="tech-card r">
+        <h4>第六層：新增的服務供應鏈依賴（本季新事件）</h4>
+        <div class="meta">出處：僅法說會準備稿；10-Q／10-K 均未揭露</div>
+        <p>Bill Brown：財務、HR、客戶服務等後台功能將整併為<b>單一全球服務交付模式</b>，
+        並「<b>partnering with an external provider to run them at scale using automation and AI</b>」。<br>
+        <span style="color:#b91c4a;font-weight:600;">⚑ 未點名該外部供應商、未揭露合約金額與年限、未說明涵蓋人數。</span>
+        這是一條<b>新增的、集中的第三方依賴</b>：把跨區域、跨事業部的財務與客服流程交給單一外部業者，
+        在取得規模效率的同時，也把營運風險集中化。10-Q Note 5 的轉型計畫定義中確實包含
+        「business process services and locations」的結構重設計，但未提及外包對象。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">製造與地理曝險（可覆核）</div>
+      <div class="tbl-scroll">
+      <table>
+        <tr><th>項目</th><th>數值</th><th style="text-align:left;">出處</th></tr>
+        <tr><td>美國製造據點</td><td><b>48 廠 / 26 州</b></td><td class="wrap" style="text-align:left;">10-K Item 2 Properties</td></tr>
+        <tr><td>海外製造與加工據點</td><td><b>60 廠 / 25 國</b></td><td class="wrap" style="text-align:left;">10-K Item 2 Properties（合計 108 廠；Bill 口稱「100 plants」）</td></tr>
+        <tr><td>物業所有權</td><td>以自有為主</td><td class="wrap" style="text-align:left;">10-K Item 2「3M owns the majority of its physical properties」</td></tr>
+        <tr><td>員工</td><td>約 60,500 FTE（美 22,500／海外 38,000）</td><td class="wrap" style="text-align:left;">10-K Item 1 Human Capital</td></tr>
+        <tr><td>美國以外營收占比</td><td>約 56%（FY2025）</td><td class="wrap" style="text-align:left;">10-K Item 1A</td></tr>
+        <tr><td>Q2 地區營收</td><td>美洲 54.1%／亞太 28.8%／EMEA 17.1%</td><td class="wrap" style="text-align:left;">10-Q Note 2</td></tr>
+        <tr><td>美國單一國家</td><td>$2,802M（43.1%），YoY <span class="neg">−0.5%</span></td><td class="wrap" style="text-align:left;">10-Q Note 2</td></tr>
+        <tr><td>中國／香港</td><td>$859M（13.2%），YoY <span class="pos">+13.9%</span></td><td class="wrap" style="text-align:left;">10-Q Note 2</td></tr>
+        <tr><td>存貨</td><td>$3,770M（成品 1,776／在製 1,124／原料 870）</td><td class="wrap" style="text-align:left;">10-Q Note 7</td></tr>
+        <tr><td>應付帳款</td><td>$3,108M（2025/12：$2,702M）</td><td class="wrap" style="text-align:left;">10-Q 資產負債表</td></tr>
+        <tr><td>2026 資本支出預估</td><td>約 $1.1B</td><td class="wrap" style="text-align:left;">10-Q MD&amp;A（上半年已投入 $448M）</td></tr>
+        <tr><td>產能利用率</td><td>約 63.5–64%（約 300 項資產）</td><td class="wrap" style="text-align:left;"><span class="neg">僅法說會口述，filing 零揭露</span></td></tr>
+        <tr><td>中國廠數與人數</td><td>6 廠、逾 5,000 人；內銷／出口 50/50</td><td class="wrap" style="text-align:left;"><span class="neg">僅法說會口述，filing 零揭露</span></td></tr>
+        <tr><td>存貨天數改善</td><td>YoY 改善 7 天</td><td class="wrap" style="text-align:left;"><span class="neg">僅法說會口述</span></td></tr>
+      </table>
+      </div>
+      <div class="note yellow">⚑ 美國營收 <b>YoY 微幅衰退 0.5%</b>（$2,817M→$2,802M），而美國佔 3M 營收 43.1%，是最大單一市場。
+      法說會的地理敘事聚焦在「中國雙位數、印度連七季雙位數、歐洲重回成長」，
+      對佔比最高的美國只用一句「U.S. and Canada industrial businesses grew mid-single-digits, partially offset by
+      softness in Consumer and auto aftermarket」帶過 —— 沒有提到<b>整體美國營收其實是負的</b>。
+      這是地理層面的留白反推：三個成長故事的合計規模（中港 $859M）仍小於一個正在萎縮的美國市場（$2,802M）。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">關稅：供應鏈風險中唯一被量化、但也留了一個伏筆的項目</div>
+      <p>10-K Item 1A 明列關稅可能「提高自他國進口的原料與零組件成本、<b>打斷既有供應鏈迫使更換供應商或遷移產能</b>、
+      限制終端市場准入」。本季的量化痕跡：關稅＋stranded cost 合計造成 <b>$110M</b> 的營業利益逆風（法說會）。</p>
+      <p><b>伏筆在這一句</b>：Anurag 在準備稿中主動說「<b>We have not received any tariff refunds to date</b>」。
+      這句話有兩層意思 ——（一）目前的財測與實績<b>完全沒有假設任何關稅退稅</b>，
+      因此若未來取得退稅，屬於未入帳的上檔選擇權；（二）反過來說，3M 顯然<b>已經申請或預期過退稅</b>，
+      否則不會特別澄清「至今一分未收」。管理層沒有說明申請的金額規模，也沒有分析師追問。
+      這是本季風險／機會兩面性最明確、卻資訊最少的一個項目。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">信心度標註（本分頁自我校準）</div>
+      <div class="tbl-scroll">
+      <table>
+        <tr><th>區塊</th><th>信心度</th><th style="text-align:left;">理由</th></tr>
+        <tr><td>下游產品線營收與終端對照（關係圖）</td><td><b class="pos">高</b></td><td class="wrap" style="text-align:left;">10-Q Note 2 逐項金額，加總與 Note 16 部門營收完全一致</td></tr>
+        <tr><td>無 10% 以上客戶</td><td><b class="pos">高</b></td><td class="wrap" style="text-align:left;">ASC 280 揭露義務的反推，邏輯嚴謹</td></tr>
+        <tr><td>製造據點與地理分布</td><td><b class="pos">高</b></td><td class="wrap" style="text-align:left;">10-K Item 2、10-Q Note 2 明文</td></tr>
+        <tr><td>PFAS 退出造成的上游成本斷點</td><td><b class="pos">高</b></td><td class="wrap" style="text-align:left;">10-Q 三個部門說明各載明一次，並與 Corporate 營收、COGS 率互相印證</td></tr>
+        <tr><td>上游投入的<b>品類分類</b></td><td><b class="neu">中</b></td><td class="wrap" style="text-align:left;">品類名稱來自 10-K 原文，但無金額、無供應商名單</td></tr>
+        <tr><td>上游各品類佔 COGS 比重</td><td><b class="neg">無法取得</b></td><td class="wrap" style="text-align:left;">filing 完全未揭露；<b>本報告不做估算填補</b></td></tr>
+        <tr><td>單一／有限來源供應商的家數與品項</td><td><b class="neg">無法取得</b></td><td class="wrap" style="text-align:left;">10-K 僅承認存在性</td></tr>
+        <tr><td>產能利用率 63.5–64%</td><td><b class="neg">低（僅口述）</b></td><td class="wrap" style="text-align:left;">filing 零揭露，無法覆核；且分母「300 項資產／逾半數產量」的定義由公司自訂</td></tr>
+        <tr><td>EBO 生態系 44 家、代工進度</td><td><b class="neg">低（僅口述）</b></td><td class="wrap" style="text-align:left;">filing 零揭露</td></tr>
+        <tr><td>後台外包的對象與規模</td><td><b class="neg">低（僅口述）</b></td><td class="wrap" style="text-align:left;">未點名供應商、未揭露金額</td></tr>
+      </table>
+      </div>
+    </div>
+  </div>
+  <!-- ============ TAB 5: 風險矩陣 ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="note grey">徽章＝本報告對<b>未來 4–8 季</b>的風險強度判讀，非機率預測。
+    每條均標註可覆核出處。<b>第 1 條為本報告的原創前瞻風險</b> —— 由散落在準備稿、Q&amp;A 與 10-Q 三處的
+    數字拼接而成，管理層未在任何一處直接承認。</div>
+
+    <div class="card">
+      <div class="card-title">高風險</div>
+
+      <div class="risk-item">
+        <span class="risk-badge high">高</span>
+        <div class="risk-text">
+          <div class="risk-title">① 股東回報的三重天花板在 2026 下半年同時到期（原創前瞻風險）</div>
+          三個獨立的限制條件在同一個時點收斂，而它們分別被放在三份不同的文件裡，從未被並列：<br><br>
+          <b>(a) 買回授權即將見底</b>：2025/2 董事會核准 $7.5B，截至 2026/6/30 <b>僅剩 $1,766M</b>。
+          上半年執行 $3.0B ⇒ 剩餘授權約當 <b>3.5 個月</b>的執行速度。<br>
+          <b>(b) 回報承諾額度所剩無幾</b>：Bill 準備稿「Since 2025, we returned <b>$8.6 billion</b>… against our
+          commitment to return <b>$10 billion+</b> through 2027」⇒ 2026H2＋2027 共 6 個季度只剩 <b>約 $1.4B</b>；
+          而<b>光是股利就要花掉約 $2.4B</b>（每季約 $0.40B × 6）。承諾若不上修，隱含的買回空間<b>已經是負數</b>。<br>
+          <b>(c) 美國境內現金枯竭</b>：10-Q 揭露美國現金＋有價證券由 <b>$2.4B 降至 $0.5B</b>（海外 $2.8B），
+          且 7 月為 Madison 提取 $1.43B 定期貸款。上半年 GAAP 自由現金流僅 <b>$1,112M</b>，
+          卻執行了 $3.0B 買回＋$0.8B 股利 —— 差額是從資產負債表的現金存量支應的，這個存量現在見底了。<br><br>
+          <b>為什麼這是風險而非會計細節</b>：本季 EPS 成長 $0.24 當中，<b>$0.08（三分之一）來自股數減少</b>
+          （稀釋股數 540.6M → 522.4M，−3.4%）。若下半年買回被迫大幅減速，
+          這個 EPS 引擎會在 2027 年幾乎完全熄火，而 2027 年正是 Investor Day 承諾期的最後一年 ——
+          屆時「雙位數 EPS CAGR」將必須<b>完全由營運增量獨力達成</b>。<br>
+          分析師 Nicole DeBlase 問到了正確的問題（下半年買回節奏），Anurag 用「opportunistic and disciplined」回答，
+          三個限制條件一個都沒提。
+          <div class="risk-source">出處：10-Q Part II Item 2（剩餘授權 $1,766M）｜10-Q「Cash, cash equivalents and marketable securities」表（美國 $0.5B）｜10-Q 現金流量表｜法說會準備稿（$8.6B / $10B+）｜10-Q Note 11（$1.43B 定期貸款）</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge high">高</span>
+        <div class="risk-text">
+          <div class="risk-title">② 「調整後」與 GAAP 的裂口已擴大到敘事層級</div>
+          本季管理層口徑與 GAAP 的三組差距，全部出現在同日申報的 10-Q 裡：<br>
+          ・有機成長 <b>5.4%（調整後）vs 2.3%（GAAP）</b>，差 3.1pp，全來自把去年同期 $186M 的 PFAS 營收移出基期<br>
+          ・營益率 <b>24.9%（調整後）vs 15.1%（GAAP，YoY −2.9pp）</b><br>
+          ・EPS <b>$2.40（調整後）vs $1.78（GAAP）</b>，上半年 <b>$4.54 vs $3.01（GAAP YoY −11%）</b><br>
+          上半年特別項目對淨利的影響達 <b>$809M（$1.53/股）</b>，年化約 $3.06/股 ——
+          相對於全年調整後 EPS 指引 $8.80–8.95，這是<b>約三分之一</b>的量級。<br>
+          更關鍵的是這些「特別項目」的<b>持續性</b>：PFAS 訴訟自 2018 年起連年出現、
+          轉型計畫自 2025 Q3 啟動且管理層自述要持續<b>三到五年</b>、
+          處分損失連續兩季發生。一個每年都出現、且被預告未來三到五年還會出現的成本，
+          在經濟實質上很難被稱為非經常性。<br>
+          風險在於：只要市場開始用 GAAP 而非調整後數字定價，本季「歷史最高利潤率」的敘事基礎就會消失。
+          <div class="risk-source">出處：10-Q「Certain amounts adjusted for special items」對照表｜10-Q Note 5、Note 16｜法說會準備稿</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge high">高</span>
+        <div class="risk-text">
+          <div class="risk-title">③ PFAS／CAE 法律負債 $9.3B，且最大的一項尚未定價完成</div>
+          10-Q Note 15：PFAS 相關環境負債 <b>$7.4B</b>（流動 $2.9B）＋ CAE 負債 <b>$1.9B</b>（流動 $1.0B），
+          合計 <b>$9.3B</b>，其中<b>未來 12 個月內須支付 $3.9B</b>。
+          對照股東權益僅 <b>$2,952M</b> —— 法律負債是股東權益的 <b>3.1 倍</b>。<br>
+          三個尚未關閉的變數：<br>
+          ・<b>PWS Settlement</b> 總額區間 $10.5B–$12.5B，最終金額取決於 class member 的檢測結果，
+            而提交截止日是 <b>2026/7/31</b>（法說會後 10 天）—— 這是一個<b>即將在 Q3 揭曉</b>的區間收斂事件，
+            法說會完全未提。<br>
+          ・<b>AFFF 人身傷害 MDL</b>：2025/8 法院撤銷原訂 2025/10 的首場 bellwether 審判，<b>迄今未定新日期</b>。
+            10-Q 明文「unable to estimate a possible loss or range of possible loss in excess of the amounts accrued」——
+            即這一整塊<b>尚未入帳</b>。<br>
+          ・<b>持續新增的原告</b>：2026/4 阿拉巴馬 18 家自來水系統（PWS 退出者）新提告；
+            喬治亞、緬因、麻州、密西根、明尼蘇達、維吉尼亞等州 2026 年上半年均有新案；
+            CAE 在澳洲已有 writ、英國已收 Letter Before Action（<b>國際戰線剛開始</b>）。<br>
+          注意流動性交互作用：這 $3.9B 的一年內給付，與上述第①條的現金枯竭是<b>同一個資產負債表</b>的問題。
+          <div class="risk-source">出處：10-Q Note 15（環境負債、CAE 負債、PWS、AFFF MDL、各州訴訟）｜10-Q 資產負債表</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title">中度風險</div>
+
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">④ 內部人在法說會後 1–2 天集體出脫，且與公司買回價形成 16% 的價差</div>
+          Form 4 顯示，法說會（7/21）後的第一與第二個交易日，<b>四位高階主管</b>同步申報賣出：<br>
+          ・Kevin H. Rhodes（EVP, Chief Legal Officer）7/22 行使 7,669 股 @$154.69 → 全數賣出 @<b>$171.20</b><br>
+          ・Christian T. Goralski Jr.（Group President）7/22 行使 4,902 股 → 全數賣出 @<b>$170.46</b><br>
+          ・John P. Banovetz（EVP）7/23 行使 7,880 股 → 全數賣出 @<b>$170.44</b><br>
+          ・Theresa E. Reinseth（SVP &amp; <b>Chief Accounting Officer</b>）7/23 直接賣出 924 股 @<b>$169.42</b>
+            —— <b>未行使任何選擇權</b>，是既有持股的 26.1%<br>
+          三位行使者的<b>行使股數與賣出股數完全相同、淨保留為零</b>，交易後持股與行使前一模一樣。<br>
+          <b>交叉比對</b>：3M 公司自身在 Q2 以均價 <b>$147.01</b> 買回 6,560,794 股（10-Q Part II Item 2）。
+          公司資本在 $147 買進，內部人個人資本在 $170 賣出，價差約 <b>16%</b>。<br>
+          <b>行為轉變</b>：5/1 的 RSU 歸屬中，包含 <b>CEO Bill Brown 本人</b>在內的高管全部只有 Code F（代扣稅款），
+          <b>無一在公開市場賣出</b>；7 月則全部轉為 Code S。<br>
+          <b>必須併陳的減弱因子</b>：這批選擇權的到期日是 <b>2027/2/6</b>（2018/2/7 起可行使），
+          僅剩約 6.5 個月 —— <b>行使本身是必然的，不構成訊號</b>；具裁量性的只有「在剩餘窗口中選在法說會後兩天」
+          與「選擇全數賣出而非保留」。此外 <b>CEO 與 CFO 均未參與</b>這波賣出。
+          四份 Form 4 的 XML <b>均未勾選 10b5-1 旗標</b>，但 7 月新設的計畫要到 Q3 10-Q 才會揭露，無法完全排除。<br>
+          綜合判定為<b>中度</b>而非高度 —— 到期壓力是合理解釋，不宜過度解讀。
+          <div class="risk-source">出處：Form 4 accession 0000066740-26-000250 / -000252 / -000255 / -000256（7/22–23）｜-000180 / -000182 / -000184（5/1 對照組）｜10-Q Part II Item 2（公司買回均價）｜10-Q Part II Item 5（10b5-1 揭露）</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">⑤ 毛利率與營益率的方向相反 —— 利潤率擴張來自訴訟費用波動</div>
+          10-Q 顯示 Q2 <b>COGS 佔營收比重上升 1.2pp</b>（57.5%→58.7%，即毛利率 42.5%→<b>41.3%</b>），
+          而 <b>SG&amp;A 佔比下降 3.5pp</b>（19.9%→16.4%），10-Q 明文其主因為
+          「<b>lower net costs from significant litigation</b>」。<br>
+          也就是說，本季調整後營益率 +40bps 的來源在費用端，而費用端的改善又與<b>訴訟費用的季度波動</b>高度相關 ——
+          這既非產能利用率改善，也非組合升級，<b>可持續性最低</b>。
+          Q2 2025 的 litigation &amp; PFAS exit 特別項目為 $347M，Q2 2026 為 $183M；
+          上半年更從 $421M 降至 $13M（因保險理賠回收增加）。這條線一旦反轉，營益率的改善會立刻消失。<br>
+          管理層對此的說法是「On gross margins, we're tracking close to mid-40s right now」（Bill Brown），
+          與 41.3% 的實際值差距明顯，見 Q&amp;A 分頁邏輯缺口 4。
+          <div class="risk-source">出處：10-Q MD&amp;A「Operating Expenses」表與說明｜10-Q Note 16 Corporate special items｜法說會 Amit Mehrotra 提問</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">⑥ 2027 年 outgrowth 的算式已把全部壓力後推到最後一年</div>
+          Investor Day 承諾 2025–2027 累計高於 macro <b>$10 億</b>。依 Bill 自己在本場給的分年數字：
+          2025 年約 $100M 出頭、2026 年約 <b>$450M</b> ⇒ 累計約 $550M，
+          <b>2027 年單年須再做出 $450M 以上</b>，即完整複製今年這個「最好的一年」。<br>
+          而 2027 年同時要面對：買回引擎熄火（見①）、消費電子與汽車終端仍在收縮、
+          Class 3 佔新品 75% 的結構未變、transformation 的廠網整併收成期落在 2029–2031（Bill 自述「three to five years」）。<br>
+          Bill 對此的回應是「We'll come back early next year and talk about next year」，未承認算式的壓力。
+          <div class="risk-source">出處：法說會 Jeff Sprague 與 Amit Mehrotra 提問｜Bill Brown 分年數字｜10-Q Note 5（轉型進度）</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">⑦ Madison JV 引入兩個新的損益波動源，且 2031 年有一筆未定價的贖回義務</div>
+          10-Q Note 3：Bain 的少數股權<b>五年後可贖回</b>，須列於永久權益之外，按帳面值與<b>估計贖回值孰高</b>衡量，
+          且明文「<b>affecting net income attributable to 3M</b>」；退場與流動性條款另形成一個
+          <b>按公允價值列帳的衍生工具</b>。<br>
+          3M 已有一個同類型的損益擾動源：Solventum 持股的價值變動，本季單季就貢獻 <b>+$303M</b> 的非營運利益
+          （去年同期為 −$7M，YoY 順風 $310M），但上半年累計卻是 <b>−$389M 的逆風</b> —— 波動極大且不可控。
+          Madison 的贖回權將成為<b>第二個</b>這樣的科目，而它的敏感度、贖回定價機制、上限，10-Q 全部未揭露。<br>
+          另外，JV 動用的 <b>$1.43B 變動利率定期貸款</b>（364 天期，可展延至多 12 個月）
+          須全額合併入 3M 報表，而 3M 股東權益僅 $2,952M。
+          信評（Moody's A3／S&amp;P BBB+／Fitch A−）是否已納入此結構，10-Q 未說明。
+          <div class="risk-source">出處：10-Q Note 3｜Note 6（Solventum 價值變動）｜Note 11 與 Exhibit 10.1（定期貸款、Fire Safety Platform Holdco）｜10-Q「Total debt」信評表</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">⑧ 消費電子下半年年減 high teens，而美國營收已在衰退</div>
+          Bill 明言下半年裝置（PC／平板）生產量預估<b>年減 high teens</b>，主因是記憶體短缺與高價；
+          汽車產量下半年仍預期年減；汽車售後的維修理賠件數持續下滑。
+          10-Q 佐證：TEBG 上半年受 auto 與 consumer electronics 拖累、Automotive Aftermarket Q2 −2.7%、
+          TEBG 營益率 <b>YoY 由 24.6% 降至 24.4%</b>（三大部門中唯一同時成長、利潤率卻走弱者）。<br>
+          同時，占營收 43.1% 的<b>美國市場營收 YoY 微幅衰退 0.5%</b>（$2,817M→$2,802M），
+          而法說會的地理敘事只講中國、印度、歐洲三個成長故事。
+          三個成長故事的規模合計仍小於一個正在萎縮的美國市場。
+          <div class="risk-source">出處：10-Q Note 2（地區與國別營收）｜10-Q TEBG 部門說明｜法說會 Chigusa Katoku、Deane Dray 提問</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="card">
+      <div class="card-title">低風險（但值得追蹤）</div>
+
+      <div class="risk-item">
+        <span class="risk-badge low">低</span>
+        <div class="risk-text">
+          <div class="risk-title">⑨ 客戶集中度：結構性優勢，但 Consumer 次體系是例外</div>
+          10-K 未揭露任何 10% 以上客戶 ⇒ 依 ASC 280 反推，無單一客戶達營收 10%。
+          最大終端「一般工業與耐久財 OEM」僅佔 20.2%，最大產品線 Personal Safety 佔 14.8%。
+          這是 3M 能同時承受消費電子、汽車、美國消費三個終端走弱仍交出成長的結構原因。<br>
+          <b>唯一的例外</b>：Consumer 部門（佔 19.2%）本季的衰退被歸因於「several key retailers」，
+          顯示該次體系內通路確實集中，只是未達揭露門檻。
+          <div class="risk-source">出處：10-K（無客戶集中度揭露）｜10-Q Note 2｜法說會 Nigel Coe 提問</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge low">低</span>
+        <div class="risk-text">
+          <div class="risk-title">⑩ 供應鏈金融未被用來美化現金流</div>
+          10-Q Note 7：supplier finance 已確認發票餘額兩期<b>各約 $0.3B、完全持平</b>，佔應付帳款約 10%。
+          本季應付帳款增加 $406M 因此並非靠拉長供應商帳期換來的。
+          這對「營運現金流品質」是正面佐證，也是本季少數<b>經得起挑剔的現金流細節</b>。
+          <div class="risk-source">出處：10-Q Note 7、資產負債表、現金流量表</div>
+        </div>
+      </div>
+
+      <div class="risk-item">
+        <span class="risk-badge low">低</span>
+        <div class="risk-text">
+          <div class="risk-title">⑪ EBO 的下檔風險有限，但上檔也被自己封頂</div>
+          EBO 今年營收 $40–50M，僅佔全公司 <b>0.18%</b> —— 即使完全失敗，財務衝擊可忽略。
+          反面亦然：即使做到管理層說的 4–5 倍（$160–250M），也只有 <b>0.6–1.0%</b>，
+          且 Bill 已明言會<b>授權他人製造</b>以滿足 hyperscaler 的多源要求。
+          真正的風險不在 EBO 本身，而在<b>市場對 EBO 的定價</b>是否已超出這個量級。
+          <div class="risk-source">出處：法說會 Scott Davis、Chris Snyder 提問｜10-Q Note 2（Electronics 產品線 $682M）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 6: 損益表 ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$6,500M</div><div class="kpi-lbl">Q2 淨銷售</div><div class="kpi-sub">GAAP YoY +2.5%</div></div>
+      <div class="kpi"><div class="kpi-val">24.9%</div><div class="kpi-lbl">調整後營益率</div><div class="kpi-sub">+40bps；GAAP 為 <b>15.1%</b></div></div>
+      <div class="kpi"><div class="kpi-val">$2.40</div><div class="kpi-lbl">調整後 EPS</div><div class="kpi-sub">+11%；GAAP 為 <b>$1.78</b></div></div>
+      <div class="kpi"><div class="kpi-val">41.3%</div><div class="kpi-lbl">GAAP 毛利率</div><div class="kpi-sub neg">YoY −1.2pp</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併損益表 — Q2 逐行 YoY（百萬美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>科目</th><th>Q2 2026</th><th>Q2 2025</th><th>YoY $</th><th>YoY %</th><th>佔營收 26</th><th>佔營收 25</th></tr>
+        <tr><td><strong>Net sales</strong></td><td><strong>6,500</strong></td><td><strong>6,344</strong></td><td class="pos">+156</td><td class="pos">+2.5%</td><td>100.0%</td><td>100.0%</td></tr>
+        <tr class="section-head"><td colspan="7">營業費用</td></tr>
+        <tr><td>Cost of sales</td><td>3,817</td><td>3,646</td><td class="neg">+171</td><td class="neg">+4.7%</td><td>58.7%</td><td>57.5%</td></tr>
+        <tr><td>Selling, general &amp; administrative</td><td>1,061</td><td>1,267</td><td class="pos">−206</td><td class="pos">−16.3%</td><td>16.4%</td><td>19.9%</td></tr>
+        <tr><td>Research, development &amp; related</td><td>302</td><td>288</td><td>+14</td><td>+4.9%</td><td>4.6%</td><td>4.5%</td></tr>
+        <tr><td>Loss on business divestitures</td><td>336</td><td>3</td><td class="neg">+333</td><td class="neg">—</td><td>5.2%</td><td>0.1%</td></tr>
+        <tr class="subtotal"><td>Total operating expenses</td><td>5,516</td><td>5,204</td><td>+312</td><td>+6.0%</td><td>84.9%</td><td>82.0%</td></tr>
+        <tr class="total"><td>Operating income（GAAP）</td><td>984</td><td>1,140</td><td class="neg">−156</td><td class="neg">−13.7%</td><td><b>15.1%</b></td><td>18.0%</td></tr>
+        <tr class="section-head"><td colspan="7">營業外</td></tr>
+        <tr><td>Interest expense</td><td>202</td><td>237</td><td class="pos">−35</td><td class="pos">−14.8%</td><td></td><td></td></tr>
+        <tr><td>Interest income</td><td>(32)</td><td>(50)</td><td class="neg">+18</td><td class="neg">−36.0%</td><td></td><td></td></tr>
+        <tr><td>退休金非服務成本（收益）</td><td>(3)</td><td>23</td><td class="pos">−26</td><td class="pos">—</td><td></td><td></td></tr>
+        <tr><td><b>Solventum 持股價值變動</b></td><td class="pos">(303)</td><td>7</td><td class="pos">−310</td><td class="pos">—</td><td></td><td></td></tr>
+        <tr class="subtotal"><td>Other expense (income), net</td><td>(136)</td><td>217</td><td class="pos">−353</td><td class="pos">—</td><td></td><td></td></tr>
+        <tr><td>Income before income taxes</td><td>1,120</td><td>923</td><td class="pos">+197</td><td class="pos">+21.3%</td><td></td><td></td></tr>
+        <tr><td>Provision for income taxes</td><td>183</td><td>245</td><td class="pos">−62</td><td class="pos">−25.3%</td><td></td><td></td></tr>
+        <tr><td>有效稅率（GAAP）</td><td>16.3%</td><td>26.6%</td><td class="pos">−10.3pp</td><td></td><td></td><td></td></tr>
+        <tr><td>Income from unconsolidated subs, net</td><td>1</td><td>47</td><td class="neg">−46</td><td class="neg">−97.9%</td><td></td><td></td></tr>
+        <tr><td>Less: NCI</td><td>5</td><td>2</td><td>+3</td><td></td><td></td><td></td></tr>
+        <tr class="total"><td>Net income attributable to 3M</td><td>933</td><td>723</td><td class="pos">+210</td><td class="pos">+29.0%</td><td>14.4%</td><td>11.4%</td></tr>
+        <tr><td>稀釋股數（百萬股）</td><td>522.4</td><td>540.6</td><td class="pos">−18.2</td><td class="pos">−3.4%</td><td></td><td></td></tr>
+        <tr class="total"><td>EPS — diluted（GAAP）</td><td>$1.78</td><td>$1.34</td><td class="pos">+$0.44</td><td class="pos">+33%</td><td></td><td></td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 這張表最違反直覺的地方：<b>GAAP 營業利益衰退 13.7%，GAAP EPS 卻成長 33%</b>。
+    兩者之間的橋樑不在本業，而在三個營業外項目：<br>
+    ① <b>Solventum 持股價值變動由 −$7M 轉為 +$303M</b>，單此一項貢獻 $310M 的稅前順風（約 $0.60/股，扣稅後）；<br>
+    ② 有效稅率由 26.6% 降至 <b>16.3%</b>，10-Q 明列主因是 Solventum 持股與訴訟成本的稅務影響；<br>
+    ③ 稀釋股數減少 3.4%。<br>
+    換言之，本季 GAAP EPS 的 +33%，<b>幾乎完全來自 3M 持有的另一家公司的股價</b>、稅率波動與買回，
+    而非 3M 自己的營運。Anurag 在法說會上把這 33% 說成「This earnings growth was also reflected in the unadjusted results」，
+    暗示 GAAP 與調整後同向印證 —— 實際上兩者的驅動因子完全不同。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">GAAP → 非 GAAP 調整明細（Q2 2026，百萬美元 / 每股）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>項目</th><th>營業利益</th><th>稅前利益</th><th>稅</th><th>淨利</th><th>EPS</th></tr>
+        <tr><td><strong>GAAP</strong></td><td><strong>984</strong></td><td>1,120</td><td>183</td><td>933</td><td><strong>$1.78</strong></td></tr>
+        <tr><td>＋ 重大訴訟與 PFAS 退出淨成本</td><td>183</td><td>296</td><td>64</td><td>232</td><td>+0.44</td></tr>
+        <tr><td>＋ 併購相關成本（Madison）</td><td>12</td><td>12</td><td>—</td><td>12</td><td>+0.02</td></tr>
+        <tr><td>＋ 業務處分損失（Dyneon 等）</td><td>336</td><td>336</td><td>20</td><td>316</td><td>+0.61</td></tr>
+        <tr><td>− Solventum 持股價值變動</td><td>—</td><td>(303)</td><td>11</td><td>(314)</td><td class="neg">−0.60</td></tr>
+        <tr><td>＋ 轉型費用</td><td>100</td><td>100</td><td>24</td><td>76</td><td>+0.15</td></tr>
+        <tr class="subtotal"><td>特別項目合計</td><td>631</td><td>441</td><td>119</td><td>322</td><td>+0.62</td></tr>
+        <tr class="total"><td>Adjusted（非 GAAP）</td><td><strong>1,615</strong></td><td>1,561</td><td>302</td><td>1,255</td><td><strong>$2.40</strong></td></tr>
+        <tr><td>調整後營益率 / 有效稅率</td><td colspan="2"><b>24.9%</b>（去年 24.5%）</td><td colspan="3"><b>19.3%</b>（去年 20.8%）</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note yellow">⚑ 值得注意的是 Solventum 這一項的<b>方向</b>：它是唯一一個被<b>扣掉</b>的調整（−$0.60）。
+    也就是說，當 Solventum 股價上漲讓 GAAP EPS 變好時，3M 把它剔除；
+    上半年 Solventum 股價下跌造成 −$389M 逆風時，同樣剔除。這個處理本身是一致且合理的。<br>
+    但由此產生一個對照：<b>Solventum 的波動被雙向剔除，PFAS／轉型的成本卻只有單向（永遠是加回）</b>。
+    後者連年出現、且管理層預告未來三到五年還會出現 —— 兩者的「非經常性」程度並不對等。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">營收成長拆解 — GAAP vs 調整後（Q2 與上半年）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>口徑</th><th>有機成長</th><th>併購/處分</th><th>匯率</th><th>總營收成長</th></tr>
+        <tr class="section-head"><td colspan="5">Q2 2026</td></tr>
+        <tr><td>Total Company（GAAP）</td><td><b>2.3%</b></td><td>−0.6%</td><td>+0.7%</td><td><b>2.4%</b></td></tr>
+        <tr><td>移除 manufactured PFAS 特別項目</td><td class="pos">+3.1</td><td>−0.1</td><td>+0.1</td><td class="pos">+3.1</td></tr>
+        <tr class="total"><td>Adjusted（法說會採用口徑）</td><td><b>5.4%</b></td><td>−0.7%</td><td>+0.8%</td><td><b>5.5%</b></td></tr>
+        <tr class="section-head"><td colspan="5">上半年 2026</td></tr>
+        <tr><td>Total Company（GAAP）</td><td><b>0.5%</b></td><td>−0.4%</td><td>+1.8%</td><td><b>1.9%</b></td></tr>
+        <tr><td>移除 manufactured PFAS 特別項目</td><td class="pos">+2.8</td><td>—</td><td>—</td><td class="pos">+2.8</td></tr>
+        <tr class="total"><td>Adjusted</td><td><b>3.3%</b></td><td>−0.4%</td><td>+1.8%</td><td><b>4.7%</b></td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 上半年的落差比單季更大：<b>GAAP 有機成長只有 0.5%</b>，調整後 3.3%。
+    這是本報告認為整場法說會最重要、卻完全沒被提及的一個數字 ——
+    在「outgrowing the market by 2x」的敘事之下，上半年未經調整的有機成長幾乎是零。
+    調整的技術內容是：把去年上半年 Corporate 底下 $360M 的 manufactured PFAS 營收從比較基期扣除
+    （調整後上半年淨銷售因此由 GAAP 的 $12,530M 變成 $12,503M，去年由 $12,298M 變成 $11,938M）。
+    這個調整在會計與揭露上完全合規、且 10-Q 明列了對照表；問題只在於法說會單獨引用調整後數字時，
+    <b>沒有一次說明兩者的差距有 2.8–3.1 個百分點</b>。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">上半年累計（YTD，百萬美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>科目</th><th>H1 2026</th><th>H1 2025</th><th>YoY</th></tr>
+        <tr><td>Net sales（GAAP）</td><td>12,530</td><td>12,298</td><td class="pos">+1.9%</td></tr>
+        <tr><td>Net sales（Adjusted）</td><td>12,503</td><td>11,938</td><td class="pos">+4.7%</td></tr>
+        <tr><td>Cost of sales</td><td>7,391</td><td>7,124</td><td class="neg">+3.7%</td></tr>
+        <tr><td>GAAP 毛利率</td><td><b>41.0%</b></td><td>42.1%</td><td class="neg">−1.1pp</td></tr>
+        <tr><td>SG&amp;A</td><td>1,805</td><td>2,212</td><td class="pos">−18.4%</td></tr>
+        <tr><td>R&amp;D</td><td>610</td><td>573</td><td>+6.5%</td></tr>
+        <tr><td>Loss on business divestitures</td><td>343</td><td>3</td><td class="neg">—</td></tr>
+        <tr class="total"><td>Operating income（GAAP）</td><td>2,381</td><td>2,386</td><td class="neg">−0.2%</td></tr>
+        <tr><td>GAAP 營益率</td><td>19.0%</td><td>19.4%</td><td class="neg">−0.4pp</td></tr>
+        <tr><td>Adjusted operating income</td><td>3,041</td><td>2,865</td><td class="pos">+6.1%</td></tr>
+        <tr><td>調整後營益率</td><td><b>24.3%</b></td><td>24.0%</td><td class="pos">+0.3pp</td></tr>
+        <tr><td>Other expense (income), net</td><td>383</td><td>78</td><td class="neg">+391%</td></tr>
+        <tr><td>有效稅率（GAAP / 調整後）</td><td>20.2% / <b>18.5%</b></td><td>22.1% / 20.9%</td><td class="pos">−1.9pp / −2.4pp</td></tr>
+        <tr class="total"><td>EPS — diluted（GAAP）</td><td>$3.01</td><td>$3.38</td><td class="neg">−11%</td></tr>
+        <tr class="total"><td>EPS — Adjusted</td><td>$4.54</td><td>$4.04</td><td class="pos">+12%</td></tr>
+        <tr><td>特別項目對 EPS 的合計影響</td><td colspan="3">+$1.53（淨利 $809M）</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note">⚑ 上半年 <b>GAAP EPS 年減 11%、調整後 EPS 年增 12%</b> —— 23 個百分點的方向差。
+    主要來源是 Solventum：上半年造成 <b>−$389M 的 YoY 逆風</b>（去年上半年為 +$336M 的收益、今年為 −$53M 的損失），
+    加上今年上半年多出的 $343M 處分損失與 $166M 轉型費用。<br>
+    ⚑ 上半年調整後有效稅率 <b>18.5%</b>，而全年指引「around 20%」⇒ 反推<b>下半年須約 21.5%</b>。
+    這意味著上半年 EPS 有一部分是向下半年借的稅務時點利益，約當 $0.13/股的下半年逆風
+    （見業務部門與估值分頁的互證表）。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">財測 vs 實際 vs 更新後財測（FY2026）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>項目</th><th>Q1 法說會原財測</th><th>上半年實際</th><th>Q2 更新後財測</th><th style="text-align:left;">隱含下半年</th></tr>
+        <tr><td>有機成長</td><td>3%</td><td>3.3%（調整後）</td><td class="pos"><b>&gt;3.5%</b></td><td class="wrap" style="text-align:left;">「high threes or better」≈3.7–4%，<b>低於 Q2 的 5.4%</b></td></tr>
+        <tr><td>調整後 EPS</td><td>$8.50–8.70</td><td>$4.54</td><td class="pos"><b>$8.80–8.95</b>（+9–11%）</td><td class="wrap" style="text-align:left;">中位數 $8.875 ⇒ 下半年 $4.335，YoY +約 $0.30，Q3／Q4 平均分配</td></tr>
+        <tr><td>自由現金流</td><td>$4.6–4.8B</td><td>$1.9B（管理層口徑）</td><td class="pos"><b>$4.7–4.9B</b>（+$100M）</td><td class="wrap" style="text-align:left;">下半年須做出約 $2.9B，即上半年的 1.5 倍</td></tr>
+        <tr><td>油價通膨</td><td>$125M</td><td>—</td><td class="neg"><b>$150–175M</b></td><td class="wrap" style="text-align:left;">以定價 dollar-for-dollar 對沖，<b>但仍稀釋利潤率 20bps</b></td></tr>
+        <tr><td>定價貢獻</td><td>—</td><td>Q2 +1.6%／H1 約 +1%</td><td>全年約 +1.5%</td><td class="wrap" style="text-align:left;">下半年約 +2%</td></tr>
+        <tr><td>Stranded cost</td><td>$150M</td><td>—</td><td>$150M（不變）</td><td class="wrap" style="text-align:left;">下半年較上半年多</td></tr>
+        <tr><td>成長／生產力投資</td><td>$225M</td><td>$75M</td><td>$225M（不變）</td><td class="wrap" style="text-align:left;">$115M<span class="neg">（$75M+$115M=$190M，與 $225M 差 $35M，管理層口述未自洽）</span></td></tr>
+        <tr><td>有效稅率</td><td>約 20%</td><td>18.5%（調整後）</td><td>約 20%（不變）</td><td class="wrap" style="text-align:left;"><b>反推下半年約 21.5%</b>，約 $0.13/股逆風</td></tr>
+        <tr><td>買回</td><td>$2.5B</td><td class="pos">$3.0B（已超標）</td><td class="wrap" style="text-align:left;">未給數字，「opportunistic」</td><td class="wrap" style="text-align:left;"><b>授權僅剩 $1,766M</b>；回報承諾僅剩約 $1.4B 而股利就要 $2.4B</td></tr>
+        <tr><td>資本支出</td><td>—</td><td>$448M</td><td>約 $1.1B（10-Q）</td><td class="wrap" style="text-align:left;">下半年約 $0.65B</td></tr>
+        <tr><td>Madison JV</td><td>—</td><td>7/1 完成</td><td class="neg"><b>完全未納入財測</b></td><td class="wrap" style="text-align:left;">年營收 $800M，Q3 法說會才納入</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note yellow">⚑ 這張表的兩個閱讀重點：<br>
+    ① <b>自由現金流的下半年任務最重</b>：全年 $4.7–4.9B、上半年（管理層口徑）$1.9B ⇒ 下半年須做出約 $2.9B，
+    是上半年的 1.5 倍。若改用 GAAP 口徑（上半年 $1,112M），下半年的落差更大。
+    Anurag 把上半年的強勁歸因於「fundamental good operational performance」，
+    但 10-Q 歸因於法律給付時點與保險回收 —— 這兩種解釋對下半年可持續性的意涵完全相反。<br>
+    ② <b>Madison 未納入財測，等於預先建立了一個超標來源</b>：$8.80–8.95 的達成不需要 Madison 貢獻任何一分錢，
+    而 Q3 起 Madison 的實際貢獻將自動成為「beat」。</div>
+
+    <div class="card">
+      <div class="card-title">下年度（2027）展望 — 管理層已給的線索與尚未給的</div>
+      <p><b>已給</b>：新產品累計逾 1,000 項、開發週期再縮短約 20%、vitality index 升至 20%；
+      innovation 對成長的貢獻「even greater into 2027」；Class 4/5 佔比升至 30%＋（工業端 40%＋）；
+      調整後營益率「tracking ahead of the approximately 25% by 2027」；EPS「trending to a double-digit CAGR」。</p>
+      <p><b>尚未給、且本季被問到卻未答的</b>：
+      ① 2027 年 outgrowth 的具體目標（Bill：「we'll come back early next year」）；
+      ② <b>2027 年利潤率目標既已提前達成，新目標何時公布</b>（Chigusa 直接問，無人回答）；
+      ③ 2027 年的買回規模（在授權剩 $1,766M、承諾剩約 $1.4B 的前提下）；
+      ④ Madison 併入後 2027 年的合併基數與有機成長定義。</p>
+      <p class="q-text" style="margin-top:8px;"><b>本報告的推算</b>：若 2027 年調整後 EPS 要維持雙位數成長（≥10%），
+      需由 $8.875 增至 <b>≥$9.76</b>。在買回引擎大幅減速的假設下（股數降幅由 3.4% 收斂至 1% 以內），
+      這 $0.89 的增量幾乎必須全部由營業利益提供 —— 約當 <b>營業利益需再成長 8–9%</b>，
+      而本季調整後營業利益的 YoY 成長率是 <b>7.2%</b>（1,507→1,615），且其中相當部分來自訴訟費用的減少。</p>
+    </div>
+  </div>
+  <!-- ============ TAB 7: 業務部門 ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="note grey">⚑ 口徑變更提醒：10-Q Note 1 與 Note 16 揭露，<b>2026 年第一與第二季 3M 變更了 CODM 使用的部門績效衡量與組成</b> ——
+    ① 2026 Q1 起：manufactured PFAS 產品活動、呼吸面罩／石綿訴訟淨成本，由 TEBG 與 SIBG <b>移入 Corporate</b>；
+    ② 2026 Q2 起：併購相關成本改列 Corporate 特別項目。<b>各期數字均已重編</b>，故以下比較具可比性，
+    但也意味著<b>三大部門的營益率「變好」有一部分是把成本移出部門的結果</b>，而非部門自身改善。</div>
+
+    <div class="bu-grid">
+      <div class="bu-card b">
+        <div class="bu-name">Safety and Industrial（SIBG）</div>
+        <div class="bu-abbr">佔全公司營收 47.6%｜7 條產品線</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$3,091M <span class="bu-delta">+8.2%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">有機成長</span><span class="bu-stat-val">+8.2%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 營業利益</span><span class="bu-stat-val">$859M <span class="bu-delta">+16.4%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營益率</span><span class="bu-stat-val">27.8% <span class="bu-delta">+2.0pp</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:92.7%;background:#2563eb;"></div></div>
+        <div class="bu-stat" style="margin-top:10px;"><span class="bu-stat-lbl">上半年營收 / 有機</span><span class="bu-stat-val">$6,021M / +5.7%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 資本支出</span><span class="bu-stat-val">$112M（去年 $77M）</span></div>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">Transportation and Electronics（TEBG）</div>
+        <div class="bu-abbr">佔全公司營收 31.8%｜4 條產品線</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$2,066M <span class="bu-delta">+6.3%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">有機成長</span><span class="bu-stat-val">+5.9%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 營業利益</span><span class="bu-stat-val">$503M <span class="bu-delta">+5.2%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營益率</span><span class="bu-stat-val">24.4% <span class="bu-delta neg">−0.2pp</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:81.3%;background:#15803d;"></div></div>
+        <div class="bu-stat" style="margin-top:10px;"><span class="bu-stat-lbl">上半年營收 / 有機</span><span class="bu-stat-val">$3,914M / +2.9%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 資本支出</span><span class="bu-stat-val">$77M（去年 $104M）</span></div>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">Consumer（CBG）</div>
+        <div class="bu-abbr">佔全公司營收 19.2%｜4 條產品線</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$1,247M <span class="bu-delta neg">−1.8%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">有機成長</span><span class="bu-stat-val neg">−2.1%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 營業利益</span><span class="bu-stat-val">$252M <span class="bu-delta neg">−6.4%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營益率</span><span class="bu-stat-val">20.1% <span class="bu-delta neg">−1.0pp</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:67.0%;background:#c2600a;"></div></div>
+        <div class="bu-stat" style="margin-top:10px;"><span class="bu-stat-lbl">上半年營收 / 有機</span><span class="bu-stat-val">$2,378M / −1.7%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 資本支出</span><span class="bu-stat-val">$20M（去年 $16M）</span></div>
+      </div>
+    </div>
+    <div class="note">⚑ 資本支出的分配透露了內部的優先序：SIBG 資本支出 YoY <b>+45%</b>（$77M→$112M），
+    TEBG 卻 <b>−26%</b>（$104M→$77M）。在「資料中心／半導體是優先垂直領域」的敘事之下，
+    資金實際上正從 TEBG 流向 SIBG。這與 New Ulm（電纜配件，屬 SIBG）擴產的敘事一致，
+    但與 EBO（屬 TEBG）「產能翻倍再翻倍」的說法形成張力 ——
+    後者的擴產可能主要靠外部代工而非自有資本支出，這也呼應了 Bill 說的「we're pretty developed on one [contract manufacturer]」。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">三季營益率趨勢（Q1 2026 由「上半年 − Q2」推算）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>部門</th><th>Q2 2025</th><th>Q1 2026</th><th>Q2 2026</th><th>QoQ</th><th>YoY</th></tr>
+        <tr><td><strong>Safety and Industrial</strong></td><td>25.8%</td><td>26.5%</td><td><b>27.8%</b></td><td class="pos">+1.3pp</td><td class="pos">+2.0pp</td></tr>
+        <tr><td><strong>Transportation and Electronics</strong></td><td>24.6%</td><td>21.6%</td><td><b>24.4%</b></td><td class="pos">+2.8pp</td><td class="neg">−0.2pp</td></tr>
+        <tr><td><strong>Consumer</strong></td><td>21.1%</td><td>19.2%</td><td><b>20.1%</b></td><td class="pos">+0.9pp</td><td class="neg">−1.0pp</td></tr>
+        <tr class="total"><td>三部門合計</td><td>24.46%</td><td>24.62%</td><td><b>25.20%</b></td><td class="pos">+0.58pp</td><td class="pos">+0.74pp</td></tr>
+        <tr><td>全公司 Adjusted 營益率</td><td>24.5%</td><td>23.6%</td><td><b>24.9%</b></td><td class="pos">+1.3pp</td><td class="pos">+0.4pp</td></tr>
+        <tr><td>全公司 GAAP 營益率</td><td>18.0%</td><td>23.0%</td><td><b>15.1%</b></td><td class="neg">−7.9pp</td><td class="neg">−2.9pp</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note">⚑ 推算基礎：Q1 2026 = 上半年 − Q2。SIBG $2,930M／OI $776M；TEBG $1,848M／OI $399M；CBG $1,131M／OI $217M。
+    三部門合計營益率 +0.74pp，正是 Anurag 在法說會說的「business group operating margins up 70 basis points」，<b>完全吻合</b>。<br>
+    ⚑ 但要注意<b>只有 SIBG 一個部門在真正擴張利潤率</b>。TEBG 與 CBG 的 YoY 都是負的，
+    Q2 的 QoQ 改善主要是季節性回升（Q1 是全年最弱的一季）。
+    也就是說，全公司的利潤率故事目前完全押在 SIBG 一個部門上，而該部門正好也是 Madison JV 的併入處 ——
+    Q3 起將更難分辨 SIBG 的改善有多少來自本業。<br>
+    ⚑ GAAP 營益率 Q1 是 23.0%、Q2 掉到 15.1%，波動 7.9pp，全部來自特別項目的時點分布
+    （Q1 的 litigation 特別項目因保險回收幾乎歸零，Q2 則有 $336M 處分損失）。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">量價拆分（全公司，Q2 2026）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>組成</th><th>Q2 2026</th><th>上半年 2026</th><th>下半年（財測）</th><th style="text-align:left;">來源</th></tr>
+        <tr><td>調整後有機成長</td><td><b>+5.4%</b></td><td>+3.3%</td><td>+3.7–4%</td><td class="wrap" style="text-align:left;">10-Q 非 GAAP 對照表／法說會</td></tr>
+        <tr><td>其中：定價（ASP）</td><td>+1.6%</td><td>約 +1.0%</td><td>約 +2.0%</td><td class="wrap" style="text-align:left;">法說會 Bill Brown（Chris Snyder 提問）</td></tr>
+        <tr class="total"><td><b>其中：量（推算）</b></td><td><b>約 +3.8%</b></td><td>約 +2.3%</td><td>約 +1.7–2.0%</td><td class="wrap" style="text-align:left;"><b>本報告推算</b>＝有機 − 定價</td></tr>
+        <tr><td>GAAP 有機成長</td><td>+2.3%</td><td>+0.5%</td><td>—</td><td class="wrap" style="text-align:left;">10-Q MD&amp;A</td></tr>
+        <tr><td>其中：量（GAAP 基礎推算）</td><td class="neu">約 +0.7%</td><td class="neg">約 −0.5%</td><td>—</td><td class="wrap" style="text-align:left;"><b>本報告推算</b></td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 這是本季<b>最能改變結論的一組推算</b>。用管理層自己給的兩個數字（有機 5.4%、定價 1.6%）相減，
+    Q2 的量成長約 <b>+3.8%</b> —— 對一家宣稱「以 2 倍 macro 成長」的公司（IPI 約 1.8%）而言，這個數字是成立的。<br>
+    但若改用 GAAP 有機成長 2.3% 減去同樣的 1.6% 定價，<b>量成長只剩約 0.7%</b>；
+    上半年更是<b>約 −0.5%（負數）</b>。<br>
+    兩種算法的差別，完全來自要不要把去年同期的 PFAS 營收留在基期裡。
+    這是一個誠實的判斷題：PFAS 業務確實已永久退出，把它排除有其道理；
+    但排除之後得到的「量成長 3.8%」，描述的是一個<b>比 3M 實際規模更小的公司</b>。
+    <b>下半年更值得注意</b>：財測隱含有機 3.7–4%，而定價要貢獻約 2% ⇒ 量的貢獻降至 <b>1.7–2.0%</b>，
+    幾乎只等於 IPI 的水準 —— 亦即財測本身已經隱含「2 倍 macro」在下半年<b>不成立</b>。<br>
+    <b>可覆核性限制</b>：3M 不按部門揭露定價，因此量價拆分只能做到全公司層級。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">15 條產品線 — Q2 與上半年（百萬美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>產品線</th><th>Q2 26</th><th>Q2 25</th><th>YoY</th><th>H1 26</th><th>H1 25</th><th>H1 YoY</th></tr>
+        <tr class="section-head"><td colspan="7">Safety and Industrial</td></tr>
+        <tr><td>Personal Safety</td><td>965</td><td>882</td><td class="pos">+9.4%</td><td>1,877</td><td>1,732</td><td class="pos">+8.4%</td></tr>
+        <tr><td>Industrial Adhesives &amp; Tapes</td><td>642</td><td>568</td><td class="pos">+13.0%</td><td>1,246</td><td>1,111</td><td class="pos">+12.2%</td></tr>
+        <tr><td>Electrical Markets</td><td>391</td><td>349</td><td class="pos">+12.0%</td><td>747</td><td>674</td><td class="pos">+10.8%</td></tr>
+        <tr><td>Abrasives</td><td>342</td><td>338</td><td class="pos">+1.2%</td><td>691</td><td>655</td><td class="pos">+5.5%</td></tr>
+        <tr><td>Industrial Specialties</td><td>326</td><td>294</td><td class="pos">+10.9%</td><td>612</td><td>582</td><td class="pos">+5.2%</td></tr>
+        <tr><td>Automotive Aftermarket</td><td>283</td><td>291</td><td class="neg">−2.7%</td><td>587</td><td>581</td><td class="pos">+1.0%</td></tr>
+        <tr><td>Roofing Granules</td><td>142</td><td>135</td><td class="pos">+5.2%</td><td>261</td><td>267</td><td class="neg">−2.2%</td></tr>
+        <tr class="subtotal"><td>SIBG 小計</td><td>3,091</td><td>2,857</td><td class="pos">+8.2%</td><td>6,021</td><td>5,602</td><td class="pos">+7.5%</td></tr>
+        <tr class="section-head"><td colspan="7">Transportation and Electronics</td></tr>
+        <tr><td>Commercial Branding &amp; Transportation</td><td>737</td><td>689</td><td class="pos">+7.0%</td><td>1,377</td><td>1,305</td><td class="pos">+5.5%</td></tr>
+        <tr><td>Electronics</td><td>682</td><td>633</td><td class="pos">+7.7%</td><td>1,259</td><td>1,215</td><td class="pos">+3.6%</td></tr>
+        <tr><td>Automotive and Aerospace</td><td>485</td><td>474</td><td class="pos">+2.3%</td><td>969</td><td>949</td><td class="pos">+2.1%</td></tr>
+        <tr><td>Advanced Materials</td><td>162</td><td>148</td><td class="pos">+9.5%</td><td>309</td><td>291</td><td class="pos">+6.2%</td></tr>
+        <tr class="subtotal"><td>TEBG 小計</td><td>2,066</td><td>1,944</td><td class="pos">+6.3%</td><td>3,914</td><td>3,760</td><td class="pos">+4.1%</td></tr>
+        <tr class="section-head"><td colspan="7">Consumer</td></tr>
+        <tr><td>Home Improvement</td><td>362</td><td>374</td><td class="neg">−3.2%</td><td>673</td><td>700</td><td class="neg">−3.9%</td></tr>
+        <tr><td>Home and Auto Care</td><td>318</td><td>306</td><td class="pos">+3.9%</td><td>646</td><td>605</td><td class="pos">+6.8%</td></tr>
+        <tr><td>Consumer Safety &amp; Well-Being</td><td>289</td><td>280</td><td class="pos">+3.2%</td><td>567</td><td>554</td><td class="pos">+2.3%</td></tr>
+        <tr><td>Packaging and Expression</td><td>278</td><td>310</td><td class="neg">−10.3%</td><td>492</td><td>535</td><td class="neg">−8.0%</td></tr>
+        <tr class="subtotal"><td>CBG 小計</td><td>1,247</td><td>1,270</td><td class="neg">−1.8%</td><td>2,378</td><td>2,394</td><td class="neg">−0.7%</td></tr>
+        <tr><td><b>Corporate</b></td><td>96</td><td>273</td><td class="neg">−64.8%</td><td>217</td><td>542</td><td class="neg">−60.0%</td></tr>
+        <tr class="total"><td>Total Company</td><td>6,500</td><td>6,344</td><td class="pos">+2.5%</td><td>12,530</td><td>12,298</td><td class="pos">+1.9%</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note yellow">⚑ Anurag 在法說會說「We delivered <b>double-digit growth</b> across the four industrial businesses,
+    electrical markets, industrial adhesives and tapes, abrasives, and industrial specialties」。
+    對照 10-Q：Electrical Markets +12.0% ✓、Industrial Adhesives &amp; Tapes +13.0% ✓、
+    Industrial Specialties +10.9% ✓，但 <b>Abrasives 只有 +1.2%</b>（$338M→$342M）。<br>
+    差異的原因應是 Anurag 指的是<b>有機成長</b>（剔除處分與匯率），而 Abrasives 受到 4 月完成的
+    <b>精密研磨業務出售</b>（年營收約 $130M，原屬 SIBG）影響 —— SIBG 整體處分拖累為 −1.3pp。
+    這是一個合理的口徑差，但法說會並未說明，聽眾若直接對照 10-Q 會發現四項中有一項對不上。
+    上半年 Abrasives +5.5% 則較接近雙位數的敘事。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Corporate 明細 — 本季利潤率故事的另一半（百萬美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>項目</th><th>Q2 2026</th><th>Q2 2025</th><th>H1 2026</th><th>H1 2025</th></tr>
+        <tr><td>Corporate 營收</td><td>96</td><td>273</td><td>217</td><td>542</td></tr>
+        <tr><td>Corporate-level income</td><td>1</td><td>22</td><td>35</td><td>72</td></tr>
+        <tr class="section-head"><td colspan="5">Corporate 特別項目</td></tr>
+        <tr><td>重大訴訟與 PFAS 退出淨成本</td><td class="neg">(183)</td><td class="neg">(347)</td><td class="neg">(13)</td><td class="neg">(421)</td></tr>
+        <tr><td>併購相關成本</td><td class="neg">(12)</td><td>—</td><td class="neg">(12)</td><td>—</td></tr>
+        <tr><td>業務處分損益</td><td class="neg">(336)</td><td class="neg">(3)</td><td class="neg">(343)</td><td class="neg">(3)</td></tr>
+        <tr><td>Manufactured PFAS products</td><td>—</td><td class="neg">(17)</td><td class="neg">(126)</td><td class="neg">(55)</td></tr>
+        <tr><td>轉型費用</td><td class="neg">(100)</td><td>—</td><td class="neg">(166)</td><td>—</td></tr>
+        <tr class="total"><td>Total Corporate</td><td class="neg">(630)</td><td class="neg">(345)</td><td class="neg">(625)</td><td class="neg">(407)</td></tr>
+        <tr><td>Corporate 折舊攤銷</td><td><b>55</b></td><td>21</td><td><b>109</b></td><td>45</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 三個觀察：<br>
+    ① <b>三大部門營業利益 $1,614M，Corporate 吃掉 $630M</b>，剩下 $984M 才是 GAAP 營業利益。
+    Corporate 的拖累幅度 YoY 幾乎翻倍（$345M→$630M）。
+    Anurag 在法說會把這描述為「expected corporate headwind of 30 basis points」—— 30bps 是<b>調整後口徑</b>下的殘餘，
+    未調整的實際拖累是 <b>9.7 個百分點</b>的營益率。<br>
+    ② <b>Corporate 折舊攤銷由 $21M 跳升至 $55M（+162%）</b>，上半年由 $45M 升至 $109M。
+    這是轉型計畫的<b>加速折舊</b>已經開始的直接痕跡 —— 廠網整併雖然要三到五年才收成，但成本已在發生。<br>
+    ③ 上半年 litigation 特別項目<b>幾乎歸零（$13M，去年 $421M）</b>，10-Q 說明主因是<b>保險理賠回收增加</b>。
+    這是上半年 SG&amp;A 大降、營益率改善、以及營運現金流暴增的<b>共同根源</b>，也是最不可預測的一條線。</div>
+  </div>
+
+  <!-- ============ TAB 8: 資產負債表 ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$34,924M</div><div class="kpi-lbl">總資產</div><div class="kpi-sub neg">半年 −$2,809M</div></div>
+      <div class="kpi"><div class="kpi-val">$2,952M</div><div class="kpi-lbl">3M 股東權益</div><div class="kpi-sub neg">半年 −$1,750M（−37%）</div></div>
+      <div class="kpi"><div class="kpi-val">$12,551M</div><div class="kpi-lbl">總有息負債</div><div class="kpi-sub">淨負債 $9,221M</div></div>
+      <div class="kpi"><div class="kpi-val">$9.3B</div><div class="kpi-lbl">PFAS＋CAE 法律負債</div><div class="kpi-sub neg">＝股東權益的 3.1 倍</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併資產負債表（百萬美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>科目</th><th>2026/6/30</th><th>2025/12/31</th><th>變動</th><th>變動%</th></tr>
+        <tr class="section-head"><td colspan="5">流動資產</td></tr>
+        <tr><td>Cash and cash equivalents</td><td>2,955</td><td>5,235</td><td class="neg">−2,280</td><td class="neg">−43.6%</td></tr>
+        <tr><td>Marketable securities</td><td>375</td><td>698</td><td class="neg">−323</td><td class="neg">−46.3%</td></tr>
+        <tr><td>Accounts receivable, net</td><td>3,927</td><td>3,533</td><td>+394</td><td>+11.2%</td></tr>
+        <tr><td>Inventories</td><td>3,770</td><td>3,661</td><td>+109</td><td>+3.0%</td></tr>
+        <tr><td>Prepaids</td><td>492</td><td>391</td><td>+101</td><td>+25.8%</td></tr>
+        <tr><td>Other current assets</td><td>2,593</td><td>2,823</td><td>−230</td><td>−8.1%</td></tr>
+        <tr class="subtotal"><td>流動資產合計</td><td>14,112</td><td>16,387</td><td class="neg">−2,275</td><td class="neg">−13.9%</td></tr>
+        <tr class="section-head"><td colspan="5">非流動資產</td></tr>
+        <tr><td>PP&amp;E, net</td><td>6,877</td><td>7,101</td><td class="neg">−224</td><td>−3.2%</td></tr>
+        <tr><td>Goodwill</td><td>6,374</td><td>6,419</td><td>−45</td><td>−0.7%</td></tr>
+        <tr><td>Intangible assets, net</td><td>1,053</td><td>1,103</td><td>−50</td><td>−4.5%</td></tr>
+        <tr><td>Other assets</td><td>6,508</td><td>6,723</td><td>−215</td><td>−3.2%</td></tr>
+        <tr class="total"><td>Total assets</td><td>34,924</td><td>37,733</td><td class="neg">−2,809</td><td class="neg">−7.4%</td></tr>
+        <tr class="section-head"><td colspan="5">流動負債</td></tr>
+        <tr><td>短期借款及一年內到期長債</td><td>1,647</td><td>1,670</td><td>−23</td><td>−1.4%</td></tr>
+        <tr><td>Accounts payable</td><td>3,108</td><td>2,702</td><td>+406</td><td>+15.0%</td></tr>
+        <tr><td>Accrued payroll</td><td>522</td><td>718</td><td class="neg">−196</td><td class="neg">−27.3%</td></tr>
+        <tr><td><b>Other current liabilities</b></td><td><b>6,102</b></td><td>4,450</td><td class="neg">+1,652</td><td class="neg">+37.1%</td></tr>
+        <tr class="subtotal"><td>流動負債合計</td><td>11,379</td><td>9,595</td><td class="neg">+1,784</td><td class="neg">+18.6%</td></tr>
+        <tr class="section-head"><td colspan="5">非流動負債與權益</td></tr>
+        <tr><td>Long-term debt</td><td>10,904</td><td>10,932</td><td>−28</td><td>−0.3%</td></tr>
+        <tr><td>Pension and postretirement</td><td>1,502</td><td>1,631</td><td class="pos">−129</td><td class="pos">−7.9%</td></tr>
+        <tr><td><b>Other liabilities</b></td><td><b>8,134</b></td><td>10,828</td><td class="pos">−2,694</td><td class="pos">−24.9%</td></tr>
+        <tr class="subtotal"><td>Total liabilities</td><td>31,919</td><td>32,986</td><td>−1,067</td><td>−3.2%</td></tr>
+        <tr><td>Additional paid-in capital</td><td>7,540</td><td>7,440</td><td>+100</td><td></td></tr>
+        <tr><td>Retained earnings</td><td>38,633</td><td>38,258</td><td>+375</td><td></td></tr>
+        <tr><td><b>Treasury stock, at cost</b></td><td class="neg">(38,177)</td><td class="neg">(35,936)</td><td class="neg">−2,241</td><td class="neg">−6.2%</td></tr>
+        <tr><td>AOCI</td><td>(5,053)</td><td>(5,069)</td><td>+16</td><td></td></tr>
+        <tr class="total"><td>Total 3M shareholders' equity</td><td><b>2,952</b></td><td>4,702</td><td class="neg">−1,750</td><td class="neg">−37.2%</td></tr>
+        <tr><td>Noncontrolling interest</td><td>53</td><td>45</td><td>+8</td><td></td></tr>
+        <tr class="total"><td>Total equity</td><td>3,005</td><td>4,747</td><td class="neg">−1,742</td><td class="neg">−36.7%</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 三處必須併讀的變動：<br>
+    ① <b>Other liabilities −$2,694M 與 Other current liabilities +$1,652M 是同一件事的兩面</b> ——
+    PFAS 環境負債由 $7.7B（流動 $0.7B／非流動 $7.0B）變成 $7.4B（<b>流動 $2.9B</b>／非流動 $4.5B），
+    CAE 由 $2.4B 變成 $1.9B。總額只降 $0.8B，但<b>從非流動重分類到流動的金額高達約 $2.2B</b>。
+    這代表未來 12 個月內須實際支付的法律義務大幅上升至 <b>$3.9B</b>，與現金存量的下降同時發生。<br>
+    ② <b>股東權益半年蒸發 37%</b>，主因是庫藏股增加 $2,241M（買回 $3.0B、部分由選擇權發行抵銷）。
+    3M 的權益基礎已薄到 $2,952M，僅為總資產的 <b>8.5%</b>。
+    每股帳面淨值約 <b>$5.72</b>（$2,952M ÷ 515.7M 股）。<br>
+    ③ 應付帳款 +15.0% 而存貨僅 +3.0%，加上 supplier finance 餘額持平（見供應鏈分頁）——
+    營運資金的改善是真的，這一點與管理層說法一致。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">法律與環境負債（10-Q Note 15，十億美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>項目</th><th>2026/6/30</th><th>其中流動</th><th>2025/12/31</th><th style="text-align:left;">關鍵時點</th></tr>
+        <tr><td>PFAS 相關環境負債</td><td><b>7.4</b></td><td class="neg">2.9</td><td>7.7</td><td class="wrap" style="text-align:left;">PWS 總額 $10.5–12.5B，2024–2036 給付；class member 檢測結果<b>提交截止 2026/7/31</b></td></tr>
+        <tr><td>CAE（Combat Arms Earplugs）</td><td><b>1.9</b></td><td class="neg">1.0</td><td>2.4</td><td class="wrap" style="text-align:left;">$5.3B 名目、2023 Q3 認列 $4.2B；2025/9 美國 MDL 全案結清；<b>澳洲已有 writ、英國已收 Letter Before Action</b></td></tr>
+        <tr class="total"><td>合計</td><td><b>9.3</b></td><td class="neg"><b>3.9</b></td><td>10.1</td><td class="wrap" style="text-align:left;">＝股東權益的 <b>3.1 倍</b></td></tr>
+        <tr><td>AFFF 人身傷害</td><td colspan="3" class="neg">未入帳（無法估計）</td><td class="wrap" style="text-align:left;">2025/8 撤銷原訂 2025/10 首場 bellwether，<b>迄今未定新日期</b></td></tr>
+        <tr><td>Watson Grinding（休士頓爆炸）</td><td colspan="3" class="neg">未入帳</td><td class="wrap" style="text-align:left;">2025/6、2025/11 兩案判部分責任（上訴中）；2026/4 一案判無責；2026 年另有審判排程</td></tr>
+        <tr><td>New Jersey Settlement</td><td colspan="3">已於 2025 Q2 認列 $281M</td><td class="wrap" style="text-align:left;">最高 $450M，預期支付 $400M</td></tr>
+        <tr><td>Flemish Remediation Agreement</td><td colspan="3">€571M 承諾</td><td class="wrap" style="text-align:left;">3M Belgium，Zwijndrecht 廠</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">信評、流動性與資本結構</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>項目</th><th>數值</th><th style="text-align:left;">說明 / 出處</th></tr>
+        <tr><td>Moody's / S&amp;P / Fitch</td><td><b>A3 / BBB+ / A−</b></td><td class="wrap" style="text-align:left;">三家皆 Stable（10-Q「Total debt」章節）</td></tr>
+        <tr><td>循環信用額度</td><td>$4.25B</td><td class="wrap" style="text-align:left;">2028/5 到期，<b>6/30 未動用</b>；可再增額 $1.0B 至 $5.25B</td></tr>
+        <tr><td>財務約定</td><td>EBITDA/利息 ≥ 3.0x</td><td class="wrap" style="text-align:left;">6/30 符合</td></tr>
+        <tr><td>商業本票</td><td>$0</td><td class="wrap" style="text-align:left;">額度上限 $5B，兩期皆零餘額</td></tr>
+        <tr><td>Madison 定期貸款</td><td><b>$1.43B</b>＋$200M 循環</td><td class="wrap" style="text-align:left;">2026/4 設立、364 天期變動利率；<b>6/30 未動用，7 月已全額提取</b>（借款人 Fire Safety Platform Holdco, Inc.）</td></tr>
+        <tr><td>2026 年到期長債</td><td>$1.5B</td><td class="wrap" style="text-align:left;">公司稱可透過再融資或贖回處理</td></tr>
+        <tr><td>現金＋有價證券（海外）</td><td>$2.8B</td><td class="wrap" style="text-align:left;">2025/12：$3.5B</td></tr>
+        <tr><td><b>現金＋有價證券（美國）</b></td><td class="neg"><b>$0.5B</b></td><td class="wrap" style="text-align:left;"><b>2025/12：$2.4B ─ 半年減少 79%</b></td></tr>
+        <tr><td>Solventum 持股</td><td>約 15%，公允價值 <b>$2.0B</b></td><td class="wrap" style="text-align:left;">未實現利益 $1.4B（2025/12：$1.5B）；<b>預計 2029 年（分拆後五年）前售出</b></td></tr>
+        <tr><td>買回授權剩餘</td><td class="neg"><b>$1,766M</b></td><td class="wrap" style="text-align:left;">2025/2 核准 $7.5B；上半年已用 $3.0B</td></tr>
+        <tr><td>Q2 買回均價</td><td>$147.01</td><td class="wrap" style="text-align:left;">6,560,794 股（4 月 $145.79／5 月 $145.11／6 月 $159.26）</td></tr>
+        <tr><td>股利</td><td>$0.78/季（+7%）</td><td class="wrap" style="text-align:left;">自 <b>1916 年</b>起連續配發；上半年支付 $813M</td></tr>
+        <tr><td>在外流通股數</td><td>515,722,417</td><td class="wrap" style="text-align:left;">2025/12/31：530,279,131（半年 −2.7%）</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note yellow">⚑ <b>美國境內現金 $0.5B</b> 是本季資產負債表最尖銳的一個數字。3M 的法律給付、股利與買回幾乎全部發生在美國，
+    而未來 12 個月的法律給付義務就有 $3.9B。10-Q 明列公司會靠「美國營運現金流、資本市場管道、
+    以及非永久再投資的海外盈餘匯回」來支應美國的現金需求 —— 換言之，<b>海外的 $2.8B 有一部分將必須匯回</b>，
+    或者依賴尚未動用的 $4.25B 循環額度。這不是償債能力問題（信評仍是投資等級中段），
+    而是<b>資本配置彈性的問題</b>：在這個現金結構下，「opportunistic 買回」的空間比法說會語氣所暗示的小得多。<br>
+    ⚑ 另一個時鐘：Solventum 持股 $2.0B <b>須在 2029 年前出售</b>。這既是一筆潛在的現金來源，
+    也意味著這個每季擾動 GAAP EPS 的科目（本季 +$303M、上半年 −$53M）將在未來三年內以某個價格被實現。</div>
+  </div>
+
+  <!-- ============ TAB 9: 現金流量 ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$1,560M</div><div class="kpi-lbl">上半年營運現金流</div><div class="kpi-sub">去年為 −$1,033M</div></div>
+      <div class="kpi"><div class="kpi-val">$1,112M</div><div class="kpi-lbl">上半年 GAAP 自由現金流</div><div class="kpi-sub neg">管理層口徑為 $1.9B</div></div>
+      <div class="kpi"><div class="kpi-val">$3,806M</div><div class="kpi-lbl">上半年股東回報</div><div class="kpi-sub neg">＝GAAP FCF 的 3.4 倍</div></div>
+      <div class="kpi"><div class="kpi-val">−$2,280M</div><div class="kpi-lbl">上半年現金淨變動</div><div class="kpi-sub neg">$5,235M → $2,955M</div></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">一、營運活動（上半年，百萬美元）</div>
+      <div class="cf-row"><span class="cf-lbl">Net income including NCI</span><span class="cf-val">1,597（去年 1,847）</span></div>
+      <div class="cf-row"><span class="cf-lbl">＋ 折舊與攤銷</span><span class="cf-val">661（去年 580）</span></div>
+      <div class="cf-row"><span class="cf-lbl">＋ 業務處分損失</span><span class="cf-val">343（去年 3）</span></div>
+      <div class="cf-row"><span class="cf-lbl">＋ 遞延所得稅</span><span class="cf-val">120（去年 217）</span></div>
+      <div class="cf-row"><span class="cf-lbl">＋ 股份基礎薪酬</span><span class="cf-val">121（去年 129）</span></div>
+      <div class="cf-row"><span class="cf-lbl">− 退休金淨額</span><span class="cf-val">0（提撥 −73／費用 +73）</span></div>
+      <div class="cf-row"><span class="cf-lbl">應收帳款變動</span><span class="cf-val">(414)（去年 −419）</span></div>
+      <div class="cf-row"><span class="cf-lbl">存貨變動</span><span class="cf-val">(132)（去年 −240）</span></div>
+      <div class="cf-row"><span class="cf-lbl">應付帳款變動</span><span class="cf-val">421（去年 182）</span></div>
+      <div class="cf-row"><span class="cf-lbl"><b>其他 — 淨額（含法律給付與保險回收）</b></span><span class="cf-val neg"><b>(1,157)（去年 −3,406）</b></span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">營運活動現金流</span><span class="cf-val">1,560（去年 −1,033）</span></div>
+    </div>
+    <div class="note red">⚑ 整個 $2.6B 的 YoY 改善，<b>幾乎全部落在「Other — net」這一行</b>（−$3,406M → −$1,157M，改善 $2,249M）。
+    10-Q 對此的原文說明是：「primarily driven by <b>lower net payments for PFAS-related environmental liabilities and
+    the CAE legal settlement impacted by insurance recoveries</b>」。<br>
+    而分析師 Deane Dray 明確問了「any one-timers?」，Anurag 的回答是
+    「just <b>fundamental good operational performance</b> that's driving the free cash flow」。
+    <b>兩份同日發布的文件對同一件事給出相反的歸因</b>，這是本季最直接的一組口徑衝突。<br>
+    真正屬於營運改善的部分是可見但小得多的：存貨變動由 −$240M 收斂到 −$132M（改善 $108M）、
+    應付帳款由 +$182M 增至 +$421M（改善 $239M）—— 合計約 $347M，佔 $2.6B 改善的 <b>13%</b>。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">二、投資活動（上半年）</div>
+      <div class="cf-row"><span class="cf-lbl">資本支出（PP&amp;E）</span><span class="cf-val">(448)（去年 −444）</span></div>
+      <div class="cf-row"><span class="cf-lbl">出售 PP&amp;E 及其他資產</span><span class="cf-val">14</span></div>
+      <div class="cf-row"><span class="cf-lbl">購買有價證券與投資</span><span class="cf-val">(294)</span></div>
+      <div class="cf-row"><span class="cf-lbl">有價證券到期與出售</span><span class="cf-val">622（去年 2,130）</span></div>
+      <div class="cf-row"><span class="cf-lbl"><b>出售業務淨額（付現）</b></span><span class="cf-val neg"><b>(326)</b>（去年 +5）</span></div>
+      <div class="cf-row"><span class="cf-lbl">其他 — 淨額</span><span class="cf-val">9</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">投資活動現金流</span><span class="cf-val neg">(423)（去年 +1,290）</span></div>
+    </div>
+    <div class="note yellow">⚑ 「出售業務」這一行是<b>負的 $326M</b> —— 3M 為了處分 Dyneon 與精密研磨業務，
+    不但沒有收到價金，還<b>淨付出了 $326M 現金</b>。10-Q Note 3 明文：兩筆交易皆
+    「did not involve proceeds」，現金留在被移轉的業務中，另有一筆款項於交割時付給買方。
+    加上 $324M 的帳面處分損失，這是一次<b>付錢請人接手</b>的組合調整，法說會全程未提。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">三、融資活動（上半年）</div>
+      <div class="cf-row"><span class="cf-lbl"><b>買回庫藏股</b></span><span class="cf-val neg"><b>(2,993)</b>（去年 −2,227）</span></div>
+      <div class="cf-row"><span class="cf-lbl">股利</span><span class="cf-val neg">(813)（去年 −786）</span></div>
+      <div class="cf-row"><span class="cf-lbl">選擇權與福利計畫發行庫藏股所得</span><span class="cf-val pos">364（去年 988）</span></div>
+      <div class="cf-row"><span class="cf-lbl">債務償還 / 舉借</span><span class="cf-val">0 / 0（去年 −1,250 / +1,099）</span></div>
+      <div class="cf-row"><span class="cf-lbl">其他 — 淨額</span><span class="cf-val">(16)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">融資活動現金流</span><span class="cf-val neg">(3,458)（去年 −2,191）</span></div>
+    </div>
+    <div class="note">⚑ 上半年<b>零舉債、零償債</b>（$1.43B 定期貸款要到 7 月才提取），
+    因此融資活動的 −$3,458M 全部是股東回報淨額。<br>
+    ⚑ 「選擇權發行所得」由去年的 $988M 降至 $364M（−63%），
+    這是一個容易被忽略的現金流逆風：去年這筆錢覆蓋了 44% 的買回支出，今年只覆蓋 12%。
+    這也與 Form 4 顯示的行為一致 —— 今年高管的動作以 RSU 歸屬扣稅（不產生公司現金流入）為主，
+    而非大量行使選擇權。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">四、自由現金流橋接：GAAP $1,112M vs 管理層 $1.9B</div>
+      <div class="cf-row"><span class="cf-lbl">上半年營運活動現金流（10-Q）</span><span class="cf-val">1,560</span></div>
+      <div class="cf-row"><span class="cf-lbl">− 資本支出（10-Q）</span><span class="cf-val">(448)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl"><b>＝ GAAP 自由現金流</b></span><span class="cf-val"><b>1,112</b></span></div>
+      <div class="cf-row"><span class="cf-lbl">＋ CAE／PFAS 法律給付（10-Q：約 $1.0B）</span><span class="cf-val">＋約 1,000</span></div>
+      <div class="cf-row"><span class="cf-lbl">− 相關保險理賠回收（10-Q：約 $0.4B）</span><span class="cf-val">−約 400</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl"><b>≈ 管理層口徑「上半年 $1.9B」</b></span><span class="cf-val"><b>約 1,712 – 1,900</b></span></div>
+      <div class="cf-row"><span class="cf-lbl">上半年股東回報（買回 $3.0B ＋ 股利 $0.8B）</span><span class="cf-val neg">3,806</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl"><b>股東回報 ÷ GAAP FCF</b></span><span class="cf-val neg"><b>3.4 倍</b></span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">股東回報 ÷ 管理層口徑 FCF</span><span class="cf-val neg">約 2.0 倍</span></div>
+    </div>
+    <div class="note red">⚑ 橋接的差額約 $0.6–0.8B，與 10-Q 揭露的法律給付淨額規模一致
+    （10-Q「Cash, cash equivalents and marketable securities」章節：
+    「$1.0 billion in payments associated with the CAE legal settlement and PFAS-related environmental liabilities」，
+    部分由「$0.4 billion in insurance recoveries」抵銷）。
+    管理層口徑把這筆法律給付視為非營運項目排除，這在邏輯上與「調整後 EPS」的處理一致，
+    <b>但它意味著同一筆現金流出被排除了兩次</b>：一次在 EPS，一次在 FCF。<br>
+    ⚑ 更關鍵的是<b>倍數</b>：無論用哪個口徑，上半年的股東回報都是自由現金流的 2–3.4 倍。
+    差額由現金存量（$5.2B → $3.0B）支應。這在現金充裕時是合理的資本配置；
+    但在美國境內現金只剩 $0.5B、且未來 12 個月有 $3.9B 法律給付到期時，這個模式<b>在數學上無法延續到下半年</b>。<br>
+    ⚑ 全年 FCF 指引 $4.7–4.9B、上半年（管理層口徑）$1.9B ⇒ <b>下半年須做出約 $2.9B</b>，
+    是上半年的 1.5 倍。Anurag 說這是「conversion greater than 100%」，
+    但沒有說明下半年的 FCF 若同樣依賴法律給付時點，會是什麼樣的品質。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">現金流品質的正反佐證</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>項目</th><th>判讀</th><th style="text-align:left;">依據</th></tr>
+        <tr><td>存貨天數改善 7 天</td><td class="pos">正面</td><td class="wrap" style="text-align:left;">法說會口述；10-Q 存貨僅 +3.0% 而營收 +2.5%，方向一致但無法精算天數</td></tr>
+        <tr><td>應付帳款 +15.0%</td><td class="pos">正面</td><td class="wrap" style="text-align:left;">10-Q 資產負債表；且 supplier finance 餘額持平（Note 7），<b>非靠拉長供應商帳期</b></td></tr>
+        <tr><td>應收帳款 +11.2%</td><td class="neu">中性偏負</td><td class="wrap" style="text-align:left;">增幅高於營收成長，但與 Q2 營收季節性走強一致</td></tr>
+        <tr><td>營運現金流 YoY +$2.6B</td><td class="neg">主要為一次性</td><td class="wrap" style="text-align:left;">10-Q 明列主因為法律給付時點與保險回收；營運改善僅約 13%</td></tr>
+        <tr><td>資本支出 $448M（全年估 $1.1B）</td><td class="neu">中性</td><td class="wrap" style="text-align:left;">與去年持平；但 SIBG +45%、TEBG −26%，內部配置在移動</td></tr>
+        <tr><td>D&amp;A $661M &gt; 資本支出 $448M</td><td class="neu">須追蹤</td><td class="wrap" style="text-align:left;">D&amp;A 已含轉型加速折舊（Corporate D&amp;A 由 $45M 升至 $109M）；扣除後的經常性 D&amp;A 與資本支出較接近</td></tr>
+        <tr><td>出售業務淨付現 $326M</td><td class="neg">負面</td><td class="wrap" style="text-align:left;">10-Q 現金流量表與 Note 3；處分需倒貼</td></tr>
+      </table>
+      </div>
+    </div>
+  </div>
+  <!-- ============ TAB 10: 估值觀察 ============ -->
+  <div id="panel-val" class="panel">
+    <div class="note grey"><b>股價基準說明</b>：本報告寫作時無即時報價。可取得的、最接近法說會後市場定價的參考點，
+    是 <b>2026/7/22–23 內部人 Form 4 的實際賣出成交價 $169.42–$171.20</b>（法說會後第 1–2 個交易日，四筆獨立申報）。
+    以下一律採 <b>$170</b> 為參考價並註明時點落差 —— 若法說會後股價已再重估，實際倍數將與下表不同。
+    股數採 10-Q 揭露的 2026/6/30 在外流通 <b>515.72M 股</b>（稀釋 522.4M 股）。</div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">19.2x</div><div class="kpi-lbl">前瞻 P/E（調整後）</div><div class="kpi-sub">$170 ÷ $8.875</div></div>
+      <div class="kpi"><div class="kpi-val">約 29x</div><div class="kpi-lbl">前瞻 P/E（GAAP 推估）</div><div class="kpi-sub neg">$170 ÷ 約 $5.82</div></div>
+      <div class="kpi"><div class="kpi-val">5.5%</div><div class="kpi-lbl">自由現金流殖利率</div><div class="kpi-sub">$4.8B ÷ $87.7B</div></div>
+      <div class="kpi"><div class="kpi-val">29.7x</div><div class="kpi-lbl">股價／每股淨值</div><div class="kpi-sub neg">每股淨值僅 $5.72</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">估值比率表 — 每項附「意義」欄</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th>指標</th><th>數值</th><th style="text-align:left;">意義（本報告解讀）</th></tr>
+        <tr><td>參考股價</td><td>$170</td><td class="wrap" style="text-align:left;">Form 4 於 2026/7/22–23 的實際成交區間 $169.42–171.20。<b>時點落差風險：這是法說會後第 1–2 日，未反映後續重估。</b></td></tr>
+        <tr><td>市值（在外股數）</td><td>約 $87.7B</td><td class="wrap" style="text-align:left;">515.72M 股 × $170。以稀釋股數計為 $88.8B。</td></tr>
+        <tr><td>前瞻 P/E（調整後）</td><td><b>19.2x</b></td><td class="wrap" style="text-align:left;">除以 FY2026 指引中位數 $8.875。這是市場<b>接受管理層全部特別項目加回</b>時的倍數。</td></tr>
+        <tr><td>前瞻 P/E（GAAP 推估）</td><td class="neg"><b>約 29x</b></td><td class="wrap" style="text-align:left;">若下半年特別項目維持上半年速度（$1.53/半年），FY26 GAAP EPS 約 $5.82。<b>同一家公司、同一個股價，倍數差 10 個檔次</b>——這正是本季估值判斷的核心分歧點。</td></tr>
+        <tr><td>追蹤 P/E（FY2025 調整後）</td><td>約 21.1x</td><td class="wrap" style="text-align:left;">FY2025 調整後 EPS 約 $8.07（由指引 +9–11% 反推）。倍數由 21.1x 降至 19.2x，反映的是<b>盈餘成長而非倍數擴張</b>。</td></tr>
+        <tr><td>股利殖利率</td><td>1.84%</td><td class="wrap" style="text-align:left;">$0.78 × 4 = $3.12。自 <b>1916 年</b>連續配發，本季調升 7%。以 FCF 每股 $9.19 計，<b>股利發放率僅 34%</b>——股利本身安全度高。</td></tr>
+        <tr><td>自由現金流殖利率</td><td>5.5%</td><td class="wrap" style="text-align:left;">全年 FCF 指引中位 $4.8B ÷ 市值。<b>但這是管理層口徑的 FCF</b>；若改用上半年 GAAP FCF 年化（約 $2.2B），殖利率降至 <b>2.5%</b>。</td></tr>
+        <tr><td>P/FCF</td><td>18.3x</td><td class="wrap" style="text-align:left;">與 P/E 19.2x 接近，代表在<b>管理層口徑下</b>盈餘轉現金的效率良好（conversion &gt;100%）。</td></tr>
+        <tr><td>淨負債</td><td>$9,221M</td><td class="wrap" style="text-align:left;">總有息負債 $12,551M − 現金及有價證券 $3,330M。<b>尚未計入 7 月提取的 $1.43B</b> Madison 定期貸款。</td></tr>
+        <tr><td>企業價值（EV）</td><td>約 $96.9B</td><td class="wrap" style="text-align:left;">市值 ＋ 淨負債。傳統算法。</td></tr>
+        <tr><td><b>法律負債調整後 EV</b></td><td class="neg"><b>約 $104.2B</b></td><td class="wrap" style="text-align:left;">＋PFAS/CAE 負債 $9.3B −Solventum 持股 $2.0B。<b>把已認列的法律義務當成類負債處理</b>，是本報告認為對 3M 更貼近實質的 EV。差距 <b>7.5%</b>。</td></tr>
+        <tr><td>EV/EBITDA</td><td>約 12.7x</td><td class="wrap" style="text-align:left;">FY26E 調整後 EBITDA 約 $7.6B（調整後 OI 約 $6.3B ＋ D&amp;A 約 $1.3B）。</td></tr>
+        <tr><td>法律調整後 EV/EBITDA</td><td class="neg">約 13.7x</td><td class="wrap" style="text-align:left;">用同一個 EBITDA、但用更完整的 EV。<b>這一個百分點的差距，就是市場對 PFAS 尾巴的定價空間。</b></td></tr>
+        <tr><td>淨負債／EBITDA</td><td>1.21x</td><td class="wrap" style="text-align:left;">單看有息負債，槓桿溫和，與投資等級信評（A3／BBB+／A−）相符。</td></tr>
+        <tr><td>含法律負債的槓桿</td><td class="neg">2.17x</td><td class="wrap" style="text-align:left;">（$9.2B ＋ $9.3B − $2.0B）÷ $7.6B。<b>這才是資產負債表真正承受的槓桿</b>，且未計入 Madison 的 $1.43B。</td></tr>
+        <tr><td>每股淨值</td><td class="neg">$5.72</td><td class="wrap" style="text-align:left;">股東權益 $2,952M ÷ 515.72M 股。半年前為 $8.87。<b>P/B 29.7x</b>——但這個倍數對 3M 沒有分析意義：權益被買回消耗殆盡，不代表資產品質。</td></tr>
+        <tr><td>負債／權益</td><td class="neg">4.18x</td><td class="wrap" style="text-align:left;">$12,551M ÷ $3,005M。同理，分母已被買回壓縮，須與 EBITDA 槓桿併看，不宜單獨解讀。</td></tr>
+        <tr><td>ROIC（推估）</td><td>約 32.6%</td><td class="wrap" style="text-align:left;">調整後 NOPAT 約 $5.06B ÷（有息負債 ＋ 權益）$15.56B。<b>數字亮眼但被薄權益放大</b>；若把 $9.3B 法律負債計入投入資本，ROIC 降至約 <b>20.4%</b>。</td></tr>
+        <tr><td>買回對 EPS 的貢獻</td><td>本季 $0.08／$0.24</td><td class="wrap" style="text-align:left;">佔 EPS 成長的 <b>三分之一</b>。授權僅剩 $1,766M ⇒ <b>這個引擎在 2027 年可能熄火</b>（見風險矩陣①）。</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">隱含 P/E 反推 — 市場對「調整後盈餘」的懷疑程度有多深</div>
+      <p>3M 目前的財務敘事是：調整後 EPS 年增 9–11%、調整後營益率創歷史新高、有機成長 2 倍於 macro。
+      若市場完全相信這套敘事，對一家交出雙位數 EPS CAGR 的多角化工業龍頭，
+      <b>25x 前瞻本益比</b>並不誇張（同期具類似成長輪廓的工業股常態區間）。</p>
+      <p><b>反推</b>：25x × $8.875 = <b>$221.9</b>。實際參考價 $170 ⇒ 市場實際給的「可信賴 EPS」＝ 170 ÷ 25 = <b>$6.80</b>，
+      比管理層指引<b>低了 $2.08（23.4%）</b>。</p>
+      <p><b>這 $2.08 落在哪裡？</b>上半年特別項目對 EPS 的加回是 <b>$1.53</b>，年化約 <b>$3.06</b>。
+      也就是說，把管理層的加回全部視為真實成本時，FY26 的「GAAP 式 EPS」約為 $8.875 − $3.06 = <b>$5.82</b>。
+      市場給的 $6.80 正好落在 $5.82（全部不信）與 $8.875（全部相信）之間：</p>
+      <div class="band-card" style="margin-top:10px;">
+        <div class="band-track">
+          <div class="band-fill" style="left:0%; right:0%;"></div>
+          <div class="band-marker floor" style="left:6%;">全部加回視為真實成本<br><b>$5.82</b><div class="dot"></div></div>
+          <div class="band-marker actual" style="left:38%;">市場隱含的可信賴 EPS<br><b>約 $6.80</b><div class="dot"></div></div>
+          <div class="band-marker target" style="left:94%;">管理層指引中位<br><b>$8.875</b><div class="dot"></div></div>
+        </div>
+        <div class="band-legend">
+          <span><i class="sw" style="background:#94a3b8"></i>完全採 GAAP 視角</span>
+          <span><i class="sw" style="background:#15803d"></i>以 25x 反推的市場隱含值</span>
+          <span><i class="sw" style="background:#2563eb"></i>完全採管理層調整後視角</span>
+        </div>
+      </div>
+      <div class="note red">⚑ <b>市場只接受約三分之一的加回</b>：($6.80 − $5.82) ÷ ($8.875 − $5.82) = <b>32%</b>。
+      換言之，以 $170 的價格計算，市場把管理層宣稱的特別項目中約 <b>68% 當成真實、經常性的營運成本</b>。<br>
+      這個懷疑程度是否合理，可以直接檢驗：PFAS 訴訟成本自 2018 年起<b>連年出現</b>；
+      轉型費用自 2025 Q3 啟動、Bill 自述廠網整併要<b>三到五年</b>；業務處分損失<b>已連續兩季</b>發生。
+      一個每年都出現、且被公司自己預告未來三到五年還會出現的成本，被市場認定為經常性，在邏輯上站得住腳。<br>
+      <b>反過來說，這也框定了上檔的來源</b>：若 3M 能證明轉型費用確實在 2027–2028 年結束、
+      PWS 的 $10.5–12.5B 區間在 7/31 收斂到低端、AFFF 人身傷害訴訟不再擴大，
+      市場對加回的接受度由 32% 升向 60%，隱含股價即由 $170 升向約 $214（25x × $8.56）。
+      <b>本季法說會沒有提供任何一項有助於這個收斂的新資訊。</b><br>
+      <span style="color:#888;">（以上為以固定 25x 倍數反推的算術情境，用於量化「市場對調整後盈餘的信任度」，
+      非目標價、非投資建議；換一個假設倍數，結論的絕對水準會改變，但「市場只接受部分加回」的方向不變。）</span></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">★ 雙層互證對照表 — 管理層說法 vs 財報科目驗證</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="width:26%;">管理層在法說會的說法</th><th style="width:34%;">對應的財報科目 / 數字</th><th style="text-align:left;">互證結果</th></tr>
+        <tr>
+          <td class="wrap">「organic growth of <b>5.4%</b>」</td>
+          <td class="wrap">10-Q MD&amp;A 非 GAAP 對照表：GAAP 有機 <b>2.3%</b>，移除 manufactured PFAS 特別項目 +3.1pp</td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>口徑差</b></span>：數字正確但為調整後；GAAP 為 2.3%，上半年更只有 <b>0.5%</b>。法說會全程未說明差距。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「operating margin of <b>24.9%</b>, up 40 basis points… the highest we've ever been」</td>
+          <td class="wrap">10-Q：調整後 24.9%（去年 24.5%）✓；<b>GAAP 15.1%，YoY −2.9pp</b></td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>口徑差</b></span>：調整後完全吻合；但 GAAP 是衰退，主因 $336M 處分損失＋$100M 轉型費用。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「business group operating margins <b>up 70 basis points</b>」</td>
+          <td class="wrap">三部門 OI $1,614M ÷ 部門營收 $6,404M = <b>25.20%</b>（去年 1,485/6,071 = 24.46%）</td>
+          <td class="wrap" style="text-align:left;"><span class="pos"><b>✓ 完全吻合</b></span>（+0.74pp）。可直接由 Note 16 覆核。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「Operating profit increased <b>$110 million</b>, or $0.16」</td>
+          <td class="wrap">調整後 OI $1,615M vs $1,507M = <b>+$108M</b></td>
+          <td class="wrap" style="text-align:left;"><span class="pos"><b>✓ 吻合</b></span>（四捨五入）。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「$0.24 of EPS growth… $0.16 operating, <b>$0.08 primarily from lower share count</b>」</td>
+          <td class="wrap">調整後 EPS $2.40 vs $2.16 = +$0.24 ✓；稀釋股數 522.4M vs 540.6M = <b>−3.4%</b></td>
+          <td class="wrap" style="text-align:left;"><span class="pos"><b>✓ 吻合</b></span>。但同時揭示：<b>EPS 成長有三分之一來自買回</b>，而買回授權僅剩 $1,766M。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「tax timing and lower pension cost <b>offset by a prior gain on investment</b>」</td>
+          <td class="wrap">調整後稅率 19.3% vs 20.8%（約 +$0.045）；退休金非服務 −$3M vs +$23M（約 +$0.04）；
+          <b>unconsolidated subs 收益 $1M vs $47M（約 −$0.09）</b></td>
+          <td class="wrap" style="text-align:left;"><span class="pos"><b>✓ 三項互相抵銷，算術精確</b></span>。<span class="neu">留白</span>：未說明 $46M 的減少是因 2025 Q2 <b>已賣掉該投資</b>（10-Q MD&amp;A），屬永久性而非時點性。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「On gross margins, we're tracking <b>close to mid-40s</b> right now」</td>
+          <td class="wrap">(6,500−3,817)/6,500 = <b>41.3%</b>（去年 42.5%）；上半年 41.0%；FY2025 39.9%。
+          即使加回全部 $631M 特別項目上限也僅約 43.6%</td>
+          <td class="wrap" style="text-align:left;"><span class="neg"><b>✗ 對不上</b></span>。10-Q MD&amp;A 自己寫明 COGS 率<b>上升</b> 1.2pp。提問者 Amit 的前提（「stuck in the very low 40s」）才是對的。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「free cash flow of $1.3 billion, <b>107% conversion</b>」（Q2）／「For the half, we generated cash flow of <b>$1.9 billion</b>」</td>
+          <td class="wrap">10-Q 上半年：營運現金流 $1,560M − 資本支出 $448M = <b>GAAP FCF $1,112M</b></td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>口徑差約 $0.8B</b></span>，與 10-Q 揭露的「$1.0B 法律給付、$0.4B 保險回收」規模一致。</td>
+        </tr>
+        <tr>
+          <td class="wrap">Deane Dray 問「any one-timers?」→「just <b>fundamental good operational performance</b>」</td>
+          <td class="wrap">10-Q 原文：營運現金流 YoY +$2.6B「primarily driven by <b>lower net payments for PFAS-related environmental liabilities and the CAE legal settlement impacted by insurance recoveries</b>」</td>
+          <td class="wrap" style="text-align:left;"><span class="neg"><b>✗ 直接衝突</b></span>。兩份文件<b>同日發布</b>、對同一件事給出相反歸因。營運改善（存貨＋應付）僅約 $347M，佔 13%。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「double-digit growth across the <b>four</b> industrial businesses… electrical markets, industrial adhesives and tapes, <b>abrasives</b>, and industrial specialties」</td>
+          <td class="wrap">10-Q Note 2：EM +12.0% ✓、IA&amp;T +13.0% ✓、IS +10.9% ✓、<b>Abrasives 僅 +1.2%</b>（$338M→$342M）</td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>口徑差</b></span>：Abrasives 受 4 月精密研磨業務出售拖累（SIBG 處分 −1.3pp）；有機基礎應為雙位數，但法說會未說明。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「oil price cost is <b>dollar neutral</b>… it impacts margin rate by <b>20 basis points</b>」</td>
+          <td class="wrap">10-Q MD&amp;A：COGS 率上升的主因之一為「rising oil prices」；定價 Q2 +1.6%</td>
+          <td class="wrap" style="text-align:left;"><span class="pos"><b>✓ 管理層主動把不利的算術講清楚</b></span>。以等額漲價覆蓋等額成本，分母變大、利潤率必降——這段值得正面記錄。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「receiving <b>$700 million in cash</b>」（Madison JV）</td>
+          <td class="wrap">10-Q Note 3：淨收現約 $0.7B，「reflecting <b>proceeds from the term loan facility and Bain's contribution</b>」；Madison 對價 $1.95B；JV 動用 <b>$1.43B 定期貸款</b>；Bain NCI <b>五年後可贖回</b>且「affecting net income attributable to 3M」</td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>選擇性揭露</b></span>：$0.7B 屬實，但來源是<b>借款與合夥人出資</b>，且 3M 須合併 $1.43B 負債＋一個公允價值衍生工具＋2031 年贖回義務。法說會只講第一項。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「we'll continue to be <b>opportunistic</b>」（下半年買回）</td>
+          <td class="wrap">10-Q Part II Item 2：買回授權<b>剩 $1,766M</b>；美國現金＋有價證券由 $2.4B 降至 <b>$0.5B</b>；準備稿：$10B+ 承諾已用 $8.6B</td>
+          <td class="wrap" style="text-align:left;"><span class="neg"><b>✗ 重大留白</b></span>。三個可量化的硬性上限，一個都沒提。見風險矩陣①。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「Cross-selling… $110M booked, $120M pipeline」「92 new products, +44%」「utilization 63.5–64%」「vitality index mid-teens」</td>
+          <td class="wrap"><b>10-Q 與 10-K 皆零揭露</b>。唯一可綁定的是 R&amp;D 費用 $302M（+4.9%，佔營收 4.6%）</td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>無法覆核</b></span>。且值得注意：<b>新產品上市數量 +44%，R&amp;D 投入只 +4.9%</b>——與 Class 3（漸進式）佔 75% 的自述一致。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「we're clearly outgrowing the market… growth to market multiple improving to <b>2x</b>」</td>
+          <td class="wrap">Q2 調整後有機 5.4% − 定價 1.6% = <b>量約 +3.8%</b>（vs IPI 約 1.8%）✓；
+          但財測隱含下半年有機 3.7–4% − 定價約 2% = <b>量約 +1.7–2.0%</b></td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>本季成立，下半年財測本身已不成立</b></span>。管理層自己的財測隱含「2x macro」在下半年退回到 1x 附近。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「stranded cost $150M」「investments $225M ($75M H1 + $115M H2)」</td>
+          <td class="wrap">$75M + $115M = <b>$190M ≠ $225M</b></td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>算術不自洽</b></span>：差 $35M。本場唯一一處管理層自述數字內部矛盾，建議 Q3 追問。</td>
+        </tr>
+        <tr>
+          <td class="wrap">「we're still in the <b>early innings</b> of our journey」</td>
+          <td class="wrap">Form 4：法說會後 1–2 日，四位高管（含 CAO、CLO、Group President、EVP）全數賣出行使所得，<b>淨保留為零</b>，價格 $169–171；公司 Q2 買回均價 <b>$147.01</b></td>
+          <td class="wrap" style="text-align:left;"><span class="neu"><b>行為落差（中度）</b></span>。<b>減弱因子</b>：選擇權 2027/2/6 到期，行使有時間壓力；CEO 與 CFO 均未賣出。見風險矩陣④。</td>
+        </tr>
+      </table>
+      </div>
+    </div>
+    <div class="note">⚑ <b>互證表的總結</b>：16 條對照中，<b>5 條完全吻合</b>（部門利潤率、營業利益增量、EPS 拆解、稅／退休金／投資收益的三項抵銷、油價對利潤率的稀釋）——
+    這說明管理層在<b>可被立即驗算的算術上非常嚴謹</b>，本季沒有任何一處數字造假。<br>
+    問題全部集中在另外兩類：<b>口徑選擇</b>（6 條）與<b>留白</b>（4 條），加上<b>2 條直接對不上</b>（毛利率、現金流歸因）。
+    這是一種特定的溝通風格：所有說出口的數字都經得起查，但<b>哪些數字被說出口</b>是高度選擇性的。
+    對投資人而言，這意味著閱讀 3M 的關鍵不在於質疑數字本身，而在於<b>把 10-Q 攤開，看哪些欄位在法說會上從未出現</b>。</div>
+
+    <div class="card">
+      <div class="card-title">結語：本季真正的分歧點</div>
+      <p>3M 本季交出的營運成績是真的：SIBG 營益率 +2.0pp、Electrical Markets +12%、
+      Industrial Adhesives &amp; Tapes +13%、營運資金改善且未靠供應鏈金融美化、
+      部門利潤率的算術與 10-Q 完全吻合。這些不需要打折。</p>
+      <p>分歧點只有一個，而且是可以量化的：<b>特別項目到底是不是特別的？</b>
+      以 $170 的價格反推，市場只接受約三分之一的加回。
+      而本季法說會沒有提供任何有助於這個判斷收斂的新資訊 ——
+      反而增加了兩個新的長期不確定項目（Madison 的贖回權與衍生工具、以及未定新審判日期的 AFFF 人身傷害訴訟）。</p>
+      <p>接下來四個季度有三個明確的檢驗點：<b>2026/7/31</b>（PWS Settlement 檢測結果提交截止，
+      $10.5–12.5B 區間開始收斂）、<b>Q3 法說會</b>（Madison 併入後的口徑、以及買回授權見底後的實際節奏）、
+      <b>2027 年初</b>（outgrowth 與利潤率的新目標，這是 Chigusa 問了卻沒得到答案的那一題）。</p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
