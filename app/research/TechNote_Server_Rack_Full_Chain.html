@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="從晶片架構定義到資料中心併網的十二環節全鏈解剖，含 AI 機櫃與傳統 x86 機櫃逐環節對照。">
+<meta name="color-scheme" content="light dark">
+<title>從晶片到機櫃：伺服器機櫃全鏈技術解剖</title>
+<style>
+/* ═══════════════ tokens ═══════════════
+   單色系・矽灰。灰階承擔所有層級，
+   單一重點色（矽晶圓虹彩紫）只用於：互動狀態、推導數值、當前位置。 */
+:root{
+  /* 純白底：所有面都是 #fff，層次全部交給線條與字重 */
+  --bg:#FFFFFF;
+  --paper:#FFFFFF;
+  --paper-2:#FFFFFF;
+  --ink:#0B0D0C;
+  --ink-2:#383D3B;
+  --ink-3:#6E7471;
+  --ink-4:#9AA09C;
+  --rule:#BFC3BE;
+  --rule-2:#DCDFDB;
+  --acc:#584B7C;
+  --acc-2:#736294;
+  --acc-wash:#EDEAF3;
+  --inv-bg:#0B0D0C;
+  --inv-ink:#FFFFFF;
+
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","Times New Roman",Georgia,serif;
+  --sans:"Noto Sans TC","Source Han Sans TC","PingFang TC","Microsoft JhengHei","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+
+  --read:min(100%,38rem);
+  --wide:min(100%,64rem);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;
+    --ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+    --rule:#2A2D2A;--rule-2:#1E211E;
+    --acc:#AFA1DF;--acc-2:#C6BBEE;--acc-wash:#1A1727;
+    --inv-bg:#EFEFEC;--inv-ink:#0A0B0B;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;
+  --ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+  --rule:#2A2D2A;--rule-2:#1E211E;
+  --acc:#AFA1DF;--acc-2:#C6BBEE;--acc-wash:#1A1727;
+  --inv-bg:#EFEFEC;--inv-ink:#0A0B0B;
+}
+:root[data-theme="light"]{
+  --bg:#FFFFFF;--paper:#FFFFFF;--paper-2:#FFFFFF;
+  --ink:#0B0D0C;--ink-2:#383D3B;--ink-3:#6E7471;--ink-4:#9AA09C;
+  --rule:#BFC3BE;--rule-2:#DCDFDB;
+  --acc:#584B7C;--acc-2:#736294;--acc-wash:#EDEAF3;
+  --inv-bg:#0B0D0C;--inv-ink:#FFFFFF;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.88;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+p{margin:0 0 1.15em}
+a{color:var(--acc);text-underline-offset:3px;text-decoration-thickness:.06em}
+a:hover{color:var(--acc-2)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:1px}
+strong{font-weight:700}
+em{font-style:normal;border-bottom:1px solid var(--rule)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+code{font-family:var(--mono);font-size:.85em;color:var(--ink-2)}
+ul,ol{margin:.5rem 0 1.15em;padding-left:1.35rem}
+li{margin:.34em 0}
+li::marker{color:var(--ink-4)}
+
+.wrap{max-width:78rem;margin:0 auto;padding:0 clamp(1.1rem,4vw,3rem) 7rem}
+
+/* ═══════════════ masthead ═══════════════ */
+.mast{padding:clamp(3rem,9vw,7rem) 0 0}
+.mast-top{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;align-items:baseline;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--ink);padding-bottom:.7rem;margin-bottom:clamp(1.8rem,4vw,3rem)}
+.mast-top .sp{flex:1}
+h1{font-family:var(--serif);font-weight:700;
+  font-size:clamp(2.5rem,7.2vw,5.4rem);line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 clamp(1.2rem,3vw,2rem);max-width:15ch;text-wrap:balance}
+h1 .thin{font-weight:400;color:var(--ink-3)}
+.deck{font-family:var(--serif);font-size:clamp(1.06rem,2.2vw,1.42rem);line-height:1.72;
+  color:var(--ink-2);max-width:42rem;margin:0 0 2rem}
+.deck b{color:var(--ink);font-weight:700}
+.byline{display:flex;flex-wrap:wrap;gap:.4rem 2.2rem;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:var(--ink-3);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:.8rem 0;margin-bottom:clamp(2.4rem,6vw,4rem)}
+.byline b{color:var(--ink-2);font-weight:600}
+
+/* ═══════════════ 全鏈模型（橫向流程帶） ═══════════════ */
+.model{border:1px solid var(--ink);background:var(--paper);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.model-head{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center;justify-content:space-between;
+  padding:.75rem .95rem;border-bottom:1px solid var(--rule)}
+.model-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+.model-title b{color:var(--ink);font-weight:600}
+.track{display:flex;border:1px solid var(--ink);align-items:stretch}
+.track button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:.28rem .8rem;color:var(--ink-3);white-space:nowrap}
+.track button+button{border-left:1px solid var(--rule)}
+.track button[aria-pressed="true"]{background:var(--inv-bg);color:var(--inv-ink)}
+.strip{display:flex;overflow-x:auto;scrollbar-width:thin}
+.strip::-webkit-scrollbar{height:5px}
+.strip::-webkit-scrollbar-thumb{background:var(--rule)}
+.seg{flex:1 0 7.6rem;min-width:7.6rem;text-align:left;padding:.7rem .7rem .75rem;
+  border-right:1px solid var(--rule-2);position:relative;transition:background .15s}
+.seg:last-child{border-right:0}
+.seg:hover .seg-t{color:var(--acc)}
+.seg:hover .seg-v{color:var(--ink-2)}
+.seg-n{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-4);margin-bottom:.15rem}
+.seg-t{display:block;font-size:12.6px;line-height:1.35;font-weight:600;color:var(--ink);margin-bottom:.3rem}
+.seg-v{display:block;font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-3);min-height:2.2em}
+.seg.on{background:var(--acc-wash)}
+.seg.on::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--acc)}
+.seg.on .seg-t{color:var(--acc)}
+
+/* ═══════════════ 章節 ═══════════════ */
+.thesis{max-width:var(--wide);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.sec-mark{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem}
+.sec-mark::after{content:"";flex:1;height:1px;background:var(--rule)}
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.65rem,3.6vw,2.5rem);
+  line-height:1.18;letter-spacing:-.022em;margin:0 0 .9rem;max-width:22ch;text-wrap:balance}
+h3{font-family:var(--sans);font-size:.86rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);margin:2.4rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+h4{font-size:.92rem;font-weight:700;margin:1.5rem 0 .35rem;color:var(--ink)}
+.lede{font-family:var(--serif);font-size:1.08rem;line-height:1.75;color:var(--ink-2);max-width:var(--read);margin:0 0 1.8rem}
+
+.phase-rule{display:flex;align-items:baseline;gap:1rem;margin:clamp(3rem,7vw,5rem) 0 1.5rem;
+  border-top:2px solid var(--ink);padding-top:.6rem}
+.phase-rule .pk{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+.phase-rule .pd{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+
+/* ── 分段展開 ── */
+.stage{border-bottom:1px solid var(--rule);max-width:var(--wide)}
+.stage>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:3.2rem 1fr auto 1.2rem;
+  gap:1rem;align-items:baseline;padding:1.35rem 0;transition:opacity .15s}
+.stage>summary::after{content:"＋";font-family:var(--mono);font-size:13px;color:var(--ink-4);
+  justify-self:end;padding-top:.3rem}
+.stage[open]>summary::after{content:"－";color:var(--acc)}
+.stage>summary::-webkit-details-marker{display:none}
+.stage>summary:hover{opacity:.65}
+.st-n{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--ink-4);padding-top:.35rem}
+.st-main{min-width:0}
+.st-t{font-family:var(--serif);font-size:clamp(1.2rem,2.6vw,1.65rem);font-weight:700;
+  line-height:1.28;letter-spacing:-.018em;margin-bottom:.28rem;text-wrap:balance}
+.st-sub{font-size:13.6px;line-height:1.6;color:var(--ink-3);max-width:44rem}
+.st-sig{font-family:var(--mono);font-size:11px;color:var(--acc);white-space:nowrap;padding-top:.4rem;text-align:right}
+.st-sig i{display:block;font-style:normal;color:var(--ink-4);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+.body{padding:.4rem 0 3rem;animation:fade .28s ease}
+.body>.full{max-width:var(--wide)}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.body>p,.body>ul,.body>ol,.body>h3,.body>h4,.body>.callout,.body>.eq,.body>.lede{max-width:var(--read)}
+.body>p:first-of-type::first-letter{font-family:var(--serif);float:left;font-size:3.15rem;line-height:.86;
+  font-weight:700;padding:.16rem .5rem .1rem 0;color:var(--ink)}
+@media(min-width:900px){
+  .body{display:grid;grid-template-columns:minmax(0,var(--read)) 1fr;gap:0 2.5rem;align-items:start}
+  .body>*{grid-column:1}
+  .body>.full{grid-column:1/-1;max-width:var(--wide)}
+  .body>.marg{grid-column:2;margin:0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+    border-top:1px solid var(--ink);padding-top:.5rem;max-width:17rem}
+}
+.marg{margin:1.2rem 0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+  border-top:1px solid var(--ink);padding-top:.5rem}
+.marg b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-2);margin-bottom:.35rem}
+
+/* ── 判讀（本文的意見） ── */
+.callout{background:var(--paper);border:1px solid var(--ink);padding:1.05rem 1.15rem;margin:1.7rem 0}
+.callout .ck{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:.5rem}
+.callout p{margin:0 0 .8em;font-size:15px;line-height:1.8;color:var(--ink-2)}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+
+/* ── 公式 ── */
+.eq{font-family:var(--mono);font-size:12.4px;line-height:1.95;color:var(--ink-2);
+  background:var(--paper-2);border-left:2px solid var(--acc);padding:.85rem 1rem;margin:1.2rem 0;
+  overflow-x:auto;white-space:pre;font-variant-numeric:tabular-nums}
+
+/* ── 表 ── */
+.tbl{overflow-x:auto;margin:1.5rem 0;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:13.4px;line-height:1.62}
+.tbl table{min-width:42rem}
+th,td{text-align:left;padding:.6rem .85rem;border-bottom:1px solid var(--rule-2);vertical-align:top}
+thead th{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid var(--ink);white-space:nowrap;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp td{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;padding-top:1.1rem;
+  text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--ink);border-bottom-color:var(--rule)}
+td.hit{background:var(--acc-wash)}
+.cap{font-size:12.4px;line-height:1.7;color:var(--ink-3);margin:-.9rem 0 1.9rem;max-width:var(--wide)}
+.cap b{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+
+/* 風險以字符深淺表示，不用顏色 */
+.lvl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;white-space:nowrap;color:var(--ink)}
+.lvl i{font-style:normal;color:var(--ink-4)}
+
+/* ── 統計 ── */
+.figs{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule);margin:1.6rem 0}
+.fg{padding:.85rem .9rem .95rem;border-right:1px solid var(--rule-2)}
+.fg:last-child{border-right:0}
+.fg .v{display:block;font-family:var(--mono);font-size:1.5rem;font-weight:500;letter-spacing:-.03em;
+  line-height:1.15;font-variant-numeric:tabular-nums}
+.fg .v small{font-size:.55em;letter-spacing:0;color:var(--ink-3);margin-left:.15em}
+.fg .k{display:block;font-size:11.5px;line-height:1.5;color:var(--ink-3);margin-top:.35rem}
+
+/* ── 時程 ── */
+.tl{margin:1.5rem 0;overflow-x:auto}
+.tl-in{min-width:42rem}
+.tl-r{display:grid;grid-template-columns:9rem 1fr 6.5rem;gap:.8rem;align-items:center;margin:.22rem 0;font-size:12.4px}
+.tl-l{color:var(--ink-2);line-height:1.35}
+.tl-t{position:relative;height:15px;border-bottom:1px solid var(--rule-2);
+  background:repeating-linear-gradient(90deg,var(--rule-2) 0 1px,transparent 1px 8.333%)}
+.tl-b{position:absolute;top:2px;bottom:2px;background:var(--ink)}
+.tl-b.hi{background:var(--acc)}
+.tl-v{font-family:var(--mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-x{display:grid;grid-template-columns:9rem 1fr 6.5rem;gap:.8rem;margin-top:.35rem}
+.tl-xk{display:grid;grid-template-columns:repeat(12,1fr);font-family:var(--mono);font-size:9.5px;color:var(--ink-4)}
+
+/* ── 剖面圖（可切層） ── */
+.xs{margin:1.6rem 0}
+.xs-legend{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.7rem}
+.xs-legend button{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;padding:.22rem .6rem;
+  border:1px solid var(--rule);color:var(--ink-3)}
+.xs-legend button[aria-pressed="true"]{border-color:var(--acc);color:var(--acc);background:var(--acc-wash)}
+.xs-view{overflow-x:auto;border:1px solid var(--rule);background:var(--paper);padding:1rem}
+.xs-view svg{display:block;min-width:38rem}
+.lb{font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)}
+.lb-b{font-family:var(--mono);font-size:10.5px;fill:var(--ink);font-weight:600}
+.dim{stroke:var(--ink-3);stroke-width:.7;fill:none}
+.lyr{transition:opacity .22s}
+.lyr.dim-out{opacity:.16}
+.hl{stroke:var(--acc);stroke-width:1.6}
+
+/* ── 機櫃立面 ── */
+.racks{display:grid;gap:1.2rem;grid-template-columns:1fr}
+@media(min-width:760px){.racks{grid-template-columns:1fr 1fr}}
+.rk{border:1px solid var(--rule)}
+.rk-h{padding:.6rem .8rem;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;
+  align-items:baseline;gap:.6rem;background:var(--paper-2)}
+.rk-h b{font-size:13.4px;font-weight:700}
+.rk-h span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase}
+.rk-b{display:flex;gap:.45rem;padding:.7rem}
+.rk-s{width:1.9rem;flex:none;display:flex;flex-direction:column;justify-content:space-between;
+  font-family:var(--mono);font-size:8.5px;color:var(--ink-4);text-align:right;padding:1px 0}
+.rk-f{flex:1;border:1px solid var(--ink);padding:2px;display:flex;flex-direction:column;gap:1px;background:var(--paper-2)}
+.u{font-family:var(--mono);font-size:9.5px;padding:.16rem .4rem;display:flex;justify-content:space-between;
+  gap:.4rem;line-height:1.5;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink-2)}
+.u b{font-weight:400}
+.u i{font-style:normal;color:var(--ink-4);font-size:8.5px;flex:none}
+.u.k{background:var(--inv-bg);color:var(--inv-ink);border-color:var(--inv-bg)}
+.u.k i{color:var(--inv-ink);opacity:.6}
+.u.a{border-color:var(--acc);color:var(--acc)}
+.u.a i{color:var(--acc);opacity:.7}
+.u.g{border-style:dashed;color:var(--ink-4)}
+.rk-t{border-top:1px solid var(--rule);padding:.55rem .8rem;font-family:var(--mono);font-size:10.5px;
+  line-height:1.85;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.rk-t b{color:var(--ink);font-weight:600}
+
+/* ── 電壓階梯 ── */
+.lad{margin:1.4rem 0}
+.lad-r{display:grid;grid-template-columns:7.5rem 1fr 5rem;gap:.7rem;align-items:center;margin:.3rem 0;font-size:12.6px}
+.lad-l{color:var(--ink-2);line-height:1.35}
+.lad-t{height:12px;background:var(--paper-2);border:1px solid var(--rule-2)}
+.lad-f{height:100%;background:var(--ink)}
+.lad-f.a{background:var(--acc)}
+.lad-v{font-family:var(--mono);font-size:11px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ── 推算器 ── */
+.calc{border:1px solid var(--ink);background:var(--paper);margin:1.6rem 0}
+.calc-h{padding:.6rem .9rem;border-bottom:1px solid var(--rule);font-family:var(--mono);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.calc-i{display:grid;gap:.85rem;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));padding:.95rem}
+.calc-i label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:.3rem}
+.calc-i input{width:100%;font-family:var(--mono);font-size:14px;padding:.35rem .45rem;background:var(--paper-2);
+  color:var(--ink);border:1px solid var(--rule);border-radius:0;font-variant-numeric:tabular-nums}
+.calc-i input:focus{border-color:var(--acc);outline:none}
+.calc-o{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));border-top:1px solid var(--rule)}
+.co{padding:.6rem .8rem .7rem;border-right:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2)}
+.co .v{display:block;font-family:var(--mono);font-size:1.12rem;font-weight:500;color:var(--acc);
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.co .k{display:block;font-size:10.5px;line-height:1.45;color:var(--ink-3);margin-top:.2rem}
+.calc-n{padding:.7rem .9rem;font-size:12px;line-height:1.7;color:var(--ink-3);border-top:1px solid var(--rule)}
+
+/* ── 尾 ── */
+.foot{border-top:2px solid var(--ink);margin-top:4rem;padding-top:1.5rem;max-width:var(--wide);
+  font-size:12.6px;line-height:1.85;color:var(--ink-3)}
+.srcs{columns:2;column-gap:2.5rem;font-size:12.3px;line-height:1.8}
+@media(max-width:700px){.srcs{columns:1}}
+.srcs li{break-inside:avoid;margin:.2em 0}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.05rem .35rem;color:var(--ink-3);white-space:nowrap}
+
+.tools{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0 0}
+.tools button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.3rem .75rem;color:var(--ink-3)}
+.tools button:hover{border-color:var(--ink);color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <span>Silicon → Rack</span><span>全鏈技術解剖</span><span class="sp"></span><span>2026</span>
+  </div>
+  <h1>從一片矽晶圓<br>到一座<span class="thin">會發熱的</span>機櫃</h1>
+  <p class="deck">伺服器機櫃不是一件產品，而是三條速度完全不同的產線被迫對齊到同一個交機日的結果。矽的時鐘走 <b>24–36 個月</b>，廠房與電網的時鐘走 <b>36–60 個月</b>，而機櫃世代的時鐘現在只有 <b>12 個月</b>。本文沿著十二個環節把整條鏈拆開，並在每一節同時對照 AI 機櫃與傳統通用機櫃兩條路線。</p>
+  <div class="byline">
+    <span><b>版本</b>　2026-07-28</span>
+    <span><b>主線</b>　NVIDIA GB300 NVL72</span>
+    <span><b>對照</b>　42U 雙路 x86</span>
+    <span><b>環節</b>　12</span>
+    <span><b>數據</b>　公開規格／產業估計／本文推導</span>
+  </div>
+</header>
+
+<!-- ══════════ 全鏈模型 ══════════ -->
+<section class="model" aria-label="全鏈互動模型">
+  <div class="model-head">
+    <span class="model-title"><b>全鏈模型</b>　選一條路線，橫向走完十二個環節</span>
+    <div class="track" role="group" aria-label="切換路線">
+      <button id="t-ai" aria-pressed="true">AI 機櫃</button>
+      <button id="t-gen" aria-pressed="false">通用機櫃</button>
+    </div>
+  </div>
+  <div class="strip" id="strip">
+    <button class="seg" data-go="s01"><span class="seg-n">A · 01</span><span class="seg-t">架構定義</span><span class="seg-v" data-ai="工作負載反推　自由度高" data-gen="相容性優先　自由度低"></span></button>
+    <button class="seg" data-go="s02"><span class="seg-n">A · 02</span><span class="seg-t">前端驗證</span><span class="seg-v" data-ai="新數值格式　驗證債高" data-gen="向後相容　模式成熟"></span></button>
+    <button class="seg" data-go="s03"><span class="seg-n">A · 03</span><span class="seg-t">實體簽核</span><span class="seg-v" data-ai="供電網格佔金屬資源 ~30%" data-gen="常規多角落簽核"></span></button>
+    <button class="seg" data-go="s04"><span class="seg-n">B · 04</span><span class="seg-t">晶圓製造</span><span class="seg-v" data-ai="晶粒 ~800 mm²　良率 ~59%" data-gen="晶粒 ~150 mm²　良率高"></span></button>
+    <button class="seg" data-go="s05"><span class="seg-n">B · 05</span><span class="seg-t">先進封裝</span><span class="seg-v" data-ai="CoWoS-L　8 組 HBM" data-gen="覆晶 BGA　成本占比低"></span></button>
+    <button class="seg" data-go="s06"><span class="seg-n">C · 06</span><span class="seg-t">板卡供電</span><span class="seg-v" data-ai="~1,750 A / 顆　20–28 層" data-gen="~200 A / 顆　12–16 層"></span></button>
+    <button class="seg" data-go="s07"><span class="seg-n">C · 07</span><span class="seg-t">整機 L10</span><span class="seg-v" data-ai="冷板＋快接頭　漏液為災難級" data-gen="風扇風道　失效溫和"></span></button>
+    <button class="seg" data-go="s08"><span class="seg-n">C · 08</span><span class="seg-t">機櫃 L11</span><span class="seg-v" data-ai="132–142 kW　1,360 kg" data-gen="8–15 kW　600–900 kg"></span></button>
+    <button class="seg" data-go="s09"><span class="seg-n">D · 09</span><span class="seg-t">機房併網</span><span class="seg-v" data-ai="雙迴路液冷　直接落樓板" data-gen="冷熱通道　可走高架地板"></span></button>
+    <button class="seg" data-go="s10"><span class="seg-n">D · 10</span><span class="seg-t">驗收營運</span><span class="seg-v" data-ai="任務無中斷時間　SDC 篩檢" data-gen="設備可用率"></span></button>
+    <button class="seg" data-go="s11"><span class="seg-n">E · 11</span><span class="seg-t">供應鏈</span><span class="seg-v" data-ai="多處極高集中單點" data-gen="成熟多源　替代性高"></span></button>
+    <button class="seg" data-go="s12"><span class="seg-n">E · 12</span><span class="seg-t">風險汰換</span><span class="seg-v" data-ai="世代 ~12 個月" data-gen="世代 3–5 年"></span></button>
+  </div>
+</section>
+
+<!-- ══════════ 00 論點 ══════════ -->
+<section class="thesis" id="s00">
+  <p class="sec-mark">00 · 論點</p>
+  <h2>三個時鐘：這條鏈真正的張力在哪裡</h2>
+  <p class="lede">把整條鏈畫成一條直線是最常見的錯誤。它其實是三條週期長度差了一個數量級的產線，被硬性對齊到同一個交機日。</p>
+
+  <div style="max-width:var(--read)">
+    <p>一顆資料中心 GPU 從架構定案到量產出貨需要 24–36 個月，其中光罩製作與首批晶圓就吃掉 3–4 個月，而實體設計簽核前的驗證吃掉一半以上的人力。承接它的建築時鐘更慢：一座 100 MW 級園區從選址、取得併網容量、變電站施工到通過整合系統測試，36–60 個月是常態；其中最不可壓縮的往往不是混凝土，而是<strong>主變壓器與中壓開關設備的交期</strong>，以及電力公司的併網排隊。</p>
+    <p>可是機櫃世代的時鐘被壓到約 12 個月：GB200 NVL72、GB300 NVL72、VR200 NVL72 三代之間各只隔一年，單櫃功率從約 120 kW 一路推到 190–230 kW。這代表<strong>一棟依照前一代密度設計的機房，在啟用時就已經落後半代到一代</strong>。</p>
+  </div>
+
+  <div class="figs">
+    <div class="fg"><span class="v">24–36<small>月</small></span><span class="k">矽：架構定案 → 量產</span></div>
+    <div class="fg"><span class="v">36–60<small>月</small></span><span class="k">廠房：選址 → 併網啟用</span></div>
+    <div class="fg"><span class="v">~12<small>月</small></span><span class="k">機櫃：世代更替節奏</span></div>
+    <div class="fg"><span class="v">10<small>×</small></span><span class="k">AI 櫃對通用櫃的單位面積功率密度差</span></div>
+  </div>
+
+  <div class="callout" style="max-width:var(--read)">
+    <span class="ck">本文的核心判讀</span>
+    <p>整條鏈上真正的瓶頸，正在從「矽」往「基礎設施」移動。2023–2024 年的稀缺是 CoWoS 與 HBM；2026–2028 年的稀缺會是<strong>電力接入、變壓器、以及能承受 200 kW／櫃的既有廠房</strong>。晶片可以一年一代，但 34.5 kV 的變電站不行。</p>
+    <p>判讀任何一家公司的產能宣稱時，要問的不是「晶片夠不夠」，而是<strong>「這些晶片要插進哪一棟已經通電的建築」</strong>。</p>
+  </div>
+
+  <h3>全鏈時程疊圖</h3>
+  <div class="tl">
+    <div class="tl-in">
+      <div class="tl-r"><span class="tl-l">架構定義</span><div class="tl-t"><div class="tl-b" style="left:0;width:16.6%"></div></div><span class="tl-v">T−36→−30</span></div>
+      <div class="tl-r"><span class="tl-l">前端 RTL／驗證</span><div class="tl-t"><div class="tl-b" style="left:12.5%;width:29.1%"></div></div><span class="tl-v">T−33→−22</span></div>
+      <div class="tl-r"><span class="tl-l">實體設計／簽核</span><div class="tl-t"><div class="tl-b" style="left:33.3%;width:16.6%"></div></div><span class="tl-v">T−24→−18</span></div>
+      <div class="tl-r"><span class="tl-l">光罩＋首批晶圓</span><div class="tl-t"><div class="tl-b" style="left:50%;width:12.5%"></div></div><span class="tl-v">T−18→−13</span></div>
+      <div class="tl-r"><span class="tl-l">Bring-up／改版</span><div class="tl-t"><div class="tl-b" style="left:58.3%;width:12.5%"></div></div><span class="tl-v">T−15→−10</span></div>
+      <div class="tl-r"><span class="tl-l">量產晶圓／封裝</span><div class="tl-t"><div class="tl-b" style="left:66.6%;width:20.8%"></div></div><span class="tl-v">T−12→−4.5</span></div>
+      <div class="tl-r"><span class="tl-l">板卡／整機 L10</span><div class="tl-t"><div class="tl-b" style="left:79.1%;width:12.5%"></div></div><span class="tl-v">T−7.5→−3</span></div>
+      <div class="tl-r"><span class="tl-l">機櫃整合 L11</span><div class="tl-t"><div class="tl-b" style="left:87.5%;width:8.3%"></div></div><span class="tl-v">T−4.5→−1.5</span></div>
+      <div class="tl-r"><span class="tl-l">部署驗收 L12</span><div class="tl-t"><div class="tl-b" style="left:91.6%;width:8.3%"></div></div><span class="tl-v">T−3→T0</span></div>
+      <div class="tl-r"><span class="tl-l">廠房／併網</span><div class="tl-t"><div class="tl-b hi" style="left:0;width:100%"></div></div><span class="tl-v">全程・關鍵路徑</span></div>
+      <div class="tl-x"><span></span><div class="tl-xk"><span>−36</span><span>−33</span><span>−30</span><span>−27</span><span>−24</span><span>−21</span><span>−18</span><span>−15</span><span>−12</span><span>−9</span><span>−6</span><span>−3</span></div><span></span></div>
+    </div>
+  </div>
+  <p class="cap"><b>標註</b>　橫軸為距首櫃交付（T0）的月數；時程為產業估計之典型值，非特定產品實績。實務上前端與實體設計高度重疊，且多代並行開發。最後一列刻意畫滿全長——它幾乎不隨晶片進度縮短，這正是本節的論點。</p>
+
+  <div class="tools">
+    <button id="expand-all">全部展開</button>
+    <button id="collapse-all">全部收合</button>
+  </div>
+</section>
+
+<!-- ══════════ A ══════════ -->
+<div class="phase-rule"><span class="pk">A · 設計</span><span class="pd">從工作負載反推到不可逆的 tape-out</span></div>
+
+<details class="stage" id="s01">
+  <summary><span class="st-n">01</span><span class="st-main"><span class="st-t">架構定義：從工作負載反推，而不是從電晶體正推</span><span class="st-sub">規格不是由製程能力決定，而是由算術強度、光罩尺寸、以及客戶願付單價三者夾出來的。</span></span><span class="st-sig">858 mm²<i>光罩上限</i></span></summary>
+  <div class="body">
+    <p>決定架構的第一個數字是 <strong>bytes/FLOP</strong>——每做一次浮點運算需要搬多少位元組。大型語言模型的推論階段（尤其是 decode）算術強度極低，效能幾乎完全被記憶體頻寬綁死。這解釋了為什麼近三代加速器的規格演進裡，記憶體那一欄的成長比算力那一欄更關鍵。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>世代</th><th class="n">HBM 容量／封裝</th><th class="n">HBM 頻寬</th><th>記憶體型態</th><th class="n">封裝 TDP 量級</th></tr></thead>
+        <tbody>
+          <tr><td>H100 · Hopper</td><td class="n">80 GB</td><td class="n">3.35 TB/s</td><td>HBM3</td><td class="n">~700 W</td></tr>
+          <tr><td>B200 · Blackwell</td><td class="n">192 GB</td><td class="n">8 TB/s</td><td>HBM3E 8-Hi</td><td class="n">~1,000–1,200 W</td></tr>
+          <tr><td>B300 · Blackwell Ultra</td><td class="n">288 GB</td><td class="n">8 TB/s</td><td>HBM3E 12-Hi</td><td class="n">~1,400 W</td></tr>
+          <tr><td>R200 · Rubin</td><td class="n">288 GB</td><td class="n">~22 TB/s</td><td>HBM4</td><td class="n">~1,800 W+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　容量與頻寬為公開規格；TDP 為產業估計之量級，各 OEM 功率上限設定不同。⚑ 值得停留的是 B200→B300：頻寬持平、容量 +50%——這是「為了長 context 與 KV cache 而堆容量」的一代。真正的頻寬躍升要等 HBM4，跳躍出現在世代交替而非年度改款。</p>
+
+    <h3>約束：光罩是唯一無法繞過的牆</h3>
+    <p>單一曝光場的物理上限是 <strong>26 mm × 33 mm = 858 mm²</strong>。這是掃描機的光學極限，不是製程節點能突破的。當單顆晶片的需求超過這個面積，唯一的路是<strong>把它切成多顆晶粒再用先進封裝縫回去</strong>——Blackwell 就是兩顆接近光罩極限的晶粒，以 10 TB/s 的 NV-HBI 介面對接，對軟體呈現為單一 GPU。</p>
+    <div class="marg"><b>連鎖效應</b>這個決定往上游改寫驗證策略（必須驗證跨晶粒一致性協定），往下游直接決定封裝技術選型與 CoWoS 產能的消耗速度。光罩極限是全鏈唯一一個既無法用錢繞過、也無法用時間繞過的物理牆。</div>
+
+    <h3>收斂式是反推的</h3>
+    <div class="eq">目標 $/token
+  → 可接受的 $/GPU-hour（含 PUE 與電價）
+    → 折舊年限下的單櫃資本支出上限
+      → 單顆封裝的 BOM 上限
+        → 可用晶粒面積、HBM 堆疊數、封裝層級</div>
+    <p>當「單顆封裝的 BOM 上限」與「達成目標效能所需的面積」對不上時，能動的變數只剩三個：換更貴但更小的製程節點、增加封裝複雜度、或降低目標效能。近三代的選擇一致是<strong>前兩者同時做</strong>——這也是封裝成本占比從個位數百分比升到雙位數的原因。</p>
+
+    <div class="callout">
+      <span class="ck">兩條路線在這一環的分歧</span>
+      <p>通用 x86 的架構定義是<strong>相容性優先</strong>：指令集、插槽、記憶體通道、PCIe 世代都受既有生態綁定，自由度低但風險低。AI 加速器是<strong>工作負載優先</strong>，可以為單一類工作負載重新定義數值格式、記憶體階層甚至互連拓樸——自由度極高，代價是一旦工作負載型態轉向，三年前的架構賭注會直接失效。</p>
+      <p>這是 AI 硬體最被低估的風險：<strong>它不是製造風險，是押注風險。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s02">
+  <summary><span class="st-n">02</span><span class="st-main"><span class="st-t">前端設計與驗證：真正吃掉時程的地方</span><span class="st-sub">大眾想像中晶片設計是「畫電路」，實際上超過六成的人力與時程花在證明它是對的。</span></span><span class="st-sig">~65%<i>驗證占比</i></span></summary>
+  <div class="body">
+    <p>現代加速器上自研模組其實是少數。CPU 核心（如 Grace 採用 Arm Neoverse V2）、記憶體控制器、SerDes、PCIe/CXL 控制器、安全信任根多半外購或授權——<strong>整合風險大於設計風險</strong>。RTL 以 SystemVerilog 為主，部分資料路徑用高階合成產生。</p>
+
+    <h3>四條並行的驗證軌道</h3>
+    <ul>
+      <li><strong>約束隨機驗證（UVM）</strong>：覆蓋率驅動的收斂曲線，主力產能。</li>
+      <li><strong>形式驗證</strong>：用於協定與安全屬性，換取數學完備性。</li>
+      <li><strong>硬體模擬加速（emulation）</strong>：對 2,000 億電晶體級的設計，emulator 是關鍵路徑資源——沒有足夠容量，作業系統與驅動根本無法在流片前先跑起來。</li>
+      <li><strong>可測試性設計（DFT）</strong>：scan chain、MBIST、LBIST、ATPG 圖樣。DFT 直接決定 04 節的晶圓測試時間與良率篩選解析度。</li>
+    </ul>
+    <div class="marg"><b>低功耗設計</b>UPF 電源意圖描述、多電壓域、power gating、DVFS 策略。AI 加速器的瞬時功率變化極大，這一層的設計缺陷會在整櫃層級變成電網問題——同一個現象在 06、08、09 三節各出現一次。</div>
+
+    <p>但有一類錯誤永遠無法在流片前排除：<strong>與製造變異耦合的時序邊界問題</strong>。它只有在真實矽片上、在特定溫度與電壓角落才會出現。這是「首批矽片幾乎不會是量產版本」的根本原因，也是為什麼時程表上一定要預留一次金屬層改版的 4–8 週。</p>
+
+    <div class="callout">
+      <span class="ck">對照</span>
+      <p>通用 x86 在這一環的壓力來自<strong>向後相容性</strong>——數十年的指令集行為必須逐一保證。AI 加速器沒有這個包袱，但換來<strong>數值行為的驗證債</strong>：新數值格式（FP8／FP4）的捨入行為、溢位處理、跨晶粒一致性，任何一處偏差都會表現為「模型訓練到第 N 千步才發散」這種極難定位的故障——而它往往要到 10 節的大規模驗收才浮現。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s03">
+  <summary><span class="st-n">03</span><span class="st-main"><span class="st-t">實體設計、簽核與光罩：把邏輯變成幾何</span><span class="st-sub">產出只是一個檔案，但它一旦送出，數千萬美元的光罩費用就無法回收。</span></span><span class="st-sig">不可逆點 ①<i>tape-out</i></span></summary>
+  <div class="body">
+    <p>實體設計從 <strong>floorplan</strong> 開始，決定巨集區塊、I/O 環、以及最關鍵的<strong>電源網格</strong>骨架——對 1,400 W 的封裝，供電網格的金屬資源佔用可能超過總佈線資源的三成。接著是佈局繞線與時脈樹合成，時脈偏斜與抖動預算直接決定可達頻率。</p>
+
+    <h3>簽核的四道關</h3>
+    <ol>
+      <li><strong>靜態時序分析</strong>：多模式多角落簽核，先進節點下需驗證的角落組合可達數百至上千組。</li>
+      <li><strong>IR-drop 與電遷移</strong>：驗證最壞同時切換情況下，電源網格壓降不會讓時序失效。</li>
+      <li><strong>實體驗證</strong>：DRC、LVS、天線效應。</li>
+      <li><strong>可製造性</strong>：DFM 與光學鄰近修正（OPC）。</li>
+    </ol>
+
+    <p>GDSII 送到晶圓廠後，資料先經過 OPC 與光罩資料準備，再製作<strong>光罩組</strong>。EUV 光罩使用多層反射式基板，全球具量產能力的供應商極少，並需搭配薄膜護膜。一套先進節點光罩組的成本落在<strong>千萬美元量級</strong>，且隨節點推進顯著上升。</p>
+    <div class="marg"><b>首批矽片</b>光罩完成後投片，到拿到首批矽片約需 2.5–3.5 個月，依層數與 EUV 層比例而定。接著是矽片啟用：上電、時脈鎖定、記憶體介面訓練、跑第一支測試程式。若問題能以金屬層改版修正，重投約 4–8 週；若需改前段層，等同重來一次。</div>
+
+    <div class="callout">
+      <span class="ck">全鏈的三個不可逆點</span>
+      <p>Tape-out 是第一個真正的不可逆點：在此之前所有錯誤只花人力與時間，在此之後每一個錯誤都直接換算成光罩費用與 3–6 個月的市場時間。這正是 02 節驗證投入看起來「過度」的原因——它其實是在買一個不可逆決策的保險。</p>
+      <p>往下游看，同性質的不可逆點還有兩個：<strong>05 節的封裝投料</strong>（KGD 與 HBM 一旦貼上就無法回收）與 <strong>09 節的變電站開工</strong>。整條鏈的專案管理，本質上是在管理這三個點的時序對齊。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ B ══════════ -->
+<div class="phase-rule"><span class="pk">B · 製造</span><span class="pd">良率的數學，與價值最集中的兩公分</span></div>
+
+<details class="stage" id="s04">
+  <summary><span class="st-n">04</span><span class="st-main"><span class="st-t">晶圓製造：良率經濟學才是真正的規格書</span><span class="st-sub">在接近光罩極限的晶粒尺寸下，缺陷密度不是品管指標，而是決定產品能否成立的財務參數。</span></span><span class="st-sig">≈ 59%<i>800 mm² 良率</i></span></summary>
+  <div class="body">
+    <p>Blackwell 世代使用台積電 <strong>4NP</strong>（5 nm 家族的效能強化版），而非當時已可用的 N3——這是刻意的選擇：對一顆本來就受光罩面積與供電限制的巨大晶粒，成熟節點的缺陷密度與產能供應比密度領先更重要。到 Rubin 世代才轉向更先進節點，並在 2 nm 世代引入環繞閘極與背面供電。</p>
+
+    <div class="figs full">
+      <div class="fg"><span class="v">1,000<small>+</small></span><span class="k">單一晶圓製程步驟數</span></div>
+      <div class="fg"><span class="v">80–100</span><span class="k">光罩層數量級</span></div>
+      <div class="fg"><span class="v">3–4<small>月</small></span><span class="k">晶圓廠週期時間</span></div>
+      <div class="fg"><span class="v">~64</span><span class="k">單片 300 mm 晶圓毛晶粒數</span></div>
+    </div>
+
+    <h3>良率的數學</h3>
+    <p>以 Murphy 模型估算一顆 800 mm² 晶粒的隨機缺陷良率，再換算成單片晶圓的良品產出：</p>
+    <div class="eq">Y = [ (1 − e^(−A·D₀)) / (A·D₀) ]²
+
+  A  = 8.0 cm²     晶粒面積（≈ 800 mm²）
+  D₀ = 0.07 /cm²   成熟先進節點缺陷密度（產業估計）
+  A·D₀ = 0.56
+  Y  = [ (1 − 0.5712) / 0.56 ]² = 0.766² ≈ 58.6 %
+
+DPW ≈ π·(d/2)²/S − π·d/√(2S)
+    = 88.4 − 23.6 ≈ 64 顆／片（毛）
+
+KGD ≈ 64 × 58.6 % ≈ 38 顆／片
+每封裝需 2 顆晶粒 → ≈ 19 顆封裝／片邏輯晶圓</div>
+
+    <div class="callout">
+      <span class="ck">這組數字說明三件事</span>
+      <p><strong>其一，晶粒面積是超線性懲罰</strong>：面積加倍不是成本加倍，而是良率再平方一次。<strong>其二</strong>，這解釋了 01 節為什麼一定要走多晶粒路線——兩顆 800 mm² 的良率遠優於一顆 1,600 mm²（後者在同樣 D₀ 下會掉到約 34%）。</p>
+      <p><strong>其三，也最容易被忽略：良率高低影響的是成本與供應量，不是封裝良率。</strong>因為晶圓測試已經先篩掉壞晶粒，進入封裝的都是良品晶粒（KGD）。這個區別在 05 節會變得極為關鍵。</p>
+    </div>
+
+    <h3>分級與冗餘</h3>
+    <p>晶圓測試用探針卡對每顆晶粒施加 ATPG 圖樣與 MBIST，標記良否並寫入晶圓圖。對大型加速器，測試不只是良否二分，還包含<strong>分級</strong>：依可達頻率、漏電流與可修復的缺陷模式分成不同料號。</p>
+    <p>現代設計會刻意內建<strong>冗餘</strong>——備用運算單元、備用記憶體列——讓帶有少量缺陷的晶粒仍可作為降規產品出貨。這使實際可用良率高於純數學模型估計，也是同一片矽能同時產出旗艦與次階料號的原因。</p>
+    <div class="marg"><b>判讀提醒</b>看到任何良率傳聞，先問對方講的是「完美良率」還是「可出貨良率」——兩者可以差 15–25 個百分點，而多數報導不會說明。</div>
+  </div>
+</details>
+
+<details class="stage" id="s05">
+  <summary><span class="st-n">05</span><span class="st-main"><span class="st-t">先進封裝與 HBM：全鏈價值最集中的兩公分</span><span class="st-sub">封裝已經從「保護晶片的外殼」變成決定系統效能的主動元件，也是全鏈風險最高的一步。</span></span><span class="st-sig">3.3×<i>光罩面積</i></span></summary>
+  <div class="body">
+    <p>先進封裝的任務是把 01 節切開的東西縫回去，並讓記憶體貼得夠近。以 CoWoS-L 為例，載板之上是重佈線層中介層搭配局部矽橋，其上並排兩顆邏輯晶粒與八組 HBM 堆疊，整體面積約為 3.3 倍光罩。</p>
+
+    <div class="xs full">
+      <div class="xs-legend" role="group" aria-label="切換剖面層">
+        <button data-lyr="all" aria-pressed="true">全部</button>
+        <button data-lyr="sub" aria-pressed="false">載板</button>
+        <button data-lyr="int" aria-pressed="false">中介層</button>
+        <button data-lyr="die" aria-pressed="false">邏輯晶粒</button>
+        <button data-lyr="hbm" aria-pressed="false">HBM</button>
+        <button data-lyr="cool" aria-pressed="false">冷板界面</button>
+      </div>
+      <div class="xs-view">
+        <svg viewBox="0 0 740 300" role="img" aria-label="CoWoS-L 封裝剖面示意：載板、RDL 中介層與局部矽橋、兩顆邏輯晶粒與八組 HBM 堆疊、上方冷板界面">
+          <g class="lyr" data-lyr="cool">
+            <rect x="44" y="12" width="652" height="20" fill="none" stroke="var(--ink-3)" stroke-dasharray="4 3"/>
+            <text x="56" y="26" class="lb">冷板界面　~1,400 W 通過約 28 cm² 頂面　≈ 50 W/cm²</text>
+          </g>
+          <g class="lyr" data-lyr="die">
+            <path d="M408 108V86h74" class="dim"/>
+            <text x="486" y="90" class="lb-b">NV-HBI　10 TB/s 晶粒對接</text>
+          </g>
+          <path d="M52 62h636M52 56v12M688 56v12" class="dim"/>
+          <text x="252" y="50" class="lb-b">封裝總面積 ≈ 3.3 倍光罩 ≈ 2,830 mm²</text>
+
+          <g class="lyr" data-lyr="hbm">
+            <g fill="var(--paper-2)" stroke="var(--ink-3)">
+              <rect x="60" y="112" width="52" height="68"/><rect x="120" y="112" width="52" height="68"/>
+              <rect x="180" y="112" width="52" height="68"/><rect x="240" y="112" width="52" height="68"/>
+              <rect x="452" y="112" width="52" height="68"/><rect x="512" y="112" width="52" height="68"/>
+              <rect x="572" y="112" width="52" height="68"/><rect x="632" y="112" width="52" height="68"/>
+            </g>
+            <g stroke="var(--rule)" stroke-width=".8">
+              <path d="M60 124h52M60 136h52M60 148h52M60 160h52M60 172h52"/>
+              <path d="M120 124h52M120 136h52M120 148h52M120 160h52M120 172h52"/>
+              <path d="M180 124h52M180 136h52M180 148h52M180 160h52M180 172h52"/>
+              <path d="M240 124h52M240 136h52M240 148h52M240 160h52M240 172h52"/>
+              <path d="M452 124h52M452 136h52M452 148h52M452 160h52M452 172h52"/>
+              <path d="M512 124h52M512 136h52M512 148h52M512 160h52M512 172h52"/>
+              <path d="M572 124h52M572 136h52M572 148h52M572 160h52M572 172h52"/>
+              <path d="M632 124h52M632 136h52M632 148h52M632 160h52M632 172h52"/>
+            </g>
+            <text x="60" y="104" class="lb">HBM3E 12-Hi ×4</text>
+            <text x="452" y="104" class="lb">HBM3E 12-Hi ×4</text>
+          </g>
+
+          <g class="lyr" data-lyr="die">
+            <rect x="304" y="112" width="64" height="68" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="376" y="112" width="64" height="68" fill="var(--paper-2)" stroke="var(--ink)" stroke-width="1.5"/>
+            <rect x="368" y="112" width="8" height="68" fill="var(--ink)"/>
+            <text x="310" y="142" class="lb-b">GPU die</text><text x="310" y="156" class="lb">~800 mm²</text>
+            <text x="382" y="142" class="lb-b">GPU die</text><text x="382" y="156" class="lb">~800 mm²</text>
+          </g>
+
+          <g class="lyr" data-lyr="int">
+            <rect x="52" y="180" width="636" height="32" fill="var(--paper-2)" stroke="var(--ink)"/>
+            <text x="64" y="200" class="lb-b">RDL 中介層 ＋ 局部矽橋（LSI）— CoWoS-L</text>
+            <g fill="var(--ink-3)" opacity=".5">
+              <rect x="286" y="186" width="40" height="9"/><rect x="366" y="186" width="40" height="9"/><rect x="424" y="186" width="40" height="9"/>
+            </g>
+          </g>
+
+          <g class="lyr" data-lyr="sub">
+            <rect x="32" y="212" width="676" height="34" fill="var(--paper-2)" stroke="var(--ink)"/>
+            <text x="44" y="233" class="lb-b">ABF 有機載板</text>
+            <text x="612" y="233" class="lb">~110×110 mm</text>
+            <g fill="var(--ink-3)" opacity=".55">
+              <circle cx="60" cy="254" r="5"/><circle cx="105" cy="254" r="5"/><circle cx="150" cy="254" r="5"/><circle cx="195" cy="254" r="5"/>
+              <circle cx="240" cy="254" r="5"/><circle cx="285" cy="254" r="5"/><circle cx="330" cy="254" r="5"/><circle cx="375" cy="254" r="5"/>
+              <circle cx="420" cy="254" r="5"/><circle cx="465" cy="254" r="5"/><circle cx="510" cy="254" r="5"/><circle cx="555" cy="254" r="5"/>
+              <circle cx="600" cy="254" r="5"/><circle cx="645" cy="254" r="5"/><circle cx="690" cy="254" r="5"/>
+            </g>
+            <text x="32" y="278" class="lb">BGA 球陣列 → 板卡（見 06 節）</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <p class="cap full"><b>標註</b>　示意圖，非按比例工程圖。⚑ 最值得停留的比例關係在最上方那條虛線：<strong>約 1,400 W 的熱功率要通過約 28 cm² 的封裝頂面</strong>，熱通量密度約 50 W/cm²，接近甚至超過部分工業級功率模組——這是空氣冷卻在此徹底出局的物理原因，不是設計偏好。</p>
+
+    <h3>HBM：另一條獨立的良率鏈</h3>
+    <p>HBM 不是一顆晶片，而是<strong>已經完成一次 3D 堆疊與測試的子系統</strong>。一組 12-Hi HBM3E 包含 1 顆基底晶粒與 12 顆 DRAM 核心晶粒，以矽穿孔與微凸塊垂直互連，出廠前以 KGSD 形式測試。</p>
+    <p>它的良率是<strong>串聯</strong>的：任何一層失效，整堆報廢。即使單層良率 99%，12 層串聯後也只剩 <code>0.99¹² ≈ 88.6%</code>，再乘上 TSV 對位與鍵合良率。這是 HBM 價格遠高於同容量標準 DRAM 的結構性原因，也是 HBM4 世代開始把基底晶粒交給邏輯晶圓廠代工的原因——基底晶粒的複雜度已經超出記憶體廠的製程強項。</p>
+
+    <div class="callout">
+      <span class="ck">為什麼封裝是全鏈風險最高的一步</span>
+      <p>進入 CoWoS 的每一項料件都是<strong>已測良品</strong>：2 顆 KGD、8 組 KGSD、1 片中介層、1 片載板。所以封裝良率不需要再乘一次晶粒良率——但這正是它可怕的地方。</p>
+      <p><strong>組裝失敗損失的不是一顆晶粒的成本，而是整包所有料件的累積價值</strong>，其中 HBM 往往就佔封裝 BOM 的一半以上。當封裝良率從 95% 掉到 90%，損失的絕對金額遠大於晶圓良率掉同樣 5 個百分點。這解釋了產業為何願意為封裝良率付出極高的製程代價（翹曲控制、CTE 匹配、逐階段電性測試），也解釋了具備量產 CoWoS-L 良率的供應商在議價上幾乎沒有對手。</p>
+    </div>
+
+    <h3>把封裝產能換算成機櫃數</h3>
+    <div class="eq">S = 2,830 mm²（3.3 光罩）
+封裝／片 ≈ π·22500/2830 − π·300/√(2·2830)
+         ≈ 25.0 − 8.9 ≈ 16 顆／片
+
+月產能 100k 片（2026 產業估計 100k–140k，多家共用）
+  → ≈ 1.6 M 顆大型封裝／月（理論上限）
+  → 每櫃 72 顆 → ≈ 22,000 櫃／月（理論上限）</div>
+    <p>⚑ 這個數字明顯高於任何實際出貨量，而<strong>差距正是判讀重點</strong>：CoWoS 產能由多家共用，且並非所有品項都是 3.3 光罩的巨型封裝；更關鍵的是<strong>下游早已不是封裝在限制</strong>。當理論封裝上限是實際部署量的數倍時，瓶頸已經移到 HBM 供應、電源與液冷零組件、以及 09 節的廠房與電力——這與 00 節的論點互相印證。</p>
+    <div class="marg"><b>推導性質</b>此處為量級檢核，非供應預測。未扣除製程邊緣、品項混合與良率，僅用於判斷「瓶頸還在不在封裝」。</div>
+  </div>
+</details>
+
+<!-- ══════════ C ══════════ -->
+<div class="phase-rule"><span class="pk">C · 硬體整合</span><span class="pd">從一千七百安培到一點三六噸</span></div>
+
+<details class="stage" id="s06">
+  <summary><span class="st-n">06</span><span class="st-main"><span class="st-t">板卡：一千七百安培要怎麼送進一顆晶片</span><span class="st-sub">從封裝往外走一層，主導設計的物理量從「電晶體」換成了「電流密度」與「插入損耗」。</span></span><span class="st-sig">1,750 A<i>單顆核心電流</i></span></summary>
+  <div class="body">
+    <p>一顆 1,400 W 的加速器，核心電壓約 0.8 V 量級。用最直接的方式算：</p>
+    <div class="eq">I = P / V = 1,400 W / 0.8 V ≈ 1,750 A</div>
+    <p>一千七百安培要通過封裝底下的球陣列與板層銅箔送進晶粒。這推動了三件在傳統伺服器板上不存在的設計：<strong>大量並聯的多相供電級</strong>（十數相到數十相）、<strong>垂直供電</strong>——把穩壓模組移到封裝正下方以縮短路徑、以及封裝內去耦電容以應付 dI/dt 暫態。</p>
+
+    <div class="callout">
+      <span class="ck">一個現象，在鏈上出現三次</span>
+      <p>AI 工作負載的電流暫態不是隨機的。整個叢集的 GPU 在同步訓練時會<strong>同時</strong>進入運算階段、又<strong>同時</strong>進入通訊等待，形成接近方波的負載變化。</p>
+      <p>這個特性在板級是去耦設計問題，在 08 節是千安培匯流排的震盪問題，到 09 節則變成園區級的電網品質問題——<strong>同一個物理現象，在鏈上三個層級各出現一次，而每一層由不同的組織負責</strong>。</p>
+    </div>
+
+    <h3>訊號完整性</h3>
+    <ul>
+      <li><strong>層數與材料</strong>：AI 加速板常見 20–28 層，使用低損耗基材；傳統雙路伺服器主機板約 12–16 層、材料等級較低。</li>
+      <li><strong>SerDes 速率</strong>：224 Gb/s PAM4 世代下 Nyquist 頻率約 56 GHz，通道插入損耗預算極為緊迫，需背鑽消除殘樁、嚴格阻抗控制（典型 ±5–8%）。</li>
+      <li><strong>板上纜線</strong>：當 PCB 損耗預算不夠時，直接用同軸纜線繞過 PCB 的損耗——這正是 08 節 NVLink 銅纜脊背的技術理由。</li>
+    </ul>
+
+    <div class="callout">
+      <span class="ck">兩種板卡的設計中心完全不同</span>
+      <p>通用 x86 主機板的設計中心是<strong>擴充性與相容性</strong>：DIMM 插槽數、PCIe 通道分配、風扇風道。AI 運算板的設計中心是<strong>供電與熱的垂直路徑</strong>——它幾乎沒有插槽（記憶體在封裝內、儲存與網路走高速纜線），板子存在的目的是把電送上去、把訊號送出去、把冷板壓下來。</p>
+      <p><strong>「一塊沒有插槽的主機板」是這一代 AI 硬體最直觀的形態差異。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s07">
+  <summary><span class="st-n">07</span><span class="st-main"><span class="st-t">系統托盤與整機：L6 到 L10</span><span class="st-sub">代工體系用製造層級描述交付範圍，這套術語是理解整個伺服器供應鏈分工的鑰匙。</span></span><span class="st-sig">L11<i>AI 的交付單位</i></span></summary>
+  <div class="body">
+    <p>伺服器產業用「製造層級」描述一批貨到底做到哪裡。這套編號看似瑣碎，卻精準標示了 AI 硬體與傳統伺服器在商業模式上的分水嶺。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th class="n">層級</th><th>交付內容</th><th>典型承作者</th><th>對 AI 機櫃的意義</th></tr></thead>
+        <tbody>
+          <tr><td class="n">L6</td><td>準系統：主機板＋機殼＋基本料件，不含 CPU／記憶體／儲存</td><td>ODM</td><td>AI 系統幾乎不以 L6 交付——加速器模組無法後裝</td></tr>
+          <tr><td class="n">L10</td><td>完整可開機伺服器：所有元件、韌體、作業系統，通過功能測試</td><td>ODM／OEM</td><td>單一運算托盤的完成點；含冷板組裝與氣密測試</td></tr>
+          <tr><td class="n hit">L11</td><td class="hit">機櫃級：上架、機內電力與冷卻配置、機內網路與 NVLink 佈線、整櫃測試</td><td class="hit">ODM／整合商</td><td class="hit"><strong>AI 機櫃的實質交付單位</strong>——整櫃出廠、整櫃驗收</td></tr>
+          <tr><td class="n">L12</td><td>叢集級：跨櫃佈線、網路架構、軟體堆疊驗證</td><td>整合商／客戶</td><td>訓練叢集的真正交付點；決定實際可用效能</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　層級定義為產業慣例，各家細節略有差異。⚑ 判讀重點：AI 硬體的交付重心已整體<strong>右移</strong>。傳統伺服器的競爭發生在 L6–L10（誰的準系統便宜），AI 機櫃的競爭發生在 L11–L12（誰能把一整櫃 1.36 噸的東西測到能開機、並且跨櫃跑得動）。這解釋了為何機櫃整合能力、而非主機板製造能力，成為近兩年 ODM 之間的分水嶺。</p>
+
+    <h3>運算托盤內的組成</h3>
+    <ul>
+      <li><strong>運算模組</strong>：GB300 世代為每托盤 4 顆 Blackwell Ultra GPU ＋ 2 顆 Grace CPU。</li>
+      <li><strong>冷板與快接頭</strong>：GPU、CPU、NVSwitch 甚至供電級都覆蓋冷板；接頭採用防滴漏快接頭（UQD）。</li>
+      <li><strong>網路</strong>：每 GPU 對應一張高速網卡或 DPU 作為橫向擴展出口；縱向擴展走 NVLink。</li>
+      <li><strong>管理與安全</strong>：BMC（Redfish 介面）、韌體套件版本控管、安全開機信任鏈。</li>
+      <li><strong>燒機</strong>：典型 48–72 小時的溫度與功率循環，用以觸發早夭失效。</li>
+    </ul>
+    <div class="marg"><b>唯一的災難級失效</b>漏液。風冷伺服器的失效模式溫和且局部，液冷托盤一旦漏液可能同時毀掉整櫃。因此出廠前的保壓測試、以及快接頭反覆插拔後的複測，是這一層無法省略的工序。</div>
+  </div>
+</details>
+
+<details class="stage" id="s08">
+  <summary><span class="st-n">08</span><span class="st-main"><span class="st-t">機櫃整合（L11）：機構、電力、互連三者同時到極限</span><span class="st-sub">到這一層，限制條件不再是電子學，而是結構工程、流體力學與運輸物流。</span></span><span class="st-sig">18.5 kN/m²<i>樓板荷重</i></span></summary>
+  <div class="body">
+    <p>機櫃是 AI 硬體真正的產品單位。把兩種機櫃的立面並排，差異不只是功率數字——最後一列才是關鍵：<strong>AI 櫃的後方有液路與一條實體互連脊背，通用櫃沒有</strong>。這一個結構差異，往下傳導成了 09 節整個機房設計的重寫。</p>
+
+    <div class="racks full">
+      <div class="rk">
+        <div class="rk-h"><b>GB300 NVL72</b><span>48U OpenU · 示意</span></div>
+        <div class="rk-b">
+          <div class="rk-s"><span>48U</span><span>32U</span><span>16U</span><span>1U</span></div>
+          <div class="rk-f">
+            <div class="u"><b>整流架 ×3</b><i>~50 kW</i></div>
+            <div class="u k"><b>運算托盤 ×10</b><i>40 GPU</i></div>
+            <div class="u a"><b>NVSwitch 托盤 ×9</b><i>NVLink</i></div>
+            <div class="u k"><b>運算托盤 ×8</b><i>32 GPU</i></div>
+            <div class="u"><b>整流架 ×3</b><i>~50 kW</i></div>
+            <div class="u g"><b>後方：銅纜脊背＋冷卻歧管＋直流匯流排</b><i></i></div>
+          </div>
+        </div>
+        <div class="rk-t">功率　<b>132–142 kW</b>（尖峰 ~155 kW）<br>重量　<b>≈ 1,360 kg</b><br>運算　72 GPU／36 CPU<br>互連　NVLink 130 TB/s · ~5,000 條銅纜<br>冷卻　直接液冷為主，殘餘風冷</div>
+      </div>
+      <div class="rk">
+        <div class="rk-h"><b>42U 雙路 x86</b><span>EIA-310 · 示意</span></div>
+        <div class="rk-b">
+          <div class="rk-s"><span>42U</span><span>28U</span><span>14U</span><span>1U</span></div>
+          <div class="rk-f">
+            <div class="u a"><b>ToR 交換器 ×2</b><i>2U</i></div>
+            <div class="u"><b>2U 雙路伺服器 ×8</b><i>16U</i></div>
+            <div class="u"><b>2U 雙路伺服器 ×8</b><i>16U</i></div>
+            <div class="u"><b>2U 雙路伺服器 ×4</b><i>8U</i></div>
+            <div class="u"><b>垂直 PDU ×2</b><i>0U 側掛</i></div>
+            <div class="u g"><b>後方：熱通道／盲板／機櫃內無液路</b><i></i></div>
+          </div>
+        </div>
+        <div class="rk-t">功率　<b>8–15 kW</b>（高密度可到 20–30 kW）<br>重量　<b>≈ 600–900 kg</b><br>運算　20 台／40 CPU<br>互連　ToR 交換器＋銅／光纜，無機櫃級縱向擴展<br>冷卻　風冷，冷熱通道封閉</div>
+      </div>
+    </div>
+    <p class="cap full"><b>標註</b>　立面為示意，實際 U 位分配依 OEM 而異；AI 櫃側規格取自公開規格與產業估計。</p>
+
+    <h3>由功率推導出的三個工程後果</h3>
+    <div class="eq">① 電流　132 kW ÷ 54 V ≈ 2,440 A
+   機櫃級直流匯流排須承載千安培級電流。這是銅重量、接觸電阻與
+   焦耳損耗的問題，也是產業轉向 800 VDC 的直接動機——
+   同功率下電流降至約 165 A，約 1/15。
+
+② 流量　ṁ = Q/(c·ΔT)，Q = 132×0.9 = 119 kW，ΔT = 10 K
+   → ≈ 2.84 kg/s ≈ 171 L/min
+   單櫃每分鐘需通過約 170 公升冷卻液，決定歧管口徑、
+   快接頭規格與 CDU 選型，也決定洩漏時的秒級損害規模。
+
+③ 荷重　1,360 kg ÷ 0.72 m² ≈ 1.9 t/m² ≈ 18.5 kN/m²
+   超出多數高架地板設計荷重（常見 7–12 kN/m²）。
+   AI 機櫃通常直接落在結構樓板上，不走高架地板。</div>
+    <p>第三項是既有機房改造最常撞到的硬牆：<strong>電力與冷卻都還能想辦法，樓板不行</strong>。</p>
+
+    <div class="callout">
+      <span class="ck">為什麼是銅纜而不是光纖</span>
+      <p>72 顆 GPU 的全互連需要極高的連接密度，NVL72 用約 5,000 條、總長超過兩英里的銅纜構成 NVLink 脊背。選銅而非光的理由是功耗：<strong>省去光收發器與重定時器可節省約 20 kW／櫃</strong>——相當於一整個傳統機櫃的全部功耗。代價是銅的距離極限，這也是縱向擴展域必須被限制在單櫃（或相鄰數櫃）內的原因。</p>
+      <p>下一代 Rubin 走得更遠：以印刷電路中板與盲插連接器取代纜線匣，把這條脊背從「五千條線」變成「一塊板」。</p>
+    </div>
+
+    <h3>L11 出廠測試</h3>
+    <ul>
+      <li>液路保壓與洩漏測試（含快接頭反覆插拔後複測）</li>
+      <li>電氣安規、接地連續性、匯流排接觸電阻</li>
+      <li>NVLink 全鏈路訓練與誤碼率掃描</li>
+      <li>整櫃滿載壓力測試與熱影像掃描</li>
+      <li>運輸包裝：防震與加速度記錄；1.36 噸整櫃出貨對貨櫃、卡車、電梯、門框與坡道都是限制條件</li>
+    </ul>
+  </div>
+</details>
+
+<!-- ══════════ D ══════════ -->
+<div class="phase-rule"><span class="pk">D · 部署</span><span class="pd">最慢的那一段，以及交機之後才開始的事</span></div>
+
+<details class="stage" id="s09">
+  <summary><span class="st-n">09</span><span class="st-main"><span class="st-t">資料中心與併網（L12）：整條鏈上最慢的那一段</span><span class="st-sub">機櫃可以在數月內造出來，接它的電與水不行。</span></span><span class="st-sig">2–5 年<i>併網排隊</i></span></summary>
+  <div class="body">
+    <p>從電網到晶粒，電壓要經過六到七次轉換，而每一次轉換都有損耗。在 100 MW 尺度上，這些損耗就是數 MW 的實體熱。</p>
+
+    <div class="lad full">
+      <div class="lad-r"><span class="lad-l">高壓輸電</span><div class="lad-t"><div class="lad-f" style="width:100%"></div></div><span class="lad-v">69–345 kV</span></div>
+      <div class="lad-r"><span class="lad-l">園區變電站</span><div class="lad-t"><div class="lad-f" style="width:86%"></div></div><span class="lad-v">34.5 kV</span></div>
+      <div class="lad-r"><span class="lad-l">中壓配電</span><div class="lad-t"><div class="lad-f" style="width:72%"></div></div><span class="lad-v">13.8 kV</span></div>
+      <div class="lad-r"><span class="lad-l">變壓器輸出</span><div class="lad-t"><div class="lad-f" style="width:58%"></div></div><span class="lad-v">400/415 V</span></div>
+      <div class="lad-r"><span class="lad-l">UPS／匯流排</span><div class="lad-t"><div class="lad-f" style="width:44%"></div></div><span class="lad-v">AC 三相</span></div>
+      <div class="lad-r"><span class="lad-l">機櫃整流架</span><div class="lad-t"><div class="lad-f a" style="width:30%"></div></div><span class="lad-v">54 V DC</span></div>
+      <div class="lad-r"><span class="lad-l">板級 VRM</span><div class="lad-t"><div class="lad-f a" style="width:16%"></div></div><span class="lad-v">12 V→0.8 V</span></div>
+      <div class="lad-r"><span class="lad-l">晶粒</span><div class="lad-t"><div class="lad-f a" style="width:6%"></div></div><span class="lad-v">~0.8 V</span></div>
+    </div>
+    <p class="cap full"><b>標註</b>　電壓為典型值；北美與亞洲配電級距不同。⚑ 這是 800 VDC 架構的核心賣點：<strong>取消機櫃級 AC/DC 轉換，把整流集中到園區側</strong>，端到端效率可望提升數個百分點——在百 MW 級園區，「幾個百分點」等於數千萬度電。</p>
+
+    <h3>冷卻鏈：兩個迴路與一台熱交換器</h3>
+    <p>液冷機房的標準架構是<strong>雙迴路</strong>：機櫃側的技術冷卻迴路（TCS）與廠房側的設施水迴路（FWS），中間以 CDU 作熱交換。CDU 的作用不只是散熱，更關鍵的是<strong>水力與水質解耦</strong>——機櫃內走的是嚴格控制水質的乙二醇水溶液，廠房側可以是普通冷卻水。CDU 同時負責把供液溫度維持在<strong>露點以上</strong>，避免冷板結露；這是液冷機房少數會直接造成硬體損毀的控制迴路。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>ASHRAE 水溫等級</th><th class="n">供水上限</th><th>典型製冷方式</th><th>能耗與地域含義</th></tr></thead>
+        <tbody>
+          <tr><td>W17</td><td class="n">17 °C</td><td>冰水主機為主</td><td>能耗最高，但可支援最高熱通量</td></tr>
+          <tr><td>W27</td><td class="n">27 °C</td><td>冰水主機＋水側節能器</td><td>過渡選項</td></tr>
+          <tr><td>W32</td><td class="n">32 °C</td><td>多數地區可全年免冰水主機</td><td><strong>大型 AI 園區的主流目標</strong></td></tr>
+          <tr><td>W40 / W45</td><td class="n">40 / 45 °C</td><td>乾冷器即可，甚至可餘熱回收</td><td>PUE 最佳，但對冷板熱阻要求最嚴苛</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　等級定義依 ASHRAE 液冷指引。⚑ 這張表其實是一張<strong>選址地圖</strong>：能否採用 W32 以上、免用冰水主機，直接由當地濕球溫度決定。同一套機櫃設計蓋在氣候乾冷處與濕熱處，PUE 與營運成本可以差 10–15%。<strong>晶片規格是全球一致的，機房經濟學不是。</strong></p>
+
+    <h3>從機櫃規模反推廠房需求</h3>
+    <div class="calc full">
+      <div class="calc-h">互動推算器　·　改任一參數即時重算</div>
+      <div class="calc-i">
+        <div><label for="i-kw">單櫃功率 kW</label><input id="i-kw" type="number" value="140" min="1" step="1"></div>
+        <div><label for="i-n">機櫃數量</label><input id="i-n" type="number" value="576" min="1" step="1"></div>
+        <div><label for="i-pue">PUE</label><input id="i-pue" type="number" value="1.15" min="1" step="0.01"></div>
+        <div><label for="i-dt">冷卻 ΔT (K)</label><input id="i-dt" type="number" value="10" min="1" step="0.5"></div>
+        <div><label for="i-liq">液冷捕獲率 %</label><input id="i-liq" type="number" value="90" min="0" max="100" step="1"></div>
+        <div><label for="i-price">電價 元／度</label><input id="i-price" type="number" value="3.2" min="0" step="0.1"></div>
+      </div>
+      <div class="calc-o">
+        <div class="co"><span class="v" id="o-it">—</span><span class="k">IT 負載 MW</span></div>
+        <div class="co"><span class="v" id="o-fac">—</span><span class="k">園區總負載 MW</span></div>
+        <div class="co"><span class="v" id="o-flow">—</span><span class="k">總冷卻液流量 m³/h</span></div>
+        <div class="co"><span class="v" id="o-cdu">—</span><span class="k">CDU 台數 1.3 MW · N+1</span></div>
+        <div class="co"><span class="v" id="o-air">—</span><span class="k">殘餘風冷負載 MW</span></div>
+        <div class="co"><span class="v" id="o-gwh">—</span><span class="k">年耗電 GWh</span></div>
+        <div class="co"><span class="v" id="o-cost">—</span><span class="k">年電費 億元</span></div>
+        <div class="co"><span class="v" id="o-home">—</span><span class="k">相當家戶數 萬戶</span></div>
+      </div>
+      <p class="calc-n">計算式：IT ＝ kW×櫃數；總負載 ＝ IT×PUE；流量 ＝ Q/(ρ·c·ΔT)，水 c ＝ 4.18 kJ/(kg·K)；家戶以年用電 3,600 度估算。⚑ 預設值為 576 櫃、約 80 MW IT 負載的訓練叢集——這個規模在 2026 年已屬中型。請看一眼「殘餘風冷負載」：即使液冷捕獲九成，剩下那一成在百 MW 尺度上仍是數 MW 的空調負荷。<strong>「上了液冷就不用空調」是常見的錯誤直覺。</strong></p>
+    </div>
+
+    <div class="callout">
+      <span class="ck">一個未被充分定價的新風險：叢集級功率震盪</span>
+      <p>06 節提到的同步負載特性，在園區尺度會放大成電網問題。數萬顆 GPU 同步訓練時，會在數十毫秒到秒的尺度上一起進入運算、又一起進入通訊等待，形成<strong>數十 MW 級的方波負載</strong>。這對配電設備、UPS 與上游電網都是非典型工況——傳統資料中心的負載曲線是平滑的，電力設備的設計假設也建立在此。</p>
+      <p>因應手段包括機櫃級電池備援、電容器組、以及在軟體層刻意插入「功率整平」的空轉指令。<strong>這是一條從 GPU 微架構一路貫穿到電力公司調度室的因果鏈，而它在多數供應鏈分析中完全缺席。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s10">
+  <summary><span class="st-n">10</span><span class="st-main"><span class="st-t">驗收、上線與營運：交機不等於可用</span><span class="st-sub">一座叢集通電之後，還要經過兩層完全不同的驗收：建築的，與運算的。</span></span><span class="st-sig">L1–L5<i>調試層級</i></span></summary>
+  <div class="body">
+    <p>建築側的調試分五級，逐級把「設備裝好了」推進到「系統真的能撐住」。</p>
+    <ol>
+      <li><strong>L1 工廠測試</strong>　設備出廠見證測試</li>
+      <li><strong>L2 到場驗收</strong>　安裝完整性、外觀與規格核對</li>
+      <li><strong>L3 啟動測試</strong>　各設備單機通電運轉</li>
+      <li><strong>L4 功能測試</strong>　子系統依設計序列動作（切換、告警、聯鎖）</li>
+      <li><strong>L5 整合系統測試</strong>　全系統含負載庫的整合驗證，包含<strong>斷電測試</strong>——實際切斷市電，驗證發電機與 UPS 的接手時序。這是唯一能證明冗餘真的存在的方法。</li>
+    </ol>
+
+    <h3>運算側：叢集驗收</h3>
+    <ul>
+      <li><strong>鏈路健康</strong>：NVLink／InfiniBand／乙太網全鏈路誤碼率掃描，光模組收發功率逐口記錄。</li>
+      <li><strong>集體通訊基準</strong>：NCCL all-reduce 匯流頻寬測試，是驗證拓樸與佈線是否真的正確的最有效手段——<strong>一條插錯的線會在這裡表現為特定規模下的效能懸崖</strong>。</li>
+      <li><strong>算力基準</strong>：HPL／HPL-MxP，以及更貼近實務的實際模型訓練短跑。</li>
+      <li><strong>熱掃描</strong>：滿載下的熱影像與冷板進出水溫差逐櫃記錄，建立基線。</li>
+      <li><strong>診斷與 SDC 篩檢</strong>：大規模部署下必然存在少數會給出錯誤結果卻不報錯的元件，需以重複計算比對篩出。</li>
+    </ul>
+
+    <div class="callout">
+      <span class="ck">規模對可靠度的非線性懲罰</span>
+      <p>單一元件的可靠度即使極高，在數萬個元件的叢集裡也會轉化為「幾乎每小時都有東西壞掉」。這使 AI 叢集的營運指標與傳統機房完全不同：關鍵不再是<strong>可用率</strong>，而是<strong>訓練任務的平均無中斷時間</strong>與<strong>檢查點恢復成本</strong>。</p>
+      <p>實務上這反過來改寫了硬體採購——備品池深度、熱插拔設計、故障節點的快速隔離能力，其價值可能高於帳面上的每瓦效能。<strong>把叢集當成一台會持續局部壞掉的機器來設計，而不是一台不會壞的機器</strong>，是這一環最重要的心態轉換。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ E ══════════ -->
+<div class="phase-rule"><span class="pk">E · 綜合</span><span class="pd">集中度、對照與風險</span></div>
+
+<details class="stage" id="s11">
+  <summary><span class="st-n">11</span><span class="st-main"><span class="st-t">供應鏈與廠商地圖：集中度在哪裡</span><span class="st-sub">把全鏈每個環節攤開後會看到一個明顯的形狀：越靠近矽，集中度越高；越靠近廠房，交期越長。</span></span><span class="st-sig">2–4 年<i>主變壓器交期</i></span></summary>
+  <div class="body">
+    <p>下表把十二個環節的供應者、集中度與典型交期並列。集中度以實心圓表示，三顆為極高。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>環節</th><th>主要供應者</th><th class="n">集中度</th><th class="n">典型交期</th><th>瓶頸性質</th></tr></thead>
+        <tbody>
+          <tr class="grp"><td colspan="5">A · 設計與工具</td></tr>
+          <tr><td>EDA 工具</td><td>Synopsys、Cadence、Siemens EDA</td><td class="n"><span class="lvl">●●●</span></td><td class="n">授權制</td><td>技術護城河，短期無替代</td></tr>
+          <tr><td>CPU／IP 授權</td><td>Arm、Synopsys、Alphawave、Credo</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">—</td><td>SerDes IP 為高速互連關鍵</td></tr>
+          <tr class="grp"><td colspan="5">B · 製造與封裝</td></tr>
+          <tr><td>EUV 曝光機</td><td>ASML</td><td class="n"><span class="lvl">●●●</span></td><td class="n">12–24 月</td><td>全鏈唯一單點；出口管制標的</td></tr>
+          <tr><td>光罩基板／護膜</td><td>Hoya、AGC、三井化學</td><td class="n"><span class="lvl">●●●</span></td><td class="n">—</td><td>被低估的隱形單點</td></tr>
+          <tr><td>先進節點晶圓代工</td><td>台積電（先進節點壓倒性多數）</td><td class="n"><span class="lvl">●●●</span></td><td class="n">3–4 月／片</td><td>地緣風險集中點</td></tr>
+          <tr><td>HBM</td><td>SK hynix、Samsung、Micron</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">配額制</td><td>HBM4 已完成三家認證，供應轉寬</td></tr>
+          <tr><td>先進封裝 CoWoS 級</td><td>台積電；外包 Amkor、SPIL、日月光</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">數週—數月</td><td>2024–25 主瓶頸，2026 缺口收斂</td></tr>
+          <tr><td>ABF 載板／ABF 膜</td><td>Ibiden、Shinko、AT&amp;S、欣興；ABF 膜為味之素獨家</td><td class="n"><span class="lvl">●●●</span></td><td class="n">數月</td><td>材料端單點，擴產週期長</td></tr>
+          <tr class="grp"><td colspan="5">C · 板卡與系統零組件</td></tr>
+          <tr><td>低損耗 CCL／PCB</td><td>Panasonic、台光電、聯茂；PCB 以台廠為主</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">數月</td><td>高階 CCL 產能吃緊</td></tr>
+          <tr><td>高速銅纜／連接器</td><td>Amphenol、Luxshare、TE</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">數月</td><td>NVLink 脊背關鍵件</td></tr>
+          <tr><td>光收發模組</td><td>Innolight、Eoptolink、Coherent</td><td class="n"><span class="lvl">●<i>○○</i></span></td><td class="n">數月</td><td>1.6T 世代良率仍在爬坡</td></tr>
+          <tr><td>電源 VRM／整流架</td><td>Delta、Lite-On、Flex、MPS、Infineon、Navitas</td><td class="n"><span class="lvl">●<i>○○</i></span></td><td class="n">數月</td><td>800 VDC 轉換帶來新一輪洗牌</td></tr>
+          <tr><td>液冷 冷板／CDU／快接頭</td><td>Vertiv、Boyd、CoolIT、AVC、奇鋐、雙鴻；UQD 由 Stäubli、CPC、Parker</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">數月—1 年</td><td>擴產速度追不上機櫃出貨</td></tr>
+          <tr class="grp"><td colspan="5">D · 整合與基礎設施</td></tr>
+          <tr><td>系統／機櫃整合 L10–L11</td><td>鴻海、廣達、緯創、緯穎、英業達、Supermicro、Dell、HPE、Lenovo</td><td class="n"><span class="lvl">●<i>○○</i></span></td><td class="n">數月</td><td>競爭在 L11 能力，非板卡成本</td></tr>
+          <tr><td class="hit">主變壓器／中壓開關設備</td><td class="hit">少數重電廠商，全球產能有限</td><td class="n hit"><span class="lvl">●●●</span></td><td class="n hit"><strong>2–4 年</strong></td><td class="hit"><strong>2026 起的實質關鍵路徑</strong></td></tr>
+          <tr><td>備援發電機</td><td>Cummins、Caterpillar、Rolls-Royce mtu</td><td class="n"><span class="lvl">●●<i>○</i></span></td><td class="n">1–2 年</td><td>大功率機組排隊嚴重</td></tr>
+          <tr><td class="hit">電網併網容量</td><td class="hit">各地電力公司</td><td class="n hit"><span class="lvl">●●●</span></td><td class="n hit"><strong>2–5 年</strong></td><td class="hit">無法用資本加速的唯一環節</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　集中度為定性判斷；交期為產業估計之區間，隨市況變動劇烈；廠商列舉為代表性而非窮盡。⚑ 這張表最該注意的是<strong>下半部而非上半部</strong>：交期最長的三項（併網、主變壓器、發電機）全部在基礎設施側，且全部無法靠先進製程或資本支出加速。<strong>2023 年談 AI 供應鏈是在談 CoWoS；2026 年談 AI 供應鏈若沒談到變壓器交期，這份分析就是不完整的。</strong></p>
+  </div>
+</details>
+
+<details class="stage" id="s12">
+  <summary><span class="st-n">12</span><span class="st-main"><span class="st-t">全鏈對照與風險矩陣</span><span class="st-sub">把十二個環節壓成一張表，兩種機櫃的差異就不再是「一個比較快」，而是兩條在每一層都做了相反選擇的路線。</span></span><span class="st-sig">12 × 1<i>同一個取捨</i></span></summary>
+  <div class="body">
+    <p>下表逐環節並列兩條路線。縱向讀會看到一個一致的模式，而那個模式本身就是本文最重要的結論。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th class="n">環節</th><th>AI 機櫃　GB300 NVL72 級</th><th>通用機櫃　42U 雙路 x86</th></tr></thead>
+        <tbody>
+          <tr><td class="n">01 架構</td><td>為單一工作負載重定義數值格式與記憶體階層；押注風險高</td><td>相容性優先，架構自由度低、風險低</td></tr>
+          <tr><td class="n">02 驗證</td><td>新數值行為與跨晶粒一致性；缺陷延遲到叢集級才顯現</td><td>向後相容性驗證為主，缺陷模式成熟已知</td></tr>
+          <tr><td class="n">03 簽核</td><td>供電網格佔用大量金屬資源；光罩費用極高</td><td>常規多角落簽核，光罩成本可攤提於長生命週期</td></tr>
+          <tr><td class="n">04 晶圓</td><td>接近光罩極限的大晶粒；良率為超線性懲罰</td><td>中小晶粒，良率高且穩定</td></tr>
+          <tr><td class="n">05 封裝</td><td>CoWoS-L ＋ 8 組 HBM；全鏈價值與風險最集中處</td><td>覆晶 BGA／標準有機封裝，成本占比低</td></tr>
+          <tr><td class="n">06 板卡</td><td>20–28 層低損耗材；單顆 ~1,750 A；幾乎無插槽</td><td>12–16 層；插槽與擴充性為設計中心</td></tr>
+          <tr><td class="n">07 整機</td><td>冷板＋快接頭；漏液為災難級失效模式</td><td>風扇與風道；失效模式溫和且可熱抽換</td></tr>
+          <tr><td class="n">08 機櫃</td><td>132–142 kW；1.36 t；千安培匯流排；銅纜脊背；整櫃為交付單位</td><td>8–15 kW；600–900 kg；PDU 供電；伺服器為交付單位</td></tr>
+          <tr><td class="n">09 機房</td><td>雙迴路液冷＋CDU；直接落樓板；面臨叢集功率震盪</td><td>冷熱通道封閉；高架地板可行；負載曲線平滑</td></tr>
+          <tr><td class="n">10 驗收</td><td>NCCL 匯流頻寬、SDC 篩檢；以任務無中斷時間為指標</td><td>單機基準測試；以設備可用率為指標</td></tr>
+          <tr><td class="n">11 供應鏈</td><td>多處極高集中度單點；受地緣與交期雙重約束</td><td>成熟多源供應，替代性高</td></tr>
+          <tr><td class="n">12 汰換</td><td>世代約 12 個月；折舊假設仍在爭論中</td><td>世代 3–5 年；折舊模型穩定</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ 縱向讀這張表會看到一個一致的模式：AI 路線在<strong>每一層都用「更高的單點風險」換「更高的密度」</strong>。這不是某一環的取捨，而是同一個取捨在十二個層級上重複了十二次。因此當風險真的實現時，它不會只在一個環節出問題——這正是下方風險矩陣把「跨環節連動」單獨列為一類的原因。</p>
+
+    <h3>風險矩陣</h3>
+    <div class="tbl full">
+      <table>
+        <thead><tr><th class="n">等級</th><th>風險</th><th class="n">環節</th><th>論證</th></tr></thead>
+        <tbody>
+          <tr><td class="n"><span class="lvl">●●●</span></td><td>電力接入成為實質產能上限</td><td class="n">09／11</td><td>併網排隊 2–5 年、主變壓器交期 2–4 年，皆長於晶片世代週期。晶片供應改善反而讓這個約束更早浮現。</td></tr>
+          <tr><td class="n"><span class="lvl">●●●</span></td><td>既有機房無法承接下一代密度</td><td class="n">08／09</td><td>18.5 kN/m² 荷重與 170 L/min 流量已超出多數現有設計；下一代 190–230 kW、乃至 600 kW 級機櫃需要 sidecar 佔位，等於再翻一倍樓地板。<strong>改造成本可能高於新建。</strong></td></tr>
+          <tr><td class="n"><span class="lvl">●●●</span></td><td>單點供應集中：EUV／先進封裝／ABF 膜</td><td class="n">04／05</td><td>三處皆為實質獨家或極高集中，且擴產週期以年計。任何一處中斷，全鏈停擺，無替代路徑。</td></tr>
+          <tr><td class="n"><span class="lvl">●●<i>○</i></span></td><td>架構押注失效</td><td class="n">01</td><td>架構在 24–36 個月前定案，押注特定工作負載型態。若模型架構轉向（稀疏化、狀態空間、極端長 context），既有記憶體階層設計的優勢會被大幅折價。</td></tr>
+          <tr><td class="n"><span class="lvl">●●<i>○</i></span></td><td>液冷零組件與工程人力供給</td><td class="n">07／08</td><td>冷板、CDU、快接頭產能與現場合格施工人力，擴充速度慢於機櫃出貨速度；同時缺乏長期運行的可靠度數據。</td></tr>
+          <tr><td class="n"><span class="lvl">●●<i>○</i></span></td><td>折舊年限假設</td><td class="n">12</td><td>12 個月的世代節奏與 5–6 年的會計折舊年限存在張力。若二手市場價值低於假設，整個產業的獲利表述都需重估。</td></tr>
+          <tr><td class="n"><span class="lvl">●●<i>○</i></span></td><td>靜默資料損毀與大規模可靠度</td><td class="n">10</td><td>元件數量放大使罕見失效變成常態；SDC 難以偵測且會污染訓練結果，代價是重跑而非重啟。</td></tr>
+          <tr><td class="n"><span class="lvl">●<i>○○</i></span></td><td>HBM 供應</td><td class="n">05</td><td>HBM4 已完成三家供應商認證，供應結構從單點走向三源，此環節的緊張度正在下降。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="ck">前瞻風險：一條沒有人單獨負責的因果鏈</span>
+      <p>把 06、08、09 三節的同一個現象串起來，會得到一條完整但沒有單一負責人的因果鏈：<strong>GPU 微架構的同步執行特性 → 板級 dI/dt 暫態 → 機櫃級千安培匯流排震盪 → 園區級數十 MW 方波負載 → 區域電網的電能品質問題。</strong></p>
+      <p>這條鏈的每一段都由不同組織負責：晶片架構團隊、板卡工程、機櫃整合商、機電顧問、電力公司。沒有任何一方的規格書涵蓋整條鏈，而現行驗收流程（10 節）也不包含「叢集級功率曲線」這個項目。當單一園區規模從 100 MW 走向 GW 級，這個治理縫隙會從工程細節升級為併網許可的實質門檻。</p>
+      <p><strong>這是本文認為最被低估、且最可能在 2027–2028 年浮現的系統性風險。</strong></p>
+    </div>
+
+    <h3>下一代的方向</h3>
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>面向</th><th>方向</th><th>對哪一節產生反作用</th></tr></thead>
+        <tbody>
+          <tr><td>電力</td><td>800 VDC 取消機櫃級 AC/DC 轉換，為 MW 級單櫃鋪路；電源與冷卻移入獨立 sidecar 機櫃</td><td>08 · 每套系統實際佔用兩個機櫃位</td></tr>
+          <tr><td>互連</td><td>以印刷電路中板與盲插連接器取代五千條銅纜；更遠處是共封裝光學（CPO）</td><td>06 · 損耗預算重寫；08 · 組裝工時大減</td></tr>
+          <tr><td>散熱</td><td>冷板熱阻逼近極限後，指向矽內微流道與嵌入式冷卻</td><td>05 與 09 直接耦合——冷卻液進入封裝內部</td></tr>
+          <tr><td>製程</td><td>2 nm 世代的環繞閘極與背面供電；HBM4 之後的混合鍵合</td><td>03 · 直接針對 IR-drop 與繞線壅塞</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ 附錄 ══════════ -->
+<section class="thesis" id="appendix" style="margin-top:clamp(3rem,7vw,5rem)">
+  <p class="sec-mark">◇ · 附錄</p>
+  <h2>方法、數據標註與來源</h2>
+
+  <div style="max-width:var(--read)">
+    <h3>三類數據的區分</h3>
+    <ul>
+      <li><span class="tag">公開規格</span>　廠商或標準組織正式發布之數值（NVL72 的 GPU 數量、ASHRAE 水溫等級、光罩場尺寸）。</li>
+      <li><span class="tag">產業估計</span>　分析機構或供應鏈報導匯整之區間值（CoWoS 月產能、光罩組成本、交期）。這類數字波動大，本文一律以區間而非單點呈現。</li>
+      <li><span class="tag">本文推導</span>　由前兩類以明示公式推得（良率、每片晶圓封裝數、匯流排電流、冷卻流量、樓板荷重）。所有假設均寫在公式旁，可自行代入不同參數複核。</li>
+    </ul>
+
+    <h3>已知限制</h3>
+    <p>本文的推導刻意採用簡化模型：良率使用 Murphy 模型而未計入冗餘修復；封裝數換算未扣除製程邊緣與品項混合；電力與冷卻推算未計入部分負載效率與冗餘配置。這些簡化不影響量級判斷與環節間的相對關係，但<strong>不適合直接用於工程設計或財務模型</strong>。各廠實際配置、韌體功率上限與環境條件都會顯著改變絕對數值。</p>
+  </div>
+
+  <h3>主要參考來源</h3>
+  <ol class="srcs">
+    <li><a href="https://www.supermicro.com/datasheet/datasheet_SuperCluster_GB300_NVL72.pdf">Supermicro — GB300 NVL72 SuperCluster 資料表</a></li>
+    <li><a href="https://lenovopress.lenovo.com/lp2357.pdf">Lenovo Press — GB300 NVL72 Rack Scale AI</a></li>
+    <li><a href="https://nvidianews.nvidia.com/news/nvidia-blackwell-platform-arrives-to-power-a-new-era-of-computing">NVIDIA — Blackwell 平台發布</a></li>
+    <li><a href="https://developer.nvidia.com/blog/nvidia-vera-rubin-pod-seven-chips-five-rack-scale-systems-one-ai-supercomputer/">NVIDIA — Vera Rubin POD 架構</a></li>
+    <li><a href="https://developer.nvidia.com/blog/nvidia-800-v-hvdc-architecture-will-power-the-next-generation-of-ai-factories/">NVIDIA — 800 VDC 架構</a></li>
+    <li><a href="https://www.nvidia.com/en-us/data-center/technologies/800-vdc-architecture/">NVIDIA — 800 VDC for AI Data Centers</a></li>
+    <li><a href="https://www.datacenterdynamics.com/en/news/nvidia-prepares-data-center-industry-for-1mw-racks-and-800-volt-dc-power-architectures/">DCD — 1 MW 機櫃與 800 VDC</a></li>
+    <li><a href="https://www.datacenterdynamics.com/en/marketwatch/rack-integration-101-what-l11-really-means-for-ai-data-centers/">DCD — 機櫃整合 L11 定義</a></li>
+    <li><a href="https://www.amax.com/server-manufacturing-levels-defined/">AMAX — Server Manufacturing Levels</a></li>
+    <li><a href="https://www.opencompute.org/documents/open-rack-base-specification-version-3-pdf">OCP — Open Rack v3 基礎規範</a></li>
+    <li><a href="https://www.opencompute.org/documents/ocp-wp-l-lcdu-test-methodology-performance-rating-r1-pdf">OCP — 液對液 CDU 測試方法</a></li>
+    <li><a href="https://www.ashrae.org/file%20library/technical%20resources/bookstore/emergence-and-expansion-of-liquid-cooling-in-mainstream-data-centers_wp.pdf">ASHRAE — 液冷於主流資料中心白皮書</a></li>
+    <li><a href="https://www.upsite.com/blog/major-changes-to-ashraes-fifth-edition-of-thermal-guidelines-part-3-liquid-cooling-chapter-updates/">Upsite — ASHRAE 熱指引第五版液冷章節</a></li>
+    <li><a href="https://www.trendforce.com/news/2026/06/15/news-tsmc-cowos-supply-demand-gap-reportedly-seen-narrowing-from-20-to-10-by-end-2026-as-capacity-expands/">TrendForce — CoWoS 供需缺口收斂</a></li>
+    <li><a href="https://siliconanalysts.com/analysis/foundry-allocation-status-q1-2026">Silicon Analysts — 2026 代工產能配置</a></li>
+    <li><a href="https://finance.yahoo.com/sectors/technology/articles/nvidia-certifies-samsung-sk-hynix-133001560.html">Reuters／Yahoo Finance — 三家 HBM4 認證通過</a></li>
+    <li><a href="https://newsletter.semianalysis.com/p/nvidias-optical-boogeyman-nvl72-infiniband">SemiAnalysis — NVL72 銅纜脊背與光學功耗比較</a></li>
+    <li><a href="https://blog.se.com/datacenter/2025/10/16/the-1-mw-ai-it-rack-is-coming-and-it-needs-800-vdc-power/">Schneider Electric — 1 MW AI 機櫃與 800 VDC</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Open_Rack">Open Rack — OpenU 48 mm 與 21 吋規格背景</a></li>
+    <li><a href="https://www.introl.com/blog/nvidia-vera-rubin-gpu-600kw-racks-2027">Introl — Vera Rubin 與 2027 年 600 kW 機櫃</a></li>
+  </ol>
+
+  <div class="foot">
+    <p><strong>從晶片到機櫃：伺服器機櫃全鏈技術解剖</strong>　·　2026-07-28　·　主線案例 NVIDIA GB300 NVL72，對照組 42U 雙路 x86 通用機櫃。</p>
+    <p>本文為技術與供應鏈結構分析，所有財務性、產能性數字皆為公開資訊之整理與推導，<strong>僅供資訊參考，非投資建議</strong>。文中提及之公司名稱僅為技術環節之代表性舉例，不構成任何評價或推薦。</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var d = document;
+
+  /* ── 路線切換：一次改寫十二個環節的參數 ── */
+  var segs = [].slice.call(d.querySelectorAll('.seg-v'));
+  var bAi = d.getElementById('t-ai'), bGen = d.getElementById('t-gen');
+  function setTrack(mode){
+    segs.forEach(function(s){ s.textContent = s.getAttribute(mode === 'ai' ? 'data-ai' : 'data-gen') || ''; });
+    bAi.setAttribute('aria-pressed', mode === 'ai');
+    bGen.setAttribute('aria-pressed', mode !== 'ai');
+  }
+  bAi.addEventListener('click', function(){ setTrack('ai'); });
+  bGen.addEventListener('click', function(){ setTrack('gen'); });
+  setTrack('ai');
+
+  /* ── 流程帶導航：點擊展開對應環節並捲動 ── */
+  var stages = [].slice.call(d.querySelectorAll('.stage'));
+  var segBtns = [].slice.call(d.querySelectorAll('.seg'));
+  segBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var el = d.getElementById(b.getAttribute('data-go'));
+      if (!el) return;
+      el.open = true;
+      el.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  /* ── 當前位置回標到流程帶 ── */
+  if ('IntersectionObserver' in window) {
+    var ratio = {};
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ ratio[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bv = 0;
+      stages.forEach(function(s){ var v = ratio[s.id] || 0; if (v > bv) { bv = v; best = s.id; } });
+      segBtns.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-go') === best); });
+    }, { rootMargin: '-10% 0px -55% 0px', threshold: [0, .15, .4, .8] });
+    stages.forEach(function(s){ io.observe(s); });
+  }
+
+  /* ── 全部展開／收合 ── */
+  d.getElementById('expand-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = true; });
+  });
+  d.getElementById('collapse-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = false; });
+  });
+
+  /* ── 封裝剖面：切層聚焦 ── */
+  var lyrBtns = [].slice.call(d.querySelectorAll('.xs-legend button'));
+  var lyrs = [].slice.call(d.querySelectorAll('.lyr'));
+  lyrBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.getAttribute('data-lyr');
+      lyrBtns.forEach(function(o){ o.setAttribute('aria-pressed', o === b); });
+      lyrs.forEach(function(l){
+        l.classList.toggle('dim-out', k !== 'all' && l.getAttribute('data-lyr') !== k);
+      });
+    });
+  });
+
+  /* ── 廠房推算器 ── */
+  var iid = ['i-kw','i-n','i-pue','i-dt','i-liq','i-price'], el = {};
+  iid.forEach(function(i){ el[i] = d.getElementById(i); });
+  var out = {};
+  ['o-it','o-fac','o-flow','o-cdu','o-air','o-gwh','o-cost','o-home'].forEach(function(i){ out[i] = d.getElementById(i); });
+
+  function pos(v, f){ var n = parseFloat(v); return (isFinite(n) && n > 0) ? n : f; }
+  function fmt(v, p){ return isFinite(v) ? v.toLocaleString('en-US', { minimumFractionDigits: p, maximumFractionDigits: p }) : '—'; }
+
+  function calc(){
+    var kw = pos(el['i-kw'].value, 140),
+        n = pos(el['i-n'].value, 1),
+        pue = pos(el['i-pue'].value, 1.15),
+        dt = pos(el['i-dt'].value, 10),
+        liq = Math.min(100, Math.max(0, parseFloat(el['i-liq'].value) || 0)) / 100,
+        price = pos(el['i-price'].value, 3.2);
+
+    var itKW = kw * n, itMW = itKW / 1000, facMW = itMW * pue;
+    var qLiq = itKW * liq;                    // kW 進入水路
+    var kgs  = qLiq / (4.18 * dt);            // kg/s
+    var m3h  = kgs * 3.6;                     // m³/h
+    var cdu  = Math.ceil(qLiq / 1300) + 1;    // 1.3 MW/台 · N+1
+    var airMW = (itKW * (1 - liq)) / 1000;
+    var gwh  = facMW * 8.76;
+    var cost = gwh * 1e6 * price / 1e8;       // 億元
+    var home = (gwh * 1e6 / 3600) / 1e4;      // 萬戶
+
+    out['o-it'].textContent   = fmt(itMW, 1);
+    out['o-fac'].textContent  = fmt(facMW, 1);
+    out['o-flow'].textContent = fmt(m3h, 0);
+    out['o-cdu'].textContent  = isFinite(cdu) ? cdu : '—';
+    out['o-air'].textContent  = fmt(airMW, 2);
+    out['o-gwh'].textContent  = fmt(gwh, 0);
+    out['o-cost'].textContent = fmt(cost, 1);
+    out['o-home'].textContent = fmt(home, 1);
+  }
+  iid.forEach(function(i){ el[i].addEventListener('input', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
