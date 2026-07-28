@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GE Vernova（GEV）vs Bloom Energy（BE）— AI電力雙雄詳細比較</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+  .container { max-width: 1180px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #444; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+  .section-title { font-size: 15px; font-weight: 700; margin: 28px 0 12px; color: #1a1a2e; padding-top: 14px; border-top: 1px solid #e2e4ea; }
+  .section-title:first-of-type { border-top: none; margin-top: 4px; padding-top: 0; }
+
+  .co-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .co-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 10px; padding: 16px; border-top: 4px solid; }
+  .co-card.gev { border-top-color: #0e7c66; }
+  .co-card.be { border-top-color: #c2600a; }
+  .co-name { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+  .co-tag { font-size: 11px; color: #666; margin: 3px 0 10px; }
+  .co-card ul { padding-left: 16px; }
+  .co-card li { font-size: 12px; margin-bottom: 6px; line-height: 1.6; color: #333; }
+  .co-stat-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .co-stat { flex: 1; min-width: 90px; background: #f7f8fa; border-radius: 6px; padding: 8px; text-align: center; }
+  .co-stat-val { font-size: 15px; font-weight: 700; }
+  .co-card.gev .co-stat-val { color: #0e7c66; }
+  .co-card.be .co-stat-val { color: #c2600a; }
+  .co-stat-lbl { font-size: 10px; color: #666; margin-top: 2px; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #444; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #444; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  table.wide { min-width: 680px; }
+  .gev-col { color: #0e7c66; font-weight: 600; }
+  .be-col { color: #c2600a; font-weight: 600; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #444; line-height: 1.7; }
+  .note.grey { border-left-color: #94a3b8; }
+  .note.red { border-left-color: #b91c1c; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .stance-col.gev { border-top-color: #0e7c66; }
+  .stance-col.be { border-top-color: #c2600a; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col ul { padding-left: 15px; }
+  .stance-col li { font-size: 12px; margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.gev { background: #fff; color: #0e7c66; border-color: #9fd6c8; }
+  .risk-badge.be { background: #fff; color: #c2600a; border-color: #f0c090; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  @media (max-width: 700px) {
+    .co-grid, .stance-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>GE Vernova（GEV）vs Bloom Energy（BE）— AI電力雙雄詳細比較</h1>
+  <p>兩家均被市場定位為「AI／資料中心電力需求」受惠股，但商業模式、規模、成長階段與估值邏輯差異極大。
+  本比較以本站既有的兩份法說會分析報告為基礎交叉整理：
+  <a href="GEV_FY26Q2_Analysis/GEV_FY26Q2_Analysis.html" style="color:#0e7c66;">GEV FY2026 Q2分析</a>（法說會2026/7/22）與
+  <a href="../be-analysis-2026q1/BE_FY2026Q1_Analysis/BE_FY2026Q1_Analysis.html" style="color:#c2600a;">BE FY2026 Q1分析</a>（法說會2026/4/28）——
+  兩份報告財季不同期（GEV為2026年4–6月、BE為2026年1–3月），比較時已盡量以「最近一次法說會揭露之全年財測」對齊成長與估值基準，
+  惟仍建議讀者留意財季時間差本身即是一種限制。僅供資訊參考，非投資建議。</p>
+</div>
+<div class="container">
+
+  <div class="section-title">公司概況與商業模式</div>
+  <div class="co-grid">
+    <div class="co-card gev">
+      <div class="co-name">GE Vernova Inc.（GEV）</div>
+      <div class="co-tag">電力設備巨頭：燃氣渦輪＋電網／電氣化＋風電，三大分部並行</div>
+      <ul>
+        <li>商業模式核心是<b>重資產、長週期的電網規模基礎設施</b>：燃氣渦輪、變壓器、開關設備等大型設備銷售＋長年期服務合約（服務約占backlog五成）</li>
+        <li>透過Slot Reservation Agreement（SRA）機制提前數年鎖定產能與客戶頭期款，2026年底前多數2030年產能已售罄，逾半2031年產能已在洽談</li>
+        <li>資料中心是<b>成長中的客戶類別之一</b>，但仍以傳統電力/工業客戶為主體（Gas Power在手合約約80%傳統／20%資料中心）</li>
+        <li>2026/2完成Prolec GE併購（$5.275–5.3B），強化北美電網布局，屬成熟公司的併購式成長</li>
+        <li>員工約85,000人；三大分部中Wind持續虧損，拖累整體獲利能力</li>
+      </ul>
+      <div class="co-stat-row">
+        <div class="co-stat"><div class="co-stat-val">$11.1B</div><div class="co-stat-lbl">Q2營收</div></div>
+        <div class="co-stat"><div class="co-stat-val">+22%</div><div class="co-stat-lbl">YoY（有機+12%）</div></div>
+        <div class="co-stat"><div class="co-stat-val">$281B</div><div class="co-stat-lbl">市值（約）</div></div>
+      </div>
+    </div>
+    <div class="co-card be">
+      <div class="co-name">Bloom Energy Corporation（BE）</div>
+      <div class="co-tag">固態氧化物燃料電池：分散式、可繞過電網併網排隊的現場發電方案</div>
+      <ul>
+        <li>商業模式核心是<b>模組化、可快速部署的現場（on-site／behind-the-meter）發電系統</b>，客戶毋須等待電網併網排隊即可取得電力，
+        對急於上線的資料中心／AI廠房極具吸引力</li>
+        <li>營收結構以Product（設備銷售）為主體、Service次之，Installation與Electricity（電力銷售）占比較小且近期下滑</li>
+        <li>本季最大敘事是與Oracle合作的「Project Jupiter」（管理層口頭稱2.45GW、100% Bloom供應），
+        惟本站BE報告已指出<b>該交易規模與排他性在SEC申報文件中完全找不到對應揭露</b>，需高度謹慎看待</li>
+        <li>Q1 FY2026是公司史上首次在傳統淡季創造GAAP營業利益與營運現金流雙轉正的季度</li>
+        <li>客戶集中度高：兩大客戶合計占Q1營收62%，其中較大者為Bloom自己持股9.9%的關聯方合資公司Bolt US JVCo</li>
+      </ul>
+      <div class="co-stat-row">
+        <div class="co-stat"><div class="co-stat-val">$751M</div><div class="co-stat-lbl">Q1營收</div></div>
+        <div class="co-stat"><div class="co-stat-val">+130%</div><div class="co-stat-lbl">YoY</div></div>
+        <div class="co-stat"><div class="co-stat-val">$85B</div><div class="co-stat-lbl">市值（約，Form4反推）</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note grey">⚑ GEV季度營收約為BE的<b>14.8倍</b>，但市值僅約BE的<b>3.3倍</b>——換算下來，市場願意為BE的每一塊錢營收支付的估值倍數
+  遠高於GEV，詳見下方「估值倍數對比」與「核心洞察」章節。</div>
+
+  <div class="section-title">財務規模與成長速度</div>
+  <div class="tbl-wrap">
+    <div class="tbl-title">最近一季營收與成長率</div>
+    <div class="tbl-scroll">
+    <table class="wide">
+      <tr><th>公司</th><th>財季</th><th>營收</th><th>YoY成長</th><th>成長驅動</th></tr>
+      <tr><td class="gev-col">GEV</td><td>Q2 FY2026（4–6月）</td><td>$11,104M</td><td class="pos">+22%（有機+12%）</td><td>Power／Electrification放量＋Prolec GE併表；Wind下滑10%拖累</td></tr>
+      <tr><td class="be-col">BE</td><td>Q1 FY2026（1–3月）</td><td>$751.1M</td><td class="pos">+130.4%</td><td>Product營收+208.4%（$653.3M）為主要引擎；Installation／Electricity均下滑</td></tr>
+    </table>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-title">全年財測對照（各自最近一次上修後財測）</div>
+    <div class="tbl-scroll">
+    <table class="wide">
+      <tr><th>公司</th><th>FY2026營收財測</th><th>財測YoY（約）</th><th>財測獲利指標</th></tr>
+      <tr><td class="gev-col">GEV</td><td>$45.5–46.5B</td><td>約+13–16%（對FY2025）</td><td>Adjusted EBITDA margin 12–14%</td></tr>
+      <tr><td class="be-col">BE</td><td>$34–38億（中值$36億）</td><td>約+80% YoY guide</td><td>非GAAP EPS guide中值$2.05</td></tr>
+    </table>
+    </div>
+  </div>
+  <div class="note">⚑ 兩者成長階段本質不同：GEV是十位數市值的成熟工業巨頭，個位數至十位數百分比成長已屬亮眼；
+  BE是仍在建立獲利模式的高成長公司，guide隱含近80%的年度成長率，但基期遠小於GEV，兩者的「成長」數字不宜直接類比為同等風險的加速度。</div>
+
+  <div class="section-title">獲利能力</div>
+  <div class="tbl-wrap">
+    <div class="tbl-title">毛利率與營業利益率</div>
+    <div class="tbl-scroll">
+    <table class="wide">
+      <tr><th>指標</th><th class="gev-col">GEV（Q2 FY26）</th><th class="be-col">BE（Q1 FY26）</th><th>解讀</th></tr>
+      <tr><td>GAAP毛利率</td><td>21.3%</td><td>30.0%</td><td>BE毛利率結構性優於GEV，但BE毛利率含$1,970萬保固準備金拖累，剔除後產品毛利率約37.3%，優勢更明顯</td></tr>
+      <tr><td>GAAP營業利益率</td><td>5.9%</td><td>9.6%（$72.2M/$751.1M）</td><td>BE本季營業利益率反而高於規模大14倍的GEV，主因GEV Wind分部持續虧損拖累合併margin</td></tr>
+      <tr><td>非GAAP／Adjusted獲利指標</td><td>Adj. EBITDA margin 11.3%</td><td>非GAAP EPS $0.44（vs GAAP $0.23，落差91%主因股權激勵費用）</td><td>兩者GAAP與非GAAP的落差來源不同：GEV差距主要來自折舊攤銷與重組費用加回；BE差距主要來自單一項目（股權激勵費用，占落差約99%）</td></tr>
+      <tr><td>本期獲利里程碑</td><td>Q2稀釋EPS $2.47（+33% YoY）</td><td>公司史上首次GAAP單季獲利發生在傳統淡季的Q1</td><td>BE的獲利拐點意義更大（首見轉正），GEV則是既有獲利基礎上的持續擴張</td></tr>
+    </table>
+    </div>
+  </div>
+  <div class="note grey">⚑ 兩者的Q2 EBITDA margin（GEV 11.3%）與Q1 GAAP營益率（BE 9.6%）並非完全同口徑比較（一為EBITDA margin、一為營業利益率），
+  僅供方向性參考，不宜做精確倍數換算。</div>
+
+  <div class="section-title">資產負債表與資本結構</div>
+  <div class="tbl-wrap">
+    <div class="tbl-title">現金部位、負債與槓桿</div>
+    <div class="tbl-scroll">
+    <table class="wide">
+      <tr><th>指標</th><th class="gev-col">GEV（2026/6/30）</th><th class="be-col">BE（2026/3/31）</th></tr>
+      <tr><td>現金及約當現金</td><td>$13,120M</td><td>$2,491M</td></tr>
+      <tr><td>長期負債</td><td>$2,794M（2026/2發行$2.6B優先無擔保債券）</td><td>$2,599M（主要為$2.5B 0%可轉換優先票據，2030年到期）</td></tr>
+      <tr><td>資產總計</td><td>$80,800M</td><td>$4,665M</td></tr>
+      <tr><td>股東權益合計</td><td>$13,115M</td><td>$948M</td></tr>
+      <tr><td>淨現金部位（現金-長期負債）</td><td class="pos">約+$10.3B</td><td class="pos">約-$0.1B（接近打平，惟可轉債0%利率、財務成本極低）</td></tr>
+    </table>
+    </div>
+  </div>
+  <div class="note">⚑ 兩者的債務結構均相對友善：GEV新發行的優先無擔保債券票面利率未在本次可得來源中取得；
+  BE最大一筆負債為<b>0%利率</b>的可轉換優先票據（2030年到期），代表帳面雖有$2.5B負債，實際現金利息負擔極低，
+  是成長型公司常見的低成本融資工具，但轉股稀釋風險需留意。</div>
+
+  <div class="section-title">估值倍數對比</div>
+  <div class="tbl-wrap">
+    <div class="tbl-title">隱含估值倍數（撰稿時點粗估，非投資建議）</div>
+    <div class="tbl-scroll">
+    <table class="wide">
+      <tr><th>倍數</th><th class="gev-col">GEV</th><th class="be-col">BE</th><th>解讀</th></tr>
+      <tr><td>市值（約）</td><td>$280.87B</td><td>$85.4B（Form 4申報價格反推，非即時報價）</td><td>GEV市值約為BE的3.3倍</td></tr>
+      <tr><td>P/S（前瞻，FY26財測中值）</td><td>約6.1倍</td><td>約23.7倍</td><td>BE的營收倍數約為GEV的<b>3.9倍</b>，反映市場給予BE遠高於GEV的成長溢價</td></tr>
+      <tr><td>P/E（前瞻或年化，GAAP／非GAAP不同基準）</td><td>約102倍（Q2 GAAP EPS年化）</td><td>約146倍（FY26非GAAP EPS guide中值）</td><td>兩者都是「靠未來兌現支撐現在股價」的高倍數股票，BE更高，但兩者基準不同口徑（GEV用GAAP年化、BE用非GAAP guide），不完全可比</td></tr>
+      <tr><td>P/B（股東權益）</td><td>約21.4倍</td><td>約90倍（$85.4B / $948M）</td><td>BE的帳面淨值杠桿倍數遠高於GEV，代表BE股價幾乎完全由「成長期權」支撐，帳面資產對估值的解釋力極低</td></tr>
+      <tr><td>EV/Adjusted EBITDA（前瞻）</td><td>約45倍（GEV有揭露Adj. EBITDA）</td><td>未計算（BE報告未採用EV/EBITDA作為主要估值指標）</td><td>—</td></tr>
+    </table>
+    </div>
+  </div>
+  <div class="note red">⚑ 兩份原始報告的估值計算基準日不同（GEV約為2026年7月下旬市場報價、BE為2026年7月1日CCO依10b5-1計畫賣股之Form 4申報價格），
+  且分別使用GAAP／非GAAP、不同財測期間作分母，本表僅供方向性比較，不應被解讀為同一時點、同一口徑的精確對照。</div>
+
+  <div class="section-title">核心洞察：兩種截然不同的「AI電力」敘事</div>
+  <div class="flow-box">
+    <div class="card-title" style="margin-bottom:10px;">GEV：電網規模、長週期、backlog鎖定的基礎設施敘事</div>
+    <div class="flow-chain">
+      <span class="node">客戶簽SRA鎖定產能（最遠至2031年）</span><span class="arrow">→</span>
+      <span class="node">GEV收頭期款、提前規劃產能爬升</span><span class="arrow">→</span>
+      <span class="node">3–5年後設備出貨、裝機、併網</span><span class="arrow">→</span>
+      <span class="node">長達數十年的服務合約與備品營收</span>
+    </div>
+  </div>
+  <div class="flow-box">
+    <div class="card-title" style="margin-bottom:10px;">BE：分散式、可快速部署、繞過電網排隊的橋接敘事</div>
+    <div class="flow-chain">
+      <span class="node">資料中心面臨電網併網排隊（可能長達數年）</span><span class="arrow">→</span>
+      <span class="node">現場部署Bloom燃料電池系統（月至季級別交期）</span><span class="arrow">→</span>
+      <span class="node">先行取得電力、爭取上線時間</span><span class="arrow">→</span>
+      <span class="node">是否長期取代或僅作為過渡方案，仍待驗證</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">這代表什麼</div>
+    <p>兩家公司表面上都在賣「AI/資料中心的電」，但賣的其實是<b>兩種不同的等待時間解法</b>：GEV解決的是「電網本身需要更多長期產能」的問題，
+    交期以年計、規模以GW計、客戶要簽多年合約鎖定產能；BE解決的是「客戶等不及電網排隊，需要現場立即發電」的問題，
+    交期以月／季計、規模以MW計、更像是資料中心建置週期中的一個橋接工具，而非電網的長期替代品。</p>
+    <p style="margin-top:8px;">這也解釋了兩者估值倍數的落差：市場給GEV的是「工業巨頭＋backlog可視度」的估值邏輯（P/S個位數、EV/EBITDA中段），
+    給BE的則是「小規模、高成長、敘事驅動」的估值邏輯（P/S與P/B都是GEV的數倍）。兩者不必然互斥——資料中心資本支出夠大時，
+    大型電網設備與現場橋接方案可以同時放量——但投資人若把兩者當成同一種風險/報酬profile的「AI電力概念股」等量齊觀，
+    容易低估BE敘事被驗證前的不確定性（尤其是本站BE報告已指出Project Jupiter規模在SEC申報文件中查無對應揭露），
+    也容易低估GEV作為成熟工業公司在Wind分部持續虧損下的獲利結構性拖累。</p>
+  </div>
+
+  <div class="section-title">風險特徵對比</div>
+  <div class="stance-grid">
+    <div class="stance-col gev">
+      <h4>GEV 主要風險（詳見GEV報告風險矩陣分頁）</h4>
+      <ul>
+        <li>Wind分部結構性虧損（H1 EBITDA虧損$657M），尚未看到訂單反曲點</li>
+        <li>「至少125GW」財測本身隱含Q3–Q4訂單淨增速度較Q2大幅減速（本報告原創推算）</li>
+        <li>「資本效率化」擴產敘事與H1 CapEx實際+118%成長方向不一致</li>
+        <li>GW在手合約／年化產能比值（約5.8倍）已站上管理層自訂的5倍擴產觸發門檻</li>
+        <li>H1 GAAP淨利$5,413M中約$4.4B推斷為Prolec GE收購相關一次性利得，非常態獲利能力</li>
+      </ul>
+    </div>
+    <div class="stance-col be">
+      <h4>BE 主要風險（詳見BE報告風險矩陣分頁）</h4>
+      <ul>
+        <li>Oracle Project Jupiter「2.45GW／100% Bloom」的規模與排他性，窮盡搜尋SEC申報文件完全找不到對應揭露</li>
+        <li>Oracle認股權證公允價值三個月暴增逾4倍，已開始直接沖抵營收，法說會全程未提及</li>
+        <li>Q1近半數營收（62%）來自兩大客戶，其中較大者是Bloom自己持股9.9%的關聯方合資公司</li>
+        <li>$1,970萬「特定產品問題」保固準備金拖累約300個基點產品毛利率，法說會未提及</li>
+        <li>「規模放大後毛利率／營運槓桿如何演變」被三位分析師問三次，管理層全部未給出量化框架</li>
+        <li>中國／台灣供應鏈曝險未量化，10-K內部揭露文字互相矛盾</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note red">⚑ 兩者風險的<b>性質</b>不同：GEV的風險多屬「財測與敘事節奏的解讀落差」（公司仍獲利、仍有現金部位優勢，
+  問題在於成長是否如敘事般加速）；BE的風險則有更高比例屬於「揭露完整性」層級（本季最大新聞的交易規模查無SEC文件佐證、
+  未提及的認股權證稀釋與保固準備金），對估值論述的殺傷力可能更直接。</div>
+
+  <div class="section-title">總結對照表</div>
+  <div class="tbl-wrap">
+    <div class="tbl-title">關鍵指標一覽</div>
+    <div class="tbl-scroll">
+    <table class="wide">
+      <tr><th>指標</th><th class="gev-col">GE Vernova（GEV）</th><th class="be-col">Bloom Energy（BE）</th></tr>
+      <tr><td>核心業務</td><td>燃氣渦輪／電網電氣化／風電（三分部）</td><td>固態氧化物燃料電池分散式發電</td></tr>
+      <tr><td>最近財季</td><td>Q2 FY2026（2026/4–6）</td><td>Q1 FY2026（2026/1–3）</td></tr>
+      <tr><td>最近季營收</td><td>$11,104M</td><td>$751.1M</td></tr>
+      <tr><td>營收YoY</td><td class="pos">+22%（有機+12%）</td><td class="pos">+130.4%</td></tr>
+      <tr><td>GAAP毛利率</td><td>21.3%</td><td>30.0%</td></tr>
+      <tr><td>GAAP營業利益率</td><td>5.9%</td><td>9.6%</td></tr>
+      <tr><td>現金及約當現金</td><td>$13,120M</td><td>$2,491M</td></tr>
+      <tr><td>長期負債</td><td>$2,794M</td><td>$2,599M（多為0%可轉債）</td></tr>
+      <tr><td>市值（約）</td><td>$280.87B</td><td>$85.4B</td></tr>
+      <tr><td>前瞻P/S</td><td>約6.1倍</td><td>約23.7倍</td></tr>
+      <tr><td>P/B</td><td>約21.4倍</td><td>約90倍</td></tr>
+      <tr><td>FY2026營收財測YoY</td><td>約+13–16%</td><td>約+80%</td></tr>
+      <tr><td>本季最大敘事事件</td><td>Prolec GE併購整合、SRA轉訂單、30GW產能規劃</td><td>Oracle Project Jupiter（SEC申報未見對應揭露）</td></tr>
+      <tr><td>資料中心客戶占比</td><td>Power約20%（GW在手合約口徑）／Electrification約36%（H1訂單口徑）</td><td>兩大客戶占營收62%，含關聯方合資公司</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="foot-note">本比較整合自本站GEV FY2026 Q2與BE FY2026 Q1兩份獨立法說會分析報告，兩份報告財季、估值計算基準日與部分口徑不完全一致，
+  已於各章節逐一註記；僅供資訊參考，非投資建議。</div>
+</div>
+</body>
+</html>
