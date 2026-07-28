@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="從組裝供應鏈拆到晶粒層級的核心拓樸，逐環節對照 AMD Helios（MI455X）與 Nvidia Vera Rubin 兩條機櫃級 AI 路線的技術與商業賭注。">
+<meta name="color-scheme" content="light dark">
+<title>拆開兩座機櫃：AMD Helios 對照 Nvidia Vera Rubin</title>
+<style>
+/* ═══════════════ tokens ═══════════════
+   單色系・矽灰。灰階承擔所有層級，
+   單一重點色（矽晶圓虹彩紫）只用於：互動狀態、推導數值、當前位置。 */
+:root{
+  /* 純白底：所有面都是 #fff，層次全部交給線條與字重 */
+  --bg:#FFFFFF;
+  --paper:#FFFFFF;
+  --paper-2:#FFFFFF;
+  --ink:#0B0D0C;
+  --ink-2:#383D3B;
+  --ink-3:#6E7471;
+  --ink-4:#9AA09C;
+  --rule:#BFC3BE;
+  --rule-2:#DCDFDB;
+  --acc:#584B7C;
+  --acc-2:#736294;
+  --acc-wash:#EDEAF3;
+  --inv-bg:#0B0D0C;
+  --inv-ink:#FFFFFF;
+
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","Times New Roman",Georgia,serif;
+  --sans:"Noto Sans TC","Source Han Sans TC","PingFang TC","Microsoft JhengHei","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+
+  --read:min(100%,38rem);
+  --wide:min(100%,64rem);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;
+    --ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+    --rule:#2A2D2A;--rule-2:#1E211E;
+    --acc:#AFA1DF;--acc-2:#C6BBEE;--acc-wash:#1A1727;
+    --inv-bg:#EFEFEC;--inv-ink:#0A0B0B;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;
+  --ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+  --rule:#2A2D2A;--rule-2:#1E211E;
+  --acc:#AFA1DF;--acc-2:#C6BBEE;--acc-wash:#1A1727;
+  --inv-bg:#EFEFEC;--inv-ink:#0A0B0B;
+}
+:root[data-theme="light"]{
+  --bg:#FFFFFF;--paper:#FFFFFF;--paper-2:#FFFFFF;
+  --ink:#0B0D0C;--ink-2:#383D3B;--ink-3:#6E7471;--ink-4:#9AA09C;
+  --rule:#BFC3BE;--rule-2:#DCDFDB;
+  --acc:#584B7C;--acc-2:#736294;--acc-wash:#EDEAF3;
+  --inv-bg:#0B0D0C;--inv-ink:#FFFFFF;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.88;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+p{margin:0 0 1.15em}
+a{color:var(--acc);text-underline-offset:3px;text-decoration-thickness:.06em}
+a:hover{color:var(--acc-2)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:1px}
+strong{font-weight:700}
+em{font-style:normal;border-bottom:1px solid var(--rule)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+code{font-family:var(--mono);font-size:.85em;color:var(--ink-2)}
+ul,ol{margin:.5rem 0 1.15em;padding-left:1.35rem}
+li{margin:.34em 0}
+li::marker{color:var(--ink-4)}
+
+.wrap{max-width:78rem;margin:0 auto;padding:0 clamp(1.1rem,4vw,3rem) 7rem}
+
+/* ═══════════════ masthead ═══════════════ */
+.mast{padding:clamp(3rem,9vw,7rem) 0 0}
+.mast-top{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;align-items:baseline;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--ink);padding-bottom:.7rem;margin-bottom:clamp(1.8rem,4vw,3rem)}
+.mast-top .sp{flex:1}
+h1{font-family:var(--serif);font-weight:700;
+  font-size:clamp(2.5rem,7.2vw,5.4rem);line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 clamp(1.2rem,3vw,2rem);max-width:15ch;text-wrap:balance}
+h1 .thin{font-weight:400;color:var(--ink-3)}
+.deck{font-family:var(--serif);font-size:clamp(1.06rem,2.2vw,1.42rem);line-height:1.72;
+  color:var(--ink-2);max-width:42rem;margin:0 0 2rem}
+.deck b{color:var(--ink);font-weight:700}
+.byline{display:flex;flex-wrap:wrap;gap:.4rem 2.2rem;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:var(--ink-3);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:.8rem 0;margin-bottom:clamp(2.4rem,6vw,4rem)}
+.byline b{color:var(--ink-2);font-weight:600}
+
+/* ═══════════════ 對照模型（橫向流程帶） ═══════════════ */
+.model{border:1px solid var(--ink);background:var(--paper);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.model-head{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center;justify-content:space-between;
+  padding:.75rem .95rem;border-bottom:1px solid var(--rule)}
+.model-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+.model-title b{color:var(--ink);font-weight:600}
+.track{display:flex;border:1px solid var(--ink);align-items:stretch}
+.track button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:.28rem .8rem;color:var(--ink-3);white-space:nowrap}
+.track button+button{border-left:1px solid var(--rule)}
+.track button[aria-pressed="true"]{background:var(--inv-bg);color:var(--inv-ink)}
+.strip{display:flex;overflow-x:auto;scrollbar-width:thin}
+.strip::-webkit-scrollbar{height:5px}
+.strip::-webkit-scrollbar-thumb{background:var(--rule)}
+.seg{flex:1 0 8.4rem;min-width:8.4rem;text-align:left;padding:.7rem .7rem .75rem;
+  border-right:1px solid var(--rule-2);position:relative;transition:background .15s}
+.seg:last-child{border-right:0}
+.seg:hover .seg-t{color:var(--acc)}
+.seg:hover .seg-v{color:var(--ink-2)}
+.seg-n{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-4);margin-bottom:.15rem}
+.seg-t{display:block;font-size:12.6px;line-height:1.35;font-weight:600;color:var(--ink);margin-bottom:.3rem}
+.seg-v{display:block;font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-3);min-height:2.2em}
+.seg.on{background:var(--acc-wash)}
+.seg.on::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--acc)}
+.seg.on .seg-t{color:var(--acc)}
+
+/* ═══════════════ 章節 ═══════════════ */
+.thesis{max-width:var(--wide);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.sec-mark{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem}
+.sec-mark::after{content:"";flex:1;height:1px;background:var(--rule)}
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.65rem,3.6vw,2.5rem);
+  line-height:1.18;letter-spacing:-.022em;margin:0 0 .9rem;max-width:24ch;text-wrap:balance}
+h3{font-family:var(--sans);font-size:.86rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);margin:2.4rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+h4{font-size:.92rem;font-weight:700;margin:1.5rem 0 .35rem;color:var(--ink)}
+.lede{font-family:var(--serif);font-size:1.08rem;line-height:1.75;color:var(--ink-2);max-width:var(--read);margin:0 0 1.8rem}
+
+.phase-rule{display:flex;align-items:baseline;gap:1rem;margin:clamp(3rem,7vw,5rem) 0 1.5rem;
+  border-top:2px solid var(--ink);padding-top:.6rem}
+.phase-rule .pk{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+.phase-rule .pd{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+
+/* ── 分段展開 ── */
+.stage{border-bottom:1px solid var(--rule);max-width:var(--wide)}
+.stage>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:3.2rem 1fr auto 1.2rem;
+  gap:1rem;align-items:baseline;padding:1.35rem 0;transition:opacity .15s}
+.stage>summary::after{content:"＋";font-family:var(--mono);font-size:13px;color:var(--ink-4);
+  justify-self:end;padding-top:.3rem}
+.stage[open]>summary::after{content:"－";color:var(--acc)}
+.stage>summary::-webkit-details-marker{display:none}
+.stage>summary:hover{opacity:.65}
+.st-n{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--ink-4);padding-top:.35rem}
+.st-main{min-width:0}
+.st-t{font-family:var(--serif);font-size:clamp(1.2rem,2.6vw,1.65rem);font-weight:700;
+  line-height:1.28;letter-spacing:-.018em;margin-bottom:.28rem;text-wrap:balance}
+.st-sub{font-size:13.6px;line-height:1.6;color:var(--ink-3);max-width:44rem}
+.st-sig{font-family:var(--mono);font-size:11px;color:var(--acc);white-space:nowrap;padding-top:.4rem;text-align:right}
+.st-sig i{display:block;font-style:normal;color:var(--ink-4);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+.body{padding:.4rem 0 3rem;animation:fade .28s ease}
+.body>.full{max-width:var(--wide)}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.body>p,.body>ul,.body>ol,.body>h3,.body>h4,.body>.callout,.body>.eq,.body>.lede{max-width:var(--read)}
+.body>p:first-of-type::first-letter{font-family:var(--serif);float:left;font-size:3.15rem;line-height:.86;
+  font-weight:700;padding:.16rem .5rem .1rem 0;color:var(--ink)}
+@media(min-width:900px){
+  .body{display:grid;grid-template-columns:minmax(0,var(--read)) 1fr;gap:0 2.5rem;align-items:start}
+  .body>*{grid-column:1}
+  .body>.full{grid-column:1/-1;max-width:var(--wide)}
+  .body>.marg{grid-column:2;margin:0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+    border-top:1px solid var(--ink);padding-top:.5rem;max-width:17rem}
+}
+.marg{margin:1.2rem 0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+  border-top:1px solid var(--ink);padding-top:.5rem}
+.marg b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-2);margin-bottom:.35rem}
+
+/* ── 判讀（本文的意見） ── */
+.callout{background:var(--paper);border:1px solid var(--ink);padding:1.05rem 1.15rem;margin:1.7rem 0}
+.callout .ck{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:.5rem}
+.callout p{margin:0 0 .8em;font-size:15px;line-height:1.8;color:var(--ink-2)}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+
+/* ── 公式 ── */
+.eq{font-family:var(--mono);font-size:12.4px;line-height:1.95;color:var(--ink-2);
+  background:var(--paper-2);border-left:2px solid var(--acc);padding:.85rem 1rem;margin:1.2rem 0;
+  overflow-x:auto;white-space:pre;font-variant-numeric:tabular-nums}
+
+/* ── 表 ── */
+.tbl{overflow-x:auto;margin:1.5rem 0;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:13.4px;line-height:1.62}
+.tbl table{min-width:42rem}
+th,td{text-align:left;padding:.6rem .85rem;border-bottom:1px solid var(--rule-2);vertical-align:top}
+thead th{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid var(--ink);white-space:nowrap;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp td{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;padding-top:1.1rem;
+  text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--ink);border-bottom-color:var(--rule)}
+td.hit{background:var(--acc-wash)}
+.cap{font-size:12.4px;line-height:1.7;color:var(--ink-3);margin:-.9rem 0 1.9rem;max-width:var(--wide)}
+.cap b{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+
+/* 差異以字符深淺表示，不用顏色 */
+.lvl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;white-space:nowrap;color:var(--ink)}
+.lvl i{font-style:normal;color:var(--ink-4)}
+
+/* ── 統計 ── */
+.figs{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule);margin:1.6rem 0}
+.fg{padding:.85rem .9rem .95rem;border-right:1px solid var(--rule-2)}
+.fg:last-child{border-right:0}
+.fg .v{display:block;font-family:var(--mono);font-size:1.5rem;font-weight:500;letter-spacing:-.03em;
+  line-height:1.15;font-variant-numeric:tabular-nums}
+.fg .v small{font-size:.55em;letter-spacing:0;color:var(--ink-3);margin-left:.15em}
+.fg .k{display:block;font-size:11.5px;line-height:1.5;color:var(--ink-3);margin-top:.35rem}
+
+/* ── 晶粒拓樸階梯 ── */
+.lad{margin:1.4rem 0}
+.lad-r{display:grid;grid-template-columns:9rem 1fr 6.5rem;gap:.7rem;align-items:center;margin:.3rem 0;font-size:12.6px}
+.lad-l{color:var(--ink-2);line-height:1.35}
+.lad-t{height:12px;background:var(--paper-2);border:1px solid var(--rule-2)}
+.lad-f{height:100%;background:var(--ink)}
+.lad-f.a{background:var(--acc)}
+.lad-v{font-family:var(--mono);font-size:11px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+/* ── 推算器 ── */
+.calc{border:1px solid var(--ink);background:var(--paper);margin:1.6rem 0}
+.calc-h{padding:.6rem .9rem;border-bottom:1px solid var(--rule);font-family:var(--mono);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.calc-i{display:grid;gap:.85rem;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));padding:.95rem}
+.calc-i label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:.3rem}
+.calc-i input{width:100%;font-family:var(--mono);font-size:14px;padding:.35rem .45rem;background:var(--paper-2);
+  color:var(--ink);border:1px solid var(--rule);border-radius:0;font-variant-numeric:tabular-nums}
+.calc-i input:focus{border-color:var(--acc);outline:none}
+.calc-o{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));border-top:1px solid var(--rule)}
+.co{padding:.6rem .8rem .7rem;border-right:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2)}
+.co .v{display:block;font-family:var(--mono);font-size:1.12rem;font-weight:500;color:var(--acc);
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.co .k{display:block;font-size:10.5px;line-height:1.45;color:var(--ink-3);margin-top:.2rem}
+.calc-n{padding:.7rem .9rem;font-size:12px;line-height:1.7;color:var(--ink-3);border-top:1px solid var(--rule)}
+
+/* ── 尾 ── */
+.foot{border-top:2px solid var(--ink);margin-top:4rem;padding-top:1.5rem;max-width:var(--wide);
+  font-size:12.6px;line-height:1.85;color:var(--ink-3)}
+.srcs{columns:2;column-gap:2.5rem;font-size:12.3px;line-height:1.8}
+@media(max-width:700px){.srcs{columns:1}}
+.srcs li{break-inside:avoid;margin:.2em 0}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.05rem .35rem;color:var(--ink-3);white-space:nowrap}
+
+.tools{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0 0}
+.tools button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.3rem .75rem;color:var(--ink-3)}
+.tools button:hover{border-color:var(--ink);color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <span>Helios ⇄ Vera Rubin</span><span>機櫃級對照解剖</span><span class="sp"></span><span>2026</span>
+  </div>
+  <h1>拆開兩座機櫃：<br>同一份規格表<span class="thin">背後的兩種賭法</span></h1>
+  <p class="deck">2026 年 7 月，AMD 在 Advancing AI 發表 Helios，正面迎戰 Nvidia 同期出貨的 Vera Rubin。兩座機櫃乍看是同一份東西的兩個版本——<b>72 顆 GPU、液冷、功耗量級相近</b>。但只要往下拆一層，會發現兩家公司在組裝、晶粒、供電、定價與生態系幾乎每一個環節，都做出了相反的選擇。</p>
+  <div class="byline">
+    <span><b>版本</b>　2026-07-28</span>
+    <span><b>主線</b>　AMD Helios（Instinct MI455X）</span>
+    <span><b>對照</b>　Nvidia Vera Rubin NVL144</span>
+    <span><b>環節</b>　7</span>
+    <span><b>數據</b>　公開規格／產業估計／本文推導</span>
+  </div>
+</header>
+
+<!-- ══════════ 對照模型 ══════════ -->
+<section class="model" aria-label="Helios／Vera Rubin 對照模型">
+  <div class="model-head">
+    <span class="model-title"><b>對照模型</b>　選一條路線，橫向走完七個環節</span>
+    <div class="track" role="group" aria-label="切換路線">
+      <button id="t-h" aria-pressed="true">Helios</button>
+      <button id="t-v" aria-pressed="false">Vera Rubin</button>
+    </div>
+  </div>
+  <div class="strip" id="strip">
+    <button class="seg" data-go="s01"><span class="seg-n">01</span><span class="seg-t">組裝廠商</span><span class="seg-v" data-h="Sanmina／Wiwynn／Celestica 分工" data-v="Foxconn／Quanta／Wistron 端到端"></span></button>
+    <button class="seg" data-go="s02"><span class="seg-n">02</span><span class="seg-t">內部零件</span><span class="seg-v" data-h="44 OU・18+6+1 tray" data-v="Oberon 機構・相容既有機房"></span></button>
+    <button class="seg" data-go="s03"><span class="seg-n">03</span><span class="seg-t">CPU／GPU</span><span class="seg-v" data-h="12 顆晶粒／GPU封裝" data-v="4 顆晶粒／GPU封裝"></span></button>
+    <button class="seg" data-go="s04"><span class="seg-n">04</span><span class="seg-t">供電系統</span><span class="seg-v" data-h="225–245 kW" data-v="約 240–250 kW（估）"></span></button>
+    <button class="seg" data-go="s05"><span class="seg-n">05</span><span class="seg-t">價格</span><span class="seg-v" data-h="$5.0–5.5M（機櫃估）" data-v="$3.5–4.0M 或 $7.8M（雙估算）"></span></button>
+    <button class="seg" data-go="s06"><span class="seg-n">06</span><span class="seg-t">全櫃對照</span><span class="seg-v" data-h="72 封裝・31 TB HBM4" data-v="144 晶粒・20.7 TB HBM4"></span></button>
+    <button class="seg" data-go="s07"><span class="seg-n">07</span><span class="seg-t">生態夥伴</span><span class="seg-v" data-h="TensorWave・無股權" data-v="Nebius・Nvidia 持股 9.3%"></span></button>
+  </div>
+</section>
+
+<!-- ══════════ 00 論點 ══════════ -->
+<section class="thesis" id="s00">
+  <p class="sec-mark">00 · 論點</p>
+  <h2>兩條路線，同一張規格表：到底在賭什麼</h2>
+  <p class="lede">把兩座機櫃的規格表並排看，第一眼會覺得是同一份東西的兩個版本。但只要往下拆一層——晶粒、快取域、定價方法論——就會看到兩家公司幾乎在每一層都做出了相反的選擇。</p>
+
+  <div style="max-width:var(--read)">
+    <p>第一個賭注在<strong>生態系開放度</strong>：AMD 把 UALink over Ethernet 做成 Helios 的預設互連，賭開放乙太網生態能靠成本與供應商多元化贏得客戶；Nvidia 則延續 NVLink＋CUDA 的垂直整合，賭既有軟體生態的轉換成本高到客戶不會輕易離開。</p>
+    <p>第二個賭注在<strong>晶粒策略</strong>：AMD 的 GPU 與 CPU 都是重度多晶粒設計——MI455X 封裝內有 12 顆晶粒、EPYC Venice 封裝內有 10 顆，靠先進封裝把延遲壓下來。Nvidia 只在 GPU 走多晶粒（Rubin R200 封裝 4 顆晶粒），CPU（Vera）卻刻意退回單一晶粒——賭的是 agentic AI 這類分支多、指標追逐的控制流工作負載，統一快取域的低延遲比 chiplet 的擴展性更重要。</p>
+    <p>第三個賭注在<strong>規格配置</strong>：AMD 機櫃的 HBM4 總容量多 50%，但如果只看單一封裝的 FP4 峰值算力，Nvidia 反而領先（50 對 40 PFLOPS）——兩家不是誰全面領先誰，而是把賭注押在了規格表的不同欄位。</p>
+    <p>第四個賭注、也是本文認為最容易被忽略的一點，甚至不在技術層——而在<strong>定價方法論本身</strong>。Futurum Group 針對「市場報價」估算 Vera Rubin 機櫃約 3.5–4.0 百萬美元；Morgan Stanley 針對同一顆機櫃由下而上拆解物料成本，得出 7.8 百萬美元——兩個機構對同一個問題給出差了一倍以上的答案。這個分歧本身，比「Helios 到底貴不貴」這個問題更值得停留。</p>
+  </div>
+
+  <div class="figs">
+    <div class="fg"><span class="v">72</span><span class="k">GPU 封裝／機櫃（雙方計數基準）</span></div>
+    <div class="fg"><span class="v">12<small>vs 4</small></span><span class="k">GPU 封裝內部晶粒數：Helios vs Rubin</span></div>
+    <div class="fg"><span class="v">225–245<small>kW</small></span><span class="k">Helios 機櫃尖峰功耗</span></div>
+    <div class="fg"><span class="v">2<small>×</small></span><span class="k">Vera Rubin 機櫃定價估算的分歧倍數</span></div>
+  </div>
+
+  <div class="callout" style="max-width:var(--read)">
+    <span class="ck">本文的核心判讀</span>
+    <p>如果只拿規格表選邊站，會錯過整篇文章最重要的訊息：<strong>這是兩套完全不同的商業賭注，不是同一套設計哲學下的效能競賽。</strong>AMD 賭「開放＋更多記憶體＋更高單價也有人買單」；Nvidia 賭「垂直整合＋更高峰值算力＋既有生態系鎖定」。哪一邊賭對，要等 2027–2028 年客戶的真實續約與擴充決策才會揭曉，而不是任何一張規格對照表能單獨回答的。</p>
+  </div>
+
+  <div class="tools">
+    <button id="expand-all">全部展開</button>
+    <button id="collapse-all">全部收合</button>
+  </div>
+</section>
+
+<!-- ══════════ A ══════════ -->
+<div class="phase-rule"><span class="pk">A · 供應鏈</span><span class="pd">誰把矽晶粒變成一座機櫃</span></div>
+
+<details class="stage" id="s01">
+  <summary><span class="st-n">01</span><span class="st-main"><span class="st-t">組裝廠商：AMD 分工發包，Nvidia 端到端整合</span><span class="st-sub">AMD 是無晶圓廠設計公司，Helios 的機櫃設計、網通子系統與量產組裝分別交給不同專責夥伴。</span></span><span class="st-sig">3 家分工<i>NPI＋機櫃＋網通</i></span></summary>
+  <div class="body">
+    <p>Helios 的組裝生態系裡，<strong>Sanmina</strong> 是新產品導入（NPI）的主力製造夥伴：2025 年 10 月完成收購 AMD 旗下 ZT Systems 的資料中心基礎設施製造業務，交易金額約 30 億美元、含最高 4.5 億美元或有對價，AMD 保留了 ZT Systems 的設計與客戶導入團隊。<strong>Wiwynn</strong> 被業界觀察為 Helios 機櫃（OCP Open Rack Wide 機構）的主要設計與製造夥伴，也是少數在 OCP 展會上展出 ORW 機櫃實體的 ODM 廠。<strong>Celestica</strong> 則在 2026 年 3 月與 AMD 宣布合作，專責 scale-up 網通交換器（switch tray）的研發、設計與製造。</p>
+    <p>更外圍的生態系涵蓋 TSMC（晶圓代工）、Gigabyte、Asus、Foxconn、Wistron、Quanta、Inventec 等十餘家夥伴，供應主機板、機構件與次系統；AMD 也在 2026 年 5 月加碼超過 100 億美元投資台灣生態系，加速相關產能。</p>
+
+    <div class="marg"><b>對照 Nvidia</b>Vera Rubin 的機櫃組裝（含 L10 整機組裝）主要由 Foxconn、Quanta、Wistron 三家台廠負責，另涉及約 150 家台灣供應鏈廠商；Nvidia 近期也調整策略，集中委由少數 ODM 主導整機組裝，單機櫃組裝時間據稱已從約 2 小時壓縮到 5 分鐘。</div>
+
+    <div class="callout">
+      <span class="ck">兩條路線在這一環的分歧</span>
+      <p>AMD 把「機櫃平台設計」（Wiwynn）與「網通子系統」（Celestica）明確拆分給不同專責夥伴，靠專業分工換取彈性；Nvidia 傾向由少數幾家 ODM 端到端整合，靠單一窗口換取執行速度與良率一致性。<strong>這不是誰的模式比較先進，而是「開放生態系」與「垂直整合」這個貫穿全文的主軸，在供應鏈這一層的第一次出現。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s02">
+  <summary><span class="st-n">02</span><span class="st-main"><span class="st-t">內部零件：從機構到 Compute Tray、Switch Tray、Power Shelf</span><span class="st-sub">Helios 採用 Meta 主導的 OCP Open Rack Wide 開放機構，機構體積約為 Nvidia NVL72 的兩倍。</span></span><span class="st-sig">44 OU<i>18+6+1 tray</i></span></summary>
+  <div class="body">
+    <p>Helios 機構寬 1.2 公尺、深 1.3 公尺、44 OU 高，滿載重量近 7,000 磅（約 3,175 公斤）。全機由 <strong>18 個 Compute Tray</strong>、<strong>6 個 Switch Tray</strong> 與 1 組集中式 <strong>Power Shelf</strong> 組成，全液冷。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>層級</th><th class="wrap">元件</th><th class="n">數量</th><th class="wrap">關鍵規格</th></tr></thead>
+        <tbody>
+          <tr><td>機櫃結構</td><td>OCP Open Rack Wide（ORW）</td><td class="n">1</td><td>1.2m×1.3m×44 OU；約 7,000 磅</td></tr>
+          <tr><td>運算層</td><td>Compute Tray（GPU＋CPU）</td><td class="n">18</td><td>每 tray 4×MI455X＋1×EPYC Venice，共 72 GPU、18 CPU；10U／約 77kg</td></tr>
+          <tr><td>網通層</td><td>Switch Tray（scale-up）</td><td class="n">6</td><td>每 tray 2×Broadcom Tomahawk 6，共 12 顆 ASIC、1,728 個連接埠</td></tr>
+          <tr><td>網卡</td><td>Pensando Vulcano 800 AI NIC</td><td class="n">最多 216</td><td>每 GPU 最多 3 張，800Gbps／張，2.4Tbps／GPU scale-out</td></tr>
+          <tr><td>管理面</td><td>Pensando Salina DPU</td><td class="n">18</td><td>每 compute tray 1 顆，400Gbps 管理流量</td></tr>
+          <tr><td>供電／冷卻</td><td>Power Shelf（含垂直 busbar）</td><td class="n">1 組</td><td>50V DC 液冷母線，集中配電＋配液</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　規格取自 AMD 官方發表與供應鏈媒體報導；switch tray 由 Celestica 研發設計，採 UALink over Ethernet（UALoE）單躍點、多平面架構連接全部 72 顆 GPU。</p>
+
+    <h3>Power Shelf：供電與配液的共用樞紐</h3>
+    <p>機櫃背部垂直母線集中配電，同一組系統也透過快拆接頭（Quick-Disconnect）把冷卻液分配到每個 compute／switch tray；AMD 與施耐德電機（Schneider Electric）共同發布了 Helios 機櫃供電與冷卻的資料中心參考標準，協助業者對應設施設計——這一節的細節會在 04 節展開。</p>
+    <div class="marg"><b>尺寸的代價</b>ORW 機構體積約為 Nvidia NVL72 的兩倍，換來的是更充裕的 tray 數與液冷管路空間；代價是機房佔地面積需求也隨之翻倍，這對既有機房的改造決策是實質限制。</div>
+  </div>
+</details>
+
+<!-- ══════════ B ══════════ -->
+<div class="phase-rule"><span class="pk">B · 晶粒</span><span class="pd">封裝內部，誰在賭 chiplet</span></div>
+
+<details class="stage" id="s03">
+  <summary><span class="st-n">03</span><span class="st-main"><span class="st-t">CPU 與 GPU：晶粒、快取域與核心拓樸</span><span class="st-sub">MI455X 封裝內塞了 12 顆晶粒，Rubin R200 只有 4 顆——但 Nvidia 的 CPU 反而是全鏈唯一的單體晶粒設計。</span></span><span class="st-sig">12<small>vs</small>4<i>晶粒／GPU封裝</i></span></summary>
+  <div class="body">
+    <p>MI455X 是 CDNA 5 架構，8 顆 XCD（運算晶粒，TSMC N2／2nm GAA）以混合鍵合堆疊在 2 顆 FCD（Fabric＋Cache 晶粒，N3P）之上，兩顆 FCD 再透過 CoWoS-L 封裝互連，另加 2 顆 N3P 的 I/O 晶粒——整顆封裝共 12 顆晶粒、約 3,200 億電晶體。Rubin R200 則是 2 顆運算晶粒＋2 顆 I/O 晶粒的四晶粒 MCM，TSMC 3nm 製程，約 3,360 億電晶體。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>指標（每 1 個 GPU 封裝）</th><th class="n">MI455X</th><th class="n">Rubin R200</th></tr></thead>
+        <tbody>
+          <tr><td>晶粒數</td><td class="n">12（8 XCD＋2 FCD＋2 IO）</td><td class="n">4（2 運算＋2 IO）</td></tr>
+          <tr><td>電晶體</td><td class="n">約 3,200 億</td><td class="n">約 3,360 億</td></tr>
+          <tr><td>L2 快取</td><td class="n">192MB（2 個獨立域）</td><td class="n">集中式，容量未公開</td></tr>
+          <tr><td>HBM4 容量</td><td class="n">432GB</td><td class="n">288GB</td></tr>
+          <tr><td>HBM4 頻寬</td><td class="n">23.3 TB/s</td><td class="n">約 22 TB/s</td></tr>
+          <tr><td>FP4 峰值算力</td><td class="n">40 PFLOPS</td><td class="n">約 50 PFLOPS</td></tr>
+          <tr><td>FP8／NVFP4 訓練算力</td><td class="n">20 PFLOPS（FP8）</td><td class="n">約 16.7 PFLOPS（推算）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　Rubin 的 FP8 等值數字為機櫃層級 1.2 EFLOPS NVFP4 訓練算力除以 72 顆反推，Nvidia 未直接公布單晶片數字，且 NVFP4 與傳統 FP8 並非同一數字格式，僅供量級參考。⚑ 單看 FP4 峰值，Nvidia 每顆封裝理論算力其實領先 AMD——AMD 在機櫃層級宣稱「多 15% AI 算力」的論證基礎是 Kimi K2 Thinking 這類實際工作負載吞吐量實測，而不是規格表上的 peak FP4 直接對比，兩種基準並不等價。</p>
+
+    <h3>核心拓樸：CCX／CCD 對照單體 Olympus 陣列</h3>
+    <p>EPYC Venice（旗艦 9996）由 8 顆 CCD（各 2 個 CCX、每 CCX 16 顆 Zen 6c 核心）與 2 顆集中式 I/O 晶粒組成，全晶片 256 核／512 執行緒、1,024MB L3、約 2,030 億電晶體，16 通道記憶體、頻寬 1.6TB/s，是首款支援 PCIe Gen 6 的伺服器 CPU。Vera CPU 則完全相反：<strong>單一晶粒、無 chiplet</strong>，88 顆自研 Armv9.2「Olympus」核心搭配 Spatial SMT（資源預先分割、每核 2 執行緒），164MB 統一 L3 快取，約 2,270 億電晶體，並以 NVLink-C2C（1.8TB/s）直連 GPU。</p>
+
+    <div class="lad full">
+      <div class="lad-r"><span class="lad-l">Venice L3（分散）</span><div class="lad-t"><div class="lad-f a" style="width:100%"></div></div><span class="lad-v">1,024MB</span></div>
+      <div class="lad-r"><span class="lad-l">Vera L3（統一）</span><div class="lad-t"><div class="lad-f" style="width:16%"></div></div><span class="lad-v">164MB</span></div>
+      <div class="lad-r"><span class="lad-l">Venice 快取域數</span><div class="lad-t"><div class="lad-f a" style="width:100%"></div></div><span class="lad-v">16 個（CCX）</span></div>
+      <div class="lad-r"><span class="lad-l">Vera 快取域數</span><div class="lad-t"><div class="lad-f" style="width:6%"></div></div><span class="lad-v">1 個（晶粒）</span></div>
+    </div>
+    <p class="cap full"><b>標註</b>　條寬為相對比例示意，非絕對數值刻度。Venice 的 1,024MB 容量大很多，但拆成 16 個 64MB 快取域分布在 8 顆 CCD 上，跨 CCD 存取要多繞一手 Infinity Fabric；Vera 的 164MB 是單一晶粒上的統一快取，容量小但沒有跨域延遲。</p>
+
+    <div class="callout">
+      <span class="ck">誰在賭 chiplet，誰在賭單體晶粒</span>
+      <p>AMD 兩顆晶片都是重度多晶粒設計，靠混合鍵合與先進封裝把延遲壓下來；Nvidia 是「一半一半」——GPU 跟進多晶粒，CPU 卻刻意維持單一晶粒。這賭的是 agentic AI 這種分支多、指標追逐（pointer-chasing）的控制流工作負載，統一快取域帶來的低延遲比 chiplet 的擴展性更重要。<strong>「CPU 要不要 chiplet」，正在變成一個工作負載型態問題，而不是純粹的製程良率問題。</strong></p>
+    </div>
+
+    <h3>MI400 系列的其他型號</h3>
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>型號</th><th>定位</th><th class="wrap">關鍵差異</th></tr></thead>
+        <tbody>
+          <tr><td><strong>MI455X</strong></td><td>Helios 機櫃旗艦，訓練＋推論</td><td>432GB HBM4，是 Helios 唯一採用的 GPU 型號</td></tr>
+          <tr><td>MI430X</td><td>主權 AI、HPC、CPU-GPU 混合負載</td><td>FP64 硬體算力達 288 TFLOPS</td></tr>
+          <tr><td>MI440X</td><td>企業級 AI 標準伺服器（非 Helios 機櫃）</td><td>1 顆 EPYC Venice 搭 8 顆 MI440X 的標準機架伺服器</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ C ══════════ -->
+<div class="phase-rule"><span class="pk">C · 基礎設施</span><span class="pd">功耗、定價與買單訊號</span></div>
+
+<details class="stage" id="s04">
+  <summary><span class="st-n">04</span><span class="st-main"><span class="st-t">供電系統：225–245kW，兩家的量級其實很接近</span><span class="st-sub">機構尺寸差了一倍，但單機櫃功耗量級幾乎重疊——差異在供電拓樸的實作細節，不在總耗電量。</span></span><span class="st-sig">225–245 kW<i>全液冷 50V DC</i></span></summary>
+  <div class="body">
+    <p>Helios 由機櫃背部 50V 直流液冷母線（busbar）供電，滿載可輸出 225–245kW，供 72 顆 MI455X、18 顆 EPYC Venice CPU 及全部網通元件使用。Power Shelf 作為集中供電樞紐，透過垂直 busbar 分配電力給 18 個 compute tray 與 6 個 switch tray，同一組系統也負責液冷冷卻液的集中分配；每個 tray 採用背面盲插快拆（Quick-Disconnect）液冷接頭，可不斷電熱抽換單一 tray。</p>
+
+    <div class="figs">
+      <div class="fg"><span class="v">225–245<small>kW</small></span><span class="k">Helios 機櫃尖峰功耗</span></div>
+      <div class="fg"><span class="v">約 240–250<small>kW</small></span><span class="k">Vera Rubin NVL72 估計值（未經 Nvidia 證實）</span></div>
+      <div class="fg"><span class="v">50<small>V</small></span><span class="k">Helios 液冷 DC busbar 電壓</span></div>
+      <div class="fg"><span class="v">2<small>×</small></span><span class="k">Helios 機構體積相對 NVL72 的倍數</span></div>
+    </div>
+
+    <div class="callout">
+      <span class="ck">對照 Nvidia</span>
+      <p>Vera Rubin NVL72 的尖峰功耗官方尚未正式公布，市場估計約落在 240–250kW，與 Helios 的 225–245kW 相近——兩家在單機櫃功耗量級上其實非常接近，差異主要在機構尺寸（Helios 約為 NVL72 的兩倍）與供電拓樸的實作細節。這代表資料中心若要同時支援兩種平台，機房供電容量（每機櫃 200kW+ 級）的規劃邏輯相似，但機櫃佔地面積需求不同。</p>
+    </div>
+    <div class="marg"><b>與 Schneider Electric 的合作</b>AMD 與施耐德電機共同發布 Helios 機櫃供電／冷卻的資料中心參考標準，協助資料中心業者針對這套液冷拓樸設計對應設施——這類「參考設計」的存在本身，反映的是機房業者需要一份不必自行從零推導的施工基準。</div>
+  </div>
+</details>
+
+<details class="stage" id="s05">
+  <summary><span class="st-n">05</span><span class="st-main"><span class="st-t">價格：兩種估算方法，兩種答案</span><span class="st-sub">機櫃售價從未由任何一方正式公告，市場上流通的估算之間差了一倍以上，而這個分歧本身就是重要資訊。</span></span><span class="st-sig">2×<i>估算方法論分歧</i></span></summary>
+  <div class="body">
+    <p>Futurum Group 對 Helios 的估算落在 5.0–5.5 百萬美元／機櫃（均值約 5.25M），對 Vera Rubin NVL72 的估算則是 3.5–4.0 百萬美元——若以此為準，Helios 較對手貴約四成，AMD 的論述立基於機櫃內 HBM4 總容量多 50%、scale-out 頻寬多 50%，以及聲稱的整體 AI 算力優勢。</p>
+
+    <h3>單顆晶片售價（分析師估算，非官方牌價）</h3>
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>晶片</th><th class="n">估算售價</th><th class="wrap">估算基礎</th></tr></thead>
+        <tbody>
+          <tr><td>MI455X（GPU）</td><td class="n">~$30,000／顆</td><td>SemiAnalysis 點估計；產業區間 $25,000–45,000，依配置與採購量而定</td></tr>
+          <tr><td>Rubin R200（GPU）</td><td class="n">~$50,000–55,000／顆</td><td>Morgan Stanley：NVL72 機櫃內 72 顆 GPU 合計近 $400 萬，平均約 $55,500／顆</td></tr>
+          <tr><td>EPYC 9006 頂規（256 核）</td><td class="n">最高 $14,904／顆</td><td>外流零售牌價，非雲端大量採購折扣價</td></tr>
+          <tr><td>Vera CPU</td><td class="n">~$5,000／顆（量產折扣後）</td><td>Morgan Stanley：NVL72 機櫃 36 顆 CPU 合計約 $18 萬；折扣前報價「遠高於 $20,000」／顆</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　EPYC 頂規牌價與 Vera CPU 量產折扣後估算的計價基礎不同，不宜直接相減比較；折扣前 Vera CPU 報價（$20K+）才是與 EPYC 牌價較可比的基準，兩者量級其實接近。</p>
+
+    <h3>機櫃成本拆解：Vera Rubin 的 BOM 估算</h3>
+    <p>Morgan Stanley 對 VR200 NVL72 做了由下而上的物料成本拆解：GPU（72 顆 Rubin）約 4.00M 美元，占比最大，較 Blackwell 世代的 GPU 成本（約 2.5M）暴增 57%；記憶體（HBM4＋LPDDR5X）約 2.00M，較前代暴增 435%，是總成本上升的主因；CPU（36 顆 Vera）約 0.18M；其餘 NVLink 交換器、網通晶片、散熱、電源、PCB、基板、被動元件等約 1.62M。合計約 <strong>7.80M 美元</strong>——這是目前唯一有公開細項的機櫃級成本拆解，AMD 側尚無對等的公開拆解。</p>
+
+    <div class="callout">
+      <span class="ck">兩個機構的估算差了一倍以上，這件事本身就是重要資訊</span>
+      <p>Futurum 的 3.5–4.0M 是針對「市場報價」的估算，Morgan Stanley 針對同一顆機櫃由下而上拆解出的 BOM 成本卻高達 7.8M——比 Futurum 高出近一倍，主因是 2026 年內 HBM4／LPDDR5X 現貨價格暴漲。這兩個數字分屬不同方法論與不同時間點，不能直接互相取代；但若以 Morgan Stanley 的 7.8M 為基準，Helios 的 5.0–5.5M <strong>反而會變成比 Vera Rubin 便宜</strong>，而不是「貴四成」。「Helios 比較貴」這個結論，取決於採信哪一家機構、哪一個時間點的估算——這正是評估這類尚未有官方定價產品時最大的不確定性來源。</p>
+    </div>
+
+    <h3>從 GW 承諾反推機櫃數與資本支出</h3>
+    <p>AMD 已公開的容量承諾以電力（GW）而非機櫃數計價——Anthropic 最高 2GW、OpenAI 總計 6GW、Meta 6GW、Oracle 5 萬顆 MI450。GW 是抽象單位，換算成機櫃數與資本支出才有具體感：</p>
+    <div class="calc full">
+      <div class="calc-h">互動推算器　·　改任一參數即時重算</div>
+      <div class="calc-i">
+        <div><label for="i-gw">承諾容量 GW</label><input id="i-gw" type="number" value="2" min="0.01" step="0.1"></div>
+        <div><label for="i-kw">單櫃功率 kW</label><input id="i-kw" type="number" value="235" min="1" step="1"></div>
+        <div><label for="i-price">單櫃售價 $M</label><input id="i-price" type="number" value="5.25" min="0.1" step="0.05"></div>
+      </div>
+      <div class="calc-o">
+        <div class="co"><span class="v" id="o-racks">—</span><span class="k">換算機櫃數</span></div>
+        <div class="co"><span class="v" id="o-gpu">—</span><span class="k">GPU 顆數（72／櫃）</span></div>
+        <div class="co"><span class="v" id="o-capex">—</span><span class="k">資本支出 $B（以 Futurum 估算）</span></div>
+      </div>
+      <p class="calc-n">計算式：機櫃數 ＝ GW×10⁶ ÷ 單櫃功率；GPU 數 ＝ 機櫃數×72；資本支出 ＝ 機櫃數×單櫃售價。⚑ 預設值對應 Anthropic 的 2GW 承諾：換算下來是近萬座機櫃、超過六十萬顆 GPU、數百億美元資本支出——這就是為什麼一個「GW」數字背後動輒是數百億美元的採購合約，也是為什麼 05 節那個「貴四成還是便宜」的定價分歧，會直接影響到這種規模的資本支出估算。</p>
+    </div>
+
+    <h3>市場買單訊號：已公開的容量承諾</h3>
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>客戶</th><th class="wrap">承諾內容</th><th>時間點</th></tr></thead>
+        <tbody>
+          <tr><td>Anthropic</td><td>最高 2GW MI450 系列容量部署於 Helios 機櫃；AMD 同步宣布最高投資 Anthropic 50 億美元股權</td><td>首個 1GW 於 2027 上半年上線</td></tr>
+          <tr><td>OpenAI</td><td>總計 6GW AMD 運算容量合作（2025/10 首度宣布），涵蓋多世代硬體</td><td>首階段 1GW MI450，2026 下半年</td></tr>
+          <tr><td>Microsoft Azure</td><td>宣布於 Azure 大規模部署 Helios 機櫃</td><td>2026/07 宣布</td></tr>
+          <tr><td>Meta</td><td>6GW 客製化 GPU 容量合約</td><td>2026/07 前後揭露</td></tr>
+          <tr><td>Oracle OCI</td><td>5 萬顆 MI450 GPU 部署於 Oracle Cloud Infrastructure</td><td>2026 Q3 起</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　綜合各家披露口徑，累積容量承諾管線約在 14–20GW 區間，統計範圍因報導而異；這批承諾以電力容量揭露，實際對應的機櫃／營收數字尚未逐筆公開。</p>
+  </div>
+</details>
+
+<!-- ══════════ D ══════════ -->
+<div class="phase-rule"><span class="pk">D · 綜合</span><span class="pd">全機櫃對照與生態系位置</span></div>
+
+<details class="stage" id="s06">
+  <summary><span class="st-n">06</span><span class="st-main"><span class="st-t">全機櫃對照：72 個封裝，還是 144 顆晶粒</span><span class="st-sub">兩家計數機櫃規模的基準不同，混用會誤導每一項算力與定價的比較。</span></span><span class="st-sig">72<small>vs</small>144<i>計數基準</i></span></summary>
+  <div class="body">
+    <p>AMD 以「72 顆 GPU 封裝」計數機櫃規模；Nvidia 的「NVL144」則以「144 顆 GPU 晶粒」命名，實際同樣是 72 個 Superchip 模組（每模組 2 顆 Rubin 晶粒＋1 顆 Vera CPU）。比較兩者算力與定價時，「每顆」的基準不同，以下表格與段落已逐項標註。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>面向</th><th>Helios（MI455X）</th><th>Vera Rubin NVL144</th></tr></thead>
+        <tbody>
+          <tr><td>量產時程</td><td>2026 下半年量產；07/22–23 正式發表</td><td>2026 下半年全面量產；07 起首批出貨</td></tr>
+          <tr><td>GPU 配置</td><td>72 顆 MI455X 封裝</td><td>72 個 Superchip 模組／144 顆 Rubin 晶粒</td></tr>
+          <tr><td>CPU 配置</td><td>72 顆 EPYC Venice（最高 256 核）</td><td>36 顆 Vera CPU（88 核／176 執行緒）</td></tr>
+          <tr><td>HBM4 總容量</td><td class="n">31 TB</td><td class="n">20.7 TB</td></tr>
+          <tr><td>機櫃 FP4 密集算力</td><td class="n">2.9 EFLOPS</td><td class="n">3.6 EFLOPS</td></tr>
+          <tr><td>機櫃 FP8 算力</td><td class="n">1.4 EFLOPS（密集）</td><td class="n">約 1.2–1.26 EFLOPS</td></tr>
+          <tr><td>Scale-up 頻寬</td><td class="n">260 TB/s（UALink over Ethernet）</td><td class="n">260 TB/s（NVLink 6）</td></tr>
+          <tr><td>Scale-out 頻寬</td><td>43 TB/s；每 GPU 3×Pensando Vulcano 800G</td><td>每 GPU 1×ConnectX-9，1.6Tbps</td></tr>
+          <tr><td>網路架構</td><td>開放乙太網（UALink over Ethernet＋UEC）</td><td>NVLink（專有）＋ConnectX-9</td></tr>
+          <tr><td>機構規格</td><td>OCP ORW，44 OU（約 NVL72 兩倍體積）</td><td>Oberon 機構，相容 GB200/GB300</td></tr>
+          <tr><td>機櫃售價（估算）</td><td class="n">$5.0M–5.5M</td><td class="n">$3.5M–4.0M（或 BOM 估 $7.8M）</td></tr>
+          <tr><td>軟體生態</td><td>ROCm（快速迭代中）</td><td>CUDA（成熟、市場主導）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ AMD 宣稱 Helios 相對 Vera Rubin <em>NVL72</em>（非 NVL144，即同為 72 GPU 封裝基準）可提供多 15% AI 算力、多 50% HBM 容量、多 50% scale-out 頻寬；在 Kimi K2 Thinking 模型的實測情境中，每 GPU 吞吐量在低／中／高互動性情境下分別高出 15%／12%／10%。這組數字的論證基礎是實測工作負載，而非規格表峰值，與 03 節的提醒互相印證。</p>
+
+    <div class="callout">
+      <span class="ck">開放生態 vs 垂直整合，在機櫃層級的最終樣貌</span>
+      <p>Helios 走 OCP 開放硬體＋開放乙太網路線，理論上降低客戶對單一供應商的依賴，並帶來約 33% 的網路交換成本節省；Vera Rubin 延續 NVLink＋CUDA 的垂直整合，換取更成熟穩定的軟體生態與既有客戶慣性。這是兩者定價與市佔策略的根本分歧：<strong>AMD 用更高規格＋更高單價搶市占，Nvidia 用生態系鎖定與量產優勢守成。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s07">
+  <summary><span class="st-n">07</span><span class="st-main"><span class="st-t">生態夥伴：AMD 有沒有一家像 Nebius 的公司</span><span class="st-sub">功能上最接近的對應者是 TensorWave，但資本連結方式跟 Nvidia／Nebius 完全不同。</span></span><span class="st-sig">0%<small>vs</small>9.3%<i>供應商入股比例</i></span></summary>
+  <div class="body">
+    <p>Nebius 的角色是「Nvidia 專屬的獨立 GPU 雲」，Nvidia 對它直接入股約 9.3%，另有 20 億美元投資承諾。AMD 這邊功能上最接近的對應者是 <strong>TensorWave</strong>——專門建置 AMD Instinct GPU 雲端算力的獨立業者，2024 年 10 月透過 SAFE 募得 4,300 萬美元用於擴充團隊、機房容量與採購 MI300X，目前已排入 Helios 部署佇列。與 Nebius 的相似之處：兩者都是「不跟自家雲端業務競爭、專心賣單一供應商 GPU 算力」的獨立業者。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>業者</th><th class="wrap">定位</th><th class="wrap">與供應商的關係</th></tr></thead>
+        <tbody>
+          <tr><td><strong>TensorWave</strong></td><td>AMD 專屬 Neocloud（不賣其他廠牌 GPU）</td><td>已排入 Helios 部署佇列；獨立募資（SAFE），非 AMD 入股</td></tr>
+          <tr><td>Crusoe</td><td>多廠牌 Neocloud（同時提供 AMD 與 Nvidia GPU）</td><td>提供 MI300X 執行個體，採購獎勵關係</td></tr>
+          <tr><td>DigitalOcean、Vultr</td><td>中大型雲端服務商，多廠牌</td><td>列名 AMD 採購獎勵合作對象</td></tr>
+          <tr><td>AWS、Oracle OCI</td><td>超大型公有雲</td><td>Oracle 已承諾 5 萬顆 MI450／OCI；AWS 列名採購獎勵合作對象</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="ck">關鍵差異：股權投資 vs 客戶採購獎勵</span>
+      <p>Nvidia 對 Nebius／CoreWeave 是直接股權投資，真金白銀買股份、綁定股價與供應鏈利益。AMD 目前並未對 TensorWave 或其他 neocloud 做出對等的股權投資——AMD 在 2026 年最大的一筆股權投資（最高 50 億美元）投進了 <strong>Anthropic</strong>，但 Anthropic 是模型／應用層的 AI 實驗室客戶，不是基礎設施 neocloud。AMD 對 neocloud 業者的支持目前以採購獎勵／折扣為主，不是入股。</p>
+      <p>市場上還沒有一家 neocloud 同時滿足「AMD 專屬」＋「AMD 入股」兩個條件——這與 Nvidia／Nebius 的關係結構有本質不同，是評估兩家公司生態系護城河時容易被忽略的一點。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ 附錄 ══════════ -->
+<section class="thesis" id="appendix" style="margin-top:clamp(3rem,7vw,5rem)">
+  <p class="sec-mark">◇ · 附錄</p>
+  <h2>方法、數據標註與來源</h2>
+
+  <div style="max-width:var(--read)">
+    <h3>三類數據的區分</h3>
+    <ul>
+      <li><span class="tag">公開規格</span>　AMD／Nvidia 官方發表或供應鏈媒體報導之數值（機櫃組成、晶粒數、HBM4 容量）。</li>
+      <li><span class="tag">產業估計</span>　分析機構匯整之區間值或點估計（機櫃售價、單顆晶片售價、BOM 拆解）。這類數字波動大，本文一律標明來源機構與估算基礎。</li>
+      <li><span class="tag">本文推導</span>　由前兩類明示公式推得（Rubin 單封裝 FP8 等值算力、GW→機櫃數→資本支出）。假設寫在公式旁，可自行代入不同參數複核。</li>
+    </ul>
+
+    <h3>已知限制</h3>
+    <p>本文寫成於 Helios 正式量產發表（2026-07-22–23）後不久，部分規格與定價仍可能隨官方正式報價與後續發表修正；GW→機櫃數的推算未計入客戶實際採購配置差異（單櫃 GPU 數、功率上限依配置而異）。這些簡化不影響環節間的相對關係判讀，但<strong>不適合直接用於採購或財務模型</strong>。</p>
+  </div>
+
+  <h3>主要參考來源</h3>
+  <ol class="srcs">
+    <li><a href="https://www.amd.com/en/products/rackscale-solutions/helios.html">AMD 官方 — Helios Rackscale Solution</a></li>
+    <li><a href="https://www.amd.com/en/blogs/2026/amd-launches-helios-the-highest-performing-rackscale-ai-infrastructure-solution.html">AMD 官方部落格 — Helios 發表</a></li>
+    <li><a href="https://www.theregister.com/systems/2026/07/23/amd-attacks-the-rack-with-helios-systems-that-rival-nvidias/5277246">The Register — Helios 深度技術報導</a></li>
+    <li><a href="https://www.tomshardware.com/pc-components/gpus/amd-takes-the-wraps-off-its-instinct-mi455x-ai-accelerator-cdna-5-and-helios-rack-scale-architecture-combine-to-take-the-fight-to-nvidia-in-the-data-center">Tom's Hardware — MI455X 與 Helios 架構</a></li>
+    <li><a href="https://chipsandcheese.com/p/amds-instinct-mi455x-aiming-for-the">Chips and Cheese — MI455X 深度架構解析</a></li>
+    <li><a href="https://www.techpowerup.com/351006/amd-instinct-mi400-series-and-helios-rack-debut-cdna-5-goes-2-nm-plus-rocm-ai-and-gorgon-halo">TechPowerUp — MI400 系列與 Helios 發表</a></li>
+    <li><a href="https://wccftech.com/amd-instinct-mi455x-gpu-320b-behemoth-tackle-nvidia-rubin-with-432gb-hbm4-40-pflops-ai/">WCCFTech — MI455X 規格解析</a></li>
+    <li><a href="https://wccftech.com/amd-epyc-venice-cpus-256-zen-6-cores-203b-transistors-over-5-ghz-stomp-nvidia-vera/">WCCFTech — EPYC Venice vs Vera CPU</a></li>
+    <li><a href="https://videocardz.com/newz/amd-reveals-epyc-venice-layout-with-256-zen-6c-cores-and-two-i-o-dies">VideoCardz — EPYC Venice 晶粒布局</a></li>
+    <li><a href="https://www.storagereview.com/news/amd-6th-gen-epyc-venice-256-cores-1-6tb-s-and-the-first-pcie-gen-6-server-cpu">StorageReview — EPYC Venice 規格</a></li>
+    <li><a href="https://www.servethehome.com/amd-vulcano-800g-nic-coming-as-amd-outlines-its-ualink-and-uec-scale-plans/">ServeTheHome — Pensando Vulcano NIC</a></li>
+    <li><a href="https://www.datacenterdynamics.com/en/news/amd-and-schneider-electric-launch-reference-standards-for-helios-ai-rack/">Data Center Dynamics — AMD × Schneider Electric</a></li>
+    <li><a href="https://www.amd.com/en/newsroom/press-releases/2026-3-16-amd-and-celestica-announce-collaboration-to-a.html">AMD 新聞稿 — Celestica 合作</a></li>
+    <li><a href="https://ir.sanmina.com/news/news-details/2025/SANMINA-COMPLETES-ACQUISITION-OF-ZT-SYSTEMS-DATA-CENTER-INFRASTRUCTURE-MANUFACTURING-BUSINESS-FROM-AMD/default.aspx">Sanmina IR — ZT Systems 收購完成</a></li>
+    <li><a href="https://www.amd.com/en/newsroom/press-releases/2026-5-20-amd-announces-more-than-10-billion-in-taiwan-ecos.html">AMD 新聞稿 — 台灣生態系投資</a></li>
+    <li><a href="https://www.digitimes.com/news/a20251113PD201/nvidia-ai-server-odm-foxconn-production.html">DigiTimes — Nvidia ODM 組裝模式調整</a></li>
+    <li><a href="https://www.cnbc.com/2026/07/20/amd-helios-microsoft-ai-nvidia.html">CNBC — Helios 發表與 Microsoft 合作</a></li>
+    <li><a href="https://www.trendforce.com/news/2026/07/21/news-amds-first-rack-scale-ai-system-helios-challenges-nvidia-with-hbm4-memory-edge-but-reportedly-comes-at-a-higher-price/">TrendForce — Helios 定價分析</a></li>
+    <li><a href="https://ir.amd.com/news-events/press-releases/detail/1292/amd-and-anthropic-announce-strategic-partnership-to-deploy-up-to-2-gigawatts-of-amd-instinct-mi450-series-gpus">AMD IR — Anthropic 策略合作</a></li>
+    <li><a href="https://itwire.com/business-it-news/data/astounding-massive-dominant-ai-innovation-amd-launches-helios-against-nvidia-tips-up-to-us-5-billion-into-anthropic-and-books-roughly-14-gigawatts-of-customer-ai-compute-at-advanci">iTWire — 容量承諾彙總</a></li>
+    <li><a href="https://videocardz.com/newz/nvidia-vera-rubin-nvl72-detailed-72-gpus-36-cpus-260-tb-s-scale-up-bandwidth">VideoCardz — Vera Rubin NVL144 規格</a></li>
+    <li><a href="https://www.techpowerup.com/350947/nvidia-details-the-rubin-architecture-die-annotation-vera-cpu-hbm4-and-disaggregated-inference">TechPowerUp — Rubin 架構解析</a></li>
+    <li><a href="https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/">Nvidia 開發者部落格 — Rubin GPU 架構</a></li>
+    <li><a href="https://developer.nvidia.com/blog/inside-nvidia-vera-cpu-olympus-cores-built-for-maximum-single-threaded-performance-in-agentic-ai/">Nvidia 開發者部落格 — Vera CPU／Olympus 核心</a></li>
+    <li><a href="https://www.tomshardware.com/pc-components/cpus/nvidia-spills-the-beans-on-vera-cpu-spec-benchmarks-revealed-olympus-architecture-detailed-and-more/2">Tom's Hardware — Vera CPU 架構細節</a></li>
+    <li><a href="https://futurumgroup.com/insights/amd-helios-reaches-parity-with-vera-rubin-nvl72-can-open-standards-outflank-nvidia/">Futurum Group — Helios vs Vera Rubin 分析</a></li>
+    <li><a href="https://www.tweaktown.com/news/112794/amd-helios-rackscale-solution-for-ai-offers-15-percent-more-ai-compute-than-nvidia-vera-rubin-nvl72/index.html">TweakTown — 效能對比宣稱</a></li>
+    <li><a href="https://finance.yahoo.com/sectors/technology/articles/morgan-stanley-estimate-says-single-114101104.html">Yahoo Finance — Morgan Stanley：Vera Rubin BOM 估算</a></li>
+    <li><a href="https://wccftech.com/nvidia-vera-rubin-rack-hit-with-memory-price-surge-pushing-hbm4-lpddr5x-bill-to-2m-of-7-8m-total/">WCCFTech — Vera Rubin 記憶體成本暴增</a></li>
+    <li><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/nvidias-memory-costs-soar-485-percent-latest-ai-systems-now-cost-usd7-8-million-to-build-memory-now-comprises-25-percent-of-the-total-cost-rubin-gpus-a-mere-usd50-000-apiece">Tom's Hardware — Nvidia 記憶體成本與晶片單價</a></li>
+    <li><a href="https://www.computerbase.de/news/prozessoren/amd-epyc-9006-venice-details-zu-kernen-takt-x3d-cache-und-lp-in-vier-cpu-familien.98520/">ComputerBase — EPYC 9006 外流定價</a></li>
+    <li><a href="https://www.futuriom.com/articles/news/amds-best-chance-against-nvidia-could-come-next-year/2025/06">Futuriom — AMD 與 Neocloud 生態</a></li>
+    <li><a href="https://www.nextplatform.com/compute/2025/05/16/how-is-neocloud-tensorwave-paying-for-its-fairly-large-amd-cluster/1633111">The Next Platform — TensorWave 募資分析</a></li>
+    <li><a href="https://www.cnbc.com/2026/07/21/nebius-stock-nvidia-stake-neocloud.html">CNBC — Nvidia 入股 Nebius</a></li>
+  </ol>
+
+  <div class="foot">
+    <p><strong>拆開兩座機櫃：AMD Helios 對照 Nvidia Vera Rubin</strong>　·　2026-07-28　·　主線案例 AMD Helios（Instinct MI455X），對照組 Nvidia Vera Rubin NVL144。</p>
+    <p>本文為技術與供應鏈結構分析，所有財務性、產能性數字皆為公開資訊之整理與推導，<strong>僅供資訊參考，非投資建議</strong>。文中提及之公司名稱僅為技術環節之代表性舉例，不構成任何評價或推薦。</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var d = document;
+
+  /* ── 路線切換：一次改寫七個環節的參數 ── */
+  var segs = [].slice.call(d.querySelectorAll('.seg-v'));
+  var bH = d.getElementById('t-h'), bV = d.getElementById('t-v');
+  function setTrack(mode){
+    segs.forEach(function(s){ s.textContent = s.getAttribute(mode === 'h' ? 'data-h' : 'data-v') || ''; });
+    bH.setAttribute('aria-pressed', mode === 'h');
+    bV.setAttribute('aria-pressed', mode !== 'h');
+  }
+  bH.addEventListener('click', function(){ setTrack('h'); });
+  bV.addEventListener('click', function(){ setTrack('v'); });
+  setTrack('h');
+
+  /* ── 流程帶導航：點擊展開對應環節並捲動 ── */
+  var stages = [].slice.call(d.querySelectorAll('.stage'));
+  var segBtns = [].slice.call(d.querySelectorAll('.seg'));
+  segBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var el = d.getElementById(b.getAttribute('data-go'));
+      if (!el) return;
+      el.open = true;
+      el.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  /* ── 當前位置回標到流程帶 ── */
+  if ('IntersectionObserver' in window) {
+    var ratio = {};
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ ratio[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bv = 0;
+      stages.forEach(function(s){ var v = ratio[s.id] || 0; if (v > bv) { bv = v; best = s.id; } });
+      segBtns.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-go') === best); });
+    }, { rootMargin: '-10% 0px -55% 0px', threshold: [0, .15, .4, .8] });
+    stages.forEach(function(s){ io.observe(s); });
+  }
+
+  /* ── 全部展開／收合 ── */
+  d.getElementById('expand-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = true; });
+  });
+  d.getElementById('collapse-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = false; });
+  });
+
+  /* ── GW → 機櫃數 → 資本支出 推算器 ── */
+  var iid = ['i-gw','i-kw','i-price'], el = {};
+  iid.forEach(function(i){ el[i] = d.getElementById(i); });
+  var out = {};
+  ['o-racks','o-gpu','o-capex'].forEach(function(i){ out[i] = d.getElementById(i); });
+
+  function pos(v, f){ var n = parseFloat(v); return (isFinite(n) && n > 0) ? n : f; }
+  function fmt(v, p){ return isFinite(v) ? v.toLocaleString('en-US', { minimumFractionDigits: p, maximumFractionDigits: p }) : '—'; }
+
+  function calc(){
+    var gw = pos(el['i-gw'].value, 2),
+        kw = pos(el['i-kw'].value, 235),
+        price = pos(el['i-price'].value, 5.25);
+
+    var racks = (gw * 1e6) / kw;
+    var gpus = racks * 72;
+    var capexB = (racks * price) / 1000;
+
+    out['o-racks'].textContent = fmt(racks, 0);
+    out['o-gpu'].textContent   = fmt(gpus, 0);
+    out['o-capex'].textContent = fmt(capexB, 1);
+  }
+  iid.forEach(function(i){ el[i].addEventListener('input', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
