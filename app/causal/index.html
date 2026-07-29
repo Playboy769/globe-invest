@@ -310,6 +310,10 @@ body.dark .cf-edge-gap{stroke:#161616}
 .cf-edge-label{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;background:#fff;border:1px solid #e0e0e0;border-radius:7px;padding:2px 8px;font-size:11px;color:#555;white-space:nowrap;cursor:grab;display:flex;align-items:center;gap:3px;max-width:170px;overflow:hidden;font-family:'Orchid','Noto Sans TC',serif;box-shadow:0 1px 5px rgba(0,0,0,0.07)}
 .cf-edge-label:active{cursor:grabbing}
 .cf-edge-label.editing{border-color:#0a0a0a;color:#0a0a0a;overflow:visible;cursor:text}
+.cf-edge-label.yes{background:#dcf2e3;border-color:#4caf6b;color:#1e6b3a}
+.cf-edge-label.no{background:#fbdfdd;border-color:#d9534f;color:#a3352f}
+body.dark .cf-edge-label.yes{background:rgba(76,175,107,0.22);border-color:#4caf6b;color:#8fd6a8}
+body.dark .cf-edge-label.no{background:rgba(217,83,79,0.22);border-color:#d9534f;color:#e69a96}
 .cf-el-text{outline:none;min-width:8px}
 .cf-el-sign{font-size:15px;font-weight:700;line-height:1}
 .cf-el-weight{font-size:10px;color:#888;letter-spacing:.02em}
@@ -397,6 +401,21 @@ body.dark .cf-node-feedlink{background:#1e1e1e;border-color:#5a9ce0}
 .cf-node-resize:hover::after{background:repeating-linear-gradient(135deg,#0a0a0a 0,#0a0a0a 1.2px,transparent 1.2px,transparent 3.4px)}
 
 /* ── Text label node ─────────────────────────────────────── */
+.cf-node.decision-node{border-left:3px solid #c9a227;padding-left:15px}
+.cf-node.decision-node .cf-decision-badge{position:absolute;top:-8px;left:-8px;width:17px;height:17px;border-radius:50%;background:#c9a227;color:#fff;font-size:11px;font-weight:700;line-height:17px;text-align:center;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.25)}
+body.dark .cf-node.decision-node{border-left-color:#d8b840}
+body.dark .cf-node.decision-node .cf-decision-badge{background:#d8b840;color:#1e1e1e}
+.cf-branch-popup{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;background:#fff;border:1px solid #d6d6d6;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.18);padding:6px;transform:translate(-50%,10px)}
+.cf-branch-opt{border:1px solid #d6d6d6;background:#f7f7f7;border-radius:6px;padding:5px 12px;font-size:12.5px;font-weight:600;cursor:pointer;color:#0a0a0a}
+.cf-branch-opt:hover{filter:brightness(0.96)}
+.cf-branch-opt[data-v="Yes"]{background:#dcf2e3;border-color:#4caf6b;color:#1e6b3a}
+.cf-branch-opt[data-v="No"]{background:#fbdfdd;border-color:#d9534f;color:#a3352f}
+.cf-branch-custom{border:1px solid #d6d6d6;border-radius:6px;padding:5px 8px;font-size:12.5px;width:88px;color:#0a0a0a}
+body.dark .cf-branch-popup{background:#242424;border-color:#3a3a3a}
+body.dark .cf-branch-opt{background:#2c2c2c;border-color:#3a3a3a;color:#e8e8e8}
+body.dark .cf-branch-opt[data-v="Yes"]{background:rgba(76,175,107,0.22);border-color:#4caf6b;color:#8fd6a8}
+body.dark .cf-branch-opt[data-v="No"]{background:rgba(217,83,79,0.22);border-color:#d9534f;color:#e69a96}
+body.dark .cf-branch-custom{background:#1e1e1e;border-color:#3a3a3a;color:#e8e8e8}
 .cf-node.text-node{background:transparent;border:1px dashed transparent;box-shadow:none;cursor:grab;font-size:13px;min-width:32px}
 .cf-node.text-node:hover{border-color:#ccc;background:rgba(255,255,255,0.5)}
 .cf-node.text-node.sel{border-color:#0a0a0a;background:rgba(255,255,255,0.7);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
@@ -1052,6 +1071,9 @@ body.dark #cf-url-ok:hover{background:#fff}
       </button>
       <button class="cf-dock-btn" id="cf-add-box" title="+ Box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" stroke-dasharray="4 3"/></svg>
+      </button>
+      <button class="cf-dock-btn" id="cf-add-decision" title="+ Decision — 判斷節點，拖曳出邊時可選 Yes/No 或自訂（建議簡短問句）">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="11" rx="3"/><path d="M18.5 2.8v4.4M18.5 7.2l-3.2 3M18.5 7.2l3.2 3" stroke-width="2.2"/></svg>
       </button>
       <button class="cf-dock-btn" id="cf-add-text" title="+ Text">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="5" x2="20" y2="5"/><line x1="12" y1="5" x2="12" y2="20"/></svg>
@@ -2688,10 +2710,11 @@ function buildNodes() {
       qbody.appendChild(renderQuadrantSVG(n));
       d.appendChild(qbody);
     } else {
-      d.className='cf-node'+(n.isText?' text-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
+      d.className='cf-node'+(n.isText?' text-node':'')+(n.isDecision?' decision-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.color) applyNodeColorAttr(d,n.color);
       if (n.w) d.style.width=n.w+'px';
       if (n.bh) { d.style.height=n.bh+'px'; d.classList.add('fixed-h'); }
+      if (n.isDecision) { const badge=document.createElement('div'); badge.className='cf-decision-badge'; badge.textContent='?'; d.appendChild(badge); }
       const rh=document.createElement('div'); rh.className='cf-node-resize';
       rh.addEventListener('pointerdown',ev=>startResize(n.id,ev)); d.appendChild(rh);
     }
@@ -2796,7 +2819,8 @@ function drawEdges() {
       const sign=e.pol?'<span class="cf-el-sign '+polCls+'">'+(e.pol==='++'?'＋＋':e.pol==='+'?'＋':e.pol==='--'?'－－':e.pol==='-'?'－':'＝')+'</span>':'';
       const wtStr=e.weight!=null?' <span class="cf-el-weight">'+(e.weight>0?'+':'')+e.weight+'</span>':'';
       const txt=(e.label?'<span class="cf-el-text">'+esc(e.label)+'</span>':'')+wtStr;
-      lbl.push('<div class="cf-edge-label" data-edge="'+e.id+'" style="left:'+mx+'px;top:'+my+'px">'+sign+txt+'</div>');
+      const ynCls=e.label==='Yes'?' yes':e.label==='No'?' no':'';
+      lbl.push('<div class="cf-edge-label'+ynCls+'" data-edge="'+e.id+'" style="left:'+mx+'px;top:'+my+'px">'+sign+txt+'</div>');
     }
   });
   // Edges live in a non-CSS-transformed SVG (crisp at any zoom); pan/zoom is
@@ -2921,6 +2945,12 @@ function addBoxNode(x, y) {
   snapshot();
   const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),text:'Group',isBox:true,w:200,bh:120};
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+  return n;
+}
+function addDecisionNode(x, y) {
+  snapshot();
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),text:'Decision?',isDecision:true,w:150,bh:110};
+  G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); editNode(n.id); save();
   return n;
 }
 function addTableNode(x, y) {
@@ -3502,12 +3532,44 @@ function openQuadrantSettings(nodeId, focusPointId){
   document.addEventListener('keydown',onKey);
 }
 
-function addEdge(from, to, fromSide, toSide) {
+function addEdge(from, to, fromSide, toSide, initLabel) {
   const ex=G.edges.find(e=>e.from===from&&e.to===to);
   if(ex){select({type:'edge',id:ex.id});return;}
   snapshot();
-  const e={id:nid(),from,to,label:'',pol:'',fromSide:fromSide||null,toSide:toSide||null};
+  const e={id:nid(),from,to,label:initLabel||'',pol:'',fromSide:fromSide||null,toSide:toSide||null};
   G.edges.push(e); select({type:'edge',id:e.id}); drawEdges(); placeTools(); updateChrome(); save();
+}
+// Small anchored popup for picking a decision node's branch label right after
+// dragging a connector out of it — Yes/No quick buttons plus free text for
+// anything beyond binary. Resolves the chosen label, or null if dismissed
+// (Escape / click outside), in which case the caller skips creating the edge.
+function askBranchLabel(x, y) {
+  return new Promise(resolve=>{
+    const pop=document.createElement('div'); pop.className='cf-branch-popup';
+    pop.style.left=x+'px'; pop.style.top=y+'px';
+    pop.innerHTML='<button class="cf-branch-opt" data-v="Yes">Yes</button>'
+      +'<button class="cf-branch-opt" data-v="No">No</button>'
+      +'<input class="cf-branch-custom" type="text" placeholder="自訂…">';
+    document.body.appendChild(pop);
+    const inp=pop.querySelector('.cf-branch-custom');
+    function done(val){
+      pop.removeEventListener('pointerdown',stopProp);
+      document.removeEventListener('pointerdown',onOutside,true);
+      document.removeEventListener('keydown',onKey,true);
+      pop.remove(); resolve(val);
+    }
+    function stopProp(e){e.stopPropagation();}
+    function onOutside(e){ if(!pop.contains(e.target))done(null); }
+    function onKey(e){
+      if(e.key==='Escape'){e.preventDefault();done(null);}
+      else if(e.key==='Enter'){e.preventDefault();done(inp.value.trim());}
+    }
+    pop.querySelectorAll('.cf-branch-opt').forEach(b=>b.addEventListener('click',()=>done(b.dataset.v)));
+    pop.addEventListener('pointerdown',stopProp);
+    document.addEventListener('pointerdown',onOutside,true);
+    document.addEventListener('keydown',onKey,true);
+    requestAnimationFrame(()=>inp.focus());
+  });
 }
 function removeNode(id) {
   snapshot();
@@ -3831,7 +3893,18 @@ function startConnect(id, ev, fromSide) {
     const nd=t&&t.closest('.cf-node');
     if(nd&&nd.dataset.nodeId&&nd.dataset.nodeId!==id){
       const toSide=portEl?['t','r','b','l'].find(s=>portEl.classList.contains(s)):null;
-      addEdge(id,nd.dataset.nodeId,fromSide,toSide);
+      const toId=nd.dataset.nodeId;
+      if(A.isDecision){
+        // Ask rather than guess: a decision node's branches are meaningful
+        // (Yes/No or a custom condition), so the user picks it explicitly
+        // instead of the app silently assigning one.
+        askBranchLabel(e.clientX,e.clientY).then(label=>{
+          if(label===null)return;
+          addEdge(id,toId,fromSide,toSide,label);
+        });
+      } else {
+        addEdge(id,toId,fromSide,toSide);
+      }
     }
   }
   document.addEventListener('pointermove',mv); document.addEventListener('pointerup',up);
@@ -3940,6 +4013,10 @@ function editNode(id) {
       if(natural>n.w){n.w=natural;el.style.width=n.w+'px';}
     }
     n._w=el.offsetWidth;n._h=el.offsetHeight;drawEdges();placeTools();save();cu();if(hasMojibake(n.text))cfWarnMojibake(n.text);
+    // Soft nudge only — decision diamonds read best as a short verb phrase or
+    // direct question (research across draw.io/Lucidchart/BPMN agrees on this);
+    // nothing here blocks or truncates a longer answer.
+    if(n.isDecision&&n.text.length>20)cfToast('💡 判斷節點文字建議精簡（動詞片語或直接問句），目前 '+n.text.length+' 字');
   }
   function onkey(ev){if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();sp.blur();}else if(ev.key==='Escape'){sp.textContent=n.text;sp.blur();}ev.stopPropagation();}
   function cu(){sp.removeEventListener('blur',done);sp.removeEventListener('keydown',onkey);}
@@ -4610,6 +4687,10 @@ document.getElementById('cf-add').addEventListener('click',()=>{
 document.getElementById('cf-add-box').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
   addBoxNode(cx-100,cy-60);
+});
+document.getElementById('cf-add-decision').addEventListener('click',()=>{
+  const {x:cx,y:cy}=spawnPoint();
+  addDecisionNode(cx-75,cy-55);
 });
 document.getElementById('cf-add-table').addEventListener('click',()=>{
   const {x:cx,y:cy}=spawnPoint();
