@@ -713,6 +713,10 @@ if(typeof marked!=='undefined')marked.use({gfm:true,breaks:true});
 const _IV_KEY='investframe_store';
 const _IV_API='/api/invest-data';
 const _IV_GROUPS_API='/api/invest-groups';
+// CSRF double-submit: the login gate (globe-invest/server.js) sets a non-httpOnly
+// csrf_token cookie once verified; every mutating request must echo it back as a header
+// so a cross-site request (which can't read the cookie) gets rejected server-side.
+function _csrfHeaders(){const m=document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);return m?{'X-CSRF-Token':decodeURIComponent(m[1])}:{};}
 const IV_STANCE_KEYS=['TWII','TWO','DJI','Nasdaq','SOX'];
 const IV_STANCE_LABELS={TWII:'TWII 台股加權',TWO:'TWO 櫃買',DJI:'DJI 道瓊',Nasdaq:'Nasdaq 那斯達克',SOX:'SOX 費半'};
 const _ivStore=(function(){try{const d=JSON.parse(localStorage.getItem(_IV_KEY));if(d&&Array.isArray(d.macro)){if(!d.daily||typeof d.daily!=='object')d.daily={};if(!Array.isArray(d.portfolio))d.portfolio=[];return d;}}catch(e){}return{macro:[],risk:[],industry:[],portfolio:[],daily:{}};})();
@@ -745,7 +749,7 @@ function _ivIdFallback(){return Date.now().toString(36)+Math.random().toString(3
 function _ivSaveLocal(){try{localStorage.setItem(_IV_KEY,JSON.stringify(_ivStore));return true;}catch(e){return false;}}
 function _ivSave(){
   const ok=_ivSaveLocal();
-  fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
+  fetch(_IV_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_ivStore)}).catch(()=>{});
   return ok;
 }
 let _ivDailyT;
@@ -868,7 +872,7 @@ if(typeof module!=='undefined'&&module.exports){module.exports={_ivMerge,_ivMerg
         if(groupsChanged){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}}
         /* converge server: if merge produced a result that differs from what the server sent, push it back */
         if(JSON.stringify(_ivGroups)!==JSON.stringify(dg)){
-          fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});
+          fetch(_IV_GROUPS_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_ivGroups)}).catch(()=>{});
         }
       }
     }
@@ -887,7 +891,7 @@ if(typeof module!=='undefined'&&module.exports){module.exports={_ivMerge,_ivMerg
     }
     /* converge server for the main store too, if our merged result differs from what server sent */
     if(JSON.stringify(_ivStore)!==JSON.stringify(d)){
-      fetch(_IV_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivStore)}).catch(()=>{});
+      fetch(_IV_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_ivStore)}).catch(()=>{});
     }
   }catch(e){}
 })();
@@ -898,12 +902,12 @@ let _ivHlEntry=null,_ivHlSel='',_ivHlMark=null;
 const _ivGroups=(function(){try{const d=JSON.parse(localStorage.getItem('ivGroups'));if(d&&d.macro)return d;}catch(e){}return{macro:[],risk:[],industry:[],portfolio:[]};})();
 if(!_ivGroups.tomb||typeof _ivGroups.tomb!=='object')_ivGroups.tomb={};
 if(!Array.isArray(_ivGroups.portfolio))_ivGroups.portfolio=[];
-function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});}
+function _ivSaveGroups(){try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}fetch(_IV_GROUPS_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_ivGroups)}).catch(()=>{});}
 let _ivGrpT;
 function _ivSaveGroupsSoon(){
   try{localStorage.setItem('ivGroups',JSON.stringify(_ivGroups));}catch(e){}
   clearTimeout(_ivGrpT);
-  _ivGrpT=setTimeout(()=>{fetch(_IV_GROUPS_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_ivGroups)}).catch(()=>{});},800);
+  _ivGrpT=setTimeout(()=>{fetch(_IV_GROUPS_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_ivGroups)}).catch(()=>{});},800);
 }
 let _ivPendingImages=[];
 const LN={macro:'Macro Narrative',risk:'Implied Risk',industry:'Industry Narrative',portfolio:'Portfolio'};
