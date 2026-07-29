@@ -671,6 +671,48 @@ body.dark #cfq-cancel-btn:hover{background:#2a2a2a;color:#e0e0e0}
 body.dark #cfq-ok-btn{background:#e0e0e0;color:#0a0a0a}
 body.dark #cfq-ok-btn:hover{background:#fff}
 
+/* ── Pie chart node ───────────────────────────────────────── */
+.cf-node.pie-node{display:flex;flex-direction:column;padding:0;overflow:hidden;background:transparent;border:1px solid transparent;border-radius:var(--cf-radius);min-width:220px;min-height:170px;cursor:default;box-shadow:none}
+.cf-node.pie-node:hover{border-color:#ccc}
+.cf-node.pie-node.sel{border-color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.cf-node.pie-node:hover .cf-box-handle,.cf-node.pie-node.sel .cf-box-handle{opacity:1}
+.cf-pie-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 12px 12px;background:#fff}
+.cf-pie-title{flex:none;text-align:center;font-size:12px;font-weight:700;color:#222;margin:2px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-pie-content{flex:1;min-height:0;display:flex;align-items:center;gap:12px}
+.cf-pie-svg-wrap{flex:none;width:170px;height:170px}
+.cf-pie-svg-wrap svg{width:100%;height:100%;display:block}
+.cf-pie-legend{flex:1;min-width:0;overflow-y:auto;display:flex;flex-direction:column;gap:3px;font-size:9.5px;color:#444;max-height:100%}
+.cf-pie-legend-row{display:flex;align-items:center;gap:5px;min-width:0}
+.cf-pie-legend-swatch{width:8px;height:8px;border-radius:2px;flex:none}
+.cf-pie-legend-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cf-pie-legend-val{flex:none;color:#888;font-variant-numeric:tabular-nums}
+body.dark .cf-node.pie-node:hover{border-color:#555}
+body.dark .cf-node.pie-node.sel{border-color:#ccc;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+body.dark .cf-pie-body{background:#1e1e1e}
+body.dark .cf-pie-title{color:#e0e0e0}
+body.dark .cf-pie-legend{color:#ccc}
+body.dark .cf-pie-legend-val{color:#888}
+
+/* ── Pie chart settings modal ────────────────────────────────── */
+#cf-pie-overlay{position:fixed;inset:0;z-index:211;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#cf-pie-overlay.on{display:flex}
+.cf-pie-rows{display:flex;flex-direction:column;gap:5px;max-height:260px;overflow-y:auto}
+.cf-pie-row{display:grid;grid-template-columns:22px 1fr 60px 18px;gap:6px;align-items:center;background:#f7f7f7;border-radius:7px;padding:5px}
+.cf-pie-row input[type=color]{width:22px;height:20px;border:1px solid #e0e0e0;border-radius:5px;padding:1px;background:#fff;cursor:pointer}
+.cf-pie-row input[type=text],.cf-pie-row input[type=number]{border:1px solid #e5e5e5;border-radius:5px;padding:4px 5px;font-size:11px;font-family:inherit}
+.cf-pie-del{border:none;background:none;color:#999;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.cf-pie-del:hover{color:#c33}
+#cfp-cancel-btn{font-family:inherit;font-size:11.5px;letter-spacing:.05em;border-radius:7px;padding:8px 16px;cursor:pointer;border:1px solid #e4e4e4;background:none;color:#888}
+#cfp-cancel-btn:hover{background:#f4f4f4;color:#0a0a0a}
+#cfp-ok-btn{font-family:inherit;font-size:11.5px;letter-spacing:.05em;border-radius:7px;padding:8px 16px;cursor:pointer;border:1px solid transparent;background:#0a0a0a;color:#fff}
+#cfp-ok-btn:hover{background:#2a2a2a}
+body.dark .cf-pie-row{background:#242424}
+body.dark .cf-pie-row input[type=text],body.dark .cf-pie-row input[type=number]{background:#141414;border-color:#333;color:#ddd}
+body.dark #cfp-cancel-btn{color:#888;border-color:#333}
+body.dark #cfp-cancel-btn:hover{background:#2a2a2a;color:#e0e0e0}
+body.dark #cfp-ok-btn{background:#e0e0e0;color:#0a0a0a}
+body.dark #cfp-ok-btn:hover{background:#fff}
+
 .cf-diagref-picker{background:#fff;border:1px solid #e5e5e5;border-radius:11px;box-shadow:0 8px 24px rgba(0,0,0,.13);z-index:9999;width:240px;padding:6px}
 .cf-diagref-picker-search{width:100%;box-sizing:border-box;font-family:inherit;font-size:12px;border:1px solid #e5e5e5;border-radius:7px;padding:6px 8px;margin-bottom:5px;outline:none}
 .cf-diagref-picker-list{max-height:260px;overflow-y:auto}
@@ -1121,6 +1163,9 @@ body.dark #cf-url-ok:hover{background:#fff}
       <button class="cf-dock-btn" id="cf-add-quadrant" title="Insert quadrant chart">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="16.5" cy="7.5" r="1.6" fill="currentColor" stroke="none"/></svg>
       </button>
+      <button class="cf-dock-btn" id="cf-add-pie" title="Insert pie chart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 A10 10 0 0 1 22 12 L12 12 Z" fill="currentColor" stroke="none" opacity="0.35"/><circle cx="12" cy="12" r="10"/><path d="M12 2 L12 12 L22 12"/></svg>
+      </button>
     </div>
   </div>
   <button class="cf-dock-btn" id="cf-fit-nodes" title="Fit nodes to text (Ctrl+B)">
@@ -1282,6 +1327,17 @@ body.dark #cf-url-ok:hover{background:#fff}
   </div>
 </div>
 
+<div id="cf-pie-overlay">
+  <div class="cf-quad-box">
+    <div class="cf-quad-modal-title">圓餅圖設定</div>
+    <div class="cf-quad-modal-body" id="cf-pie-modal-body"></div>
+    <div class="cf-url-actions">
+      <button id="cfp-cancel-btn">取消</button>
+      <button id="cfp-ok-btn">套用</button>
+    </div>
+  </div>
+</div>
+
 <!-- Shortcuts overlay -->
 <div id="cf-shortcuts-overlay">
   <div class="cf-shortcuts-box">
@@ -1326,6 +1382,10 @@ body.dark #cf-url-ok:hover{background:#fff}
 const FILES_KEY = 'cf_files_v2';
 const LEGACY_KEY = 'cf_graph_v1';
 const CF_API = '/api/causal-files';
+// CSRF double-submit: the login gate (globe-invest/server.js) sets a non-httpOnly
+// csrf_token cookie once verified; every mutating request must echo it back as a header
+// so a cross-site request (which can't read the cookie) gets rejected server-side.
+function _csrfHeaders(){const m=document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);return m?{'X-CSRF-Token':decodeURIComponent(m[1])}:{};}
 
 // ── File store ─────────────────────────────────────────────
 let files = [];
@@ -1348,7 +1408,7 @@ function loadFiles() {
 
 function saveFiles() {
   try { localStorage.setItem(FILES_KEY, JSON.stringify(files)); } catch(e) {}
-  fetch(CF_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(_buildCloudPayload()) }).catch(()=>{});
+  fetch(CF_API, { method:'POST', headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()), body:JSON.stringify(_buildCloudPayload()) }).catch(()=>{});
 }
 
 function activeFile() { return files.find(f => f.id === activeId) || files[0]; }
@@ -1440,7 +1500,7 @@ function _buildCloudPayload(){
 function saveFolders(){
   _folderModified=Date.now();
   try{localStorage.setItem(CF_FOLDERS_KEY,JSON.stringify(folders));}catch(e){}
-  fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
+  fetch(CF_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
 }
 function newFolder(){
   const fd={id:fdid(),name:folders.length?'Folder '+(folders.length+1):'New Folder',expanded:true};
@@ -2709,6 +2769,23 @@ function buildNodes() {
       const qbody=document.createElement('div'); qbody.className='cf-quad-body';
       qbody.appendChild(renderQuadrantSVG(n));
       d.appendChild(qbody);
+    } else if (n.isPie) {
+      d.className='cf-node pie-node'+(isSel?' sel':'')+(isMulti?' multi-sel':'');
+      d.style.width=(n.w||360)+'px'; d.style.height=(n.bh||250)+'px';
+      const BH=[{cls:'bh-nw',dir:{n:1,w:1}},{cls:'bh-n',dir:{n:1}},{cls:'bh-ne',dir:{n:1,e:1}},{cls:'bh-e',dir:{e:1}},{cls:'bh-se',dir:{s:1,e:1}},{cls:'bh-s',dir:{s:1}},{cls:'bh-sw',dir:{s:1,w:1}},{cls:'bh-w',dir:{w:1}}];
+      BH.forEach(h=>{const bh=document.createElement('div');bh.className='cf-box-handle '+h.cls;bh.addEventListener('pointerdown',ev=>startBoxResize(n.id,h.dir,ev));d.appendChild(bh);});
+      const pbar=document.createElement('div'); pbar.className='cf-quad-bar';
+      const pbarTitle=document.createElement('span'); pbarTitle.className='cf-quad-bar-title'; pbarTitle.textContent='圓餅圖';
+      pbar.appendChild(pbarTitle);
+      const pGearBtn=document.createElement('button'); pGearBtn.className='cf-quad-btn'; pGearBtn.title='圓餅圖設定';
+      pGearBtn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+      pGearBtn.addEventListener('pointerdown',ev=>ev.stopPropagation());
+      pGearBtn.addEventListener('click',ev=>{ev.stopPropagation();openPieSettings(n.id);});
+      pbar.appendChild(pGearBtn);
+      d.appendChild(pbar);
+      const pbody=document.createElement('div'); pbody.className='cf-pie-body';
+      pbody.appendChild(renderPieBody(n));
+      d.appendChild(pbody);
     } else {
       d.className='cf-node'+(n.isText?' text-node':'')+(n.isDecision?' decision-node':'')+(isSel?' sel':'')+(isMulti?' multi-sel':'')+(isTraced?' traced-node':'')+mj;
       if (n.color) applyNodeColorAttr(d,n.color);
@@ -2720,7 +2797,7 @@ function buildNodes() {
     }
     d.style.left=n.x+'px'; d.style.top=n.y+'px';
     d.dataset.nodeId=n.id;
-    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef&&!n.isEarningsRef&&!n.isDivider&&!n.isQuadrant){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
+    if(!n.isTable&&!n.isImage&&!n.isEmbed&&!n.isDiagramRef&&!n.isEarningsRef&&!n.isDivider&&!n.isQuadrant&&!n.isPie){const sp=document.createElement('span');sp.className='cf-node-text';sp.textContent=n.text||'';d.appendChild(sp);}
     // Every node type gets connection ports, including box/group nodes — a
     // box is a valid edge endpoint just like any other node. A divider is a
     // pure visual line, not a causal factor, so it's excluded here.
@@ -2766,6 +2843,9 @@ function buildNodes() {
     } else if(n.isQuadrant){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{ev.stopPropagation();openQuadrantSettings(n.id);});
+    } else if(n.isPie){
+      d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
+      d.addEventListener('dblclick',ev=>{ev.stopPropagation();openPieSettings(n.id);});
     } else if(n.isEmbed){
       d.addEventListener('pointerdown',ev=>onNodeDown(n.id,ev));
       d.addEventListener('dblclick',ev=>{
@@ -3027,6 +3107,17 @@ function addQuadrantNode(x, y) {
     divider:{x:0,y:0},
     quad:{tr:{name:'象限一',color:'#4f46e5'},tl:{name:'象限二',color:'#0891b2'},bl:{name:'象限三',color:'#6b7280'},br:{name:'象限四',color:'#d97706'}},
     points:[]};
+  G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
+  return n;
+}
+function addPieNode(x, y) {
+  snapshot();
+  const n={id:nid(),x:Math.max(4,x),y:Math.max(4,y),isPie:true,w:360,bh:250,
+    pie:{title:'',slices:[
+      {id:'s1',label:'類別 A',value:40,color:CF_QUAD_PALETTE[0]},
+      {id:'s2',label:'類別 B',value:35,color:CF_QUAD_PALETTE[1]},
+      {id:'s3',label:'類別 C',value:25,color:CF_QUAD_PALETTE[2]}
+    ]}};
   G.nodes.push(n); renderAll(); select({type:'node',id:n.id}); save();
   return n;
 }
@@ -3528,6 +3619,170 @@ function openQuadrantSettings(nodeId, focusPointId){
   function onKey(e){ if(e.key==='Escape'){e.stopPropagation();onCancel();} }
   document.getElementById('cfq-ok-btn').addEventListener('click',onOk);
   document.getElementById('cfq-cancel-btn').addEventListener('click',onCancel);
+  ov.addEventListener('pointerdown',onBackdrop);
+  document.addEventListener('keydown',onKey);
+}
+
+// Builds the pie node's live body: a small SVG wedge chart plus a scrollable
+// legend (swatch/label/value/%), returned together as one fragment so the
+// caller can append both with a single call.
+// Picks readable text color (near-black vs white) for a label sitting on top
+// of an arbitrary slice fill, via perceived luminance (YIQ) rather than a
+// fixed color — palette includes both light (cyan/yellow) and dark fills.
+function _pieTextColor(hex){
+  const h=(hex||'#999999').replace('#','');
+  if(h.length!==6)return '#fff';
+  const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+  return ((r*299+g*587+b*114)/1000)>=150 ? '#1a1a1a' : '#ffffff';
+}
+function renderPieBody(n){
+  const SVGNS='http://www.w3.org/2000/svg';
+  const elS=(tag,attrs,text)=>{const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!==undefined)e.textContent=text;return e;};
+  const frag=document.createDocumentFragment();
+
+  if(n.pie&&n.pie.title){
+    const titleEl=document.createElement('div'); titleEl.className='cf-pie-title'; titleEl.textContent=n.pie.title; titleEl.title=n.pie.title;
+    frag.appendChild(titleEl);
+  }
+
+  const content=document.createElement('div'); content.className='cf-pie-content';
+  const wrap=document.createElement('div'); wrap.className='cf-pie-svg-wrap';
+  const svg=elS('svg',{viewBox:'0 0 200 200'});
+  const slices=(n.pie&&n.pie.slices)||[];
+  const total=slices.reduce((s,x)=>s+Math.max(0,+x.value||0),0);
+  const cx=100,cy=100,r=74;
+  const FONT="'Calibri','Noto Sans TC',sans-serif";
+  if(!total){
+    svg.appendChild(elS('circle',{cx,cy,r,fill:'none',stroke:'#e5e5e5','stroke-width':2,'stroke-dasharray':'6 5'}));
+  } else if(slices.filter(s=>(+s.value||0)>0).length===1){
+    // A single non-zero slice can't be drawn as an SVG arc (start === end
+    // point), so it's just the full circle in that slice's color.
+    const only=slices.find(s=>(+s.value||0)>0);
+    svg.appendChild(elS('circle',{cx,cy,r,fill:only.color||'#999'}));
+    svg.appendChild(elS('text',{x:cx,y:cy,'text-anchor':'middle','dominant-baseline':'middle','font-size':'16','font-weight':'700','font-family':FONT,fill:_pieTextColor(only.color)},'100%'));
+  } else {
+    // A slice's wedge has to be wide enough for a centered "%" label to sit
+    // inside it without spilling past its own edges — below this angle the
+    // label is pushed outside instead, with a short leader line back to the
+    // wedge (matches how Excel/Highcharts degrade thin-slice labels).
+    const MIN_INSIDE_THETA=0.42; // ~24°
+    let angle=-Math.PI/2;
+    slices.forEach(s=>{
+      const val=Math.max(0,+s.value||0); if(!val)return;
+      const theta=(val/total)*Math.PI*2;
+      const x1=cx+r*Math.cos(angle), y1=cy+r*Math.sin(angle);
+      const endAngle=angle+theta;
+      const x2=cx+r*Math.cos(endAngle), y2=cy+r*Math.sin(endAngle);
+      const largeArc=theta>Math.PI?1:0;
+      const d='M '+cx+' '+cy+' L '+x1+' '+y1+' A '+r+' '+r+' 0 '+largeArc+' 1 '+x2+' '+y2+' Z';
+      svg.appendChild(elS('path',{d,fill:s.color||'#999','stroke':'#fff','stroke-width':1.5}));
+
+      const mid=angle+theta/2, pct=Math.round((val/total)*100);
+      if(theta>=MIN_INSIDE_THETA){
+        const lx=cx+r*0.62*Math.cos(mid), ly=cy+r*0.62*Math.sin(mid);
+        svg.appendChild(elS('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':'12','font-weight':'700','font-family':FONT,fill:_pieTextColor(s.color)},pct+'%'));
+      } else {
+        const lx1=cx+r*Math.cos(mid), ly1=cy+r*Math.sin(mid);
+        const lx2=cx+(r+9)*Math.cos(mid), ly2=cy+(r+9)*Math.sin(mid);
+        svg.appendChild(elS('line',{x1:lx1,y1:ly1,x2:lx2,y2:ly2,stroke:'#aaa','stroke-width':1}));
+        const tx=cx+(r+13)*Math.cos(mid), ty=cy+(r+13)*Math.sin(mid);
+        const anchor=Math.cos(mid)>0.15?'start':Math.cos(mid)<-0.15?'end':'middle';
+        svg.appendChild(elS('text',{x:tx,y:ty,'text-anchor':anchor,'dominant-baseline':'middle','font-size':'10','font-family':FONT,fill:'#777'},pct+'%'));
+      }
+      angle=endAngle;
+    });
+  }
+  wrap.appendChild(svg);
+  content.appendChild(wrap);
+
+  const legend=document.createElement('div'); legend.className='cf-pie-legend';
+  if(!slices.length){
+    const empty=document.createElement('div'); empty.className='cf-quad-pts-empty'; empty.textContent='雙擊以新增類別';
+    legend.appendChild(empty);
+  } else {
+    slices.forEach(s=>{
+      const row=document.createElement('div'); row.className='cf-pie-legend-row';
+      const sw=document.createElement('span'); sw.className='cf-pie-legend-swatch'; sw.style.background=s.color||'#999';
+      const lb=document.createElement('span'); lb.className='cf-pie-legend-label'; lb.textContent=s.label||'（未命名）';
+      const val=document.createElement('span'); val.className='cf-pie-legend-val';
+      const pct=total?Math.round((Math.max(0,+s.value||0)/total)*100):0;
+      val.textContent=(+s.value||0)+' ('+pct+'%)';
+      row.appendChild(sw); row.appendChild(lb); row.appendChild(val);
+      legend.appendChild(row);
+    });
+  }
+  content.appendChild(legend);
+  frag.appendChild(content);
+  return frag;
+}
+function openPieSettings(nodeId){
+  const n=byNode(nodeId); if(!n||!n.isPie)return;
+  const draft=JSON.parse(JSON.stringify(n.pie||{title:'',slices:[]}));
+  if(!Array.isArray(draft.slices))draft.slices=[];
+  const ov=document.getElementById('cf-pie-overlay');
+  const body=document.getElementById('cf-pie-modal-body');
+
+  function renderRows(){
+    const wrap=document.getElementById('cfp-rows'); if(!wrap)return;
+    wrap.innerHTML='';
+    if(!draft.slices.length){
+      const empty=document.createElement('div'); empty.className='cf-quad-pts-empty'; empty.textContent='尚無類別';
+      wrap.appendChild(empty);
+    }
+    draft.slices.forEach((s,idx)=>{
+      const row=document.createElement('div'); row.className='cf-pie-row';
+      row.innerHTML=
+        '<input type="color" value="'+(s.color||'#999999')+'">'+
+        '<input type="text" placeholder="類別名稱" value="'+esc(s.label||'')+'">'+
+        '<input type="number" min="0" step="any" value="'+(s.value!=null?s.value:0)+'">'+
+        '<button class="cf-pie-del" title="刪除">×</button>';
+      const inps=row.querySelectorAll('input');
+      const colorI=inps[0],labelI=inps[1],valI=inps[2];
+      colorI.addEventListener('input',()=>{s.color=colorI.value;});
+      labelI.addEventListener('input',()=>{s.label=labelI.value;});
+      valI.addEventListener('input',()=>{s.value=Math.max(0,parseFloat(valI.value)||0);});
+      row.querySelector('.cf-pie-del').addEventListener('click',()=>{draft.slices.splice(idx,1);renderBody();});
+      wrap.appendChild(row);
+    });
+  }
+
+  function renderBody(){
+    body.innerHTML =
+      '<div class="cf-quad-sec-title">圖表標題（選填）</div>'+
+      '<label><input type="text" id="cfp-title" value="'+esc(draft.title||'')+'" placeholder="圖表標題"></label>'+
+      '<div class="cf-quad-sec-title">類別（'+draft.slices.length+'）</div>'+
+      '<div class="cf-pie-rows" id="cfp-rows"></div>'+
+      '<button class="cf-quad-tpl-btn" id="cfp-addrow" style="margin-top:6px;">＋ 新增類別</button>';
+    renderRows();
+    document.getElementById('cfp-title').addEventListener('input',e=>{draft.title=e.target.value;});
+    document.getElementById('cfp-addrow').addEventListener('click',()=>{
+      const idn=draft.slices.length+1;
+      draft.slices.push({id:'s'+Date.now()+'_'+idn,label:'類別 '+idn,value:10,color:CF_QUAD_PALETTE[(idn-1)%CF_QUAD_PALETTE.length]});
+      renderBody();
+    });
+  }
+
+  renderBody();
+  ov.classList.add('on');
+
+  function close(){
+    ov.classList.remove('on');
+    document.getElementById('cfp-ok-btn').removeEventListener('click',onOk);
+    document.getElementById('cfp-cancel-btn').removeEventListener('click',onCancel);
+    ov.removeEventListener('pointerdown',onBackdrop);
+    document.removeEventListener('keydown',onKey);
+  }
+  function onOk(){
+    snapshot();
+    n.pie={title:draft.title,slices:draft.slices};
+    buildNodes(); save(); close();
+    cfToast('已更新圓餅圖設定');
+  }
+  function onCancel(){ close(); }
+  function onBackdrop(e){ if(e.target===ov)onCancel(); }
+  function onKey(e){ if(e.key==='Escape'){e.stopPropagation();onCancel();} }
+  document.getElementById('cfp-ok-btn').addEventListener('click',onOk);
+  document.getElementById('cfp-cancel-btn').addEventListener('click',onCancel);
   ov.addEventListener('pointerdown',onBackdrop);
   document.addEventListener('keydown',onKey);
 }
@@ -4731,6 +4986,10 @@ document.getElementById('cf-add-quadrant').addEventListener('click',(ev)=>{
     }
   }, {allowSkip:true});
 });
+document.getElementById('cf-add-pie').addEventListener('click',()=>{
+  const {x:cx,y:cy}=spawnPoint();
+  addPieNode(cx-180,cy-125);
+});
 document.getElementById('cf-fit-nodes').addEventListener('click',fitAllNodes);
 document.getElementById('cf-add-text').addEventListener('click',()=>{
   _textMode=!_textMode;canvas.style.cursor=_textMode?'text':'';
@@ -4746,7 +5005,7 @@ function addImageFromFile(f, pt) {
     const ext=(f.name.split('.').pop()||'png').toLowerCase();
     // Try Railway upload; fallback to inline base64
     try{
-      const res=await fetch('/api/upload-asset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:dataUrl,ext})});
+      const res=await fetch('/api/upload-asset',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify({data:dataUrl,ext})});
       if(res.ok){const {url}=await res.json();addImageNode(cx-140,cy-100,url);return;}
     }catch(_){}
     addImageNode(cx-140,cy-100,dataUrl);
@@ -4769,7 +5028,7 @@ function addPdfFromFile(f, pt) {
     const cx=pt?pt.x:0, cy=pt?pt.y:0;
     // Try Railway upload; fallback to inline base64 (same pattern as images)
     try{
-      const res=await fetch('/api/upload-asset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:dataUrl,ext:'pdf'})});
+      const res=await fetch('/api/upload-asset',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify({data:dataUrl,ext:'pdf'})});
       if(res.ok){const {url}=await res.json();addPdfNode(cx-140,cy-180,url,f.name);return;}
     }catch(_){}
     addPdfNode(cx-140,cy-180,dataUrl,f.name);
@@ -5297,7 +5556,7 @@ async function cfPullSync(){
     if(!r.ok)return false;
     const sv=await r.json();
     if(!Array.isArray(sv)||!sv.length){
-      if(files.length)fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
+      if(files.length)fetch(CF_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
       return false;
     }
     // Extract folder meta from server, then filter system records
@@ -5321,7 +5580,7 @@ async function cfPullSync(){
     // Ensure meta is always uploaded with a valid timestamp
     if(!_folderModified)_folderModified=Date.now();
     try{localStorage.setItem(FILES_KEY,JSON.stringify(files));}catch(e){}
-    fetch(CF_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
+    fetch(CF_API,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},_csrfHeaders()),body:JSON.stringify(_buildCloudPayload())}).catch(()=>{});
     return {filesChanged,foldersChanged};
   }catch(e){return false;}
 }
