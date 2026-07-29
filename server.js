@@ -4,10 +4,54 @@ const zlib = require('zlib');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const auth = require('./auth');
 
 const PORT = process.env.PORT || 8080;
 const DATA_DIR = '/data';
 const APP_DIR = '/app';
+
+// ── Auth (cross-domain login system — see auth.js for the shared token format) ──
+// OutsideFramework is the only service that talks to Google; this service just verifies
+// tokens it mints and keeps its own short-lived local session once verified once.
+const CENTRAL_AUTH_ORIGIN = process.env.CENTRAL_AUTH_ORIGIN || 'https://ofw.up.railway.app';
+const AUTH_SECRET = process.env.AUTH_SIGNING_SECRET || '';
+const AUTHORIZED_EMAIL = (process.env.AUTHORIZED_EMAIL || '').toLowerCase();
+const SESSION_COOKIE = 'gi_sid';
+const CSRF_COOKIE = 'csrf_token';
+const SESSION_TTL_SEC = 12 * 60 * 60;
+if (!AUTH_SECRET) console.error('WARNING: AUTH_SIGNING_SECRET is not set — every request will be treated as unauthenticated.');
+
+function nowSec() {
+  return Math.floor(Date.now() / 1000);
+}
+
+function selfOrigin(req) {
+  const host = req.headers.host || 'globe-invest.up.railway.app';
+  const xfProto = req.headers['x-forwarded-proto'];
+  const isLocal = host.startsWith('localhost') || host.startsWith('127.0.0.1');
+  const proto = xfProto || (isLocal ? 'http' : 'https');
+  return proto + '://' + host;
+}
+
+function getSessionEmail(req) {
+  const cookies = auth.parseCookies(req.headers.cookie);
+  const payload = auth.verifyToken(cookies[SESSION_COOKIE], AUTH_SECRET);
+  if (!payload || !payload.email || payload.email.toLowerCase() !== AUTHORIZED_EMAIL) return null;
+  return payload.email;
+}
+
+// Double-submit CSRF check for mutating (POST) endpoints: the session-establishing
+// response also sets a non-httpOnly csrf_token cookie; the frontend must echo it back as
+// an X-CSRF-Token header on every mutating request. A cross-site attacker can trigger the
+// request but can't read the cookie to put its value in the header.
+function csrfOk(req) {
+  const cookies = auth.parseCookies(req.headers.cookie);
+  const cookieTok = cookies[CSRF_COOKIE];
+  const headerTok = req.headers['x-csrf-token'];
+  return !!cookieTok && !!headerTok && cookieTok === headerTok;
+}
+
+const authFailLimiter = auth.makeRateLimiter({ windowMs: 10 * 60 * 1000, max: 30 });
 const DATA_FILE = path.join(DATA_DIR, 'invest-data.json');
 const GROUPS_FILE = path.join(DATA_DIR, 'invest-groups.json');
 const CAUSAL_FILE = path.join(DATA_DIR, 'causal-files.json');
@@ -411,6 +455,57 @@ async function getOilPrices() {
 
 const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, CORS); res.end(); return; }
+
+  // ── Auth gate: everything except /research/* (the intentionally-public earnings call
+  // reports) requires a valid local session or a fresh handoff token from the central
+  // login service. Default-deny, allowlist the public exception — not the other way
+  // around, so a new route added later is gated by default. ──
+  const gatePath = req.url.split('?')[0];
+  if (gatePath === '/healthz') { res.writeHead(200, { 'Content-Type': 'text/plain' }); res.end('ok'); return; }
+  if (!gatePath.startsWith('/research/')) {
+    let email = getSessionEmail(req);
+    if (!email) {
+      const incomingUrl = new URL(req.url, selfOrigin(req));
+      const incomingToken = incomingUrl.searchParams.get('auth');
+      const tokenPayload = incomingToken ? auth.verifyToken(incomingToken, AUTH_SECRET) : null;
+      const tokenOk = tokenPayload && tokenPayload.aud === selfOrigin(req) &&
+        tokenPayload.email && tokenPayload.email.toLowerCase() === AUTHORIZED_EMAIL;
+      if (tokenOk) {
+        const sessionToken = auth.signToken({ email: tokenPayload.email.toLowerCase(), exp: nowSec() + SESSION_TTL_SEC }, AUTH_SECRET);
+        const csrfToken = auth.randomToken(18);
+        const isProd = selfOrigin(req).startsWith('https://');
+        incomingUrl.searchParams.delete('auth');
+        res.writeHead(302, {
+          'Set-Cookie': [
+            auth.cookieHeader(SESSION_COOKIE, sessionToken, { maxAgeSec: SESSION_TTL_SEC, httpOnly: true, secure: isProd }),
+            auth.cookieHeader(CSRF_COOKIE, csrfToken, { maxAgeSec: SESSION_TTL_SEC, httpOnly: false, secure: isProd }),
+          ],
+          Location: incomingUrl.pathname + (incomingUrl.search || ''),
+        });
+        res.end();
+        return;
+      }
+      if (!authFailLimiter(auth.clientIp(req))) {
+        res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Too many attempts. Try again later.');
+        return;
+      }
+      incomingUrl.searchParams.delete('auth');
+      const returnTo = selfOrigin(req) + incomingUrl.pathname + (incomingUrl.search || '');
+      res.writeHead(302, { Location: CENTRAL_AUTH_ORIGIN + '/auth/handoff?return_to=' + encodeURIComponent(returnTo) });
+      res.end();
+      return;
+    }
+  }
+
+  // Double-submit CSRF check applies to every mutating request once authenticated —
+  // enforced here once instead of per-route so a future POST/PATCH/DELETE endpoint is
+  // covered automatically instead of needing a remembered opt-in.
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) && !csrfOk(req)) {
+    res.writeHead(403, { 'Content-Type': 'application/json', ...CORS });
+    res.end(JSON.stringify({ error: 'csrf' }));
+    return;
+  }
 
   if (req.url === '/api/oil-prices' && req.method === 'GET') {
     try {
