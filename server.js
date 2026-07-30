@@ -18,6 +18,9 @@ const AUTH_SECRET = process.env.AUTH_SIGNING_SECRET || '';
 const AUTHORIZED_EMAIL = (process.env.AUTHORIZED_EMAIL || '').toLowerCase();
 const SESSION_COOKIE = 'gi_sid';
 const CSRF_COOKIE = 'csrf_token';
+// Marks that we already sent this browser to the central service for a handoff token. See
+// the loop breaker in the auth gate below.
+const HANDOFF_TRY_COOKIE = 'gi_hs';
 const SESSION_TTL_SEC = 12 * 60 * 60;
 if (!AUTH_SECRET) console.error('WARNING: AUTH_SIGNING_SECRET is not set — every request will be treated as unauthenticated.');
 
@@ -25,17 +28,34 @@ function nowSec() {
   return Math.floor(Date.now() / 1000);
 }
 
+// Cookie flags and this service's own origin come from configuration, never from request
+// headers: Host and X-Forwarded-Proto are both attacker-settable, and deriving the Secure
+// flag from X-Forwarded-Proto let anyone strip it off an issued cookie.
+const IS_PROD =
+  process.env.NODE_ENV === 'production' ||
+  !!process.env.RAILWAY_PROJECT_ID ||
+  !!process.env.RAILWAY_ENVIRONMENT_NAME;
+const SELF_ORIGIN = process.env.PUBLIC_ORIGIN || 'https://globe-invest.up.railway.app';
+const ALLOWED_HOSTS = new Set([new URL(SELF_ORIGIN).host.toLowerCase(), 'globe-invest.up.railway.app']);
+const LOCAL_HOST_RE = /^(localhost|127\.0\.0\.1)(:\d+)?$/;
+
 function selfOrigin(req) {
-  const host = req.headers.host || 'globe-invest.up.railway.app';
-  const xfProto = req.headers['x-forwarded-proto'];
-  const isLocal = host.startsWith('localhost') || host.startsWith('127.0.0.1');
-  const proto = xfProto || (isLocal ? 'http' : 'https');
-  return proto + '://' + host;
+  const host = String(req.headers.host || '').toLowerCase();
+  if (!IS_PROD && LOCAL_HOST_RE.test(host)) return 'http://' + host;
+  if (ALLOWED_HOSTS.has(host)) return 'https://' + host;
+  return SELF_ORIGIN;
 }
 
 function getSessionEmail(req) {
   const cookies = auth.parseCookies(req.headers.cookie);
-  const payload = auth.verifyToken(cookies[SESSION_COOKIE], AUTH_SECRET);
+  // verifyFor derives the key from the audience, so a token minted for any other service
+  // cannot produce a valid signature here. Previously this checked neither aud nor typ,
+  // and the session cookie minted below carried no aud at all — making it a universal key
+  // accepted by every sibling service that also skipped the check.
+  const payload = auth.verifyFor(cookies[SESSION_COOKIE], AUTH_SECRET, {
+    aud: selfOrigin(req),
+    typ: auth.TYP_SESSION,
+  });
   if (!payload || !payload.email || payload.email.toLowerCase() !== AUTHORIZED_EMAIL) return null;
   return payload.email;
 }
@@ -467,18 +487,29 @@ const server = http.createServer(async (req, res) => {
     if (!email) {
       const incomingUrl = new URL(req.url, selfOrigin(req));
       const incomingToken = incomingUrl.searchParams.get('auth');
-      const tokenPayload = incomingToken ? auth.verifyToken(incomingToken, AUTH_SECRET) : null;
-      const tokenOk = tokenPayload && tokenPayload.aud === selfOrigin(req) &&
-        tokenPayload.email && tokenPayload.email.toLowerCase() === AUTHORIZED_EMAIL;
+      // aud and typ are both enforced, and the key is derived from aud — the hand-written
+      // `tokenPayload.aud === selfOrigin(req)` comparison this replaces was correct but
+      // was the only thing standing between a token for one service and a session on
+      // another, and the sibling services' session path had no such comparison at all.
+      const tokenPayload = incomingToken
+        ? auth.verifyFor(incomingToken, AUTH_SECRET, { aud: selfOrigin(req), typ: auth.TYP_HANDOFF })
+        : null;
+      const tokenOk = tokenPayload && tokenPayload.email &&
+        tokenPayload.email.toLowerCase() === AUTHORIZED_EMAIL;
       if (tokenOk) {
-        const sessionToken = auth.signToken({ email: tokenPayload.email.toLowerCase(), exp: nowSec() + SESSION_TTL_SEC }, AUTH_SECRET);
+        // The local session now names its own audience and purpose. It used to carry
+        // neither, which made this cookie a universal key across all four services.
+        const sessionToken = auth.signFor(
+          { email: tokenPayload.email.toLowerCase(), aud: selfOrigin(req), typ: auth.TYP_SESSION, exp: nowSec() + SESSION_TTL_SEC },
+          AUTH_SECRET
+        );
         const csrfToken = auth.randomToken(18);
-        const isProd = selfOrigin(req).startsWith('https://');
         incomingUrl.searchParams.delete('auth');
         res.writeHead(302, {
           'Set-Cookie': [
-            auth.cookieHeader(SESSION_COOKIE, sessionToken, { maxAgeSec: SESSION_TTL_SEC, httpOnly: true, secure: isProd }),
-            auth.cookieHeader(CSRF_COOKIE, csrfToken, { maxAgeSec: SESSION_TTL_SEC, httpOnly: false, secure: isProd }),
+            auth.cookieHeader(SESSION_COOKIE, sessionToken, { maxAgeSec: SESSION_TTL_SEC, httpOnly: true, secure: IS_PROD }),
+            auth.cookieHeader(CSRF_COOKIE, csrfToken, { maxAgeSec: SESSION_TTL_SEC, httpOnly: false, secure: IS_PROD }),
+            auth.clearCookieHeader(HANDOFF_TRY_COOKIE, { secure: IS_PROD }),
           ],
           Location: incomingUrl.pathname + (incomingUrl.search || ''),
         });
@@ -490,9 +521,29 @@ const server = http.createServer(async (req, res) => {
         res.end('Too many attempts. Try again later.');
         return;
       }
+      // Loop breaker. Bouncing back to /auth/handoff is right when there was no token or
+      // an expired one — the central service just mints a fresh one. But if a token that
+      // WAS present still fails, minting another identical one will fail identically, and
+      // the browser ping-pongs forever. That is exactly what a signing-scheme rollout
+      // across four independently-deployed services produces mid-window, so fail loudly
+      // once instead of looping.
+      if (incomingToken && auth.parseCookies(req.headers.cookie)[HANDOFF_TRY_COOKIE]) {
+        res.writeHead(503, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Set-Cookie': auth.clearCookieHeader(HANDOFF_TRY_COOKIE, { secure: IS_PROD }),
+        });
+        res.end(
+          '<h1>登入交接失敗</h1><p>中央登入服務簽發的憑證無法在此服務驗證。' +
+          '若剛完成部署，請稍候一分鐘再重試。</p><p><a href="' + CENTRAL_AUTH_ORIGIN + '">回首頁</a></p>'
+        );
+        return;
+      }
       incomingUrl.searchParams.delete('auth');
       const returnTo = selfOrigin(req) + incomingUrl.pathname + (incomingUrl.search || '');
-      res.writeHead(302, { Location: CENTRAL_AUTH_ORIGIN + '/auth/handoff?return_to=' + encodeURIComponent(returnTo) });
+      res.writeHead(302, {
+        'Set-Cookie': auth.cookieHeader(HANDOFF_TRY_COOKIE, '1', { maxAgeSec: 120, httpOnly: true, secure: IS_PROD }),
+        Location: CENTRAL_AUTH_ORIGIN + '/auth/handoff?return_to=' + encodeURIComponent(returnTo),
+      });
       res.end();
       return;
     }
