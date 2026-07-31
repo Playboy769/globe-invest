@@ -15,7 +15,13 @@ const APP_DIR = '/app';
 // tokens it mints and keeps its own short-lived local session once verified once.
 const CENTRAL_AUTH_ORIGIN = process.env.CENTRAL_AUTH_ORIGIN || 'https://ofw.up.railway.app';
 const AUTH_SECRET = process.env.AUTH_SIGNING_SECRET || '';
-const AUTHORIZED_EMAIL = (process.env.AUTHORIZED_EMAIL || '').toLowerCase();
+// Comma-separated whitelist — small, rarely-changed list of trusted people, all with equal
+// full access (no per-user role/permission split). Must match the same env var value across
+// all four services.
+const AUTHORIZED_EMAILS = (process.env.AUTHORIZED_EMAILS || '')
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 const SESSION_COOKIE = 'gi_sid';
 const CSRF_COOKIE = 'csrf_token';
 // Marks that we already sent this browser to the central service for a handoff token. See
@@ -56,7 +62,7 @@ function getSessionEmail(req) {
     aud: selfOrigin(req),
     typ: auth.TYP_SESSION,
   });
-  if (!payload || !payload.email || payload.email.toLowerCase() !== AUTHORIZED_EMAIL) return null;
+  if (!payload || !payload.email || !AUTHORIZED_EMAILS.includes(payload.email.toLowerCase())) return null;
   return payload.email;
 }
 
@@ -495,7 +501,7 @@ const server = http.createServer(async (req, res) => {
         ? auth.verifyFor(incomingToken, AUTH_SECRET, { aud: selfOrigin(req), typ: auth.TYP_HANDOFF })
         : null;
       const tokenOk = tokenPayload && tokenPayload.email &&
-        tokenPayload.email.toLowerCase() === AUTHORIZED_EMAIL;
+        AUTHORIZED_EMAILS.includes(tokenPayload.email.toLowerCase());
       if (tokenOk) {
         // The local session now names its own audience and purpose. It used to carry
         // neither, which made this cookie a universal key across all four services.
