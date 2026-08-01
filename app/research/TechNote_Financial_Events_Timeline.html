@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>金融事件簿 · Financial Events Timeline</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'%3E%3Cline x1='6' y1='20' x2='58' y2='20' stroke='%230a0a0a' stroke-width='2.4'/%3E%3Ccircle cx='16' cy='20' r='3.6' fill='%230a0a0a'/%3E%3Ccircle cx='34' cy='20' r='3.6' fill='%23d1591f'/%3E%3Ccircle cx='50' cy='20' r='3.6' fill='%230a0a0a'/%3E%3C/svg%3E">
+<link href="https://fonts.cdnfonts.com/css/orchid" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --ink:#0a0a0a;
+  --accent:#d1591f;
+  --accent-deep:#a94515;
+  --accent-soft:rgba(209,89,31,.08);
+  --line:#eee;
+  --line-mid:#ddd;
+  --muted:#999;
+  --muted2:#bbb;
+}
+body{
+  background:#fff; color:var(--ink);
+  font-family:'Orchid','Noto Serif TC','PMingLiU',serif; font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  display:flex; justify-content:center;
+  padding:0 20px;
+}
+::selection{background:var(--ink);color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#fff}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:3px}
+a{color:inherit}
+
+.app{width:100%; max-width:760px; padding:72px 0 100px;}
+
+/* ── Header ── */
+.label{display:flex; align-items:center; gap:9px; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.14em; margin-bottom:22px;}
+.label::before{content:'';width:28px;height:1px;background:var(--accent)}
+.heading{font-size:clamp(28px,5vw,42px); font-weight:300; line-height:1.25; letter-spacing:.01em; margin-bottom:16px;}
+.subtitle{font-size:14.5px; color:#777; line-height:1.9; max-width:560px; font-weight:400; margin-bottom:36px;}
+
+/* ── Filter pills ── */
+.filter-row{display:flex; gap:10px; flex-wrap:wrap; padding-bottom:28px; margin-bottom:36px; border-bottom:1px solid var(--line);}
+.f-pill{font-size:12.5px; letter-spacing:.04em; padding:7px 16px; border:1px solid var(--line-mid); border-radius:100px; cursor:pointer; color:#666; transition:all .18s ease; background:#fff;}
+.f-pill:hover{border-color:var(--accent); color:var(--accent);}
+.f-pill.active{background:var(--ink); border-color:var(--ink); color:#fff;}
+.f-count{font-size:12px; color:var(--muted2); margin-left:auto; align-self:center; font-variant-numeric:tabular-nums;}
+
+/* ── Timeline ── */
+.tl{position:relative; padding-left:26px;}
+.tl::before{content:'';position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:var(--line-mid);}
+
+.tl-year{position:relative; font-family:'Noto Serif TC',Georgia,serif; font-size:13px; font-weight:600; color:var(--muted); letter-spacing:.1em; margin:36px 0 18px;}
+.tl-year:first-child{margin-top:0}
+.tl-year::before{content:'';position:absolute; left:-26px; top:5px; width:11px; height:11px; border-radius:50%; background:#fff; border:2px solid var(--ink);}
+
+.tl-item{position:relative; padding-bottom:26px;}
+.tl-item::before{content:'';position:absolute; left:-22px; top:6px; width:7px; height:7px; border-radius:50%; background:var(--accent);}
+.tl-item.is-macro::before{background:var(--ink);}
+.tl-item.hidden{display:none}
+
+.tl-date{font-size:11.5px; color:var(--muted); letter-spacing:.06em; margin-bottom:6px; font-variant-numeric:tabular-nums;}
+.tl-badge{display:inline-block; font-size:10.5px; letter-spacing:.05em; padding:2px 9px; border-radius:100px; margin-right:8px; vertical-align:1px;}
+.tl-badge.macro{background:#f2f2f2; color:#555;}
+.tl-badge.company{background:var(--accent-soft); color:var(--accent-deep);}
+.tl-title{font-size:16.5px; font-weight:500; line-height:1.5; margin-bottom:6px;}
+.tl-summary{font-size:13.5px; color:#555; line-height:1.8; margin-bottom:8px;}
+.tl-source{font-size:12px;}
+.tl-source a{color:var(--accent-deep); text-decoration:none; border-bottom:1px solid var(--accent-soft); padding-bottom:1px;}
+.tl-source a:hover{border-color:var(--accent-deep);}
+
+.tl-empty{padding:48px 0; text-align:center; color:var(--muted); font-size:13.5px; line-height:1.9;}
+
+.footer{margin-top:56px; padding-top:24px; border-top:1px solid var(--line); font-size:11.5px; color:var(--muted2); text-align:center;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="label">Financial Events Timeline</div>
+  <div class="heading">金融事件簿</div>
+  <div class="subtitle">依時間順序整理總體經濟與個股層級的重大公開事件，每一筆都附上可查證的公開資料來源。</div>
+
+  <div class="filter-row" id="filter-row">
+    <div class="f-pill active" data-filter="all">全部</div>
+    <div class="f-pill" data-filter="macro">總體經濟</div>
+    <div class="f-pill" data-filter="company">個股事件</div>
+    <span class="f-count" id="f-count"></span>
+  </div>
+
+  <div class="tl" id="tl"></div>
+  <div class="footer">僅供資訊參考，非投資建議 · 每筆事件皆附公開資料來源</div>
+</div>
+
+<script>
+/* ── 資料結構 ──────────────────────────────────────────────────────────
+   新增事件只要在 EVENTS 陣列裡 push 一個物件即可，不用碰下面的 render 邏輯。
+   欄位：
+     date       'YYYY-MM-DD'（必填，決定排序與年份分組）
+     type       'macro'（總體經濟）或 'company'（個股事件，必填）
+     ticker     type==='company' 時填股票代碼，會顯示在徽章裡（如 'AAPL'、'2330'）
+     title      事件標題（必填）
+     summary    1–3 句白話說明（必填）
+     sourceUrl  公開可查證的來源連結（必填 — 官方公告/新聞稿/主管機關網站等）
+     sourceLabel 來源顯示文字（如 'Fed 官網聲明'、'SEC 8-K'、'公開資訊觀測站'）
+   -------------------------------------------------------------------- */
+const EVENTS = [
+  // 範例（可刪除）：
+  // { date:'2024-03-20', type:'macro', title:'聯準會利率決策：維持利率不變',
+  //   summary:'FOMC 連續第五次維持聯邦資金利率於 5.25%–5.50% 區間，並釋出年內降息三次的點陣圖預期。',
+  //   sourceUrl:'https://www.federalreserve.gov/newsevents/pressreleases/monetary20240320a.htm',
+  //   sourceLabel:'Federal Reserve 官方新聞稿' },
+];
+
+function renderTimeline(filter) {
+  const tl = document.getElementById('tl');
+  const countEl = document.getElementById('f-count');
+  tl.innerHTML = '';
+
+  const sorted = EVENTS.slice().sort((a, b) => a.date.localeCompare(b.date));
+  const visible = filter === 'all' ? sorted : sorted.filter(e => e.type === filter);
+  countEl.textContent = visible.length + ' 筆事件';
+
+  if (!sorted.length) {
+    tl.innerHTML = '<div class="tl-empty">尚無事件 — 事件會依提供的公開資料陸續加入。</div>';
+    return;
+  }
+  if (!visible.length) {
+    tl.innerHTML = '<div class="tl-empty">此分類目前沒有事件。</div>';
+    return;
+  }
+
+  let lastYear = null;
+  visible.forEach(e => {
+    const year = e.date.slice(0, 4);
+    if (year !== lastYear) {
+      const yEl = document.createElement('div');
+      yEl.className = 'tl-year';
+      yEl.textContent = year;
+      tl.appendChild(yEl);
+      lastYear = year;
+    }
+
+    const item = document.createElement('div');
+    item.className = 'tl-item is-' + e.type;
+
+    const badge = e.type === 'company'
+      ? '<span class="tl-badge company">' + (e.ticker || '個股') + '</span>'
+      : '<span class="tl-badge macro">總體經濟</span>';
+
+    item.innerHTML =
+      '<div class="tl-date">' + e.date + '</div>' +
+      '<div class="tl-title">' + badge + escapeHtml(e.title) + '</div>' +
+      '<div class="tl-summary">' + escapeHtml(e.summary) + '</div>' +
+      (e.sourceUrl ? '<div class="tl-source">資料來源：<a href="' + e.sourceUrl + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(e.sourceLabel || e.sourceUrl) + '</a></div>' : '');
+
+    tl.appendChild(item);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+document.getElementById('filter-row').addEventListener('click', e => {
+  const pill = e.target.closest('.f-pill');
+  if (!pill) return;
+  document.querySelectorAll('.f-pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  renderTimeline(pill.dataset.filter);
+});
+
+renderTimeline('all');
+</script>
+</body>
+</html>
