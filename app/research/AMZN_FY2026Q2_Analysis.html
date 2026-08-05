@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon.com (AMZN) — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 100px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 24px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; left: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -22px; transform: translateX(-50%); text-align: center; font-size: 11px; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 2px; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 190px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; }
+  .rev-val { width: 200px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .tech-card.aws { border-top-color: #2563eb; }
+  .tech-card.stores { border-top-color: #15803d; }
+  .tech-card.ads { border-top-color: #c2600a; }
+  .tech-card.other { border-top-color: #7b7e87; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.aws h4 { color: #1d4ed8; }
+  .tech-card.stores h4 { color: #15803d; }
+  .tech-card.ads h4 { color: #c2600a; }
+  .tech-card.other h4 { color: #444; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.2; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.na { border-top-color: #15803d; }
+  .bu-card.intl { border-top-color: #c2600a; }
+  .bu-card.aws { border-top-color: #2563eb; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 190px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .bar-num { width: 150px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.6; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+
+<div class="page-header">
+  <h1>Amazon.com, Inc. (AMZN) — FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析 / 本季特殊事件深度拆解（CapEx ROI框架＋Barbell需求曲線）/ 技術與產品線 / 供應鏈 / 風險矩陣 / 損益表 / 業務部門 / 資產負債表 / 現金流量 / 估值觀察 &nbsp;·&nbsp; 法說會日期：2026年7月30日（季末：2026年6月30日）&nbsp;·&nbsp; 交叉比對 FY2026 Q2 10-Q（申報於2026/7/31，SEC EDGAR，accession 0001018724-26-000026）與法說會逐字稿、Form 4 申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('special',this)">本季特殊事件深度拆解</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('supply',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- Q&A Panel -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">分析師提問（另1位掉線未接通）</div></div>
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Doug Anmuth（J.P. Morgan）</div><div class="qa-topic">39% AWS營益率的可持續性 × Amazon是否需要自家前沿模型</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">市場多半假設AI工作負載短期內是低毛利的，能否解釋Q2 AWS 39%營益率背後的驅動因素、以及未來的可持續性？另外，Bedrock本季客戶支出超過過去所有季度總和，在「全套服務」策略下，Amazon需要自己的前沿（frontier）模型嗎？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Olsavsky：對營收與利潤率雙擴張感到滿意，AWS營益率YoY+650個基點，若排除能源衍生性商品公允價值利得則為+520個基點。強調這不是隨機的，而是「紀律化的效率提升、產能優化、以及持續嚴格管控固定成本」的結果，但也重申利潤率「會波動」。Jassy補充：AI業務的利潤率軌跡與過去核心業務相似、甚至略快；關於自家前沿模型，明確表示「AWS和Amazon可以在沒有自己前沿模型的情況下獲得巨大成功」，因為不會只有一個模型稱霸市場，Bedrock已納入所有主要模型；但同時公司仍在追求自家前沿模型，理由包括成本控制、對模型訓練重點的掌控權、以及速度——預期未來幾年會有至少半打水準相當的模型，「其中一個會是我們的」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Anmuth問的是「可持續性」這個前瞻問題，Olsavsky給出的是本季驅動因素的拆解（效率、產能優化、固定成本管理）與「會波動」的免責聲明，但沒有正面回答未來幾季39%這個水準能否維持——這是典型的「解釋過去、迴避未來」句型。另外，Jassy在同一段回答裡先說「不需要自己的前沿模型」，緊接著解釋公司「正在追求」自己的前沿模型，兩者邏輯上並不矛盾（可以不需要但仍選擇投入），但這個先講「不需要」再講「仍在做」的順序容易讓聽者忽略後半段其實是一筆龐大、持續的資本與研發承諾，且未被問及具體規模。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Doug Anmuth:</b> "Great. Thanks for taking questions. Just one for Brian, one for Andy. Brian, many have assumed that AI workloads would be lower margin, at least near term. Can you just talk about the drivers of the 39% AWS operating margin in 2Q and just how we should think about sustainability? Andy, strong Amazon Bedrock traction with customers spending more in the quarter than in all the prior quarters combined. When you think about the full stack offering, does Amazon need its own leading model toward the frontier? Thank you."<br><br><b>Brian Olsavsky:</b> "Doug, let me start with the first question. Yes, we're pleased with the growth in both revenue and also margin expansion that we had in AWS in Q2, especially given the size of our business. You're seeing, despite the large investments, AWS margins have continued to remain strong, and we're up 650 basis points year-over-year. 520 basis points if you exclude the derivative accounting gain that I mentioned. We've said before, these margins will fluctuate. They're based on a number of factors, including our investment levels Mix of products, mix of AI versus non-AI. I would say that the profitability you're seeing from AWS isn't random. It's a result of disciplined efficiency gains, capacity optimization, which we benefited quite a bit from in Q2, and always closely managing our fixed costs. Again, they'll fluctuate, but very strong performance year-over-year, and we'll take it."<br><br><b>Andy Jassy:</b> "Yeah. I'll just add one other thing to what Brian said, which is, as I mentioned in my opening comments, we see the AI business following very much the same type of margin trajectory that we saw in the core business before, and it's a little bit ahead of that pace that we saw. We're optimistic about that. On the question about Bedrock and our own frontier model. My view of it is that AWS and Amazon can have a wildly successful business without its own frontier model. A lot of that is because there is not going to be one model to rule the world. You already see that right now. You see it. It's not just Anthropic, or it's not just OpenAI. You see increasingly more and more companies being interested in the open models as well. We have all of them in Bedrock, and it's one of the many reasons why Bedrock is growing so quickly. If you're a company that's building important AI applications, you want to make sure that you have the ability to use all the available models. They're going to each leapfrog each other at different times. They're going to have lots of different models that actually are comparable in capabilities. You want that leading selection with the right price performance and with the right governance and security, and there's nothing like Bedrock that provides that right now. We use those models as well. All that said, we are pursuing our own frontier model, and we're doing it for a few reasons. First of which is it just gives us additional control over cost. Cost for our own consumer applications, also we're trying to drive costs down for customers. Having a player like ourselves that's always focused on trying to take the price performance and the cost down for customers all the time, we think will help keep the models more cost effective for customers. I think also it allows us to have more control over prioritization on what models focus on. We have, both from our own external customers as well as our internal customers inside the company, certain priorities that matter that we want the models trained especially well for, then it gives us some control on speed. My view of it is that within the next few years, you're going to have at least a half dozen models that are comparably good to each other. They'll all be in Bedrock, one of them will be ours."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Justin Post（Bank of America）</div><div class="qa-topic">AWS加速成長的產能驅動因素 × 下半年與2027年產能展望</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">AWS的加速成長是否主要來自本季新上線的產能？公司在揭露GW（gigawatt）產能規劃上比同業更透明，能否具體說明下半年相對上半年會新增多少產能，以及對2027年的展望？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Jassy：成長有多重原因——客戶因AWS功能最廣、營運表現與安全性最強、以及推論工作負載希望貼近既有資料而選擇AWS；AI帶動核心業務同步成長（後訓練強化學習與代理工具使用主要跑在CPU/核心上，Graviton是其中優勢）；企業從地端遷移上雲的計畫增加（全球IT支出仍有85%在地端）。關於產能：確認「正在新增大量產能」，並重申此前揭露的目標——到2027年底電力產能將是2025年的兩倍，公司仍按此進度推進。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Post明確要求「上半年vs下半年」的產能增量拆解這個具體、可量化的問題，Jassy的回答完全沒有提供任何拆解數字，只是重申先前幾季就已揭露過的「2027年底電力產能為2025年兩倍」這個籠統目標，等於用一個舊的、更粗顆粒度的承諾取代了分析師要求的新增量細節，H2 vs H1的具體配置仍是黑箱。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Justin Post:</b> "Great. Thank you. Just thinking about the AWS acceleration, was that really driven by a lot of capacity coming online in the quarter? You guys have been more open than your peers on gigawatts you're adding. Any help you can give us on how much you might be adding in the second half versus the first half, also how you're thinking about 2027? Thank you."<br><br><b>Andy Jassy:</b> "Yeah. I think that there are several reasons for why we saw such significant growth, we're really pleased and excited. It's fifth straight acceleration quarter, largest acceleration in 18 quarters. I think there are several things that are driving it. I think the first part is that customers are choosing AWS in part because it has the broadest functionality across both cloud core and AI, in part because it has the strongest operational performance and security, in part because as more and more companies are bringing their inference workloads to production, they want it to live near the rest of their workloads and data, and so much more of it lives in AWS than anywhere else. I think there are a couple other things going on here on the core side. AI is obviously growing at a very rapid rate, as we talked about, well over $25 billion in annual revenue run rate at this point. The core business is growing very quickly as well, and I think there's at least a couple things at play. One is that increasingly more enterprises are building their transformation plan to move from on-premises to the cloud. Remember, by the way, that 85% of the global IT spend is still on premises. That equation is going to flip in the next 10-20 years. You see more and more enterprises that are moving and building plans to move to the cloud, we're winning the lion's share of those with the capabilities I mentioned earlier and the advantages. AI is growing, at such a rapid rate, and it's pulling along core alongside of it. That's because the post-training and the reinforcement learning and all the agentic tool use is being driven on CPU and core. With the leading CPU chip in Graviton, it makes AWS an even more attractive choice. Yes, we're adding a lot of capacity, there are a lot of other reasons why it's growing. We're on pace with the capacity build that we talked about a few quarters ago, where we said we expect to have double the power capacity by the end of 2027 that we had in 2025, and we continue to be on that track."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brian Nowak（Morgan Stanley）</div><div class="qa-topic">2027年長生命週期資料中心支出能否放緩 × Trainium對外銷售的時程與ROIC</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">從目前看到的需求判斷，2027年公司是否有機會開始放緩長生命週期資料中心的支出，還是未來兩三四年仍需持續開新資料中心？另外，公司近90天內公開談過未來可能把Trainium晶片賣給第三方資料中心，這件事的時程規劃、以及相對於AWS內部負載的ROIC如何看待？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Jassy：目前需求非常龐大，2027年絕大部分產能已被預訂，且2028年也已有相當產能被預訂。以「barbell（槓鈴）」形容當前AI採用曲線——一端是AI實驗室消耗海量運算＋少數爆紅應用（如Claude Code、ChatGPT），另一端是企業在成本規避與生產力上獲得實質價值（如客服自動化、流程自動化、防詐）；槓鈴中段則是絕大部分現有企業生產工作負載，目前多數尚未大規模導入推論，這段未來會顯著變化，且Jassy預期會是最大的絕對需求區塊，但「不確定中段的成長軌跡是否會和實驗室端一樣陡峭」。關於Trainium對外銷售：晶片業務興奮，年化營收run rate已逾$25B，來自Anthropic與OpenAI的多年期、多GW承諾提振信心；「有越來越多客戶對於在雲端服務之外單獨取得Trainium晶片感興趣」，公司「正積極進行相關對話與探索」，並認為未來真的有機會這麼做。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Nowak問的是一個明確的是非題（「2027年能否開始放緩」），Jassy從未直接回答是或否，而是用barbell需求曲線的敘事側面暗示答案是「不能放緩」（因為產能已被預訂到2028年），但全程沒有給出任何2027年資本支出的具體數字或成長率，只用定性描述取代量化答案。第二個問題問的是「時程」與「ROIC比較」兩個具體項目，Jassy的回答只給了「有真實機會未來會做」這種方向性語言，時程與ROIC比較兩者皆未觸及——這是本季最明顯的「被問具體數字、答定性方向」案例之一。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Brian Nowak:</b> "Thanks. Thanks for taking my questions. I have two, Andy. I appreciate the color on the long-lived data centers investments versus the server and network investments. The question is, as you look into 2027, you look at the demand that's coming, et cetera, are you at a point where you're going to be able to start to slow that long-lived data center spend at all in 2027, or is that just too soon where you're still going to have to be opening up new data centers for the next two, three, four years as you look into 2027 as number one? Second one, in the past 90 days or so, the company talked publicly about selling Trainium at some point to third-party data centers. How do you think about when you could do that and just sort of the ROIC on that versus core AWS loads?"<br><br><b>Andy Jassy:</b> "Well, on the first question, Brian, we have so much demand right now. Apart from what we've talked about in 2026, the lion's share of capacity in 2027, we're adding a lot of capacity, as I mentioned just a few minutes ago, is largely reserved, and we have quite a bit of capacity that's already been reserved for 2028. I think it's actually kind of useful to look at at least our view of what we see in the demand and adoption curve right now, which is we see this adoption curve in AI right now is very barbellled. There is, on one end of the barbell, the AI labs are consuming gobs and gobs of compute, and there are a few runaway successful generative AI applications like Claude Code and ChatGPT. On the other end of the barbell are enterprises who are getting real value from AI in cost avoidance and productivity. These are things like automating customer service or business process automation or fraud or things like that. In the middle of the barbell is all of the current enterprise production workloads, some of which are using inference in a pervasive way, but most of which aren't. That is going to change very significantly over time. In my opinion, that will be the largest absolute segment, the existing production workloads in the enterprise and new businesses and workloads that startups build too. I think we're still in the relative early stages of how much demand there's going to be for AI... I don't know if the trajectory of that middle part of the barbell will be the same wildly steep trajectory that we've seen with the current barbell AI labs piece. We have a lot of demand in front of us, and we're going to invest in this business to continue to be the significant market segment leader that we are today... On the question about selling Trainium, we're quite excited about what's happening in our chips business... We just have an incredible amount of demand for Trainium. There are a lot of customers who are very excited about using it in the form that we're providing right now. We do have an increasing number of customers who are interested in us providing the Trainium chips to them, separate from our cloud, and we're actively having those conversations and exploring, and I expect there's a real chance we'll do that in the future."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Colin Sebastian（Baird）</div><div class="qa-topic">應用層擴張（Kiro/Transform）對平台的加分效果 × 未來建設的資金來源規劃</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">（提問對象標註為Andy）是否可以說公司正更積極地往應用層擴張（Kiro、Transform，以及更廣泛的職場生產力工具），這些是否能為從基礎設施往上的整體平台提供加分效果？（提問對象標註為Brian）鑑於雙方都提到的需求訊號與擴大產能的計畫，公司目前對未來幾年建設所需資金來源有何想法？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">回答者均為Olsavsky（CFO）：先回答第二題——「你們已經看到我們今年發債了，我們有很多選項可以持續為AWS的成長提供資金，會持續評估所有選項並在適當時機做出決定，但今天沒有可以分享的內容」。接著回答第一題：說明Kiro（代理式編碼服務）、Amazon Q（起源於內部文件摘要／商業智慧需求，後擴展為管理郵件/Slack/日曆的智慧助理）、Amazon Connect（五大主要航空公司與多家銀行/醫療機構使用的客服中心服務）、AWS Transform（軟體遷移）、以及新推出的Continuum（資安漏洞掃描與修復）——強調這些應用層服務機會「上下都有」，覆蓋不同企業需求層級。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Sebastian的第一個問題明確點名「Andy」回答，但實際回答者從頭到尾都是CFO Brian Olsavsky——Jassy本人完全沒有針對這個「應用層策略」問題發言，逐字稿的角色標記或當場答題分配出現了錯位，投資人原本期待的是CEO對產品/策略方向的第一手說法。第二個問題（資金來源規劃）更直接被以「今天沒有可以分享的內容」帶過，是本季少數對具體提問給出「無可奉告」式明確迴避的案例——對照SEC 10-Q揭露：公司已在2026年7月（即法說會當週前後）發行合計$25.75B的新票券（$25,000M固定利率＋$750M浮動利率），這類規模的公司債通常需要數週的承銷籌備期，意味著法說會當下極可能已在推進這筆融資，卻選擇完全不預告，即便只是定性提及。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Colin Sebastian:</b> "Yeah, good afternoon. Thanks very much. Andy, is it fair to say that there's a more concerted effort to move into the application layer with Kiro and Transform, and I guess more broadly, plans for workplace productivity tools? Do you see those as sort of providing a boost to the broader platform offering from infrastructure on up? Brian, just given the demand signals you guys are both talking about and plans for additional capacity, what are your current thoughts on sources of capital for the build-out over the next couple of years? Thank you."<br><br><b>Brian Olsavsky:</b> "Hi, Colin. Let me take your second question first. You've seen us issue debt this year. We have a lot of options available to us as we continue to fund this growth that we're seeing in AWS. We'll continue to look at all the options and make the appropriate decision at the right time, but nothing to share today. On your first question, Colin, we see a very substantial opportunity both for our customers and for AWS in building some of these agentic applications. Some of this is born out of what customers tell us they wish they had and they want to be using. Some of it is born out of just needing to provide those capabilities to ourselves inside Amazon. Kiro, which is our agentic coding service, is an example of that... Amazon Q's a really interesting example... AWS Transform, which makes it much easier to migrate software, is super useful for enterprises. In the latest one we just launched with Continuum, it's really hard to have a conversation with a large company about AI right now where they don't actually ask you about security..."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ken Gawrelski（Wells Fargo）</div><div class="qa-topic">RPO達Q3 2025的2.5倍對產能展望的意義 × 供應鏈通膨下的定價策略</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">公司揭露的RPO達2025年Q3的2.5倍，遠高於當時「2027年底產能翻倍」的說法所隱含的規模——這個RPO數字與其爆炸性增長，對未來產能展望有何影響？能否至少定性談談對2028年及以後產能的意涵？另外，公司今年因供應鏈通膨（部分因素）上修了資本支出財測，AWS的定價策略如何納入未來的成本通膨？長期合約是否讓公司即使面對成本通膨仍能維持穩定的報酬率？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Jassy：backlog持續大幅成長，反映客戶對AWS（包含核心與AI）的高度熱情；「我們知道這個backlog的存在，這一切都已經納入我們的資本支出規劃中」；預期會持續簽下更多客戶合約，繼續追求維持顯著市場領導地位的機會。關於定價：多數已簽約需求會鎖定簽約當下談定的價格與條款，在合約存續期間維持不變；新簽約時公司會將當下成本納入定價考量；坦言「現在全世界沒有任何一家公司不知道記憶體、硬碟、SSD等零組件目前正處於漲價狀態」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Gawrelski明確要求「至少定性」談2028年及以後的產能意涵，Jassy的回答完全沒有觸及2028年這個具體年份，只用「都已經納入我們的資本支出規劃中」這種循環論證式的說法帶過——聽起來像是回答了問題，實際上沒有提供任何新資訊。定價問題的核心其實在問：「已經簽約、鎖定舊價格的合約，如果碰上組件成本上漲，是否會侵蝕AWS的毛利率？」Jassy的回答只重申「新合約會考慮當下成本」，完全沒有正面處理「舊合約vintage的毛利率是否正在被通膨侵蝕」這個更尖銳的問題——這與本季CapEx財測上修（$200B→$220B，因記憶體成本上升）以及Q2 AWS利潤率有130個基點來自一次性能源衍生性商品公允價值利得（而非純定價/效率）的組合對照來看，構成了一個未被充分回答的關鍵留白。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Ken Gawrelski:</b> "Thanks so much. Two, if I may. First, your RPO reported as two and a half times that of the third quarter of 2025 when you gave us the doubling of capacity comments for year-end 2027. How does that RPO number and the massive expansion there impact your outlook for future capacity? I know that you talked about through year-end 2027, but maybe at least qualitatively, if you could touch upon what the RPO means for 2028 and beyond capacity. The second one related is you raised your CapEx guidance this year for some supply chain inflation. Could you talk about how your pricing strategy at AWS incorporates future cost inflation? Do your longer-term contracts allow for stable return profiles despite cost inflation? Thank you."<br><br><b>Andy Jassy:</b> "Yeah. I'll start on the backlog number. To your point, it's very substantially continuing to grow. I think it's a reflection, again, of customers being very enthusiastic about using AWS, both across core and for AI. We know about that backlog, obviously, so that's all taken into account in our CapEx projections. Over time, I expect that we will continue to sign more deals with customers, and as I mentioned earlier, we're going to pursue the opportunity to continue being the significant market segment leader that we are. On the second question on the supply chain inflation. What I would say is that most of the deals that you sign, there's a certain amount of your demand that is on demand, where there aren't contracts. A large amount of it tends to be deals and agreements that you've signed. The deals that you sign, those will be the prices and those will be the agreements that we have over the duration of that contract. New agreements that you sign, you always take into account what your costs are and how you ultimately build a price that you agree to with your customers. I think it's no secret right now to any company in the world that there are inflated prices right now on some of the components like memory and hard drives and SSDs."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Eric Sheridan（Goldman Sachs）</div><div class="qa-topic">快速商務／生鮮擴張的消費者採用訊號與地域差異</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">在快速商務（fast commerce）與更廣泛的生鮮/日用品供應擴張上，公司從消費者端看到什麼訊號——包括這些服務的採用率、對整體支出趨勢的影響？是否有特定國家或地區出現不同的結果？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Jassy：對日用品與生鮮成長速度感到興奮，部分歸功於更廣的選品、以及過去兩三年配送速度大幅提升——當選品廣、價格低、又能快速送達，消費者會把更多購物決策交給Amazon。去年生鮮雜貨GMV逾$150B，是美國第二大雜貨商；Whole Foods（有機雜貨龍頭）成長優於同業，獲利軌跡持續改善；新格式Daily Shop在都會區起步順利，正快速擴張；同日配送生鮮已覆蓋美國2,300個城鎮，這些城鎮中9/10最暢銷商品是生鮮，生鮮月活躍客戶數年初至今增加50%，生鮮同日訂單平均單量是一般訂單的3倍。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口</div>
+          <div class="q-text">Sheridan明確問了「是否有特定國家或地區出現不同結果」，Jassy的整段回答只談美國市場數字（2,300個城鎮、Whole Foods、Daily Shop），完全沒有提及任何非美國地區的採用率或差異化表現——地域比較這個子問題被完整跳過。同時，「對整體支出趨勢的影響」（例如日用品/生鮮的快速擴張是否在排擠其他較高毛利品類的消費、或是否單純是新增消費）也沒有被觸及，管理層只給出成長故事，沒有給出任何巨觀支出結構的解讀。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Eric Sheridan:</b> "Thanks so much for taking the question. Maybe pivoting to the commerce business. When you're talking about scaling some of your initiatives around fast commerce and a wider array of supply of groceries and everyday essentials, can you talk a little bit about the signal you're getting from consumers in terms of either adoption rates of those services or what it's doing to overall spend trends? Whether there's any countries or geographies where you're seeing different outcomes as you launch and scale some of those services. Thanks so much."<br><br><b>Andy Jassy:</b> "Yeah. We are quite enthusiastic and excited about the pace with which we are growing the amount of everyday essentials, as well as perishables, in the business right now. I think some of that has to do with the broader selection we have. Some of that has to do with just how fast our delivery has gotten over the last two to three years... We've talked for a while about grocery, and we have a very large business in that space. Last year, it was over $150 billion in gross merchandise sales, making us the second largest grocer in the U.S... We've tried lots of experiments over the last few years, as we've talked about on this call for a few years. We have finally found something that is a real needle mover for us in offering perishables in our same-day facilities that we're now able to offer same-day perishables in 2,300 cities around the U.S... We're just seeing very significant traction in our everyday essentials and in our grocery items. We're not done experimenting, by the way, with other physical formats in the grocery side, but we've hit on something with same-day perishables in our same-day facilities that's changing the trajectory of our everyday essentials business."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">未接通的提問者</div>
+      <p>Operator依序唱名Jason Helfstein（Oppenheimer &amp; Co.）並宣告「Jason, your line is now live」，但Helfstein始終沒有出聲提問，主持人直接跳到下一位分析師（Ken Gawrelski）。⚑ 這是本季逐字稿中唯一一次被點名卻完全沒有留下任何問答內容的紀錄，性質上偏向電話會議的技術性掉線，而非分析師主動放棄提問，但也代表本季實際完整問答的分析師是6位而非法說會邀請的7位。</p>
+      <div class="orig-box">
+        <div class="orig-label">逐字稿原文</div>
+        <div class="orig-text"><b>Operator:</b> "Thank you. The next question comes from the line of Jason Helfstein with Oppenheimer &amp; Co.. Please proceed with your question. Jason, your line is now live. Okay, the next question comes from the line of Ken Gawrelski with Wells Fargo. Please proceed with your question."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Event Deep-Dive Panel -->
+  <div id="panel-special" class="panel">
+    <div class="section-title">CapEx ROI框架：兩段式資本週期 ＋ 上修至$220B的2026財測</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>2026年現金資本支出財測由約$200B上修至約$220B，主因是記憶體成本上升</li>
+          <li>Q2單季現金資本支出$53.1B，主要用於AWS與生成式AI</li>
+          <li>AWS Q2營收$42.2B，YoY+36.7%，連續第5季加速，為18季以來最快，季增額逾$4.6B（比歷來最大單季增幅還多約80%）</li>
+          <li>AWS backlog達$496B，YoY三位數成長；年化營收run rate達$169B（若為獨立公司將排名Fortune 500第24名）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限／結構（兩段式資本週期）</h4>
+        <ul>
+          <li>資料中心資本：需在伺服器可上架前約2年就開始支出；一旦伺服器上架即可立即開始貢獻營收，且資料中心具30年以上使用年限，後續不需再重複支出啟動資本</li>
+          <li>伺服器與網路設備：通常在上線前僅提前數月採購，能見度較高（若需求不在就不會投入資本）；平均約需不到3年就能損益兩平，設備使用年限至少5-6年，多數AI產能簽約年期至少5年——意味著損益兩平後還有2-3年可持續創造自由現金流</li>
+          <li>單一資料中心可望支撐至少5-6個世代的伺服器經濟效益，第一代之後的世代由於不需重複資料中心啟動資本，經濟效益會更好</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾</h4>
+        <ul>
+          <li>10-Q揭露：無條件採購承諾（晶片/硬體）$130,065M＋尚未啟用租賃（未來資料中心）$137,214M，合計契約性承諾總額達$650,034M（見供應鏈Tab）</li>
+          <li>2026年7月發行合計$25.75B新票券（$25,000M固定利率＋$750M浮動利率，票息4.60%-6.25%），為10-Q揭露的期後事項（subsequent event）</li>
+          <li>短期在建設高峰期，資本支出將持續超前於營收貢獻，直到新資料中心上線、被貨幣化、伺服器使用滿數年後，才會轉為自由現金流與ROIC的正向貢獻</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>Jassy自陳「不確定barbell中段（現有企業生產工作負載）的成長軌跡是否會和AI實驗室端一樣陡峭」——這是「AWS至少翻倍、甚至上看兆美元營收」長期敘事中最大、且管理層自己都承認的不確定性</li>
+          <li>Colin Sebastian直接問及未來建設的資金來源規劃，Olsavsky僅回應「今天沒有可以分享的內容」，但10-Q隔天即揭露$25.75B新債——法說會當下的資金結構規劃透明度低於實際進度</li>
+          <li>2027-2028年「已預訂」的產能規模僅為口頭揭露，10-Q並未提供對應的GAAP口徑RPO數字可交叉核對（見估值觀察Tab互證對照表）</li>
+          <li>Q2 39%的AWS營益率中，約130個基點來自一次性能源衍生性商品公允價值利得（見損益表／風險矩陣Tab），若排除該項目及$600M北美關稅退款，本季優異的獲利數字含有無法重複的一次性成分</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="band-card">
+      <div class="card-title">資本週期時間軸：資料中心先行 → 伺服器隨後上架 → 損益兩平 → 自由現金流貢獻期</div>
+      <div class="band-track">
+        <div class="band-fill" style="left:0%; width:100%;"></div>
+        <div class="band-marker floor" style="left:0%;"><div class="dot"></div>T-2年<br>資料中心資本開始投入</div>
+        <div class="band-marker target" style="left:45%;"><div class="dot"></div>T-0<br>伺服器上架＋開始貢獻營收（未來幾月內採購伺服器）</div>
+        <div class="band-marker actual" style="left:100%;"><div class="dot"></div>T+3年<br>伺服器投資損益兩平，其後2-3年為FCF貢獻高峰</div>
+      </div>
+      <div class="band-legend">
+        <span><span class="sw" style="background:#94a3b8;"></span>資料中心資本（30年以上使用年限，長前置期）</span>
+        <span><span class="sw" style="background:#2563eb;"></span>伺服器/網路資本（5-6年使用年限，短前置期，約3年損益兩平）</span>
+        <span><span class="sw" style="background:#15803d;"></span>損益兩平後的FCF貢獻期（多數AI合約至少簽5年）</span>
+      </div>
+      <p style="margin-top:8px; color:#666; font-size:11.5px;">⚑ 這個框架的核心邏輯是「資料中心資本一次性投入、可重複貨幣化5-6個世代」，因此Jassy強調「即使短期CapEx很高、自由現金流承壓，只要需求最終兌現，長期ROIC仍非常吸引人」。但這個論證的前提是barbell中段需求會按時轉化為營收——如右上「尚待驗證」欄所述，這正是管理層自己都承認不確定的部分。</p>
+    </div>
+
+    <div class="section-title">Barbell（槓鈴型）AI採用曲線</div>
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>槓鈴左端：AI實驗室 ＋ 少數爆紅應用</h4>
+        <div class="pro">現況</div>
+        <ul>
+          <li>AI實驗室消耗「海量」運算資源，屬於已兌現、且持續成長的需求</li>
+          <li>少數已跑出規模的生成式AI應用（Claude Code、ChatGPT）拉動大量推論需求</li>
+          <li>Anthropic與OpenAI均已簽署多年期、多GW規模的Trainium採購承諾——這段需求已具體、可驗證（見供應鏈Tab）</li>
+        </ul>
+        <div class="con">性質</div>
+        <ul>
+          <li>成長曲線「非常陡峭」，是目前AWS AI營收run rate（逾$25B）的主要驅動來源</li>
+        </ul>
+      </div>
+      <div class="stance-col">
+        <h4>槓鈴右端：企業成本規避／生產力應用</h4>
+        <div class="pro">現況</div>
+        <ul>
+          <li>客服自動化、業務流程自動化、防詐等場景已產生「實質價值」，屬於已在發生的落地案例</li>
+          <li>Amazon Q、Kiro、AWS Transform、Continuum等內部/外部應用均屬此類</li>
+        </ul>
+        <div class="con">性質</div>
+        <ul>
+          <li>單點案例多、缺乏彙總性量化指標，公司未提供整體滲透率或營收貢獻規模</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問：盡職調查式追問清單</h4>
+      <ol>
+        <li>槓鈴中段（現有企業生產工作負載）的AI導入曲線，若最終不如管理層樂觀假設般「陡峭」而是更漸進，$220B的2026資本支出（以及背後已鎖定的$130B採購承諾＋$137B未啟用租賃）在需求兌現時點上會出現多大的緩衝空間？公司目前沒有提供任何情境分析或敏感度區間。</li>
+        <li>Colin Sebastian問及的資金來源規劃被以「今天沒有可以分享」帶過，但法說會隔天10-Q即揭露$25.75B新債（期後事項）——這代表法說會時點的資訊揭露與實際已在進行中的融資動作之間存在時間差，未來財測是否應該預期類似的「先未揭露、後隔天在filing補充」模式重複出現？</li>
+        <li>Q2 AWS 39%營益率中，管理層自己承認有130個基點來自能源衍生性商品公允價值利得（非重複性）——若加回北美另一筆$600M關稅退款對集團整體營益率的貢獻，本季財報數字中有多少比例是「一次性美化」而非結構性改善？下一季這兩項利得消失後，市場是否會誤讀為「營運惡化」？</li>
+        <li>Trainium對外銷售被Nowak問及ROIC比較，Jassy完全迴避——若公司真的開始把稀缺的Trainium產能賣給第三方資料中心，這是否代表AWS自身雲端負載的產能反而更緊張？這個資本配置的取捨（自用vs外售）目前完全沒有框架可供投資人評估。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Technology & Product Lines Panel -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">三大分部營收（FY2026 Q2，來源：10-Q審計後分部揭露，見SEC Cross-Reference Notes）</div>
+    <div class="rev-chart">
+      <div class="rev-row">
+        <div class="rev-name">北美（North America）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:100%; background:#15803d;">$116.2B</div></div>
+        <div class="rev-val">QoQ +11.6%；YoY +16.1%；占總營收57.9%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">國際（International）</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:36%; background:#c2600a;">$42.2B</div></div>
+        <div class="rev-val">QoQ +6.1%；YoY +14.8%（F/X調整後+15%）；占總營收21.0%</div>
+      </div>
+      <div class="rev-row">
+        <div class="rev-name">AWS</div>
+        <div class="rev-bar-wrap"><div class="rev-bar" style="width:36%; background:#2563eb;">$42.2B</div></div>
+        <div class="rev-val">QoQ +12.4%；YoY +36.8%；占總營收21.1%</div>
+      </div>
+    </div>
+    <p style="color:#888; font-size:11px; margin-top:-8px; margin-bottom:16px;">⚑ 條狀長度以北美（$116.2B）為100%基準做相對比例示意；QoQ數字對照上季（FY2026 Q1：北美$104.14B／國際$39.79B／AWS$37.59B）計算。AWS與國際本季營收規模已幾乎相同（$42.23B vs $42.20B），但AWS的YoY成長率是國際的2.5倍——AWS占營收比重（21.1%）本季首度些微超過國際（21.0%），是AWS營收貢獻結構性上升的一個里程碑。</p>
+
+    <div class="section-title">廣告業務（Amazon Ads，橫跨北美/國際分部，非獨立揭露分部）</div>
+    <div class="card">
+      <p>Q2營收$19.8B，YoY+26%（10-Q揭露的disaggregated revenue Ads線項為$19,809M，與法說會口徑精確吻合）。Sponsored Products仍是最大貢獻來源；贊助提示（sponsored prompts，出現在Alexa+與Alexa for Shopping內）帶動的購買轉換率高出48%、客單價高出21%；體育廣告（Thursday Night Football、NBA、WNBA、NASCAR）全數售罄；多運動廣告主的不重複觸及率高出2.3倍、單一運動廣告主相比消費高出12%、訂單多17%；Ads Agent（AI驅動廣告投放工具）已擴至11個新國家，使用者的單次曝光成本低8%、單次轉換成本低6%。</p>
+      <p style="margin-top:8px;">⚑ 廣告業務+26%的YoY成長率仍快於北美（+16.1%）與國際（+14.8%）兩大零售分部，是零售端貨幣化效率持續提升的訊號，但廣告本身不是獨立揭露的GAAP分部，其營益率無法從10-Q分部附註中拆分驗證。</p>
+    </div>
+
+    <div class="section-title">AWS AI技術堆疊：晶片與代理服務採用指標</div>
+    <div class="tech-grid">
+      <div class="tech-card aws">
+        <h4>Trainium（AI晶片）</h4>
+        <ul>
+          <li>年化營收run rate逾$25B，YoY三位數成長</li>
+          <li>Anthropic與OpenAI（兩大AI實驗室）均簽署多年期、多GW規模採購承諾</li>
+          <li>越來越多AI新創採用，包括獨角獸Neurorobotics、Odyssey，以及Twelve Labs、Descartes Labs、Poolside AI、Karakuri、Metagenomi、NetoAI、Splash Music等；Uber、Pinterest等較大型企業也已採用</li>
+          <li>與NVIDIA持續深度合作，客戶可依需求選擇GPU方案，管理層強調「選擇對客戶、競爭與降低推論成本都是好事」</li>
+        </ul>
+      </div>
+      <div class="tech-card aws">
+        <h4>Graviton（CPU晶片）</h4>
+        <ul>
+          <li>逾98%的前1,000大EC2客戶採用</li>
+          <li>營收承諾季增近3倍</li>
+          <li>Graviton5成長速度較Graviton4同期快近2倍</li>
+          <li>後訓練強化學習與代理工具使用多跑在CPU上，是Graviton帶動「AI成長拉動核心成長」因果鏈的關鍵一環</li>
+        </ul>
+      </div>
+      <div class="tech-card aws">
+        <h4>SageMaker／Bedrock／Bedrock Agents</h4>
+        <ul>
+          <li>SageMaker：供技術能力強的企業建構自有基礎模型（非最頂尖前沿模型，而是運用自身專屬資料的中型模型）</li>
+          <li>Bedrock：本季客戶支出超過過去所有季度總和（見Q&amp;A · Doug Anmuth）；納入所有主要模型供客戶選擇</li>
+          <li>Bedrock Agents：新增政策控制（deterministic control）、支付功能（讓代理可自主執行交易）、網頁搜尋（無需離開AWS即可為代理提供最新資訊）、新的整合框架（含Strands代理建構工具）</li>
+        </ul>
+      </div>
+      <div class="tech-card aws">
+        <h4>Kiro／Amazon Q／AWS Continuum</h4>
+        <ul>
+          <li>Kiro（spec-driven編碼代理）：成本效益較同業高出最多50%，使用量季增達3倍</li>
+          <li>Amazon Q：新增可用自然語言設定的自主代理、整合郵件/訊息/日曆/任務的個人化活動摘要、16項新整合（含Adobe、Moody's、Snowflake）；企業客戶涵蓋3M、Allianz、AstraZeneca、Autodesk、BMW、Exxon、FINRA、Hyundai、Intuit、Mondelēz、Moody's、NBA、NFL、Sun Life、Southwest Airlines</li>
+          <li>AWS Continuum（新推出）：發現、排序、驗證並修復程式碼漏洞，利用前沿模型掃描既有漏洞積壓，並在沙箱中驗證以避免誤報；管理層形容「幾乎每次與企業談AI都會被問到資安」，預期快速成長</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:-4px; color:#666; font-size:11.5px;">⚑ <strong>量價拆分（留白反推）</strong>：法說會提供了大量「量」的指標——backlog $496B（三位數YoY成長）、Graviton營收承諾季增近3倍、Kiro使用量季增3倍——但完全沒有提供AWS的定價（ASP）變化資訊。Olsavsky將AWS利潤率擴張明確歸因於「效率提升、產能優化、嚴格管控固定成本」（成本/分母端），而非「調漲價格」（收入/分子端）——這與AWS歷史上定價長期呈通縮/持平的慣例一致，代表本季利潤率擴張的敘事幾乎完全建立在成本端，管理層對此沒有主動點破，須靠交叉比對Olsavsky的用詞才能拼湊出這個結論。</p>
+
+    <div class="flow-box">
+      <div class="card-title">因果鏈敘事：AI需求爆發 → 遷移上雲加速 → 核心與AI相互拉動 → Graviton/Trainium雙晶片優勢外溢</div>
+      <div class="flow-chain">
+        <span class="node">AI實驗室與企業推論需求爆發</span><span class="arrow">→</span>
+        <span class="node">企業加速從地端（仍占全球IT支出85%）遷移上雲，優先選擇功能最廣、安全性最強的AWS</span><span class="arrow">→</span>
+        <span class="node">後訓練強化學習與代理工具使用主要跑在CPU上（Graviton優勢）</span><span class="arrow">→</span>
+        <span class="node">AI spend與核心consumption呈現強相關（Olsavsky明確指出）</span><span class="arrow">→</span>
+        <span class="node">AWS營收連續5季加速，本季達18季最快（+36.7% YoY）</span><span class="arrow">→</span>
+        <span class="node">效率提升＋產能優化帶動AWS營益率YoY+650bps（其中約130bps屬一次性能源衍生性商品利得）</span>
+      </div>
+      <p style="margin-top:10px; color:#666; font-size:11.5px;">與Q1報告揭露的斷裂點（AWS營益率當時YoY下滑1.8pp）相比，本季這條因果鏈在利潤率端首度真正閉合——AWS營益率不僅沒有繼續受AI基礎設施折舊侵蝕，反而YoY大幅擴張。但如上方量價拆分所述，這個擴張目前仍高度依賴一次性項目與成本端紀律，尚未看到管理層提供任何AWS定價／ASP層面的直接證據。</p>
+    </div>
+  </div>
+
+  <!-- Supply Chain Panel -->
+  <div id="panel-supply" class="panel">
+    <div class="card">
+      <div class="card-title">本Tab性質說明</div>
+      <p>⚑ AWS並非製造業，沒有傳統意義上的零組件物料清單（BOM）供應鏈——這裡指的「供應鏈」實質是AWS作為雲端服務商的<strong>運算/晶片供應結構與資本融資結構</strong>，因此本Tab不採用Sankey關係圖呈現（與晶片/硬體製造商報告的畫法慣例不同），改以結構化卡片呈現，並明確標註每項數字來源——法說會逐字稿口頭揭露 vs 10-Q交叉查核（見 <em>AMZN Q2 FY2026 SEC Cross-Reference Notes.md</em>），凡未經filing具名證實者已加註信心度說明。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">(a) 晶片策略：Trainium（AI）＋Graviton（CPU）雙軌，並行NVIDIA夥伴關係</div>
+      <ul>
+        <li><strong>Trainium</strong>：年化營收run rate逾$25B，三位數YoY成長。兩大AI實驗室Anthropic與OpenAI均簽署多年期、多GW規模採購承諾（法說會具名揭露，非10-Q具名）；新增獨角獸級新創Neurorobotics、Odyssey等採用，另有Uber、Pinterest等較大型企業客戶。</li>
+        <li><strong>Graviton</strong>：98%的前1,000大EC2客戶已採用；營收承諾季增近3倍；Graviton5成長速度較Graviton4同期快近2倍。</li>
+        <li><strong>NVIDIA</strong>：管理層明確表示將持續是「跑NVIDIA晶片最好的地方」，並預期「未來可預見的時間內都會有客戶選擇跑在NVIDIA上」——維持多元晶片供應策略而非全面自製替代。</li>
+        <li>⚑ 10-K/10-Q對晶片供應鏈的具名揭露程度遠低於法說會口頭內容：10-K風險因子僅泛稱「仰賴數量有限的供應商供應半導體產品，包括GPU等AI基礎設施相關產品」，未具名任何晶圓代工廠或個別供應商採購占比。以上晶片業務具體數字均來自法說會逐字稿，非10-Q具名揭露。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">(b) 資本結構：撐起建設案的承諾與舉債（來源：SEC 10-Q Cross-Reference Notes）</div>
+      <table>
+        <tr><th>項目</th><th>金額</th><th>性質</th></tr>
+        <tr><td>無條件採購承諾（晶片/硬體）</td><td>$130,065M</td><td>10-Q Commitments附註（R42.htm），跨所有年度加總</td></tr>
+        <tr><td>尚未啟用租賃（未來資料中心）</td><td>$137,214M</td><td>10-Q Commitments附註，跨所有年度加總</td></tr>
+        <tr><td>契約性承諾總額（所有類別）</td><td>$650,034M</td><td>10-Q Commitments附註，涵蓋上述兩項及其他契約性承諾</td></tr>
+        <tr><td>2026年7月新票券發行</td><td>$25,750M</td><td>$25,000M固定利率優先票券＋$750M浮動利率票券，票息4.60%-6.25%，10-Q揭露之期後事項（subsequent event）</td></tr>
+      </table>
+      <p style="margin-top:8px;">⚑ $130B無條件採購承諾＋$137B尚未啟用租賃，正是Jassy在法說會上「即使投入$220B，2026年仍不夠應付所有需求，2027年可能也一樣，2028年的需求也已相當可觀」這段說法背後的filing層級證據——這些是已契約鎖定的未來義務，不是願景性guidance。7月的$25.75B新債則是Colin Sebastian問及資金來源規劃時，Olsavsky回應「今天沒有可以分享的內容」之後，隔天10-Q隨即揭露的具體動作（見Q&amp;A Tab · Colin Sebastian）。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">(c) Anthropic／OpenAI：AWS最大的AI實驗室客戶，兼具客戶與生態夥伴雙重角色</div>
+      <p>Anthropic與OpenAI是法說會中唯二被具名提及、簽署「多年期、多GW規模」Trainium採購承諾的客戶，也是AWS backlog（$496B，三位數YoY成長）中最具指標性的組成部分。Jassy在回答Doug Anmuth的frontier model問題時也點名這兩家作為Bedrock模型多元選擇策略的核心案例（「不是只有Anthropic，也不是只有OpenAI」）。</p>
+      <p style="margin-top:8px;">⚑ <strong>競爭/夥伴張力（信心度：中低，屬本報告兩份來源文件之外的一般公開資訊，非本季逐字稿或10-Q具名揭露）</strong>：據公開市場資訊，Anthropic同時也是Microsoft／Azure的大型雲端合作與投資對象，換言之AWS對Anthropic的角色並非獨家雲端供應商，而是在多雲策略下與Azure並存的供應商之一。若這個外部認知屬實，AWS對Anthropic的Trainium採購承諾規模，長期而言可能面臨客戶多雲/多晶片策略下的替代風險——但這一點完全未在本季逐字稿或10-Q中被提及或量化，僅列為須留意的外部脈絡，不應視為本報告兩份主要來源文件所證實的結論。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">下游客戶集中度</div>
+      <p>與晶片/硬體製造商常見的「前幾大客戶占營收X%」具名揭露不同，AWS/Amazon整體作為多租戶B2C/B2B平台，10-Q未揭露任何單一客戶達10%營收門檻的集中度資訊。唯一可辨識的集中度訊號同樣來自backlog結構本身——Anthropic與OpenAI作為兩大具名的多GW承諾客戶，構成AWS AI營收run rate（逾$25B）與backlog（$496B）中具名可辨識、但未量化占比的核心部分。</p>
+    </div>
+  </div>
+
+  <!-- Risk Matrix Panel -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高（原創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">資產/PP&amp;E建設速度（半年+38.6%~38.8%）已明顯超過AWS營收成長（YoY+36.8%），若barbell中段需求未如期兌現，容量-營收落差恐進一步擴大</div>
+        10-Q資產負債表交叉查核顯示：AWS segment總資產由$252,588M（2025/12/31）增至$350,170M（2026/6/30），半年+38.6%；AWS segment PP&amp;E淨額由$190,055M增至$263,750M，半年+38.8%。兩者的半年成長率都明顯快於AWS本季36.8%的YoY營收成長率（即使換算成可比的半年基礎，資產擴張速度仍領先營收成長）。對照Jassy本季親自解釋的兩段式資本週期框架——資料中心需提前約2年投入、伺服器約3年損益兩平——以及他在回答Brian Nowak時親口承認「不確定barbell中段（現有企業生產工作負載）的成長軌跡是否會和AI實驗室端一樣陡峭」，這構成一個管理層未曾主動連結、但可從交叉比對10-Q資產負債表與法說會定性框架中拼湊出的結構性風險：如果2027-2028年「已預訂」的需求（尤其是barbell中段這個管理層自陳「最大但最不確定」的區塊）未能按時轉化為實際營收，Amazon將背負一個持續加速擴張、但貨幣化時點被推遲的資產基礎，進而拖累自由現金流與ROIC——而這個風險正發生在CapEx財測被上修（$200B→$220B）而非下修的當下。
+        <div class="risk-source">來源：SEC 10-Q Cross-Reference Notes（AWS segment資產負債表）交叉比對法說會Andy Jassy對Brian Nowak的barbell需求曲線回應</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Q2營益率含約$1.2B一次性利得，其中AWS 39%營益率有約130個基點來自能源衍生性商品公允價值調整</div>
+        Olsavsky明確揭露：Q2營業利益中包含約$1.2B的一次性利益，分別為北美segment約$600M關稅退款、以及主要影響AWS segment的約$600M能源合約公允價值計量利得。Olsavsky本人亦親口拆解：AWS營益率YoY+650個基點，若排除能源衍生性商品利得則為+520個基點，即約130個基點的擴張屬於非重複性的會計性利得，而非結構性效率改善。若以同樣邏輯調整北美segment：扣除$600M關稅退款後，北美營業利益將由$9,123M降至約$8,523M，營益率約7.34%，較去年同期7.51%實為<strong>下滑約17個基點</strong>而非帳面上的擴張——與集團整體「39%破紀錄AWS利潤率」的樂觀敘事形成對照，讀者若未做此拆解容易高估本季獲利的結構性改善程度。
+        <div class="risk-source">來源：法說會Brian Olsavsky開場財務揭露（約$1.2B一次性項目、AWS 650bps vs 520bps拆解）交叉比對SEC 10-Q分部財務數字</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">資金來源規劃被明確問及卻以「今天沒有可以分享」回應，隔日10-Q即揭露$25.75B新債</div>
+        Colin Sebastian直接問及未來幾年建設所需的資金來源規劃，Brian Olsavsky僅回應「你們已經看到我們今年發債了……我們會持續評估所有選項並在適當時機做決定，但今天沒有可以分享的內容」。然而10-Q（申報於法說會隔日2026/7/31）即揭露公司已於2026年7月發行合計$25,750M新票券（$25,000M固定利率＋$750M浮動利率）作為期後事項。公司債發行規模達此量級通常需要數週的承銷籌備期，意味著這筆融資極可能在法說會當下已在推進中，卻選擇不做任何定性預告，凸顯法說會口頭揭露與filing實際進度之間存在可觀的資訊落差。
+        <div class="risk-source">來源：法說會Colin Sebastian提問／Brian Olsavsky回應交叉比對10-Q Note（$25.75B票券發行，期後事項）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Barbell中段需求軌跡的不確定性，是「AWS上看兆美元營收」敘事中管理層自己承認、但未被財測保守化反映的最大變數</div>
+        Jassy將AI需求描述為槓鈴型分布：AI實驗室端與企業成本規避端需求已相對確定，但槓鈴中段（現有企業生產工作負載，Jassy預期會是最大絕對需求區塊）的成長曲線「我不確定是否會和實驗室端一樣陡峭」。這段自陳的不確定性，恰好是支撐「AWS未來可能是至少double、甚至上看兆美元營收」這個長期論述中最關鍵、也最脆弱的一環——但本季CapEx財測是上修而非因應這個不確定性而保守化，管理層也未提供任何情境分析或緩衝機制說明。
+        <div class="risk-source">來源：法說會Andy Jassy回應Brian Nowak（barbell需求曲線原文）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">Prime Day時點位移造成的Q3財測「衰退」視覺效果，本質是日曆效應而非需求訊號</div>
+        Q3財測（$197B-$202B）較Q2實際（$200.6B）呈現持平至略降的表面觀感，Olsavsky主動解釋兩大驅動因素：(1) Prime Day今年落在Q2（去年完全落在Q3），若剔除兩年Prime Day的時點差異，Q3 YoY成長率將高出近400個基點；(2) 以目前匯率估算，Q3將面臨約80個基點的YoY匯率逆風。這是可歸因於日曆與匯率的技術性雜訊，而非業務動能減弱的訊號，但對不熟悉Prime Day時點變化的市場參與者而言，容易被誤讀為成長放緩。
+        <div class="risk-source">來源：法說會Brian Olsavsky財測說明（Q3 guidance段落）</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人交易訊號：Herrington例行10b5-1排程賣股，法說會前後無異常申報</div>
+        Form 4掃描（2026年4月至2026年8月初）顯示：法說會前最近一筆申報為2026年7月2日，Worldwide Amazon Stores CEO Douglas Herrington賣出1,000股（每股$239.77），明確標註屬於2025年11月10日設立的Rule 10b5-1既定交易計畫，屬預先排程、非裁量性賣股，非機會性擇時訊號。AWS執行長Matt Garman在此觀察窗口內無任何Form 4申報。2026年7月2日至8月4日之間<strong>完全無任何Form 4新申報</strong>，符合法說會前例行安靜期的乾淨blackout window。整體而言本季未觀察到與AWS加速成長敘事相牴觸的內部人活動訊號。
+        <div class="risk-source">來源：SEC EDGAR Form 4申報掃描，CIK 0001018724（2026/4~2026/8/4）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Income Statement -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$200.6B</div><div class="kpi-lbl">季營收</div><div class="kpi-sub">YoY +20%</div></div>
+      <div class="kpi"><div class="kpi-val">$27.5B</div><div class="kpi-lbl">營業利益</div><div class="kpi-sub">YoY +43%</div></div>
+      <div class="kpi"><div class="kpi-val">13.7%</div><div class="kpi-lbl">營業利益率</div><div class="kpi-sub">QoQ +57bps（Q1 13.1%）／YoY估算+約226bps</div></div>
+      <div class="kpi"><div class="kpi-val">$169B</div><div class="kpi-lbl">AWS年化營收run rate</div><div class="kpi-sub">若為獨立公司排名Fortune 500第24名</div></div>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資料限制說明</strong>：本季法說會逐字稿與已提供的SEC 10-Q交叉查核筆記，均未揭露/擷取合併損益表的完整逐行明細（銷貨成本、物流/技術/行銷/管理費用分項、非營業損益、所得稅費用、淨利與每股盈餘）——SEC筆記檔案明確註明「考量完整filing篇幅，未另外擷取超出分部/資產負債表/承諾表之外的明細」。為避免在缺乏原始數字的情況下臆測具體金額，下方僅呈現法說會與10-Q分部揭露中確有依據的數字（總營收、營業利益、三大分部營收與營業利益），不呈現虛構的淨利/EPS/稅率數字。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">依分部彙總的營業利益（GAAP審計分部數字加總，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>Q2 2026</th><th>Q2 2025</th><th>YoY</th></tr>
+        <tr><td>北美（North America）營收</td><td>$116,177</td><td>$100,068</td><td class="pos">+16.1%</td></tr>
+        <tr><td>國際（International）營收</td><td>$42,197</td><td>$36,761</td><td class="pos">+14.8%</td></tr>
+        <tr><td>AWS營收</td><td>$42,232</td><td>$30,873</td><td class="pos">+36.8%</td></tr>
+        <tr><td><strong>三分部營收合計</strong></td><td><strong>$200,606</strong></td><td>$167,702</td><td class="pos">+19.6%</td></tr>
+        <tr><td>北美營業利益</td><td>$9,123</td><td>$7,517</td><td class="pos">+21.4%</td></tr>
+        <tr><td>國際營業利益</td><td>$1,717</td><td>$1,494</td><td class="pos">+14.9%</td></tr>
+        <tr><td>AWS營業利益</td><td>$16,621</td><td>$10,160</td><td class="pos">+63.6%</td></tr>
+        <tr><td><strong>三分部營業利益合計</strong></td><td><strong>$27,461</strong></td><td>$19,171</td><td class="pos">+43.2%</td></tr>
+        <tr><td>合併營業利益率（估算）</td><td class="pos">13.69%</td><td>11.43%</td><td class="pos">+226bps</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 三分部營收/營業利益加總（$200,606M／$27,461M）與法說會揭露的合併數字（$200.6B／$27.5B）幾乎完全吻合（差異僅為四捨五入），代表Amazon目前並無明顯的「未分配公司層級」費用需另外調整——這使得分部級數字成為本季損益表分析可靠度最高的資料來源。合併營業利益率估算YoY+226個基點，主要由AWS營業利益率大幅擴張（+646bps，見業務部門Tab）驅動，北美與國際的邊際貢獻相對溫和。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">本季一次性項目（Brian Olsavsky開場揭露）</div>
+      <table>
+        <tr><th>項目</th><th>金額</th><th>影響segment</th><th>性質</th></tr>
+        <tr><td>關稅相關退款</td><td>約$600M</td><td>北美（North America）</td><td>代表公司預期收到退款的絕大部分金額，已計入本季</td></tr>
+        <tr><td>能源合約公允價值計量利得</td><td>約$600M</td><td>主要為AWS</td><td>用於保障現有/未來營運電力供應的能源合約，因符合衍生性商品會計處理，公允價值變動計入營業費用，波動性高，「過去幾季影響並不顯著」</td></tr>
+        <tr><td><strong>合計</strong></td><td><strong>約$1.2B</strong></td><td>—</td><td>約占本季$27.5B營業利益的4.4%</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">帶調整解讀</strong>：Olsavsky主動、清楚地揭露了這兩筆一次性項目（這點本身值得肯定，資訊透明度高於許多公司），並親口拆解AWS 650bps利潤率擴張中有130bps來自能源衍生性商品利得（即520bps為「乾淨」擴張）。北美關稅退款的等效影響則需自行拆算：扣除後北美營益率約7.34%，較去年同期7.51%轉為YoY下滑約17個基點（原始未調整數字為7.9% vs 7.51%的擴張），詳見業務部門Tab與風險矩陣Tab。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY2026 Q3（9月季）財測</div>
+      <table>
+        <tr><th>項目</th><th>財測區間</th></tr>
+        <tr><td>淨銷售額</td><td>$197B – $202B</td></tr>
+        <tr><td>營業利益</td><td>$22.5B – $26.5B</td></tr>
+        <tr><td>F/X影響</td><td>YoY逆風約80個基點（按目前匯率估算）</td></tr>
+        <tr><td>Prime Day時點雜訊</td><td>2026年Prime Day落在Q2（多數主要國家含美國），2025年Prime Day完全落在Q3；剔除兩年Prime Day的時點差異，Q3 YoY成長率估計會高出近400個基點</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ Q3財測區間中點（約$199.5B）較Q2實際（$200.6B）呈現QoQ略降的表面觀感，但Olsavsky主動說明這主要是Prime Day時點位移（去年完全落在Q3、今年提前到Q2）與匯率逆風兩項技術性因素造成，並非業務動能減弱——他明確表示「剔除Prime Day影響後，看到的是強勁的顧客參與度、成長，以及上半年趨勢的延續」，詳見風險矩陣Tab的「低風險」項目。</div>
+  </div>
+
+  <!-- Business Units -->
+  <div id="panel-bu" class="panel">
+    <div class="section-title">三大分部營收與獲利（Q2 2026 vs Q2 2025，百萬美元，來源：10-Q審計分部揭露）</div>
+    <div class="bu-grid">
+      <div class="bu-card na">
+        <div class="bu-name">North America</div>
+        <div class="bu-abbr">占總營收57.9%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$116,177<span class="bu-delta">+16.1%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業費用</span><span class="bu-stat-val">$107,054（去年$92,551）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益</span><span class="bu-stat-val pos">$9,123<span class="bu-delta">+21.4%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val pos">7.85%（去年7.51%）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:79%; background:#15803d;"></div></div>
+      </div>
+      <div class="bu-card intl">
+        <div class="bu-name">International</div>
+        <div class="bu-abbr">占總營收21.0%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$42,197<span class="bu-delta">+14.8%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業費用</span><span class="bu-stat-val">$40,480（去年$35,267）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益</span><span class="bu-stat-val pos">$1,717<span class="bu-delta">+14.9%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val">4.07%（去年4.06%）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:41%; background:#c2600a;"></div></div>
+      </div>
+      <div class="bu-card aws">
+        <div class="bu-name">AWS</div>
+        <div class="bu-abbr">占總營收21.1%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$42,232<span class="bu-delta">+36.8%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業費用</span><span class="bu-stat-val">$25,611（去年$20,713）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益</span><span class="bu-stat-val pos">$16,621<span class="bu-delta">+63.6%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val pos">39.36%（去年32.90%）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:39%; background:#2563eb;"></div></div>
+      </div>
+    </div>
+    <div class="note red">⚑ AWS是三個分部中營業利益率YoY擴張幅度最大者（+646bps，管理層口徑：+650bps含四捨五入），但如損益表/風險矩陣Tab所述，其中約130個基點來自一次性能源衍生性商品公允價值利得（Olsavsky自述：排除後為+520bps）。北美的+34bps表面擴張，若同樣扣除約$600M關稅退款，實為YoY下滑約17個基點——三個分部中僅有國際維持真正貼近持平的溫和擴張（+1bp）。換言之，本季分部利潤率的「全面擴張」表象，有相當比例是兩項一次性項目共同貢獻的結果。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">量（Volume）vs 價/組合（Price/Mix）拆分</div>
+    <div class="card">
+      <div class="card-title">量（Volume）指標</div>
+      <ul>
+        <li>全球付費商品件數（paid units）YoY+17%——是零售端（北美＋國際）出貨量最直接的量化指標</li>
+        <li>AWS backlog達$496B，YoY三位數成長——是AWS未來營收兌現的量化蓄水池，但無法從10-Q中取得GAAP口徑的RPO數字交叉核對（見估值觀察Tab互證對照表）</li>
+        <li>Graviton營收承諾季增近3倍；Trainium/Graviton run rate均逾$25B——晶片業務的量化成長指標</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">價/組合（Price/Mix）指標</div>
+      <ul>
+        <li>管理層將AWS利潤率擴張明確歸因於「紀律化效率提升、產能優化、嚴格管控固定成本」——全部屬於成本/分母端因素，法說會全程未提及AWS定價調整</li>
+        <li>⚑ <strong>留白反推</strong>：法說會沒有給出任何AWS服務調漲/調降價格的資訊，加上AWS歷史上定價長期呈現通縮/持平慣例，可合理推論本季39%的營益率擴張幾乎完全是成本效率驅動，而非漲價驅動——這對「利潤率能否持續」（見Q&amp;A Tab · Doug Anmuth）這個問題其實提供了一個間接但重要的解讀：純靠成本紀律驅動的利潤率擴張，通常比漲價驅動的擴張更容易受規模效應趨緩或新一輪資本支出高峰侵蝕</li>
+        <li>廣告業務YoY+26%成長率高於北美/國際任一零售分部本身的成長率，是零售端貨幣化組合（mix）持續優化的訊號</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Balance Sheet -->
+  <div id="panel-bs" class="panel">
+    <div class="section-title">AWS分部資產負債表（GAAP，百萬美元，來源：10-Q R56/R57.htm）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>項目</th><th>2026/6/30</th><th>2025/12/31</th><th>6個月變化</th></tr>
+        <tr><td>AWS segment總資產</td><td>$350,170</td><td>$252,588</td><td class="neu">+38.6%</td></tr>
+        <tr><td>AWS segment PP&amp;E，淨額</td><td>$263,750</td><td>$190,055</td><td class="neu">+38.8%</td></tr>
+        <tr><td>公司總資產</td><td>$1,095,689</td><td>$818,042</td><td class="pos">+34.0%</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資本強度警訊</strong>：AWS segment資產在短短6個月內成長38.6%，PP&amp;E淨額成長38.8%，兩者均明顯快於公司整體資產成長率（+34.0%），也快於AWS本季36.8%的YoY營收成長——確認建設集中在雲端/AI基礎設施，而非平均分散於零售/國際業務。AWS目前占公司總資產的比重達31.9%（$350,170M / $1,095,689M），且是成長最快的部分。這正是風險矩陣Tab「高風險」項目的資產負債表證據來源：資產擴張速度領先營收擴張速度，若需求兌現時點延後，容量-營收落差將持續擴大。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">契約性承諾（10-Q Commitments附註，R42.htm，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>金額（跨所有年度加總）</th></tr>
+        <tr><td>無條件採購承諾（晶片/硬體）</td><td>$130,065</td></tr>
+        <tr><td>尚未啟用租賃（未來資料中心）</td><td>$137,214</td></tr>
+        <tr><td><strong>契約性承諾總額（所有類別）</strong></td><td><strong>$650,034</strong></td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ $130B無條件採購承諾＋$137B尚未啟用租賃，是Jassy「demand exceeds capacity through 2027, likely 2028 too」這段口頭敘事背後最直接的filing證據——這些是已簽署的未來義務，而非願景性語言。$650B的契約性承諾總額約為公司目前總資產（$1,095,689M）的59%，規模相當龐大。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">2026年7月新票券發行（10-Q揭露之期後事項）</div>
+      <table>
+        <tr><th>項目</th><th>金額</th><th>條件</th></tr>
+        <tr><td>固定利率優先票券</td><td>$25,000M</td><td>票息4.60%–6.25%</td></tr>
+        <tr><td>浮動利率票券</td><td>$750M</td><td>—</td></tr>
+        <tr><td><strong>合計</strong></td><td><strong>$25,750M</strong></td><td>—</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ 這正是Brian Olsavsky回答Colin Sebastian「資金來源規劃」提問時所指的「你們已經看到我們今年發債了」，但當時被進一步追問具體規劃時僅回應「今天沒有可以分享的內容」——隔日10-Q隨即揭露這筆$25.75B的具體發行條件，詳見風險矩陣Tab。</div>
+  </div>
+
+  <!-- Cash Flow -->
+  <div id="panel-cf" class="panel">
+    <div class="section-title">現金資本支出與2026財測（來源：法說會逐字稿）</div>
+    <div class="cf-section">
+      <div class="cf-header">Q2現金資本支出</div>
+      <div class="cf-row"><span class="cf-lbl">Q2 2026現金CapEx</span><span class="cf-val neg">$53.1B</span></div>
+      <div class="cf-row"><span class="cf-lbl">主要用途</span><span class="cf-val">AWS與生成式AI，支持強勁客戶需求</span></div>
+    </div>
+    <div class="note">⚑ 本季法說會逐字稿與SEC交叉查核筆記均未提供完整的合併現金流量表（營業/投資/融資活動現金流細項），與Q1報告不同——Q1的10-Q交叉查核當時完整擷取了現金流量表，本季提供的SEC筆記聚焦於分部財務、資產負債表與承諾表。為避免臆測未經證實的現金流量表逐行數字，本Tab僅呈現法說會逐字稿與10-Q期後事項中確有依據的資本支出與融資活動資訊。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">2026全年CapEx財測上修</div>
+      <div class="cf-row"><span class="cf-lbl">原財測（年初）</span><span class="cf-val">約$200B</span></div>
+      <div class="cf-row"><span class="cf-lbl">上修後財測（本季揭露）</span><span class="cf-val neg">約$220B</span></div>
+      <div class="cf-row"><span class="cf-lbl">上修主因</span><span class="cf-val">記憶體成本上升（Jassy原話：「higher cost of memory pushing this number up」）</span></div>
+    </div>
+    <div class="note red">⚑ CapEx財測上修雖歸因於成本端（記憶體漲價），但Jassy同時強調「即使投入$220B，2026年仍無法滿足所有需求，我相信2027年也會是如此」——代表這次上修並非單純的成本通膨轉嫁，而是在「本來就不夠」的產能缺口上，疊加了額外的單位成本上升，兩個因素同時推高了資本支出金額。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">兩段式資本週期（Jassy親自解釋，詳見特殊事件Tab）</div>
+      <div class="cf-row"><span class="cf-lbl">資料中心資本</span><span class="cf-val">提前約2年投入，上線後可貨幣化30年以上，且可重複支撐5-6個伺服器世代</span></div>
+      <div class="cf-row"><span class="cf-lbl">伺服器／網路資本</span><span class="cf-val">提前數月採購，平均不到3年損益兩平，設備壽命5-6年，多數AI合約至少簽5年</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">短期意涵</span><span class="cf-val neg">產能集中建設期資本支出將持續超前營收貢獻，直到規模足夠的資料中心上線並運轉數年後，才會轉為自由現金流與ROIC的正向貢獻</span></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">融資活動：2026年7月新票券發行（10-Q期後事項）</div>
+      <div class="cf-row"><span class="cf-lbl">固定利率優先票券</span><span class="cf-val neg">$25,000M（票息4.60%–6.25%）</span></div>
+      <div class="cf-row"><span class="cf-lbl">浮動利率票券</span><span class="cf-val neg">$750M</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">合計新增舉債</span><span class="cf-val neg">$25,750M</span></div>
+    </div>
+    <div class="note">⚑ 這筆發債嚴格來說發生於Q2財季結束（2026/6/30）之後，屬於10-Q揭露的期後事項，因此不會反映在Q2的現金流量表中，但與Q2的$53.1B現金CapEx以及全年上修至$220B的CapEx財測，共同構成本季「建設資金來源正部分轉向舉債」的完整圖像——詳見供應鏈Tab與風險矩陣Tab。</div>
+  </div>
+
+  <!-- Valuation -->
+  <div id="panel-val" class="panel">
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">資料限制</strong>：本報告未取得法說會日（2026/7/30）前後的官方收盤價、市值或分析師共識預估EPS/P&amp;L明細，亦未取得本季新的Form 4申報成交價（觀察窗口內唯一一筆為2026/7/2的Herrington排程賣股，價格$239.77，距法說會約4週，僅供方向性參考）。以下估值觀察以可從法說會與10-Q交叉查核取得的營運指標為主，不臆測市值或P/E等需要股價/EPS數字的比率。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">可驗證的營運性比率觀察</div>
+      <table>
+        <tr><th>指標</th><th>數值</th><th>意義</th></tr>
+        <tr><td>合併營業利益率（估算）</td><td>13.69%</td><td>三分部營業利益合計/三分部營收合計，YoY+226bps，反映本季獲利能力明顯改善，但需注意其中含約$1.2B一次性項目</td></tr>
+        <tr><td>AWS backlog／AWS單季營收（倍數）</td><td>約11.75x</td><td>$496B backlog相當於約11.75季（近3年）的AWS現有營收規模，是需求蓄水池深度的粗略指標，惟backlog本身非GAAP口徑、無法逐項交叉核對</td></tr>
+        <tr><td>現金CapEx／營收（資本密集度）</td><td>26.5%</td><td>$53.1B現金CapEx / $200.6B營收，反映本季有超過四分之一的營收規模被再投入資本支出，資本密集度處於歷史高檔</td></tr>
+        <tr><td>AWS營業利益率（排除一次性能源利得）</td><td>約37.9%–38.2%（估算）</td><td>官方報告39.36%扣除約130bps的一次性能源衍生性商品利得後的估算「乾淨」利潤率，較接近可持續水準</td></tr>
+        <tr><td>2026 CapEx財測 / AWS年化營收run rate</td><td>約1.30x</td><td>$220B財測 / $169B AWS年化營收run rate，顯示CapEx規模已超過AWS自身年化營收，凸顯建設週期領先營收兌現的時間落差</td></tr>
+        <tr><td>契約性承諾總額 / 公司總資產</td><td>約59.3%</td><td>$650B承諾總額相對於$1,095.7B總資產的比重，反映帳外未來義務的規模已相當接近公司現有資產基礎的六成</td></tr>
+      </table>
+    </div>
+    <div class="note red">⚑ <strong style="color:#1a1a2e;">帶調整解讀</strong>：官方公布的AWS 39.36%營益率，是本季最受矚目、也最容易被市場直接拿來定價的單一數字，但如損益表/風險矩陣Tab所述，其中約130個基點來自一次性能源衍生性商品公允價值利得（Olsavsky自述520bps為排除後的「乾淨」YoY擴張）。若估值模型直接沿用39.36%外推未來季度，將系統性高估AWS的可持續利潤率水準約1個百分點左右。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">互證對照表：管理層說法 vs 財報／SEC filing驗證</div>
+      <table>
+        <tr><th>管理層／法說會說法</th><th>對應財報／SEC filing數字</th></tr>
+        <tr><td>「AWS營益率39%，YoY提升約650個基點」</td><td>10-Q審計分部表：39.36% vs 32.90%，實際差距+646bps（四捨五入誤差內完全吻合）</td></tr>
+        <tr><td>「即使投入$220B，2026年需求仍無法完全滿足，2027、甚至2028年的需求都已相當可觀」</td><td>10-Q Commitments附註：$130,065M無條件採購承諾＋$137,214M尚未啟用租賃（未來資料中心），兩者合計$267,279M為已契約鎖定的未來義務</td></tr>
+        <tr><td>「你們已經看到我們今年發債了」</td><td>10-Q期後事項：2026年7月發行合計$25,750M新票券（$25,000M固定利率＋$750M浮動利率，票息4.60%-6.25%）</td></tr>
+        <tr><td>「AWS backlog達$496B，YoY三位數成長」</td><td>10-Q未揭露GAAP口徑RPO數字可逐項核對；僅可與$650,034M契約性承諾總額做量級層次的交叉比對，兩者定義不完全相同，無法精確勾稽</td></tr>
+        <tr><td>「本季獲利率的提升『並非隨機』，是紀律化效率提升與產能優化的結果」</td><td>Olsavsky同時自述：AWS 650bps中有約130bps（即$600M量級）來自能源衍生性商品公允價值利得，並非純營運效率——管理層自己的補充揭露部分反駁了「完全非隨機」的定性表述</td></tr>
+        <tr><td>「本季無異常內部人交易訊號」</td><td>Form 4掃描：2026/7/2至2026/8/4完全無新申報，乾淨的法說會前blackout window；唯一一筆（Herrington）明確標註屬既定10b5-1計畫</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 六組互證中，第一、三、六組可精確或近乎精確勾稽；第二組僅能做量級層次的合理性檢查（承諾金額規模與「需求吃緊到2027-2028年」的定性說法方向一致，但無法逐項對應到「2027」或「2028」個別年度）；第四組backlog數字因10-Q未揭露對應GAAP口徑而<strong>無法</strong>逐項交叉核對，是本季揭露透明度的一個明顯缺口；第五組則是管理層自己的補充揭露反過來削弱了同一句話中的另一半定性描述，是本季少見的「管理層自我修正」案例。</div>
+  </div>
+</div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

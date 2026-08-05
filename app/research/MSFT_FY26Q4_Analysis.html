@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft (MSFT) — FY2026 Q4 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 9px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 12.5px; white-space: nowrap; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .tab-sep { width: 100%; height: 0; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.6; color: #333; }
+  .card ul { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.6; color: #333; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.6; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #333; }
+  .flag-box.obs { border-left-color: #2563eb; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 100px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 14px; }
+  .quad-box li { margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.6; color: #333; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col ul { padding-left: 14px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 3px; line-height: 1.5; color: #333; }
+
+  .rev-chart { margin-bottom: 16px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 210px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .rev-val { width: 150px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card.pnl { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid; }
+  .tech-card.c1 { border-top-color: #2563eb; }
+  .tech-card.c2 { border-top-color: #15803d; }
+  .tech-card.c3 { border-top-color: #6d28d9; }
+  .tech-card.c4 { border-top-color: #c2600a; }
+  .tech-card.c5 { border-top-color: #0891b2; }
+  .tech-card.c6 { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.c1 h4 { color: #1d4ed8; }
+  .tech-card.c2 h4 { color: #15803d; }
+  .tech-card.c3 h4 { color: #6d28d9; }
+  .tech-card.c4 h4 { color: #c2600a; }
+  .tech-card.c5 h4 { color: #0e7490; }
+  .tech-card.c6 h4 { color: #b91c4a; }
+  .tech-card ul { padding-left: 14px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.5; color: #333; }
+
+  .chain-layer { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .chain-layer h4 { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .chain-up h4 { color: #c2600a; } .chain-core h4 { color: #2563eb; } .chain-down h4 { color: #15803d; }
+  .node { display: inline-block; background: #f5f6fa; border: 1px solid #d5d9e2; border-radius: 6px; padding: 5px 9px; margin: 3px 4px 3px 0; font-size: 12px; }
+  .node .src { color: #94a3b8; font-size: 10px; }
+  .conf-hi { border-left: 3px solid #15803d; } .conf-mid { border-left: 3px solid #c2600a; } .conf-lo { border-left: 3px solid #b91c4a; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.6; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 14px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .note { font-size: 11px; color: #94a3b8; margin-top: 6px; line-height: 1.5; }
+  .meaning { color: #555; text-align: left; font-size: 11px; line-height: 1.5; }
+  .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .flag { font-size: 11px; color: #7a2020; background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 8px 10px; margin-top: 8px; line-height: 1.55; }
+  .flag b { color: #b91c1c; }
+  .flag.obs { background: #fff; border-color: #a9c9f5; color: #1e3a6e; }
+  .flag.obs b { color: #1d4ed8; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.pbp { border-top-color: #2563eb; }
+  .bu-card.ic { border-top-color: #15803d; }
+  .bu-card.mpc { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 210px; font-size: 12px; color: #333; flex-shrink: 0; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
+  .bar-num { width: 150px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { color: #1a1a2e; font-weight: 600; }
+
+  .donut-wrap { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 12px; }
+  .donut-legend { font-size: 12px; }
+  .donut-legend .li { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .donut-legend .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<!-- cf-backlinks-widget: shows which CausalFrame canvases reference this report; renders nothing if none do -->
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+<!-- /cf-backlinks-widget -->
+
+<div class="page-header">
+  <h1>Microsoft Corporation（MSFT）— FY2026 Q4 法說會＋財報完整分析</h1>
+  <p>Q&amp;A問答分析／模型多元化與使用年限會計變更／技術與產品線／供應鏈／風險矩陣／損益表／業務部門／資產負債表／現金流量／估值觀察 &nbsp;·&nbsp; 法說會日期：2026年7月29日（財季：FY2026 Q4，截至2026年6月30日，全年財年結束）&nbsp;·&nbsp; 交叉比對FY2026 10-K（申報於2026/7/29，同日）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('special',this)">模型多元化／會計變更</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('is',this)">損益表</div>
+    <div class="tab" onclick="sw('seg',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+    <div class="card" style="border-left:3px solid #2563eb;">
+      <div class="card-title">本 tab 的本質是話術偵測，不是摘要</div>
+      <p>本場法說會只有6位分析師發問（IR主持人Jonathan Neilson一開場就要求「每人限問一題」），但貫穿全場的迴避模式跟上一季如出一轍：只要分析師要具體數字——模型多元化1–2年後的實質佔比、零組件漲價對毛利率的量化衝擊、CapEx投資報酬率相較去年的變化幅度——管理層就用定性的信心語言帶過。三個最明顯的例子：Karl Keirstead問「開放/客製模型的traction有多大」，Satya完全沒有給任何數字，只重申「harness與模型解耦」的架構哲學；Mark Moerdler問零組件漲價如何不侵蝕毛利，Amy給的是CapEx彈性與客戶組合多元的定性保證，沒有量化敏感度；Gabriela Borges問CapEx的ROI「跟一年前比有什麼變化」，Amy明確承認「我的算法並沒有改變」，等於沒有回答比較基準這件事。另外，Brad Zelnick問了雙重問題（Project Perception對資安業務的意義＋對Microsoft信任度的意義），Satya完整回答了第一半、對第二半（信任度）完全沒有著墨——這種「半題被丟棄」的模式與上一季Gabriela Borges問Copilot「什麼沒有起作用」被完全略過如出一轍，是管理層維持敘事紀律的慣性做法。</p>
+    </div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Karl Keirstead（UBS）</div><div class="qa-topic">開放／客製模型的1–2年traction量化 × Microsoft在自身Frontier Lab曝險下如何受益</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">(1) 未來一到兩年，開放與客製模型的traction實質上能有多大？考量到許多企業一開始可能對使用開放模型持保留態度。(2) Microsoft在自身持有相當大的Frontier Lab曝險（即OpenAI、Anthropic等股權投資）之下，究竟如何從這個轉變中受益？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Satya：核心訴求是讓企業掌握自己的「人力資本＋token資本」命運，模型是輸入而非萃取企業知識的工具；架構上必須讓harness與模型解耦——記憶、情境全部留在外部，任何模型都可替換，企業可同時用frontier模型、低成本模型，甚至訓練自己的模型；Copilot、GitHub Copilot、Security Copilot都是用這套架構打造，要把這個設計模式民主化給所有企業；並以Hugging Face事件為例，說明不能依賴單一模型，需要多模型互相補位。Amy補充：正因為平台是為「在Azure這個架構上為對的工作選對的模型」而設計，不論客戶選哪個模型或模型家族、甚至自己跑模型，Azure都能有效率地交付——把基礎設施視為高度「可替換／可通用」（fungible）。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Karl明確問了一個可量化的問題（未來1–2年traction有多大）與一個直指利益衝突的問題（Microsoft對OpenAI／Anthropic等frontier lab有股權曝險，客戶若轉向開放/客製模型，Microsoft到底怎麼受益）。Satya的整段回答完全停留在架構哲學層次，沒有給出任何百分比、時間表或客戶佔比預估；Amy的補充把問題重新框定成「Azure基礎設施本身可替換」，這確實回答了「Azure這一層的收入不受模型選擇影響」，但完全沒有觸及Karl真正在問的另一半——如果客戶大量把推論工作從OpenAI／Anthropic的API轉向Microsoft自家更便宜的MAI模型，Microsoft作為這兩家公司股權投資人的經濟利益（如本季認列的$32億Anthropic評價利得）會不會因此被稀釋。這個利益衝突至今未被管理層正面處理。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Karl Keirstead:</b> "Okay, great. Thank you. Satya, maybe I'll start away from the numbers and ask if you could spend a minute and elaborate on your opening comments about model choice and the protection of corporate IP. Maybe I could ask this in two parts. First, how material do you think traction could be for open and custom models over the next year or two, knowing that many enterprises might be initially reticent to use open models? Secondly, how exactly does Microsoft benefit from this shift, knowing that you've also got fairly large Frontier Lab exposure? Thanks so much.<br><br><b>Satya Nadella:</b> Thank you, Karl. The way we are coming at this is, at the end of the day, the goal is to have the firm be in control of their own destiny in terms of what I describe as building their human capital and their token capital. Right? At the end of the day, if a firm is a learning machine, they need their own learning machine. That's really the goal. The models are an input, not some extraction of the knowledge of the enterprise, but in some sense, you have to really, at the end of the day, every firm is going to evaluate who are the providers who are helping them with their outcomes and their knowledge creation. I think that that is now fairly clear, and it's going to become clearer by the day.<br><br>This is not going to be about, come in and take all my knowledge and benefit yourself, whereas I am not getting anything out of it. Given that direction of travel, we are very clear about the architectural design of the platform, which is you've got to keep your harness separate from the model. The harness will ensure that your memory, your context, all of that is external. That means any given model at any given time is swappable. You should and you can use frontier models. There's no reason not to. You also can use multiple of them. Right?<br><br>If you look at some of the stats I gave, it's a great example of how to use the frontier models for what they deliver, how to use low-cost models for what they deliver, and in fact, train your own model when you don't want to use any external model itself, because after all, you have all the outputs, you have all the traces, you have all the context. That's really the enterprise design architecture that we are going to evangelize. We ourselves are using it. Copilot is built that way. GitHub Copilot is built that way. Our Security Copilot is built that way. We want to democratize that design pattern so that every enterprise can use it. Within there will be a mix of open weights, closed weights.<br><br>By the way, one of the things that Lisa talked about is, remember, if you look even at the Hugging Face incident, the biggest thing that we should take away from that is you can't depend on any one model. You will maybe need multiple models to even remediate some challenges that get caused by one model. That's the way to think about it, which is you can't be subject to the refusal of the one model. There's a lot more design space here. We talk about the frontier as if it's one thing. The frontier is about every firm having a frontier and the choice, the cost control, and the capability that they need in order to be able to control their destiny.<br><br><b>Amy Hood:</b> I think maybe, Karl, just to add a little bit to the end of your question, which is that it's why it's important that the platform is built, and I think Satya mentioned this in his comments, to be able to deliver the right model for the right job on the architecture called Azure. Given that we continue to see growing demand, no matter what model is chosen or what model family or whether it's run a model of your own, the Azure platform's quite efficient at delivering that. Think about that infrastructure as being pretty fungible.<br><br><b>Karl Keirstead:</b> Very helpful. Thanks.</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brent Thill（Jefferies）</div><div class="qa-topic">Azure加速到43%、邁向mid-40s——環境使然還是Microsoft執行力更好</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Azure加速到43%、guide邁向mid-40s，令人印象深刻。驅動這個加速的根本原因是什麼？產能限制的相關問題也很多——我們是仍處於同樣的環境，還是Microsoft在大家都面臨的限制之下執行得更好？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：系統裡仍有限制，需求持續超過可用供給，這點在資產的現貨市場定價上都看得出來；能交付更好的第一個原因是效率——把機隊裡已有的東西發揮到極致，CPU與GPU機隊都有效率提升，本季工程團隊做得特別好；因為供需失衡，效率提升會在當季就被快速貨幣化（quickly monetized），這個動能確實正面影響了本季；CPU與GPU的到貨到上線前置時間在過去90天也有改善，這些改善同樣會被快速貨幣化；在超大規模機隊的量體下，能快速貨幣化的效率改善確實會反映成當季的加速，這也是Q1展望的一部分。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Brent的問題本質是要一個「環境 vs 執行」的歸因拆分，Amy的回答方向是選了「執行」（效率＋前置時間改善），但完全沒有給出量化的拆分比例——多少百分點的加速來自需求環境本身持續強勁、多少來自效率改善。更值得注意的是「效率提升會被快速貨幣化」這個措辭本身就是一個訊號：如果加速的很大一部分來自把既有產能榨得更乾淨（而非新增產能上線），那麼一旦供給端追上需求（管理層自己在其他場合也說「至少到今年底維持受限」），這類一次性效率紅利可能不會重複出現，本季43%的加速率含有無法簡單外推的成分。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Brent Thill:</b> Thanks. Amy, impressive acceleration in Azure, up to 43, going to mid-40s. I guess the questions around the underlying drivers, what you and Satya are seeing in terms of just what's driving this, and many of the questions around capacity constraints. Are we just still in the same environment, or is this Microsoft just executing better given the constraints we're all seeing? Thanks.<br><br><b>Amy Hood:</b> Thanks, Brent. There are still constraints in the system. I think we've continued to say, I think now for a number of quarters, that demand continues to exceed available supply, that certainly remains true. You can even see it, I think, in some of the pricing that's occurring in the spot market for assets. When you think about being able to deliver better, the first thing we focus on, and I tried to talk a little bit about it in my prepared remarks, is efficiency. Being able to get more out of everything that we've got in the fleet. That applies to efficiency gains in the CPU fleet. It's going to be efficiency gains in the GPU fleet. We saw a good work this quarter, in particular from our engineering teams, to make as much of that available as we could.<br><br>Because of the supply-demand imbalance we've been talking about, when we can make efficiency gains, they are quickly monetized in the quarter. I think that dynamic certainly impacted the quarter positively. I would also say, some of the process improvements we've made to make sure both CPUs and GPUs, just the lead time from how quickly we can get things, to simplify it tremendously, plugged in, was also improved over the past 90 days. Those improvements, again, are very quickly monetized when we're able to do that. At the scale that we're operating, in terms of across the entire hyperscale fleet, making efficiency improvements that can be quickly monetized does result in acceleration in the quarter. It's part of also what we expect to see and talk about with the Q1.</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mark Moerdler（Bernstein Research）</div><div class="qa-topic">AI情緒volatile、供過於求疑慮 × 零組件漲價如何不侵蝕毛利率</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">AI相關情緒仍然非常volatile，市場既擔心未來供過於求，也擔心零組件價格上漲會侵蝕毛利率。反過來問：Amy要如何在硬體零組件價格上漲的情況下，不被迫大幅調漲產品售價、也不讓毛利率受到負面衝擊？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：目前需求相對極端地超過可用供給；把時間拉長來看，CapEx已明顯轉向「短生命週期資產」（CPU/GPU），這類資產前置時間較短，一旦需求環境改變可以隨時放慢——這是COGS最大的驅動因子；土地與資料中心建置本身彈性更大、佔整體成本結構比例較小、時程也可調整；可以錯開GPU/CPU的建置時程；客戶組合按地區、產業、業務高度多元，本季新增的RPO就反映了這種廣度；同時擁有龐大的第一方應用業務也共用這些產能，帶來更多彈性；漲價問題其實是全產業共同面對的，因應之道是持續做效率工作、並提醒客戶雲端相對於自建on-prem仍然是更划算的選擇；新簽約也能反映漲價後的定價，但長期而言要讓訂價同時對客戶與Microsoft都合理。Satya補充：重點是把「產品形狀」與「投資組合」都做對——涵蓋Copilot、超級App、Azure裡的agent-first原生元件；客戶組合的地理、產業、業務、工作負載多元性在建產能時都要納入考量；要「經營一條有效率的鐵路」，效率是持續、單調遞增的工作，不是最後才會顯現；長期而言對正確的業務組合、正確的毛利結構、以及對客戶的正確價值都很有信心。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Mark要的是一個具體機制——零組件漲價「不會」侵蝕毛利率或「不會」被迫大幅漲價的具體防禦機制與數字。Amy的回答完整鋪陳了CapEx資產結構的彈性（短生命週期資產可延後）與客戶組合多元性，但沒有給出任何量化的毛利敏感度分析，也沒有正面回答「不漲價」是否真的可行——反而暗示部分漲價確實會反映在新合約定價中（"a lot of this obviously is also being sold in newer contracts, and we're able to have the pricing reflect it"），這其實部分承認了會透過漲價轉嫁，與問題原本想確認「不用大幅漲價」的前提有些微張力，但管理層沒有直接點破或量化這個轉嫁比例。與上一季相比，這季的漲價衝擊揭露反而更模糊——上一季法說會曾明確給出CY2026 CapEx guidance中約$250億歸因於零組件漲價的具體數字，這季的回答完全沒有出現任何類似的可驗證數字。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Mark Moerdler:</b> Thank you very much for taking my question. Congratulations on the solid, really great quarter. Satya, Amy, sentiment around AI remains incredibly volatile, with concerns about oversupply coming, as well as concerns about component pricing increasing, impacting margins. Amy, two related questions. On the flip side of that, how do you manage through the hardware price increases that we're seeing, the component prices? That it doesn't just drive you to either massively drive up the price of your offerings or negatively impact your margins. Thank you.<br><br><b>Amy Hood:</b> Thanks, Mark. The questions are a little bit related. I'll start with maybe the first. Currently, the situation is obviously that demand exceeds available supply in a sort of relatively extreme moment. When you start to think about over the duration, I try to remind people, a lot of the expense, especially you see it in CapEx. You've seen our CapEx really pivot toward what I would call and do call short-lived assets, which really, right, that's CPUs and GPUs that have relatively shorter lead times. If the demand environment changes, you just slow down what is, in fact, the largest component, right, and the driver of COGS. The investment into land and data center builds is actually quite flexible, right? It's a smaller percentage of the overall cost structure, and timing can be changed on much of that, especially on the builds.<br><br>You can stagger the timing of the build-out of, as I was saying, some of the GPUs and CPUs that you plan to put in. When you think about being able to manage through that, hyperscalers have been doing that for quite a long time in terms of having the flexibility and the understanding of manage those changes in demand. The other thing is, that's important, Mark, is you just have an incredibly diverse book of business, by geo, by segment, by industry. I feel like when you look even at our backlog or what we added in RPO this quarter, it is from the breadth of really the Microsoft product portfolio as well as our customer portfolio. When you have the ability to late bind some of the more expensive components in short term, you have a big book of business that's flexible.<br><br>You have a big first-party app business that also uses the capacity that you're building out in addition to your Azure platform. It does allow us to have a lot more flexibility to manage through those. When it comes to the pricing question, I think that's really impacting everybody equivalently in so many ways. What we've been trying to do, of course, at this point, is to just make sure that we're doing the best efficiency work we can so we can continue to give customers great value. We're reminding people that frankly, the cloud offers tremendous benefits versus having to make these purchases as servers on-prem yourself, where the price increases are even more hard for customers. So the cloud still provides a great ROI in those types of situations.<br><br>We're adding this capacity, to your point, but a lot of this obviously is also being sold in newer contracts, and we're able to have the pricing reflect it, but keep value where we. Listen, for the long term, you want to have pricing work for customers and for you, and so we're trying to stay focused on that as well.<br><br><b>Satya Nadella:</b> If I just add to Amy's comments, I thought Amy captured it well, all of us are reading this, "1873" is the book to be read. So in my mind, I think you've got to get the product shape right. That's sort of a lot of what we are focused on. You have to get the portfolio right. Amy talked about what we are doing, whether it's in Copilot or the super app, bringing all the form factors or all the way to Azure and the agent first sort of primitives in Azure. You kind of have to really get that portfolio to all come together. The mix of customers is super important. You have to recognize the breadth, the geo mix, the segment mix, the workload mix, and you got to really think about all of those when you're even building capacity.<br><br>You've got to run an efficient railroad. At the end of the day, you do need to, Amy talked a little bit about even in the last quarter, how we've improved on the efficiency front. It's not something that'll just show up at the end. You have to sort of monotonically work at it. We are very focused on all of those. Then we know that there will be ups and downs of what is the cycle here, but the secular shift is clear, and we are very bullish about us coming with the right sort of mix of business and the right margin structure, and most importantly, with the right value for our customers.<br><br><b>Mark Moerdler:</b> Excellent. Thank you so much.</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Adam Wood（Morgan Stanley）</div><div class="qa-topic">M365 Copilot從試點走向大規模部署的證據 × 座位/E7/消費三種貨幣化槓桿的主力</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">M365 Copilot本季表現強勁，付費座位突破3,000萬且加速成長。能否談談客戶如何從試點走向更廣泛的部署？現在還是以試點為主的動能，還是已經看到更多大規模部署？另外，從貨幣化角度——新增座位、升級到E7等更高價值SKU、以及消費制——哪一個會是接下來的主要貨幣化驅動力？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Satya：起點是「產品形狀」——本季內Chat、CoWork、Autopilot、Code都逐漸整合進同一個未來的旗艦超級App；使用面上，從授權到高使用度的時間已從數月縮短到數天，使用強度已追平Outlook、Teams等日常溝通工具的等級；第二點是企業級的「佈線」——E7把治理（Agent 365）、ITOps/SecOps/FinOps、CRM/ERP等業務流程全部當作Copilot Cowork的技能與外掛接進來，用量因此複合成長；商業模式上，現在同時有座位制與消費制（座位+使用量）；已經看到E7帶來的ARPU成長，且相較歷史上較窄的Office，Copilot是第一個真正橫跨全企業、同時有座位與消費計價的工具，TAM遠更龐大。Amy補充：今年以來部分ARPU成長來自M365 E5+Copilot授權組合，E7在Agent 365元件上（SecOps/FinOps的token支出可視性與可管理性）有相當價值，E7本季僅上市部分時間、但客戶反應令人鼓舞，接下來會持續聚焦；隨著更多流程被佈線進來、IT涉入更深，市場對M365能力的認知會持續改變。Satya並以自己用Copilot把一份ROIC文件轉成Power BI dashboard、資料模型自動串接Fabric/OneLake與GitHub repo、且全程登記在Agent 365的例子，具體示範企業級工作流。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Adam問的是一個二選一式的判斷（試點 vs 大規模部署）與一個排序式的問題（座位/E7/消費三者誰是主力），管理層用「時間到高使用度從數月變數天」「50k席以上客戶年增逾7倍」等佐證間接暗示已經走向大規模部署，但沒有給出「試點客戶佔比」與「大規模部署客戶佔比」的具體切分數字；對於三個貨幣化槓桿的優先順序，Satya與Amy都以「都在發生、都會複合」的方式回答，沒有指出接下來一到兩季最主要的邊際貢獻來源會是哪一個，使得投資人無法判斷未來ARPU成長的主要驅動力究竟會是座位量、SKU升級、還是使用量計費。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Adam Wood:</b> Hi. Good evening. Thanks for taking the question, and also congrats to me on a very strong end to the year. I wanted to maybe just ask about M365 Copilot. Obviously very strong quarter there with over 30 million paid seats and a strong acceleration. Could you just talk a little bit about how you're seeing customers move from pilots to broader deployments here? Is this still a pilot-driven motion or are we seeing a lot more broader deployments? Then when we think about the monetization of the product in terms of additional seats, migration to higher value SKUs like E7 and then consumption, what do you see as the main monetization or the main driver of monetization from here, please? Thank you.<br><br><b>Satya Nadella:</b> No, thank you, Adam, for that question. Let me start and then Amy can add. It starts with, again, that product shape. As you can see, even within the quarter, the product shape has changed pretty dramatically, right? We now have Chat, CoWork, Autopilot, Code all coming to essentially what is going to become this flagship super app that various roles can use it. If you think about even the usage side, that's a place where, again, lots of interesting data there, right? Which is time to usage has drastically come down. What used to be months is days, right? When a license is bought to usage. The usage intensity itself has gone up significantly. We are talking about a usage intensity that's sort of is the same level of what is an everyday communication tool like Outlook or Teams.<br><br>The second thing I would say is the overall enterprise wiring of this, right? It's not like a tool that's isolated somewhere, but it's wired in, whether it is, you brought up E7, right? It's wired into the governance pieces with Microsoft Agent 365, you have your IT ops, SecOps, FinOps, all wired in, as well as it's all the business processes. For example, your CRM system, your ERP system, all of them are just skills and plugins that go into Copilot Cowork, you are able to take that enterprise-wide workflow and wire it into the super app, right? That increases usage, it all compounds. The other one is the business model. We now have this per seat business model, we also now have the usage business model. It's seat plus usage.<br><br>We are already seeing the ARPU growth that comes from things like Microsoft 365 E7. But really, as we deliver more value to customer and customer outcomes at the enterprise level, in fact, if I think about historically Office compared to what Microsoft Copilot is much more narrower. This is the first time where you really have an enterprise-wide tool, which has a both per seat and usage-based pricing. The TAM is much more expansive. We're going to be very focused on driving customer value and then expanding with it.<br><br><b>Amy Hood:</b> Adam, I think I talked a little about it in my prepared remarks, but I do think what we've been seeing is over the course of this year, some of the growth in ARPU was from Microsoft 365 E5 plus the Microsoft Copilot license that Satya Nadella's talking about. We'll see a little bit more from Microsoft 365 E7 really has a lot of interesting value in the Microsoft Agent 365 component in particular, where Satya Nadella's talking about having SecOps and FinOps, think about in general, everyone is going to need both observability of token spend and the manageability of token spend for all business processes, and that is what Microsoft 365 E7 brings. I think that it was only in market for a part of the quarter, and I think we were quite encouraged by the value customers saw in that SKU.<br><br>I think we'll continue to focus on that through the year. Finally, what Satya's talking about is this building TAM that grows through the year. As I think about that expansive spending TAM, that's really where we're talking about this usage and consumption growth. As more of those experiences get wired in, and as IT gets more involved in that process, it'll be quite, I think, changing in terms of what people think of the M365 capabilities.<br><br><b>Satya Nadella:</b> It'll be fun for you, Adam. I think one of your colleagues put out an ROIC document. I took that document to Copilot, which is a PDF, and I said, "Build me a new Power BI dashboard, essentially." Here is the thing, it built a rich semantic model that went into my Fabric with OneLake that brought all the data in from the external sources. In fact, was current with all the SEC filings of all the Mag Seven. On top of that, the repo itself is in GitHub. The artifact is sitting in my Copilot as a site. That, to me, is a classic example of an enterprise-wide workflow. I, as a knowledge worker, could go create a dashboard. The data engineer can go to Fabric and find the artifact. The professional developer can go to the repo and find it in GitHub.<br><br>By the way, it's all registered with Agent 365, right? That's a little bit of what Amy is describing as the coming together of a new way to work even, while at the same time bringing IT, security, and manageability of it.<br><br><b>Adam Wood:</b> Very helpful. Thank you.</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brad Zelnick（Deutsche Bank）</div><div class="qa-topic">Project Perception對資安業務的意義 × 對Microsoft信任度的意義（後半題被完全略過）</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">網路資安對Microsoft的一切業務都是核心。近期最新的frontier模型發布改變了整個競爭態勢，本週你們也推出了Project Perception。能否說明這個時刻對你們的資安業務具體意味著什麼，以及這對Microsoft整體的信任度又意味著什麼？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Satya：資安產品與資安營運需要的整體「物理定律」都已劇烈改變，企業必須同時在產品與自身營運方式上轉型；Microsoft的做法延續在知識工作與coding上的「智慧優先、模型導向」路線——Project Perception建立紅隊agent持續尋找漏洞、藍隊agent持續分類分診、綠隊agent負責修復，形成一個持續運作的agentic防禦系統，並整合Entra身分、Defender、網路、應用資安等各種訊號做情境判斷；資安場景特別需要多模型策略——用MDASH資料在CyberGym證明，用MAI-Cyber-1-Flash可以做到接近Mythos等級的表現、但成本少一半，原因是90%的任務交給MAI-Cyber-1-Flash處理、僅10%需要frontier模型；除了成本，模型多元也帶來韌性——任一模型若無法使用，資安維運也不能因此中斷；對公司在資安業務上的前景感到興奮。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 — 半題被完全丟棄</div><div class="q-text">Brad明確問了兩件事：Project Perception對資安業務的意義，以及對「Microsoft整體信任度」的意義。Satya的回答完整、具體地回答了第一半（紅藍綠team架構、成本效益數字、韌性論點），但整段回應沒有一個字觸及第二半——「信任度」議題。這個問題的言外之意其實相當敏感：Microsoft既是最大的企業軟體與雲端平台供應商、又同時扮演資安產品供應商與（透過Copilot／Agent 365）AI治理工具供應商的三重角色，這種「球員兼裁判」的結構性問題正是Brad問「trust in Microsoft more broadly」真正想探詢的方向，但管理層選擇完全不回應這個角度，只用資安產品路線圖填滿整個答案時間。這與上一季Gabriela Borges問Copilot「什麼沒有起作用」被完全略過屬於同一種模式——對於可能暴露弱點或利益衝突的提問方向，管理層傾向用另一半更安全的問題填滿回答篇幅。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Brad Zelnick:</b> Great. Thank you so much for taking my question. Satya, appreciating cybersecurity is so core to everything Microsoft does. The playing field shifted recently with the latest frontier model releases, and this week you introduced Project Perception. Can you expand on what this moment means for your cyber business explicitly, and also what it means for trust in Microsoft more broadly? Thanks.<br><br><b>Satya Nadella:</b> Yeah. Thank you for that question. I think you're right about saying that the entire, I would say, the overall physics of how both what is needed in terms of the cyber product and even the cyber operations, because at the end of the day, you kind of have to sort of transform yourself on both the products, but also how you operate as a company, to protect yourself, have changed pretty dramatically. What we are focused on is first, again, take the same approach we've taken for knowledge work or coding, which is you got to start with an intelligence-first, model-forward approach. What we launched with Perception is essentially saying, let's sort of really make sure that you have the red team agents that know how to find, constantly are red teaming and finding the vulnerabilities.<br><br>You have the blue team agent that is constantly going and making sure that you're triaging, and the green team that fixes. You kind of create your own agentic system that's continuously operating to create the cyber defense you need. It definitely feeds off of all the signals, right? Whether it's the identity Microsoft Entra signal, the Microsoft Defender signal, the network signal, the app security signal, all that sort of helping really do the context, so that you can then truly create the protection. The other thing they've also said is, especially in cyber, it becomes critical to have that multi-model approach to sort of the first question that was asked. Not just for cost. In fact, we proved with the MDASH data in CyberGym that essentially you can have Mythos level performance, with 50% less cost because of this MAI-Cyber-1-Flash.<br><br>The reason is because 90% of the tasks are done by the MAI-Cyber-1-Flash model, and 10% of the tasks, you still go to the frontier, right? This is sort of that mixing of the right model for the right task in what is essentially a pipeline job, is a super important characteristic. To us, I think this is an important piece. The other thing I'd say is from a resilience perspective, right? For whatever reason, if a given model goes away, then you kind of can't be left high and dry. You need to be able to still continue your cyber operations. That's the other piece. It's cost and resilience is both an important criteria, and that's what we are trying to build in, whether it's in code, whether it's in cyber, whether it is in knowledge work.<br><br>We're very excited about Perception and what it means, quite frankly, for our security business going forward.<br><br><b>Brad Zelnick:</b> Super helpful. Thank you.</div></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Gabriela Borges（Goldman Sachs）</div><div class="qa-topic">CapEx的ROI較一年前如何變化 × 自研矽晶片作為增量貨幣化槓桿</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">關於ROI——你已經分別談了CapEx這一側與貨幣化這一側的顏色，能否把兩者放在一起？當你追蹤今天CapEx決策的ROI時，跟一年前相比有什麼變化？未來還有哪些槓桿可以拉，例如自研矽晶片這一側，作為增量貨幣化的驅動力？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Amy：坦白說，過去一年我計算ROI的方法並沒有改變；比較貼切的說法是對TAM擴張的信心程度、以及應用層與基礎設施層雙軌的毛利槓桿——本場已經談到不少可以持續拿到效率的槓桿；矽晶片上仍持續尋找最佳性價比，包含自研投資；模型多元化本身也是一個毛利改善機會——能用更有效率（token使用效率與成本結構效率）的方式交付最佳結果，都是毛利槓桿；這些都會提升對投入資金ROIC的信心；產品組合上橫跨知識工作、coding、資安，再加上Agent 365這個「有點取巧」的代理層，也都是增量機會；Azure端在模型效率、矽晶片、零組件效率（含自研1P投資）以及超大規模營運效率之間還有不少槓桿；用Satya的話講，這是「磨的功夫」（grind work）——每天進步一點點，而公司很擅長做這種磨的功夫並持續交付給客戶。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Gabriela明確要求一個「跟一年前比較」的錨點，Amy的第一句話就承認「我的算法並沒有改變」——這本身就是一個對比較基準的隱性迴避：如果計算方法沒變，理論上應該能直接給出去年與今年ROI/ROIC數字的對比，但Amy整段回答完全沒有提供任何具體數字（無論是絕對值或方向性的百分點變化），只是重申「信心提升」這個定性結論。這與Karl Keirstead被問到量化問題時的迴避模式相同——當被要求提供可比較的時間序列數字時，管理層傾向於用「信心」「槓桿」等定性詞彙取代真正的比較數字。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Gabriela Borges:</b> Hey, good afternoon. Thank you. Amy, I wanted to ask you about ROI. You've given us color on the CapEx side of the equation. You've given us color on the monetization side of the equation. Maybe put those two pieces together for us. When you look at and track ROI on the CapEx decisions you're making today, how does that compare to a year ago? What are some of the levers that you can still pull, perhaps from the internal silicon side, for example, as a driver of incremental monetization going forward? Thank you.<br><br><b>Amy Hood:</b> Thanks, Gabriela. I don't know that, quite frankly, my math has changed in terms of how I do it over the past year. I would say the way to think about it for me is more the confidence in the TAM expansion, the margin levers that we have in terms of both product improvements, then the infrastructure improvements. We talked about some already on the call today in terms of the levers we have to continue to get efficiencies across both the application part of the stack and then the infra part of the stack. You're right, we didn't touch on all of the pieces. I think Satya actually commented on a number of them. We still have opportunities, obviously, as we continue to look for the best price-performance on silicon, including our investments in first party.<br><br>The work, frankly, on model diversification also is a margin improvement opportunity. Being able to serve the best possible outcome with a more efficient, or both efficient in terms of token usage and efficient in terms of cost structure, are also margin levers. All of these things contribute, obviously, to your point of increased confidence in ROIC, frankly, of the dollars that we're investing, and continue to invest going forward. As we think about the mix of the portfolio, being able to have a pretty broad pool across knowledge work, coding, security, then basically the agent layer, I'll call that Agent 365. It's kind of a cheat.<br><br>All of that also is an opportunity, then, of course, what we talked about on the Azure side between model efficiency, silicon, and component efficiency, including our investments in 1P solutions there, and just the overall efficiency of running it at a hyperscale. We have quite a few levers to continue to see improvement that we're focused on. As Satya mentioned, this is the grind work. This is like every day you just get a little better. We actually are quite good at that grind and making sure that we can deliver that for customers.<br><br><b>Gabriela Borges:</b> That all makes sense. Thank you.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Special Item: Model Diversification + Useful-Life Accounting Change ============ -->
+  <div id="panel-special" class="panel">
+    <div class="section-title">本季特殊事件一：模型多元化戰略——「harness與模型解耦」的架構設計</div>
+    <div class="card"><p>Satya本季開場就把「模型多元化」講成一套完整的企業架構哲學，而不只是一句口號：企業要把harness（記憶、情境、行動空間）跟任何單一模型家族解耦，讓模型變成可替換的輸入。Karl Keirstead是唯一直接追問這件事財務意涵的分析師，管理層完整解釋了「怎麼做」，但對「Microsoft自己會不會受傷」（因為同時持有OpenAI與Anthropic的股權曝險）這個問題沒有正面回應——這是本季度最值得深挖的策略疊加風險，詳見下方核心疑問與風險矩陣tab。</p></div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue"><h4>規模</h4><ul>
+        <li>模型目錄橫跨11,000+個模型，涵蓋OpenAI、Anthropic、Mistral、xAI，以及自研MAI家族。</li>
+        <li>年初至今，同時使用多家供應商模型的客戶數成長5倍；Levi Strauss &amp; Co.用OpenAI與Anthropic模型在Foundry上打造逾1,000個領域專屬代理。</li>
+        <li>自研MAI-Code-1-Flash已被數百萬開發者用於GitHub Copilot，程式碼接受率更高、median token用量降低10%；MAI-Cyber-1-Flash在資安場景做到與更大型「Mythos」模型相當表現、成本卻減半（90%任務交給MAI-Cyber-1-Flash、10%才上frontier模型）。</li>
+        <li>效率案例：Dynamics 365用MAI-Voice-2-Flash使GPU成本降89%；PowerPoint用MAI-Image-2.5使GPU成本降最多84%；在Maia 200上跑MAI模型效能／瓦特提升40%。</li>
+      </ul></div>
+      <div class="quad-box green"><h4>期限</h4><ul>
+        <li>「年初至今5倍成長」的措辭顯示這是一個近期才加速的趨勢，而非已運作多年的成熟模式。</li>
+        <li>Foundry客戶數達100,000家，營收年增逾倍；達1兆token年化run rate的客戶數年增4倍——顯示這不只是試點，而是持續在擴大的採用曲線。</li>
+        <li>與Mistral的Sovereign Cloud合作「上週」才宣布，屬於最新進展；Maia 200「現在同時支援OpenAI與MAI模型」，代表矽晶片與模型的協同設計仍在持續演進中。</li>
+      </ul></div>
+      <div class="quad-box orange"><h4>財務承諾／成本</h4><ul>
+        <li>這本質上是一個成本效率／毛利策略，不是新增營收承諾——真正的財務承諾是矽晶片與模型協同設計所需的研發與基礎設施投入（Maia 200等）。</li>
+        <li>Foundry是第三方模型存取的貨幣化入口，Microsoft無論客戶選哪個模型都能靠Azure基礎設施收費——這正是Amy回應Karl Keirstead時強調的「基礎設施可替換／可通用（fungible）」邏輯。</li>
+        <li>隱藏成本：如果客戶把推論工作從OpenAI／Anthropic的付費API大量轉向Microsoft自家更便宜的MAI模型，Microsoft作為這兩家公司股權投資人的經濟利益（本季認列的$32億Anthropic評價利得即為一例）有可能被自己力推的架構稀釋——這是Karl Keirstead提問未被正面回答的部分。</li>
+      </ul></div>
+      <div class="quad-box red"><h4>尚待驗證</h4><ul>
+        <li>管理層從未揭露Foundry推論流量中，究竟有多少比例實際跑在自家MAI模型、多少比例仍付費給第三方frontier模型——沒有這個拆分，「模型多元化帶來的成本節省」敘事無法對照整體AI基礎設施支出規模來驗證。</li>
+        <li>Azure毛利率是否因客戶選用較便宜的MAI推論、而非付費OpenAI／Anthropic API（Microsoft可能從中分潤）而受影響，管理層未揭露方向或幅度。</li>
+        <li>Karl Keirstead直接問的「開放／客製模型未來1–2年traction有多大」始終未被量化。</li>
+        <li>Microsoft對OpenAI與Anthropic的股權／經濟利益，是否會讓公司在Foundry內部的模型推薦與定價設計上，存在把客戶導向自家MAI模型的結構性誘因？這個潛在利益衝突未被討論。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title">本季特殊事件二：資料中心／辦公大樓使用年限15→25年會計變更</div>
+    <div class="card"><p>Amy在展望前主動揭露：自FY2027起，資料中心與辦公大樓的估計使用年限從15年延長至25年，理由是「反映我們的營運歷史與這些資產的預期使用方式」。這個變更本身對FY27營業利益影響輕微，但真正的槓桿在CapEx——因為部分未來資料中心租約會從融資租賃（計入CapEx）轉為營運租賃（不計入CapEx），使CY2026 CapEx guidance從原本的軌跡調整為約$1,750億。這是一個純會計／租賃分類調整，不代表實際建置規模改變，但會讓CapEx數字的年度可比性變得模糊。</p></div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue"><h4>規模</h4><ul>
+        <li>適用範圍是整個資料中心與辦公大樓的PP&amp;E基礎——依SEC交叉比對筆記，伺服器與網路設備原始成本年增62.5%（$2,158.74億）、建築物原始成本年增32.5%（$1,827.49億），基數龐大。</li>
+        <li>使用年限從15年延長至25年，等於單一年度折舊費用的分母放大約67%。</li>
+      </ul></div>
+      <div class="quad-box green"><h4>期限</h4><ul>
+        <li>變更自FY2027起生效（即2026年7月1日之後），屬於前瞻性調整，不追溯重編過去財報。</li>
+        <li>Amy明確指出「這個變更只影響未來折舊認列的時間點，對FY2027營業利益的效益很小」——換言之，損益表層面的影響被刻意講得很輕，但資產負債表／CapEx層面的影響才是重點。</li>
+      </ul></div>
+      <div class="quad-box orange"><h4>財務承諾／成本</h4><ul>
+        <li>機制：使用年限延長後，更多未來資料中心租約會從「融資租賃」（計入CapEx）轉為「營運租賃」（不計入CapEx）。</li>
+        <li>Amy特別強調：撇除這個使用年限的影響，公司對CY2026 CapEx投資的預期本身沒有變，只是租賃分類的移轉，讓guidance數字調整為約$1,750億。</li>
+        <li>Q1 FY2027 CapEx guidance為「超過$500億，含此次使用年限更新帶來的租賃重分類影響」——代表本季及下季的CapEx數字已經開始反映這個新的分類方式，使用舊制（融資租賃）與新制的CapEx數字不能直接並列比較。</li>
+      </ul></div>
+      <div class="quad-box red"><h4>尚待驗證</h4><ul>
+        <li>本季究竟有多少金額的資料中心租約從融資租賃重分類為營運租賃，管理層沒有給出一個獨立揭露的具體數字，只用「調整guidance到約$1,750億」這個結果性描述帶過。</li>
+        <li>沒有給出「若沿用舊制（15年／融資租賃）」下FY2027 CapEx guidance會是多少的反事實對照，使得FY26→FY27跨界的CapEx年增率比較在方法論上失真。</li>
+        <li>25年使用年限假設相較同業（如AWS過去也曾做過類似的使用年限延長）是偏保守還是偏積極，法說會上未討論，也未見外部審計意見對此列為關鍵會計估計判斷的公開評論。</li>
+        <li>這個會計變更如何與風險矩陣tab提出的「RPO認列時程落後CapEx現金支出」風險疊加——使用年限延長讓近期帳面折舊費用變輕，即使現金與租賃/CapEx的建置步伐持續加速，可能讓損益表呈現的獲利能力比實際現金負擔更樂觀。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title">核心疑問——管理層留白的盡職調查追問</div>
+    <div class="diligence-box"><ol>
+      <li>Foundry目前的推論token量中，實際跑在Microsoft自家MAI模型上的比例是多少？沒有這個數字，「模型多元化帶來的成本節省」規模無法對照整體AI基礎設施支出驗證。</li>
+      <li>Microsoft同時持有OpenAI與Anthropic的股權／經濟利益，而自身的多模型harness策略又鼓勵客戶用更便宜的MAI模型取代這兩家的API——這是否構成結構性利益衝突？Foundry的模型推薦邏輯、定價設計是否對自家模型存在傾斜？</li>
+      <li>本季究竟有多少金額的資料中心租約因使用年限變更而從融資租賃改列營運租賃？若沿用舊制，FY2027 CapEx guidance會是多少？沒有這個反事實對照，投資人無法乾淨地比較FY26與FY27的CapEx年增率。</li>
+      <li>25年使用年限假設的合理性依據是什麼（機齡數據、汰換歷史、技術迭代速度）？是否已由審計機構列為「關鍵會計估計」（critical accounting estimate）並在10-K附註中揭露判斷依據？</li>
+      <li>使用年限延長降低了近期帳面折舊，是否讓財報呈現的獲利能力（尤其是Intelligent Cloud的營業利益率）比實際現金負擔更樂觀？這個效果會在未來幾季隨CapEx加速而擴大還是持平？</li>
+    </ol></div>
+    <p class="note">資料來源：FY2026 Q4法說會逐字稿（Satya Nadella開場談模型多元化、Amy Hood展望前段落談使用年限變更）；PP&amp;E年增率交叉比對SEC Cross-Reference Notes文件（R61.htm，伺服器/網路設備、建築物原始成本）。</p>
+  </div>
+
+  <!-- ============ Technology ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">分部營收 — FY2026 Q4（百萬美元、年增率、佔總營收比）</div>
+    <div class="rev-chart">
+      <div class="rev-row"><div class="rev-name">Intelligent Cloud</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:100%;background:#15803d;">44%</div></div><div class="rev-val">$39,300M / +32%</div></div>
+      <div class="rev-row"><div class="rev-name">Productivity and Business Processes</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:96%;background:#2563eb;">42%</div></div><div class="rev-val">$37,800M / +14%</div></div>
+      <div class="rev-row"><div class="rev-name">More Personal Computing</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:33%;background:#c2600a;">14%</div></div><div class="rev-val">$12,900M / −4%</div></div>
+    </div>
+    <p class="note">長條寬度以Intelligent Cloud=100%縮放；三部門合計$90,000M，與公司總營收$90B吻合。IC本季首度超越PBP成為最大部門（$393億 vs $378億），成長動能也最強（+32%，Azure單獨+43%）；MPC是唯一衰退部門（−4%，主因Windows OEM存貨去化與零組件漲價壓抑PC市場），與Q3同一模式延續。來源：Microsoft IR分部營收頁與法說會逐字稿。</p>
+    <hr class="divider">
+    <div class="section-title">AI技術堆疊六大層——Satya描述的架構與本季採用指標</div>
+    <div class="tech-grid">
+      <div class="tech-card pnl c1"><h4>① 基礎設施</h4><ul>
+        <li>本季新增31座資料中心、橫跨5大洲，年初至今累計新增88座；本季新增約1GW產能，兩年內整體產能翻倍的軌道不變（與Q3的翻倍承諾延續一致）。</li>
+        <li>年初至今新GPU「dock-to-live」時間在主要區域縮短近50%。</li>
+        <li>Maia 200：效能／美元優於現役機隊逾30%，同時支援OpenAI與自研MAI模型；Cobalt VM已服務Adobe、Arm、Elastic、OpenAI、Sprinklr、TomTom等客戶，本月底前Cobalt 200機櫃將部署於25+座資料中心。</li>
+        <li>將成為最早部署新一代機架級AI基礎設施（AMD Helios、NVIDIA Vera Rubin）的雲端供應商之一。</li>
+      </ul></div>
+      <div class="tech-card pnl c2"><h4>② Foundry（模型與資料層）</h4><ul>
+        <li>100,000家Foundry客戶，營收年增逾倍；達1兆token年化run rate的客戶數年增4倍；Telefónica採用Foundry作為其agentic平台基礎，首波聚焦關鍵網路維運。</li>
+        <li>PostgreSQL營收+55%，連續第三季加速；同時使用PostgreSQL與Foundry的客戶數+80%；新推出Horizon DB（全代管PostgreSQL），吞吐量達自管部署3倍。</li>
+        <li>Fabric付費客戶突破40,000，年增逾60%；同時使用Foundry與Fabric的客戶逾17,000，年增60%；新推出Rayfin（agent-first後端SDK），已有2,500+客戶採用，並開始為Replit提供後端。</li>
+        <li>Web IQ本季推出，已被包含ChatGPT在內的主流AI助理採用；近90%的Fortune 500已透過Foundry、Fabric、Work IQ把代理與企業情境接軌。</li>
+      </ul></div>
+      <div class="tech-card pnl c3"><h4>③ Copilot（知識工作）</h4><ul>
+        <li>付費M365 Copilot座位突破3,000萬，淨新增席次季增逾倍（與Q3「淨新增年增250%」的加速軌跡一致，本季改用季增倍率描述，顯示動能持續加快）。</li>
+        <li>上月Copilot Cowork正式GA；本季推出autopilots（含由OpenClaw驅動的常駐個人代理）；近三季使用者滿意度翻倍、創歷史新高，本季延遲降低25%。</li>
+        <li>每使用者對話數年增近倍；每週互動強度追平Outlook／Teams；從部署到高使用度（月活躍滲透約80%）的時間從數月縮短至數天；5萬席以上大客戶數年增逾7倍；部署Copilot給多數員工的企業客戶數季增近75%。</li>
+        <li>指標客戶：NHS England（50.5萬名臨床與行政人員，試點顯示每人每天省43分鐘）、KPMG（27.6萬+名專業人員）、HSBC（20萬席）、AstraZeneca／Boeing／Infosys／Coke／P&amp;G／Stellantis／TCS／UPMC／Wells Fargo／Wipro（各6萬席以上）；E7上市兩個月內已有數百家企業客戶採購逾百萬席，EY單一客戶部署40萬人（史上最大單）。</li>
+      </ul></div>
+      <div class="tech-card pnl c4"><h4>④ Agent 365（治理層）</h4><ul>
+        <li>提供延伸企業既有治理、身分、資安、管理框架到agent的控制平面。</li>
+        <li>推出僅兩個月，已有近4,000萬個代理在數萬家公司註冊——是本季全新出現、Q3尚未有的採用指標，代表治理層正快速追上應用層的部署速度。</li>
+      </ul></div>
+      <div class="tech-card pnl c5"><h4>⑤ GitHub Copilot（開發者）</h4><ul>
+        <li>GitHub Copilot用戶突破5,000萬；本季推出使用量計費，商業與企業席次持續成長，新計費模式上路後消費營收顯著成長，Copilot營收季增逾60%。</li>
+        <li>GitHub整體用戶達2.25億，逾90%的Fortune 500選用GitHub做AI開發；每3個pull request就有1個涉及代理，「敏捷時代正建立在GitHub之上」。</li>
+      </ul></div>
+      <div class="tech-card pnl c6"><h4>⑥ Security（資安層）</h4><ul>
+        <li>Microsoft Purview已稽核逾150億次Copilot互動以符合合規要求，年增近360%。</li>
+        <li>本週推出Project Perception——多模態agentic資安系統，紅隊／藍隊／綠隊代理協同模擬攻擊、調查威脅、驅動修復；退出私有預覽後將以消費制方式向客戶開放。</li>
+      </ul></div>
+    </div>
+    <hr class="divider">
+    <div class="section-title">管理層在推銷的因果鏈——與Q3的延續性</div>
+    <div class="card"><p>基礎設施投資（本季新增31座資料中心、+1GW，年初至今累計88座）→ 推論效率提升（Copilot workload吞吐量年初至今4倍、Maia 200效能/瓦特+40%）→ Foundry與Copilot使用強度創新高（週互動追平Outlook、5萬席以上客戶年增7倍）→ 座位制與消費制雙軌收費同步擴張（GitHub Copilot營收季增60%、Dynamics消費信用季增4倍）→ 資助下一代模型與晶片（Maia 200、Cobalt 200、AMD Helios/NVIDIA Vera Rubin部署）→ 循環。這條因果鏈與Q3法說會的敘事完全一致，但本季多了一個新的顯性框架——「harness與模型解耦」被Satya明確闡述為架構設計原則（見「模型多元化／會計變更」tab），且Copilot付費席次的成長速率（淨新增季增逾倍）比Q3的年增倍率描述更陡峭，顯示飛輪本身在加速，而非只是維持速度。牛市論點是這個飛輪持續自我強化；熊市反駁（見風險矩陣）是：RPO中「12個月內認列」的比重雖也成長（+37%年增），但「12個月以後才認列」的部分成長速度是它的三倍（+112%），代表在手訂單正在被拉長遞延，與CapEx持續加速的現金支出步調產生時間落差。</p></div>
+  </div>
+
+  <!-- ============ Value Chain ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="section-title">運算供應鏈與關鍵夥伴關係 — 法說會＋10-K PP&amp;E交叉比對整理（含出處與信心註記）</div>
+    <div class="flag-box obs" style="margin-bottom:12px;"><div class="q-label">資料限制註記</div><div class="q-text">Microsoft不像半導體或硬體製造業申報公司，10-K不會用Item 1/1A的方式逐項揭露零組件供應商與集中度——依SEC Cross-Reference Notes文件的範圍註記，本次交叉查核聚焦於Form 4內部人動態、經會計師簽證的分部財務表、PP&amp;E明細與RPO附註，而非逐項重建供應鏈申報。以下內容屬「法說會具名資訊＋10-K財產目錄科目佐證」的混合整理，非傳統供應鏈揭露文件，信心度依來源標註。</div></div>
+
+    <div class="chain-layer chain-up"><h4>▲ 矽晶片／運算供給依賴</h4>
+      <div class="node conf-hi">NVIDIA — GPU，將部署next-gen Vera Rubin機架級架構 <span class="src">法說會</span></div>
+      <div class="node conf-hi">AMD — GPU，將部署next-gen Helios機架級架構 <span class="src">法說會</span></div>
+      <div class="node conf-hi">自研：Maia 200（AI加速器，效能/美元優於現役機隊逾30%）、Cobalt／Cobalt 200（CPU，本月底前部署於25+資料中心）<span class="src">法說會</span></div>
+      <div class="node conf-mid">零組件價格通膨——Amy Hood明確提及CapEx guidance「含零組件漲價的影響」，且Windows OEM／通路夥伴因零組件漲價而持續增加庫存 <span class="src">法說會</span></div>
+      <div class="node conf-hi">10-K財產目錄佐證：伺服器與網路設備（含相關軟體）原始成本年增62.5%（$2,158.74億 vs $1,328.36億）<span class="src">10-K R61.htm，見SEC Cross-Reference Notes</span></div>
+    </div>
+
+    <div class="chain-layer chain-up"><h4>▲ 產能建置夥伴／地理布局</h4>
+      <div class="node conf-hi">本季新增31座資料中心、橫跨5大洲；年初至今累計新增88座；本季新增約1GW容量，兩年內整體容量翻倍在軌 <span class="src">法說會</span></div>
+      <div class="node conf-hi">與Mistral合作，將其模型帶入Microsoft Sovereign Cloud（公有／客戶控管／完全斷網三種環境）——回應客戶對AI主權的需求 <span class="src">法說會</span></div>
+      <div class="node conf-hi">10-K財產目錄佐證：建築物與改良工程原始成本年增32.5%（$1,827.49億 vs $1,379.21億），PP&amp;E淨額年增52.7% <span class="src">10-K R61.htm</span></div>
+      <div class="node conf-mid">本季新增融資租賃$56億，主要用於大型資料中心基地 <span class="src">法說會</span></div>
+    </div>
+
+    <div class="chain-layer chain-core"><h4>● OpenAI／Anthropic——雙重角色：客戶＋股權投資（關聯方動態，需持續追蹤）</h4>
+      <div class="node conf-hi">Maia 200「現在同時支援OpenAI與MAI模型」——基礎設施層仍與OpenAI深度協同設計 <span class="src">法說會</span></div>
+      <div class="node conf-hi">Cobalt VM客戶名單明確包含OpenAI——OpenAI同時是Azure運算大客戶 <span class="src">法說會</span></div>
+      <div class="node conf-hi">本季認列$32億Anthropic評價利得，是$0.27每股discrete效益中最大的單一項目——Anthropic成為繼OpenAI之後，第二個讓Microsoft財報損益隨其自身估值波動的關聯方 <span class="src">法說會</span></div>
+      <div class="node conf-mid">10-K客戶集中度揭露：「沒有單一客戶或美國以外國家占任一財年營收超過10%」——此揭露門檻可能是在合併營收層級而非雲端分部層級計算，不必然與OpenAI/Anthropic作為重要雲端客戶的敘事矛盾，但屬於揭露範圍差異，非揭露不實 <span class="src">10-K R108.htm</span></div>
+      <p class="note">⚑ 留白反推：管理層從未在法說會上把OpenAI或Anthropic的Azure採購金額、或Foundry內MAI模型與這兩家模型的流量占比拆開揭露，儘管兩者顯然都具重大性（Anthropic單季即貢獻$32億評價利得）。這種「重要但不具名量化」的揭露模式，與Q3法說會對OpenAI關係重組「只講拿到什麼、不講放棄什麼」的敘事紀律一致，本季隨Anthropic加入而进一步放大成兩個關聯方。</p>
+    </div>
+
+    <div class="chain-layer chain-down"><h4>▼ 下游 — 企業／開發者／消費者客戶</h4>
+      <div class="node conf-hi">旗艦企業客戶：NHS England（50.5萬席）、KPMG（27.6萬+席）、HSBC（20萬席）、EY（40萬席，史上最大單）、AstraZeneca／Boeing／Infosys／Coke／P&amp;G／Stellantis／TCS／UPMC／Wells Fargo／Wipro（各6萬席以上）<span class="src">法說會</span></div>
+      <div class="node conf-hi">Foundry企業客戶：Telefónica（agentic平台基礎）、Levi Strauss &amp; Co.（多模型、1,000+領域代理）<span class="src">法說會</span></div>
+      <div class="node conf-hi">Cobalt／Azure企業客戶：Adobe、Arm、Elastic、Sprinklr、TomTom <span class="src">法說會</span></div>
+      <div class="node conf-hi">開發者：GitHub Copilot 5,000萬用戶、GitHub整體2.25億用戶 <span class="src">法說會</span></div>
+      <div class="node conf-hi">科學／醫療：BHP、GSK、Pacific Northwest National Laboratory（Microsoft Discovery）；Mass General Brigham（DAX Copilot，4,000+醫護，研究顯示降低倦怠21%）<span class="src">法說會</span></div>
+    </div>
+    <p class="note">集中度：法說會與10-K均未揭露單一客戶10%以上集中度。與Q3相同，OpenAI是唯一同時出現在上游（矽晶片協同設計）、核心（關聯方投資）與下游（Azure大客戶）三個位置的特殊節點，本季新增Anthropic成為第二個具備類似「三重角色」潛力的關聯方（目前僅明確揭露其股權投資／評價利得一側，客戶採購規模未揭露）。綠邊=法說會或10-K財產目錄高信心來源；橘＝籠統揭露或推論；本tab未使用紅（低信心）節點，因本次未依賴任何單一來源、未交叉驗證的第三方彙整數字。</p>
+  </div>
+
+  <!-- ============ Risk ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title">風險矩陣 — 已揭露 vs 未揭露／從數字反推</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">⭐ 獨創前瞻風險：RPO認列時程正在拉長，卻與CapEx現金加速及使用年限會計變更疊加，可能讓帳面獲利能力領先實際現金負擔太多</div>
+        <span>Commercial RPO年增84%達$6,780億，其中預計12個月內認列的部分年增37%，但預計12個月「以後」才認列的部分年增達112%——是前者的三倍速。換言之，在手訂單存量正快速向更長的認列時間軸偏移。與此同時，CapEx本季達$410億（含零組件漲價影響），Q1 FY2027 guidance跳升至逾$500億，FY2027全年約$1,750億——現金與租賃/CapEx的建置步伐持續加速。更值得注意的是，管理層同時宣布資料中心與辦公大樓使用年限由15年延長至25年，效果是壓低近期帳面折舊費用（「對FY27營業利益的效益很小」是管理層自己的說法，但方向是正面的）。三件事疊加：①營收認列被拉長、②現金CapEx持續加速、③折舊費用因使用年限延長而被壓低——這意味著近幾季損益表呈現的獲利能力（尤其是Intelligent Cloud的營業利益率）可能會系統性地比實際現金負擔更樂觀，而這個落差會隨RPO的長尾部分持續放大、CapEx guidance持續上修而擴大，卻沒有任何一位分析師在本場法說會上把這三件事連在一起追問。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">零組件漲價揭露品質較上季倒退——管理層對「如何不侵蝕毛利率」給不出量化答案</div>
+        <span>Mark Moerdler直接問零組件漲價如何不迫使大幅漲價或侵蝕毛利，Amy的回答完全是定性的（CapEx資產結構彈性、客戶組合多元、效率工作、雲端相對on-prem仍划算），且部分承認漲價確實會反映在新合約定價中，卻沒有量化轉嫁比例。對比上一季法說會，管理層曾明確揭露CY2026 CapEx guidance中約$250億歸因於零組件價格通膨這個具體數字；本季法說會只在展望中用「含零組件漲價影響」這類籠統措辭帶過Q1與CapEx guidance，沒有給出可與上季對照的量化數字，是一次揭露品質的倒退，值得在下季追問是否會恢復量化揭露。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Azure/Intelligent Cloud的高成長仍是供給封頂、非需求封頂——與Q3同一模式延續</div>
+        <span>Amy明確表示「需求持續超過可用供給」，且Brent Thill的提問揭露：本季43%的Azure加速有相當部分來自效率提升「被快速貨幣化」（quickly monetized）——即把既有機隊榨得更乾淨帶來的一次性效果，而非單純新增產能上線。這代表Q1 FY2027 guidance的Azure CC+45%本身仍是供給允許的上限，而非需求真實水位的完整反映；一旦供給端追上需求、效率紅利的邊際貢獻遞減，成長率有可能無法簡單線性外推。與Q3法說會「至少到2026年底維持受限」的表述方向一致，代表這個供給瓶頸預期至少會持續到本財年後續季度。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">模型多元化戰略與Microsoft自身Frontier Lab股權曝險之間的潛在利益衝突未被正面處理</div>
+        <span>Karl Keirstead明確問「Microsoft在持有大量Frontier Lab曝險的情況下，如何從客戶轉向開放/客製模型中受益」，管理層的回答只講了Azure基礎設施層的「可替換性」（無論客戶選哪個模型，Azure都能賺到運算費），完全沒有處理另一半問題——如果Foundry客戶大量把推論工作從OpenAI／Anthropic的付費API轉向Microsoft自家更便宜的MAI模型，Microsoft作為這兩家公司股權投資人的經濟利益（本季$32億Anthropic評價利得即為代表）是否會被自己力推的多模型架構侵蝕。這個問題在本季隨Anthropic投資的加入而變得更加迫切，卻完全沒有被量化或正面回應。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">雙重關聯方（OpenAI＋Anthropic）疊加，EPS品質的股權法波動因子從一個變成兩個</div>
+        <span>本季$0.27每股discrete效益中，最大單一項目是$32億Anthropic評價利得，與去年同期的OpenAI股權法波動風險（Q3已標記為高風險）性質完全相同，只是換了一個關聯方。這代表Microsoft的「Other income and expense」與GAAP EPS往後不只受OpenAI一家未上市公司自身估值波動牽動，還多了Anthropic這第二個變數。本季法說會的EPS成長率措辭也出現了有趣的翻轉——管理層強調的是「調整後（ex-OpenAI投資影響）成長23%」，而非像Q3那樣把GAAP數字（23%）當作headline、調整後數字（21%/18% CC）當作更保守的參照；這次因為Anthropic利得是正貢獻，管理層選擇性地把「調整後」數字擺在最前面講，這種依當季利得方向切換headline框架的做法，本身就是財報品質層面值得持續追蹤的訊號。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Xbox業務重置——管理層已明確承認多季度的營運陣痛，要到FY2027才預期恢復成長</div>
+        <span>Xbox本季營收年減10%（內容與服務年減10%），營業利益年減14%（CC−15%），營業利益率降至21%；本季一次性資遣費用與減損費用也是壓低營運費用增幅、影響G&amp;A年增率的discrete items之一。管理層直接使用「重置（reset）」一詞描述對內容組合、平台與營運所做的必要決策，並明確表示「預期FY2027讓業務恢復成長」——這是管理層主動承認的已知逆風，而非需要反推的留白，但其恢復成長的具體路徑（哪些IP、哪些平台決策）在本場法說會上未展開，值得下一季追蹤進度。</span>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人訊號中性——本次財報前後為乾淨的封鎖窗口，無異常訊號</div>
+        <span>依SEC Cross-Reference Notes文件的Form 4掃描：最近一批Form 4集中在2026年6月9日至6月16日（財年底既定RSU歸屬季節性扣稅賣出，屬例行模式）與7月1日、7月15日（Amy Coleman一筆代碼F的稅務代扣，約$1.24萬，非自主性賣出）；2026年7月15日至8月4日之間完全沒有任何Form 4申報——即財報發布前後有一個乾淨的封鎖窗口，沒有Section 16高管在財報公布前後進行自主性買賣。考量6月RSU歸屬潮的活躍度，這段時間的沉默本身具資訊性，與標準財報前封鎖窗口一致，非特殊訊號。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Income Statement ============ -->
+  <div id="panel-is" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$90.0B</div><div class="kpi-lbl">營收</div><div class="kpi-sub">+18% YoY（CC+17%）</div></div>
+      <div class="kpi"><div class="kpi-val">45%</div><div class="kpi-lbl">營業利益率</div><div class="kpi-sub">年增小幅（毛利率67%，年減）</div></div>
+      <div class="kpi"><div class="kpi-val">$4.74</div><div class="kpi-lbl">稀釋EPS</div><div class="kpi-sub">調整後（排除OpenAI投資影響）+23%</div></div>
+      <div class="kpi"><div class="kpi-val">$331.8B</div><div class="kpi-lbl">FY2026全年營收</div><div class="kpi-sub">+18%；全年營業利益&gt;$155B（+21%）</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併損益表——逐行推算（百萬美元，三個月，Q4 對 Q4）</div>
+      <table>
+        <tr><th>項目</th><th>Q4 FY2025（推算）</th><th>Q4 FY2026</th><th>年增</th></tr>
+        <tr><td><strong>營收</strong></td><td>76,300</td><td><strong>90,000</strong></td><td class="pos">+18.0%（管理層明示）</td></tr>
+        <tr class="total"><td>毛利</td><td>52,400</td><td>60,300</td><td class="pos">+15.0%（管理層明示，毛利率67%）</td></tr>
+        <tr class="subtotal"><td>　營收成本（推算）</td><td>23,900</td><td>29,700</td><td>+24.3%（推算）</td></tr>
+        <tr><td>營業費用（推算）</td><td>18,000</td><td>19,800</td><td>+10.0%（管理層明示成長率）</td></tr>
+        <tr class="total"><td>營業利益（推算，營益率45%）</td><td>34,300</td><td>40,500</td><td class="pos">+18.0%（管理層明示）</td></tr>
+        <tr><td>其他收入（費用）淨額（排除OpenAI投資影響）</td><td>—</td><td>2,800</td><td>主因$32億Anthropic評價利得</td></tr>
+        <tr><td>稀釋EPS</td><td>—</td><td>$4.74</td><td>調整後（ex-OpenAI）+23%</td></tr>
+      </table>
+      <div class="flag"><b>⚑ 本表「推算」欄位的方法論與限制。</b> 法說會逐字稿只明確揭露了本季營收$900億（精確數字）、毛利率67%、營業利益率45%、EPS $4.74，以及營收/毛利/營業利益/營業費用的年增率——沒有直接揭露Q4 FY2025的可比較美元金額，也沒有揭露GAAP口徑的淨利與稀釋股數。上表的「Q4 FY2025（推算）」欄位是用本季美元數字除以（1+年增率）反推而得，屬於自洽的估算，不是管理層或10-K逐項公布的數字；由於反推方法會讓營業利益率在兩期之間機械性地趨於一致（本表算出兩期都約45.0%），無法呈現管理層口頭形容的「年增小幅」這個更細緻的變動方向，讀者請以逐字稿的定性描述為準、表格數字僅供量級參考。GAAP口徑淨利金額因缺乏股數與GAAP EPS成長率資訊，本報告不做推算以避免虛假精確度。</div>
+      <div class="flag obs"><b>⚑ Headline框架出現翻轉——這次管理層把「調整後」數字擺在最前面，而非像上季那樣把GAAP數字當headline。</b> 本季逐字稿原文是「EPS was $4.74, an increase of 23% when adjusted for the impact from our investment in OpenAI」——23%這個數字被明確定義為「調整後」成長率，GAAP口徑的成長率本身在法說會逐字稿中並未單獨揭露。這與上一季（FY26 Q3）的揭露順序恰好相反：當時管理層把GAAP+23%當作headline數字、把「調整後」的21%／18% CC當作更保守的參照口徑（因為當時OpenAI股權法效應是墊高GAAP數字）。本季由於$32億Anthropic評價利得同樣是正貢獻，理論上GAAP成長率應該不會低於23%（甚至可能更高），但管理層選擇讓「調整後」數字站上headline——這種依當季discrete items方向切換呈現順序的溝通模式，是財報品質層面值得持續追蹤的訊號，與風險矩陣tab「雙重關聯方EPS波動」項目對應同一件事。</div>
+      <div class="flag"><b>⚑ 本季$0.27每股的guidance-vs-actual差異，由三個discrete items組成。</b> $32億Anthropic投資評價利得（最大單項）＋較預期為低的優退方案費用，部分被Xbox資遣費用與減損費用抵銷。扣除這些discrete items後，管理層強調「在營收、營業利益、EPS三個面向都因強勁需求與執行力而超出預期」——即便扣除一次性項目，本業表現仍優於原guidance，這點與下方guidance-vs-actual表的三大部門營收全數超越高標一致。</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Q4 FY2026 財測 vs 實際（財測取自FY26 Q3法說會給出的guidance）</div>
+      <table>
+        <tr><th>項目</th><th>Q4指引（Q3法說會給出）</th><th>Q4實際</th><th>達成情況</th></tr>
+        <tr><td>總營收</td><td>$86.7B–$87.8B（+13%至+15%）</td><td>$90.0B（+18%）</td><td class="pos">超越高標約$2.2B+</td></tr>
+        <tr><td>COGS（推算）</td><td>$29.4B–$29.6B（+22%至+23%）</td><td>≈$29.7B（推算，+24.3%）</td><td class="neu">略高於高標</td></tr>
+        <tr><td>營業費用（推算）</td><td>$19.3B–$19.4B（約+7%）</td><td>≈$19.8B（推算，+10%）</td><td class="neu">費用成長率超出guidance</td></tr>
+        <tr><td>Intelligent Cloud營收</td><td>$37.95B–$38.25B（+27%至+28%）</td><td>$39.3B（+32%）</td><td class="pos">超越高標約$1.05B</td></tr>
+        <tr><td>Productivity &amp; Business Processes營收</td><td>$37.0B–$37.3B（+12%至+13%）</td><td>$37.8B（+14%）</td><td class="pos">超越高標約$0.5B</td></tr>
+        <tr><td>More Personal Computing營收</td><td>$11.75B–$12.25B</td><td>$12.9B（−4%YoY）</td><td class="pos">超越高標約$0.65B</td></tr>
+        <tr><td>CapEx</td><td>&gt;$40B（含約$5B零組件漲價影響）</td><td>$41B</td><td class="pos">落在guide範圍內</td></tr>
+      </table>
+      <div class="flag obs"><b>⚑ 這是一次「營收與成本同步超預期」的季度，不是單純的營運槓桿驚喜。</b> 總營收與三大部門營收全數超越guidance高標，是紮實的需求面訊號；但COGS與營業費用的年增率也雙雙略高於guidance（尤其營業費用+10% vs guide約+7%），代表本季的beat有一部分是靠多花錢換來的，而非單純的效率提升。這與Brent Thill在Q&amp;A tab上「Azure加速是環境還是執行力」的問題呼應——本季的財測超標同時混合了需求強勁與成本超支兩種訊號，不能只看營收beat的表面。</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY2024–FY2026 營收與營業利益趨勢（10-K年度數字，百萬美元）</div>
+      <svg viewBox="0 0 640 260" style="width:100%;max-width:640px;height:auto;display:block;margin:0 auto;">
+        <line x1="60" y1="240" x2="580" y2="240" stroke="#e2e4ea" stroke-width="1"/>
+        <line x1="60" y1="177.1" x2="580" y2="177.1" stroke="#eef0f5" stroke-width="1"/>
+        <line x1="60" y1="114.3" x2="580" y2="114.3" stroke="#eef0f5" stroke-width="1"/>
+        <line x1="60" y1="51.4" x2="580" y2="51.4" stroke="#eef0f5" stroke-width="1"/>
+        <text x="52" y="244" font-size="10" fill="#94a3b8" text-anchor="end">$0B</text>
+        <text x="52" y="181" font-size="10" fill="#94a3b8" text-anchor="end">$100B</text>
+        <text x="52" y="118" font-size="10" fill="#94a3b8" text-anchor="end">$200B</text>
+        <text x="52" y="55" font-size="10" fill="#94a3b8" text-anchor="end">$300B</text>
+        <polyline points="60,85.9 320,62.9 580,31.4" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <circle cx="60" cy="85.9" r="4" fill="#2563eb"/><circle cx="320" cy="62.9" r="4" fill="#2563eb"/><circle cx="580" cy="31.4" r="4" fill="#2563eb"/>
+        <text x="60" y="76" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">$245.1B</text>
+        <text x="320" y="53" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">$281.7B</text>
+        <text x="580" y="22" font-size="11" fill="#1a1a2e" text-anchor="middle" font-weight="700">$331.8B</text>
+        <polyline points="60,171.2 320,159.2 580,142.4" fill="none" stroke="#15803d" stroke-width="2.5"/>
+        <circle cx="60" cy="171.2" r="4" fill="#15803d"/><circle cx="320" cy="159.2" r="4" fill="#15803d"/><circle cx="580" cy="142.4" r="4" fill="#15803d"/>
+        <text x="60" y="186" font-size="11" fill="#15803d" text-anchor="middle">$109.4B</text>
+        <text x="320" y="174" font-size="11" fill="#15803d" text-anchor="middle">$128.5B</text>
+        <text x="580" y="157" font-size="11" fill="#15803d" text-anchor="middle">$155.2B</text>
+        <text x="60" y="255" font-size="11" fill="#666" text-anchor="middle">FY2024</text>
+        <text x="320" y="255" font-size="11" fill="#666" text-anchor="middle">FY2025</text>
+        <text x="580" y="255" font-size="11" fill="#666" text-anchor="middle">FY2026</text>
+      </svg>
+      <p class="note" style="text-align:center;">藍線＝總營收，綠線＝總營業利益（資料來源：10-K R107.htm分部表加總）。FY2026營業利益成長率（+20.8%）持續超過營收成長率（+17.8%），營業槓桿連續兩年擴大。</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY2027全年展望（法說會給出）</div>
+      <table>
+        <tr><th>項目</th><th>FY2027展望</th></tr>
+        <tr><td>營收與營業利益成長</td><td>再一個雙位數成長的財年</td></tr>
+        <tr><td>營業費用成長</td><td>中至高個位數（研發運算產能、人才、資料投入）</td></tr>
+        <tr><td>CapEx</td><td>年增（使用年限會計變更後，約$1,750億）</td></tr>
+        <tr><td>全年營業利益率</td><td>年減不到1個百分點</td></tr>
+        <tr><td>自由現金流</td><td>預期維持正值</td></tr>
+        <tr><td>有效稅率</td><td>約20%</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Q1 FY2027 展望（法說會給出）</div>
+      <table>
+        <tr><th>項目</th><th>Q1 FY2027展望</th></tr>
+        <tr><td>總營收</td><td>$89.85B–$90.95B（+16%至+17%）</td></tr>
+        <tr><td>COGS</td><td>$29.6B–$29.8B（+23%至+24%）</td></tr>
+        <tr><td>營業費用</td><td>$16.8B–$16.9B（+7%至+8%）</td></tr>
+        <tr><td>營業利益率</td><td>年增持平</td></tr>
+        <tr><td>Productivity &amp; Business Processes營收</td><td>$36.7B–$37.0B（+11%至+12%）</td></tr>
+        <tr><td>M365商業雲端</td><td>調整後CC約+16%／reported約+15%</td></tr>
+        <tr><td>Intelligent Cloud營收</td><td>$40.95B–$41.25B（+33%至+34%）；Azure CC約+45%</td></tr>
+        <tr><td>More Personal Computing營收</td><td>$12.2B–$12.7B</td></tr>
+        <tr><td>Windows OEM與裝置</td><td>低20%衰退區間</td></tr>
+        <tr><td>搜尋廣告ex-TAC</td><td>中個位數成長</td></tr>
+        <tr><td>Xbox內容與服務</td><td>中個位數衰退；硬體營收年減</td></tr>
+        <tr><td>其他收入（費用）淨額（排除OpenAI影響）</td><td>約−$1億</td></tr>
+        <tr><td>有效稅率</td><td>約20%</td></tr>
+        <tr><td>CapEx</td><td>&gt;$500億（含使用年限更新帶來的租賃重分類影響）</td></tr>
+      </table>
+      <div class="note">Windows OEM低20%衰退、MPC營收區間下修，反映零組件漲價推升裝置售價、Windows 10終止支援的高基期，以及通路存貨水位偏高三重逆風延續至Q1 FY2027，管理層明言「潛在結果的範圍比正常情況更寬」。</div>
+    </div>
+  </div>
+
+  <!-- ============ Segments ============ -->
+  <div id="panel-seg" class="panel">
+    <div class="bu-grid">
+      <div class="bu-card ic">
+        <div class="bu-name">Intelligent Cloud</div>
+        <div class="bu-abbr">智慧雲端</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$39,300M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">年增</span><span class="bu-stat-val pos">+32%（CC+31%）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益（推算）</span><span class="bu-stat-val">≈$16,113M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營益率</span><span class="bu-stat-val">≈41%（年增持平）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:41%;background:#15803d;"></div></div>
+      </div>
+      <div class="bu-card pbp">
+        <div class="bu-name">Productivity and Business Processes</div>
+        <div class="bu-abbr">生產力與商業流程</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$37,800M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">年增</span><span class="bu-stat-val pos">+14%</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益（推算）</span><span class="bu-stat-val">≈$21,924M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營益率</span><span class="bu-stat-val">58%（年增）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:58%;background:#2563eb;"></div></div>
+      </div>
+      <div class="bu-card mpc">
+        <div class="bu-name">More Personal Computing</div>
+        <div class="bu-abbr">個人運算</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">$12,900M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">年增</span><span class="bu-stat-val neg">−4%（CC−5%）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營業利益（推算）</span><span class="bu-stat-val">≈$2,709M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">營益率</span><span class="bu-stat-val">21%（年減）</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:21%;background:#c2600a;"></div></div>
+      </div>
+    </div>
+    <div class="note" style="margin-bottom:12px;">⚑ 各部門營業利益金額為推算值（部門營收×管理層口頭揭露的營益率），法說會逐字稿未直接公布部門營業利益美元數字，10-K分部表僅提供年度數據（見資產負債表／估值觀察tab的年度交叉比對）。三部門營收合計$90,000M，與公司總營收$90.0B完全吻合，為內部一致性檢核。</div>
+
+    <div class="donut-wrap">
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#eef0f5" stroke-width="28"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#15803d" stroke-width="28" stroke-dasharray="192.1 439.82" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#2563eb" stroke-width="28" stroke-dasharray="184.7 439.82" stroke-dashoffset="-192.1" transform="rotate(-90 100 100)"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#c2600a" stroke-width="28" stroke-dasharray="63.02 439.82" stroke-dashoffset="-376.8" transform="rotate(-90 100 100)"/>
+        <text x="100" y="96" text-anchor="middle" font-size="15" font-weight="700" fill="#1a1a2e">$90.0B</text>
+        <text x="100" y="112" text-anchor="middle" font-size="10" fill="#666">Q4總營收</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="li"><span class="sw" style="background:#15803d;"></span>Intelligent Cloud — 44%（$39.3B）</div>
+        <div class="li"><span class="sw" style="background:#2563eb;"></span>Productivity &amp; Business Processes — 42%（$37.8B）</div>
+        <div class="li"><span class="sw" style="background:#c2600a;"></span>More Personal Computing — 14%（$12.9B）</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">部門營益率趨勢（Q3 → Q4 FY2026）</div>
+      <table>
+        <tr><th>部門</th><th>Q3 FY2026營益率</th><th>Q4 FY2026營益率</th><th>QoQ變動</th></tr>
+        <tr><td>Intelligent Cloud</td><td>39.6%</td><td>≈41%</td><td class="pos">+1.4pt（管理層稱「年增持平」）</td></tr>
+        <tr><td>Productivity &amp; Business Processes</td><td>59.9%</td><td>58%</td><td class="neg">−1.9pt</td></tr>
+        <tr><td>More Personal Computing</td><td>27.8%</td><td>21%</td><td class="neg">−6.8pt</td></tr>
+      </table>
+      <div class="flag"><b>⚑ PBP營益率下滑，管理層直接點名原因是Copilot用量增加。</b> 法說會原文：「segment gross margin percentage decreased slightly with increased Microsoft 365 Copilot usage」——即Copilot的用量成長本身正在對PBP毛利率造成壓力，儘管毛利率美元金額仍成長14%／13% CC。這與估值觀察tab互證對照表第8項對應同一件事：ARPU成長的來源（Copilot/E5/E7用量）正是毛利率承壓的來源。</div>
+      <div class="flag obs"><b>⚑ MPC營益率QoQ驟降6.8個百分點，主因是本季一次性的Xbox資遣與減損費用，而非營運惡化。</b> 法說會提到「operating expenses increased 8%...driven by...impairment charges in Xbox」，這是本季discrete items的一部分（見損益表tab），屬於管理層主動承認的業務重置陣痛，預期FY2027回到成長軌道。</div>
+    </div>
+
+    <div class="section-title">Intelligent Cloud 內部拆分——量 vs 價／組合</div>
+    <div class="bar-row"><div class="bar-lbl">Azure與其他雲端服務</div><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#15803d;">+43%</div></div><div class="bar-num">Q1指引CC≈+45%</div></div>
+    <div class="bar-row"><div class="bar-lbl">在地伺服器業務</div><div class="bar-wrap"><div class="bar-fill" style="width:2%;background:#94a3b8;">CC−1%</div></div><div class="bar-num">持續向雲端轉移</div></div>
+    <p class="note">⚑ 量 vs 價：Azure本季加速主要是「量」的故事——管理層明確表示「額外的當季產能被快速貨幣化」，即新上線的容量幾乎立即被消化；GitHub Copilot則是「價／商業模式」的故事——6月轉為使用量計費後，消費營收顯著成長、Copilot營收季增逾60%，是計價機制改變而非單純用戶數成長帶動。兩股力量疊加，是本季Azure與Intelligent Cloud雙雙超越guidance高標的主因。</p>
+
+    <div class="section-title">Productivity &amp; Business Processes 內部拆分（年增率）</div>
+    <div class="bar-row"><div class="bar-lbl">M365商業產品（傳統授權）</div><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#94a3b8;">+19%</div></div><div class="bar-num">大型長期合約認列</div></div>
+    <div class="bar-row"><div class="bar-lbl">M365消費雲端</div><div class="bar-wrap"><div class="bar-fill" style="width:126%;background:#6d28d9;">+24%</div></div><div class="bar-num">CC+22%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Dynamics 365</div><div class="bar-wrap"><div class="bar-fill" style="width:68%;background:#c2600a;">+13%</div></div><div class="bar-num">CC+12%</div></div>
+    <div class="bar-row"><div class="bar-lbl">LinkedIn</div><div class="bar-wrap"><div class="bar-fill" style="width:63%;background:#2563eb;">+12%</div></div><div class="bar-num">CC+10%</div></div>
+    <div class="bar-row"><div class="bar-lbl">M365商業雲端（調整後）</div><div class="bar-wrap"><div class="bar-fill" style="width:84%;background:#15803d;">+16%</div></div><div class="bar-num">reported+14%</div></div>
+    <p class="note">⚑ 量 vs 價：付費M365商業席次年增6%（量），但主要集中在SMB與前線員工方案——這些恰好是ARPU較低的客群；ARPU成長（價／組合）則主要來自Copilot、E5、E7等高階SKU的滲透。這代表「量的成長」與「價的成長」目前發生在客群結構的兩端，並非同一批客戶同時貢獻——是管理層在法說會上沒有主動點出、但從分部數字可以反推的組合訊號。M365商業產品+19%主要是大型長期合約在本期認列較多、屬會計時點效果，非經常性成長率。</p>
+
+    <div class="section-title">More Personal Computing 內部拆分（年增率）</div>
+    <div class="bar-row"><div class="bar-lbl">搜尋廣告ex-TAC</div><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#2563eb;">+10%</div></div><div class="bar-num">CC+9%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Windows OEM與裝置</div><div class="bar-wrap"><div class="bar-fill" style="width:70%;background:#94a3b8;">−7%</div></div><div class="bar-num">Windows OEM單獨−5%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Xbox內容與服務</div><div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#b91c4a;">−10%</div></div><div class="bar-num">CC−11%</div></div>
+    <p class="note">MPC是三部門中唯一衰退者，Windows OEM存貨去化與零組件漲價推升裝置售價是主因；Xbox內容服務下滑對比去年同期強勁的第一方內容表現形成高基期。搜尋廣告是MPC內唯一正成長的次業務，由每次搜尋營收與搜尋量雙重驅動，但受第三方夥伴關係影響而有所抵銷。</p>
+  </div>
+
+  <!-- ============ Balance Sheet ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="flag-box obs" style="margin-bottom:12px;"><div class="q-label">資料範圍註記</div><div class="q-text">依SEC Cross-Reference Notes文件的範圍說明，本次10-K交叉查核聚焦於Form 4內部人動態、經會計師簽證的分部財務表、PP&amp;E明細與RPO附註這幾項對驗證法說會headline claims最具份量的揭露，而非逐行重建完整資產負債表（原文：「rather than a line-by-line re-derivation of every quarterly figure」）。因此本tab以下內容是聚焦式的PP&amp;E／RPO／租賃／股東回饋整理，不是傳統意義上「資產總額–負債總額–股東權益」逐行對照的完整資產負債表——這個範圍限制本身就是本tab第一條要標註的事。</div></div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">不動產、廠房與設備（10-K，2026/6/30 對 2025/6/30，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>2025/6/30</th><th>2026/6/30</th><th>年增</th></tr>
+        <tr><td>伺服器、網路設備及相關軟體（原始成本）</td><td>132,836</td><td>215,874</td><td class="pos">+62.5%</td></tr>
+        <tr><td>建築物與改良工程（原始成本）</td><td>137,921</td><td>182,749</td><td class="pos">+32.5%</td></tr>
+        <tr class="total"><td>不動產與設備淨額</td><td>204,966</td><td>313,076</td><td class="pos">+52.7%</td></tr>
+      </table>
+      <div class="flag"><b>⚑ 這是「88座資料中心、+1GW產能」定性敘事的資產負債表鏡像。</b> 伺服器與網路設備原始成本年增62.5%，是本季新增算力投入最直接的財產目錄佐證；建築物年增32.5%，反映資料中心廠房建置的實體擴張。兩者疊加使PP&amp;E淨額年增52.7%，與法說會「兩年內整體容量翻倍在軌」的說法方向一致、幅度吻合。詳見估值觀察tab互證對照表第1項。</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Commercial RPO（剩餘履約義務）— 10-K附註（R88.htm）</div>
+      <table>
+        <tr><th>項目</th><th>數值</th></tr>
+        <tr><td>Commercial RPO總額</td><td>$678B（年增84%）</td></tr>
+        <tr><td>排除OpenAI後的RPO年增</td><td>+25%</td></tr>
+        <tr><td>加權平均存續期間</td><td>2.3年</td></tr>
+        <tr><td>12個月內預計認列比例</td><td>約30%（年增37%）——與10-K附註揭露的30%完全吻合</td></tr>
+        <tr><td>12個月以後才認列的部分</td><td>年增112%——是12個月內部分成長速度的三倍</td></tr>
+      </table>
+      <div class="flag obs"><b>⚑ RPO正在向更長的認列時間軸偏移，是風險矩陣tab第一條高風險項目的資料來源。</b> 12個月內認列部分（+37%）與12個月以後才認列部分（+112%）的成長速度差距達3倍，代表在手訂單存量的組成正快速拉長——這與同期CapEx持續加速、使用年限會計變更壓低近期折舊費用三件事疊加，構成本報告獨創的前瞻風險（詳見風險矩陣tab）。</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">融資租賃與股東回饋（法說會揭露，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>數值</th></tr>
+        <tr><td>本季新增融資租賃</td><td>$5,600（主要用於大型資料中心基地）</td></tr>
+        <tr><td>本季現金付訖不動產與設備</td><td>$35,800</td></tr>
+        <tr><td>本季返還股東（股利＋回購）</td><td>$10,200</td></tr>
+        <tr><td>FY2026全年返還股東總額</td><td>&gt;$43,000</td></tr>
+      </table>
+      <div class="note">融資租賃在本季屬於相對小額的$56億，但這個科目正是「使用年限15→25年會計變更」影響最直接的分類項目——更多未來的資料中心租約將從這裡（計入CapEx的融資租賃）移到不計入CapEx的營運租賃，詳見「模型多元化／會計變更」tab與現金流量tab的說明。</div>
+    </div>
+  </div>
+
+  <!-- ============ Cash Flow ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="cf-section">
+      <div class="cf-header">營運活動（本季，百萬美元）</div>
+      <div class="cf-row"><span class="cf-lbl">營運現金流</span><span class="cf-val">55,400</span></div>
+      <div class="cf-row"><span class="cf-lbl">年增</span><span class="cf-val pos">+30%</span></div>
+      <p class="note">主因雲端計費與收款強勁，部分被營運租賃付款增加抵銷。</p>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">投資活動（本季重點項目，百萬美元）</div>
+      <div class="cf-row"><span class="cf-lbl">資本支出（CapEx，含零組件漲價影響）</span><span class="cf-val">41,000</span></div>
+      <div class="cf-row"><span class="cf-lbl">　其中約三分之二為短生命週期資產（CPU/GPU）</span><span class="cf-val">—</span></div>
+      <div class="cf-row"><span class="cf-lbl">　其餘為長生命週期資產</span><span class="cf-val">—</span></div>
+      <div class="cf-row"><span class="cf-lbl">現金付訖不動產與設備</span><span class="cf-val">35,800</span></div>
+      <div class="cf-row"><span class="cf-lbl">新增融資租賃（主要為大型資料中心基地）</span><span class="cf-val">5,600</span></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">融資活動（本季重點項目，百萬美元）</div>
+      <div class="cf-row"><span class="cf-lbl">股利＋股票回購（返還股東）</span><span class="cf-val">10,200</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">FY2026全年返還股東總額</span><span class="cf-val">&gt;43,000</span></div>
+    </div>
+
+    <div class="tbl-wrap" style="margin-top:12px;">
+      <div class="tbl-title">自由現金流橋接（本季，百萬美元）</div>
+      <table>
+        <tr><th>項目</th><th>金額</th></tr>
+        <tr><td>營運現金流</td><td>55,400</td></tr>
+        <tr><td>－現金付訖不動產與設備</td><td>(35,800)</td></tr>
+        <tr class="total"><td>＝自由現金流</td><td>19,600</td></tr>
+      </table>
+      <div class="flag"><b>⚑ 這條橋接可以完全被驗證：$554億－$358億＝$196億，三個獨立揭露的數字彼此自洽，沒有缺口。</b> 儘管CFO強勁成長30%，CapEx（現金基礎$358億）吃掉了約65%，FCF轉換率明顯受CapEx步調壓縮；但CFO本身的高成長速度（+30%，快於營收+18%）顯示本業收現能力並未被AI建置拖累，只是資本支出的絕對規模持續在成長。</div>
+    </div>
+
+    <div class="section-title">CapEx展望與「使用年限15→25年」會計變更如何改變CapEx數字的可比性</div>
+    <div class="card"><p>自FY2027起，資料中心與辦公大樓的估計使用年限由15年延長至25年。這個變更本身對FY27營業利益的效益很小（純粹是折舊時間點的重新分配），但真正牽動CapEx數字的機制是：使用年限延長後，更多未來的資料中心租約會從「融資租賃」（依會計準則計入CapEx）轉為「營運租賃」（不計入CapEx）。管理層明確表示，撇除這個使用年限影響，公司對CY2026 CapEx投資規模的預期本身沒有改變——純粹是分類方式的移轉，讓對外揭露的CapEx guidance數字變小。這意味著：跨越FY2026／FY2027這個會計政策變更邊界前後的CapEx年增率，不能簡單地拿來做蘋果對蘋果的比較。</p></div>
+    <div class="tbl-wrap">
+      <div class="tbl-title">CapEx guidance 时间序列（法說會給出）</div>
+      <table>
+        <tr><th>期間</th><th>CapEx guidance</th><th>備註</th></tr>
+        <tr><td>Q4 FY2026（本季實際）</td><td>$41,000M</td><td>含零組件漲價影響；約2/3為短生命週期資產</td></tr>
+        <tr><td>Q1 FY2027（展望）</td><td>&gt;$50,000M</td><td>含使用年限更新帶來的租賃重分類影響——與Q4的$410億不宜直接並列比較年增率</td></tr>
+        <tr><td>FY2027全年（展望）</td><td>約$175,000M</td><td>租賃重分類調整後的guidance；撇除此影響，CY2026 CapEx投資規模預期本身不變</td></tr>
+      </table>
+      <div class="flag obs"><b>⚑ 讀這幾個CapEx數字時，記得它們橫跨了一次會計政策變更。</b> Q1 FY2027guidance「>$500億」與FY2027全年「約$1,750億」都已經反映新的租賃分類方式，而Q4 FY2026的$410億仍是舊制下的數字。管理層沒有提供「若沿用舊制」的反事實對照數字，這使得FY26→FY27跨界的CapEx年增率在方法論上是模糊的——見「模型多元化／會計變更」tab核心疑問第3點。</div>
+    </div>
+  </div>
+
+  <!-- ============ Valuation ============ -->
+  <div id="panel-val" class="panel">
+    <div class="tbl-wrap">
+      <div class="tbl-title">估值與體質比率——附意義欄</div>
+      <table>
+        <tr><th>指標</th><th>Q4 FY2026</th><th class="meaning">意義／懷疑者解讀</th></tr>
+        <tr><td>營業利益率</td><td>45%</td><td class="meaning">管理層形容「年增小幅」，是相對乾淨的獲利訊號，但本季同時有Xbox資遣/減損費用與較低優退成本兩股discrete items互相抵銷，拆解後的「核心」營益率變化方向仍需搭配損益表tab的$0.27 EPS discrete明細解讀。</td></tr>
+        <tr><td>毛利率（公司整體）</td><td>67%（年減）</td><td class="meaning">銷售組合轉向Azure與持續的AI基礎設施投資是主因，效率提升僅部分抵銷——與Microsoft Cloud毛利率65%的年減方向一致，兩者互相印證同一趨勢。</td></tr>
+        <tr><td>稀釋EPS成長（管理層headline口徑）</td><td>+23%（調整後，排除OpenAI投資影響）</td><td class="meaning">本季管理層選擇把「調整後」數字當headline，而非像上季那樣把GAAP數字擺在前面——GAAP口徑成長率本身未在法說會單獨揭露。這個框架選擇本身是財報溝通品質的觀察點，詳見損益表tab。</td></tr>
+        <tr><td>CapEx／FY營收（前瞻）</td><td>FY27 guide≈$175B ÷ FY26營收$331.8B ≈ 52.7%</td><td class="meaning">資本密集度處於歷史高檔，且分子已反映使用年限會計變更後的租賃重分類定義，與舊制下的CapEx數字不能直接比較（見現金流量tab）。</td></tr>
+        <tr><td>RPO／Microsoft Cloud年化營收</td><td>$678B ÷ ≈$237.2B（Q4×4）≈ 2.86x</td><td class="meaning">與Q3的≈2.9x相近，多年期訂單能見度延續；但12個月以後才認列的部分成長速度是12個月內部分的3倍，backlog正在拉長，見風險矩陣tab第一條高風險項目。</td></tr>
+        <tr><td>自由現金流／營收</td><td>$19.6B ÷ $90.0B ≈ 21.8%</td><td class="meaning">CapEx吃掉約65%的營運現金流（$41B現金基礎CapEx／$55.4B CFO），FCF轉換率主要取決於CapEx步調而非本業收現能力——CFO本身+30%成長仍優於營收+18%。</td></tr>
+        <tr><td>隱含P/E</td><td>資料不足，暫不反推</td><td class="meaning">本報告所依據的法說會逐字稿與SEC交叉比對筆記均未包含財報後股價資料，若強行反推隱含P/E將是虛構數字而非真實反推，故此列為資料限制而非省略——待後續補齊股價資料再行反推。</td></tr>
+      </table>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">互證對照表——管理層說法 vs 財報／10-K科目驗證</div>
+      <table>
+        <tr><th>管理層說法（法說會）</th><th>對應財報／10-K科目驗證</th></tr>
+        <tr><td>年初至今新增88座資料中心，本季新增31座、橫跨5大洲</td><td>10-K：伺服器與網路設備原始成本年增62.5%（$2,158.74億 vs $1,328.36億）</td></tr>
+        <tr><td>Commercial RPO約30%將於12個月內認列</td><td>10-K RPO附註（R88.htm）：精確吻合30%</td></tr>
+        <tr><td>Azure「客戶需求持續超過可用產能」</td><td>Intelligent Cloud相關PP&amp;E投入（伺服器+62.5%、建築+32.5%）成長速度明顯超過IC年度營收成長（FY26年度+29.7%），資本先行於營收確認</td></tr>
+        <tr><td>本季無異常內部人交易訊號</td><td>2026/7/15–8/4完全無Form 4申報，乾淨封鎖窗口</td></tr>
+        <tr><td>Intelligent Cloud「營業利益率年增持平，約41%」</td><td>10-K分部表：FY26年度41.3% vs FY25年度42.0%——方向與量級基本吻合</td></tr>
+        <tr><td>$32億Anthropic投資評價利得是本季$0.27每股discrete效益的最大單項</td><td>其他收入（費用）淨額（排除OpenAI影響）$2.8B，法說會明確歸因主要由Anthropic利得驅動——兩個獨立揭露的數字互相印證同一事件</td></tr>
+        <tr><td>營運現金流$55.4B（+30%）、CapEx$410億</td><td>自由現金流$19.6B精確等於CFO $55.4B減現金付訖PP&amp;E $35.8B——三個獨立揭露數字內部完全自洽，無缺口</td></tr>
+        <tr><td>M365商業雲端ARPU成長由Copilot／E5／E7等高階SKU滲透帶動</td><td>PBP分部毛利率因「Microsoft 365 Copilot用量增加」而小幅下滑——同一件事在營收敘事與毛利率科目兩處分別現身，互相印證</td></tr>
+      </table>
+      <div class="flag"><b>⚑ 本季的估值提醒：</b> 表面上「營收與三大部門全數超越guidance高標、CFO強勁成長30%、FCF為正」讀起來是一個乾淨的執行力故事；但拆開來看，(1) COGS與營業費用的成長率也雙雙略高於guidance，beat裡混合了需求強勁與成本超支、(2) EPS的「調整後+23%」headline背後藏著Anthropic評價利得這第二個關聯方波動因子，且GAAP口徑成長率本季未被單獨揭露、(3) CapEx guidance已經開始反映使用年限會計變更帶來的租賃重分類，FY27數字與FY26不能直接比較、(4) RPO中12個月以後才認列的部分成長速度是12個月內部分的3倍，在手訂單正在被拉長——這四點合起來，是比單看營收beat更完整的體質圖像。</div>
+    </div>
+  </div>
+
+  <div class="footer">依FY2026 Q4法說會逐字稿（2026年7月29日），交叉比對FY2026 10-K（同日申報，CIK 0000789019，accession no. 0001193125-26-323660）之分部財務表、PP&amp;E明細、RPO附註與Form 4內部人交易掃描整理；部分損益表美元金額因法說會僅揭露成長率與利潤率而非逐行金額，屬本報告依管理層揭露的成長率與利潤率反推之估算值，已於損益表tab逐項標註。僅供資訊參考，非投資建議。</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) { header.parentElement.classList.toggle('open'); }
+</script>
+</body>
+</html>
+
