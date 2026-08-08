@@ -8,7 +8,9 @@ const auth = require('./auth');
 
 const PORT = process.env.PORT || 8080;
 const DATA_DIR = '/data';
-const APP_DIR = '/app';
+// The Dockerfile copies server.js to / and app to /app, so this resolves to the
+// exact same '/app' in the container while also working from a local checkout.
+const APP_DIR = path.join(__dirname, 'app');
 
 // ── Auth (cross-domain login system — see auth.js for the shared token format) ──
 // OutsideFramework is the only service that talks to Google; this service just verifies
@@ -311,6 +313,148 @@ function fetchMis(url) {
     req.on('error', reject);
     req.setTimeout(8000, () => { req.destroy(); reject(new Error('timeout')); });
   });
+}
+
+/* ---------- Yahoo option chains (volatility surface) ---------- */
+
+// Yahoo's v7 option endpoint answers 401 without a session cookie plus a crumb
+// minted against that same cookie. Both are cheap to hold and only occasionally
+// rotate, so cache the pair and re-mint on the next 401 rather than per request.
+let _yCookie = null, _yCrumb = null, _yAuthTime = 0;
+const Y_AUTH_TTL = 30 * 60 * 1000;
+
+function fetchRaw(url, cookie) {
+  return new Promise((resolve, reject) => {
+    const headers = { ...BROWSER_HEADERS };
+    delete headers['Accept-Encoding'];
+    headers['Accept-Encoding'] = 'gzip, deflate';
+    if (cookie) headers['Cookie'] = cookie;
+    const req = https.get(url, { headers }, res => {
+      const enc = res.headers['content-encoding'] || '';
+      let stream = res;
+      if (enc.includes('gzip')) stream = res.pipe(zlib.createGunzip());
+      else if (enc.includes('deflate')) stream = res.pipe(zlib.createInflate());
+      const chunks = [];
+      stream.on('data', c => chunks.push(c));
+      stream.on('end', () => resolve({
+        status: res.statusCode,
+        setCookie: res.headers['set-cookie'],
+        body: Buffer.concat(chunks).toString('utf8'),
+      }));
+      stream.on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(12000, () => { req.destroy(); reject(new Error('timeout')); });
+  });
+}
+
+async function yahooAuth(force) {
+  if (!force && _yCrumb && Date.now() - _yAuthTime < Y_AUTH_TTL) {
+    return { cookie: _yCookie, crumb: _yCrumb };
+  }
+  let cookie = '';
+  for (const seed of ['https://fc.yahoo.com/', 'https://finance.yahoo.com/']) {
+    try {
+      const r = await fetchRaw(seed);
+      if (r.setCookie && r.setCookie.length) {
+        cookie = r.setCookie.map(s => s.split(';')[0]).join('; ');
+        break;
+      }
+    } catch (_) { /* try the next seed */ }
+  }
+  if (!cookie) throw new Error('yahoo cookie unavailable');
+  const cr = await fetchRaw('https://query1.finance.yahoo.com/v1/test/getcrumb', cookie);
+  const crumb = (cr.body || '').trim();
+  if (cr.status !== 200 || !crumb || crumb.length > 32) throw new Error('yahoo crumb unavailable');
+  _yCookie = cookie; _yCrumb = crumb; _yAuthTime = Date.now();
+  return { cookie, crumb };
+}
+
+async function yahooOptions(symbol, epoch) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const { cookie, crumb } = await yahooAuth(attempt > 0);
+    let url = `https://query1.finance.yahoo.com/v7/finance/options/${encodeURIComponent(symbol)}`
+            + `?crumb=${encodeURIComponent(crumb)}`;
+    if (epoch) url += `&date=${epoch}`;
+    const r = await fetchRaw(url, cookie);
+    if (r.status === 401 || r.status === 403) continue;   // stale crumb -> re-mint once
+    if (r.status !== 200) throw new Error('HTTP ' + r.status);
+    const parsed = JSON.parse(r.body);
+    const result = parsed?.optionChain?.result?.[0];
+    if (!result) throw new Error('no option chain for ' + symbol);
+    return result;
+  }
+  throw new Error('yahoo rejected the crumb twice');
+}
+
+// Kept deliberately in step with projects/volatility-surface-viewer/fetch_options.py
+// -- the offline snapshot script and this endpoint must filter identically, or the
+// surface changes shape depending on where its data came from.
+const VS_MONEYNESS = 0.35;
+const VS_MIN_IV = 0.01, VS_MAX_IV = 3.0;
+const VS_MIN_TIME_VALUE = 0.002;
+const VS_MIN_POINTS = 8;
+const VS_MIN_DTE = 4;
+
+function vsCleanQuotes(rows, spot, side) {
+  const best = new Map();
+  for (const row of rows || []) {
+    const iv = Number(row.impliedVolatility), strike = Number(row.strike);
+    if (!(iv > VS_MIN_IV && iv < VS_MAX_IV) || !(strike > 0)) continue;
+    const oi = Number(row.openInterest || 0), vol = Number(row.volume || 0);
+    if (oi <= 0 && vol <= 0) continue;
+    const k = Math.log(strike / spot);
+    if (Math.abs(k) > VS_MONEYNESS) continue;
+    const bid = Number(row.bid || 0), ask = Number(row.ask || 0);
+    if (bid <= 0) continue;
+    const mid = ask > 0 ? (bid + ask) / 2 : Number(row.lastPrice || 0);
+    const intrinsic = side === 'calls' ? Math.max(0, spot - strike) : Math.max(0, strike - spot);
+    if (mid - intrinsic < VS_MIN_TIME_VALUE * spot) continue;
+    const prev = best.get(strike);
+    if (!prev || oi + vol > prev.liq) best.set(strike, { k, iv, liq: oi + vol });
+  }
+  return [...best.values()]
+    .sort((a, b) => a.k - b.k)
+    .map(p => [Number(p.k.toFixed(6)), Number(p.iv.toFixed(6))]);
+}
+
+async function buildVolSurface(symbol, maxExpiries) {
+  const head = await yahooOptions(symbol);
+  const spot = Number(head?.quote?.regularMarketPrice);
+  if (!spot) throw new Error('no spot price for ' + symbol);
+
+  const today = new Date();
+  const todayUTC = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+  const epochs = (head.expirationDates || []).filter(e => {
+    const dte = Math.round((e * 1000 - todayUTC) / 86400000);
+    return dte >= VS_MIN_DTE;
+  }).slice(0, maxExpiries);
+
+  const calls = [], puts = [];
+  for (const epoch of epochs) {
+    let chain;
+    try {
+      chain = epoch === epochs[0] && head.options?.[0]?.expirationDate === epoch
+        ? head : await yahooOptions(symbol, epoch);
+    } catch (_) { continue; }
+    const leg = chain.options?.[0];
+    if (!leg) continue;
+    const expiry = new Date(epoch * 1000).toISOString().slice(0, 10);
+    const dte = Math.round((epoch * 1000 - todayUTC) / 86400000);
+    for (const [side, bucket, rows] of
+         [['calls', calls, leg.calls], ['puts', puts, leg.puts]]) {
+      const points = vsCleanQuotes(rows, spot, side);
+      if (points.length >= VS_MIN_POINTS) bucket.push({ expiry, dte, points });
+    }
+  }
+  if (!calls.length && !puts.length) throw new Error('no usable quotes for ' + symbol);
+
+  return {
+    ticker: symbol.toUpperCase(),
+    spot: Number(spot.toFixed(4)),
+    fetched: new Date().toISOString(),
+    calls, puts,
+  };
 }
 
 function fetchUrl(url) {
@@ -811,6 +955,34 @@ const server = http.createServer(async (req, res) => {
   }
 
   // OpenGraph metadata for CausalFrame's link-preview embed cards
+  if (req.url.startsWith('/api/volsurface') && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const symbol = (urlObj.searchParams.get('ticker') || '').toUpperCase();
+      // Symbols only: this value is interpolated into an upstream URL path.
+      if (!/^[A-Z][A-Z0-9.\-]{0,9}$/.test(symbol)) throw new Error('bad ticker');
+      const maxExpiries = Math.min(12, Math.max(4,
+        parseInt(urlObj.searchParams.get('expiries') || '10', 10) || 10));
+
+      const cacheKey = `vs_${symbol}_${maxExpiries}`;
+      let data;
+      // Chains move all session, but a surface built minutes apart looks the same;
+      // 10 minutes keeps the page snappy without going stale in a way that matters.
+      if (_warnCache[cacheKey] && Date.now() - (_warnTime[cacheKey] || 0) < 10 * 60 * 1000) {
+        data = _warnCache[cacheKey];
+      } else {
+        data = await buildVolSurface(symbol, maxExpiries);
+        _warnCache[cacheKey] = data; _warnTime[cacheKey] = Date.now();
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(data));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   if (req.url.startsWith('/api/og-fetch') && req.method === 'GET') {
     try {
       const urlObj = new URL(req.url, 'http://localhost');
@@ -1151,6 +1323,17 @@ const server = http.createServer(async (req, res) => {
   else if (url === '/sankey'     || url === '/sankey/')     fp = path.join(APP_DIR, 'sankey',     'index.html');
   else if (url === '/earnings-quiz' || url === '/earnings-quiz/') fp = path.join(APP_DIR, 'earnings-quiz', 'index.html');
   else if (url === '/market-weather' || url === '/market-weather/') fp = path.join(APP_DIR, 'market-weather', 'index.html');
+  // Unlike the other single-file apps this one fetches siblings by relative URL,
+  // so it must be served from a trailing-slash path or those resolve to root.
+  // Keep the query: the Works page arrives with ?auth=<handoff token>, and
+  // redirecting to a bare path would strip it and bounce the visitor to login.
+  else if (url === '/volsurface') {
+    const qs = req.url.indexOf('?');
+    res.writeHead(301, { Location: '/volsurface/' + (qs >= 0 ? req.url.slice(qs) : '') });
+    res.end();
+    return;
+  }
+  else if (url === '/volsurface/') fp = path.join(APP_DIR, 'volsurface', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 

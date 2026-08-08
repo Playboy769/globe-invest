@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>隱含波動率曲面 Implied Volatility Surface</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--c-canvas:#fff;--c-ink:#0a0a0a;--c-accent:#d1591f;--c-accent-deep:#a94515;--c-line:#eee}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{display:flex;flex-direction:column;font-family:'Noto Serif TC','PMingLiU',serif;
+       color:var(--c-ink);background:var(--c-canvas);-webkit-font-smoothing:antialiased}
+
+  /* Toolbar: type and one accent rule carry the state. No pills, no chrome. */
+  .toolbar{display:flex;align-items:center;padding:0 20px;height:52px;
+           border-bottom:1px solid var(--c-line);background:#fff;z-index:5;white-space:nowrap}
+  .toolbar button{background:none;border:0;padding:0;font-family:inherit;cursor:pointer;
+                  color:#aaa;letter-spacing:.09em;transition:color .18s ease}
+  .brand{font-size:12.5px;letter-spacing:.2em;color:var(--c-ink);margin-right:26px}
+
+  .tk{position:relative;margin-right:26px}
+  .tk-btn{display:flex;align-items:center;gap:8px;font-size:18px!important;
+          letter-spacing:.07em!important;color:var(--c-ink)!important}
+  .tk-btn .caret{width:6px;height:6px;border-right:1px solid #b0b0b0;
+                 border-bottom:1px solid #b0b0b0;transform:rotate(45deg) translate(-2px,-2px)}
+  .tk-btn:hover .caret{border-color:var(--c-accent)}
+  .tk-menu{position:absolute;top:calc(100% + 6px);left:-12px;background:#fff;
+           border:1px solid var(--c-line);box-shadow:0 8px 26px rgba(0,0,0,.09);
+           min-width:118px;padding:5px 0;display:none;z-index:30;
+           max-height:340px;overflow-y:auto}
+  .tk-menu.on{display:block}
+  .tk-menu button{display:block;width:100%;text-align:left;padding:8px 15px;
+                  font-size:12.5px;color:#666}
+  .tk-menu button:hover{background:#fbf7f5;color:var(--c-accent-deep)}
+  .tk-menu button.on{color:var(--c-ink)}
+
+  .seg{display:flex;gap:19px;margin-right:22px}
+  .seg button{position:relative;font-size:12.5px;padding:3px 0}
+  .seg button:hover{color:#666}
+  .seg button.on{color:var(--c-ink)}
+  .seg button.on::after{content:'';position:absolute;left:0;right:0;bottom:-2px;
+                        height:1.5px;background:var(--c-accent)}
+
+  .vr{width:1px;height:15px;background:var(--c-line);margin-right:22px}
+
+  .tog{display:flex;gap:17px;margin-right:auto}
+  .tog button{display:flex;align-items:center;gap:7px;font-size:12.5px;padding:3px 0}
+  .tog button:hover{color:#666}
+  .tog .dot{width:6px;height:6px;border-radius:50%;border:1px solid #ccc;transition:all .18s ease}
+  .tog button.on{color:var(--c-ink)}
+  .tog button.on .dot{background:var(--c-accent);border-color:var(--c-accent)}
+
+  .acts{display:flex;gap:19px}
+  .acts button{font-size:12px;padding:3px 0;border-bottom:1px solid transparent}
+  .acts button:hover{color:var(--c-accent-deep);border-bottom-color:var(--c-accent)}
+
+  .stage{flex:1;position:relative;min-height:0}
+  #gl{display:block;width:100%;height:100%}
+
+  .meta{position:absolute;top:14px;left:16px;font-size:11.5px;color:#666;line-height:1.9;
+        pointer-events:none;letter-spacing:.03em}
+  .meta b{font-weight:500;color:var(--c-ink)}
+
+  .legend{position:absolute;bottom:16px;left:16px;font-size:11px;color:#888;
+          letter-spacing:.06em;pointer-events:none}
+  .legend .bar{width:150px;height:7px;border-radius:4px;margin:5px 0 3px}
+  .legend .ends{display:flex;justify-content:space-between;width:150px}
+
+  .tip{position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;
+       border-radius:6px;padding:8px 11px;font-size:11.5px;line-height:1.8;color:#444;
+       box-shadow:0 3px 14px rgba(0,0,0,.09);opacity:0;transition:opacity .12s;letter-spacing:.02em}
+  .tip.on{opacity:1}
+  .tip b{color:var(--c-accent-deep);font-weight:500}
+
+  .hint{position:absolute;bottom:16px;right:16px;font-size:11px;color:#bbb;letter-spacing:.06em}
+  .err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+       font-size:13px;color:#b3261e;padding:24px;text-align:center;line-height:2}
+  .err.on{display:flex}
+
+  .busy{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+        display:none;align-items:center;gap:10px;font-size:12.5px;color:#999;
+        letter-spacing:.08em;pointer-events:none}
+  .busy.on{display:flex}
+  .busy i{width:11px;height:11px;border:1.5px solid #e2e2e2;border-top-color:var(--c-accent);
+          border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* 說明面板 */
+  .help{position:absolute;top:0;right:0;bottom:0;width:430px;max-width:92vw;background:#fff;
+        border-left:1px solid var(--c-line);box-shadow:-6px 0 26px rgba(0,0,0,.06);
+        transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+        overflow-y:auto;padding:22px 26px 40px;z-index:10}
+  .help.on{transform:translateX(0)}
+  .help h2{font-size:14px;font-weight:400;letter-spacing:.14em;margin:0 0 4px}
+  .help .lead{font-size:11.5px;color:#999;letter-spacing:.04em;margin-bottom:20px;line-height:1.9}
+  .help h3{font-size:12px;font-weight:500;letter-spacing:.1em;color:var(--c-accent-deep);
+           margin:22px 0 8px;padding-bottom:6px;border-bottom:1px solid #f2f2f2}
+  .help p{font-size:12px;line-height:2;color:#444;margin:0 0 9px;letter-spacing:.02em}
+  .help ul{margin:0 0 9px;padding-left:17px}
+  .help li{font-size:12px;line-height:2;color:#444;margin-bottom:5px;letter-spacing:.02em}
+  .help b{font-weight:500;color:var(--c-ink)}
+  .help code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;
+             background:#f7f7f7;border:1px solid #eee;border-radius:4px;padding:1px 5px;color:#a94515}
+  .help .kv{display:flex;gap:10px;font-size:12px;line-height:1.95;margin-bottom:4px}
+  .help .kv span:first-child{flex:none;width:74px;color:#999;letter-spacing:.04em}
+  .help .note{background:#fcfaf9;border-left:2px solid var(--c-accent);
+              padding:10px 13px;font-size:11.5px;line-height:1.95;color:#555;margin:10px 0}
+  .help .close{position:absolute;top:18px;right:20px;background:none;border:0;padding:3px 0;
+               font-family:inherit;font-size:11.5px;letter-spacing:.09em;color:#aaa;
+               cursor:pointer;border-bottom:1px solid transparent;transition:color .18s ease}
+  .help .close:hover{color:var(--c-accent-deep);border-bottom-color:var(--c-accent)}
+  .swatch{display:inline-block;width:22px;height:8px;border-radius:3px;vertical-align:middle;margin-right:5px}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="brand">隱含波動率曲面</div>
+
+  <div class="tk">
+    <button class="tk-btn" id="tkBtn"><span id="tkName">—</span><i class="caret"></i></button>
+    <div class="tk-menu" id="tkMenu"></div>
+  </div>
+
+  <div class="seg">
+    <button id="otm" class="on" title="賣權補左半、買權補右半，價外側才有可信的時間價值">OTM 合成</button>
+    <button id="calls">Calls</button>
+    <button id="puts">Puts</button>
+  </div>
+
+  <div class="vr"></div>
+
+  <div class="tog">
+    <button id="smooth" class="on"><i class="dot"></i>平滑</button>
+    <button id="rawq" title="顯示實際報價到期日的位置"><i class="dot"></i>報價線</button>
+  </div>
+
+  <div class="acts">
+    <button id="reset">重設視角</button>
+    <button id="helpBtn">說明</button>
+  </div>
+</div>
+
+<div class="stage">
+  <canvas id="gl"></canvas>
+  <div class="meta" id="meta"></div>
+  <div class="legend">
+    <div>隱含波動率</div>
+    <div class="bar" id="bar"></div>
+    <div class="ends"><span id="lo"></span><span id="hi"></span></div>
+  </div>
+  <div class="hint">拖曳旋轉 · 滾輪縮放</div>
+  <div class="tip" id="tip"></div>
+  <div class="err" id="err"></div>
+  <div class="busy" id="busy"><i></i>擷取即時選擇權鏈…</div>
+
+  <div class="help" id="help">
+    <button class="close acts-lnk" id="helpClose">關閉</button>
+    <h2>使用說明</h2>
+    <div class="lead">這張圖把整條選擇權鏈壓成一片曲面，讓「市場對未來波動的定價」一眼看得出形狀。</div>
+
+    <h3>這張圖在看什麼</h3>
+    <p>每一個選擇權合約都有一個<b>隱含波動率（IV）</b>——把市場成交價倒推回 Black-Scholes 得到的波動率。單看一個數字沒有意義，但把<b>所有履約價 × 所有到期日</b>的 IV 攤開來，就會浮現一片有結構的曲面。這片曲面的<b>形狀</b>才是資訊：它直接反映市場願意為哪一種風險付多少錢。</p>
+
+    <h3>三個軸怎麼讀</h3>
+    <div class="kv"><span>X 軸</span><span>履約價。以價平（ATM）為中心，用對數距離 ln(K/S) 排列，兩端各約 ±35%。</span></div>
+    <div class="kv"><span>Z 軸</span><span>到期天數（DTE）。採平方根刻度，近月會被拉開——近月才有結構，否則會被 200 天以上的遠月壓成一條線。</span></div>
+    <div class="kv"><span>Y 軸</span><span>隱含波動率，同時用顏色重複編碼。</span></div>
+    <div class="kv"><span>橘線</span><span>ATM 脊線，串起各到期日的價平波動率，是讀偏斜的基準線。</span></div>
+
+    <h3>三種形狀的意義</h3>
+    <ul>
+      <li><b>微笑 / 偏斜（沿 X 軸）</b>：曲面兩端翹起就是「微笑」。股票通常是<b>左高右低</b>的偏斜——下檔保護（賣權）比上檔投機貴，那是崩跌保險的溢價。左翼特別高＝市場在對沖下跌。</li>
+      <li><b>期限結構（沿 Z 軸）</b>：正常是近低遠高（contango）。若<b>近月高於遠月</b>（backwardation），代表市場預期短期內有事件——財報、法說會、判決。</li>
+      <li><b>局部隆起</b>：單一到期日整排抬高，通常正好卡在某個已知事件日期上。這是這張圖最實用的地方：<b>它會把市場認定的風險日標出來</b>，不需要你先知道那天有什麼。</li>
+    </ul>
+
+    <h3>操作</h3>
+    <ul>
+      <li><b>拖曳</b>旋轉視角、<b>滾輪</b>縮放、<b>右鍵拖曳</b>平移。</li>
+      <li><b>滑鼠移到曲面上</b>會顯示該點的履約價、到期日與 IV。</li>
+      <li><b>OTM 合成</b>（預設）：左半用賣權、右半用買權，只取各自的<b>價外</b>side。這是市場實務上真正在用的曲面，也是形狀最乾淨的一個——原因見下方「為什麼預設是 OTM 合成」。</li>
+      <li><b>Calls / Puts</b>：改看單一側的完整曲面。可以拿來對照兩側在同一履約價的差異，差太多通常是流動性問題。</li>
+      <li><b>平滑</b>：關閉後顯示未經時間方向插值的原始階梯狀曲面，可以看出真實資料只有 12 個到期日。</li>
+      <li><b>報價線</b>：在曲面上畫出實際有報價的到期日位置，線與線之間都是插值出來的。</li>
+      <li><b>說明</b> / <kbd>Esc</kbd> 開關這個面板。</li>
+    </ul>
+
+    <h3>平滑是怎麼做的</h3>
+    <p>曲面的平滑不是視覺濾鏡，是一次<b>二維局部加權迴歸</b>：對曲面上每一個點，取最接近的 44 筆報價、以 tricube 權重加權，擬合一個「履約價方向二次、時間方向線性」的小曲面，取其中心值。</p>
+    <ul>
+      <li><b>為什麼是迴歸而不是插值</b>：每筆報價的 IV 都帶有買賣價差造成的抖動，而<b>任何插值法都有義務忠實通過每一個點</b>，等於把雜訊原封不動變成曲面上的漣漪。迴歸則是穿過雜訊擬合。代價是曲面<b>不會精確通過每筆報價</b>，平均偏離約 0.8 個百分點。</li>
+      <li><b>為什麼是二維一次做完，而不是先橫再直</b>：因為每個到期日涵蓋的履約價範圍不一樣——5 天到期的合約只有價平上下幾個百分點還有時間價值。若先沿履約價平滑、再沿時間插值，相鄰兩排會是用<b>不同組到期日</b>擬合出來的，曲面就會沿著那些接縫撕裂成鋸齒。改成在（履約價, √時間）平面上一次擬合，支撐範圍才是連續的。</li>
+      <li><b>擬合的對象是總變異數</b> w = σ²T，不是 σ 本身，最後才開根號還原。直接對 σ 平滑可能讓近月的總變異數超過遠月，那是數學上不可能存在的<b>日曆價差套利</b>；在 w 空間就碰不到這個失敗模式。</li>
+    </ul>
+    <div class="note">兩個方向都<b>只在有報價的範圍內</b>進行，絕不外推。翼部或遠月沒有報價的地方，曲面就是缺一塊——那個洞是真實的資訊，代表那裡沒有市場。<br><br>想看未經處理的樣子，關掉<b>平滑</b>：那是只有 12 條真實到期日的階梯狀曲面。再打開<b>報價線</b>可以看到真實資料的位置，線與線之間全是算出來的。</div>
+
+    <h3>為什麼預設是 OTM 合成</h3>
+    <p>一個<b>價內</b>選擇權的價格幾乎全是<b>內含價值</b>——例如股價 420 時，履約價 300 的買權至少值 120 元，其中只有幾毛錢是時間價值。把這種價格倒推回 IV，等於用「總價的 0.1%」去反推波動率：報價跳動幾分錢，IV 就會暴衝到 140%。</p>
+    <p>這不是真實的波動率微笑，是<b>除以一個接近零的數字</b>造成的數值假象。實測上它會讓近月曲面長出一根假尖峰，把其餘 95% 的曲面壓成平板。</p>
+    <div class="note">因此抓取時直接<b>依時間價值過濾</b>：時間價值低於股價 0.2% 的報價一律丟棄，不論它在哪一側。這比「只留某個價外範圍」更精準，因為它針對的是失真的<b>成因</b>而不是位置。<br><br>副作用之一是<b>近月曲面會變窄</b>：5 天到期的合約，只有價平上下約 ±9% 的履約價還有可信的時間價值。曲面因此呈現前窄後寬的錐形——那是真實的，不是資料缺漏。</div>
+
+    <h3>資料來源與更新</h3>
+    <p>資料是<b>打開頁面當下即時</b>向 Yahoo Finance 抓取的選擇權鏈，不是預先存好的快照。左上角的「擷取於」就是這批報價實際抓下來的時間。</p>
+    <div class="note">兩個必須知道的時間差：① 伺服器端會<b>快取 10 分鐘</b>，所以短時間內重開看到的是同一批報價；② Yahoo 本身的報價<b>可能延遲</b>，且盤後與週末抓到的是<b>最後收盤狀態</b>而非即時市場。要看最新的一批，等 10 分鐘後重新整理即可。</div>
+    <p>切換 Calls / Puts / OTM 合成<b>不會重新抓取</b>——一次請求就把兩側都帶回來了，切換只是換個角度看同一批資料。換股票才會發新的請求。</p>
+    <p>抓取時已濾掉這些不可信的報價：</p>
+    <ul>
+      <li><b>時間價值低於股價 0.2%</b> 的合約（見上一節，這條濾掉的最多）</li>
+      <li><b>買價為零</b>的合約——沒有人願意用任何價格買，就不算有市場</li>
+      <li>未平倉量與成交量<b>同時為零</b>的合約（IV 是陳舊的殘值）</li>
+      <li><b>4 天內到期</b>的整個到期日：這種合約的價格由 pin risk 與 gamma 主導，而不是對波動率的看法，IV 會亂跳並把曲面近端拉成鋸齒</li>
+      <li>報價數<b>少於 8 筆</b>的整個到期日：撐不出一條微笑，只會讓擬合被迫向外借點</li>
+      <li>IV 落在 1%–300% 之外的極端值</li>
+      <li>距離價平超過 ±35% 的深度價外合約</li>
+      <li>同一履約價重複報價時，只保留流動性較高的那筆</li>
+    </ul>
+    <p>另外兩項是<b>顯示</b>層的處理，不影響資料本身：</p>
+    <ul>
+      <li>高度與顏色的刻度取<b>第 1 與第 99 百分位</b>，不是最大最小值——否則一小塊異常波動率會獨占整個色階，把其餘 99% 的曲面壓成一片同色的平板。左下角圖例顯示的就是這個刻度範圍，左上角的 IV 則是真實的最大最小值。</li>
+      <li>擬合結果會被<b>限制在鄰近報價的 IV 範圍內</b>。近月的 T 很小，σ = √(w/T) 會把 w 的微小誤差放大成離譜的波動率；這道限制讓曲面可以平滑，但不能憑空生出沒有人報過的價位。</li>
+    </ul>
+
+    <h3>注意事項</h3>
+    <ul>
+      <li>IV 是 <b>Yahoo 自行計算</b>的，未必與你的券商或 Bloomberg 一致，報價本身也可能延遲。</li>
+      <li><b>翼部仍是最不可靠的區域</b>：即使過濾後，深度價外合約成交依然稀疏，單一筆爛報價就能把邊緣拉歪。看形狀時以中央區域為主。</li>
+      <li>美式選擇權有提前履約價值，Black-Scholes 反推的 IV 本身就有偏差。</li>
+      <li>曲面經過迴歸與插值，是<b>對市場的估計</b>而非市場報價本身。要看原始資料請開<b>報價線</b>並關掉<b>平滑</b>。</li>
+      <li>本工具僅供資訊參考，<b>非投資建議</b>。</li>
+    </ul>
+  </div>
+</div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const TICKERS = ['TSM','NVDA','AMD','MU','AVGO','ASML','AAPL','MSFT','GOOGL','AMZN',
+                 'META','TSLA','NFLX','PLTR','COIN','SPY','QQQ'];
+const API = '/api/volsurface';
+const SPAN_X = 10, SPAN_Z = 10, SPAN_Y = 4.2;
+const NX = 121, NT = 81;          // dense grid resolution
+const M_MIN = -0.35, M_MAX = 0.35;
+
+const el = id => document.getElementById(id);
+const state = { ticker: TICKERS[0], side: 'otm', smooth: true, showQuotes: false, data: null };
+const SIDE_LABEL = { calls: '買權', puts: '賣權', otm: 'OTM 合成' };
+
+/* ---------- interpolation ---------- */
+
+// Bandwidths for the 2D fit: log-moneyness, and sqrt(days) along time.
+const HK = 0.11, HS = 2.6, MIN_SUP = 10, MAX_R = 2.2;
+// Neighbourhood size scales with how densely the chain is quoted. A fixed count
+// is too local on a heavily quoted name -- the fit then tracks quote noise
+// instead of smoothing it -- and too greedy on a thinly quoted one.
+const qnFor = n => Math.max(44, Math.round(0.12 * n));
+
+function makeLinear(xs, ys){
+  const n = xs.length;
+  if (n < 2) return null;
+  return { min: xs[0], max: xs[n-1], at(x){
+    if (x < xs[0] || x > xs[n-1]) return null;
+    let i = 0;
+    while (i < n - 2 && x > xs[i+1]) i++;
+    const t = (x - xs[i]) / (xs[i+1] - xs[i]);
+    return ys[i] + t*(ys[i+1] - ys[i]);
+  }};
+}
+
+function quickselect(a, k, n){
+  let lo = 0, hi = n - 1;
+  while (lo < hi){
+    const p = a[(lo + hi) >> 1];
+    let i = lo, j = hi;
+    while (i <= j){
+      while (a[i] < p) i++;
+      while (a[j] > p) j--;
+      if (i <= j){ const t = a[i]; a[i] = a[j]; a[j] = t; i++; j--; }
+    }
+    if (k <= j) hi = j; else if (k >= i) lo = i; else break;
+  }
+  return a[k];
+}
+
+function solve4(M, b){
+  for (let i = 0; i < 4; i++){
+    let piv = i;
+    for (let r = i+1; r < 4; r++) if (Math.abs(M[r][i]) > Math.abs(M[piv][i])) piv = r;
+    if (Math.abs(M[piv][i]) < 1e-13) return null;
+    [M[i], M[piv]] = [M[piv], M[i]]; [b[i], b[piv]] = [b[piv], b[i]];
+    for (let r = i+1; r < 4; r++){
+      const f = M[r][i]/M[i][i];
+      for (let c = i; c < 4; c++) M[r][c] -= f*M[i][c];
+      b[r] -= f*b[i];
+    }
+  }
+  const x = [0,0,0,0];
+  for (let i = 3; i >= 0; i--){
+    let s = b[i];
+    for (let c = i+1; c < 4; c++) s -= M[i][c]*x[c];
+    x[i] = s/M[i][i];
+  }
+  return x;
+}
+
+// One 2D local regression over every quote at once, rather than smoothing along
+// strike and then along time. The separable version fails here because each
+// expiry covers a different strike range -- a 5-day option only has meaningful
+// time value within a few percent of spot -- so neighbouring columns end up fitted
+// from different sets of expiries, and the surface tears along those seams.
+// Fitting in (moneyness, sqrt-time) jointly makes the support a smooth region.
+// The response is total variance w = sigma^2 * T, not sigma: interpolating sigma
+// can leave near-dated w above far-dated w, which is a calendar arbitrage that
+// cannot exist. In w space that failure mode is unreachable.
+function makeFit2D(d){
+  const qk = [], qs = [], qw = [], qiv = [];
+  for (const e of d.expiries){
+    const s = Math.sqrt(e.dte), T = e.dte/365;
+    for (const [k, iv] of e.points){
+      qk.push(k); qs.push(s); qw.push(iv*iv*T); qiv.push(iv);
+    }
+  }
+  const n = qk.length;
+  const QN = qnFor(n);
+  const dist = new Float64Array(n), scratch = new Float64Array(n);
+
+  // Returns implied vol at (log-moneyness, sqrt-days), or null where unsupported.
+  return function fit(k0, s0){
+    if (n < MIN_SUP) return null;
+    for (let i = 0; i < n; i++){
+      const u = (qk[i] - k0)/HK, v = (qs[i] - s0)/HS;
+      dist[i] = Math.sqrt(u*u + v*v);
+    }
+    scratch.set(dist);
+    const R = quickselect(scratch, Math.min(QN, n) - 1, n);
+    if (!(R > 0) || R > MAX_R) return null;
+
+    const M = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]], b = [0,0,0,0];
+    let cnt = 0, kLo = false, kHi = false, sLo = false, sHi = false;
+    let ivLo = Infinity, ivHi = -Infinity;
+    for (let i = 0; i < n; i++){
+      const r = dist[i]/R;
+      if (r >= 1) continue;
+      const u = qk[i] - k0, v = qs[i] - s0;
+      cnt++;
+      if (qiv[i] < ivLo) ivLo = qiv[i];
+      if (qiv[i] > ivHi) ivHi = qiv[i];
+      if (u <= 0) kLo = true;
+      if (u >= 0) kHi = true;
+      if (v <= 0) sLo = true;
+      if (v >= 0) sHi = true;
+      const wt = Math.pow(1 - r*r*r, 3);
+      const B = [1, u, u*u, v];
+      for (let a = 0; a < 4; a++){
+        b[a] += wt*B[a]*qw[i];
+        for (let c = 0; c < 4; c++) M[a][c] += wt*B[a]*B[c];
+      }
+    }
+    // Refuse to extrapolate: the point must be bracketed by quotes on both axes,
+    // so the empty corners of the surface stay genuinely empty.
+    if (cnt < MIN_SUP || !(kLo && kHi && sLo && sHi)) return null;
+    const beta = solve4(M, b);
+    if (!beta || beta[0] <= 0) return null;
+    const T = s0*s0/365;
+    const iv = Math.sqrt(beta[0]/T);
+    // Near the front month T is tiny, so sqrt(w/T) magnifies any error in w into
+    // a wild vol. Keep the fit inside the range of the quotes it was built from:
+    // the surface may smooth, but it must not invent a level nobody quoted.
+    return Math.min(ivHi, Math.max(ivLo, iv));
+  };
+}
+
+// The support boundary is decided per cell, so it comes out serrated: one cell
+// passes the bracketing test and its neighbour does not. Those single-cell
+// prongs render as spikes and sawtooth along the rim. Erode any cell with fewer
+// than three filled orthogonal neighbours -- that is exactly a prong or a
+// corner, while a cell along a straight edge keeps three and survives.
+function prune(G, passes = 2){
+  const R = G.length, C = G[0].length;
+  for (let pass = 0; pass < passes; pass++){
+    const kill = [];
+    for (let r = 0; r < R; r++)
+      for (let c = 0; c < C; c++){
+        if (G[r][c] == null) continue;
+        let nb = 0;
+        if (r > 0   && G[r-1][c] != null) nb++;
+        if (r < R-1 && G[r+1][c] != null) nb++;
+        if (c > 0   && G[r][c-1] != null) nb++;
+        if (c < C-1 && G[r][c+1] != null) nb++;
+        if (nb <= 2) kill.push([r, c]);
+      }
+    if (!kill.length) return;
+    for (const [r, c] of kill) G[r][c] = null;
+  }
+}
+
+function buildGrid(d, smooth){
+  const xs = Array.from({length: NX}, (_, i) => M_MIN + (M_MAX - M_MIN) * i/(NX-1));
+  const dtes0 = d.expiries.map(e => e.dte);
+
+  if (!smooth){
+    // Raw view: straight lines between real quotes, at the real expiries only.
+    const A = d.expiries.map(e => {
+      const f = makeLinear(e.points.map(p => p[0]), e.points.map(p => p[1]));
+      return xs.map(x => f ? f.at(x) : null);
+    });
+    return { xs, dtes: dtes0, G: A, A, dtes0 };
+  }
+
+  const fit = makeFit2D(d);
+  const ivAt = (k, dte) => fit(k, Math.sqrt(dte));
+
+  const sMin = Math.sqrt(Math.min(...dtes0)), sMax = Math.sqrt(Math.max(...dtes0));
+  const dtes = Array.from({length: NT}, (_, i) => {
+    const s = sMin + (sMax - sMin) * i/(NT-1);
+    return s*s;
+  });
+
+  const G = dtes.map(dte => xs.map(x => ivAt(x, dte)));
+  prune(G);
+  // The quote lines ride the same fitted surface, evaluated at the real expiries.
+  const A = dtes0.map(dte => xs.map(x => ivAt(x, dte)));
+  return { xs, dtes, G, A, dtes0 };
+}
+
+/* ---------- scene ---------- */
+
+function ramp(t){
+  t = Math.max(0, Math.min(1, t));
+  const stops = [[0.42,0.51,0.60],[0.55,0.60,0.58],[0.80,0.58,0.36],[0.82,0.35,0.12]];
+  const s = t * (stops.length - 1), i = Math.min(Math.floor(s), stops.length - 2), f = s - i;
+  return stops[i].map((c, k) => c + (stops[i+1][k] - c) * f);
+}
+el('bar').style.background = 'linear-gradient(90deg,' + Array.from({length:8},(_,i)=>{
+  const c = ramp(i/7).map(v => Math.round(v*255));
+  return `rgb(${c[0]},${c[1]},${c[2]}) ${(i/7*100).toFixed(0)}%`;
+}).join(',') + ')';
+
+const renderer = new THREE.WebGLRenderer({canvas: el('gl'), antialias: true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xffffff);
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 500);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.72));
+const key = new THREE.DirectionalLight(0xffffff, 0.62);
+key.position.set(9, 14, 7);
+scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.3);
+fill.position.set(-8, 5, -6);
+scene.add(fill);
+
+// Framed to leave room for the axis labels sitting outside the grid.
+const HOME = new THREE.Vector3(13, 11, 15.5);
+function resetView(){
+  camera.position.copy(HOME);
+  controls.target.set(0, SPAN_Y * 0.35, 0);
+  controls.update();
+}
+el('reset').onclick = resetView;
+
+const world = new THREE.Group();
+scene.add(world);
+let surfaceMesh = null;
+
+function clearWorld(){
+  while (world.children.length){
+    const o = world.children.pop();
+    o.geometry?.dispose();
+    if (o.material) [].concat(o.material).forEach(m => m.dispose());
+    o.material?.map?.dispose();
+  }
+  surfaceMesh = null;
+}
+
+function label(text, pos, size = 0.34, color = '#666'){
+  const pad = 8, fs = 44;
+  const c = document.createElement('canvas');
+  let ctx = c.getContext('2d');
+  ctx.font = `${fs}px "Noto Serif TC", serif`;
+  c.width = Math.ceil(ctx.measureText(text).width) + pad*2;
+  c.height = fs + pad*2;
+  ctx = c.getContext('2d');
+  ctx.font = `${fs}px "Noto Serif TC", serif`;
+  ctx.fillStyle = color;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, pad, c.height/2);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: new THREE.CanvasTexture(c), transparent: true, depthTest: false
+  }));
+  sp.scale.set(size * c.width/c.height, size, 1);
+  sp.position.copy(pos);
+  sp.renderOrder = 10;
+  return sp;
+}
+
+function stamp(iso){
+  const t = new Date(iso);
+  if (isNaN(t)) return iso;
+  const p = n => String(n).padStart(2, '0');
+  return `${t.getFullYear()}-${p(t.getMonth()+1)}-${p(t.getDate())} `
+       + `${p(t.getHours())}:${p(t.getMinutes())}`;
+}
+
+function build(d){
+  clearWorld();
+
+  const { xs, dtes, G, A, dtes0 } = buildGrid(d, state.smooth);
+  const rows = dtes.length, cols = xs.length;
+
+  const ivs = G.flat().filter(v => v != null);
+  if (!ivs.length){
+    el('err').classList.add('on');
+    el('err').textContent = '資料不足以構成曲面';
+    return;
+  }
+  // Scale to the 1st/99th percentile, not min/max. One thin corner of unusual
+  // vol otherwise owns the whole range and presses the other 99% of the surface
+  // into a flat, single-coloured slab.
+  const sorted = ivs.slice().sort((a, b) => a - b);
+  const pct = q => sorted[Math.min(sorted.length - 1,
+                                   Math.max(0, Math.round(q*(sorted.length - 1))))];
+  const loIV = pct(0.01), hiIV = pct(0.99);
+  const spanIV = hiIV - loIV || 1;
+  const norm = iv => Math.max(0, Math.min(1, (iv - loIV) / spanIV));
+  const maxDte = Math.max(...dtes0);
+
+  const zOf = dte => (Math.sqrt(dte / maxDte) - 0.5) * SPAN_Z;
+  const xOf = m => (m - M_MIN) / (M_MAX - M_MIN) * SPAN_X - SPAN_X/2;
+  const yOf = iv => norm(iv) * SPAN_Y;
+
+  const pos = [], col = [], idx = [], vid = [];
+  for (let r = 0; r < rows; r++){
+    const z = zOf(dtes[r]);
+    vid.push([]);
+    for (let c = 0; c < cols; c++){
+      const iv = G[r][c];
+      vid[r].push(iv == null ? null : pos.length/3);
+      if (iv == null) continue;
+      pos.push(xOf(xs[c]), yOf(iv), z);
+      col.push(...ramp(norm(iv)));
+    }
+  }
+  for (let r = 0; r < rows - 1; r++)
+    for (let c = 0; c < cols - 1; c++){
+      const a = vid[r][c], b = vid[r][c+1], cc = vid[r+1][c], dd = vid[r+1][c+1];
+      if (a == null || b == null || cc == null || dd == null) continue;
+      idx.push(a, cc, b, b, cc, dd);
+    }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+
+  surfaceMesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({
+    vertexColors: true, side: THREE.DoubleSide
+  }));
+  world.add(surfaceMesh);
+
+  // Where the real quotes actually are — everything between these is interpolated.
+  if (state.showQuotes){
+    for (let r = 0; r < A.length; r++){
+      const pts = [];
+      for (let c = 0; c < cols; c++){
+        const iv = A[r][c];
+        if (iv == null){
+          if (pts.length > 1) world.add(new THREE.Line(
+            new THREE.BufferGeometry().setFromPoints(pts),
+            new THREE.LineBasicMaterial({color: 0x333333, transparent: true, opacity: 0.35})));
+          pts.length = 0;
+          continue;
+        }
+        pts.push(new THREE.Vector3(xOf(xs[c]), yOf(iv) + 0.012, zOf(dtes0[r])));
+      }
+      if (pts.length > 1) world.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({color: 0x333333, transparent: true, opacity: 0.35})));
+    }
+  }
+
+  // ATM ridge — the baseline every skew read starts from.
+  const atm = [];
+  const ic = Math.round((0 - M_MIN) / (M_MAX - M_MIN) * (cols - 1));
+  for (let r = 0; r < rows; r++){
+    const iv = G[r][ic];
+    if (iv != null) atm.push(new THREE.Vector3(0, yOf(iv) + 0.025, zOf(dtes[r])));
+  }
+  if (atm.length > 1)
+    world.add(new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(atm),
+      new THREE.LineBasicMaterial({color: 0xd1591f, transparent: true, opacity: 0.85})
+    ));
+
+  const g = new THREE.GridHelper(SPAN_X, 10, 0xdddddd, 0xf0f0f0);
+  g.position.y = -0.01;
+  world.add(g);
+
+  for (const m of [-0.3, -0.15, 0, 0.15, 0.3]){
+    const strike = (d.spot * Math.exp(m)).toFixed(0);
+    world.add(label(m === 0 ? `ATM ${strike}` : strike,
+      new THREE.Vector3(xOf(m), -0.15, SPAN_Z/2 + 0.7), 0.32, m === 0 ? '#d1591f' : '#999'));
+  }
+  world.add(label('履約價 Strike', new THREE.Vector3(0, -0.15, SPAN_Z/2 + 1.7), 0.34, '#666'));
+
+  // Label expiries greedily by on-screen gap: the sqrt axis still crowds the
+  // near month, and bucketing by day count does not know how close that lands.
+  // Right-hand edge, i.e. the side facing the default camera. On the far side
+  // these labels project on top of the surface and become unreadable.
+  let lastZ = -Infinity;
+  for (const dte of dtes0){
+    const z = zOf(dte);
+    if (z - lastZ < 1.45) continue;
+    lastZ = z;
+    world.add(label(`${dte}d`, new THREE.Vector3(SPAN_X/2 + 1.0, -0.15, z), 0.3, '#aaa'));
+  }
+  world.add(label('到期天數 DTE', new THREE.Vector3(SPAN_X/2 + 2.6, -0.15, 0), 0.34, '#666'));
+
+  el('lo').textContent = (loIV*100).toFixed(0) + '%';
+  el('hi').textContent = (hiIV*100).toFixed(0) + '%';
+  el('meta').innerHTML =
+    `<b>${d.ticker}</b> · ${SIDE_LABEL[d.side] || d.side}<br>` +
+    `現價 <b>${d.spot}</b><br>` +
+    `${dtes0.length} 個到期日 · ${d.expiries.reduce((s,e)=>s+e.points.length,0)} 筆報價<br>` +
+    `IV <b>${(sorted[0]*100).toFixed(0)}%</b> – ` +
+    `<b>${(sorted[sorted.length-1]*100).toFixed(0)}%</b><br>` +
+    `<span style="color:#bbb">擷取於 ${stamp(d.fetched)} · Yahoo 報價可能延遲</span>`;
+
+  Object.assign(state, {loIV, spanIV, maxDte, zOf, yOf});
+}
+
+/* ---------- hover ---------- */
+
+const ray = new THREE.Raycaster();
+const ptr = new THREE.Vector2();
+const tip = el('tip');
+
+el('gl').addEventListener('pointermove', ev => {
+  if (!surfaceMesh || !state.data){ tip.classList.remove('on'); return; }
+  const r = renderer.domElement.getBoundingClientRect();
+  ptr.x = (ev.clientX - r.left) / r.width * 2 - 1;
+  ptr.y = -((ev.clientY - r.top) / r.height) * 2 + 1;
+  ray.setFromCamera(ptr, camera);
+  const hit = ray.intersectObject(surfaceMesh)[0];
+  if (!hit){ tip.classList.remove('on'); return; }
+
+  const d = state.data, p = hit.point;
+  const iv = p.y / SPAN_Y * state.spanIV + state.loIV;
+  const m = (p.x + SPAN_X/2) / SPAN_X * (M_MAX - M_MIN) + M_MIN;
+  const dte = state.maxDte * Math.pow(p.z / SPAN_Z + 0.5, 2);
+  const near = d.expiries.reduce((a, b) =>
+    Math.abs(b.dte - dte) < Math.abs(a.dte - dte) ? b : a);
+
+  tip.innerHTML = `履約價 <b>${(d.spot * Math.exp(m)).toFixed(1)}</b> (${(m*100).toFixed(1)}%)<br>` +
+                  `到期 <b>${Math.round(dte)}</b> 天<br>` +
+                  `IV <b>${(iv*100).toFixed(1)}%</b><br>` +
+                  `<span style="color:#aaa">最近報價 ${near.expiry}</span>`;
+  tip.style.left = (ev.clientX - r.left + 16) + 'px';
+  tip.style.top  = (ev.clientY - r.top + 16) + 'px';
+  tip.classList.add('on');
+});
+el('gl').addEventListener('pointerleave', () => tip.classList.remove('on'));
+
+/* ---------- wiring ---------- */
+
+// One payload per ticker holds both sides, so switching Calls/Puts/OTM is local.
+const chainCache = new Map();
+let loadSeq = 0;
+
+async function fetchChain(ticker){
+  if (chainCache.has(ticker)) return chainCache.get(ticker);
+  const res = await fetch(`${API}?ticker=${encodeURIComponent(ticker)}`);
+  const body = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+  chainCache.set(ticker, body);
+  return body;
+}
+
+// The market-standard surface: take each side only where it is out-of-the-money.
+// An ITM option is mostly intrinsic value, so its IV is the least trustworthy
+// number on the board -- the OTM half of each side is the half worth plotting.
+function blendOTM(calls, puts){
+  const byExpiry = new Map();
+  for (const e of puts)
+    byExpiry.set(e.expiry, {expiry: e.expiry, dte: e.dte,
+                            points: e.points.filter(p => p[0] < 0)});
+  for (const e of calls){
+    const row = byExpiry.get(e.expiry) || {expiry: e.expiry, dte: e.dte, points: []};
+    row.points = row.points.concat(e.points.filter(p => p[0] >= 0));
+    byExpiry.set(e.expiry, row);
+  }
+  const expiries = [...byExpiry.values()]
+    .filter(e => e.points.length >= 4)
+    .sort((a, b) => a.dte - b.dte);
+  expiries.forEach(e => e.points.sort((a, b) => a[0] - b[0]));
+  return expiries;
+}
+
+function shape(chain, side){
+  const expiries = side === 'otm' ? blendOTM(chain.calls, chain.puts)
+                                  : (chain[side] || []);
+  return {ticker: chain.ticker, side, spot: chain.spot,
+          fetched: chain.fetched, expiries};
+}
+
+async function load(){
+  const seq = ++loadSeq;
+  const ticker = state.ticker;
+  el('err').classList.remove('on');
+  el('busy').classList.add('on');
+  try {
+    const chain = await fetchChain(ticker);
+    // A slow request for a ticker the user has already moved on from must not
+    // paint over the one they are actually looking at.
+    if (seq !== loadSeq) return;
+    const d = shape(chain, state.side);
+    if (!d.expiries.length) throw new Error('這個標的沒有足夠的可用報價');
+    state.data = d;
+    build(d);
+  } catch (e) {
+    if (seq !== loadSeq) return;
+    clearWorld();
+    state.data = null;
+    el('err').classList.add('on');
+    el('err').innerHTML = `${ticker} 讀取失敗<br><span style="color:#999">${e.message}</span>`;
+  } finally {
+    if (seq === loadSeq) el('busy').classList.remove('on');
+  }
+}
+
+const tkMenu = el('tkMenu');
+function renderTickerMenu(){
+  el('tkName').textContent = state.ticker;
+  tkMenu.innerHTML = '';
+  for (const t of TICKERS){
+    const b = document.createElement('button');
+    b.textContent = t;
+    b.className = t === state.ticker ? 'on' : '';
+    b.onclick = () => {
+      state.ticker = t;
+      tkMenu.classList.remove('on');
+      renderTickerMenu();
+      load();
+    };
+    tkMenu.appendChild(b);
+  }
+}
+el('tkBtn').onclick = e => { e.stopPropagation(); tkMenu.classList.toggle('on'); };
+addEventListener('click', () => tkMenu.classList.remove('on'));
+renderTickerMenu();
+
+const SIDES = ['otm','calls','puts'];
+for (const side of SIDES)
+  el(side).onclick = () => {
+    state.side = side;
+    SIDES.forEach(s => el(s).classList.toggle('on', s === side));
+    load();
+  };
+
+el('smooth').onclick = () => {
+  state.smooth = !state.smooth;
+  el('smooth').classList.toggle('on', state.smooth);
+  if (state.data) build(state.data);
+};
+el('rawq').onclick = () => {
+  state.showQuotes = !state.showQuotes;
+  el('rawq').classList.toggle('on', state.showQuotes);
+  if (state.data) build(state.data);
+};
+
+const help = el('help');
+el('helpBtn').onclick = () => help.classList.toggle('on');
+el('helpClose').onclick = () => help.classList.remove('on');
+addEventListener('keydown', e => { if (e.key === 'Escape') help.classList.remove('on'); });
+
+const stage = renderer.domElement.parentElement;
+function resize(){
+  const w = stage.clientWidth, h = stage.clientHeight;
+  if (!w || !h) return;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+}
+// Observe the element, not the window: the stage has its final size only after
+// the webfont-bearing stylesheet lands, which is after this module first runs.
+new ResizeObserver(resize).observe(stage);
+resize();
+resetView();
+
+(function loop(){
+  requestAnimationFrame(loop);
+  controls.update();
+  renderer.render(scene, camera);
+})();
+
+load();
+</script>
+</body>
+</html>
