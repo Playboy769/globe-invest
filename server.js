@@ -1085,6 +1085,7 @@ const server = http.createServer(async (req, res) => {
   else if (url === '/options'    || url === '/options/')    fp = path.join(APP_DIR, 'options',    'index.html');
   else if (url === '/brownian'   || url === '/brownian/')   fp = path.join(APP_DIR, 'brownian',   'index.html');
   else if (url === '/sankey'     || url === '/sankey/')     fp = path.join(APP_DIR, 'sankey',     'index.html');
+  else if (url === '/earnings-quiz' || url === '/earnings-quiz/') fp = path.join(APP_DIR, 'earnings-quiz', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 

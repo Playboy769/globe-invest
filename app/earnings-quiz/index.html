@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>話術偵測 · Earnings Call Quiz</title>
+<style>
+  :root{
+    --ink:#111; --sub:#555; --faint:#888; --line:#e6e6e6; --bg:#fff;
+    --accent:#3a5a9c; --good:#2e7d4f; --good-bg:#eef7f1; --good-line:#b9ddc6;
+    --bad:#b3564a; --bad-bg:#fdf1ef; --bad-line:#f0c6bf;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.7}
+  .wrap{max-width:760px;margin:0 auto;padding:36px 20px 80px}
+  .title{font-size:22px;font-weight:700;letter-spacing:.02em}
+  .subtitle{color:var(--sub);font-size:13.5px;margin-top:6px}
+
+  .statbar{display:flex;gap:10px;margin:22px 0 18px;flex-wrap:wrap}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:10px 16px;flex:1;min-width:100px;text-align:center}
+  .stat-val{font-size:20px;font-weight:700}
+  .stat-lbl{font-size:11px;color:var(--faint);margin-top:2px;letter-spacing:.03em}
+
+  .card{border:1px solid var(--line);border-radius:14px;padding:22px}
+  .exchange{font-size:15px;white-space:pre-wrap}
+  .exchange b{color:var(--accent)}
+
+  .adv-toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sub);
+    border:1px solid var(--line);border-radius:20px;padding:6px 12px;margin-top:14px;cursor:pointer;user-select:none}
+  .adv-toggle:hover{border-color:#ccc}
+  .orig{display:none;margin-top:12px;padding:12px 14px;background:#fafafa;border-left:3px solid var(--line);
+    border-radius:0 8px 8px 0;font-size:13px;color:var(--sub);white-space:pre-wrap}
+  .orig.on{display:block}
+
+  .prompt{margin:22px 0 12px;font-size:13.5px;color:var(--sub);font-weight:600}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13.5px;
+    background:#fff;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s}
+  .opt:hover:not(.locked){border-color:#aaa;background:#fafafa}
+  .opt.correct{border-color:var(--good-line);background:var(--good-bg);color:var(--good)}
+  .opt.wrong{border-color:var(--bad-line);background:var(--bad-bg);color:var(--bad)}
+  .opt.dim{opacity:.5}
+  .opt.locked{cursor:default}
+
+  .reveal{display:none;margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+  .reveal.on{display:block}
+  .reveal-meta{font-size:12.5px;color:var(--faint);margin-bottom:10px}
+  .reveal-meta a{color:var(--accent);text-decoration:none}
+  .reveal-meta a:hover{text-decoration:underline}
+  .next-btn{margin-top:16px;background:var(--ink);color:#fff;border:none;border-radius:10px;
+    padding:11px 22px;font-size:13.5px;cursor:pointer}
+  .next-btn:hover{opacity:.85}
+
+  .footer{margin-top:30px;font-size:11.5px;color:var(--faint);text-align:center}
+  .reset-link{background:none;border:none;color:var(--faint);font-size:11.5px;text-decoration:underline;cursor:pointer;padding:0}
+
+  .loading,.empty{color:var(--faint);font-size:13.5px;padding:40px 0;text-align:center}
+
+  @media(max-width:480px){
+    .wrap{padding:24px 16px 60px}
+    .statbar{gap:8px}
+    .stat{padding:8px 10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">話術偵測 · Earnings Call Quiz</div>
+  <div class="subtitle">看一段法說會問答交換，猜猜真正的邏輯缺口判讀是哪一個——四選一。</div>
+
+  <div class="statbar">
+    <div class="stat"><div class="stat-val" id="st-streak">0</div><div class="stat-lbl">連續答對</div></div>
+    <div class="stat"><div class="stat-val" id="st-best">0</div><div class="stat-lbl">最佳紀錄</div></div>
+    <div class="stat"><div class="stat-val" id="st-progress">0/0</div><div class="stat-lbl">已作答題數</div></div>
+  </div>
+
+  <div id="game" class="card">
+    <div class="loading">載入題庫中…</div>
+  </div>
+
+  <div class="footer">
+    題庫來自站內既有 Earnings Call 分析報告的 Q&amp;A 判讀 ·
+    <button class="reset-link" id="reset-btn">重設紀錄</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var STREAK_KEY = 'eq_streak', BEST_KEY = 'eq_best', SEEN_KEY = 'eq_seen';
+  var state = { questions: [], pool: [], current: null, answered: false, showOrig: false };
+
+  function load(k, dflt){ try{ var v = localStorage.getItem(k); return v===null?dflt:JSON.parse(v);}catch(e){return dflt;} }
+  function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+
+  function refreshStats(){
+    document.getElementById('st-streak').textContent = load(STREAK_KEY, 0);
+    document.getElementById('st-best').textContent = load(BEST_KEY, 0);
+    var seen = load(SEEN_KEY, []);
+    document.getElementById('st-progress').textContent = seen.length + '/' + state.questions.length;
+  }
+
+  function nextQuestion(){
+    if (!state.pool.length){
+      var seen = load(SEEN_KEY, []);
+      var seenSet = {}; seen.forEach(function(id){ seenSet[id]=true; });
+      state.pool = shuffle(state.questions.filter(function(q){ return !seenSet[q.id]; }));
+      if (!state.pool.length){
+        // Every question has been seen at least once — start a fresh lap.
+        save(SEEN_KEY, []);
+        state.pool = shuffle(state.questions);
+      }
+    }
+    state.current = state.pool.pop();
+    state.answered = false;
+    state.showOrig = false;
+    render();
+  }
+
+  function markSeen(id){
+    var seen = load(SEEN_KEY, []);
+    if (seen.indexOf(id) === -1){ seen.push(id); save(SEEN_KEY, seen); }
+  }
+
+  function choose(optText, optionsEls, q){
+    if (state.answered) return;
+    state.answered = true;
+    var isCorrect = optText === q.correctAnswer;
+    var streak = load(STREAK_KEY, 0);
+    if (isCorrect){
+      streak += 1;
+      var best = load(BEST_KEY, 0);
+      if (streak > best) save(BEST_KEY, streak);
+    } else {
+      streak = 0;
+    }
+    save(STREAK_KEY, streak);
+    markSeen(q.id);
+
+    optionsEls.forEach(function(el){
+      var txt = el.dataset.text;
+      el.classList.add('locked');
+      if (txt === q.correctAnswer) el.classList.add('correct');
+      else if (txt === optText) el.classList.add('wrong');
+      else el.classList.add('dim');
+    });
+
+    var reveal = document.getElementById('reveal');
+    reveal.classList.add('on');
+    document.getElementById('reveal-meta').innerHTML =
+      (isCorrect ? '答對了。' : '這題答錯了——') +
+      '出處：' + q.ticker + ' ' + q.period + ' · ' +
+      '<a href="' + q.sourceUrl + '" target="_blank" rel="noopener">查看完整報告 →</a>';
+    refreshStats();
+  }
+
+  function render(){
+    var q = state.current;
+    if (!q){
+      document.getElementById('game').innerHTML = '<div class="empty">題庫是空的。</div>';
+      return;
+    }
+    var shuffled = shuffle(q.options);
+    var html = '';
+    html += '<div class="exchange">' + escapeHtml(q.exchange).replace(/\n/g,'<br>') + '</div>';
+    if (q.origText){
+      html += '<div class="adv-toggle" id="orig-toggle">🔎 顯示逐字稿原文</div>';
+      html += '<div class="orig" id="orig-box">' + escapeHtml(q.origText) + '</div>';
+    }
+    html += '<div class="prompt">下列何者是真正的邏輯缺口判讀？</div>';
+    html += '<div class="options" id="options"></div>';
+    html += '<div class="reveal" id="reveal"><div class="reveal-meta" id="reveal-meta"></div>';
+    html += '<button class="next-btn" id="next-btn">下一題 →</button></div>';
+    document.getElementById('game').innerHTML = html;
+
+    var optionsWrap = document.getElementById('options');
+    var els = shuffled.map(function(optText){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.dataset.text = optText;
+      btn.textContent = optText;
+      optionsWrap.appendChild(btn);
+      return btn;
+    });
+    els.forEach(function(el){
+      el.addEventListener('click', function(){ choose(el.dataset.text, els, q); });
+    });
+
+    if (q.origText){
+      document.getElementById('orig-toggle').addEventListener('click', function(){
+        state.showOrig = !state.showOrig;
+        document.getElementById('orig-box').classList.toggle('on', state.showOrig);
+        this.textContent = state.showOrig ? '🔎 隱藏逐字稿原文' : '🔎 顯示逐字稿原文';
+      });
+    }
+    document.getElementById('next-btn').addEventListener('click', nextQuestion);
+    refreshStats();
+  }
+
+  function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    save(STREAK_KEY, 0); save(BEST_KEY, 0); save(SEEN_KEY, []);
+    state.pool = [];
+    nextQuestion();
+  });
+
+  fetch('./questions.json')
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data){
+      state.questions = data;
+      if (!data.length){
+        document.getElementById('game').innerHTML = '<div class="empty">題庫是空的。</div>';
+        return;
+      }
+      nextQuestion();
+    })
+    .catch(function(err){
+      document.getElementById('game').innerHTML = '<div class="empty">題庫載入失敗：' + escapeHtml(err.message) + '</div>';
+    });
+})();
+</script>
+</body>
+</html>
