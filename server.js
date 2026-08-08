@@ -335,6 +335,58 @@ function fetchUrl(url) {
   });
 }
 
+// ── Market Weather dashboard (FRED-sourced macro stress indicators) ──
+// All 5 series are official, free, daily-updated FRED data — no unofficial/undocumented
+// endpoints in the mix, so there's nothing here that can silently break on a format change.
+const FRED_SERIES = [
+  { id: 'VIXCLS',       label: '波動率指數 VIX',       desc: '選擇權隱含波動率，市場恐慌程度的即時溫度計。數值越高代表市場預期未來波動越劇烈。' },
+  { id: 'T10Y2Y',       label: '10年-2年公債利差',     desc: '長短天期公債殖利率之差。轉負（倒掛）historically 是衰退的領先訊號之一。' },
+  { id: 'BAMLH0A0HYM2', label: '高收益債利差',         desc: '高收益（垃圾）債相對公債的加碼殖利率。走闊代表信用市場風險胃納下降。' },
+  { id: 'BAMLC0A0CM',   label: '投資級債利差',         desc: '投資級公司債相對公債的加碼殖利率，信用市場的基準線，較不受個別違約事件干擾。' },
+  { id: 'NFCI',         label: '芝加哥聯準銀行金融情勢指數', desc: '綜合流動性、信用、槓桿多項指標的複合指數。正值代表金融情勢緊縮於歷史平均。' },
+];
+const MW_TTL = 60 * 60 * 1000; // 1 hour — far shorter than FRED's own once-daily update cadence;
+                                // this just caps how often concurrent visitors re-hit the FRED API.
+let _mwCache = null, _mwTime = 0;
+
+async function fetchFredSeries(seriesId) {
+  const key = process.env.FRED_API_KEY;
+  if (!key) throw new Error('FRED_API_KEY not configured');
+  const url = 'https://api.stlouisfed.org/fred/series/observations?series_id=' + seriesId +
+    '&api_key=' + key + '&file_type=json&sort_order=asc&limit=260';
+  const raw = await fetchUrl(url);
+  const data = JSON.parse(raw);
+  const obs = (data.observations || [])
+    .filter((o) => o.value !== '.')
+    .map((o) => ({ date: o.date, value: parseFloat(o.value) }));
+  if (!obs.length) throw new Error('no observations returned');
+  const latest = obs[obs.length - 1];
+  const sorted = obs.map((o) => o.value).slice().sort((a, b) => a - b);
+  const rank = sorted.filter((v) => v <= latest.value).length;
+  const percentile = Math.round((rank / sorted.length) * 100);
+  return { latest: latest.value, latestDate: latest.date, history: obs, percentile };
+}
+
+// Each series is fetched independently and a single failure degrades to
+// {error} for that one card rather than failing the whole endpoint — FRED
+// being the one external dependency in this feature, a transient outage on
+// one series shouldn't blank the entire dashboard.
+async function getMarketWeather() {
+  if (_mwCache && Date.now() - _mwTime < MW_TTL) return _mwCache;
+  const results = await Promise.allSettled(FRED_SERIES.map((s) => fetchFredSeries(s.id)));
+  const indicators = FRED_SERIES.map((s, i) => {
+    const r = results[i];
+    if (r.status === 'fulfilled') return { id: s.id, label: s.label, desc: s.desc, error: null, ...r.value };
+    return { id: s.id, label: s.label, desc: s.desc, error: r.reason.message, latest: null, latestDate: null, history: [], percentile: null };
+  });
+  const ok = indicators.filter((x) => x.percentile !== null);
+  const avgPercentile = ok.length ? Math.round(ok.reduce((a, x) => a + x.percentile, 0) / ok.length) : null;
+  const result = { indicators, avgPercentile, updatedAt: new Date().toISOString() };
+  _mwCache = result;
+  _mwTime = Date.now();
+  return result;
+}
+
 // ── OpenGraph metadata fetch (CausalFrame embed preview cards) ──
 // Blocks the obvious SSRF vectors (loopback/private/link-local ranges) since this
 // endpoint fetches whatever URL the client passes in. Not exhaustive (no DNS-rebind
@@ -746,6 +798,18 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (req.url === '/api/market-weather' && req.method === 'GET') {
+    try {
+      const data = await getMarketWeather();
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(data));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   // OpenGraph metadata for CausalFrame's link-preview embed cards
   if (req.url.startsWith('/api/og-fetch') && req.method === 'GET') {
     try {
@@ -1086,6 +1150,7 @@ const server = http.createServer(async (req, res) => {
   else if (url === '/brownian'   || url === '/brownian/')   fp = path.join(APP_DIR, 'brownian',   'index.html');
   else if (url === '/sankey'     || url === '/sankey/')     fp = path.join(APP_DIR, 'sankey',     'index.html');
   else if (url === '/earnings-quiz' || url === '/earnings-quiz/') fp = path.join(APP_DIR, 'earnings-quiz', 'index.html');
+  else if (url === '/market-weather' || url === '/market-weather/') fp = path.join(APP_DIR, 'market-weather', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 

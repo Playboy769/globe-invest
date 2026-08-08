@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市場天氣 · Market Weather</title>
+<style>
+  :root{
+    --ink:#111; --sub:#555; --faint:#888; --line:#e6e6e6; --bg:#fff;
+    --accent:#3a5a9c; --warn:#b3564a; --calm:#2e7d4f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.7}
+  .wrap{max-width:860px;margin:0 auto;padding:36px 20px 70px}
+  .title{font-size:22px;font-weight:700;letter-spacing:.02em}
+  .subtitle{color:var(--sub);font-size:13.5px;margin-top:6px}
+
+  .headline{border:1px solid var(--line);border-radius:16px;padding:28px;margin:24px 0;text-align:center}
+  .headline-icon{font-size:52px;line-height:1}
+  .headline-label{font-size:19px;font-weight:700;margin-top:8px}
+  .headline-summary{color:var(--sub);font-size:13.5px;margin-top:10px;max-width:560px;margin-left:auto;margin-right:auto}
+  .headline-updated{color:var(--faint);font-size:11.5px;margin-top:14px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){ .grid{grid-template-columns:1fr} }
+
+  .card{border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .card-label{font-size:13.5px;font-weight:700}
+  .card-value{font-size:22px;font-weight:700;margin-top:4px}
+  .badge{font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;white-space:nowrap}
+  .badge.low{color:var(--calm);background:#eef7f1;border:1px solid #b9ddc6}
+  .badge.mid{color:#8a6d00;background:#fff9e8;border:1px solid #ecd98a}
+  .badge.high{color:var(--warn);background:#fdf1ef;border:1px solid #f0c6bf}
+  .badge.err{color:var(--faint);background:#f5f5f5;border:1px solid var(--line)}
+
+  .spark{width:100%;height:44px;margin-top:12px;display:block}
+  .spark path{fill:none;stroke:var(--accent);stroke-width:1.6}
+
+  .card-desc{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);
+    font-size:12.5px;color:var(--sub)}
+  .card-desc.on{display:block}
+  .card-err{color:var(--faint);font-size:12.5px;margin-top:10px}
+
+  .footer{margin-top:30px;font-size:11.5px;color:var(--faint);text-align:center}
+  .loading,.empty{color:var(--faint);font-size:13.5px;padding:60px 0;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">市場天氣 · Market Weather</div>
+  <div class="subtitle">五項總體壓力指標（VIX、殖利率曲線、信用利差、金融情勢指數），綜合成今日市場氣候。</div>
+
+  <div id="headline" class="headline"><div class="loading">載入資料中…</div></div>
+  <div id="grid" class="grid"></div>
+
+  <div class="footer">
+    資料來源：FRED（St. Louis Fed），每日更新 · 僅供資訊參考，非投資建議
+  </div>
+</div>
+
+<script>
+(function(){
+  var LEVELS = [
+    { max: 20,  icon: '☀️', label: '晴朗', word: '市場情緒平靜' },
+    { max: 40,  icon: '🌤️', label: '多雲時晴', word: '略偏謹慎但整體平穩' },
+    { max: 60,  icon: '⛅', label: '陰天', word: '中性偏緊張' },
+    { max: 80,  icon: '🌧️', label: '降雨', word: '市場情緒偏緊張' },
+    { max: 101, icon: '⛈️', label: '暴風', word: '壓力指標普遍位於高檔' },
+  ];
+
+  function levelFor(pct){
+    for (var i=0;i<LEVELS.length;i++) if (pct < LEVELS[i].max) return LEVELS[i];
+    return LEVELS[LEVELS.length-1];
+  }
+  function badgeClass(pct){
+    if (pct === null || pct === undefined) return 'err';
+    if (pct < 34) return 'low';
+    if (pct < 67) return 'mid';
+    return 'high';
+  }
+  function fmtVal(v){
+    if (v === null || v === undefined) return '—';
+    return Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(2);
+  }
+  function sparkPath(history){
+    if (!history || history.length < 2) return '';
+    var vals = history.map(function(h){ return h.value; });
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    var span = (max - min) || 1;
+    var w = 300, h = 40, pad = 3;
+    var step = w / (vals.length - 1);
+    var d = vals.map(function(v, i){
+      var x = i * step;
+      var y = pad + (1 - (v - min) / span) * (h - pad*2);
+      return (i===0?'M':'L') + x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+    return d;
+  }
+
+  function renderHeadline(data){
+    var el = document.getElementById('headline');
+    if (data.avgPercentile === null){
+      el.innerHTML = '<div class="empty">所有指標暫時都無法取得資料。</div>';
+      return;
+    }
+    var lvl = levelFor(data.avgPercentile);
+    var okIndicators = data.indicators.filter(function(x){ return x.percentile !== null; });
+    var worst = okIndicators.slice().sort(function(a,b){ return b.percentile - a.percentile; })[0];
+    var summary = worst
+      ? worst.label + ' 目前處於近一年 ' + worst.percentile + ' 百分位，' + lvl.word + '。'
+      : lvl.word + '。';
+    el.innerHTML =
+      '<div class="headline-icon">' + lvl.icon + '</div>' +
+      '<div class="headline-label">' + lvl.label + '</div>' +
+      '<div class="headline-summary">' + summary + '</div>' +
+      '<div class="headline-updated">更新時間：' + new Date(data.updatedAt).toLocaleString('zh-TW') + '</div>';
+  }
+
+  function renderGrid(data){
+    var grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    data.indicators.forEach(function(ind){
+      var card = document.createElement('div');
+      card.className = 'card';
+      var badgeHtml = ind.error
+        ? '<span class="badge err">資料暫時無法取得</span>'
+        : '<span class="badge ' + badgeClass(ind.percentile) + '">近一年 ' + ind.percentile + ' 百分位</span>';
+      var bodyHtml = ind.error
+        ? '<div class="card-err">' + escapeHtml(ind.error) + '</div>'
+        : '<div class="card-value">' + fmtVal(ind.latest) + '</div>' +
+          '<svg class="spark" viewBox="0 0 300 40" preserveAspectRatio="none"><path d="' + sparkPath(ind.history) + '"/></svg>';
+      card.innerHTML =
+        '<div class="card-top"><div class="card-label">' + escapeHtml(ind.label) + '</div>' + badgeHtml + '</div>' +
+        bodyHtml +
+        '<div class="card-desc">' + escapeHtml(ind.desc) + (ind.latestDate ? '（最新資料日：' + ind.latestDate + '）' : '') + '</div>';
+      card.addEventListener('click', function(){
+        card.querySelector('.card-desc').classList.toggle('on');
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  window.__renderMarketWeather = function(data){
+    renderHeadline(data);
+    renderGrid(data);
+  };
+
+  fetch('/api/market-weather')
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data){ window.__renderMarketWeather(data); })
+    .catch(function(err){
+      document.getElementById('headline').innerHTML = '<div class="empty">資料載入失敗：' + escapeHtml(err.message) + '</div>';
+    });
+})();
+</script>
+</body>
+</html>
