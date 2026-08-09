@@ -19,8 +19,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Syntax-check server.js
-        run: node --check server.js
+      - name: Syntax-check every shipped module
+        run: for f in *.js; do echo "Checking $f"; node --check "$f"; done
+
+      # Adding a module takes three edits: the require, a Dockerfile COPY, and an
+      # entry in .dockerignore (which is deny-all with a per-file allowlist).
+      # Missing either of the last two builds a container that crash-loops on
+      # MODULE_NOT_FOUND or fails to build at all — it took the service down once.
+      - name: Every required local module is actually shipped
+        run: |
+          fail=0
+          for m in $(grep -ho "require('\./[a-zA-Z0-9_-]*')" *.js \
+                     | sed "s/require('\.\///;s/')//" | sort -u); do
+            [ -f "$m.js" ] || { echo "::error::$m.js is required but missing"; fail=1; continue; }
+            grep -q "^COPY $m\.js " Dockerfile \
+              || { echo "::error file=Dockerfile::no COPY line for $m.js"; fail=1; }
+            grep -q "^!$m\.js$" .dockerignore \
+              || { echo "::error file=.dockerignore::$m.js not in the allowlist"; fail=1; }
+          done
+          exit $fail
 
       - name: Verify each app entry point is well-formed HTML
         run: |
