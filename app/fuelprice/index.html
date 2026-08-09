@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>台灣油價歷史 Taiwan Fuel Price History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--c-ink:#0a0a0a;--c-accent:#d1591f;--c-accent-deep:#a94515;--c-line:#eee}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Noto Serif TC','PMingLiU',serif;color:var(--c-ink);background:#fff;
+       -webkit-font-smoothing:antialiased}
+
+  .topbar{display:flex;align-items:center;padding:0 22px;height:54px;
+          border-bottom:1px solid var(--c-line);white-space:nowrap;overflow-x:auto}
+  .topbar button{background:none;border:0;padding:0;font-family:inherit;cursor:pointer;
+                 color:#aaa;letter-spacing:.09em;transition:color .18s ease}
+  .brand{font-size:12.5px;letter-spacing:.2em;margin-right:30px}
+  .tabs{display:flex;gap:22px;margin-right:auto}
+  .tabs button{position:relative;font-size:12.5px;padding:4px 0}
+  .tabs button:hover{color:#666}
+  .tabs button.on{color:var(--c-ink)}
+  .tabs button.on::after{content:'';position:absolute;left:0;right:0;bottom:-3px;
+                         height:1.5px;background:var(--c-accent)}
+  .stamp{font-size:11px;color:#bbb;letter-spacing:.05em;margin-left:20px}
+
+  .wrap{max-width:1040px;margin:0 auto;padding:26px 22px 60px}
+  .panel{display:none}.panel.on{display:block}
+
+  h2{font-size:13px;font-weight:500;letter-spacing:.12em;color:var(--c-accent-deep);
+     margin:32px 0 12px;padding-bottom:7px;border-bottom:1px solid #f2f2f2}
+  h2:first-child{margin-top:0}
+  p.lead{font-size:12.5px;line-height:2;color:#666;margin:0 0 16px;letter-spacing:.02em}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;margin-bottom:22px}
+  .kpi{border-left:2px solid var(--c-line);padding:2px 0 2px 14px}
+  .kpi.lit{border-left-color:var(--c-accent)}
+  .kpi .k{font-size:11px;color:#999;letter-spacing:.08em;margin-bottom:6px}
+  .kpi .v{font-size:24px;font-weight:300}
+  .kpi .v small{font-size:11.5px;color:#999;margin-left:4px}
+  .kpi .s{font-size:11px;color:#aaa;margin-top:4px;letter-spacing:.04em}
+  .up{color:#b3261e}.dn{color:#3f8f5b}
+
+  .ctrl{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .ctrl .grp{display:flex;gap:14px}
+  .ctrl button{background:none;border:0;font-family:inherit;font-size:11.5px;
+               letter-spacing:.07em;color:#aaa;cursor:pointer;padding:3px 0;
+               display:flex;align-items:center;gap:6px}
+  .ctrl button.on{color:var(--c-ink);box-shadow:inset 0 -1.5px 0 var(--c-accent)}
+  .sw{width:9px;height:9px;border-radius:2px;background:#ddd}
+  .ctrl .sep{width:1px;height:14px;background:var(--c-line)}
+
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .ax{stroke:#eee;stroke-width:1}
+  .axt{font-size:9.5px;fill:#bbb;letter-spacing:.03em}
+  .hov{stroke:#ccc;stroke-width:1;stroke-dasharray:3 3}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;font-size:11px;color:#999;letter-spacing:.08em;font-weight:500;
+     padding:7px 8px;border-bottom:1px solid var(--c-line)}
+  td{padding:7px 8px;border-bottom:1px solid #f6f6f6}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr:hover td{background:#fcfaf9}
+
+  .note{background:#fcfaf9;border-left:2px solid var(--c-accent);padding:12px 15px;
+        font-size:12px;line-height:2;color:#555;margin:14px 0;letter-spacing:.02em}
+  .muted{color:#aaa;font-size:12px}
+  .err{color:#b3261e;font-size:12.5px;line-height:2}
+  .spin{display:inline-block;width:11px;height:11px;border:1.5px solid #e2e2e2;
+        border-top-color:var(--c-accent);border-radius:50%;animation:sp .7s linear infinite;
+        vertical-align:-1px;margin-right:8px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .tip{position:fixed;pointer-events:none;background:#fff;border:1px solid #ddd;
+       border-radius:6px;padding:8px 11px;font-size:11.5px;line-height:1.8;color:#444;
+       box-shadow:0 3px 14px rgba(0,0,0,.09);opacity:0;transition:opacity .12s;z-index:20}
+  .tip.on{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">台灣油價歷史</div>
+  <div class="tabs">
+    <button data-t="chart" class="on">走勢</button>
+    <button data-t="table">調價紀錄</button>
+    <button data-t="about">關於</button>
+  </div>
+  <div class="stamp" id="stamp"></div>
+</div>
+
+<div class="wrap">
+  <div id="boot"><span class="spin"></span><span class="muted">擷取中油歷史油價…</span></div>
+  <div class="panel" id="p-chart"></div>
+  <div class="panel" id="p-table"></div>
+  <div class="panel" id="p-about">
+    <h2>這是什麼</h2>
+    <p class="lead">中油每週公布一次調價，所有歷史紀錄都放在<b>同一個網頁</b>上——一個約 800KB 的 ASP.NET 頁面，裡面是一張 620 列的表格。沒有 API、沒有 CSV、沒有圖。</p>
+    <p class="lead">資料是公開的，但公開跟<b>可用</b>是兩回事。這頁做的事只有一件：把那張表解析出來，畫成看得懂的走勢圖。沒有加工、沒有評論，就是原始資料換一個能讀的形狀。</p>
+
+    <h2>一個必須說明的重建</h2>
+    <p class="lead">原始表格裡<b>大量儲存格是空的</b>——620 列中，92 無鉛只有 330 列有數字。空白代表該項目那次沒有公布新價格，而不是價格歸零。</p>
+    <div class="note">所以畫線時採<b>階梯式向前填補</b>：沿用上一次公布的價格，直到出現新價格為止。這是還原「那段期間實際的掛牌價」的正確做法，也是把這張表變成可讀圖表的關鍵一步。圖上的<b>圓點是實際公布的調價日</b>，點與點之間的水平線是沿用價。</p>
+    <p class="lead">實測 92 無鉛的 330 個公布點中，有 317 個間隔<b>正好是 7 天</b>，符合每週調價的節奏。</p>
+
+    <h2>資料來源</h2>
+    <p class="lead">台灣中油「歷史零售牌價」頁面，涵蓋 <span id="about-range" class="muted"></span>。伺服器端擷取並解析，快取 6 小時——油價一週才動一次，不需要更密。</p>
+    <div class="note">公秉（KL）計價的漁船油與燃料油與公升計價的汽柴油<b>差三個數量級</b>，不能放在同一個軸上，因此分成兩組切換。</div>
+    <p class="lead">僅供資訊參考。價格以中油官方公告為準。</p>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const COLORS = ['#d1591f','#3f7fa8','#3f8f5b','#a05fb4','#c9a227','#8a8a8a','#b3261e','#557','#7a5','#963'];
+
+let DATA = null, group = 'road', range = 0, sel = new Set();
+
+function fmtD(iso){ const [y,m,d] = iso.split('-'); return `${y}/${+m}/${+d}`; }
+
+/* ---------- chart ---------- */
+function stepPath(points, X, Y){
+  // Blanks in the source mean "no new price published", so the line holds the
+  // last value until the next announcement rather than sloping between them.
+  let d = '';
+  points.forEach((p,i) => {
+    const x = X(p[0]), y = Y(p[1]);
+    if (!i) d += `M${x.toFixed(1)} ${y.toFixed(1)}`;
+    else d += `H${x.toFixed(1)}V${y.toFixed(1)}`;
+  });
+  return d;
+}
+
+function chart(){
+  const prods = DATA.products.filter(p => p.group === group && sel.has(p.key));
+  const host = $('#chartbox');
+  if (!prods.length){ host.innerHTML = '<p class="muted">請至少選一個油品。</p>'; return; }
+
+  const cutoff = range ? Date.now() - range*365.25*86400000 : 0;
+  const series = prods.map(p => ({
+    ...p,
+    pts: p.points.map(([d,v]) => [Date.parse(d), v]).filter(q => q[0] >= cutoff),
+  })).filter(s => s.pts.length > 1);
+  if (!series.length){ host.innerHTML = '<p class="muted">這個區間沒有資料。</p>'; return; }
+
+  const W = 960, H = 340, PL = 54, PR = 16, PT = 16, PB = 30;
+  const xs = series.flatMap(s => s.pts.map(p => p[0]));
+  const ys = series.flatMap(s => s.pts.map(p => p[1]));
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys);
+  // Headroom, but never below zero: the bulk fuels swung wide enough in 2020
+  // that plain padding put a negative tick on a price axis.
+  const pad = (y1-y0)*0.12 || 1; y0 = Math.max(0, y0 - pad); y1 += pad;
+  const X = v => PL + (x1===x0?0:(v-x0)/(x1-x0))*(W-PL-PR);
+  const Y = v => PT + (1-(v-y0)/(y1-y0||1))*(H-PT-PB);
+
+  const ticks = [];
+  for (let i = 0; i <= 4; i++) ticks.push(y0 + (y1-y0)*i/4);
+  const yearTicks = [];
+  const sy = new Date(x0).getFullYear(), ey = new Date(x1).getFullYear();
+  for (let y = sy; y <= ey; y++){
+    const t = Date.parse(`${y}-01-01`);
+    if (t >= x0 && t <= x1) yearTicks.push([t, y]);
+  }
+
+  host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" id="svg" role="img" aria-label="油價走勢">
+    ${ticks.map(t => `<line class="ax" x1="${PL}" x2="${W-PR}" y1="${Y(t).toFixed(1)}" y2="${Y(t).toFixed(1)}"/>
+      <text class="axt" x="${PL-8}" y="${(Y(t)+3).toFixed(1)}" text-anchor="end">${t.toFixed(group==='road'?1:0)}</text>`).join('')}
+    ${yearTicks.map(([t,y]) => `<line class="ax" x1="${X(t).toFixed(1)}" x2="${X(t).toFixed(1)}" y1="${PT}" y2="${H-PB}"/>
+      <text class="axt" x="${X(t).toFixed(1)}" y="${H-PB+15}" text-anchor="middle">${y}</text>`).join('')}
+    ${series.map((s,i) => `<path d="${stepPath(s.pts,X,Y)}" fill="none"
+        stroke="${COLORS[DATA.products.indexOf(DATA.products.find(p=>p.key===s.key))%COLORS.length]}"
+        stroke-width="1.5"/>`).join('')}
+    ${series.map((s,i) => s.pts.map(p =>
+        `<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="1.6"
+          fill="${COLORS[DATA.products.findIndex(q=>q.key===s.key)%COLORS.length]}" opacity=".5"/>`).join('')).join('')}
+    <text class="axt" x="${PL}" y="${PT-4}">${esc(series[0].unit)}</text>
+  </svg>`;
+
+  // hover readout
+  const svg = $('#svg'), tip = $('#tip');
+  svg.onpointermove = ev => {
+    const r = svg.getBoundingClientRect();
+    const vx = (ev.clientX - r.left)/r.width*W;
+    const t = x0 + (vx-PL)/(W-PL-PR)*(x1-x0);
+    if (vx < PL || vx > W-PR){ tip.classList.remove('on'); return; }
+    const rows = series.map(s => {
+      let last = null;
+      for (const p of s.pts){ if (p[0] <= t) last = p; else break; }
+      return last ? `${esc(s.label)} <b>${last[1]}</b>` : null;
+    }).filter(Boolean);
+    const d = new Date(t);
+    tip.innerHTML = `<b>${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}</b><br>` + rows.join('<br>');
+    tip.style.left = Math.min(ev.clientX+14, innerWidth-190)+'px';
+    tip.style.top = (ev.clientY+14)+'px';
+    tip.classList.add('on');
+  };
+  svg.onpointerleave = () => tip.classList.remove('on');
+}
+
+function renderChart(){
+  const prods = DATA.products.filter(p => p.group === group);
+  const latest = DATA.products.filter(p => p.group === 'road').slice(0,4);
+  const kpi = latest.map(p => {
+    const n = p.points.length;
+    const prev = n > 1 ? p.points[n-2][1] : null;
+    const diff = prev == null ? null : +(p.latest - prev).toFixed(2);
+    return `<div class="kpi ${p.key===latest[0].key?'lit':''}">
+      <div class="k">${esc(p.label)}</div>
+      <div class="v">${p.latest}<small>元/公升</small></div>
+      <div class="s">${diff == null ? '' : (diff === 0 ? '與前次持平'
+        : `<span class="${diff>0?'up':'dn'}">${diff>0?'▲':'▼'} ${Math.abs(diff).toFixed(1)}</span> 元`)}
+        · ${fmtD(p.latestDate)}</div></div>`;
+  }).join('');
+
+  $('#p-chart').innerHTML = `
+    <div class="kpis">${kpi}</div>
+    <div class="ctrl">
+      <div class="grp" id="grpsel">
+        <button data-g="road" class="${group==='road'?'on':''}">公升計價</button>
+        <button data-g="bulk" class="${group==='bulk'?'on':''}">公秉計價</button>
+      </div>
+      <div class="sep"></div>
+      <div class="grp" id="rangesel">
+        ${[[1,'1年'],[3,'3年'],[0,'全部']].map(([v,l]) =>
+          `<button data-r="${v}" class="${range===v?'on':''}">${l}</button>`).join('')}
+      </div>
+    </div>
+    <div class="ctrl" id="prodsel">
+      ${prods.map((p,i) => `<button data-k="${p.key}" class="${sel.has(p.key)?'on':''}">
+        <i class="sw" style="background:${sel.has(p.key)?COLORS[DATA.products.findIndex(q=>q.key===p.key)%COLORS.length]:'#ddd'}"></i>${esc(p.label)}</button>`).join('')}
+    </div>
+    <div id="chartbox"></div>
+    <div class="note">圓點是<b>實際公布調價的日期</b>，之間的水平線代表沿用前一次的價格——原始表格在未調價時是空白的，直接連線會畫出不存在的斜坡。詳見「關於」。</div>`;
+
+  $('#grpsel').onclick = e => { const b = e.target.closest('button'); if(!b) return;
+    group = b.dataset.g; sel = new Set(DATA.products.filter(p=>p.group===group).slice(0,4).map(p=>p.key)); renderChart(); };
+  $('#rangesel').onclick = e => { const b = e.target.closest('button'); if(!b) return;
+    range = +b.dataset.r; renderChart(); };
+  $('#prodsel').onclick = e => { const b = e.target.closest('button'); if(!b) return;
+    const k = b.dataset.k; sel.has(k) ? sel.delete(k) : sel.add(k); renderChart(); };
+  chart();
+}
+
+/* ---------- table ---------- */
+function renderTable(){
+  const road = DATA.products.filter(p => p.group === 'road');
+  const dates = [...new Set(road.flatMap(p => p.points.map(q => q[0])))].sort().reverse().slice(0,80);
+  const at = (p, d) => { const hit = p.points.find(q => q[0] === d); return hit ? hit[1] : null; };
+  $('#p-table').innerHTML = `
+    <p class="lead">最近 ${dates.length} 次有公布的調價日。空格代表該油品當次<b>未公布新價</b>，沿用前次價格。</p>
+    <table><thead><tr><th>調價日期</th>${road.map(p=>`<th class="n">${esc(p.label)}</th>`).join('')}</tr></thead>
+    <tbody>${dates.map(d => `<tr><td>${fmtD(d)}</td>${road.map(p => {
+      const v = at(p,d);
+      return `<td class="n">${v == null ? '<span class="muted">—</span>' : v}</td>`;
+    }).join('')}</tr>`).join('')}</tbody></table>`;
+}
+
+/* ---------- wiring ---------- */
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x===b));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  $('#p-'+b.dataset.t).classList.add('on');
+});
+
+(async () => {
+  try {
+    const r = await fetch('/api/fuelprice');
+    const j = await r.json().catch(() => null);
+    if (!r.ok) throw new Error((j && j.error) || ('HTTP ' + r.status));
+    DATA = j;
+    sel = new Set(DATA.products.filter(p => p.group === 'road').slice(0,4).map(p => p.key));
+    $('#boot').remove();
+    $('#p-chart').classList.add('on');
+    $('#stamp').textContent = `${fmtD(DATA.from)} – ${fmtD(DATA.to)} · ${DATA.rows} 次調價`;
+    $('#about-range').textContent = `${fmtD(DATA.from)} 至 ${fmtD(DATA.to)}，共 ${DATA.rows} 次調價紀錄`;
+    renderChart();
+    renderTable();
+  } catch (e) {
+    $('#boot').innerHTML = `<div class="err">讀不到中油油價：${esc(e.message)}</div>`;
+  }
+})();
+</script>
+</body>
+</html>

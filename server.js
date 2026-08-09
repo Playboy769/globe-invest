@@ -6,6 +6,7 @@ const path = require('path');
 const crypto = require('crypto');
 const auth = require('./auth');
 const powerlog = require('./powerlog');
+const fuelprice = require('./fuelprice');
 
 const PORT = process.env.PORT || 8080;
 const DATA_DIR = '/data';
@@ -956,6 +957,17 @@ const server = http.createServer(async (req, res) => {
   }
 
   // OpenGraph metadata for CausalFrame's link-preview embed cards
+  if (req.url.startsWith('/api/fuelprice') && req.method === 'GET') {
+    try {
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(await fuelprice.get()));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   if (req.url.startsWith('/api/powergrid/') && req.method === 'GET') {
     try {
       const urlObj = new URL(req.url, 'http://localhost');
@@ -1361,6 +1373,7 @@ const server = http.createServer(async (req, res) => {
   }
   else if (url === '/volsurface/') fp = path.join(APP_DIR, 'volsurface', 'index.html');
   else if (url === '/powergrid' || url === '/powergrid/') fp = path.join(APP_DIR, 'powergrid', 'index.html');
+  else if (url === '/fuelprice' || url === '/fuelprice/') fp = path.join(APP_DIR, 'fuelprice', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 
