@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const auth = require('./auth');
+const powerlog = require('./powerlog');
 
 const PORT = process.env.PORT || 8080;
 const DATA_DIR = '/data';
@@ -955,6 +956,31 @@ const server = http.createServer(async (req, res) => {
   }
 
   // OpenGraph metadata for CausalFrame's link-preview embed cards
+  if (req.url.startsWith('/api/powergrid/') && req.method === 'GET') {
+    try {
+      const urlObj = new URL(req.url, 'http://localhost');
+      const days = Math.min(730, Math.max(1,
+        parseInt(urlObj.searchParams.get('days') || '30', 10) || 30));
+      const what = urlObj.pathname.slice('/api/powergrid/'.length);
+      let data;
+      if (what === 'now') {
+        // Serve the recorder's own last poll rather than refetching: the page and
+        // the tape should never disagree about what the grid looked like.
+        data = powerlog.latest || await powerlog.poll();
+      }
+      else if (what === 'history')  data = { days, rows: powerlog.history(days) };
+      else if (what === 'findings') data = powerlog.findings(days);
+      else if (what === 'status')   data = powerlog.status();
+      else throw new Error('unknown view');
+      res.writeHead(200, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify(data));
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: e.message }));
+    }
+    return;
+  }
+
   if (req.url.startsWith('/api/volsurface') && req.method === 'GET') {
     try {
       const urlObj = new URL(req.url, 'http://localhost');
@@ -1334,6 +1360,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
   else if (url === '/volsurface/') fp = path.join(APP_DIR, 'volsurface', 'index.html');
+  else if (url === '/powergrid' || url === '/powergrid/') fp = path.join(APP_DIR, 'powergrid', 'index.html');
   else if (url === '/') { res.writeHead(301, { Location: '/globe' }); res.end(); return; }
   else fp = path.join(APP_DIR, url);
 
@@ -1350,4 +1377,11 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => console.log('Listening on port ' + PORT));
+server.listen(PORT, () => {
+  console.log('Listening on port ' + PORT);
+  // The recorder's value is continuity, so it starts with the process rather than
+  // on first page view — the archive has to accrue whether or not anyone visits.
+  // Set POWERLOG_DISABLED=1 in a local checkout to avoid polling Taipower while
+  // developing something unrelated.
+  if (process.env.POWERLOG_DISABLED !== '1') powerlog.start();
+});

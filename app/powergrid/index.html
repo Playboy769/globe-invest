@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>台電電網記錄器 Taipower Grid Recorder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--c-ink:#0a0a0a;--c-accent:#d1591f;--c-accent-deep:#a94515;--c-line:#eee;
+        --g:#3f8f5b;--y:#c9a227;--o:#d1591f;--r:#b3261e}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Noto Serif TC','PMingLiU',serif;color:var(--c-ink);background:#fff;
+       -webkit-font-smoothing:antialiased}
+
+  .topbar{display:flex;align-items:center;padding:0 22px;height:54px;
+          border-bottom:1px solid var(--c-line);white-space:nowrap;overflow-x:auto}
+  .topbar button{background:none;border:0;padding:0;font-family:inherit;cursor:pointer;
+                 color:#aaa;letter-spacing:.09em;transition:color .18s ease}
+  .brand{font-size:12.5px;letter-spacing:.2em;margin-right:30px}
+  .tabs{display:flex;gap:22px;margin-right:auto}
+  .tabs button{position:relative;font-size:12.5px;padding:4px 0}
+  .tabs button:hover{color:#666}
+  .tabs button.on{color:var(--c-ink)}
+  .tabs button.on::after{content:'';position:absolute;left:0;right:0;bottom:-3px;
+                         height:1.5px;background:var(--c-accent)}
+  .clock{font-size:11px;color:#bbb;letter-spacing:.05em;margin-left:20px}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 22px 60px}
+  .panel{display:none}
+  .panel.on{display:block}
+
+  h2{font-size:13px;font-weight:500;letter-spacing:.12em;color:var(--c-accent-deep);
+     margin:34px 0 12px;padding-bottom:7px;border-bottom:1px solid #f2f2f2}
+  h2:first-child{margin-top:0}
+  p.lead{font-size:12.5px;line-height:2;color:#666;margin:0 0 18px;letter-spacing:.02em}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:18px;margin-bottom:8px}
+  .kpi{border-left:2px solid var(--c-line);padding:2px 0 2px 14px}
+  .kpi .k{font-size:11px;color:#999;letter-spacing:.08em;margin-bottom:6px}
+  .kpi .v{font-size:25px;font-weight:300;letter-spacing:.01em}
+  .kpi .v small{font-size:12px;color:#999;margin-left:4px;font-weight:400}
+  .kpi .s{font-size:11px;color:#aaa;margin-top:4px;letter-spacing:.04em}
+  .kpi.lit{border-left-color:var(--c-accent)}
+
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:baseline}
+  .G{background:var(--g)}.Y{background:var(--y)}.O{background:var(--o)}.R{background:var(--r)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;font-size:11px;color:#999;letter-spacing:.08em;font-weight:500;
+     padding:7px 8px;border-bottom:1px solid var(--c-line)}
+  td{padding:7px 8px;border-bottom:1px solid #f6f6f6;letter-spacing:.02em}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr:hover td{background:#fcfaf9}
+
+  .bar{height:7px;border-radius:4px;background:var(--c-accent);opacity:.75}
+  .bartrack{background:#f4f4f4;border-radius:4px;width:100%;min-width:70px}
+
+  .tag{display:inline-block;font-size:10.5px;letter-spacing:.06em;padding:2px 8px;
+       border-radius:100px;border:1px solid #e2e2e2;color:#888}
+  .tag.run{border-color:#cfe3d6;color:var(--g)}
+  .tag.idle{border-color:#e6e6e6;color:#aaa}
+  .tag.fix{border-color:#f0d9cd;color:var(--c-accent-deep)}
+
+  .note{background:#fcfaf9;border-left:2px solid var(--c-accent);padding:12px 15px;
+        font-size:12px;line-height:2;color:#555;margin:14px 0;letter-spacing:.02em}
+  .muted{color:#aaa;font-size:12px;letter-spacing:.04em}
+  .err{color:#b3261e;font-size:12.5px;line-height:2}
+
+  .spin{display:inline-block;width:11px;height:11px;border:1.5px solid #e2e2e2;
+        border-top-color:var(--c-accent);border-radius:50%;animation:sp .7s linear infinite;
+        vertical-align:-1px;margin-right:8px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .ax{stroke:#eee;stroke-width:1}
+  .axt{font-size:9.5px;fill:#bbb;letter-spacing:.04em}
+  .ln{fill:none;stroke:var(--c-accent);stroke-width:1.4}
+  .ln2{fill:none;stroke:#8aa4b8;stroke-width:1.2;stroke-dasharray:3 3}
+
+  .filters{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+  .filters button{background:none;border:0;font-family:inherit;font-size:11.5px;
+                  letter-spacing:.07em;color:#aaa;cursor:pointer;padding:3px 0}
+  .filters button.on{color:var(--c-ink);box-shadow:inset 0 -1.5px 0 var(--c-accent)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">台電電網記錄器</div>
+  <div class="tabs">
+    <button data-t="now" class="on">現在</button>
+    <button data-t="trend">趨勢</button>
+    <button data-t="units">機組</button>
+    <button data-t="find">長期發現</button>
+    <button data-t="about">關於</button>
+  </div>
+  <div class="clock" id="clock"></div>
+</div>
+
+<div class="wrap">
+  <div id="boot"><span class="spin"></span><span class="muted">讀取電網狀態…</span></div>
+
+  <div class="panel" id="p-now"></div>
+  <div class="panel" id="p-trend"></div>
+  <div class="panel" id="p-units"></div>
+  <div class="panel" id="p-find"></div>
+
+  <div class="panel" id="p-about">
+    <h2>這是什麼</h2>
+    <p class="lead">台電每十分鐘公布一次全台各機組的即時發電量與系統備轉容量，然後<b>覆蓋掉上一筆</b>。任何一次造訪看到的都只是當下切片，沒有人留下那捲帶子。</p>
+    <p class="lead">這個頁面做的事很單純：<b>持續把它抄下來</b>。伺服器每十分鐘擷取一次並寫進磁碟，累積起來之後，一些單看快照永遠答不出來的問題就變得可以回答——哪些機組長期掛在檢修、風電被「友善降載」的頻率有多高、各燃料別的實際容量因數是多少。</p>
+    <div class="note">洞察來自<b>時間</b>，不是來自複雜的分析。剛部署時這頁幾乎沒有東西可看，那是正常的；資料要自己長出來。</div>
+
+    <h2>資料來源</h2>
+    <p class="lead">台電電力交易平台開放資料：<br>
+      · <span class="muted">d006001</span> — 各機組即時發電量（機組名稱、裝置容量、淨發電量、備註）<br>
+      · <span class="muted">d006020</span> — 系統即時負載與尖峰備轉容量預測</p>
+
+    <h2>怎麼存的</h2>
+    <p class="lead">磁碟上是 append-only 的 NDJSON，分成三種：系統快照每十分鐘一行；<b>機組事件只在狀態改變時才寫一行</b>；每日再彙整一份每機組的平均出力與停機比例。</p>
+    <div class="note">機組事件之所以只記錄<b>變化</b>而不是每次都全寫，是因為 204 個機組每十分鐘寫一次等於一年一千一百萬列，而想問的問題其實只跟「狀態改變的那一刻」有關。整份檔案一年約 20MB。</div>
+
+    <h2>要注意的</h2>
+    <p class="lead">
+      · 「備轉容量率」是台電<b>對當日尖峰的預測值</b>，不是此刻的即時值，燈號 G／Y／O／R 也是台電自己的分級。<br>
+      · 抽蓄機組（明潭、大觀二、電池）在原始資料裡會出現<b>兩次</b>，一次是發電、一次是抽水耗電，本頁以「燃料別＋機組名」區分，不會混在一起。<br>
+      · 記錄從本服務部署那天開始，<b>沒有回補歷史</b>。<br>
+      · 僅供資訊參考。
+    </p>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const api = p => fetch('/api/powergrid/' + p).then(async r => {
+  const j = await r.json().catch(() => null);
+  if (!r.ok) throw new Error((j && j.error) || ('HTTP ' + r.status));
+  return j;
+});
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mw = v => v == null ? '—' : Math.round(v).toLocaleString();
+const IND = { G:'供電充裕', Y:'供電吃緊', O:'供電警戒', R:'限電' };
+
+let NOW = null, FIND = null, HIST = null;
+
+function localTime(iso){
+  const d = new Date(iso);
+  if (isNaN(d)) return iso || '—';
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+/* ---------- 現在 ---------- */
+function renderNow(d){
+  const s = d.sys, ind = s.indicator || '';
+  const mix = Object.entries(d.mix).filter(([,v]) => v > 0).sort((a,b) => b[1]-a[1]);
+  const total = mix.reduce((a,[,v]) => a+v, 0) || 1;
+  const down = d.units.filter(u => u.state !== 'running' && u.state !== 'idle');
+
+  $('#p-now').innerHTML = `
+    <div class="kpis">
+      <div class="kpi lit"><div class="k">目前用電</div>
+        <div class="v">${mw(s.load)}<small>MW</small></div>
+        <div class="s">用電率 ${s.util == null ? '—' : s.util + '%'}</div></div>
+      <div class="kpi"><div class="k">今日尖峰備轉容量率</div>
+        <div class="v"><span class="dot ${esc(ind)}"></span>${s.resvRate == null ? '—' : s.resvRate + '%'}</div>
+        <div class="s">${esc(IND[ind] || '—')}${s.peakRange ? ' · 尖峰 ' + esc(s.peakRange) : ''}</div></div>
+      <div class="kpi"><div class="k">機組發電總和</div>
+        <div class="v">${mw(d.genTotal)}<small>MW</small></div>
+        <div class="s">${d.units.length} 部機組</div></div>
+      <div class="kpi"><div class="k">非正常運轉機組</div>
+        <div class="v">${down.length}</div>
+        <div class="s">檢修／停機／降載</div></div>
+    </div>
+
+    <h2>燃料別發電結構</h2>
+    <table><thead><tr><th>燃料別</th><th class="n">出力 MW</th><th class="n">占比</th><th style="width:34%"></th></tr></thead><tbody>
+      ${mix.map(([k,v]) => `<tr>
+        <td>${esc(k)}</td><td class="n">${mw(v)}</td>
+        <td class="n">${(v/total*100).toFixed(1)}%</td>
+        <td><div class="bartrack"><div class="bar" style="width:${(v/total*100).toFixed(1)}%"></div></div></td>
+      </tr>`).join('')}
+    </tbody></table>
+    <div class="note">占比以<b>機組出力總和</b>為分母，與台電「目前用電」不會完全相等——後者是系統負載，兩者差在輸電損失、廠用電與抽蓄抽水耗電。</div>
+
+    ${down.length ? `<h2>此刻非正常運轉的機組</h2>
+    <table><thead><tr><th>機組</th><th>燃料別</th><th class="n">裝置容量</th><th class="n">出力</th><th>狀態</th></tr></thead><tbody>
+      ${down.slice(0,40).map(u => `<tr>
+        <td>${esc(u.name)}</td><td>${esc(u.fuel)}</td>
+        <td class="n">${mw(u.cap)}</td><td class="n">${mw(u.gen)}</td>
+        <td><span class="tag fix">${esc(u.state)}</span></td></tr>`).join('')}
+    </tbody></table>` : ''}`;
+}
+
+/* ---------- 趨勢 ---------- */
+function lineChart(rows, pick, label, unit){
+  const pts = rows.map(r => [Date.parse(r.t), pick(r)]).filter(p => p[1] != null);
+  if (pts.length < 2)
+    return `<p class="muted">目前只有 ${pts.length} 筆記錄，畫不出趨勢——這頁需要時間累積。</p>`;
+  const W = 900, H = 210, PL = 52, PR = 12, PT = 12, PB = 26;
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const pad = (y1 - y0) * 0.12 || Math.abs(y1) * 0.05 || 1;
+  y0 -= pad; y1 += pad;
+  const X = v => PL + (x1 === x0 ? 0 : (v - x0)/(x1 - x0)) * (W - PL - PR);
+  const Y = v => PT + (1 - (v - y0)/(y1 - y0 || 1)) * (H - PT - PB);
+  const d = pts.map((p,i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
+  const ticks = [y0, (y0+y1)/2, y1];
+  const tt = new Date(x0), t2 = new Date(x1);
+  const fmt = dt => `${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:00`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}趨勢">
+    ${ticks.map(t => `<line class="ax" x1="${PL}" x2="${W-PR}" y1="${Y(t).toFixed(1)}" y2="${Y(t).toFixed(1)}"/>
+      <text class="axt" x="${PL-8}" y="${(Y(t)+3).toFixed(1)}" text-anchor="end">${Math.round(t).toLocaleString()}</text>`).join('')}
+    <path class="ln" d="${d}"/>
+    <text class="axt" x="${PL}" y="${H-6}">${fmt(tt)}</text>
+    <text class="axt" x="${W-PR}" y="${H-6}" text-anchor="end">${fmt(t2)}</text>
+    <text class="axt" x="${PL}" y="${PT-2}">${esc(label)}（${esc(unit)}）</text>
+  </svg>`;
+}
+
+function renderTrend(h){
+  const rows = h.rows;
+  $('#p-trend').innerHTML = `
+    <p class="lead">從本服務開始記錄以來的系統負載與備轉容量率。<b>沒有回補歷史</b>，所以起點就是部署那一刻。</p>
+    <h2>系統負載</h2>${lineChart(rows, r => r.load, '系統負載', 'MW')}
+    <h2>尖峰備轉容量率</h2>${lineChart(rows, r => r.resvRate, '備轉容量率', '%')}
+    <h2>記錄涵蓋</h2>
+    <p class="lead">已記錄 <b>${rows.length}</b> 筆系統快照${rows.length ? `，從 ${localTime(rows[0].t)} 到 ${localTime(rows[rows.length-1].t)}` : ''}。
+    每十分鐘一筆，滿一天約 144 筆。</p>`;
+}
+
+/* ---------- 機組 ---------- */
+let unitFilter = '全部';
+function renderUnits(){
+  const d = NOW;
+  const fuels = ['全部', ...new Set(d.units.map(u => u.fuel))];
+  const rows = d.units
+    .filter(u => unitFilter === '全部' || u.fuel === unitFilter)
+    .slice().sort((a,b) => (b.gen||0) - (a.gen||0));
+  const cls = s => s === 'running' ? 'run' : s === 'idle' ? 'idle' : 'fix';
+  const txt = s => s === 'running' ? '運轉中' : s === 'idle' ? '未發電' : s;
+  $('#p-units').innerHTML = `
+    <p class="lead">此刻全台 ${d.units.length} 部機組。資料時間 ${esc(d.at || '')}。</p>
+    <div class="filters">${fuels.map(f =>
+      `<button data-f="${esc(f)}" class="${f === unitFilter ? 'on' : ''}">${esc(f)}</button>`).join('')}</div>
+    <table><thead><tr><th>機組</th><th>燃料別</th><th class="n">裝置容量 MW</th>
+      <th class="n">淨發電 MW</th><th class="n">容量因數</th><th>狀態</th></tr></thead><tbody>
+      ${rows.map(u => `<tr>
+        <td>${esc(u.name)}</td><td>${esc(u.fuel)}</td>
+        <td class="n">${mw(u.cap)}</td><td class="n">${mw(u.gen)}</td>
+        <td class="n">${(u.cap && u.gen != null) ? (u.gen/u.cap*100).toFixed(0)+'%' : '—'}</td>
+        <td><span class="tag ${cls(u.state)}">${esc(txt(u.state))}</span></td></tr>`).join('')}
+    </tbody></table>`;
+  $('#p-units').querySelectorAll('.filters button').forEach(b =>
+    b.onclick = () => { unitFilter = b.dataset.f; renderUnits(); });
+}
+
+/* ---------- 長期發現 ---------- */
+function renderFind(f){
+  const notes = Object.entries(f.noteTotals || {}).sort((a,b) => b[1]-a[1]);
+  const cov = f.coverage;
+  $('#p-find').innerHTML = `
+    <p class="lead">這一頁是這個專案的重點：只有<b>持續記錄</b>才答得出來的問題。目前累積
+      ${cov ? `<b>${cov.from} → ${cov.to}</b>，共 ${cov.unitDays.toLocaleString()} 筆機組‑日` : '尚無完整日資料'}，
+      期間記錄到 <b>${f.transitions.toLocaleString()}</b> 次機組狀態變化。</p>
+    ${!cov || cov.unitDays < 400 ? `<div class="note">記錄時間還很短，下面的排名<b>還不具代表性</b>——一部機組剛好在今天檢修，就會直接衝上榜首。累積數週之後才開始有意義。</div>` : ''}
+
+    <h2>台電自己標注的異常狀態</h2>
+    ${notes.length ? `<table><thead><tr><th>備註</th><th class="n">出現次數（機組×取樣）</th></tr></thead><tbody>
+      ${notes.map(([k,v]) => `<tr><td>${esc(k)}</td><td class="n">${v.toLocaleString()}</td></tr>`).join('')}
+    </tbody></table>
+    <div class="note">「友善降載減排」是機組配合空品或調度主動壓低出力，「合約限制」多見於民營電廠。這些欄位台電只寫在當下的備註裡，不會另外公布統計——<b>要知道它多常發生，只能自己數</b>。</div>`
+      : '<p class="muted">尚未記錄到任何異常備註。</p>'}
+
+    <h2>停機比例最高的機組</h2>
+    ${f.mostDown.length ? `<table><thead><tr><th>機組</th><th>燃料別</th><th class="n">裝置容量</th><th class="n">非運轉比例</th></tr></thead><tbody>
+      ${f.mostDown.map(u => `<tr><td>${esc(u.name)}</td><td>${esc(u.fuel)}</td>
+        <td class="n">${mw(u.cap)}</td><td class="n">${u.downPct}%</td></tr>`).join('')}
+    </tbody></table>` : '<p class="muted">尚無資料。</p>'}
+
+    <h2>容量因數最低的大型機組</h2>
+    <p class="lead">僅列裝置容量 100MW 以上者。容量因數低不必然是問題——尖載機組本來就備而不用——但<b>長期偏低的基載機組</b>值得留意。</p>
+    ${f.lowestCapFactor.length ? `<table><thead><tr><th>機組</th><th>燃料別</th><th class="n">裝置容量</th><th class="n">容量因數</th></tr></thead><tbody>
+      ${f.lowestCapFactor.map(u => `<tr><td>${esc(u.name)}</td><td>${esc(u.fuel)}</td>
+        <td class="n">${mw(u.cap)}</td><td class="n">${u.capFactor}%</td></tr>`).join('')}
+    </tbody></table>` : '<p class="muted">尚無資料。</p>'}
+
+    <h2>最近的機組狀態變化</h2>
+    ${f.recentEvents.length ? `<table><thead><tr><th>時間</th><th>機組</th><th>燃料別</th><th>變化</th></tr></thead><tbody>
+      ${f.recentEvents.slice(0,40).map(e => `<tr><td>${localTime(e.t)}</td><td>${esc(e.name)}</td>
+        <td>${esc(e.fuel)}</td><td>${esc(e.from || '—')} → <b>${esc(e.state)}</b></td></tr>`).join('')}
+    </tbody></table>` : '<p class="muted">尚未記錄到狀態變化。</p>'}`;
+}
+
+/* ---------- wiring ---------- */
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  $('#p-' + b.dataset.t).classList.add('on');
+  if (b.dataset.t === 'units' && NOW) renderUnits();
+});
+
+(async () => {
+  try {
+    NOW = await api('now');
+    renderNow(NOW);
+    $('#boot').remove();
+    $('#p-now').classList.add('on');
+    $('#clock').textContent = '資料時間 ' + (NOW.at || '');
+  } catch (e) {
+    $('#boot').innerHTML = `<div class="err">讀不到電網資料：${esc(e.message)}</div>`;
+    return;
+  }
+  // Secondary views read the archive, which is slower and must not hold up the
+  // headline numbers.
+  try { HIST = await api('history?days=30'); renderTrend(HIST); }
+  catch (e) { $('#p-trend').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  try { FIND = await api('findings?days=90'); renderFind(FIND); }
+  catch (e) { $('#p-find').innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+})();
+</script>
+</body>
+</html>
