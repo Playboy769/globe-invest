@@ -269,7 +269,7 @@ html{scroll-behavior:smooth}
     <span><b>版本</b>　2026-07-28</span>
     <span><b>主線</b>　AMD Helios（Instinct MI455X）</span>
     <span><b>對照</b>　Nvidia Vera Rubin NVL144</span>
-    <span><b>環節</b>　7</span>
+    <span><b>環節</b>　12</span>
     <span><b>數據</b>　公開規格／產業估計／本文推導</span>
   </div>
 </header>
@@ -277,7 +277,7 @@ html{scroll-behavior:smooth}
 <!-- ══════════ 對照模型 ══════════ -->
 <section class="model" aria-label="Helios／Vera Rubin 對照模型">
   <div class="model-head">
-    <span class="model-title"><b>對照模型</b>　選一條路線，橫向走完七個環節</span>
+    <span class="model-title"><b>對照模型</b>　選一條路線，橫向走完十二個環節</span>
     <div class="track" role="group" aria-label="切換路線">
       <button id="t-h" aria-pressed="true">Helios</button>
       <button id="t-v" aria-pressed="false">Vera Rubin</button>
@@ -291,6 +291,11 @@ html{scroll-behavior:smooth}
     <button class="seg" data-go="s05"><span class="seg-n">05</span><span class="seg-t">價格</span><span class="seg-v" data-h="$5.0–5.5M（機櫃估）" data-v="$3.5–4.0M 或 $7.8M（雙估算）"></span></button>
     <button class="seg" data-go="s06"><span class="seg-n">06</span><span class="seg-t">全櫃對照</span><span class="seg-v" data-h="72 封裝・31 TB HBM4" data-v="144 晶粒・20.7 TB HBM4"></span></button>
     <button class="seg" data-go="s07"><span class="seg-n">07</span><span class="seg-t">生態夥伴</span><span class="seg-v" data-h="TensorWave・無股權" data-v="Nebius・Nvidia 持股 9.3%"></span></button>
+    <button class="seg" data-go="s08"><span class="seg-n">08</span><span class="seg-t">交付模式</span><span class="seg-v" data-h="晶片級・客戶自整合" data-v="機櫃級・插電即用"></span></button>
+    <button class="seg" data-go="s09"><span class="seg-n">09</span><span class="seg-t">搭售率</span><span class="seg-v" data-h="預設配置（Venice+Pensando）" data-v="生態鎖定（CUDA/NVLink）"></span></button>
+    <button class="seg" data-go="s10"><span class="seg-n">10</span><span class="seg-t">同代定價</span><span class="seg-v" data-h="$5.0–5.5M" data-v="$3.5–4.0M／BOM估$7.8M"></span></button>
+    <button class="seg" data-go="s11"><span class="seg-n">11</span><span class="seg-t">市占率</span><span class="seg-v" data-h="個位數→潛在雙位數（27–28）" data-v="80%+・現況主導"></span></button>
+    <button class="seg" data-go="s12"><span class="seg-n">12</span><span class="seg-t">軟體護城河</span><span class="seg-v" data-h="AI agent 降低移植門檻" data-v="CUDA：不可進入→偏好性"></span></button>
   </div>
 </section>
 
@@ -568,6 +573,95 @@ html{scroll-behavior:smooth}
   </div>
 </details>
 
+<!-- ══════════ E ══════════ -->
+<div class="phase-rule"><span class="pk">E · 商業模式</span><span class="pd">交付單位、搭售率與市占率轉折</span></div>
+
+<details class="stage" id="s08">
+  <summary><span class="st-n">08</span><span class="st-main"><span class="st-t">交付模式：Nvidia 賣一整座機櫃，AMD 賣一顆顆晶片</span><span class="st-sub">客戶拿到手上的完成度不同，隱含的整合工程成本（本文稱為摩擦成本）也不同，但這項成本不會出現在任何一張規格表或財報科目裡。</span></span><span class="st-sig">摩擦成本<i>隱性但真實</i></span></summary>
+  <div class="body">
+    <p>Nvidia 從 NVL72 世代開始，交付給客戶的已經是「插電即可運算」的完整機櫃：GPU、NVLink 互連、網通、散熱、電源與軟體棧由 Nvidia 統一設計並主導整合（見 06 節），客戶端的決策被簡化為「買或不買」。AMD 的 GPU 出貨目前仍以晶片級為主要交付單位——客戶須自行完成 8 顆以上 GPU 規模的擴展拓樸設計、與 ROCm 軟體生態的相容性驗證，以及液冷與高速網路的機房整合。這些整合工作消耗的是客戶自身的工程資源與時間，即本文所稱的「摩擦成本」。</p>
+    <p>Helios 的出現，是 AMD 第一次把「機櫃級整合」明確搬進自己的產品藍圖（見 01–02 節機構與 tray 規格），本質上是在壓低這項摩擦成本，把 AMD 的交付單位從「晶片」往「機櫃」靠攏。但 Vera Rubin 仍握有先發優勢：CUDA 生態系的成熟度與 Nvidia 既有的整機出貨經驗，讓其客戶端的摩擦成本結構性更低——這與 03 節「誰在賭 chiplet」的判讀是同一個主軸的延伸：AMD 押注的是開放生態系終將攤平摩擦成本，Nvidia 押注的是既有生態系的轉換成本高到客戶不會輕易承擔這項摩擦。</p>
+    <div class="marg"><b>與 01 節的關係</b>AMD 不是完全不做整合，而是把整合工作分包給 Sanmina／Wiwynn／Celestica 等專責夥伴（見 01 節），機櫃平台設計與網通子系統拆給不同廠商各自負責；Nvidia 則傾向收攏在少數 ODM 手上做端到端整合。分工方式不同，最終體現在客戶收到的完成度也不同。</div>
+    <div class="callout">
+      <span class="ck">規格對照表回答不了的問題</span>
+      <p>摩擦成本不會反映在任何一張性能規格表上，卻直接影響客戶的總持有成本（TCO）與導入速度。<strong>「Helios 的規格追上 Vera Rubin了嗎」與「Helios 的部署摩擦力追上 Vera Rubin 了嗎」是兩個不同的問題</strong>，本文 03、06 節處理的是前者，這一節指出的是後者——目前仍缺乏公開、可比較的實測數據能直接回答。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s09">
+  <summary><span class="st-n">09</span><span class="st-main"><span class="st-t">搭售率與資產配置：把加購品預先畫進藍圖裡</span><span class="st-sub">Helios 機櫃藍圖把 EPYC Venice CPU 與 Pensando 網卡列為預設配置，AMD 的晶片組合出貨比率因此從取決於客戶另外選型，轉為寫進系統設計本身。</span></span><span class="st-sig">預設配置<i>而非機率</i></span></summary>
+  <div class="body">
+    <p>在 Helios 之前，客戶購入 AMD GPU 後，CPU 與網通晶片的選型仍是獨立決策，AMD 的搭售率（attach rate，即客戶同時採購 AMD 多項晶片的比例）長期受限於其他晶片供應商的競爭。Helios 的機櫃藍圖將 EPYC Venice CPU 與 Pensando Vulcano 網卡明訂為預設配置（見 02 節：每個 Compute Tray 為 4×MI455X＋1×EPYC Venice），客戶一旦採用 Helios 架構，AMD 的 CPU 與網通晶片即成為預設而非選配——搭售率因此從「取決於客戶另外決策」轉為「寫進系統設計」，理論上更可預期，也更難被單獨替換掉而不影響整體效能。</p>
+    <p>商業模式上，AMD 仍維持晶片設計商的定位：機櫃的組裝、量產與庫存風險由 Sanmina／Wiwynn／Celestica 等專責夥伴承擔（見 01 節），AMD 本身的營收落點集中在機櫃內高單價矽晶片（MI455X、Venice、Pensando）。這種分工讓 AMD 以相對輕的資產投入專注在晶片銷售，同時迴避整機製造與庫存的沉重風險；代價是機櫃整體的規格主導權與利潤分配，不完全掌握在 AMD 一家手中——這與 Nvidia 對整機規格與利潤分配的高度掌控（見 06 節「開放生態 vs 垂直整合」callout）形成對比。</p>
+    <div class="callout">
+      <span class="ck">兩種搭售率的鞏固方式不同</span>
+      <p>Nvidia 的高搭售率來自封閉生態系的強制綁定——CUDA 與 NVLink 的轉換成本讓客戶選擇有限；AMD 的搭售率提升則來自開放架構下的預設最優解——客戶理論上仍可替換其中一項，但替換後系統效能會打折扣。<strong>能否把「藍圖預設」真正轉化為長期營收貢獻，取決於客戶是否照著預設配置採購，而非事後拆分選購</strong>——這是目前公開資訊尚無法驗證的執行細節。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s10">
+  <summary><span class="st-n">10</span><span class="st-main"><span class="st-t">重新定錨的價格排序：三代產品放進同一張圖</span><span class="st-sub">「Helios 比較貴」的說法，多數比較基準是已出貨的上一代 Blackwell 平台，而非同期發表的 Vera Rubin。</span></span><span class="st-sig">3.5→5.25→7.8<i>三代中值，$M</i></span></summary>
+  <div class="body">
+    <p>市場上流傳「Helios 比 Nvidia 貴」的論述，比較基準多半是 Helios（估算 5.0–5.5 百萬美元，見 05 節）對照上一代已出貨的 GB200／GB300 NVL72（市場估計約 3.0–4.0 百萬美元）——但 GB200／GB300 屬於 Blackwell 世代，早於 Helios 與 Vera Rubin 同批於 2026 下半年發表、出貨的時間點，兩者並非同代競品。</p>
+    <p>若改為同代對照，Helios 真正的直接對手是 Vera Rubin NVL72：以 05 節 Futurum Group 的市場報價估算（3.5–4.0M），兩者價格量級接近；若改採 Morgan Stanley 由下而上的 BOM 拆解估算（7.8M，見 05 節），Helios 反而顯著便宜。三代放在同一張圖，價格排序是 <strong>GB200／GB300 ≤ Helios &lt; Vera Rubin NVL72</strong>（同代對照）——這與「Helios 比較貴」的直覺印象方向相反，但兩者其實不衝突，差別只在於用哪一代 Nvidia 產品當比較基準。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#0B0D0C" font-family="sans-serif">機櫃售價的世代排序</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6E7471" font-family="sans-serif">GB200/GB300 ≤ Helios &lt; Vera Rubin NVL72（同代對照，Vera Rubin 採 Morgan Stanley BOM 估算）</text><line x1="22" y1="56" x2="876" y2="56" stroke="#DCDFDB" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#BFC3BE" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">0</text><line x1="78" y1="359" x2="876" y2="359" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="363" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">2</text><line x1="78" y1="262" x2="876" y2="262" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="266" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">4</text><line x1="78" y1="165" x2="876" y2="165" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="169" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">6</text><line x1="78" y1="68" x2="876" y2="68" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="72" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">8 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#0B0D0C" stroke-width="1.2"/><rect x="116.24" y="286.25" width="189.52" height="169.75" fill="#584B7C" rx="1" data-dim="機櫃售價中值"/><text x="211" y="280.25" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="機櫃售價中值">3.50</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">GB200/GB300</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9AA09C" font-family="sans-serif">NVL72（前代）</text><rect x="382.24" y="201.38" width="189.52" height="254.63" fill="#584B7C" rx="1" data-dim="機櫃售價中值"/><text x="477" y="195.38" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="機櫃售價中值">5.25</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#0B0D0C" font-family="sans-serif">Helios（現代・AMD）</text><rect x="648.24" y="77.7" width="189.52" height="378.3" fill="#584B7C" rx="1" data-dim="機櫃售價中值"/><text x="743" y="71.7" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="機櫃售價中值">7.80</text><text x="743" y="472" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">Vera Rubin</text><text x="743" y="485" text-anchor="middle" font-size="10" fill="#9AA09C" font-family="sans-serif">NVL72（現代・Nvidia）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：AMD/Nvidia 官方規格與 Futurum Group／Morgan Stanley 產業估算（見本文 05 節）；為示意用中值，非官方牌價</text></svg>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ GB200／GB300 的價格區間為市場報價的概略估計，本文未能找到與 05 節同等嚴謹的機構點名來源，信心度低於 05 節 Futurum／Morgan Stanley 兩組估算，僅供世代定位參考，不宜視為精確牌價。</p>
+
+    <div class="callout">
+      <span class="ck">這張圖真正指出的問題</span>
+      <p>這張圖不是要證明「Helios 比較便宜」是唯一正確答案——05 節已說明 Vera Rubin 的兩個估算本身相差超過一倍，分歧本身就是重要資訊。這張圖真正要指出的是一個更基本的方法論問題：<strong>拿 Helios 跟哪一代 Nvidia 產品比較，會直接決定「貴」或「便宜」這個結論該怎麼下</strong>——跨世代比較（對 GB200/300）與同代比較（對 Vera Rubin）幾乎必然得出相反的結論，而這正是本文 00 節第四個賭注（定價方法論本身）在三代對照下的具體樣貌。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s11">
+  <summary><span class="st-n">11</span><span class="st-main"><span class="st-t">市占率：從個位數缺口到潛在雙位數的視窗</span><span class="st-sub">AI 加速器市場長期由 Nvidia 主導八成以上，AMD 的機會窗口落在 Helios 出貨後的 2027–2028 年——但這是尚未發生的執行結果，不是已確認的財報數字。</span></span><span class="st-sig">個位數→雙位數<i>2027–2028（預期）</i></span></summary>
+  <div class="body">
+    <p>AMD 在 AI 加速器市場的營收市占率過去數年大致落在個位數區間（產業評論常見引述約 3%–8%），Nvidia 則長期維持八成以上的主導地位；這個落差反映的是 03 節提到的軟體生態成熟度差距，也是 05 節「Helios 是否貴」爭論背後真正的商業風險所在——即使規格與定價具吸引力，市占率是否真的轉移，最終仍要看客戶的實際採購與續約行為，而非任何一次發表會的宣稱。</p>
+    <p>Helios 已公開的容量承諾（見 05 節：Microsoft、Meta、Anthropic、Oracle、OpenAI 等，累積約 14–20GW）若能如期落地執行，產業評論預期有機會協助 AMD 在 2027–2028 年間將市占率推升至雙位數區間。</p>
+
+    <div class="figs">
+      <div class="fg"><span class="v">3–8<small>%</small></span><span class="k">AMD 近年 AI 加速器營收市占率區間（產業評論估計）</span></div>
+      <div class="fg"><span class="v">80<small>%+</small></span><span class="k">Nvidia 同期市占率</span></div>
+      <div class="fg"><span class="v">14–20<small>GW</small></span><span class="k">Helios 已公開容量承諾累積（見 05 節）</span></div>
+      <div class="fg"><span class="v">2027–28</span><span class="k">產業評論預期市占率轉折窗口</span></div>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ 3–8% 與雙位數轉折窗口為產業評論常見引述之整理，非單一機構具名報告的精確數字，信心度低於本文其餘標註公開規格／具名機構估算之處，僅供量級與方向參考。</p>
+
+    <div class="callout">
+      <span class="ck">規格追平不等於市占率轉移</span>
+      <p>Helios 無法在短期內推翻 Nvidia 的絕對主導地位，07 節已說明 CUDA 生態系與 Nebius 這類專屬股權綁定的護城河依然深厚。Helios 真正改變的，是 AMD 從「性價比替代選項」升級為「機櫃級市場具備實質威脅的替代平台」——<strong>這個定位轉換本身，比任何單一季度的市占率百分點更值得追蹤</strong>，也呼應本文 00 節論點：兩條路線是兩套不同的商業賭注，哪一邊賭對要等 2027–2028 年客戶的真實續約與擴充決策才會揭曉。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ F ══════════ -->
+<div class="phase-rule"><span class="pk">F · 軟體護城河</span><span class="pd">從「不可進入」到「偏好性」：CUDA 護城河的性質正在改變</span></div>
+
+<details class="stage" id="s12">
+  <summary><span class="st-n">12</span><span class="st-main"><span class="st-t">軟體護城河：CUDA 從「不可進入」變成「麻煩但可行」</span><span class="st-sub">一名工程師、一個週末、一句提示詞，讓 Claude 獨力完成 AMD MI355X 機櫃的系統開機與效能調優——這比任何一次規格發表都更直接挑戰 CUDA 軟體護城河的前提假設。</span></span><span class="st-sig">不可進入→偏好性<i>護城河性質轉變</i></span></summary>
+  <div class="body">
+    <p>2026 年 AMD Advancing AI 發表會上，Anthropic 共同創辦人暨技術長 Tom Brown 分享了一則案例：一名工程師將一台全新的 AMD Instinct MI355X 機櫃交給 Claude，僅下達「把這台機器搞起來」的指令便讓它跑過一個週末，最終產出的是一張持續改善的模型效能曲線，過程中沒有人工介入寫程式碼。過去要讓全新硬體從開箱到穩定運作，通常需要專職團隊耗費數週甚至數月，處理驅動載入、記憶體分層、卡間通訊等大量未見於官方文件的細節——這正是 CUDA 生態十年累積調優知識所構築的護城河核心。Tom Brown 同時公開表示 Anthropic 計畫部署高達 2GW 的 AMD 運算容量並明確表達對 MI355 的偏好，與 05、11 節已披露的 Anthropic 容量承諾是同一件事的不同切面，這裡不重複列數字。</p>
+    <p>類似論述不只出現在 AMD 陣營。DeepSeek 創辦人梁文鋒在一場外流的投資人交流會談話中表示，Nvidia 的 CUDA 生態護城河正快速瓦解，主因是 AI 已經能自行編寫程式碼，大幅降低了建立替代軟體生態系的人力門檻——DeepSeek 訓練 V3 模型時雖仍使用 Nvidia GPU，但已轉為自行開發高階編譯器 TileLang，不再依賴 Nvidia 的軟體生態；梁文鋒並透露 DeepSeek 已取得約 1.6 萬張華為 Ascend 950 卡用於實測，認為其 950 超節點在性能與價格上可望完全替代 Nvidia GB200、GB300 的工作負載，並預期國產晶片的軟體適配問題可望於一年內大致解決，真正瓶頸將轉為製造產能。</p>
+    <div class="marg"><b>與 08 節的關係</b>本節談的是軟體整合摩擦，08 節談的是硬體機櫃整合摩擦——兩者是同一個「摩擦成本」主軸在不同層次的展現：硬體摩擦決定客戶要不要買，軟體摩擦決定買了之後能不能順利跑起來。</div>
+
+    <h3>護城河沒有消失，只是性質改變了</h3>
+    <p>CUDA 今天仍握有結構性優勢：Nvidia 把晶片、互連網路與系統軟體整套綁定銷售，這種深度整合的效率無法在一個週末內複製；成熟的除錯工具鏈與整個開源生態「CUDA 優先」的慣性，也讓多數團隊在動輒燒掉數百萬美元的長時間訓練任務上，傾向選擇「已驗證可行」而非「理論上可行」的路線。但護城河的性質正在改變——兩年前的 CUDA 護城河近似「不可進入」：多數團隊光是移植一個核心運算，就要耗費大量時間摸索官方文件沒寫的細節；今天則正在變成「偏好性」：客戶技術上可以離開，只是離開後的效能與穩定性仍有落差，且既有工程習慣仍長在 CUDA 之上。</p>
+    <p>AI coding agent 降低的是撰寫替代軟體堆疊的成本，卻沒有同等降低「信任這段程式碼」的成本——模型能在數小時內產出通過單元測試的高效能程式碼，但難以保證在數千卡規模擴展、或連續訓練數週後不會出現難以察覺的數值漂移或隱藏臭蟲。這使競爭稀缺資源從「會寫程式的人」轉移到「能嚴謹驗證、為機器產出的程式碼扛責的人」。Nvidia 的因應方向，是把客戶黏性從單純的程式碼相容性，往上搬到系統整合層——把晶片、互連、系統軟體與除錯工具整套綁在一起銷售；若開發者發現在 CUDA 上叫 agent 做優化十分鐘搞定、換到其他平台卻要多耗一小時，AI coding agent 反而可能強化而非削弱 Nvidia 的既有優勢。</p>
+    <p class="cap full"><b>標註</b>　⚑ 梁文鋒對 950 超節點性價比可「完全平替」GB200／GB300 的評價為 DeepSeek 一方單方面陳述，尚無第三方基準測試驗證，信心度低於本文其餘具名機構估算之處；1.6 萬張 Ascend 950 卡的數字則出自多家媒體對同一場外流會議內容的報導。</p>
+
+    <div class="callout">
+      <span class="ck">城牆變成了可以涉水的河</span>
+      <p>軟體護城河沒有乾涸，性質從「不可逾越的城牆」轉為「可以涉水而過、但鞋子會濕的河」——這個轉變本身，可視為本文 00 節「兩套商業賭注」框架下的延伸賭注：AMD／開放生態陣營賭的是這條河會愈來愈淺、愈來愈多客戶願意涉水；Nvidia 賭的是即使河能涉水，多數預算充足、任務極度關鍵的客戶仍會選擇走橋，也就是留在 CUDA 上。<strong>哪一邊賭對，同樣要交由 2027–2028 年的實際採購與續約行為驗證</strong>，與 00、11 節的判讀邏輯一致。</p>
+    </div>
+  </div>
+</details>
+
 <!-- ══════════ 附錄 ══════════ -->
 <section class="thesis" id="appendix" style="margin-top:clamp(3rem,7vw,5rem)">
   <p class="sec-mark">◇ · 附錄</p>
@@ -583,6 +677,7 @@ html{scroll-behavior:smooth}
 
     <h3>已知限制</h3>
     <p>本文寫成於 Helios 正式量產發表（2026-07-22–23）後不久，部分規格與定價仍可能隨官方正式報價與後續發表修正；GW→機櫃數的推算未計入客戶實際採購配置差異（單櫃 GPU 數、功率上限依配置而異）。這些簡化不影響環節間的相對關係判讀，但<strong>不適合直接用於採購或財務模型</strong>。</p>
+    <p>E 段（08–11 節）新增的「摩擦成本」「搭售率」框架，以及 GB200／GB300 價格區間、AMD 歷史市占率區間（3–8%）與 2027–2028 市占率轉折窗口，是本文對公開產業評論與商業模式敘事的整理與推導，<strong>不像 A–D 段各節多數數字附有具名機構或官方來源</strong>，信心度相對較低，僅供方向與量級參考，各節內文與圖說已逐項以 ⚑ 標註。F 段（12 節）的 Tom Brown／梁文鋒談話經查證多家媒體報導交叉確認屬實，但梁文鋒對華為 Ascend 950 性價比「完全平替」Nvidia GPU 的評價為當事一方單方面陳述，尚無第三方基準測試佐證，信心度同樣低於官方規格與具名機構估算。</p>
   </div>
 
   <h3>主要參考來源</h3>
@@ -621,6 +716,10 @@ html{scroll-behavior:smooth}
     <li><a href="https://www.futuriom.com/articles/news/amds-best-chance-against-nvidia-could-come-next-year/2025/06">Futuriom — AMD 與 Neocloud 生態</a></li>
     <li><a href="https://www.nextplatform.com/compute/2025/05/16/how-is-neocloud-tensorwave-paying-for-its-fairly-large-amd-cluster/1633111">The Next Platform — TensorWave 募資分析</a></li>
     <li><a href="https://www.cnbc.com/2026/07/21/nebius-stock-nvidia-stake-neocloud.html">CNBC — Nvidia 入股 Nebius</a></li>
+    <li><a href="https://finance.biggo.com/news/3a24f734-b656-4c82-83d5-48161596aff9">BigGo Finance — Claude 一個週末完成 MI355X 系統開機</a></li>
+    <li><a href="https://newsletter.semianalysis.com/p/can-amd-break-the-cuda-moat-amd-advancing">SemiAnalysis — Can AMD Break the CUDA Moat?</a></li>
+    <li><a href="https://money.udn.com/money/story/5603/9646958">經濟日報／聯合新聞網 — DeepSeek 內部交流會曝光，梁文鋒談 CUDA 護城河瓦解</a></li>
+    <li><a href="https://technews.tw/2026/07/24/deepseeks-liang-wenfeng-tells-investors-restraint-is-the-business-model/">科技新報 — 梁文鋒投資人會議談話（華為 Ascend 950 細節）</a></li>
   </ol>
 
   <div class="foot">
