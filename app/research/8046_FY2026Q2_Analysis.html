@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南亞電路板（8046）— FY2026 Q2 財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 9px 13px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 12.5px; white-space: nowrap; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+  .card ul { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.65; color: #333; }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 130px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow-x: auto; margin-bottom: 18px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { color: #333; width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: right; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { color: #333; padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.subtotal td { color: #888; font-style: italic; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; text-align: left; }
+  td strong { color: #1a1a2e; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+
+  .cf-section { margin-bottom: 14px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { color: #1a1a2e; font-weight: 600; white-space: nowrap; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 18px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.65; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 22px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 12px; color: #1a1a2e; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 18px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+  .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .card-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<!-- cf-backlinks-widget: shows which CausalFrame canvases reference this report; renders nothing if none do -->
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+<!-- /cf-backlinks-widget -->
+
+<div class="page-header">
+  <h1>南亞電路板股份有限公司（TWSE: 8046）— FY2026 Q2 財報完整分析</h1>
+  <p>法說會簡報重點 / 母公司轉讓持股事件拆解 / 技術與產品線 / 供應鏈 / 風險矩陣 / 損益表 / 業務部門 / 資產負債表 / 現金流量 / 估值觀察（共 10 個分頁）
+  &nbsp;·&nbsp; 主軸期間修正為 <strong>2026年第二季（115Q2）</strong>—本次重建時確認 MOPS 已公布 115Q2 合併財報（公告截止日 2026-08-14），故將主軸由舊版 2026Q1 升級至 2026Q2，舊版檔案已删除
+  &nbsp;·&nbsp; 資料來源：115年第二季合併財務報告暨會計師核閱報告（MOPS t164sb01）、MOPS月營收公布（t21sc03，113/8–115/7共24個月，均經累計欄逆算交叉驗證）、114年度年報（115/4/15刊印）、115年第一季法人說明會簡報（2026/6/12）、公開新聞報導（內部人持股轉讓事件）&nbsp;·&nbsp;
+  財務數字幣別為新台幣，依台灣IFRS編製，季度數字未經會計師查核（僅經核閱）&nbsp;·&nbsp;
+  本次分析無法說會逐字稿可交叉比對（公司未對外發布逐字稿），質化敘事判斷主要基於法說會簡報、年報書面揭露與財務數字推導（Fallback模式）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">法說會簡報重點</div>
+    <div class="tab" onclick="sw('deal',this)">持股轉讓事件拆解</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ TAB 1: FALLBACK - INVESTOR PRESENTATION HIGHLIGHTS ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="note grey">⚑ <strong>Fallback模式說明：</strong>南亞電路板未舉辦附逐字稿的法人說明會（僅提供簡報檔與現場口述，未公開逐字稿），本框架標準的「Q&amp;A話術偵測」tab在此無逐字稿可用，故依CLAUDE.md之Fallback規則改為「法說會簡報重點」，直接從最近一次（2026年第一季、2026/6/12）法說會簡報之書面揭露與本次2026Q2財報數字整理重點、並標註兩者之間的印證關係。公司截至查詢日（2026-08-14）尚未召開2026Q2法說會（財報公告截止日即為查詢日當天），下一場法說會之簡報重點待公司公布後另行補充。</div>
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">21.4%</div><div class="stat-lbl">2026Q2營業利益率</div></div>
+      <div class="stat-box"><div class="stat-val">+50.2%</div><div class="stat-lbl">2026年7月營收YoY（最新公告月份）</div></div>
+      <div class="stat-box"><div class="stat-val">90%+</div><div class="stat-lbl">2026Q1法說會揭露稼動率</div></div>
+      <div class="stat-box"><div class="stat-val">8,174億</div><div class="stat-lbl">2026/8/12收盤隱含市值</div></div>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>營運動能：量價齊升延續且加速</h4>
+        <ul>
+          <li>2026Q2合併營收135.75億元，YoY+41.7%、QoQ+21.4%，為連續第7季QoQ正成長</li>
+          <li>H1 2026營收247.53億元，YoY+37.2%，已達2026年第一季法說會展望「延續AI伺服器與高階網通需求」的方向</li>
+          <li>2026年6-7月最新月營收YoY分別為+50.0%與+50.2%，動能較Q2整季平均（+41.7%）進一步加速，是財報公布之後才出現的增量資訊（詳損益表tab月營收圖）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>產能與稼動率</h4>
+        <ul>
+          <li>2026年第一季法說會揭露IC載板產能利用率已全面突破90%，為公司近年首見</li>
+          <li>樹林廠（2022年投產ABF）、南電昆山廠（2021年投產ABF）為近年擴產主力基地，本次2026Q2財報顯示台灣廠區出貨佔比持續墊高（2026Q1台灣佔比43.9%，較2025Q1的36.9%明顯上升，詳損益表tab地區別表）</li>
+          <li>H1 2026資本支出僅執行7.74億元，占公司自身FY2026全年計畫30.35億元的25.5%，執行進度落後於時間過半的節奏，屬「後段加速執行型」——詳現金流量tab</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>報價與獲利結構</h4>
+        <ul>
+          <li>2026Q1法說會提及「已就原物料成本上漲與客戶協商並順利調漲報價」；本次2026Q2財報毛利率達24.75%，較2025Q2的8.02%大幅擴張近17個百分點，方向與調漲報價之說法一致</li>
+          <li>營業利益率連續7季單向擴張：-11.2%（2024Q1）→0.4%→3.8%→5.7%→8.6%→12.1%→<strong>21.4%</strong>（2026Q2），本季擴張速度為歷季最快（單季+9.3個百分點）</li>
+          <li>高階AI伺服器與交換器佔營收比重，2026Q1法說會口徑約15%–18.8%並持續擴張（此為簡報既有措辭，本報告財報數字面之對應為「網通+AI/HPC」合計佔比49%+16%=65%，兩者定義口徑不完全相同，不可直接相加比對）</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>資本配置與股東回饋</h4>
+        <ul>
+          <li>FY2025股利倍增至NT$2.00/股（FY2024為NT$1.00/股），發放率約66.4%；截至2026/6/30，應付股利1,292,331千元仍列於資產負債表，顯示尚未實際撥發</li>
+          <li>公司自身FY2026現金流動性計畫原規劃「淨減少」，但H1 2026實際現金逆勢大增17.9億元（見現金流量tab），顯示營運現金流入速度遠快於原計畫假設</li>
+          <li>母公司南亞塑膠於2026年5-6月間申報轉讓16,874張南電持股（見下一分頁「持股轉讓事件拆解」），是本期最值得留意的治理面事件</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">⚑ 本tab所有數字互證關係，完整版收斂於「估值觀察」tab之互證對照表（強制交付物），此處僅作重點導覽。</div>
+  </div>
+
+  <!-- ============ TAB 2: SPECIAL EVENT - PARENT SHARE TRANSFER ============ -->
+  <div id="panel-deal" class="panel">
+    <div class="section-title">本季特殊事件：母公司南亞塑膠(1303)申報轉讓南電(8046)持股16,874張</div>
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>轉讓股數：16,874張（16,874,000股）</li>
+          <li>轉讓前母公司持股：413,359,977股</li>
+          <li>轉讓後母公司持股：396,485,977股（減少約4.1%）</li>
+          <li>以8046總流通股數646,165,487股計算，母公司持股比例約由63.98%降至61.36%（降約2.62個百分點；註：與114年報揭露之66.97%基準日不同，本欄為依本次新聞稿股數獨立換算，僅供級距參考）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限</h4>
+        <ul>
+          <li>依股權轉讓事前申報公告，有效期間為2026年5月25日至6月24日（共30天）</li>
+          <li>此期間落在2026Q2財報涵蓋期間之內（4/1–6/30），故本次轉讓若已於期間內完成，理論上已反映於2026Q2財報所揭露之股東結構，惟財報本身未單獨揭露此交易明細（非公司對8046自身資產負債表之影響，而是母公司南亞塑膠層級之持股變動）</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾／對8046自身財報的影響</h4>
+        <ul>
+          <li>此交易為母公司南亞塑膠出售其持有之8046股票予第三方，<strong>不影響8046公司本身之股本、資產負債表或損益表</strong>——8046流通在外股數646,165,487股不因此改變</li>
+          <li>對8046而言純屬「股東結構變動」事件，不產生資金流入流出；真正的財務影響層面在於母公司南亞塑膠自身的投資收益認列與其資產負債表</li>
+          <li>資料中心專案融資條款（CLAUDE.md新增追蹤重點）：<strong>無此資料/不適用</strong>——8046為ABF/BT載板製造商，非資料中心/AI infra資本支出主體本身，本季揭露事項與此追蹤重點無關</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>公告稱轉讓原因為「AI技術持續進化與雲端服務業融合，帶動電子材料產品需求，南亞旗下CCL、銅箔、玻纖布及南電的ABF載板、BT載板出貨受惠」——這是對<strong>集團整體</strong>電子材料業務看好的敘事，但同一時間點母公司卻選擇<strong>減碼</strong>其在南電的直接持股部位，兩者方向存在邏輯張力（詳見估值觀察tab互證對照表）</li>
+          <li>公開新聞未揭露具體交易對象、成交價格與交易方式（是否為大宗交易、盤後定價交易等），亦未說明轉讓後資金用途</li>
+          <li>母公司持股仍維持過半（約61%），控制權未受影響，此次轉讓性質較可能是「集團旗下電子材料相關持股的例行調整」而非釋出控制權訊號，但確切動機（套現、集團內部資產重分配、稅務規劃等）無法從公開資訊進一步驗證</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note yellow">⚑ 核心疑問（盡職調查式追問）：(1) 此次轉讓的實際受讓方是誰？是否為集團內其他公司或外部法人？(2) 成交價格相對公告當時市價（約NT$500-600元區間）是折價、平價還是溢價？(3) 母公司近12個月是否有其他南電持股調整動作，本次是否為系列動作之一？(4) 若8046股價自轉讓公告後已大幅上漲（2026/8/12收盤1,265元，較轉讓期間約NT$500-600元已翻倍以上），母公司此次轉讓的時點回頭看是否「賣得過早」，這對解讀公司內部人對後市看法的參考價值需要打折扣看待。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">關係人資金貸與事件（延續自2026Q1，2026Q2持續追蹤）</div>
+    <div class="card">
+      <div class="card-title">資金貸與關係人：必成玻璃纖維(昆山)有限公司</div>
+      <p>2026Q1新增一筆NT$693,290千元、利率2.10%資金貸與關係人（台塑集團體系內公司），2026Q1報告已列為觀察重點。截至2026Q2財報，關係人交易揭露顯示H1 2026售予關聯企業（含福懋科技等）金額NT$354,841千元、向關係人進貨NT$529,221千元、其他應收關係人款項餘額NT$718,304千元（2026/6/30）——與Q1單獨揭露的693,290千元貸款金額相近，顯示此筆資金貸與可能仍在存續中，惟本次查詢未能取得Q2單獨的資金貸與關係人明細金額變動，暫以「其他應收關係人款項」科目餘額間接觀察，建議下次更新時向公司財報附註逐項核對。</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: TECHNOLOGY & PRODUCT LINES ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">產品技術線：三大產品類別</div>
+    <div class="tech-grid">
+      <div class="tech-card b">
+        <h4>ABF載板（Ajinomoto Build-up Film Substrate）</h4>
+        <div class="meta">應用：CPU/GPU/AI加速器封裝載板</div>
+        <p>以味之素build-up film作為介電材料的高階IC載板，用於承載高腳數、高訊號密度的處理器晶片（CPU、GPU、AI加速器），需支援極細線寬/線距與高層數堆疊，是AI伺服器與高效能運算需求成長最直接受惠的產品線。南電樹林廠（2022年投產）與南電昆山廠（2021年投產）是近年ABF擴產主力基地。2026Q1法說會明確點名「新世代AI伺服器客製化晶片、新世代高階交換器與路由器晶片應用載板」為未來發展方向，與本次2026Q2財報網通+AI/HPC合計佔比65%（FY2025/2026Q1口徑）的結構高度吻合。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>BT載板（Bismaleimide Triazine Substrate）</h4>
+        <div class="meta">應用：記憶體、電源管理IC、通訊模組封裝載板</div>
+        <p>以BT樹脂為基材的中階IC載板，成本較ABF低、製程成熟度更高，用於記憶體控制晶片、電源管理IC（PMIC）、5G天線模組、智慧眼鏡等對訊號密度要求相對較低但成本敏感的應用。2026Q1法說會明確點名「5G天線模組、智慧眼鏡、固態硬碟控制晶片；新世代伺服器及電源IC控制晶片載板」為BT載板未來發展方向，顯示公司仍在既有BT產能基礎上往新興終端（智慧眼鏡等穿戴裝置）尋找成長動能，作為ABF高階產能之外的第二成長曲線。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>一般電路板（PCB，非載板類）</h4>
+        <div class="meta">應用：伺服器配板、網通高層板、邊緣運算/LED</div>
+        <p>傳統多層印刷電路板產品，用於伺服器主機板配板（非CPU/GPU載板本身）、伺服器網通卡、交換器高層板，以及邊緣AI用高階PC與LED燈珠電路板。此產品線與IC載板業務共用部分原料供應鏈（銅箔基板、銅箔），但製程與IC載板顯著不同，屬公司在載板高速成長之外仍持續經營的基本盤業務，2026Q1法說會將其定位為「伺服器網通卡、伺服器配板、交換器高層板；邊緣AI用高階PC與LED燈珠電路板」，同樣鎖定伺服器/網通/邊緣AI等成長主題，而非傳統消費性電子。</p>
+      </div>
+      <div class="tech-card r">
+        <h4>四大轉型策略（公司2026年營運方針）</h4>
+        <div class="meta">產品轉型 / 事業轉型 / 數位轉型 / 低碳轉型</div>
+        <p><strong>產品轉型</strong>：提升雲端運算、邊緣運算、高速傳輸產品銷售比重；<strong>事業轉型</strong>：開發新材料、新技術及新產品；<strong>數位轉型</strong>：應用AI與數位科技，實現智能化營運（員工數連續3期下滑但營收與獲利大幅成長，指向單位人力產出提升，見下方業務部門tab）；<strong>低碳轉型</strong>：擴大綠電使用，落實循環經濟。四項策略與量化面（毛利率/營益率同步跳升、員工精簡但產出提升）方向一致，屬可觀察到財報印證的策略執行。</p>
+      </div>
+    </div>
+
+    <div class="note">⚑ 資料來源：2026年第一季法人說明會簡報（2026/6/12）「產品未來發展方向」與「2026年營運策略」章節；公司截至查詢日尚未召開2026Q2法說會，本tab沿用最近一次揭露之產品技術敘事，並以2026Q2財報數字驗證方向一致性。</div>
+  </div>
+
+  <!-- ============ TAB 4: SUPPLY CHAIN ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="section-title">供應鏈結構圖（依114年度年報揭露整理，FY2025基期未變，2026Q2無新年報可更新此結構性數字）</div>
+    <div class="card">
+      <div class="card-title">上下游結構圖（chart-tools · chain-diagram）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 662.75 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="662.75" height="702" fill="#ffffff"/><text x="331.38" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">南亞電路板（8046）供應鏈結構圖</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">上游原料／母公司採購</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">南亞電路板(8046)</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">下游客戶（未具名）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">終端應用市場</text><defs><marker id="arr-2563eb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker><marker id="arr-7c3aed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7c3aed"/></marker><marker id="arr-c2410c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#c2410c"/></marker></defs><polyline points="168.125,106 168.125,124 272.2,124 272.2,222" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="144.86" y="115" width="150.6" height="18" rx="3" fill="#ffffff"/><text x="220.16" y="128" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">第三方供應商85.15%(FY25)</text><polyline points="377.95,106 377.95,146 341.375,146 341.375,222" fill="none" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arr-7c3aed)"/><rect x="289.86" y="137" width="139.6" height="18" rx="3" fill="#ffffff"/><text x="359.66" y="150" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">母公司採購10.87%(FY25)</text><polyline points="551.1999999999999,106 551.1999999999999,168 410.54999999999995,168 410.54999999999995,222" fill="none" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arr-7c3aed)"/><rect x="408.6" y="159" width="144.55" height="18" rx="3" fill="#ffffff"/><text x="480.87" y="172" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">關係企業採購3.98%(FY25)</text><polyline points="341.375,282 341.375,300 216.12500000000003,300 216.12500000000003,398" fill="none" stroke="#c2410c" stroke-width="1.6" marker-end="url(#arr-c2410c)"/><rect x="225.45" y="291" width="106.6" height="18" rx="3" fill="#ffffff"/><text x="278.75" y="304" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">13.25%(FY25佔比)</text><polyline points="341.375,282 341.375,322 341.375,322 341.375,398" fill="none" stroke="#c2410c" stroke-width="1.6" marker-end="url(#arr-c2410c)"/><rect x="288.08" y="313" width="106.6" height="18" rx="3" fill="#ffffff"/><text x="341.38" y="326" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">17.36%(FY25佔比)</text><polyline points="341.375,282 341.375,344 466.625,344 466.625,398" fill="none" stroke="#c2410c" stroke-width="1.6" marker-end="url(#arr-c2410c)"/><rect x="350.7" y="335" width="106.6" height="18" rx="3" fill="#ffffff"/><text x="404" y="348" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">15.16%(FY25佔比)</text><polyline points="148.87500000000006,458 148.87500000000006,476 72,476 72,574" fill="none" stroke="#c2410c" stroke-width="1.6" marker-end="url(#arr-c2410c)"/><polyline points="341.375,458 341.375,498 341.375,498 341.375,574" fill="none" stroke="#c2410c" stroke-width="1.6" marker-end="url(#arr-c2410c)"/><polyline points="533.875,458 533.875,520 610.75,520 610.75,574" fill="none" stroke="#c2410c" stroke-width="1.6" marker-end="url(#arr-c2410c)"/><g><rect x="60" y="46" width="216.25" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="168.13" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">原料供應商</text><text x="168.13" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">銅箔基板/基材/銅箔/鑽針/乾膜/油墨</text></g><g><rect x="310.25" y="46" width="135.4" height="60" rx="9" fill="rgb(237,227,252)" stroke="#7c3aed" stroke-width="1.4"/><text x="377.95" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">南亞塑膠工業</text><text x="377.95" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">母公司(持股66.97%)</text></g><g><rect x="479.65" y="46" width="143.1" height="60" rx="9" fill="rgb(237,227,252)" stroke="#7c3aed" stroke-width="1.4"/><text x="551.2" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">南亞電子材料</text><text x="551.2" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">母公司關係企業(昆山)</text></g><g><rect x="260.2" y="222" width="162.35" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="341.38" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">南亞電路板</text><text x="341.38" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">8046・IC載板/一般電路板</text></g><g><rect x="69.63" y="398" width="158.5" height="60" rx="9" fill="rgb(246,228,221)" stroke="#c2410c" stroke-width="1.4"/><text x="148.88" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">甲客戶</text><text x="148.88" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未具名・FY25佔比13.25%</text></g><g><rect x="262.13" y="398" width="158.5" height="60" rx="9" fill="rgb(246,228,221)" stroke="#c2410c" stroke-width="1.4"/><text x="341.38" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">乙客戶</text><text x="341.38" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未具名・FY25佔比17.36%</text></g><g><rect x="454.63" y="398" width="158.5" height="60" rx="9" fill="rgb(246,228,221)" stroke="#c2410c" stroke-width="1.4"/><text x="533.88" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">丙客戶</text><text x="533.88" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未具名・FY25佔比15.16%</text></g><g><rect x="60" y="574" width="562.75" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="341.38" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">終端應用市場</text><text x="341.38" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">網通49%/電腦17%/消費12%/AI-HPC16%/車用6%(FY25)</text></g><rect x="77.88" y="663" width="22" height="2.4" fill="#2563eb"/><text x="107.88" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">第三方原料供應商</text><rect x="213.88" y="663" width="22" height="2.4" fill="#7c3aed"/><text x="243.88" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">母公司集團採購（關係人）</text><rect x="393.88" y="663" width="22" height="2.4" fill="#c2410c"/><text x="423.88" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">客戶（集中度風險，未具名）</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：114年度年報「原物料供應」「進銷貨集中風險」章節、2026年第一季法人說明會簡報（應用別佔比）；查詢日期2026-08-10</div>
+</div>
+    </div>
+    <div class="note">⚑ 母公司集團採購（南亞塑膠＋南亞電子材料）合計占FY2025進貨14.85%，較FY2024的18.26%下降；前三大客戶（甲/乙/丙）合計占FY2025銷貨45.77%，較FY2024的39.96%上升——上游依存度降、下游集中度升，方向相反。此為年度揭露數字（年報僅每年更新一次），2026Q2尚未有新一期年報可更新，沿用FY2025基期並已於下方風險矩陣tab與估值觀察tab互證對照表中持續追蹤此趨勢。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">上下游流量圖（chart-tools · sankey-diagram-demo，線寬＝相對比重）</div>
+    <div class="card">
+      <div id="sankeyEmbed_nya8046q2" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"raw","label":"原料供應商","color":"#2563eb"},{"id":"npc","label":"南亞塑膠工業(母公司)","color":"#7c3aed"},{"id":"nem","label":"南亞電子材料(關係企業)","color":"#7c3aed"},{"id":"hub","label":"南亞電路板(8046)","color":"#15181a"},{"id":"custA","label":"甲客戶","color":"#c2410c"},{"id":"custB","label":"乙客戶","color":"#c2410c"},{"id":"custC","label":"丙客戶","color":"#c2410c"},{"id":"custOther","label":"其他客戶(合計)","color":"#c2410c"},{"id":"end","label":"終端應用市場","color":"#15181a"}],"links":[{"source":"raw","target":"hub","value":85.15},{"source":"npc","target":"hub","value":10.87},{"source":"nem","target":"hub","value":3.98},{"source":"hub","target":"custA","value":13.25},{"source":"hub","target":"custB","value":17.36},{"source":"hub","target":"custC","value":15.16},{"source":"hub","target":"custOther","value":54.23},{"source":"custA","target":"end","value":13.25},{"source":"custB","target":"end","value":17.36},{"source":"custC","target":"end","value":15.16},{"source":"custOther","target":"end","value":54.23}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_nya8046q2");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        DATA.links.forEach(function(l){
+          (connectedMap[l.source] = connectedMap[l.source] || {})[l.target] = true;
+          (connectedMap[l.target] = connectedMap[l.target] || {})[l.source] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+      <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：114年度年報「原物料供應」「進銷貨集中風險」章節（FY2025佔比）；上游採購佔比與下游銷貨佔比為不同計算基礎（前者為進貨金額佔比，後者為銷貨金額佔比），兩者不可直接加總比較，僅各自反映該側之集中度；查詢日期2026-08-14</div>
+    </div>
+    <div class="note yellow">⚑ 本圖節點與上方chain-diagram完全一致（原料供應商/南亞塑膠工業/南亞電子材料 → 南亞電路板 → 甲/乙/丙客戶+其他客戶 → 終端應用市場），兩圖談的是同一組供應鏈實體，前者交代結構層級與單一來源風險位置，後者交代相對流量粗細。無公開逐筆交易金額，本圖線寬採用年報揭露之佔比百分比作為相對比例，非絕對金額。</div>
+
+    <div class="divider"></div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">上游：原料採購集中度</div>
+        <div class="tbl-wrap" style="margin-bottom:0;">
+          <table>
+            <tr><th>供應商</th><th>FY2024佔比</th><th>FY2025佔比</th><th>關係</th></tr>
+            <tr><td>南亞塑膠工業（母公司）</td><td>12.54%</td><td>10.87%</td><td>母公司</td></tr>
+            <tr><td>南亞電子材料(昆山)</td><td>5.72%</td><td>3.98%</td><td>母公司之最終母公司關係企業</td></tr>
+            <tr><td>其他第三方供應商</td><td>81.74%</td><td>85.15%</td><td>無關係</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">下游：客戶集中度（未具名）</div>
+        <div class="tbl-wrap" style="margin-bottom:0;">
+          <table>
+            <tr><th>客戶</th><th>FY2024佔比</th><th>FY2025佔比</th><th>關係</th></tr>
+            <tr><td>甲客戶</td><td>12.16%</td><td>13.25%</td><td>無</td></tr>
+            <tr><td>乙客戶</td><td>15.48%</td><td>17.36%</td><td>無</td></tr>
+            <tr><td>丙客戶</td><td>12.32%</td><td>15.16%</td><td>無</td></tr>
+            <tr class="total"><td>前三大合計</td><td class="neg">39.96%</td><td class="neg">45.77%</td><td>—</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="note yellow">⚑ <strong>留白反推：</strong>公司在年報一貫強調「持續開發新客戶以分散銷貨過於集中之風險」，但FY2025實際數字方向相反——前三大客戶集中度由39.96%升至45.77%。本次2026Q2財報進一步看到合約負債（可視為客戶預付款/在手訂單之代理指標）連續4期下滑（見估值觀察tab互證對照表），與客戶集中度上升、營收同步大幅成長並存，較合理的解讀是既有大客戶訂單認列營收的速度快於新單／預付款的補充速度，而非需求疲弱，但集中度風險本身是可觀察的財務事實，需持續追蹤。</div>
+
+    <div class="divider"></div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">關係人交易摘要（H1 2026）</div>
+        <ul>
+          <li>銷售予關聯企業：NT$354,841千元</li>
+          <li>向關係人進貨：NT$529,221千元</li>
+          <li>其他應收關係人款項餘額（2026/6/30）：NT$718,304千元</li>
+          <li>資金貸與關係人必成玻璃纖維(昆山)：NT$693,290百萬元（2026Q1新增，詳「持股轉讓事件拆解」tab）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">資通安全事件揭露（年報，延續追蹤）</div>
+        <p>子公司南亞電路板(昆山)公司於114年2月2日偵測到部分資訊系統遭駭客網路攻擊，公司稱「經評估後對公司營運無造成影響」。已採取因應措施：強化密碼複雜度、建置特權帳號管理系統(CyberArk)、離線備份機制、VPN雙因子認證等，114年3月已取得ISO 27001驗證。</p>
+        <div class="note" style="margin-bottom:0;">⚑ 昆山廠是ABF載板主力擴產基地之一，2026Q2財報顯示「亞洲」部門對外收入佔比持續存在但部門損益貢獻近乎全部沖銷（詳業務部門tab），暫無新財報數字可直接驗證資安事件「無影響」之說法。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 5: RISK MATRIX ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="note grey">⚑ <strong>Fallback模式限制：</strong>本次分析無法說會逐字稿可交叉比對，以下風險矩陣依公開財報、年報書面揭露、MOPS月營收公告與公開新聞報導（母公司持股轉讓）推導，非管理層口頭應答之話術偵測結果。</div>
+    <div class="section-title">風險矩陣</div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">母公司南亞塑膠申報轉讓16,874張南電持股，與集團看好敘事存在方向張力</div>
+        2026年5-6月間，母公司南亞塑膠公告轉讓所持8046股份16,874張（自413,359,977股降至396,485,977股，約-4.1%），公告理由聚焦「AI需求帶動集團電子材料業務受惠」的正面敘事，但同一份公告本身即是母公司減碼南電直接持股的動作。母公司持股仍過半（約61%），控制權未受影響，性質較可能為集團內部持股調整而非釋出控制權訊號，但方向本身值得留意，詳見「持股轉讓事件拆解」tab。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">客戶集中度持續攀升，與管理層「分散風險」敘事方向相反</div>
+        前三大客戶（甲/乙/丙，均未揭露身分且與公司無關係人關係）合計占FY2025銷貨淨額比重由39.96%升至45.77%，三家個別佔比全數走高。年報同時聲稱「持續開發新客戶以分散銷貨過於集中之風險」，兩者方向不一致，2026Q2尚無新年報數字可驗證此趨勢是否延續。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">合約負債（客戶預付款代理指標）連續4期下滑，與需求強勁敘事並存但方向背離</div>
+        合約負債總額由2025/6/30的66.2億元，連續4期下滑至2026/6/30的44.1億元（66.2億→55.2億→49.6億→44.1億）。同期營收卻大幅成長（H1 2026 YoY+37.2%），較合理解讀是既有訂單認列營收速度快於新單補充速度，而非需求轉弱，但此背離本身值得列入觀察名單，若未來合約負債持續下滑而營收成長開始放緩，將是需求動能真正轉弱的早期訊號。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低-中</div>
+      <div class="risk-text">
+        <div class="risk-title">昆山子公司2025年2月遭駭客攻擊（已揭露、稱無營運影響），2026Q2無新資訊可驗證</div>
+        公司稱經評估對營運無造成影響，並已完成多項資安強化措施（PAM系統、雙因子驗證、離線備份等），114年3月已取得ISO 27001驗證（效期至117年3月）。列為低-中風險是因為缺乏獨立第三方佐證「無影響」的結論，且昆山廠是ABF擴產基地之一。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">估值已隱含極高成長預期，任何動能放緩皆可能觸發估值重評</div>
+        以2026/8/12收盤價NT$1,265元計算，TTM本益比約148.6x、年化run-rate本益比約90.4x，均遠高於歷史水準與同業中位數。2026Q2單季EPS由虧轉盈（2025Q2虧損0.29元→2026Q2獲利3.50元），使YoY%基期失去比較意義，但股價已大幅反映高成長預期（2026/8/12單日漲停10%），任一季營益率擴張放緩或月營收YoY回落，都可能觸發估值重新評估。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">資產負債表結構乾淨，無質押、無高槓桿、無衍生性商品</div>
+        本次查詢MOPS 2026Q2財報未發現「承諾及或有事項」（採購承諾）或「尚未開始租賃」相關揭露章節（查無公開揭露資料，非表示不存在，僅本次查詢未能定位到該節），歷史揭露（2025/3至2026/3三期比較）均無資產質押；公司明確聲明「不作高槓桿投資」「未從事衍生性金融商品交易」；負債比率24.0%、流動比率338.7%，利息保障倍數以H1 2026淨財務費用回推達約720倍，反映公司幾乎無有息負債（詳估值觀察tab）。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">地緣政治與關稅風險，透過轉投資／外銷客戶間接傳導（延續2026Q1揭露）</div>
+        年報明確揭露：美國對台灣課徵15%對等關稅，公司直接外銷美國占比小（2026Q1僅4.8%），但「美國關稅重創中國、印度等本公司轉投資或外銷客戶營運，致間接影響本公司業務」；美中科技戰下半導體設備／技術出口管制範圍可能擴大。2026Q2財報未見新增揭露更新此議題，維持與Q1相同的風險評級。
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="note">⚑ 內部人持股轉讓事前申報：除母公司南亞塑膠上述轉讓案外，本次查詢未能取得8046董事、監察人或經理人個人層級之持股轉讓事前申報資料——查無公開揭露資料。若後續公開資訊平台釋出相關申報，應併入本矩陣更新管理層信心訊號。</div>
+  </div>
+
+  <!-- ============ TAB 6: INCOME STATEMENT ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">135.75億</div><div class="kpi-lbl">2026Q2營收</div><div class="kpi-sub">YoY +41.7%／QoQ +21.4%</div></div>
+      <div class="kpi"><div class="kpi-val">28.99億</div><div class="kpi-lbl">2026Q2營業利益</div><div class="kpi-sub">營益率21.4%，去年同期3.8%</div></div>
+      <div class="kpi"><div class="kpi-val">22.62億</div><div class="kpi-lbl">2026Q2稅後淨利</div><div class="kpi-sub">EPS $3.50，去年同期虧損$0.29</div></div>
+      <div class="kpi"><div class="kpi-val">103.83億</div><div class="kpi-lbl">2026Q2末現金</div><div class="kpi-sub">QoQ +7.5%</div></div>
+    </div>
+
+    <div class="note">⚑ 本季最關鍵訊號：營業利益率單季跳升9.3個百分點（12.1%→21.4%），為連續7季擴張以來最快單季擴張速度；營收QoQ亦重新加速至+21.4%（前一季僅+0.1%），代表「量」與「價/組合」同時發力，而非上一季偏「價」驅動的單邊結構。2025Q2為近年谷底（EPS虧損$0.29），本季轉為單季EPS $3.50，是連續第7季的結構性反轉延續。</div>
+
+    <div class="divider"></div>
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併損益表（新台幣千元，季度數字未經查核僅經核閱）</div>
+      <table>
+        <tr><th>項目</th><th>2025Q2</th><th>2026Q2</th><th>YoY</th><th>H1 2025</th><th>H1 2026</th><th>YoY</th><th>FY2025</th></tr>
+        <tr><td>營業收入</td><td>9,582,919</td><td><strong>13,575,475</strong></td><td class="pos">+41.7%</td><td>18,040,951</td><td><strong>24,752,716</strong></td><td class="pos">+37.2%</td><td>40,172,990</td></tr>
+        <tr><td>營業成本</td><td>8,814,108</td><td>10,215,865</td><td class="neg">+15.9%</td><td>16,841,857</td><td>19,621,661</td><td class="neg">+16.5%</td><td>36,525,938</td></tr>
+        <tr class="total"><td>營業毛利</td><td>768,811</td><td>3,359,610</td><td class="pos">+337.0%</td><td>1,199,094</td><td>5,131,055</td><td class="pos">+327.9%</td><td>3,647,052</td></tr>
+        <tr class="subtotal"><td>&nbsp;&nbsp;毛利率</td><td>8.0%</td><td>24.7%</td><td class="pos">+16.7pp</td><td>6.6%</td><td>20.7%</td><td class="pos">+14.1pp</td><td>9.1%</td></tr>
+        <tr><td>營業費用</td><td>402,732</td><td>460,242</td><td>+14.3%</td><td>799,924</td><td>879,450</td><td>+9.9%</td><td>1,664,637</td></tr>
+        <tr class="total"><td>營業淨利（損）</td><td>366,079</td><td>2,899,368</td><td class="pos">+692.1%</td><td>399,170</td><td>4,251,605</td><td class="pos">+965.2%</td><td>1,982,415</td></tr>
+        <tr class="subtotal"><td>&nbsp;&nbsp;營益率</td><td>3.8%</td><td>21.4%</td><td class="pos">+17.6pp</td><td>2.2%</td><td>17.2%</td><td class="pos">+15.0pp</td><td>4.9%</td></tr>
+        <tr><td>營業外收入及支出</td><td>(592,659)</td><td>76,264</td><td class="pos">轉正</td><td>(369,609)</td><td>322,224</td><td class="pos">轉正</td><td>363,099</td></tr>
+        <tr class="total"><td>稅前淨利</td><td>(226,580)</td><td>2,975,632</td><td class="pos">轉正</td><td>29,561</td><td>4,573,829</td><td class="pos">+15,373%</td><td>2,345,514</td></tr>
+        <tr><td>所得稅費用</td><td>(39,151)</td><td>713,848</td><td>—</td><td>9,517</td><td>1,003,419</td><td>—</td><td>398,739</td></tr>
+        <tr class="total"><td>本期淨利（歸屬本公司）</td><td>(187,429)</td><td><strong>2,261,784</strong></td><td class="pos">轉正</td><td>20,044</td><td><strong>3,570,410</strong></td><td class="pos">+17,712%</td><td>1,946,775</td></tr>
+        <tr class="subtotal"><td>&nbsp;&nbsp;淨利率</td><td>(2.0%)</td><td>16.7%</td><td class="pos">+18.6pp</td><td>0.1%</td><td>14.4%</td><td class="pos">+14.3pp</td><td>4.8%</td></tr>
+        <tr><td>基本每股盈餘（元）</td><td>(0.29)</td><td><strong>3.50</strong></td><td class="pos">轉正</td><td>0.03</td><td><strong>5.53</strong></td><td class="pos">大幅成長</td><td>3.01</td></tr>
+      </table>
+    </div>
+    <div class="note yellow">⚑ 2025Q2為近8季獲利谷底（單季稅前虧損22.7百萬元），主因當季營業外收支為負5.93億元（推測為匯兌損失，與2024全年類似的匯率敏感結構呼應，詳資產負債表tab）；2026Q2營業外收支轉為正0.76億元，加上本業營業利益本身已達28.99億元的高基期，兩者疊加使稅前淨利單季達29.76億元，較去年同期成長逾13倍且由虧轉盈。H1 2026淨利率14.4%，較H1 2025的0.1%近乎從零起漲，反映本業驅動的獲利結構已延續兩個完整季度，非單季偶發。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">近7季合併營收與營業利益率趨勢（chart-tools · line-chart）</div>
+    <div class="card">
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450.0" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">南亞電路板 近7季合併營收與營業利益率</text><line x1="76" y1="443.5" x2="824" y2="443.5" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="447.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="315.4" x2="824" y2="315.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="319.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5,000</text><line x1="76" y1="187.3" x2="824" y2="187.3" stroke="#eeeeee" stroke-width="1"/><text x="66" y="191.3" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10,000</text><line x1="76" y1="59.2" x2="824" y2="59.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="63.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">15,000</text><text x="834" y="437.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">-10</text><text x="834" y="332.7" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">0</text><text x="834" y="228.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">10</text><text x="834" y="123.7" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">新台幣百萬元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76.0" y1="456" x2="76.0" y2="460" stroke="#999999" stroke-width="1"/><text x="76.0" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2024Q1</text><line x1="200.7" y1="456" x2="200.7" y2="460" stroke="#999999" stroke-width="1"/><text x="200.7" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2025Q1</text><line x1="325.3" y1="456" x2="325.3" y2="460" stroke="#999999" stroke-width="1"/><text x="325.3" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2025Q2</text><line x1="450.0" y1="456" x2="450.0" y2="460" stroke="#999999" stroke-width="1"/><text x="450.0" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2025Q3</text><line x1="574.7" y1="456" x2="574.7" y2="460" stroke="#999999" stroke-width="1"/><text x="574.7" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2025Q4</text><line x1="699.3" y1="456" x2="699.3" y2="460" stroke="#999999" stroke-width="1"/><text x="699.3" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2026Q1</text><line x1="824.0" y1="456" x2="824.0" y2="460" stroke="#999999" stroke-width="1"/><text x="824.0" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2026Q2</text><polyline points="76.0,261.59 200.7,226.82 325.3,198.00 450.0,162.54 574.7,157.49 699.3,157.16 824.0,95.73" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76.0" cy="261.59" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="200.7" cy="226.82" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="325.3" cy="198.00" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="450.0" cy="162.54" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="574.7" cy="157.49" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="699.3" cy="157.16" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="824.0" cy="95.73" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><polyline points="76.0,445.78 200.7,324.56 325.3,289.03 450.0,269.17 574.7,238.86 699.3,202.29 824.0,105.10" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76.0" cy="445.78" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="200.7" cy="324.56" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="325.3" cy="289.03" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="450.0" cy="269.17" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="574.7" cy="238.86" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="699.3" cy="202.29" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="824.0" cy="105.10" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><line x1="360.0" y1="40" x2="376.0" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="382.0" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">合併營收</text><line x1="448.0" y1="40" x2="464.0" y2="40" stroke="#dc2626" stroke-width="2.4" stroke-dasharray="5 3"/><text x="470.0" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：115年第二季合併財務報告暨會計師核閱報告、MOPS t164sb01(115年各季)；查詢日期2026-08-14</div>
+</div>
+    </div>
+    <div class="note">⚑ 左軸為合併營收（新台幣百萬元），右軸為營業利益率（%，虛線）。連續7個季度營益率單向擴張：-11.2%（2024Q1）→0.4%→3.8%→5.7%→8.6%→12.1%→21.4%（2026Q2），本季擴張幅度（+9.3pp）為歷季最大單季跳升，與2026Q1法說會「已與客戶協商調漲報價」之說法互證一致（詳損益表毛利率變化）。原始數字（NT$百萬元／營業利益率）：2024Q1 7,100.6／(11.2%)、2025Q1 8,458.0／0.4%、2025Q2 9,582.9／3.8%、2025Q3 10,967.5／5.7%、2025Q4 11,164.6／8.6%、2026Q1 11,177.2／12.1%、2026Q2 13,575.5／21.4%。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">台股專用：近24個月單月合併營收與YoY%（chart-tools · line-chart，2026-08-14季報之後最新公告月份已納入）</div>
+    <div class="card">
+      <div style="max-width:960px;margin:0 auto;">
+  <svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="960" height="560" fill="#ffffff"/><text x="480.0" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">南亞電路板 近24個月單月合併營收與YoY%</text><line x1="80" y1="470.0" x2="900" y2="470.0" stroke="#c9c9c9" stroke-width="1"/><text x="70" y="474.0" text-anchor="end" font-size="10.5" fill="#555555" font-family="sans-serif">0</text><line x1="80" y1="337.6" x2="900" y2="337.6" stroke="#eeeeee" stroke-width="1"/><text x="70" y="341.6" text-anchor="end" font-size="10.5" fill="#555555" font-family="sans-serif">2,000</text><line x1="80" y1="205.3" x2="900" y2="205.3" stroke="#eeeeee" stroke-width="1"/><text x="70" y="209.3" text-anchor="end" font-size="10.5" fill="#555555" font-family="sans-serif">4,000</text><line x1="80" y1="72.9" x2="900" y2="72.9" stroke="#eeeeee" stroke-width="1"/><text x="70" y="76.9" text-anchor="end" font-size="10.5" fill="#555555" font-family="sans-serif">6,000</text><text x="910" y="406.1" text-anchor="start" font-size="10.5" fill="#555555" font-family="sans-serif">-20%</text><text x="910" y="317.7" text-anchor="start" font-size="10.5" fill="#555555" font-family="sans-serif">0%</text><text x="910" y="229.2" text-anchor="start" font-size="10.5" fill="#555555" font-family="sans-serif">20%</text><text x="910" y="140.7" text-anchor="start" font-size="10.5" fill="#555555" font-family="sans-serif">40%</text><line x1="80" y1="56" x2="80" y2="470" stroke="#111111" stroke-width="1.2"/><line x1="80" y1="470" x2="900" y2="470" stroke="#111111" stroke-width="1.2"/><line x1="900" y1="56" x2="900" y2="470" stroke="#111111" stroke-width="1.2"/><text x="70" y="42" text-anchor="end" font-size="10.5" fill="#777777" font-family="sans-serif">新台幣百萬元</text><text x="910" y="42" text-anchor="start" font-size="10.5" fill="#777777" font-family="sans-serif">YoY%</text><line x1="80.0" y1="470" x2="80.0" y2="474" stroke="#999999" stroke-width="1"/><text x="80.0" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 80.0 488)">2024-08</text><line x1="151.3" y1="470" x2="151.3" y2="474" stroke="#999999" stroke-width="1"/><text x="151.3" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 151.3 488)">2024-10</text><line x1="222.6" y1="470" x2="222.6" y2="474" stroke="#999999" stroke-width="1"/><text x="222.6" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 222.6 488)">2024-12</text><line x1="293.9" y1="470" x2="293.9" y2="474" stroke="#999999" stroke-width="1"/><text x="293.9" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 293.9 488)">2025-02</text><line x1="365.2" y1="470" x2="365.2" y2="474" stroke="#999999" stroke-width="1"/><text x="365.2" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 365.2 488)">2025-04</text><line x1="436.5" y1="470" x2="436.5" y2="474" stroke="#999999" stroke-width="1"/><text x="436.5" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 436.5 488)">2025-06</text><line x1="507.8" y1="470" x2="507.8" y2="474" stroke="#999999" stroke-width="1"/><text x="507.8" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 507.8 488)">2025-08</text><line x1="579.1" y1="470" x2="579.1" y2="474" stroke="#999999" stroke-width="1"/><text x="579.1" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 579.1 488)">2025-10</text><line x1="650.4" y1="470" x2="650.4" y2="474" stroke="#999999" stroke-width="1"/><text x="650.4" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 650.4 488)">2025-12</text><line x1="721.7" y1="470" x2="721.7" y2="474" stroke="#999999" stroke-width="1"/><text x="721.7" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 721.7 488)">2026-02</text><line x1="793.0" y1="470" x2="793.0" y2="474" stroke="#999999" stroke-width="1"/><text x="793.0" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 793.0 488)">2026-04</text><line x1="864.3" y1="470" x2="864.3" y2="474" stroke="#999999" stroke-width="1"/><text x="864.3" y="488" text-anchor="middle" font-size="9.5" fill="#444444" font-family="sans-serif" transform="rotate(-40 864.3 488)">2026-06</text><polyline points="80.0,265.00 115.7,273.53 151.3,296.87 187.0,299.44 222.6,292.84 258.3,300.18 293.9,284.32 329.6,265.77 365.2,258.80 400.9,253.65 436.5,263.36 472.2,230.39 507.8,218.04 543.5,235.76 579.1,224.71 614.8,236.10 650.4,210.33 686.1,223.79 721.7,260.47 757.4,186.05 793.0,175.44 828.7,176.15 864.3,160.00 900.0,110.00" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="80.0" cy="265.00" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="115.7" cy="273.53" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="151.3" cy="296.87" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="187.0" cy="299.44" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="222.6" cy="292.84" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="258.3" cy="300.18" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="293.9" cy="284.32" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="329.6" cy="265.77" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="365.2" cy="258.80" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="400.9" cy="253.65" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="436.5" cy="263.36" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="472.2" cy="230.39" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="507.8" cy="218.04" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="543.5" cy="235.76" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="579.1" cy="224.71" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="614.8" cy="236.10" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="650.4" cy="210.33" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="686.1" cy="223.79" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="721.7" cy="260.47" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="757.4" cy="186.05" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="793.0" cy="175.44" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="828.7" cy="176.15" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="864.3" cy="160.00" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><circle cx="900.0" cy="110.00" r="2.8" fill="#ffffff" stroke="#2563eb" stroke-width="1.8"/><polyline points="80.0,349.89 115.7,382.89 151.3,434.61 187.0,380.28 222.6,313.57 258.3,312.86 293.9,93.21 329.6,244.02 365.2,228.45 400.9,220.26 436.5,252.87 472.2,243.53 507.8,212.34 543.5,228.63 579.1,129.26 614.8,149.39 650.4,107.58 686.1,114.66 721.7,256.85 757.4,140.94 793.0,139.04 828.7,155.19 864.3,92.32 900.0,91.39" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="80.0" cy="349.89" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="115.7" cy="382.89" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="151.3" cy="434.61" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="187.0" cy="380.28" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="222.6" cy="313.57" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="258.3" cy="312.86" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="293.9" cy="93.21" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="329.6" cy="244.02" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="365.2" cy="228.45" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="400.9" cy="220.26" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="436.5" cy="252.87" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="472.2" cy="243.53" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="507.8" cy="212.34" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="543.5" cy="228.63" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="579.1" cy="129.26" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="614.8" cy="149.39" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="650.4" cy="107.58" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="686.1" cy="114.66" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="721.7" cy="256.85" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="757.4" cy="140.94" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="793.0" cy="139.04" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="828.7" cy="155.19" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="864.3" cy="92.32" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="900.0" cy="91.39" r="2.8" fill="#ffffff" stroke="#dc2626" stroke-width="1.8"/><circle cx="900.0" cy="110.00" r="5.5" fill="none" stroke="#16a34a" stroke-width="2"/><circle cx="900.0" cy="91.39" r="5.5" fill="none" stroke="#16a34a" stroke-width="2"/><line x1="340.0" y1="40" x2="356.0" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="362.0" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">單月合併營收</text><line x1="470.0" y1="40" x2="486.0" y2="40" stroke="#dc2626" stroke-width="2.4" stroke-dasharray="5 3"/><text x="492.0" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">YoY%（右軸）</text><circle cx="628.0" cy="40" r="5.5" fill="none" stroke="#16a34a" stroke-width="2"/><text x="640.0" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">最新公告月份</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：MOPS月營收 t21sc03(113/8-115/7)，經累計欄逐月反算交叉驗證；YoY%為當月營收/去年同月營收計算（非MOPS頁面「當月增減%」欄，該欄經比對實為環比MoM，本圖已改正）；查詢日期2026-08-14</div>
+</div>
+    </div>
+    <div class="note yellow">⚑ 這是本季報告週期內最具增量資訊的一張圖：2026Q2財報涵蓋期間僅至6月底，但公司已於7月公告6月營收、8月初公告7月營收——<strong>7月單月營收YoY+50.24%，較Q2整季平均YoY(+41.7%)進一步加速</strong>，是Q2財報公布之後才出現、尚未被任何一期財報涵蓋的最新資訊。是否支持管理層展望，詳見估值觀察tab互證對照表。原始YoY%為當月營收÷去年同月營收計算，已排除MOPS頁面「當月增減%」欄實為環比(MoM)而非年增(YoY)的欄位標示問題（每月數字均以累計欄逐月反算交叉驗證，詳見查證方法附註）。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">營業收入結構：地區別（2026Q1揭露，2026Q2尚無對應揭露可更新）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>地區</th><th>2025Q1</th><th>2026Q1</th><th>YoY</th><th>2026Q1佔比</th></tr>
+        <tr><td>臺灣</td><td>3,120,006</td><td>4,902,091</td><td class="pos">+57.1%</td><td>43.9%</td></tr>
+        <tr><td>大陸</td><td>3,452,314</td><td>3,513,163</td><td class="pos">+1.8%</td><td>31.4%</td></tr>
+        <tr><td>韓國</td><td>489,981</td><td>1,048,982</td><td class="pos">+114.1%</td><td>9.4%</td></tr>
+        <tr><td>美國</td><td>517,624</td><td>532,490</td><td class="pos">+2.9%</td><td>4.8%</td></tr>
+        <tr><td>其他國家</td><td>878,107</td><td>1,180,515</td><td class="pos">+34.4%</td><td>10.6%</td></tr>
+        <tr class="total"><td>合計</td><td>8,458,032</td><td>11,177,241</td><td class="pos">+32.1%</td><td>100.0%</td></tr>
+      </table>
+    </div>
+    <div class="note grey">⚑ <strong>資料限制（誠實揭露）：</strong>本次針對2026Q2財報逐節搜尋「財務報表附註」全部21個章節標題（報表索引、資產負債表、綜合損益表、現金流量表、權益變動表、獨立審計人報告、公司簡介、重大會計政策、應收帳款、交易對手方資訊、對他人之貸款、簽署保證、集團內公司間重大交易、被投資公司、大陸地區投資、營運外收入與支出等），<strong>確認2026Q2合併財務報告本次查得之附註範圍內並未包含「營運部門資訊」（地區別營收拆解）章節</strong>——與2026Q1報告不同，Q1當時查得地區別表。故上表仍為2026Q1當時揭露之最新地區別數字，2026Q2對應數字暫缺，不強行推算或杜撰。台灣占比在2026Q1已由36.9%（2025Q1）升至43.9%，與新增高值化ABF產能落地台灣廠區（樹林廠）的資本支出方向吻合，此趨勢是否於2026Q2延續，待公司下次完整揭露後更新。</div>
+  </div>
+
+  <!-- ============ TAB 7: BUSINESS SEGMENTS (APPLICATION MIX) ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="note grey">⚑ 南亞電路板為單一產品線公司（IC載板＋一般電路板），並非多角化事業群，無傳統意義上的獨立損益事業部（BU）。本tab依CLAUDE.md量化層規範之「最貼近等價物」，改以<strong>應用別營收結構</strong>（網通/電腦/消費/AI-HPC/車用）作為業務部門分析的替代單位，並比照BU卡片規範對每一應用領域做產品層級的技術/製程/認證門檻深度拆解，而非僅列財務數字。</div>
+
+    <div class="section-title">應用別佔比（chart-tools · bar-chart，2026Q1為最新公布數字）</div>
+    <div class="card">
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450.0" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">南亞電路板 營收結構：應用別佔比（FY2024-2026Q1，2026Q2尚未公布）</text><rect x="295.5" y="41" width="12" height="12" rx="2" fill="#94a3b8"/><text x="315.5" y="50" font-size="11.5" fill="#333333" font-family="sans-serif">FY2024</text><rect x="398.5" y="41" width="12" height="12" rx="2" fill="#2563eb"/><text x="418.5" y="50" font-size="11.5" fill="#333333" font-family="sans-serif">FY2025</text><rect x="501.5" y="41" width="12" height="12" rx="2" fill="#15803d"/><text x="521.5" y="50" font-size="11.5" fill="#333333" font-family="sans-serif">2026Q1</text><line x1="78" y1="434.0" x2="870" y2="434.0" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="438.0" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="304.8" x2="870" y2="304.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="175.6" x2="870" y2="175.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="179.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="78" y1="46.4" x2="870" y2="46.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="50.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60</text><text x="68" y="62" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="78" y1="434" x2="870" y2="434" stroke="#111111" stroke-width="1.2"/><rect x="100.63" y="324.19" width="33.94" height="109.81" fill="#94a3b8" fill-opacity="0.9" rx="2"/><text x="117.60" y="318.2" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">17</text><rect x="138.34" y="324.19" width="33.94" height="109.81" fill="#2563eb" fill-opacity="0.9" rx="2"/><text x="155.31" y="318.2" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">17</text><rect x="176.06" y="324.19" width="33.94" height="109.81" fill="#15803d" fill-opacity="0.9" rx="2"/><text x="193.03" y="318.2" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">17</text><text x="157.2" y="454" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">電腦</text><rect x="259.03" y="136.86" width="33.94" height="297.14" fill="#94a3b8" fill-opacity="0.9" rx="2"/><text x="276.00" y="130.9" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">46</text><rect x="296.74" y="117.48" width="33.94" height="316.52" fill="#2563eb" fill-opacity="0.9" rx="2"/><text x="313.71" y="111.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">49</text><rect x="334.46" y="117.48" width="33.94" height="316.52" fill="#15803d" fill-opacity="0.9" rx="2"/><text x="351.43" y="111.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">49</text><text x="315.6" y="454" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">網通</text><rect x="417.43" y="362.94" width="33.94" height="71.06" fill="#94a3b8" fill-opacity="0.9" rx="2"/><text x="434.40" y="356.9" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">11</text><rect x="455.14" y="356.48" width="33.94" height="77.52" fill="#2563eb" fill-opacity="0.9" rx="2"/><text x="472.11" y="350.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">12</text><rect x="492.86" y="356.48" width="33.94" height="77.52" fill="#15803d" fill-opacity="0.9" rx="2"/><text x="509.83" y="350.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">12</text><text x="474.0" y="454" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">消費</text><rect x="575.83" y="362.94" width="33.94" height="71.06" fill="#94a3b8" fill-opacity="0.9" rx="2"/><text x="592.80" y="356.9" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">11</text><rect x="613.54" y="395.24" width="33.94" height="38.76" fill="#2563eb" fill-opacity="0.9" rx="2"/><text x="630.51" y="389.2" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">6</text><rect x="651.26" y="395.24" width="33.94" height="38.76" fill="#15803d" fill-opacity="0.9" rx="2"/><text x="668.23" y="389.2" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">6</text><text x="632.4" y="454" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">車用</text><rect x="734.23" y="337.11" width="33.94" height="96.89" fill="#94a3b8" fill-opacity="0.9" rx="2"/><text x="751.20" y="331.1" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">15</text><rect x="771.94" y="330.65" width="33.94" height="103.35" fill="#2563eb" fill-opacity="0.9" rx="2"/><text x="788.91" y="324.6" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">16</text><rect x="809.66" y="330.65" width="33.94" height="103.35" fill="#15803d" fill-opacity="0.9" rx="2"/><text x="826.63" y="324.6" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif">16</text><text x="790.8" y="454" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">AI/HPC</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：2026年第一季法人說明會簡報（2026/6/12）；公司截至查詢日尚未召開2026Q2法說會、應用別佔比未公布，故沿用最近一次揭露數字；查詢日期2026-08-14</div>
+</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">各應用領域產品層級拆解</div>
+    <div class="bu-grid">
+      <div class="bu-card b">
+        <div class="bu-name">網通（49%，2026Q1，最大應用類別）</div>
+        <div class="bu-abbr">交換器/路由器/基地台用高階ABF載板</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2024→FY2025佔比</span><span class="bu-stat-val">46%→49%</span></div>
+        <p style="font-size:12px;line-height:1.6;color:#333;margin-top:8px;">新世代800G/1.6T交換器與路由器所用之高階網通晶片，需要高層數（20層以上）、細線寬/線距（&lt;10μm）的ABF載板以支撐高速訊號完整性（signal integrity）與散熱需求。此類應用的載板單價顯著高於一般消費性電子用板，且認證週期長（通常需6-12個月的訊號測試與可靠度驗證），一旦通過特定客戶認證即形成較高的轉換成本，是公司近兩年毛利率結構性改善的主要貢獻來源之一。</p>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">AI/HPC（16%，2026Q1，成長最快類別之一）</div>
+        <div class="bu-abbr">AI伺服器CPU/GPU/加速器封裝載板</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2024→FY2025佔比</span><span class="bu-stat-val">15%→16%</span></div>
+        <p style="font-size:12px;line-height:1.6;color:#333;margin-top:8px;">AI伺服器CPU、GPU與客製化AI加速器晶片封裝所需之ABF載板，是目前業界技術難度最高的載板應用：晶片腳數動輒上萬支、載板尺寸大（大型化載板良率控制困難度高於小尺寸載板）、且須支援高功率密度下的訊號與電源完整性。2026Q1法說會提及「新世代AI伺服器客製化晶片」為未來發展方向，公司樹林廠與昆山廠的ABF擴產即鎖定此類應用，是網通之外拉動毛利率結構性改善的第二引擎。</p>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">電腦（17%，相對穩定的基本盤）</div>
+        <div class="bu-abbr">PC/NB用CPU/晶片組載板</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2024→FY2025佔比</span><span class="bu-stat-val">17%→17%</span></div>
+        <p style="font-size:12px;line-height:1.6;color:#333;margin-top:8px;">傳統個人電腦與筆記型電腦CPU、晶片組封裝載板，技術門檻與單價低於AI伺服器用板，但需求相對穩定、認證關係成熟，是公司載板業務的基本盤。近三年佔比維持17%左右，未隨AI題材大幅擴張，也未隨消費性需求疲弱而明顯萎縮，屬於現金流穩定但成長性有限的類別。</p>
+      </div>
+      <div class="bu-card b">
+        <div class="bu-name">消費（12%，溫和成長）</div>
+        <div class="bu-abbr">消費性電子（穿戴裝置/智慧家電等）用BT/一般電路板</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2024→FY2025佔比</span><span class="bu-stat-val">11%→12%</span></div>
+        <p style="font-size:12px;line-height:1.6;color:#333;margin-top:8px;">涵蓋智慧眼鏡、穿戴裝置、智慧家電等消費性終端所用之BT載板與一般電路板，技術門檻中等、單價較低，但2026Q1法說會點名「智慧眼鏡」為BT載板新興應用方向，若穿戴裝置市場放量，此類別可望從目前的基本盤角色轉為新的成長來源，惟目前佔比仍小，對整體營收貢獻有限。</p>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">車用（6%，FY2024腰斬至FY2025，唯一衰退類別）</div>
+        <div class="bu-abbr">車用電子模組載板/電路板</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2024→FY2025佔比</span><span class="bu-stat-val">11%→6%</span></div>
+        <p style="font-size:12px;line-height:1.6;color:#333;margin-top:8px;">車用電子模組（含ADAS感測器、車用電源管理、車用通訊模組）所用之載板與電路板，通常要求更嚴苛的可靠度認證（如AEC-Q系列車用規範）與更長的產品生命週期。公司歸因佔比腰斬為「汽車需求仍疲弱，供應鏈亦受影響」，是應用組合中唯一佔比下滑的類別，2026Q1沿用FY2025同一水準（6%），尚未見回升訊號。</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="note yellow">⚑ <strong>量價拆分（CLAUDE.md規範項目）：</strong>本次查詢之MOPS財報與2026Q1法說會簡報均未揭露各應用類別個別之出貨量（片數/㎡）與ASP（平均單價）拆分數據，僅有營收佔比。<strong>無此資料/不適用</strong>——公司未對外拆分量價結構，本報告不強行推算或杜撰出貨量與單價數字。從整體毛利率結構性擴張（8.0%→24.7%，2025Q2→2026Q2）可合理推論，本輪成長主要由「價/組合」（高階應用佔比提升、報價調漲）驅動，但無法進一步拆解各應用類別各自的量價貢獻。</div>
+
+    <div class="note">⚑ 員工結構延續：員工總數連續3期下滑（9,936→9,874→9,818，FY2024→FY2025→2026/3/31），與同期營收、獲利大幅成長並存，指向單位人力產出提升（年報「數位轉型」章節提及AI與智能化生產改善良率與效率），而非單純擴產增人。本次查詢未取得2026Q2最新員工人數更新，沿用2026/3/31最新揭露數字。</div>
+  </div>
+
+  <!-- ============ TAB 8: BALANCE SHEET ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">648.4億</div><div class="kpi-lbl">2026Q2末總資產</div><div class="kpi-sub">QoQ +5.9%</div></div>
+      <div class="kpi"><div class="kpi-val">155.8億</div><div class="kpi-lbl">2026Q2末總負債</div><div class="kpi-sub">負債比率24.0%</div></div>
+      <div class="kpi"><div class="kpi-val">492.6億</div><div class="kpi-lbl">2026Q2末權益總額</div><div class="kpi-sub">QoQ +6.8%</div></div>
+      <div class="kpi"><div class="kpi-val">338.7%</div><div class="kpi-lbl">流動比率</div><div class="kpi-sub">2025Q2同期304.4%</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併資產負債表（新台幣千元）</div>
+      <table>
+        <tr><th>項目</th><th>2025/6/30</th><th>2025/12/31</th><th>2026/6/30</th></tr>
+        <tr class="section-head"><td colspan="4">資產</td></tr>
+        <tr><td>現金及約當現金</td><td>7,133,991</td><td>8,589,500</td><td class="pos">10,383,363</td></tr>
+        <tr><td>應收票據及帳款（含關係人）淨額</td><td>7,761,618</td><td>9,552,295</td><td>11,287,203</td></tr>
+        <tr><td>存貨淨額</td><td>4,601,222</td><td>5,067,682</td><td>6,709,180</td></tr>
+        <tr><td>其他流動資產</td><td>169,587</td><td>140,908</td><td>156,801</td></tr>
+        <tr class="total"><td>流動資產合計</td><td>19,919,878</td><td>23,622,645</td><td>29,602,706</td></tr>
+        <tr><td>不動產、廠房及設備</td><td>36,821,468</td><td>35,373,336</td><td>33,208,512</td></tr>
+        <tr><td>使用權資產</td><td>1,361,896</td><td>1,240,265</td><td>1,115,196</td></tr>
+        <tr><td>其他非流動資產</td><td>12,328</td><td>9,893</td><td>11,194</td></tr>
+        <tr class="total"><td>非流動資產合計</td><td>39,219,204</td><td>37,584,753</td><td>35,240,781</td></tr>
+        <tr class="total"><td><strong>資產總計</strong></td><td><strong>59,139,082</strong></td><td><strong>61,207,398</strong></td><td><strong>64,843,487</strong></td></tr>
+        <tr class="section-head"><td colspan="4">負債</td></tr>
+        <tr><td>合約負債－流動</td><td>2,218,144</td><td>2,218,144</td><td>2,218,144</td></tr>
+        <tr><td>合約負債－非流動</td><td>4,406,130</td><td>3,297,058</td><td>2,187,986</td></tr>
+        <tr><td>應付股利</td><td>646,166</td><td>—</td><td class="neg">1,292,331</td></tr>
+        <tr><td>其他流動負債</td><td>179,449</td><td>165,190</td><td>338,847</td></tr>
+        <tr><td>遞延所得稅負債</td><td>2,891,361</td><td>2,535,447</td><td>2,717,026</td></tr>
+        <tr><td>其他非流動負債</td><td>895,732</td><td>1,076,667</td><td>1,043,660</td></tr>
+        <tr class="total"><td><strong>負債總計</strong></td><td><strong>15,829,355</strong></td><td><strong>15,084,504</strong></td><td><strong>15,582,593</strong></td></tr>
+        <tr class="section-head"><td colspan="4">權益</td></tr>
+        <tr><td>普通股股本</td><td>6,461,655</td><td>6,461,655</td><td>6,461,655</td></tr>
+        <tr><td>資本公積</td><td>18,125,632</td><td>18,125,648</td><td>18,125,648</td></tr>
+        <tr><td>法定盈餘公積</td><td>8,504,731</td><td>8,504,731</td><td>8,681,734</td></tr>
+        <tr><td>未分配盈餘</td><td>11,732,240</td><td>13,482,234</td><td>15,131,936</td></tr>
+        <tr><td>其他權益（FX兌換等）</td><td class="neg">(1,838,959)</td><td class="neg">(775,802)</td><td>84,119</td></tr>
+        <tr class="total"><td><strong>權益總計</strong></td><td><strong>43,309,727</strong></td><td><strong>46,122,894</strong></td><td><strong>49,260,894</strong></td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 應付股利1,292,331千元（=NT$2.00／股×646,166千股，FY2025新決議股利）於2026/3/31首次入帳後，2026/6/30仍原封不動列示，顯示截至季底尚未實際撥發；「其他權益」科目由連續兩期負值（-1,838,959→-775,802）於2026/6/30首度轉正（+84,119），指向累積匯兌換算差異方向反轉，與新台幣兌美元匯率走勢有關，是本季非本業因素中值得留意的一項。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">不動產、廠房及設備變動明細（2026Q2單季，新台幣千元，反算自H1與Q1累計數字）</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>項目</th><th>金額</th><th>說明</th></tr>
+        <tr><td>2026/4/1期初帳面</td><td>34,466,924</td><td>＝2026Q1財報期末數</td></tr>
+        <tr><td>本期增添（現金基礎資本支出）</td><td>356,577</td><td>H1現金流量表資本支出773,519減Q1資本支出416,942反算</td></tr>
+        <tr><td>本期折舊</td><td>(1,778,924)</td><td>H1折舊3,581,794減Q1折舊1,802,870反算</td></tr>
+        <tr><td>其他調整項（推算，含匯率換算等）</td><td>+163,935</td><td>期末實際數與現金流量反算數之差額，可能反映外幣子公司PP&amp;E匯率換算或應計基礎與現金基礎的認列時點差異</td></tr>
+        <tr class="total"><td>2026/6/30期末帳面</td><td>33,208,512</td><td>＝2026Q2財報期末數</td></tr>
+      </table>
+    </div>
+    <div class="note grey">⚑ 質押之資產：本次查詢MOPS 2026Q2財報未見資產質押相關揭露段落，歷史三期比較（2025/3、2025/12、2026/3）均為「無」，延續此觀察。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">新增必備追蹤項目（2026-08-13起框架規範）</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">① 應收帳款天數（DSO）</div>
+        <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="420" fill="#ffffff"/><text x="450.0" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">南亞電路板 應收帳款天數(DSO)趨勢</text><line x1="76" y1="360.0" x2="850" y2="360.0" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="364.0" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="281.9" x2="850" y2="281.9" stroke="#eeeeee" stroke-width="1"/><text x="66" y="285.9" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="203.7" x2="850" y2="203.7" stroke="#eeeeee" stroke-width="1"/><text x="66" y="207.7" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="76" y1="125.6" x2="850" y2="125.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="129.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="76" y1="54" x2="76" y2="360" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="360" x2="850" y2="360" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">天</text><line x1="76.0" y1="360" x2="76.0" y2="364" stroke="#999999" stroke-width="1"/><text x="76.0" y="379" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2025Q2</text><line x1="334.0" y1="360" x2="334.0" y2="364" stroke="#999999" stroke-width="1"/><text x="334.0" y="379" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2025Q4</text><line x1="592.0" y1="360" x2="592.0" y2="364" stroke="#999999" stroke-width="1"/><text x="592.0" y="379" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2026Q1</text><line x1="850.0" y1="360" x2="850.0" y2="364" stroke="#999999" stroke-width="1"/><text x="850.0" y="379" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2026Q2</text><polyline points="76.0,72.07 334.0,57.61 592.0,63.86 850.0,65.04" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76.0" cy="72.07" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><text x="76.0" y="62.1" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">73.7</text><circle cx="334.0" cy="57.61" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><text x="334.0" y="47.6" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">77.4</text><circle cx="592.0" cy="63.86" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><text x="592.0" y="53.9" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">75.8</text><circle cx="850.0" cy="65.04" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><text x="850.0" y="55.0" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">75.5</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">DSO=期末應收帳款(淨額,含關係人)÷當季營業收入×91天；資料來源：MOPS各季合併財務報告資產負債表與損益表；查詢日期2026-08-14</div>
+</div>
+      </div>
+      <div class="card">
+        <div class="card-title">② 未開始租賃（尚未生效之租賃）</div>
+        <p><strong>查無公開揭露資料。</strong>本次針對2026Q2財報「財務報表附註」逐節搜尋（共21個章節標題，見損益表tab地區別附註之揭露限制說明），未見「Leases」或「尚未開始之租賃」相關章節。資產負債表已揭露使用權資產科目（2026/6/30餘額NT$1,115,196千元），確認公司確有既存營運租賃，但forward-starting（尚未開始生效）之租賃承諾未在本次查得範圍內找到揭露，不代表不存在，僅本次查詢未能定位，如公司完整年報／10-K等效文件另有揭露，待後續更新補充。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">③ 採購承諾（依到期年度分層）</div>
+        <p><strong>查無公開揭露資料。</strong>本次查詢未見「承諾及或有事項」章節，無法取得unconditional purchase obligations之到期年度分層數字。公司資產負債表結構乾淨、無質押、無衍生性商品，與大型資本支出承諾型企業慣常出現的長期採購合約揭露特徵不完全一致，但仍不能排除公司於年報層級另有揭露、僅本次查詢的財報頁面未涵蓋。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">④ 客戶預付款（合約負債）逐季餘額變化</div>
+        <div class="tbl-wrap" style="margin-bottom:0;">
+          <table>
+            <tr><th>期別</th><th>流動</th><th>非流動</th><th>合計</th><th>QoQ</th></tr>
+            <tr><td>2025/6/30</td><td>2,218,144</td><td>4,406,130</td><td>6,624,274</td><td>—</td></tr>
+            <tr><td>2025/12/31</td><td>2,218,144</td><td>3,297,058</td><td>5,515,202</td><td class="neg">-16.7%</td></tr>
+            <tr><td>2026/3/31</td><td>2,218,144</td><td>2,742,522</td><td>4,960,666</td><td class="neg">-10.1%</td></tr>
+            <tr><td>2026/6/30</td><td>2,218,144</td><td>2,187,986</td><td>4,406,130</td><td class="neg">-11.2%</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="note yellow">⚑ 合約負債（客戶預付款代理指標）連續4期下滑，與同期營收大幅成長並存，方向背離，完整互證分析見估值觀察tab互證對照表。</div>
+  </div>
+
+  <!-- ============ TAB 9: CASH FLOW ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="section-title">自由現金流（FCF）橋接：2026Q2單季（chart-tools · waterfall-chart）</div>
+    <div class="card">
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450.0" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">南亞電路板 2026Q2(單季)自由現金流(FCF)橋接</text><line x1="78" y1="424.0" x2="870" y2="424.0" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="428.0" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="284.3" x2="870" y2="284.3" stroke="#eeeeee" stroke-width="1"/><text x="68" y="288.3" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000,000</text><line x1="78" y1="144.6" x2="870" y2="144.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="148.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,000,000</text><line x1="78" y1="4.9" x2="870" y2="4.9" stroke="#eeeeee" stroke-width="1"/><text x="68" y="8.9" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6,000,000</text><text x="68" y="40" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">新台幣千元</text><line x1="78" y1="52" x2="78" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="424" x2="870" y2="424" stroke="#111111" stroke-width="1.2"/><rect x="97.80" y="216.13" width="48.40" height="207.87" fill="#334155" fill-opacity="0.9" rx="2"/><text x="122.00" y="208.1" text-anchor="middle" font-size="11" font-weight="600" fill="#111111" font-family="sans-serif">2,975,632</text><text x="122.0" y="444" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">稅前淨利</text><line x1="146.20" y1="216.13" x2="185.80" y2="216.13" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="185.80" y="91.86" width="48.40" height="124.27" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="210.00" y="83.9" text-anchor="middle" font-size="11" font-weight="600" fill="#16a34a" font-family="sans-serif">+1,778,924</text><text x="210.0" y="444" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">+折舊費用</text><line x1="234.20" y1="91.86" x2="273.80" y2="91.86" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="273.80" y="91.86" width="48.40" height="64.42" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="298.00" y="83.9" text-anchor="middle" font-size="11" font-weight="600" fill="#dc2626" font-family="sans-serif">-922,216</text><text x="298.0" y="444" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">存貨增加</text><line x1="322.20" y1="91.86" x2="361.80" y2="91.86" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="361.80" y="156.28" width="48.40" height="136.51" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="386.00" y="148.3" text-anchor="middle" font-size="11" font-weight="600" fill="#dc2626" font-family="sans-serif">-1,954,055</text><text x="386.0" y="444" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">應收帳款增加</text><line x1="410.20" y1="156.28" x2="449.80" y2="156.28" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="449.80" y="292.79" width="48.40" height="38.74" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="474.00" y="284.8" text-anchor="middle" font-size="11" font-weight="600" fill="#dc2626" font-family="sans-serif">-554,536</text><text x="474.0" y="444" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">合約負債減少</text><line x1="498.20" y1="292.79" x2="537.80" y2="292.79" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="537.80" y="331.53" width="48.40" height="21.47" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="562.00" y="323.5" text-anchor="middle" font-size="11" font-weight="600" fill="#dc2626" font-family="sans-serif">-307,340</text><text x="562.0" y="458" text-anchor="end" font-size="10.5" fill="#333333" font-family="sans-serif" transform="rotate(-25 562.0 458)">其他調整項(推算)</text><line x1="586.20" y1="331.53" x2="625.80" y2="331.53" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="625.80" y="353.00" width="48.40" height="71.00" fill="#334155" fill-opacity="0.9" rx="2"/><text x="650.00" y="345.0" text-anchor="middle" font-size="11" font-weight="600" fill="#111111" font-family="sans-serif">1,016,409</text><text x="650.0" y="458" text-anchor="end" font-size="10.5" fill="#333333" font-family="sans-serif" transform="rotate(-25 650.0 458)">營業活動淨現金流入</text><rect x="713.80" y="353.00" width="48.40" height="24.91" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="738.00" y="345.0" text-anchor="middle" font-size="11" font-weight="600" fill="#dc2626" font-family="sans-serif">-356,577</text><text x="738.0" y="444" text-anchor="middle" font-size="10.5" fill="#333333" font-family="sans-serif">資本支出</text><line x1="762.20" y1="353.00" x2="801.80" y2="353.00" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="801.80" y="377.91" width="48.40" height="46.09" fill="#334155" fill-opacity="0.9" rx="2"/><text x="826.00" y="369.9" text-anchor="middle" font-size="11" font-weight="600" fill="#111111" font-family="sans-serif">659,832</text><text x="826.0" y="458" text-anchor="end" font-size="10.5" fill="#333333" font-family="sans-serif" transform="rotate(-25 826.0 458)">自由現金流(FCF)</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：115年第二季合併財務報告現金流量表(H1累計)減去115年第一季合併財務報告現金流量表(Q1)反算單季數字；查詢日期2026-08-14</div>
+</div>
+    </div>
+    <div class="note">⚑ 起點為稅前淨利2,975,632千元，加回折舊1,778,924千元、扣除存貨增加922,216千元、應收帳款增加1,954,055千元（依資產負債表期末餘額差額計算）、合約負債減少554,536千元，其中307,340千元為現金流量表未拆分明細、依總額推算之其他調整項淨額，得出營業活動淨現金流入1,016,409千元（＝H1 2026現金流量表營業活動淨額2,996,931千元減2026Q1財報揭露之1,980,522千元反算）；再扣減資本支出356,577千元，得自由現金流659,832千元。本季單季FCF雖較Q1（1,563,580千元）為低，主因應收帳款隨營收大幅成長而同步增加，屬營運擴張的正常現象而非現金流質量惡化。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">現金流量表拆解（2026Q2單季，新台幣千元，反算自H1與Q1累計數字）</div>
+    <div class="cf-section">
+      <div class="cf-header">一、營業活動現金流</div>
+      <div class="cf-row"><span class="cf-lbl">本期稅前淨利</span><span class="cf-val pos">+2,975,632</span></div>
+      <div class="cf-row"><span class="cf-lbl">折舊費用</span><span class="cf-val pos">+1,778,924</span></div>
+      <div class="cf-row"><span class="cf-lbl">存貨增加</span><span class="cf-val neg">(922,216)</span></div>
+      <div class="cf-row"><span class="cf-lbl">應收帳款增加（依資產負債表餘額差額計算）</span><span class="cf-val neg">(1,954,055)</span></div>
+      <div class="cf-row"><span class="cf-lbl">合約負債減少</span><span class="cf-val neg">(554,536)</span></div>
+      <div class="cf-row"><span class="cf-lbl">其他調整項淨額（依總額推算）</span><span class="cf-val neg">(307,340)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">營業活動淨現金流入</span><span class="cf-val pos">+1,016,409</span></div>
+    </div>
+    <div class="cf-section">
+      <div class="cf-header">二、投資活動現金流</div>
+      <div class="cf-row"><span class="cf-lbl">取得不動產、廠房及設備（資本支出）</span><span class="cf-val neg">(356,577)</span></div>
+      <div class="cf-row"><span class="cf-lbl">其他投資活動項目（依總額推算）</span><span class="cf-val neg">(5,814)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">投資活動淨現金流出</span><span class="cf-val neg">(362,391)</span></div>
+    </div>
+    <div class="cf-section">
+      <div class="cf-header">三、籌資活動現金流</div>
+      <div class="cf-row"><span class="cf-lbl">租賃本金償還等</span><span class="cf-val neg">(34,206)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">籌資活動淨現金流出</span><span class="cf-val neg">(34,206)</span></div>
+    </div>
+    <div class="cf-section">
+      <div class="cf-header">四、匯率影響與本期現金淨變動</div>
+      <div class="cf-row"><span class="cf-lbl">匯率變動影響（依總額推算）</span><span class="cf-val pos">+105,975</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">本期現金及約當現金增加</span><span class="cf-val pos">+725,787</span></div>
+    </div>
+    <div class="note grey">⚑ 本季（Q2單季）數字均以「115年第二季合併財務報告」揭露之H1 2026累計數，減去「115年第一季合併財務報告」揭露之Q1 2026數字反算而得，非公司直接揭露之單季數字（公司僅揭露季末累計數，此為台股財報的常態格式限制）。反算後的營業/投資/籌資活動淨額加上匯率影響推算數，與H1減Q1所得之本期現金淨變動725,787千元完全一致，內部勾稽無誤。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">H1 2026累計現金流量與FY2026資本支出/股利計畫執行進度</div>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>項目</th><th>H1 2025</th><th>H1 2026</th><th>FY2026公司自身計畫</th><th>執行進度</th></tr>
+        <tr><td>營業活動淨現金流入</td><td>154,921</td><td>2,996,931</td><td>3,935,092</td><td>76.2%</td></tr>
+        <tr><td>資本支出（投資活動主項）</td><td>(1,261,839)</td><td>(773,519)</td><td>(3,035,314)</td><td class="neg">25.5%</td></tr>
+        <tr><td>股利發放（籌資活動主項，尚未實際撥發）</td><td>—</td><td>—（僅列應付股利1,292,331於資產負債表）</td><td>(1,292,331)</td><td>0%（尚未撥發）</td></tr>
+        <tr class="total"><td>期初→期末現金變動</td><td>(1,346,701)</td><td>+1,793,863</td><td>預計全年淨減少約3.9億</td><td>已逆勢大增</td></tr>
+      </table>
+    </div>
+    <div class="note yellow">⚑ 公司FY2026自身規劃現金水位為「淨減少」（因擴大資本支出＋股利倍增），但H1 2026實際現金已逆勢大增17.9億元，主因：(1) 營業活動現金流入遠優於全年計畫的節奏（H1已達全年計畫76.2%，超出時間過半應有的50%基準甚多）；(2) 資本支出執行進度明顯落後（H1僅完成全年計畫的25.5%，遠低於50%的時間過半基準），屬於「後段加速執行型」的資本支出節奏，若下半年依原計畫執行，資本支出將明顯加快，現金增速可能放緩；(3) 股利雖已於資產負債表列示應付股利1,292,331千元，但截至2026Q2末尚未實際撥付現金，此為H1現金表現優於全年計畫的另一項技術性原因（真正的現金流出將遞延至實際撥發日）。</div>
+  </div>
+
+  <!-- ============ TAB 10: VALUATION ============ -->
+  <div id="panel-val" class="panel">
+    <div class="section-title">估值觀察</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">隱含股價與本益比（基準：2026/8/12收盤價NT$1,265元，較前一交易日漲停+10%）</div>
+        <div class="tbl-wrap" style="margin-bottom:0;">
+          <table>
+            <tr><th>指標</th><th>數值</th><th>說明</th></tr>
+            <tr><td>流通在外股數</td><td>646,165,487股</td><td>年報揭露，歷史無增資/減資/庫藏股</td></tr>
+            <tr><td>收盤價（2026/8/12）</td><td>NT$1,265元</td><td>公開新聞查詢，非公司財報揭露；當日漲停+10%</td></tr>
+            <tr><td>隱含市值</td><td>約8,174.0億元</td><td>股數×收盤價</td></tr>
+            <tr><td>FY2025 EPS</td><td>NT$3.01</td><td>年度基本每股盈餘</td></tr>
+            <tr><td>trailing P/E（FY2025）</td><td>約420.3x</td><td>收盤價÷FY2025 EPS</td></tr>
+            <tr><td>TTM EPS（FY25全年－H1 25＋H1 26）</td><td>NT$8.51</td><td>3.01－0.03＋5.53</td></tr>
+            <tr><td>TTM P/E</td><td>約148.6x</td><td>收盤價÷TTM EPS</td></tr>
+            <tr><td>2026Q2單季年化EPS（×4，激進假設）</td><td>NT$14.00</td><td>假設全年四季持平於本季</td></tr>
+            <tr><td>年化run-rate P/E</td><td>約90.4x</td><td>收盤價÷年化EPS</td></tr>
+            <tr><td>股利殖利率</td><td>約0.16%</td><td>NT$2.00÷1,265</td></tr>
+            <tr><td>FY2025股利發放率</td><td>約66.4%</td><td>2.00÷3.01（未變動）</td></tr>
+            <tr><td>利息保障倍數（新增追蹤，H1 2026）</td><td>約719.6x</td><td>營業利益4,251,605÷淨財務費用5,908（見下方說明）</td></tr>
+          </table>
+        </div>
+        <div class="note yellow" style="margin-bottom:0;">⚑ 股價自2026Q1報告基準日（2026/3/31隱含股價約522.1元）至今已上漲逾140%，TTM本益比亦由110.6x進一步墊高至148.6x，估值擴張速度快於獲利成長速度（TTM EPS由4.72元升至8.51元，+80.3%），代表市場定價已跑在基本面改善之前，任何一季獲利不如預期都可能引發較大幅度的估值修正。利息保障倍數719.6x反映公司幾乎無有息負債，財務結構穩健，惟此為H1 2026單一期間數字，公司財報揭露為「財務成本淨額」而非拆分之毛額利息費用，可能已扣除利息收入，實際利息保障倍數之精確度受此基礎限制，且無法取得逐季趨勢資料，暫以H1單期數字呈現。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">MSCI指數納入（新增市場資訊，非公司自身財報揭露）</div>
+        <p>公開新聞顯示南亞電路板已於2026年8月13日納入MSCI台灣指數成份股，新權重將於8月31日收盤生效。指數納入通常伴隨被動資金流入，是本次股價於8月12日觸及漲停的可能觸發因素之一，屬於估值面的市場結構性利多，與公司基本面表現為獨立事件，但可能放大近期股價波動並進一步推升本益比評價，讀者評估估值合理性時應將此結構性因素與基本面改善分開看待。</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="card">
+      <div class="card-title">質化敘事與量化科目的互證對照表（強制交付物）</div>
+      <div class="tbl-wrap" style="margin-bottom:0;">
+        <table class="wide">
+          <tr><th>敘事／管理層說法</th><th>財報科目驗證</th></tr>
+          <tr><td class="wrap">法說會簡報強調伺服器、AI高階應用需求提高，稼動率突破90%</td><td class="wrap">營益率連續7季擴張：-11.2%→21.4%；網通+AI/HPC營收占比由61%（FY24）升至65%（FY25/2026Q1）；毛利率同步由8.0%（2025Q2）跳升至24.7%（2026Q2）</td></tr>
+          <tr><td class="wrap">年報持續強調「開發新客戶以分散銷貨過於集中之風險」</td><td class="wrap">前三大客戶集中度反而由39.96%升至45.77%（FY24→FY25），方向相反，2026Q2尚無新年報數字可驗證是否延續</td></tr>
+          <tr><td class="wrap">母公司南亞塑膠公告轉讓南電持股，理由稱「AI需求帶動集團電子材料業務受惠」（正面敘事）</td><td class="wrap">同一動作卻是母公司實際減碼其在南電的直接持股部位（-16,874張，約-4.1%），敘事方向（看好）與行動方向（減碼）存在張力，且轉讓時間點（5-6月，約NT$500-600元區間）回頭看恰在股價後續翻倍之前，凸顯內部人持股訊號解讀本身的侷限性</td></tr>
+          <tr><td class="wrap">FY2026資本支出計畫+25%、股利倍增，公司自身規劃現金水位「淨減少」</td><td class="wrap">H1 2026實際現金逆勢大增17.9億元；資本支出執行進度僅25.5%（落後於時間過半的節奏），股利尚未實際撥發——現金水位表現優於公司自身規劃，主因執行節奏遞延而非營運現金流不如預期</td></tr>
+          <tr><td class="wrap">公司稱昆山廠2025年2月資安事件「經評估後對公司營運無造成影響」</td><td class="wrap">尚無財報數字可直接反駁此說法；「亞洲」部門對外收入占比雖達逾20%，但部門損益貢獻近乎全部沖銷（2026Q1揭露數字，2026Q2無對應部門附註可更新），暫時中性</td></tr>
+          <tr><td class="wrap">法說會/簡報整體語氣強調「需求強勁」，隱含客戶提前鎖單、預付款增加</td><td class="wrap">合約負債（客戶預付款代理指標）連續4期下滑：66.2億→55.2億→49.6億→44.1億（2025/6/30→2026/6/30），與「需求強勁」的直覺印象方向背離——較合理解讀是既有訂單認列營收速度快於新單補充速度（營收本身確實同步大幅成長），而非需求疲弱，但此背離值得列入下一季觀察重點</td></tr>
+          <tr><td class="wrap">公司稱「不作高槓桿投資」「未從事衍生性金融商品交易」</td><td class="wrap">三期資產負債表均無資產質押；利息保障倍數約719.6x，反映公司幾乎無有息負債，與此說法完全一致</td></tr>
+          <tr><td class="wrap"><strong>台股必做：</strong>最新月營收動能是否支持或打臉管理層在2026Q1法說會給的展望（「稼動率90%+、AI/網通需求持續」）</td><td class="wrap">2026年6月、7月單月營收YoY分別達+50.03%與+50.24%，較Q2整季平均YoY（+41.7%）進一步加速，且高於2026Q1當季YoY（+32.1%）——月營收動能不僅未放緩反而持續加速，<strong>強力支持</strong>管理層在法說會上對需求維持審慎樂觀的語氣，是本報告週期內最具增量資訊的一項驗證</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="card">
+      <div class="card-title">同業估值比較：本益比 vs EPS成長率（chart-tools · scatter-chart，框架要求之必備圖表）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450.0" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">ABF載板三雄＋臻鼎-KY：TTM本益比 vs 2026Q1單季EPS年增率</text><line x1="76" y1="458.0" x2="860" y2="458.0" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462.0" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="337.5" x2="860" y2="337.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="341.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="216.9" x2="860" y2="216.9" stroke="#eeeeee" stroke-width="1"/><text x="66" y="220.9" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="76" y1="96.4" x2="860" y2="96.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="100.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">150</text><line x1="76" y1="-24.2" x2="860" y2="-24.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="-20.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76.0" y1="46" x2="76.0" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76.0" y="476" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="331.3" y1="46" x2="331.3" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="331.3" y="476" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="586.7" y1="46" x2="586.7" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="586.7" y="476" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="842.0" y1="46" x2="842.0" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="842.0" y="476" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="1097.3" y1="46" x2="1097.3" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="1097.3" y="476" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">800</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468.0" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">2026Q1 EPS年增率 (%)</text><text x="18" y="252.0" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252.0)">TTM本益比 (x)</text><line x1="524.1" y1="46" x2="524.1" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="528.1" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 351</text><line x1="76" y1="114.9" x2="860" y2="114.9" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="108.9" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 142.3</text><circle cx="757.74" cy="99.74" r="6.5" fill="#2563eb" fill-opacity="0.85" stroke="#2563eb" stroke-width="1.5"/><text x="757.74" y="88.2" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">南亞電路板(8046)</text><circle cx="524.11" cy="114.93" r="6.5" fill="#dc2626" fill-opacity="0.85" stroke="#dc2626" stroke-width="1.5"/><text x="524.11" y="103.4" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">欣興(3037)</text><circle cx="193.20" cy="135.03" r="6.5" fill="#16a34a" fill-opacity="0.85" stroke="#16a34a" stroke-width="1.5"/><text x="193.20" y="123.5" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">景碩(3189)</text><circle cx="204.94" cy="413.45" r="6.5" fill="#d97706" fill-opacity="0.85" stroke="#d97706" stroke-width="1.5"/><text x="204.94" y="401.9" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">臻鼎-KY(4958)</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">南電TTM本益比以2026/8/12收盤價1,265元(較前一日漲停+10%)÷TTM EPS 8.51元回推，查詢日期2026-08-14；其餘三家為財報狗/玩股網公開頁面2026-08-10查詢舊值(各股股價時點不完全一致，本圖為框架要求之必備圖表，僅供級距參考，非投資建議)。南電2026Q2單季EPS由虧轉盈(2025Q2 EPS -0.29元→2026Q2 EPS 3.50元)，基期為負使YoY%失去比較意義，故x軸沿用可比的2026Q1單季成長率+534%，Q2動能改於損益表tab之營益率趨勢圖與正文說明呈現</div>
+</div>
+      <div class="note yellow" style="margin-bottom:0;">⚑ 南電TTM本益比148.6x（見左表）在「載板三雄＋臻鼎-KY」四家中已由2026Q1的中段（110.6x）躍居最高，反映近一個月股價漲幅（含MSCI納入題材）遠超同業。x軸沿用可比的2026Q1單季EPS年增率+534%（南電四者中最高，欣興+351%次之），因2026Q2單季EPS基期為負（2025Q2虧損），YoY%不具比較意義，Q2動能已另於損益表tab之營益率趨勢圖（連續7季擴張且本季加速最快）與月營收圖（近兩個月YoY 50%+）呈現，兩者合觀可判斷南電目前是四者中估值與動能同步最高、但也最依賴後續季度延續高成長率才能支撐目前定價的一檔。景碩TTM本益比133.96x次高，對應其「美系AI GPU載板第三供應商」的敘事溢價；臻鼎-KY本益比僅18.48x明顯偏低，反映其業務組合（PCB／FPC為主，非純ABF載板）與載板三雄的估值脫鉤。資料來源：南電數字為本報告獨立計算（2026/8/12收盤價，查詢日期2026-08-14）；其餘三家P/E與成長率為財報狗(statementdog.com)/玩股網(wantgoo.com)公開頁面2026-08-10查詢之既有數字（本次未及時更新，各股股價時點不完全一致，僅供級距參考，非投資建議）。</div>
+    </div>
+  </div>
+
+  <div class="footer">本報告依據南亞電路板股份有限公司115年第二季合併財務報告暨會計師核閱報告（MOPS t164sb01）、114年度年報（115/4/15刊印）、2026年第一季法人說明會簡報（2026/6/12）、MOPS月營收公告（113/8-115/7）及公開新聞報導整理；財務數字均為公司揭露之台灣IFRS合併數，季度數字未經會計師查核（僅經核閱）。本次分析無法說會逐字稿可交叉比對，質化判斷主要基於書面揭露文件之直接引述與財務數字推導（Fallback模式）。部分2026Q2地區別營收拆解、租賃/採購承諾附註、內部人個人層級持股申報等項目，本次查詢未能取得公開揭露資料，已於各對應tab明確標註「查無公開揭露資料」，不代表不存在，亦未以推算數字替代。僅供資訊參考，非投資建議。</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
