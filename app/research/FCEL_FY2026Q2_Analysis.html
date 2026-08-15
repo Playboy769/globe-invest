@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCEL — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* FCEL-specific addition (2026-08-16): JNJ 範本的 .bu-grid 是為 3 張卡片設計（1fr 1fr 1fr）；
+     FCEL 只有一個可報告分部，但營收拆成 4 大類（Product/Service/Generation/Advanced Technologies），
+     需要 4 欄版型與第 4 種強調色，其餘沿用 JNJ 既有 class 不做修改。 */
+  .bu-grid.four { grid-template-columns: repeat(4,1fr); }
+  .bu-card.p { border-top-color: #7c3aed; }
+  @media (max-width: 900px) { .bu-grid.four { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .bu-grid.four { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<!-- cf-backlinks-widget: shows which CausalFrame canvases reference this report; renders nothing if none do -->
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+<!-- /cf-backlinks-widget -->
+
+<div class="page-header">
+  <h1>FuelCell Energy, Inc.（FCEL）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／特殊交易-事件深度拆解／技術與產品線／供應鏈／風險矩陣／損益表／業務部門／資產負債表／現金流量／估值觀察（共 10 個分頁）
+  &nbsp;·&nbsp; 法說會日期：2026 年 6 月 8 日（財季結束於 2026 年 4 月 30 日，會計年度結束於 10 月 31 日）
+  &nbsp;·&nbsp; 交叉比對 SEC EDGAR（CIK 0000886128）：Q2 FY2026 Form 10-Q、Q1 FY2026／FY2025 各季 10-Q、FY2025 Form 10-K、2026 年 4–7 月 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('event',this)">特殊交易/事件深度拆解</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ TAB 1: Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題（含追問）</div></div>
+      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+    <div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。每一位分析師的卡片底部都附逐字稿原文引用框（未經節錄的完整交換），解讀與缺口判斷一律寫在紅框內供讀者自行覆核。整場 Q&amp;A 有一個貫穿全場的結構性現象：凡是涉及<b>具體時間表</b>（pipeline 轉換時程、500MW 產能爬升節奏）或<b>具體數字承諾</b>（是否排除再融資、opex 成長幅度）的追問，管理層幾乎一律退回「這是一個漸進過程／我們對現有結構感到自在」這類無法被證偽的說法；相對地，涉及<b>技術／商業定位</b>（好賣點是什麼、選址優勢是什麼）的問題則回答得非常具體。這個「定性問題答得細、定量／時程問題答得糊」的落差，是本場話術偵測的主線。</div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Jason Tilchen（Canaccord Genuity）</div><div class="qa-topic">資料中心客戶最看重哪些賣點；pipeline 轉換為簽約的步驟與時程</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q1）</div>
+          <div class="q-text">在法說會簡報中列出了公司平台對資料中心的多項優勢，實際與潛在客戶對話時，哪些賣點最能引起共鳴？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A1）</div>
+          <div class="q-text">Jason Few：最突出的賣點是公司長年提供公用事業規模平台的紀錄——簡報中五個案例合計 50 年運轉經驗；把電網功能「搬到電表後方」是核心賣點；時間到電（time to power）與規避 Title V 等傳統發電廠面臨的社區抗爭／許可障礙也很關鍵；新推出的 12.5 MW 模組化區塊反應熱烈；DC 原生輸出對客戶而言是長期資本保值的論點（機架與 GPU 往 DC 方向發展，公司平台的投資不會過時）。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q2 追問）</div>
+          <div class="q-text">除了法說會正式稿提到的「今會計年度內」這個大框架，公司端或客戶端還需要哪些具體步驟、關鍵里程碑，才能把 pipeline 轉換成正式簽約？是否能給出更明確的時程？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A2）</div>
+          <div class="q-text">Jason Few：交易規模擴大（提案平均規模單季增加 200%）使盡職調查（diligence）等比例拉長，時程本質上是「規模的函數」；milestone 包括與客戶就技術問題深入互動、展示長期運轉紀錄（例如其中一個平台已連續運轉 13 年），以此跨越客戶的技術門檻。<b>全程沒有回答「具體需要哪些步驟」或給出比框架更明確的時間點</b>。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 1 — 被問「具體步驟與時程」，答的是「規模越大越慢」的一般化原則</div>
+          <div class="q-text">Jason Tilchen 的追問結構很清楚：先問步驟（客戶/公司各自要做什麼），再問時程（能否比「這個財年內」更具體）。Jason Few 的回答只用「diligence 隨規模擴大」與「展示長期運轉紀錄」兩個抽象概念帶過，沒有列出任何具體的步驟清單（例如：技術審查完成→PPA 條款談定→董事會/客戶內部審批→簽約），也沒有給出比正式稿更精確的時間窗。這與正式稿裡「100 MW infrastructure decisions are not made on a predictable schedule」這句預先設下的免責語句相互呼應——管理層似乎刻意保留「無法被追問釘死」的空間。目前 4 GW pipeline 全部仍停留在「submitted proposals」階段，尚未有一筆轉換為 backlog 的具體時間點被揭露。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Jason Tilchen：</b>"Good morning, and thanks for taking my questions. To start, I was hoping, in the deck, you laid out a number of the benefits that you think that the use of your fuel cell technology will provide to data centers. Just curious, in the conversations with potential customers, which of those various benefits and advantages are resonating the most at the moment? That would be really helpful to start."<br><br>
+          <b>Jason Few（CEO）：</b>"Jason, good morning, and thank you for the question. I think if you look at our platform and the conversations we are having with customers, one of the big advantages that clearly stand out is just our long history in providing utility scale platforms first and foremost. If you look at even the material we provided in the deck, we show five examples with a combined 50-year operating history at utility scale. When you look at essentially taking the grid and moving it behind the meter, that is a real strong selling point for us because that is effectively what we are doing. Obviously, time to power remains critically important in our ability to deliver quickly, not only deliver quickly, but to get through the permitting hurdles that more traditional generation clearly faces when it comes to communities as well as just permitting on things like Title V, which are not issues for us. We offer a community-friendly platform. The other big piece is we think we are getting a lot of interest in our 12.5 MW building block that we have announced, and just the long-term capital preservation from an investment in our technology, given that we are native DC, as the racks move that direction, GPUs go that direction, that investment that a customer makes is still a solid one and will certainly continue to be important for the AI factory in the future."<br><br>
+          <b>Jason Tilchen（追問）：</b>"Great. That's really helpful. Maybe one follow-up to that. Is there anything else you can share in terms of the steps that are needed, either on your side or on the customer side, or the prospective customer side, or sort of key milestones you're looking towards to get some of that pipeline converted into those signed agreements as you talked about, and maybe potential timelines beyond just the sort of framework that you mentioned in the prepared remarks around sort of some point this fiscal year?"<br><br>
+          <b>Jason Few（CEO）：</b>"I think as we look at it and the conversations that we're having, certainly as the transaction sizes have increased, we talked about a 200% increase in the average size of the proposals that we're responding to, that increases diligence. It expands proportionately to the size of those transactions. We see these timelines really as a function of scale. As you look at the milestones that you go through, it's one, clearly being in the opportunity and have a chance to engage with the customer and lay out our technology, work through the technological questions that a customer has, and then just being able to really demonstrate our long history of providing utility scale solutions that have had continuous runtime. For example, one of our largest platforms has continuously run for 13 years. That is a really strong technical hurdle that we're able to cross given what our platform has done over the last 23+ years."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Mark Strouse（JPMorgan）</div><div class="qa-topic">100 MW 損益兩平目標是否隨產能擴張改變；能否排除再融資</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q1）</div>
+          <div class="q-text">獲利目標是否仍錨定在約 100 MW 年化產量？產能擴張目標拉高，是否會改變這個門檻？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A1）</div>
+          <div class="q-text">Michael Bishop：不會改變。公司一貫的看法是，一旦年化產量穩定達到或超過 100 MW，即以此為目標邁向調整後 EBITDA 轉正。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q2 追問）</div>
+          <div class="q-text">鑒於近期已完成多次募資、資產負債表良好，是否可以完全排除近期再進行額外增資？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A2）</div>
+          <div class="q-text">Michael Bishop：以「不」開頭作答，但隨即轉為描述公司對現有資產負債表與擴產投資「感到自在」，並列舉公司會運用的多種融資工具（專案融資、服務協議融資、不定期利用股權市場），全程<b>沒有正面回答是否會排除未來增資</b>，只重申「對目前的流動性部位感到自在」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 2 — 「不」字開頭卻沒有真正否認，是一次典型的非否認式回應</div>
+          <div class="q-text">Mark Strouse 問的是一個可以用是非題回答的具體問題：「投資人是否應該完全排除近期再增資？」Michael Bishop 用「No」開場，聽起來像是否認，但接下來整段話只在重申現有流動性「comfortable」、羅列公司過去用過的融資工具（含「periodically」利用股權市場），卻沒有一句話真正把「近期再增資」的可能性排除或確認。考量到本季公司才透過 ATM 增發 1,090 萬股（均價 $9.45，淨募得 $100.4M），季後又再增發 410 萬股（均價 $13.31，淨募得 $52.9M），股數在半年內從約 4,610 萬股增至約 6,355 萬股（+37.9%），這個問題本身直指市場最關切的稀釋疑慮，而回答刻意保留了模糊空間——本身就是一個訊號，而非中性的公關用語。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Mark Strouse：</b>"Yes, good morning. Thank you very much for taking our questions. I just had a couple for Mike, if I can. Wanted to ask about the target for profitability. Or should we still think about that around 100 MW or so? I'm just curious if the increase in capacity that you're targeting, if that changes that target at all."<br><br>
+          <b>Michael Bishop（CFO）：</b>"Good morning, Mark, and thanks for the question. No, the increase in capacity does not change that target. The company has been consistently looking at once we achieve consistent production volumes at or above 100 MW on an annualized basis, we are targeting getting to adjusted EBITDA positive."<br><br>
+          <b>Mark Strouse（追問）：</b>"Okay. Thank you. With the capital raises that you mentioned recently, obviously your balance sheet's in good shape. You are spending on CapEx though, I'm just curious, should investors completely rule out additional capital raises from here? Do you think you're in a sufficient spot or anything else to expect near term? Thank you."<br><br>
+          <b>Michael Bishop（CFO）：</b>"No. As Jason and I said in our prepared remarks, we are comfortable with our current balance sheet and investing in capacity expansion for growth. The company looks at a number of ways to continue to finance growth. We have obviously done project financing. We have financed service agreements, we have looked to the equity markets periodically. Again, comfortable with our current liquidity position."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ryan Pfingst（B. Riley Securities）</div><div class="qa-topic">12.5 MW 模組對客戶對話的實際加速效果；營運槓桿與 opex 成長</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q1）</div>
+          <div class="q-text">自 3 月底發表 12.5 MW 動力模組以來，這項產品對客戶對話帶來多大程度的加速？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A1）</div>
+          <div class="q-text">Jason Few：是很強的助力。優勢包括：以 12.5 MW 這個區塊規模展示更快的到電時間；透過更大區塊分攤 balance of plant 成本帶來更好的經濟性；模組化讓客戶能按實際需求擴充而不必一次性超額建置，這一點被強調為最持續的賣點，且可與現有 1.25 MW／2.5 MW 區塊搭配使用。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q2 追問）</div>
+          <div class="q-text">隨著資料中心需求帶動營收成長，公司預期 opex 會如何成長？如何看待營運槓桿？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A2）</div>
+          <div class="q-text">Michael Bishop：公司已在成本結構上做了不少工作以達成調整後 EBITDA 轉正的目標，因此<b>不預期 opex 有顯著增加</b>，僅會有與通膨相關的溫和成長；對現有成本結構感到自在，且「絕對」預期能從中獲得槓桿。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 3 — 「不會顯著增加」沒有搭配任何數字或區間，且與同時揭露的 2–2.75 億美元擴產支出並置時顯得樂觀</div>
+          <div class="q-text">Ryan Pfingst 問的是營運槓桿的具體幅度，Michael Bishop 給的是方向性保證（「僅溫和的通膨性成長」）而非任何百分比或金額區間，讀者無法據此建立 opex 模型。更值得注意的是，這個回答發生在同一場法說會裡管理層才剛把 Torrington 擴產計畫從 350 MW 上修到 500 MW、總支出 2 億至 2.75 億美元之後——擴產本身通常伴隨新增的維運、品保、人力等營運費用，但 CFO 對 opex 的敘事仍是「維持現有結構」，兩者之間的張力沒有被追問或釐清，是否定義口徑不同（例如擴產支出計入資本支出而非 opex）也未說明。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Ryan Pfingst：</b>"Hey, guys. Thanks for taking the questions. First, just curious how much the introduction of the 12.5 MW power block solution has accelerated customer conversations since you announced that in late March."<br><br>
+          <b>Jason Few（CEO）：</b>"Ryan, thank you, and good morning. It's been a really strong adder to the conversations that we're having because you're able to really demonstrate to the customer, one, time to power, being able to do that in a 12.5 MW block size, is really attractive in terms of the way that data centers think about the overall power domain and the way in which they want to scale in a modular fashion. The other big piece of that is that you create better economics because your ability to actually leverage a lot of the balance of plant across a larger block of power. That has become a really strong selling point from a customer perspective. That being said, I would say that what continues to be a really strong selling point is modularity and the ability to actually scale at the customer demand as opposed to having the customer overbuy from where their real demand is. We're able to do that with the 12.5 MW block in addition to our 1.25 MW or 2.5 MW block sizes as well."<br><br>
+          <b>Ryan Pfingst（追問）：</b>"Appreciate that. Then maybe going back to the EBITDA positive target and how you're thinking about operating leverage. What do you expect for growth in OpEx as you potentially scale revenue here with data center demand and the operating leverage that you're expecting to see?"<br><br>
+          <b>Michael Bishop（CFO）：</b>"Good morning, Ryan. It's Mike. I'll take that one. As you know, the company has done a fair amount of work around our operating cost structure with the goal to get to that adjusted EBITDA positive target. As a result, we would not expect to see significant increases in operating expenses. There will certainly be some modest growth related to inflation. We're comfortable with our current cost structure and absolutely expect to get leverage from it."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Dushyant Ailani（Jefferies）</div><div class="qa-topic">500 MW 產能爬升節奏；Groton 是否為孤立個案</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q1）</div>
+          <div class="q-text">未來 24 個月從目前產能爬升到 500 MW，節奏會是什麼樣子？是以 100 MW 為單位分批推進，還是兩年後從約 100 MW 直接跳到 500 MW？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A1）</div>
+          <div class="q-text">Jason Few：會逐步解鎖產能，例如導入高產能 tape caster 以取得達成 500 MW 所需的胚片鑄造產能，並隨著調理（conditioning）產能增加而逐步釋放更多產量；公司從「哪裡是瓶頸」反推，逐步解除各環節限制，並明確表示<b>不會是 100 MW 到 500 MW 的一次性跳躍</b>，而是漸進增加。<b>沒有給出任何分階段的具體數字或時間點</b>。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q2 追問）</div>
+          <div class="q-text">除了 Groton，投資組合裡是否還有其他資產有類似的升級／減損機會？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A2）</div>
+          <div class="q-text">Jason Few：目前只看到 Groton 這一個案例，因為此舉是把該資產換成公司現行標準的能源區塊（energy block）——投資組合其餘部分本來就已部署這個標準規格；決策考量包括 Groton 是核潛艦基地、微電網是強化該設施韌性的一環，這是目前唯一預期會做這種置換的案例，「全艦隊都會是標準規格」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 4 — 被問「節奏是什麼」，答的是「會逐步而非一次跳躍」——迴避了節奏本身</div>
+          <div class="q-text">Dushyant Ailani 的問題非常具體：是以 100 MW 為單位分批，還是兩年後一次到位？Jason Few 的回答只確認了「不是二元跳躍」這個否定命題，卻沒有給出肯定命題——沒有任何一個中間里程碑（例如「FY2027 底前達到 200 MW」）被揭露。這與 Q1 Tilchen 追問時觀察到的模式一致：凡涉及具體時程，管理層一律退回「漸進、視情況而定」的敘事。就 Q2 而言，「目前只有 Groton 一例」的回答本身是直接且可覆核的（管理層明確排除了其他資產的類似風險），是本場少數對敏感問題給出明確答案的情況，值得與其他迴避時程的回答做對照。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Dushyant Ailani：</b>"Hey, guys. Thanks for taking my question. Just the first one, and I guess I've talked about it briefly, but the ramp to 500 MW you've talked about in the next 24 months. How do we think about the cadence? Is it going to be in 100 MW blocks, or how do we think about it over the next 12 months? Do we just see an immediate bump from 100 MW to 500 MW in two years?"<br><br>
+          <b>Jason Few（CEO）：</b>"Dushyant, thank you for the question. You'll see us unlock capacity as we scale from where we are today to that 500 MW. For example, one of the things we've talked about is implementing our high volume tape caster. That gives us the ability actually to have tape casting capacity to fulfill that 500 MW as an example. As we expand and add additional conditioning capacity, we'll start to unlock more volume. The way we really think about it, if you think about it and kind of work backwards, we look at all of the areas of constraint where we're kind of maxed out. How do we unlock that capacity as we scale to 500 MW? We anticipate that we'll incrementally add more volume all the way to the 500. It won't be a binary 100 MW to 500 MW cut."<br><br>
+          <b>Dushyant Ailani（追問）：</b>"Got it. That's helpful. Maybe just on the growth on repairs. Are there potential for other upgrade opportunities across your portfolio, or would this be the only one?"<br><br>
+          <b>Jason Few（CEO）：</b>"This is the one that we see because what we're doing is we're changing it to our standard energy block. Across the rest of our portfolio, that's what we have deployed. From our perspective, we looked at the importance of the U.S. military operation and Groton and that this is a nuclear submarine base, and a microgrid is part of hardening that facility. For us to play a role in that and to deliver really strong operational technology is really what anchors this decision. This is the one area where we see that we'll switch out to our standard platform. We'll be standard across our entire fleet."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Colin Rusch（Oppenheimer）</div><div class="qa-topic">選址彈性優勢；歐洲市場現況</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q1）</div>
+          <div class="q-text">公司為客戶提供的選址彈性具體是什麼，如何影響與資料中心客戶的對話？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A1）</div>
+          <div class="q-text">Jason Few：公司平台屬社區友善型技術——不觸及 Title V 空污許可問題、不對周邊社區造成空污；噪音水準相當於家用空調，遠低於社區常見的抱怨門檻；模組化帶來高效土地利用；並可利用平台熱能透過吸收式製冷（absorption chilling）幫資料中心降溫、降低整體能耗。</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label q">問題核心（Q2 追問）</div>
+          <div class="q-text">轉向歐洲市場：近期歐洲在利用尖峰電力容量、擺脫國際能源波動追求能源自主上活動頻繁，pipeline 在歐洲的進展如何？是否有值得留意的具體機會？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應（A2）</div>
+          <div class="q-text">Jason Few：目前 pipeline 明顯偏重美國市場；歐洲對天然氣角色與資料中心建置的態度正在轉變，公司也持續與部分在歐洲有據點的美國大型資料中心開發商合作，把同樣「社區友善、易於取得許可」的論述帶到歐洲與亞洲市場，但坦言目前重心仍在美國。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 正向覆核：這是本場少數坦承弱項、未過度包裝的回答</div>
+          <div class="q-text">相較於其他涉及時程與數字的問題普遍被模糊帶過，Jason Few 在此明確承認「pipeline 明顯偏重美國」，沒有把歐洲機會誇大成即將轉化的具體商機，而是誠實描述為仍在態度轉變階段、透過美系開發商的歐洲布局間接切入。這種「不美化弱項」的回答方式，值得作為評估管理層在其他問題上措辭可信度的基準對照——換言之，管理層並非對所有問題都刻意模糊，選擇性迴避（如逾期未答的時程類問題）因此更值得注意。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Colin Rusch：</b>"Thanks so much, guys. Could you talk a little bit about the siting flexibility that you're enabling for your customers and how that's impacting some of the conversations that you're having with the data center customers?"<br><br>
+          <b>Jason Few（CEO）：</b>"Hey, Colin. Good morning, and thank you for that question. Yeah, we think one of the really strong value propositions of our platform is the fact that we're a community-friendly technology. When you think about the following few items. You're not going to run into Title V issues. We're not going to create air pollution to the local community. That's a positive. If you look at some of the complaints that you see from some communities, it's around noise. Well, we operate at a level that's similar to a home air conditioner. We're not going to run into noise-related issues. We're modular in terms of our scalability. We're very efficient in terms of land use. We also have the ability to bring down overall energy consumption by leveraging the thermal output of our platform and delivering a product that can actually help cool the data center by leveraging our thermal energy and integration with absorption chilling. We see a number of factors that create positives for data center developers and then certainly see those positives play out in terms of the community reaction to our technology."<br><br>
+          <b>Colin Rusch（追問）：</b>"Just turning into a different market. In Europe, there's been an awful lot of activity looking at moving towards leveraging some of the peak power capacity as well as moving towards energy independence from some of the international volatility that we're seeing in the macro environment. I'm just curious about how the pipeline is starting to move in Europe and if there's any meaningful opportunities we should be attending to over there?"<br><br>
+          <b>Jason Few（CEO）：</b>"I think if you look at our pipeline today, it's clearly weighted toward the U.S. We do see a change in attitude taking place in Europe and a bigger acceptance starting to emerge around natural gas and the importance that it's going to play in helping them build out data centers. In addition to that, also having the energy that they need from a reliable, continuous energy resource. We continue to focus on a global market opportunity, and we're certainly even seeing some of the larger data center developers here in the U.S. that also have a significant European presence. We're working with them on our technology as a way to not only deliver the power that they need in Europe, again, going back to the same conversation we just had around community-friendly, being able to get sited, getting through a lot of the environmental issues that are a big consideration in the European markets. We're seeing that play well as we look at those opportunities there and in Asia."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Noel Parks（Tuohy Brothers）</div><div class="qa-topic">單季 pipeline 三倍成長、提案規模翻倍的具體驅動因素</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">相較於三個月前上一次法說會，本季 pipeline 規模近乎三倍、平均提案規模翻倍，能否具體描述這個轉變在實務上是什麼樣子？例如詢問電話的變化——這一季為何特別出現這樣的躍升？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Jason Few：公司有一支專責資料中心與 AI 工廠機會的直銷團隊，聚焦與資料中心開發商、電力用地開發商、hyperscaler 及 GPU 供應商互動；這種互動與對公司技術差異化的認知提升是驅動力；直銷通路之外，也透過網站、近期發布的資料中心白皮書、多場 podcast 等全通路方式建立聲量；隨著這些「環繞式聲量」逐漸發酵，開始反映在能更深入與客戶互動、提交更大規模提案上。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 5 — 被問「為何是這一季」，答的是「我們一直在做行銷與業務」——沒有解釋轉折點</div>
+          <div class="q-text">Noel Parks 的問題明確指向一個時間點對比：三個月前 vs 現在，為什麼偏偏是這一季出現三倍躍升？Jason Few 的回答羅列了直銷團隊、白皮書、podcast 等持續性行銷活動，這些描述可以套用在任何一個季度，並沒有指出這一季特有的觸發事件（例如某個大型客戶簽署 MOU、某場產業會議帶來集中詢價，或 12.5 MW 產品發表後的具體轉單效應）。作為全場最後一個問題，也沒有其他分析師追問補強。若把這一季躍升完全歸因於「累積聲量終於發酵」，讀者難以判斷這是否為可持續的常態增速，還是一次性的集中詢價潮。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Noel Parks：</b>"Hi. Good morning. Just trying to wrap my head around sort of the doubling of proposal size and the tripling of the pipeline in the course of the quarter. I wonder if you can just sort of characterize what that looks like compared to our last call three months ago. Just inbound calls, how has that manifested itself that in this particular quarter you've seen such a ramp-up?"<br><br>
+          <b>Jason Few（CEO）：</b>"Noel, thank you. Good morning to you as well. Look, we have a direct sales team that is focused on data center and the overall AI factory opportunity as a segment. That team is very focused on working across data center developers, powered land developers, hyperscalers, and as well as the GPU providers. It's that engagement and creating more awareness of our technology, our differentiation, and advantages that's really driving that in addition to just the more significant engagement the team is having now that we've really shifted a big part of our focus toward this opportunity. They're coming through our direct channel. In addition to that, we have a very robust omni-channel, if you will, in terms of our website presence and the things that we do to drive interest and awareness of our technology. We recently published a data center white paper that's been well-received. A lot of our podcasts and other things that we've been doing, those have all been well-attended. As we think about creating surround sound around our technology, our advantages in the market, we're starting to see that pay off in terms of our ability to engage at a more deep level with customers and submit larger proposals."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: EVENT ============ -->
+  <div id="panel-event" class="panel">
+    <div class="card">
+      <div class="card-title">事件摘要 — Groton 海軍基地專案減損與重新動力化</div>
+      <p>本季（截至 2026 年 4 月 30 日）認列 <b>$42.6M 非現金減損費用</b>，與 7.4 MW 的 Groton, CT 海軍基地專案有關。公司決定以 3 座現行世代的 <b>2.5 MW 動力區塊</b>（合計 7.5 MW，約略對應原專案 7.4 MW 額定容量）重新動力化該專案，CFO Michael Bishop 將此定調為一項策略決策，目的是為這個關鍵美國政府資產（核潛艦基地的微電網一環）確保高可靠度。這筆費用是本季營業費用從去年同期 $26.4M 暴增至 $65.0M、營業虧損從 $35.8M 擴大至 $77.9M 的主要原因——扣除減損費用後，核心營業費用實為年減。</p>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>非現金減損費用：<b>$42.6M</b>（10-Q 損益表 Impairment expense 項，前一年同期為 $0）</li>
+          <li>原專案容量 7.4 MW；重新動力化將部署 3 座 2.5 MW 動力區塊（合計 7.5 MW），即改採公司目前艦隊標準規格的能源區塊</li>
+          <li>減損金額占本季營業虧損總額（$77.9M）約 55%，是本季 GAAP 虧損擴大的最主要單一因素</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限</h4>
+        <ul>
+          <li>決策揭露於本季法說會（2026/6/8），對應財季為截至 2026/4/30 的 Q2 FY2026</li>
+          <li>CFO 在說明本季 generation 營收年減 28%（$8.7M vs $12.1M）時提到「largely due to the fact that the Groton project was undergoing repairs」——即本季發電量已因此下滑，換機期間的產出缺口已部分反映在本季數字中</li>
+          <li>⚑ 重新動力化完工／恢復滿載運轉的具體日期，來源文件（法說會逐字稿、10-Q）<b>均未揭露</b>，屬資料缺口</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾</h4>
+        <ul>
+          <li>減損為非現金項目，直接沖銷 Project assets, net 帳面價值——資產負債表上該科目由 2025/10/31 的 $216.8M 降至 2026/4/30 的 $167.5M（QoQ 降幅方向與減損一致，惟該科目變動亦包含其他專案的正常折舊與新增投資，非純粹對應此筆減損）</li>
+          <li>⚑ 換裝 3 座 2.5 MW 區塊的實際<b>現金</b>資本支出金額，來源文件<b>未單獨揭露</b>——不確定是否計入六個月現金流量表中 Project asset expenditures 的 $6.2M（2026 年 H1，遠高於去年同期 $0.2M），但無法從現有資料直接對應確認</li>
+          <li>是否有美國海軍作為對造成資產故障有連帶責任、或分攤部分置換成本，來源文件未提及</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>重新動力化後的實際完工與滿發時間表</li>
+          <li>置換用 3 座 2.5 MW 區塊的具體資本支出金額，以及是否已包含在已揭露的 $200–275M Torrington 擴產預算之外</li>
+          <li>可靠度提升是否如管理層預期兌現——目前僅為策略決策的說明，尚無運轉數據可覆核</li>
+          <li>管理層在 Q&amp;A 中明確表示「這是唯一一個此類案例」（見 Q&amp;A 分頁 Dushyant Ailani 追問），但這個保證本身也只是口頭陳述，尚待後續季度覆核是否有其他自有發電資產出現類似減損</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問（盡職調查式追問清單）</h4>
+      <ol>
+        <li>導致認列全額 $42.6M 減損、而非採取較小規模維修的具體根本原因是什麼——是設備老化、原始機型已停產難以取得備料，還是可靠度已明顯低於海軍客戶要求的門檻？</li>
+        <li>置換用 3 座 2.5 MW 區塊的增量資本支出金額為何？這筆支出是否已納入近期上修至 $200–275M 的 Torrington 擴產預算，還是屬於獨立於擴產計畫之外的專案級支出？</li>
+        <li>重新動力化後的預計完工／併網時間為何？換機期間是否會有超出本季已反映範圍的額外發電缺口，進而影響 Generation 營收與對應的長期 PPA 履約？</li>
+        <li>Groton 是美國海軍核潛艦基地資產，客戶端（美國政府）是否分擔任何置換成本，還是全部由 FCEL 如目前財報所示自行吸收？</li>
+        <li>管理層表示目前僅 Groton 一例需要此類置換，且其餘投資組合已是標準規格——未來觸發類似置換決策的具體判斷標準是什麼？投資人應如何監測是否會有下一筆減損？</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">關聯事件 — Torrington 製造產能擴張（350 MW → 500 MW／年，總支出 $200–275M）</div>
+      <p>本季法說會同時宣布，將原先已公開討論的 Torrington, CT 廠年產能擴張計畫，從 <b>350 MW／年上修至 500 MW／年</b>，整體擴產總支出預估在 <b>$2.0 億至 $2.75 億美元</b>之間。管理層將此上修的理由直接連結到 pipeline 規模的擴大（單季增至 4 GW，其中約 89% 為潛在資料中心客戶）。根據 FY2025 10-K，Torrington 廠現況為截至 2025/10/31 單班運作、年化實際產量約 <b>41 MW</b>，現行廠房配置下最大額定產能為 <b>100 MW／年</b>——換言之，500 MW／年的目標相對於現行額定產能是約 5 倍、相對於目前實際單班產量則接近 12 倍的擴張規模。</p>
+      <p>⚑ <b>資料中心專案融資條款追蹤（框架泛用項目）</b>：本框架要求追蹤資料中心相關資本支出的融資結構（自有資本／合資 JV／SPV／租賃／資產負債表認列方式）。就 Torrington 擴產一案，來源資料明確顯示<b>不適用 JV／SPV 型態</b>——CFO 與 CEO 在法說會中皆將此擴產定位為由公司<b>內部現金＋股權市場（ATM）</b>融資支應：CEO 明確表示「we intend to expand capacity in line with contracted backlog, market demand, and structured capital support, not ahead of it」、CFO 補充公司會運用專案融資、服務協議融資與股權市場等多種工具，但<b>全程未提及任何合資、特殊目的實體或表外融資安排</b>用於此擴產計畫。公司截至本季末總現金及約當現金達 $440.9M（含 $373.2M 非限制性現金），本季另透過 ATM 增發淨募得 $100.4M、季後再募得 $52.9M，資產負債表上除項目層級的專案融資與服務協議融資外基本無息負債，也支持「以自有資產負債表支應」這個定位。因此本項目在此標記為<b>「不適用 JV/SPV — 明確為資產負債表／股權融資型態」</b>，而非資料缺口。</p>
+      <p>⚑ 需留意的是，擴產本身仍是<b>計畫性上限</b>而非鎖定支出——管理層兩次強調會「in strict alignment with contracted backlog, market demand, and structured capital support」推進，且截至本季末，89% 的 4 GW pipeline 屬「submitted proposals」、尚未有一筆轉為簽約的資料中心客戶（見「供應鏈」分頁），也就是說 500 MW 的產能目標目前主要由<b>未簽約的 pipeline 規模</b>而非已簽約的 backlog 支撐，執行風險詳見「風險矩陣」分頁。</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: TECH ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">核心技術與產品線</div>
+    <div class="tech-grid">
+      <div class="tech-card g">
+        <h4>12.5 MW FuelCell Energy Block</h4>
+        <div class="meta">本季新發表（3 月底）· 模組化：1.25 MW 基礎區塊 → 12.5 MW 區塊 → 數百 MW</div>
+        <p>CEO 明確定位為「utility scale architecture scaled out」而非小型系統堆疊而成——基礎能源區塊為 1.25 MW，從 1.25 MW 到 12.5 MW 再到數百 MW，是同一套架構、同一套已驗證的電堆、同一套運轉條件的倍數放大，而非改款。客戶效益：更大區塊分攤 balance of plant 帶來更佳經濟性，同時保留模組化擴充能力避免客戶超額建置。管理層將此產品定位為把 pipeline 提案轉化為可執行交易的關鍵商業化工具（見 Q&amp;A 分頁 Ryan Pfingst 交換）。</p>
+      </div>
+      <div class="tech-card">
+        <h4>Torrington, CT 製造產能路徑</h4>
+        <div class="meta">現況 41 MW／年實際（單班）· 現行額定上限 100 MW／年 · 目標 500 MW／年（原 350 MW／年上修）</div>
+        <p>167,000 平方呎廠房，生產個別電池組並組裝碳酸鹽燃料電池模組（FY2025 10-K）。擴產總支出估計 $200–275M，屬資產負債表／股權融資（見「特殊交易/事件」分頁）。管理層將調整後 EBITDA 轉正目標錨定在年化產量達到或超過 100 MW（即現行額定產能上限）這個門檻（見 Q&amp;A 分頁 Mark Strouse 交換），擴產本身則會依 pipeline 轉換為 backlog 的實際進度分階段推進，而非一次到位。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>碳酸鹽燃料電池平台（Carbonate Fuel Cell）</h4>
+        <div class="meta">公司現行商業化主力產品線 · DC 原生輸出 · 熱能可用於吸收式製冷</div>
+        <p>公司在法說會中強調此平台「DC native continuous」的特性，可直接為資料中心的直流負載供電，同時整合高品質廢熱用於吸收式製冷（absorption chilling），兩者合計被定位為能顯著改善資料中心用電效率指標（PUE）的關鍵賣點。平台已有近 50 年累計公用事業規模運轉經驗（五座代表性案例合計），其中至少一座已連續運轉 13 年，整體平台商業化歷史逾 23 年（皆為 CEO 在法說會中的原話陳述，見 Q&amp;A 分頁）。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>固態氧化物燃料電池（SOFC）與 ExxonMobil 碳捕捉合作</h4>
+        <div class="meta">Rotterdam 據點 · 「兩座機組已在運送途中，預計 6 月交付」（法說會原話）</div>
+        <p>公司與 ExxonMobil Low Carbon Solutions 的碳捕捉模組合作持續推進，目標是在荷蘭鹿特丹 Esso Nederland B.V. 煉油廠部署模組化點源碳捕捉試驗設施。根據 10-K 供應鏈附註，本合作源自 2024/1/31 由 Esso（ExxonMobil 關係企業）發出的 <b>$11.6M</b> 採購訂單，涵蓋燃料電池模組及工程/採購/製造/測試/交付服務。截至本季末，公司「先進技術」合約 backlog 為 <b>$15.4M</b>，CFO 明確表示其中多數與 ExxonMobil Technology and Engineering Company（EMTEC）的聯合開發工作有關；EMTEC 與 Esso 合計占 FY2025 全年營收 11%（10-K 客戶集中度附註）。管理層稱這條產品線「we believe the market has not yet valued」，正從開發階段轉向部署階段。</p>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title" style="margin-bottom:10px;">因果鏈敘事 — AI 用電需求如何轉化為公司的產品與產能定位</div>
+      <div class="flow-chain">
+        <span class="node">AI／高密度運算驅動資料中心用電需求急遽成長</span><span class="arrow">→</span>
+        <span class="node">電網併網排隊時程過長，無法在數年內滿足需求</span><span class="arrow">→</span>
+        <span class="node">客戶轉向尋求電表後方（behind-the-meter）的模組化、可快速部署電源</span><span class="arrow">→</span>
+        <span class="node">FuelCell Energy 的 DC 原生／可模組化擴充平台切入該缺口</span><span class="arrow">→</span>
+        <span class="node">12.5 MW 動力區塊產品化 ＋ Torrington 產能上修至 500 MW／年</span><span class="arrow">→</span>
+        <span class="node">4 GW submitted-proposal pipeline（89% 為潛在資料中心客戶）</span>
+      </div>
+      <div class="note grey">⚑ 這條因果鏈目前每一環都有公開陳述支持，但最後一環（pipeline）到「簽約 backlog」之間的轉換，截至本季末<b>尚未發生任何一筆</b>——所有 4 GW 均停留在「submitted proposals」階段（詳見「供應鏈」與「風險矩陣」分頁）。因果鏈本身描述的是需求邏輯與公司定位是否合理，不等於已驗證的商業成果。</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: SUPPLY CHAIN ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="card">
+      <div class="card-title">上游 — 原料與零組件供應商</div>
+      <p>10-K 明確點名的關鍵原料僅有<b>鎳與不鏽鋼</b>：「We use various commercially available raw materials and components to construct a fuel cell module, including nickel and stainless steel, which are key inputs in our manufacturing process.」電力與機械 balance-of-plant（BOP）零組件則「由數家供應商組裝與採購」，公司描述其策略為持續評估、認證新供應商以分散供應商基礎，追求成本、供貨安全與品質穩定的三重目標。</p>
+      <p>⚑ <b>資料缺口</b>：10-K 揭露中<b>沒有具名的單一來源供應商</b>，也沒有觸媒／電解質材料的具體供應商名稱或集中度百分比——來源文件的風險因子章節僅有一則標題「We depend on third party suppliers for the development and timely supply of key raw materials and components for our products」，完整段落內文未能取得。因此下方結構圖與 Sankey 圖的上游節點僅能以「未具名」呈現，不做臆測性補全。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">中游 — Torrington, CT 自有製造</div>
+      <p>公司在 Torrington 廠自行生產電池組並組裝碳酸鹽燃料電池模組（167,000 平方呎），現況年化實際產量約 41 MW（單班），現行廠房配置下最大額定產能 100 MW／年，計畫擴產至 500 MW／年（見「技術與產品線」「特殊交易/事件」分頁）。這是全公司唯一的模組製造節點，供應鏈上游與下游客戶皆匯集於此。</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">下游 — 客戶集中度是本頁的核心故事</div>
+      <p>依 10-K 揭露的「占合併營收百分比」客戶集中度附註（exhibit R52.htm）：</p>
+      <div class="tbl-wrap">
+        <div class="tbl-title">客戶占合併營收百分比</div>
+        <div class="tbl-scroll">
+        <table>
+          <tr><th>客戶</th><th>FY2025</th><th>FY2024</th><th>FY2023</th></tr>
+          <tr><td><b>Gyeonggi Green Energy Co., Ltd.（GGE，南韓）</b></td><td><b>46%</b></td><td>18%</td><td>—</td></tr>
+          <tr><td>Connecticut Light and Power</td><td>15%</td><td>21%</td><td>13%</td></tr>
+          <tr><td>United Illuminating</td><td>7%</td><td>3%</td><td>5%</td></tr>
+          <tr><td>ExxonMobil Technology and Engineering Company（EMTEC）</td><td>6%</td><td>8%</td><td>8%</td></tr>
+          <tr><td>Esso Nederland B.V.</td><td>5%</td><td>10%</td><td>2%</td></tr>
+          <tr><td>Ameresco／Sacramento Sewer</td><td>2%</td><td>7%</td><td>—</td></tr>
+          <tr><td>Korea Southern Power Company（KOSPO）</td><td>1%</td><td>1%</td><td>31%</td></tr>
+          <tr><td>Korea Fuel Cell Co., Ltd（KFC）</td><td>—</td><td>—</td><td>16%</td></tr>
+          <tr class="total"><td>前幾大客戶合計</td><td>82%</td><td>68%</td><td>75%</td></tr>
+        </table>
+        </div>
+      </div>
+      <div class="note red">⚑ <b>GGE 從 FY2024 的 18% 暴增至 FY2025 的 46%</b>，一年內幾乎翻三倍，是公司單一最大營收來源，且占比接近全公司營收的一半——與本季法說會 CFO 反覆提及「product revenue driven by scheduled module deliveries to Gyeonggi Green Energy」完全吻合（本季 Product 營收年增 38% 至 $18.0M，主要即為 GGE 模組交付）；CFO 並預告「remaining six GGE modules」與新的 CGN-Yulchon（CGN）交付將帶動下半年產品營收。這個客戶結構是本報告風險矩陣中最優先的項目——來源：10-K 客戶集中度附註（R52.htm）＋ Q2 FY2026 法說會 CFO 財務回顧段落。</div>
+      <p>其餘值得標註的下游關係：</p>
+      <ul style="padding-left:18px; line-height:1.8; color:#333; margin-bottom:12px;">
+        <li><b>美國海軍（Groton, CT）</b>：7.4 MW 微電網專案，本季因重新動力化決策認列 $42.6M 減損（見「特殊交易/事件」分頁）；未見於上表客戶集中度百分比揭露中（可能因其為公司自有發電資產下的服務／發電收入，而非直接列入該表所指的合併營收客戶百分比計算基礎，來源文件未明確說明分類方式）。</li>
+        <li><b>ExxonMobil（EMTEC＋Esso）</b>：合計占 FY2025 營收 11%，涵蓋碳捕捉聯合開發（JDA）與 Rotterdam 模組化點源碳捕捉試驗設施，2024/1/31 起始採購訂單 $11.6M（10-K）。</li>
+        <li><b>KOSPO（南韓）</b>：占比從 FY2023 的 31% 驟降至 FY2025 的 1%——與 GGE 崛起同期發生，顯示公司在南韓的營收來源已從 KOSPO 大幅轉移至 GGE，並非單純「新增一個大客戶」，而是南韓客戶結構本身的重新洗牌，值得留意其背後是否反映特定專案生命週期（如 KOSPO 專案已進入尾聲、GGE 專案接手放量）而非市場地位此消彼長。</li>
+        <li><b>潛在資料中心客戶（管線）</b>：占 4 GW submitted-proposal pipeline 的 <b>89%</b>（本季法說會揭露），<b>但這是未簽約的提案管線，不是已列入 10-K 客戶集中度表或法說會 backlog 數字（總計 $1.14B）中的任何一筆</b>。截至本季末，FY2025 10-K 與 Q2 FY2026 法說會均未揭露任何一個具名的美國資料中心客戶。這個區別必須明確——管線規模的成長是需求訊號，不等於營收或 backlog 的成長。</li>
+      </ul>
+    </div>
+
+    <!-- NODES: 鎳/不鏽鋼原料供應商(未具名), BOP零組件供應商(未具名·集中度低), FCEL Torrington製造(41MW實際/100MW額定/目標500MW), GGE南韓(46% FY25營收↑自18% FY24), Connecticut Light & Power(15% FY25), United Illuminating(7% FY25), ExxonMobil EMTEC+Esso(11% FY25合計·Rotterdam碳捕捉), KOSPO(1% FY25↓自31% FY23), 美國海軍Groton(7.4MW·本季$42.6M減損), 資料中心管線客戶(未簽約·占4GW管線89%) -->
+    <div class="chart-wrap">
+      <div class="chart-title">供應鏈結構圖</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1686.4 526" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1686.4" height="526" fill="#ffffff"/><text x="843.2" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">FuelCell Energy 供應鏈結構：上游供應商 → Torrington 製造 → 下游客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">上游供應商</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">FCEL 自有製造</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">下游客戶／管線</text><defs><marker id="arr-c2600a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#c2600a"/></marker><marker id="arr-2563eb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker><marker id="arr-94a3b8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker></defs><polyline points="737.7,106 737.7,124 72,124 72,222" fill="none" stroke="#c2600a" stroke-width="1.6" marker-end="url(#arr-c2600a)"/><rect x="376.85" y="115" width="56" height="18" rx="3" fill="#ffffff"/><text x="404.85" y="128" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">關鍵原料</text><polyline points="941.2,106 941.2,146 1634.4,146 1634.4,222" fill="none" stroke="#c2600a" stroke-width="1.6" marker-end="url(#arr-c2600a)"/><rect x="1254.3" y="137" width="67" height="18" rx="3" fill="#ffffff"/><text x="1287.8" y="150" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">組裝零組件</text><polyline points="853.2,282 853.2,300 263.70000000000005,300 263.70000000000005,398" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="543.38" y="291" width="30.15" height="18" rx="3" fill="#ffffff"/><text x="558.45" y="304" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">46%</text><polyline points="853.2,282 853.2,322 530.1750000000002,322 530.1750000000002,398" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="676.61" y="313" width="30.15" height="18" rx="3" fill="#ffffff"/><text x="691.69" y="326" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">15%</text><polyline points="853.2,282 853.2,344 737.2500000000002,344 737.2500000000002,398" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="783.18" y="335" width="24.1" height="18" rx="3" fill="#ffffff"/><text x="795.23" y="348" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">7%</text><polyline points="853.2,282 853.2,366 853.2,366 853.2,398" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="838.13" y="357" width="30.15" height="18" rx="3" fill="#ffffff"/><text x="853.2" y="370" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">11%</text><polyline points="853.2,282 853.2,384 1042.2000000000003,384 1042.2000000000003,398" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="935.65" y="375" width="24.1" height="18" rx="3" fill="#ffffff"/><text x="947.7" y="388" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">1%</text><polyline points="853.2,282 853.2,384 1230.8500000000004,384 1230.8500000000004,398" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="1009.9" y="375" width="64.25" height="18" rx="3" fill="#ffffff"/><text x="1042.03" y="388" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">7.4MW專案</text><polyline points="853.2,282 853.2,384 1422.4000000000003,384 1422.4000000000003,398" fill="none" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arr-94a3b8)" stroke-dasharray="6 5"/><rect x="1078.73" y="375" width="118.15" height="18" rx="3" fill="#ffffff"/><text x="1137.8" y="388" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">4GW提案中，尚無簽約</text><g><rect x="666.7" y="46" width="142" height="60" rx="9" fill="rgb(246,233,221)" stroke="#c2600a" stroke-width="1.4"/><text x="737.7" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">鎳／不鏽鋼供應商</text><text x="737.7" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未具名，關鍵原料投入</text></g><g><rect x="842.7" y="46" width="197" height="60" rx="9" fill="rgb(246,233,221)" stroke="#c2600a" stroke-width="1.4"/><text x="941.2" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">BOP 零組件供應商</text><text x="941.2" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未具名，多家組成，集中度未揭露</text></g><g><rect x="60" y="222" width="1586.4" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="853.2" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">FCEL Torrington, CT 製造廠</text><text x="853.2" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">41MW實際(單班)／100MW額定／目標500MW</text></g><g><rect x="60" y="398" width="215.7" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="167.85" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">GGE（南韓）</text><text x="167.85" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY25營收占比46%，較FY24的18%暴增</text></g><g><rect x="309.7" y="398" width="232.48" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="425.94" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Connecticut Light and Power</text><text x="425.94" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY25 15%</text></g><g><rect x="576.18" y="398" width="173.08" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="662.71" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">United Illuminating</text><text x="662.71" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY25 7%</text></g><g><rect x="783.25" y="398" width="212.95" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="889.73" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">ExxonMobil（EMTEC+Esso）</text><text x="889.73" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY25合計11%，Rotterdam碳捕捉JDA</text></g><g><rect x="1030.2" y="398" width="154.65" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="1107.53" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">KOSPO（南韓）</text><text x="1107.53" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY25僅1%，FY23曾達31%</text></g><g><rect x="1218.85" y="398" width="157.55" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="1297.63" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">美國海軍（Groton）</text><text x="1297.63" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">7.4MW，本季$42.6M減損</text></g><g><rect x="1410.4" y="398" width="236" height="60" rx="9" fill="rgb(240,242,245)" stroke="#94a3b8" stroke-width="1.4"/><text x="1528.4" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">潛在資料中心客戶（管線）</text><text x="1528.4" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未簽約，占4GW submitted-proposal…</text></g><rect x="541.58" y="487" width="22" height="2.4" fill="#c2600a"/><text x="571.58" y="492" font-size="11" fill="#5a6167" font-family="sans-serif">上游供應商（10-K 未具名）</text><rect x="729.83" y="487" width="22" height="2.4" fill="#2563eb"/><text x="759.83" y="492" font-size="11" fill="#5a6167" font-family="sans-serif">已簽約、已認列營收客戶</text><line x1="898.83" y1="488" x2="920.83" y2="488" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 4"/><text x="928.83" y="492" font-size="11" fill="#5a6167" font-family="sans-serif">未簽約資料中心管線（僅提案，非營收）</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2025 10-K Item 1（供應鏈敘述）＋客戶集中度附註 R52.htm；Q2 FY2026 法說會逐字稿（2026-06-08）</div>
+</div>
+      <div class="note">⚑ 結構圖重點：把「已簽約且已認列營收的客戶」（GGE、CL&amp;P、UI、ExxonMobil、美國海軍）與「尚未簽約的資料中心管線」清楚分層畫開，避免讀者誤把管線當成既有客戶關係；GGE 節點應以顯著顏色／粗細標示其 46% 的營收占比與逐年暴增的趨勢。上游供應商因 10-K 未具名，維持匿名節點並標註「未具名／集中度低」。資料來源：FY2025 10-K Item 1（供應鏈敘述）＋ 客戶集中度附註 R52.htm＋ Q2 FY2026 法說會逐字稿。</div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">供應鏈流量圖（Sankey）</div>
+      <div id="sankeyEmbed_712vg4c" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"ni_ss","label":"鎳／不鏽鋼供應商","color":"#c2600a"},{"id":"bop","label":"BOP零組件供應商","color":"#d97706"},{"id":"torrington","label":"FCEL Torrington製造","color":"#15181a"},{"id":"gge","label":"GGE（南韓，46%）","color":"#2563eb"},{"id":"clp","label":"Connecticut Light and Power（15%）","color":"#3b82f6"},{"id":"ui","label":"United Illuminating（7%）","color":"#60a5fa"},{"id":"exxon","label":"ExxonMobil EMTEC+Esso（11%）","color":"#93c5fd"},{"id":"kospo","label":"KOSPO（南韓，1%）","color":"#bfdbfe"}],"links":[{"source":"ni_ss","target":"torrington","value":10},{"source":"bop","target":"torrington","value":10},{"source":"torrington","target":"gge","value":46},{"source":"torrington","target":"clp","value":15},{"source":"torrington","target":"ui","value":7},{"source":"torrington","target":"exxon","value":11},{"source":"torrington","target":"kospo","value":1}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_712vg4c");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+      <div class="note">⚑ 流量圖重點：節點名稱須與上方結構圖完全一致。線寬建議依 10-K 揭露的營收占比百分比設定相對值（GGE 46、CL&amp;P 15、UI 7、EMTEC+Esso 11、KOSPO 1，其餘客戶依表列百分比），資料中心管線客戶因無實際營收流量，<b>不建議在 Sankey 中畫出金額線</b>，可用虛線或獨立備註區塊標示「4GW submitted proposals，89% 為潛在資料中心客戶，尚未轉換為營收」，避免與其餘已實現的營收流量混淆。資料來源同上，客戶百分比取 FY2025 一欄。</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 5: RISK ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">客戶集中度 — GGE 一年內從 18% 暴增至 46%，接近全公司營收半壁江山</div>
+        Gyeonggi Green Energy Co., Ltd.（南韓）占 FY2025 合併營收比重達 <b>46%</b>，較 FY2024 的 18% 幾乎翻三倍；前幾大客戶合計占比亦由 FY2024 的 68% 升至 FY2025 的 82%。本季法說會進一步確認產品營收成長主要即由 GGE 模組交付驅動，且下半年仍有「remaining six GGE modules」待交付。單一客戶占比接近半數，任何交付延遲、付款糾紛、或該客戶所屬專案（Gyeonggi 58.8 MW 電廠）本身的營運變化，都會對公司整體營收造成不成比例的衝擊。
+        <div class="risk-source">來源：FY2025 10-K 客戶集中度附註（R52.htm）；Q2 FY2026 法說會 CFO 財務回顧段落</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">股權稀釋 — 半年內流通股數增加 37.9%，且管理層未正面排除近期再增資</div>
+        流通股數從 2025/10/31 的約 <b>4,607.5 萬股</b>增至 2026/4/30 的約 <b>6,354.9 萬股</b>，增幅 37.9%，主因是 ATM 股權增發：本季（Q2 FY26）增發約 1,090 萬股（均價 $9.45，淨募得 $100.4M），季後又再增發 410 萬股（均價 $13.31，淨募得 $52.9M）。當被 JPMorgan 分析師 Mark Strouse 直接問及「是否可以完全排除近期再增資」時，CFO Michael Bishop 以「No」開場卻未真正給出否認或確認，只重申「comfortable with our current liquidity position」（見 Q&amp;A 分頁邏輯缺口 2）——在已完成兩輪增發、且公司正推進 $200–275M 資本支出計畫的背景下，這種模糊表態本身即是需要留意的訊號。
+        <div class="risk-source">來源：Q2 FY2026 10-Q 資產負債表、現金流量表（融資活動）；法說會 Mark Strouse／Michael Bishop 交換</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Groton 減損／重新動力化的執行風險</div>
+        本季認列 $42.6M 非現金減損，決定以 3 座 2.5 MW 動力區塊重新動力化 Groton 專案（美國海軍核潛艦基地微電網）。截至目前，重新動力化的完工時間表、置換用區塊的實際資本支出金額，來源文件均未揭露；本季發電營收已因專案「undergoing repairs」而年減 28%，換機期間是否有進一步的發電缺口尚待觀察。
+        <div class="risk-source">來源：Q2 FY2026 法說會 CFO 財務回顧段落；10-Q 損益表 Impairment expense 項</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Pipeline 轉換為 backlog 的時程與確定性風險</div>
+        4 GW submitted-proposal pipeline 較上季成長逾 250%，平均提案規模由 65 MW 增至 130 MW，但管理層在正式稿中已預先設下但書：「100 MW infrastructure decisions are not made on a predictable schedule」，且對外承諾僅止於「with the goal of converting submitted proposals into contracted backlog within this fiscal year」——用詞是「目標」而非「承諾」。Q&amp;A 中多位分析師（Tilchen、Ailani）追問具體步驟與節奏時，管理層均未給出可覆核的中間里程碑（見 Q&amp;A 分頁邏輯缺口 1、4）。截至本季末，4 GW 管線<b>尚無一筆轉換為簽約 backlog 或具名客戶</b>。
+        <div class="risk-source">來源：Q2 FY2026 法說會 CEO 正式稿與 Q&amp;A 逐字稿</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">資本支出承諾 vs 尚未兌現的資料中心 backlog</div>
+        Torrington 擴產預算已從 350 MW／年上修至 500 MW／年、總支出 $200–275M，決策理由直接連結到管線規模成長，但管線本身 89% 為未簽約的潛在資料中心客戶，截至本季末沒有任何一筆已轉換為具名合約。管理層雖強調擴產會「in strict alignment with contracted backlog」推進、不會超前市場，但預算上修的觸發點是管線（提案）規模而非 backlog（已簽約）規模，兩者在本框架中須被明確區分（見「供應鏈」分頁）。
+        <div class="risk-source">來源：Q2 FY2026 法說會 CEO 正式稿；FY2025 10-K 產能揭露</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge high">高（獨創前瞻風險）</div>
+      <div class="risk-text">
+        <div class="risk-title">獨創前瞻風險 — 公司目前唯一驗證過的「大型集中客戶」關係，未必能說明資料中心管線的轉換勝算</div>
+        把兩件分別揭露、管理層未曾放在一起討論的事實連起來看：公司目前唯一真正驗證過的「大型、高度集中」商業關係是 GGE——一個南韓政府背景電力購售架構下的模組交付／代工型客戶，占營收比重高達 46%；其餘可觀察的規模化客戶（Connecticut Light and Power、United Illuminating）同樣是受監管的美國公用事業，交易節奏、審批邏輯、財務結構都與美國政府/受監管公用事業採購流程高度相關。而公司現正押注轉換的資料中心管線（4 GW 中 89%），客戶輪廓是 hyperscaler／資料中心開發商／電力用地開發商——這類買家的決策速度、談判籌碼、融資結構、以及對供應商財務體質與量產保證的要求，與公用事業或政府採購的邏輯有本質差異。換言之，公司「成功放量給 GGE、CL&amp;P、UI」這段紀錄，並不必然轉移為「有能力在可預期時間內把 hyperscaler 級客戶從提案轉為簽約」的證據——這正是管理層在被反覆追問轉換時程時始終無法給出具體里程碑的一個可能結構性原因（見 Q&amp;A 分頁邏輯缺口 1、4），也是本報告認為讀者應對 4 GW pipeline 的轉換速度抱持更審慎預期的核心理由。
+        <div class="risk-source">來源：本報告依 FY2025 10-K 客戶集中度附註與 Q2 FY2026 法說會逐字稿交叉推導；未見於公司對外任何正式陳述</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低（風險緩解訊號）</div>
+      <div class="risk-text">
+        <div class="risk-title">資產負債表無立即流動性疑慮，10-Q 未見持續經營疑慮用語</div>
+        截至 2026/4/30，公司總現金及約當現金（含限制性）達 <b>$440.9M</b>（其中非限制性 $373.2M），10-Q 流動性揭露明確表示「we believe that our unrestricted cash and cash equivalents...will be sufficient to allow the Company to meet its obligations for at least one year」，且<b>未見任何「substantial doubt about our ability to continue as a going concern」等持續經營疑慮用語</b>。公司債務規模約 $134.2M，絕大部分為專案層級融資（EXIM、Derby／Groton back-leverage loans 等），近期無重大到期壓力。這是本季少數對公司有利、值得與稀釋與集中度風險並陳的平衡訊號。
+        <div class="risk-source">來源：Q2 FY2026 10-Q Note 1 流動性揭露段落；Note 17 債務附註</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低（正向訊號，附資料可靠性但書）</div>
+      <div class="risk-text">
+        <div class="risk-title">內部人信心訊號 — 董事逢高逢跌後仍現金買進，但交易細節來自次級來源</div>
+        2026 年 7 月 16 日，董事 Homer John Livingston III 於公開市場買進 <b>26,343 股（約 $18.79／股，約合 $495K）</b>，是本研究窗口（2026 年 4 月至 7 月，共 21 筆 Form 4 申報）中唯一一筆明確的公開市場<b>現金買進</b>，其餘已辨識交易多為例行性股權薪酬事件（RSU／DSU 既得、選擇權行使，以及至少一筆疑似既得後為繳稅而出售的官員交易）。⚑ <b>資料可靠性但書</b>：本筆交易的股數與價格細節取自次級彙整來源（stocktitan.net、secform4.com），SEC EDGAR 官方列表僅確認該筆 Form 4 申報存在（受理編號 0000897069-26-001523，申報日 2026/7/20），交易細節尚未對照原始 Form 4 文件逐字覆核，使用時應標註為「方向正確、金額未經一手文件確認」。
+        <div class="risk-source">來源：SEC EDGAR Form 4 申報列表（受理編號 0000897069-26-001523）；交易細節來自 stocktitan.net／secform4.com 二手彙整，未經原始文件覆核</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 6: INCOME STATEMENT ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$35.6M</div><div class="kpi-lbl">Q2 FY26 總營收</div><div class="kpi-sub neg">−4.9% YoY</div></div>
+      <div class="kpi"><div class="kpi-val">$(12.9)M</div><div class="kpi-lbl">毛損</div><div class="kpi-sub neg">較去年同期 $(9.4)M 擴大 37.0%</div></div>
+      <div class="kpi"><div class="kpi-val">$(77.9)M</div><div class="kpi-lbl">營業損失</div><div class="kpi-sub neg">較去年同期 $(35.8)M，含 $42.6M 減損</div></div>
+      <div class="kpi"><div class="kpi-val">$(17.1)M</div><div class="kpi-lbl">調整後 EBITDA（非GAAP）</div><div class="kpi-sub">較去年同期 $(19.3)M，改善 12%</div></div>
+    </div>
+
+    <div class="note red">⚑ 本表單位：百萬美元（US$M），四捨五入至小數點後一位；原始數字（千美元）見同資料夾 <em>FCEL Q2 10-Q Key Data.md</em>。<b>關鍵警示：每股虧損（EPS）的改善是股數膨脹造成的稀釋假象，不是本業好轉</b>——Q2 FY26 淨損 $77.6M（較去年同期 $37.7M 擴大 105.6%），但由於加權平均股數從 21.7M 暴增至 54.2M（+149.4%，主因 ATM 增發），每股虧損反而從 $(1.79) 收斂至 $(1.45)（改善 19.0%）。六個月期同理：淨損擴大 47.8%（$70.1M→$103.7M），EPS 卻從 $(3.22) 改善至 $(2.00)。單看 EPS 會得出與實際虧損規模相反的結論，下方表格同時列出兩者供對照。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併損益表（GAAP，US$M）</div>
+      <div class="tbl-scroll">
+        <table class="wide">
+          <tr><th style="text-align:left">項目</th><th>Q2 FY26</th><th>Q2 FY25</th><th>YoY</th><th>H1 FY26</th><th>H1 FY25</th></tr>
+          <tr class="section-head"><td colspan="5">營收</td></tr>
+          <tr><td>Product</td><td>18.0</td><td>13.0</td><td class="pos">+38.3%</td><td>30.1</td><td>13.1</td></tr>
+          <tr><td>Service</td><td>4.2</td><td>8.1</td><td class="neg">−48.7%</td><td>7.4</td><td>10.0</td></tr>
+          <tr><td>Generation</td><td>8.7</td><td>12.1</td><td class="neg">−28.4%</td><td>19.7</td><td>23.5</td></tr>
+          <tr><td>Advanced Technologies</td><td>4.7</td><td>4.1</td><td class="pos">+14.7%</td><td>9.0</td><td>9.8</td></tr>
+          <tr class="total"><td><strong>總營收</strong></td><td><strong>35.6</strong></td><td>37.4</td><td class="neg">−4.9%</td><td><strong>66.1</strong></td><td>56.4</td></tr>
+          <tr class="section-head"><td colspan="5">營收成本</td></tr>
+          <tr><td>Product</td><td>20.3</td><td>16.3</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Service</td><td>3.5</td><td>9.1</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Generation</td><td>22.1</td><td>18.4</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Advanced Technologies</td><td>2.7</td><td>3.1</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr class="subtotal"><td>總營收成本</td><td>48.5</td><td>46.8</td><td class="neg">+3.6%</td><td>84.9</td><td>71.0</td></tr>
+          <tr class="total"><td><strong>毛損</strong></td><td><strong>(12.9)</strong></td><td>(9.4)</td><td class="neg">擴大37.0%</td><td><strong>(18.8)</strong></td><td>(14.6)</td></tr>
+          <tr class="section-head"><td colspan="5">營業費用</td></tr>
+          <tr><td>管理及銷售費用</td><td>14.7</td><td>16.5</td><td class="pos">−10.7%</td><td>28.2</td><td>31.5</td></tr>
+          <tr><td>研究發展費用</td><td>7.7</td><td>9.9</td><td class="pos">−22.1%</td><td>14.7</td><td>21.0</td></tr>
+          <tr><td>重組費用</td><td>0.0</td><td>0.0</td><td>—</td><td>0.0</td><td>1.5</td></tr>
+          <tr class="wrap"><td>減損費用（Groton專案，非現金）</td><td class="neg">42.6</td><td>0.0</td><td class="wrap">新增項目</td><td class="neg">42.6</td><td>0.0</td></tr>
+          <tr class="subtotal"><td>總成本及費用</td><td>65.0</td><td>26.4</td><td class="neg">+146.4%</td><td>85.4</td><td>54.0</td></tr>
+          <tr class="total"><td><strong>營業損失</strong></td><td><strong>(77.9)</strong></td><td>(35.8)</td><td class="neg">擴大117.6%</td><td><strong>(104.2)</strong></td><td>(68.7)</td></tr>
+          <tr><td>利息費用</td><td>(2.9)</td><td>(2.5)</td><td>—</td><td>(5.6)</td><td>(5.2)</td></tr>
+          <tr><td>利息收入</td><td>2.5</td><td>1.8</td><td>—</td><td>5.0</td><td>4.2</td></tr>
+          <tr><td>其他收入（費用），淨額</td><td>0.6</td><td>(1.1)</td><td>—</td><td>1.1</td><td>(0.4)</td></tr>
+          <tr><td>稅前損失</td><td>(77.7)</td><td>(37.7)</td><td>—</td><td>(103.7)</td><td>(70.1)</td></tr>
+          <tr><td>所得稅利益（費用）</td><td>0.1</td><td>(0.1)</td><td>—</td><td>0.1</td><td>(0.1)</td></tr>
+          <tr class="total"><td><strong>淨損</strong></td><td><strong>(77.6)</strong></td><td>(37.7)</td><td class="neg">擴大105.6%</td><td><strong>(103.7)</strong></td><td>(70.1)</td></tr>
+          <tr><td>歸屬非控制權益之淨利（損）</td><td>0.3</td><td>0.3</td><td>—</td><td>(2.9)</td><td>(3.8)</td></tr>
+          <tr><td>歸屬FCEL之淨損</td><td>(77.9)</td><td>(38.0)</td><td>—</td><td>(100.8)</td><td>(66.4)</td></tr>
+          <tr><td>特別股股息（Series B）</td><td>(0.8)</td><td>(0.8)</td><td>—</td><td>(1.6)</td><td>(1.6)</td></tr>
+          <tr class="total"><td><strong>歸屬普通股股東之淨損</strong></td><td><strong>(78.7)</strong></td><td>(38.8)</td><td>—</td><td><strong>(102.4)</strong></td><td>(68.0)</td></tr>
+          <tr><td>每股淨損（基本／稀釋）</td><td class="pos">$(1.45)</td><td>$(1.79)</td><td class="pos">改善19.0%</td><td class="pos">$(2.00)</td><td>$(3.22)</td></tr>
+          <tr><td>加權平均流通股數</td><td>54,224,428</td><td>21,740,193</td><td class="neg">+149.4%</td><td>51,165,339</td><td>21,110,664</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note">⚑ 來源：10-Q Consolidated Statements of Operations（三個月與六個月期），見 <em>FCEL Q2 10-Q Key Data.md</em> 第1節。營收下滑主因：無模組更換之服務收入（Service）與 Groton 專案停機檢修拖累發電收入（Generation），部分被 GGE 韓國模組交付帶動的 Product 營收成長抵銷——與 CFO 法說會逐字稿描述完全一致。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">QoQ 環比：Q1 FY26 → Q2 FY26（US$M）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th>Q1 FY26</th><th>Q2 FY26</th><th>QoQ</th></tr>
+          <tr><td>總營收</td><td>30.5</td><td>35.6</td><td class="pos">+16.6%</td></tr>
+          <tr><td>毛損</td><td>(5.9)</td><td>(12.9)</td><td class="neg">擴大118.6%</td></tr>
+          <tr><td>總成本及費用</td><td>20.4</td><td>65.0</td><td class="neg">+218.2%</td></tr>
+          <tr><td>營業損失</td><td>(26.3)</td><td>(77.9)</td><td class="neg">擴大196.4%</td></tr>
+          <tr><td>淨損</td><td>(26.1)</td><td>(77.6)</td><td class="neg">擴大197.7%</td></tr>
+          <tr><td>每股淨損</td><td>$(0.49)</td><td>$(1.45)</td><td class="neg">擴大195.9%</td></tr>
+          <tr><td>現金（不受限）</td><td>311.8</td><td>373.2</td><td class="pos">+19.7%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ QoQ 惡化的唯一主因是 $42.6M Groton 減損——Q1 FY26 完全沒有減損項目（總成本及費用僅 $20.4M），這是本季總成本及費用季增 218.2%、營業損失季增近 2 倍的關鍵解釋，而非核心營運突然惡化。資料來源：<em>FCEL Prior 10-Q Trend Data.md</em>（Q1 FY26 列）與 <em>FCEL Q2 10-Q Key Data.md</em>。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">財測 vs 實際 / 下半年展望</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th style="text-align:left">內容</th></tr>
+          <tr><td class="wrap">正式數字財測</td><td class="wrap"><b>管理層在本次法說會逐字稿中未提供 FY26 下半年正式量化財測</b>（無營收區間、無 EBITDA 區間等具體數字）。</td></tr>
+          <tr><td class="wrap">定性方向指引</td><td class="wrap">CFO：「remaining six GGE modules and the upcoming CGN-Yulchon Generation deliveries [are] expect[ed] to drive consistent product revenue in the second half of fiscal 2026」——即剩餘 6 座 GGE 模組與 CGN-Yulchon 發電案交付，預期支撐下半年 Product 營收。</td></tr>
+          <tr><td class="wrap">獲利能力門檻指引</td><td class="wrap">CFO 回答 JPMorgan 提問時重申：一旦年化量產穩定達到或超過 100 MW，即以調整後 EBITDA 轉正為目標；擴大至 500 MW 產能計畫「不改變」此 100 MW 門檻。此為產能／營運槓桿門檻，非本期財測數字。</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ 調整後 EBITDA 拆解：管理層僅揭露起訖點（Q2 FY26 $(17.1)M vs Q2 FY25 $(19.3)M，改善約 11.4%，法說會口徑「12%」），最大單一調節項目是 $42.6M 非現金減損——扣除減損後，Q2 FY26 裸營業損失約為 $(35.3)M（$77.9M−$42.6M），與去年同期 $(35.8)M 幾乎持平（甚至略優），顯示核心業務虧損並未如表面營業損失數字般惡化逾一倍。惟法說會逐字稿與 10-Q 均未提供淨損→調整後EBITDA的完整逐項調節表（折舊攤銷、股權薪酬、利息等個別加回金額未揭露），故此處僅呈現已知起訖點與最大調節項目，不虛構中間步驟金額。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">損益表逐季趨勢</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">FCEL 近7季損益趨勢</text><line x1="76" y1="456" x2="864" y2="456" stroke="#eeeeee" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-100</text><line x1="76" y1="355.5" x2="864" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-50</text><line x1="76" y1="255" x2="864" y2="255" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="154.5" x2="864" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元 (US$M)</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY24</text><line x1="207.33" y1="456" x2="207.33" y2="460" stroke="#999999" stroke-width="1"/><text x="207.33" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY25</text><line x1="338.67" y1="456" x2="338.67" y2="460" stroke="#999999" stroke-width="1"/><text x="338.67" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY25</text><line x1="470" y1="456" x2="470" y2="460" stroke="#999999" stroke-width="1"/><text x="470" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY25</text><line x1="601.33" y1="456" x2="601.33" y2="460" stroke="#999999" stroke-width="1"/><text x="601.33" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY25</text><line x1="732.67" y1="456" x2="732.67" y2="460" stroke="#999999" stroke-width="1"/><text x="732.67" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY26</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY26</text><polyline points="76,155.91 207.33,216.81 338.67,179.83 470,161.13 601.33,144.45 732.67,193.7 864,183.44" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="155.91" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="207.33" cy="216.81" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="338.67" cy="179.83" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="470" cy="161.13" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="601.33" cy="144.45" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="732.67" cy="193.7" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="864" cy="183.44" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><polyline points="76,337.41 207.33,321.13 338.67,326.96 470,446.75 601.33,311.88 732.67,307.86 864,411.58" fill="none" stroke="#0891b2" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="337.41" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="207.33" cy="321.13" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="338.67" cy="326.96" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="470" cy="446.75" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="601.33" cy="311.88" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="732.67" cy="307.86" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="864" cy="411.58" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><line x1="365.75" y1="40" x2="381.75" y2="40" stroke="#7c3aed" stroke-width="2.4"/><text x="387.75" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">總營收</text><line x1="444.25" y1="40" x2="460.25" y2="40" stroke="#0891b2" stroke-width="2.4"/><text x="466.25" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營業損失</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：各季 10-Q／FY25・FY24 10-K，見 FCEL Prior 10-Q Trend Data.md；Q4 FY24／FY25 為推算值</div>
+</div>
+      <div class="note">⚑ 7季趨勢顯示營收在 $19M–$55M 區間波動（無穩定成長軌跡），營業損失則因 Q3 FY25（$95.4M，疑似另有大額一次性項目，見下方資料缺口）與 Q2 FY26（$77.9M，Groton減損）兩次出現異常放大的季度，其餘各季約落在 $26M–$41M 區間。資料來源：各季 10-Q／FY25 10-K／FY24 10-K，見 <em>FCEL Prior 10-Q Trend Data.md</em>；Q4 FY24 與 Q4 FY25 為推算值（全年10-K數字減去前三季10-Q累計數字，非公司單獨揭露）。</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">近7季損益趨勢資料（圖表用數據，US$M）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">季度</th><th>總營收</th><th>營業損失</th><th>淨損</th></tr>
+          <tr><td>Q4 FY24（推算）</td><td>49.3</td><td>(41.0)</td><td>(39.6)</td></tr>
+          <tr><td>Q1 FY25</td><td>19.0</td><td>(32.9)</td><td>(32.4)</td></tr>
+          <tr><td>Q2 FY25</td><td>37.4</td><td>(35.8)</td><td>(37.7)</td></tr>
+          <tr><td>Q3 FY25</td><td>46.7</td><td>(95.4)</td><td>(91.9)</td></tr>
+          <tr><td>Q4 FY25（推算）</td><td>55.0</td><td>(28.3)</td><td>(29.3)</td></tr>
+          <tr><td>Q1 FY26</td><td>30.5</td><td>(26.3)</td><td>(26.1)</td></tr>
+          <tr><td>Q2 FY26</td><td>35.6</td><td>(77.9)</td><td>(77.6)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 資料缺口：Q3 FY25 營業損失 $95.4M／淨損 $91.9M 明顯偏離其餘各季的 $26M–$41M 區間，規模與本季 Groton 減損相近，極可能也是某項大額一次性費用（減損或重組），但這份趨勢檔案僅擷取了損益表頂層數字，並未取得該季 10-Q 的附註明細獨立確認，故不臆測其性質，標註為待查缺口。Q4 FY24／FY25 為（全年10-K數字 − 前三季10-Q累計）推算值，非公司單獨揭露的季度數字。</div>
+  </div>
+
+  <!-- ============ TAB 7: BUSINESS UNITS (4 REVENUE CATEGORIES) ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="note grey">⚑ FCEL 僅有<b>單一可報告分部</b>（「fuel cell power plant production and research」），不像多數公司有多個事業部。本 tab 以 10-Q 揭露的 4 大營收類別（Product／Service／Generation／Advanced Technologies）作為「業務單位」的替代分析單位，比照框架對 BU tab 的深度要求逐項拆解。</div>
+
+    <div class="bu-grid four">
+      <div class="bu-card b">
+        <div class="bu-name">Product 產品銷售</div>
+        <div class="bu-abbr">一次性設備／模組銷售</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 營收</span><span class="bu-stat-val">$18.0M<span class="bu-delta">+38.3%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 營收</span><span class="bu-stat-val">$30.1M<span class="bu-delta">+129.5%</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:50.6%;background:#2563eb;"></div></div>
+        <div class="bu-stat" style="margin-top:8px;"><span class="bu-stat-lbl">季末產品類別在手訂單</span><span class="bu-stat-val">$36.1M</span></div>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">Service 服務</div>
+        <div class="bu-abbr">客戶自有電廠之長期維運合約</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 營收</span><span class="bu-stat-val">$4.2M<span class="bu-delta neg">−48.7%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 營收</span><span class="bu-stat-val">$7.4M<span class="bu-delta neg">−26.3%</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:11.8%;background:#15803d;"></div></div>
+        <div class="bu-stat" style="margin-top:8px;"><span class="bu-stat-lbl">季末服務類別在手訂單</span><span class="bu-stat-val">$155.4M</span></div>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">Generation 發電</div>
+        <div class="bu-abbr">公司自有電廠依PPA售電</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 營收</span><span class="bu-stat-val">$8.7M<span class="bu-delta neg">−28.4%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 營收</span><span class="bu-stat-val">$19.7M<span class="bu-delta neg">−16.2%</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:24.4%;background:#c2600a;"></div></div>
+        <div class="bu-stat" style="margin-top:8px;"><span class="bu-stat-lbl">季末發電類別在手訂單</span><span class="bu-stat-val">$928.5M</span></div>
+      </div>
+      <div class="bu-card p">
+        <div class="bu-name">Advanced Technologies 先進技術</div>
+        <div class="bu-abbr">研發／聯合開發合約（JDA）收入</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 營收</span><span class="bu-stat-val">$4.7M<span class="bu-delta">+14.7%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 營收</span><span class="bu-stat-val">$9.0M<span class="bu-delta neg">−8.3%</span></span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:13.2%;background:#7c3aed;"></div></div>
+        <div class="bu-stat" style="margin-top:8px;"><span class="bu-stat-lbl">季末先進技術在手訂單</span><span class="bu-stat-val">$15.4M</span></div>
+      </div>
+    </div>
+    <div class="note grey">Margin bar 顯示各類別 Q2 FY26 營收佔四類總和（$35.6M）的比重，非毛利率。⚑ <b>營收規模與在手訂單規模呈現戲劇性反差</b>：Generation 本季只佔營收的 24.4%（$8.7M），但其在手訂單 $928.5M 卻佔總在手訂單 $1.14B 的 81.5%，且平均剩餘合約年期約 15 年——這是四類中「當期營收最不起眼、長期價值最大」的一類；Product 恰好相反，當期營收占比最高（50.6%）但在手訂單僅 $36.1M（3.2%），反映其一次性交易特性。資料來源：10-Q 損益表分類、法說會逐字稿 backlog 拆解，見 <em>FCEL Q2 10-Q Key Data.md</em> 第1節與第7節。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">四大營收類別是什麼、客戶為何需要它</div>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>Product（產品銷售）</h4>
+        <div class="meta">一次性設備交易・毛損最深的類別</div>
+        <p>客戶（通常是電廠業主或授權經銷商）直接購買 FuelCell Energy 製造的燃料電池模組硬體，用於新建或更新（repowering）電廠。本季成長主力是交付給南韓 Gyeonggi Green Energy（GGE）的 repowering 模組——GGE 是既有 58.8 MW 電廠的業主，模組屬於汰換既有堆疊的既定排程交付，而非新客戶拓展。CFO 明確預告「剩餘 6 座 GGE 模組」與「CGN-Yulchon Generation」交付將是 H2 FY26 產品營收主要驅動力。⚑ 資料缺口：10-Q 與逐字稿均未揭露本季確切出貨模組數量或單一模組單價（ASP），量價拆分無法量化，僅能定性歸因於 GGE 排程交付。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>Service（服務）</h4>
+        <div class="meta">長期維運合約・經常性但波動</div>
+        <p>公司為<b>客戶自有</b>的電廠提供長期維運（O&amp;M）服務，收取服務費以維持電廠運轉在合約要求的最低發電水準以上，未達標可能觸發罰則或須更換模組。服務收入的其中一項組成是「模組更換（module exchange）」——電池堆疊定期汰換屬於高單價、非每季發生的服務事件。CFO 明確將本季服務收入年減 48.7% 歸因於「there were no module exchanges in the quarter」，即本季恰好沒有排到任何模組更換事件，而非客戶流失或合約終止。這說明 Service 收入雖是「經常性」收入流，但因模組更換的間歇性，季度間波動可能很大。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>Generation（發電）</h4>
+        <div class="meta">FCEL自有電廠售電・長年期PPA・公司唯一真正的「電力生產者」收入流</div>
+        <p>公司自行擁有並營運燃料電池電廠，依<b>電力購買協議（PPA）</b>將發出的電力賣給客戶（如公用事業、軍事基地），公司自行承擔燃料採購與運維成本，並承擔未達性能標準的罰則風險。這是四類中唯一讓 FCEL 扮演「發電業者」角色、而非設備供應商角色的收入流，also是唯一有燃料價格曝險（10-Q Note 19 揭露透過固定價格供氣合約與成本轉嫁機制部分避險，合約展延至 2029 年）的類別。本季衰退主因是 Groton 專案（7.4 MW，供應美國海軍基地）停機檢修——該專案同時是本季 $42.6M 減損的來源（管理層決定以新一代 2.5 MW 電力模塊升級，以確保對軍方客戶的高可靠度）。Generation 在手訂單 $928.5M（占總在手訂單約 81.5%）反映的正是這批長年期 PPA 的鎖定未來現金流，加權平均剩餘合約期約 15 年。</p>
+      </div>
+      <div class="tech-card p">
+        <h4>Advanced Technologies（先進技術）</h4>
+        <div class="meta">研發／聯合開發合約收入・尚未規模化的技術選擇權</div>
+        <p>主要來自與客戶／政府的聯合開發合約（JDA）及研發資助合約，目前絕大部分與 ExxonMobil Technology and Engineering Company（EMTEC）的碳捕捉合作相關——包括出貨至荷蘭鹿特丹 Esso 煉油廠的模組化點源碳捕捉示範模組（CEO 逐字稿：「two units are en route to Rotterdam...expect they will be delivered in June」）。這類收入代表公司技術多元化（固態氧化物、碳捕捉）的商業化選擇權，規模仍小（本季僅 $4.7M，占比13.2%），在手訂單 $15.4M 中多數綁定 ExxonMobil JDA，屬於「證明技術可行性」階段而非規模化商轉收入。</p>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">營收類別比較</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 342" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="342" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">FCEL 營收類別比較：Q2 FY25 vs Q2 FY26</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6b6b6b" font-family="sans-serif">資料來源：10-Q Consolidated Statements of Operations 分類明細</text><line x1="22" y1="56" x2="876" y2="56" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="71" width="10" height="10" rx="1" fill="#db2777"/><text x="40" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 FY25</text><rect x="108.28" y="71" width="10" height="10" rx="1" fill="#65a30d"/><text x="126.28" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 FY26</text><line x1="170" y1="96" x2="170" y2="284" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="300" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="337.5" y1="96" x2="337.5" y2="284" stroke="#eeeeee" stroke-width="1"/><text x="337.5" y="300" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">5</text><line x1="505" y1="96" x2="505" y2="284" stroke="#eeeeee" stroke-width="1"/><text x="505" y="300" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="672.5" y1="96" x2="672.5" y2="284" stroke="#eeeeee" stroke-width="1"/><text x="672.5" y="300" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">15</text><line x1="840" y1="96" x2="840" y2="284" stroke="#eeeeee" stroke-width="1"/><text x="840" y="300" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">20 百萬美元 (US$M)</text><line x1="170" y1="96" x2="170" y2="284" stroke="#111111" stroke-width="1.2"/><rect x="170" y="103.58" width="435.5" height="14.92" fill="#db2777" rx="1" data-dim="Q2 FY25"/><rect x="170" y="120.5" width="603" height="14.92" fill="#65a30d" rx="1" data-dim="Q2 FY26"/><text x="160" y="123.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Product</text><rect x="170" y="150.58" width="271.35" height="14.92" fill="#db2777" rx="1" data-dim="Q2 FY25"/><rect x="170" y="167.5" width="140.7" height="14.92" fill="#65a30d" rx="1" data-dim="Q2 FY26"/><text x="160" y="170.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Service</text><rect x="170" y="197.58" width="405.35" height="14.92" fill="#db2777" rx="1" data-dim="Q2 FY25"/><rect x="170" y="214.5" width="291.45" height="14.92" fill="#65a30d" rx="1" data-dim="Q2 FY26"/><text x="160" y="217.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Generation</text><rect x="170" y="244.58" width="137.35" height="14.92" fill="#db2777" rx="1" data-dim="Q2 FY25"/><rect x="170" y="261.5" width="157.45" height="14.92" fill="#65a30d" rx="1" data-dim="Q2 FY26"/><text x="160" y="264.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Advanced Technologies</text><text x="22" y="330" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：10-Q Consolidated Statements of Operations 分類明細，見 FCEL Q2 10-Q Key Data.md 第1節</text></svg>
+</div>
+      <div class="note">⚑ 四大類中僅 Product 與 Advanced Technologies 本季 YoY 正成長（+38.3%／+14.7%），Service 與 Generation 同步衰退（−48.7%／−28.4%）；兩組衰退驅動因子彼此獨立（服務端無模組更換排程 vs 發電端 Groton 停機檢修），並非同一根本原因造成，須分別追蹤是否為一次性缺口或結構性下滑。資料來源：10-Q Consolidated Statements of Operations 分類明細，見 <em>FCEL Q2 10-Q Key Data.md</em> 第1節。</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 8: BALANCE SHEET ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$1,003.4M</div><div class="kpi-lbl">總資產</div><div class="kpi-sub">+7.6% vs FY25末（10/31）</div></div>
+      <div class="kpi"><div class="kpi-val">$373.2M</div><div class="kpi-lbl">不受限現金</div><div class="kpi-sub">+34.2% vs FY25末</div></div>
+      <div class="kpi"><div class="kpi-val">$134.2M</div><div class="kpi-lbl">總負債（附註口徑，淨額）</div><div class="kpi-sub">主要為專案層級融資</div></div>
+      <div class="kpi"><div class="kpi-val">63.5M股</div><div class="kpi-lbl">流通在外股數</div><div class="kpi-sub neg">較FY25末（46.1M股）+37.9%</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併資產負債表（US$M）——僅有兩個可比期別（10-Q未提供第三期）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th>2026/4/30</th><th>2025/10/31</th></tr>
+          <tr class="section-head"><td colspan="3">流動資產</td></tr>
+          <tr><td>不受限現金及約當現金</td><td>373.2</td><td>278.1</td></tr>
+          <tr><td>受限現金（短期）</td><td>16.6</td><td>16.6</td></tr>
+          <tr><td>應收帳款，淨額</td><td>7.7</td><td>4.0</td></tr>
+          <tr><td>未開票應收款</td><td>43.7</td><td>49.0</td></tr>
+          <tr><td>存貨</td><td>88.4</td><td>86.2</td></tr>
+          <tr><td>其他流動資產</td><td>14.4</td><td>15.9</td></tr>
+          <tr class="subtotal"><td>流動資產合計</td><td>543.9</td><td>449.8</td></tr>
+          <tr class="section-head"><td colspan="3">非流動資產</td></tr>
+          <tr><td>受限現金（長期）</td><td>51.1</td><td>47.1</td></tr>
+          <tr><td>存貨（長期）</td><td>0.0</td><td>3.2</td></tr>
+          <tr><td>專案資產，淨額</td><td>167.5</td><td>216.8</td></tr>
+          <tr><td>不動產廠房設備，淨額</td><td>95.3</td><td>96.4</td></tr>
+          <tr><td>營業租賃使用權資產，淨額</td><td>11.0</td><td>11.2</td></tr>
+          <tr><td>無形資產，淨額</td><td>3.2</td><td>3.9</td></tr>
+          <tr><td>其他資產</td><td>131.2</td><td>103.6</td></tr>
+          <tr class="total"><td><strong>總資產</strong></td><td><strong>1,003.4</strong></td><td>932.1</td></tr>
+          <tr class="section-head"><td colspan="3">流動負債</td></tr>
+          <tr><td>長期負債－流動部分</td><td>17.4</td><td>15.8</td></tr>
+          <tr><td>營業租賃負債－流動部分</td><td>1.0</td><td>0.9</td></tr>
+          <tr><td>應付帳款</td><td>16.5</td><td>17.0</td></tr>
+          <tr><td>應計負債</td><td>24.1</td><td>31.3</td></tr>
+          <tr><td>遞延收入（流動）</td><td>4.4</td><td>2.7</td></tr>
+          <tr class="subtotal"><td>流動負債合計</td><td>63.3</td><td>67.8</td></tr>
+          <tr><td>長期遞延收入</td><td>10.4</td><td>6.0</td></tr>
+          <tr><td>長期營業租賃負債</td><td>11.8</td><td>12.0</td></tr>
+          <tr><td>長期負債及其他長期負債</td><td>129.6</td><td>115.2</td></tr>
+          <tr class="total"><td><strong>負債合計</strong></td><td><strong>215.0</strong></td><td>201.0</td></tr>
+          <tr><td>可贖回B系列特別股</td><td>59.9</td><td>59.9</td></tr>
+          <tr><td>普通股股本（面額）</td><td>0.0（可忽略）</td><td>0.0（可忽略）</td></tr>
+          <tr><td>額外實收資本</td><td>2,651.5</td><td>2,493.3</td></tr>
+          <tr><td>累積虧損</td><td>(1,930.2)</td><td>(1,829.4)</td></tr>
+          <tr><td>累積其他綜合損失</td><td>(1.8)</td><td>(1.7)</td></tr>
+          <tr><td>庫藏股</td><td>(1.5)</td><td>(1.4)</td></tr>
+          <tr><td>遞延薪酬</td><td>1.5</td><td>1.4</td></tr>
+          <tr class="total"><td><strong>股東權益合計</strong></td><td><strong>719.4</strong></td><td>662.2</td></tr>
+          <tr><td>非控制權益</td><td>9.1</td><td>9.1</td></tr>
+          <tr class="total"><td><strong>權益合計</strong></td><td><strong>728.5</strong></td><td>671.3</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ 10-Q 僅提供兩個資產負債表期別（本季末 vs 上一財年末），無法比照 JNJ 範本做三期別對比，如實呈現現有兩期。專案資產淨額季減 $49.3M（$216.8M→$167.5M），與 Generation 營收下滑、Groton 減損（部分沖銷專案資產帳面價值）方向一致。資料來源：10-Q Consolidated Balance Sheets，見 <em>FCEL Q2 10-Q Key Data.md</em> 第2節。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">股數與稀釋</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th style="text-align:left">內容</th></tr>
+          <tr><td class="wrap">流通在外股數</td><td class="wrap">63,549,362 股（2026/4/30）vs 46,075,237 股（2025/10/31），+37.9%</td></tr>
+          <tr><td class="wrap">H1 FY26 ATM 增發淨收入</td><td class="wrap">$155.3M（現金流量表「Common stock issuance, net of fees」，與 Note 1 揭露「sold 17.2M shares for net proceeds of $155.3M」一致）</td></tr>
+          <tr><td class="wrap">季末後之增發（後續事項）</td><td class="wrap">法說會揭露季末後另售出 4.1M 股，均價 $13.31，淨收入 $52.9M——不在本資產負債表期末數字內，但延續同一稀釋趨勢，供讀者留意下一季股數將進一步增加。</td></tr>
+          <tr><td class="wrap">ATM 剩餘額度</td><td class="wrap">截至 2026/4/30 尚餘 $54.5M 額度可用（Sales Agreement）。</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 流通股數在半年內增加 37.9%，是理解本報告所有「每股」數字（EPS、每股淨值）必須同時參照的背景——見損益表 tab 紅色註記，EPS 表面改善主要是稀釋效果，而非本業好轉。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">負債結構明細（2026/4/30，Note 17，US$M）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th>金額</th></tr>
+          <tr><td>2025 EXIM 融資（5.29%固定利率，7年期）</td><td>23.9</td></tr>
+          <tr><td>2024 EXIM 融資</td><td>8.5</td></tr>
+          <tr><td>Derby 優先層 Back Leverage Loans</td><td>7.1</td></tr>
+          <tr><td>Derby 次順位 Back Leverage Loan</td><td>3.5</td></tr>
+          <tr><td>Groton 優先層 Back Leverage Loans</td><td>9.4</td></tr>
+          <tr><td>Groton 次順位 Back Leverage Loan</td><td>7.6</td></tr>
+          <tr><td>售後租回融資義務（Sale-Leaseback）</td><td>18.8</td></tr>
+          <tr><td>康乃狄克州政府貸款</td><td>4.7</td></tr>
+          <tr><td>OpCo 融資工具</td><td>55.6</td></tr>
+          <tr><td>減：遞延融資成本</td><td>(4.9)</td></tr>
+          <tr class="total"><td><strong>總負債（淨額）</strong></td><td><strong>134.2</strong></td></tr>
+          <tr><td>其中：流動部分</td><td>17.4</td></tr>
+          <tr><td>其中：長期部分</td><td>116.8</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ $134.2M 幾乎全數是<b>專案層級</b>融資（EXIM出口信貸、Derby/Groton 個別電廠的 back-leverage 貸款、售後租回），對應管理層在法說會反覆強調的「essentially debt-free apart from the long-term financings on specific project assets and service agreements」——相對於 $1,003.4M 總資產與 $728.5M 總權益，公司層級（非專案）幾乎無傳統公司債，此為 CFO「essentially debt-free」說法的合理依據（見估值觀察 tab 互證對照表）。資料來源：10-Q Note 17 Debt，見 <em>FCEL Q2 10-Q Key Data.md</em> 第4節。</div>
+
+    <div class="divider"></div>
+    <div class="section-title">四項新增必備追蹤重點</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">1. 應收帳款天數（DSO）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th>數值</th></tr>
+          <tr><td>已開票應收帳款，淨額（2026/4/30）</td><td>$7.7M</td></tr>
+          <tr><td>Q2 FY26 營收</td><td>$35.6M</td></tr>
+          <tr><td>DSO（＝AR÷營收×91天）</td><td>≈19.6 天</td></tr>
+          <tr><td>未開票應收款（unbilled receivables）</td><td>$43.7M</td></tr>
+          <tr><td>未開票／已開票 倍數</td><td>≈5.7倍</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note red">⚑ 已開票 DSO 僅約19.6天看似健康，但具高度誤導性——未開票應收款 $43.7M 是已開票應收帳款 $7.7M 的<b>約5.7倍</b>，代表公司多數合約營收是依完工百分比法（percentage-of-completion）認列，尚未達到可對客戶開票的合約里程碑。傳統「已開票DSO」嚴重低估了實際收款週期，兩個數字須並列閱讀，不能只看已開票口徑。資料來源：10-Q資產負債表，見 <em>FCEL Q2 10-Q Key Data.md</em> 第2節。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">2. 未開始租賃（Leases not yet commenced）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th style="text-align:left">內容</th></tr>
+          <tr><td>本季（2026/4/30）10-Q Note 11</td><td class="wrap"><b>無此資料/查無揭露</b>——擷取的附註內容中未出現「lease that has not yet commenced」相關文字。</td></tr>
+          <tr><td>FY25 10-K（2025/10/31）Note 11</td><td class="wrap">同樣未在擷取內容中出現此揭露。</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ 「無此資料」在此指<b>擷取工具未擷取到相關文字</b>，並非已對照原始 10-Q 全文逐字確認該揭露項目「不存在」——兩份來源檔案皆明確標註此為擷取限制而非確認闕如，不對此下絕對結論。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">3. 採購承諾（Purchase Commitments）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th style="text-align:left">內容</th></tr>
+          <tr><td>總額（2026/4/30，Note 19）</td><td>$77.0M（材料、供應品及服務之無條件合計採購承諾）</td></tr>
+          <tr><td>到期年度分層（&lt;1年／1-3年／3-5年／3年以上）</td><td class="wrap"><b>未取得</b>——10-Q擷取的附註文字未包含逐年到期分層表。</td></tr>
+          <tr><td>對照：FY25 10-K 同項目</td><td>$59.8M（2025/10/31）——半年內增加 $17.2M，與產能擴張及供應鏈布局時點吻合，但因果未經逐字稿明確證實。</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ 不臆測到期分層——僅呈現總額。若「供應鏈」tab 揭露的特定供應商與此處承諾有具體對應金額，兩 tab 之間可互相參照，但目前擷取的資料未提供逐一供應商對應金額。資料來源：10-Q Note 19 Commitments and Contingencies；10-K Note 20，見 <em>FCEL Q2 10-Q Key Data.md</em> 第4節與 <em>FCEL 10-K Supply Chain Notes.md</em>。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">4. 客戶預付款／合約負債（遞延收入）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">項目</th><th>2026/4/30</th><th>2025/10/31</th><th>變動</th></tr>
+          <tr><td>遞延收入（流動）</td><td>$4.4M</td><td>$2.7M</td><td class="pos">+59.5%</td></tr>
+          <tr><td>遞延收入（長期）</td><td>$10.4M</td><td>$6.0M</td><td class="pos">+73.2%</td></tr>
+          <tr class="total"><td><strong>遞延收入合計</strong></td><td><strong>$14.7M</strong></td><td><strong>$8.7M</strong></td><td class="pos"><strong>+68.9%</strong></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note">⚑ 遞延收入半年增加 68.9%，方向與現金流量表「Deferred revenue change +$6.0M」（H1營運活動加項）一致，是本季少數明確走高的資產負債表科目之一。此增幅可與法說會 backlog 討論交叉參照：管理層強調 pipeline（4GW）擴張與 GGE／CGN-Yulchon 排程交付，若客戶因即將到來的交付而預付款項，理應反映在遞延收入放大——本季數字方向支持此敘事，但無法從擷取資料精確拆分「哪一筆合約」貢獻了增量，僅能從方向一致性佐證。資料來源：10-Q Note 4 Deferred Revenue，見 <em>FCEL Q2 10-Q Key Data.md</em> 第4節。</div>
+  </div>
+
+  <!-- ============ TAB 9: CASH FLOW ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$(61.2)M</div><div class="kpi-lbl">營運現金流（H1）</div><div class="kpi-sub">較去年同期 $(75.6)M 改善19.0%</div></div>
+      <div class="kpi"><div class="kpi-val">$169.1M</div><div class="kpi-lbl">融資活動淨流入（H1）</div><div class="kpi-sub neg">主要來自ATM增發，非本業</div></div>
+      <div class="kpi"><div class="kpi-val">$(69.9)M</div><div class="kpi-lbl">自由現金流proxy（H1）</div><div class="kpi-sub neg">仍深度為負</div></div>
+      <div class="kpi"><div class="kpi-val">$99.1M</div><div class="kpi-lbl">現金淨增加（H1）</div><div class="kpi-sub">期末總現金$440.9M</div></div>
+    </div>
+
+    <div class="note red">⚑ <b>不要把「現金增加」誤讀為「現金流改善」</b>：本季末總現金較期初大增 $99.1M，但拆解來源後，本業（營運活動）仍淨流出 $61.2M，真正貢獻現金增加的是融資活動淨流入 $169.1M——其中 $155.3M 是 ATM 增發股票（股東稀釋），並非營運自主造血。營運現金流雖較去年同期改善 19.0%（$(75.6)M→$(61.2)M），改善方向正確，但幅度仍遠不足以支撐正向自由現金流，公司目前現金部位的成長本質上是「用股權換現金」，而非「用營運賺現金」。</div>
+
+    <div class="cf-section">
+      <div class="cf-header">營運活動（H1，US$M）</div>
+      <div class="cf-row"><span class="cf-lbl">淨損</span><span class="cf-val">(103.7)</span></div>
+      <div class="cf-row"><span class="cf-lbl">股權基礎薪酬</span><span class="cf-val">5.0</span></div>
+      <div class="cf-row"><span class="cf-lbl">折舊及攤銷</span><span class="cf-val">21.4</span></div>
+      <div class="cf-row"><span class="cf-lbl">融資義務之非現金利息費用</span><span class="cf-val">1.4</span></div>
+      <div class="cf-row"><span class="cf-lbl">衍生性商品未實現損失（利益）</span><span class="cf-val">0.4</span></div>
+      <div class="cf-row"><span class="cf-lbl">營業租賃費用</span><span class="cf-val">0.8</span></div>
+      <div class="cf-row"><span class="cf-lbl">營業租賃給付</span><span class="cf-val">(0.7)</span></div>
+      <div class="cf-row"><span class="cf-lbl">減損費用</span><span class="cf-val">42.6</span></div>
+      <div class="cf-row"><span class="cf-lbl">其他，淨額</span><span class="cf-val">0.0</span></div>
+      <div class="cf-row"><span class="cf-lbl">應收帳款變動</span><span class="cf-val">(3.7)</span></div>
+      <div class="cf-row"><span class="cf-lbl">未開票應收款變動</span><span class="cf-val">(22.4)</span></div>
+      <div class="cf-row"><span class="cf-lbl">存貨變動</span><span class="cf-val">(2.9)</span></div>
+      <div class="cf-row"><span class="cf-lbl">其他資產變動</span><span class="cf-val">1.3</span></div>
+      <div class="cf-row"><span class="cf-lbl">應付帳款變動</span><span class="cf-val">(0.8)</span></div>
+      <div class="cf-row"><span class="cf-lbl">應計負債變動</span><span class="cf-val">(5.9)</span></div>
+      <div class="cf-row"><span class="cf-lbl">遞延收入變動</span><span class="cf-val">6.0</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">營運活動淨現金流出</span><span class="cf-val">(61.2)</span></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">投資活動（H1，US$M）</div>
+      <div class="cf-row"><span class="cf-lbl">資本支出</span><span class="cf-val">(2.5)</span></div>
+      <div class="cf-row"><span class="cf-lbl">專案資產支出</span><span class="cf-val">(6.2)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">投資活動淨現金流出</span><span class="cf-val">(8.7)</span></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">融資活動（H1，US$M）</div>
+      <div class="cf-row"><span class="cf-lbl">償還債務及融資義務</span><span class="cf-val">(9.6)</span></div>
+      <div class="cf-row"><span class="cf-lbl">發行債務所得</span><span class="cf-val">25.0</span></div>
+      <div class="cf-row"><span class="cf-lbl">遞延融資成本給付</span><span class="cf-val">(2.3)</span></div>
+      <div class="cf-row"><span class="cf-lbl">員工股票計畫發行普通股</span><span class="cf-val">0.0</span></div>
+      <div class="cf-row"><span class="cf-lbl">出售非控制權益取得之出資</span><span class="cf-val">4.0</span></div>
+      <div class="cf-row"><span class="cf-lbl">分配予非控制權益</span><span class="cf-val">(1.1)</span></div>
+      <div class="cf-row"><span class="cf-lbl">淨股份結算相關稅款</span><span class="cf-val">(0.7)</span></div>
+      <div class="cf-row"><span class="cf-lbl">普通股發行，淨額（ATM）</span><span class="cf-val">155.3</span></div>
+      <div class="cf-row"><span class="cf-lbl">特別股股利給付</span><span class="cf-val">(1.6)</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">融資活動淨現金流入</span><span class="cf-val">169.1</span></div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">現金總變動（H1，US$M）</div>
+      <div class="cf-row"><span class="cf-lbl">匯率對現金之影響</span><span class="cf-val">(0.1)</span></div>
+      <div class="cf-row"><span class="cf-lbl">現金淨增加</span><span class="cf-val">99.1</span></div>
+      <div class="cf-row"><span class="cf-lbl">期初現金（含受限）</span><span class="cf-val">341.8</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">期末現金（含受限）</span><span class="cf-val">440.9</span></div>
+    </div>
+    <div class="note grey">⚑ 期末現金 $440.9M 拆解：不受限 $373.2M＋受限短期 $16.6M＋受限長期 $51.1M。投資活動現金流出雖同比大幅收斂（H1FY25淨流入$37.9M因有價證券到期/購買軋平所致，屬結構性不同，非本業比較基礎），H1FY26的$(8.7)M全數為實質資本支出（設備+專案資產），是較乾淨的可比數字。資料來源：10-Q Consolidated Statements of Cash Flows，見 <em>FCEL Q2 10-Q Key Data.md</em> 第3節。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">自由現金流橋接</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">FCEL 自由現金流橋接（H1 FY26）</text><line x1="78" y1="424" x2="870" y2="424" stroke="#eeeeee" stroke-width="1"/><text x="68" y="428" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-125</text><line x1="78" y1="349.6" x2="870" y2="349.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="353.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-100</text><line x1="78" y1="275.2" x2="870" y2="275.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="279.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-75</text><line x1="78" y1="200.8" x2="870" y2="200.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="204.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-50</text><line x1="78" y1="126.4" x2="870" y2="126.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="130.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-25</text><line x1="78" y1="52" x2="870" y2="52" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="56" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><text x="68" y="40" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元 (US$M)</text><line x1="78" y1="52" x2="78" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="52" x2="870" y2="52" stroke="#111111" stroke-width="1.2"/><line x1="166.57" y1="360.61" x2="215.71" y2="360.61" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="279.71" y1="149.61" x2="328.86" y2="149.61" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="392.86" y1="234.13" x2="442" y2="234.13" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="506" y1="234.13" x2="555.14" y2="234.13" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="619.14" y1="241.57" x2="668.29" y2="241.57" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="732.29" y1="260.02" x2="781.43" y2="260.02" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="102.57" y="52" width="64" height="308.61" fill="#334155" fill-opacity="0.9" rx="2"/><text x="134.57" y="45" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">-103.7</text><text x="134.57" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-30 134.57142857142856 438)">淨損（H1 FY26）</text><rect x="215.71" y="149.61" width="64" height="211" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="247.71" y="142.61" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+70.9</text><text x="247.71" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 247.71428571428572 438)">非現金加回項合計（D&amp;A+減損+SBC等）</text><rect x="328.86" y="149.61" width="64" height="84.52" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="360.86" y="249.13" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-28.4</text><text x="360.86" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">營運資金變動合計</text><rect x="442" y="52" width="64" height="182.13" fill="#334155" fill-opacity="0.9" rx="2"/><text x="474" y="45" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">-61.2</text><text x="474" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">營運活動淨現金流出</text><rect x="555.14" y="234.13" width="64" height="7.44" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="587.14" y="256.57" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-2.50</text><text x="587.14" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">資本支出</text><rect x="668.29" y="241.57" width="64" height="18.45" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="700.29" y="275.02" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-6.20</text><text x="700.29" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">專案資產支出</text><rect x="781.43" y="52" width="64" height="208.02" fill="#334155" fill-opacity="0.9" rx="2"/><text x="813.43" y="45" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">-69.9</text><text x="813.43" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-30 813.4285714285714 438)">自由現金流 proxy</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：10-Q Consolidated Statements of Cash Flows（H1 FY26），見 FCEL Q2 10-Q Key Data.md 第3節；FCF proxy 為框架定義簡化指標，非公司官方揭露</div>
+</div>
+      <div class="note">⚑ FCF proxy 計算過程（H1 FY26，US$M，逐步可覆核）：
+        <br>淨損 $(103.7) ＋ 非現金加回項合計 $70.9（折舊攤銷21.4＋減損42.6＋股權薪酬5.0＋非現金利息1.4＋衍生品損失0.4＋租賃費用0.8－租賃給付0.7＋其他0.0）＋ 營運資金變動合計 $(28.4)（應收(3.7)＋未開票應收(22.4)＋存貨(2.9)＋其他資產1.3＋應付(0.8)＋應計(5.9)＋遞延收入6.0）＝ 營運活動淨現金流出 $(61.2)（與10-Q揭露數字完全吻合✓）；再減資本支出 $(2.5) 與專案資產支出 $(6.2) ＝ <b>自由現金流proxy $(69.9)M</b>。此為framework定義的簡化FCF proxy（並非公司自行揭露的官方FCF指標，FCEL法說會逐字稿亦未提及「free cash flow」用語），計算式全程可回推核對10-Q現金流量表數字。資料來源：10-Q Consolidated Statements of Cash Flows，見 <em>FCEL Q2 10-Q Key Data.md</em> 第3節。
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 10: VALUATION ============ -->
+  <div id="panel-val" class="panel">
+    <div class="note red">⚑ FCEL 為 GAAP 淨損公司（Q2 FY26 淨損 $77.6M，H1 FY26 淨損 $103.7M），<b>沒有正的 EPS，傳統本益比（P/E）在此完全不適用</b>——無論用GAAP或近似非GAAP口徑，分母都是負值，計算出的「本益比」沒有經濟意義（會產生無意義的負數或需要另外定義），也不應被拿來與同業正P/E比較。以下仍依框架規定完整呈現本益比同業比較所需的必備圖表，但明確標註其資訊量有限，並補上一張更有意義的替代分析（現金跑道分析）。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">利息保障倍數（新增必備追蹤項目）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th style="text-align:left">期間</th><th>EBIT proxy（營業損益）</th><th>利息費用</th><th>利息保障倍數</th><th style="text-align:left">意義</th></tr>
+          <tr><td>Q2 FY26（3個月）</td><td>$(77.9)M</td><td>$2.9M</td><td class="neg">約 −27.1x</td><td class="wrap">營業損益為負，傳統「保障倍數」概念不成立</td></tr>
+          <tr><td>H1 FY26（6個月）</td><td>$(104.2)M</td><td>$5.6M</td><td class="neg">約 −18.6x</td><td class="wrap">同上，六個月期同樣顯示營業利益完全無法覆蓋利息支出</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note">⚑ <b>負值保障倍數的正確解讀方式</b>：這不是一個槓桿危機訊號，而是「公司仍處於獲利前（pre-profitability）階段」的量化體現——債務本身規模不大（$134.2M）且絕大部分是專案層級、非追索或有限追索的融資（EXIM出口信貸、back-leverage貸款、售後租回，見資產負債表 tab），並非公司層級的高槓桿舉債；利息費用（$2.9M／季）相對於 $373.2M 不受限現金與 $728.5M 總權益而言規模很小，違約風險低。但這確實意味著公司目前完全仰賴現金儲備與股權市場融資支應營運，任何條件下都不能靠「本業獲利支付利息」，這正是下方現金跑道分析要量化的核心問題。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">同業估值比較（此圖為框架要求之必備圖表）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">同業估值 vs 成長率（示意，FCEL無正P/E故略去）</text><line x1="76" y1="458" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="355" x2="860" y2="355" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3</text><line x1="76" y1="252" x2="860" y2="252" stroke="#eeeeee" stroke-width="1"/><text x="66" y="256" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="76" y1="149" x2="860" y2="149" stroke="#eeeeee" stroke-width="1"/><text x="66" y="153" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5</text><line x1="76" y1="46" x2="860" y2="46" stroke="#eeeeee" stroke-width="1"/><text x="66" y="50" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6</text><line x1="76" y1="46" x2="76" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="272" y1="46" x2="272" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="272" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="468" y1="46" x2="468" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="468" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="664" y1="46" x2="664" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="664" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">150</text><line x1="860" y1="46" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="860" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">營收成長率(%)</text><text x="18" y="252" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252)">EV/Revenue倍數(x，示意)</text><line x1="95.6" y1="46" x2="95.6" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="99.6" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 5</text><line x1="76" y1="303.5" x2="860" y2="303.5" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="298.5" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 3.50</text><circle cx="726.72" cy="46" r="26" fill="#2563eb" fill-opacity="0.55" stroke="#2563eb" stroke-width="1.5"/><circle cx="95.6" cy="458" r="15.01" fill="#dc2626" fill-opacity="0.55" stroke="#dc2626" stroke-width="1.5"/><circle cx="87.76" cy="303.5" r="15.01" fill="#16a34a" fill-opacity="0.55" stroke="#16a34a" stroke-width="1.5"/><text x="726.72" y="15" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Bloom Energy (BE)</text><text x="95.6" y="437.99" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Plug Power (PLUG)</text><text x="87.76" y="283.49" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Ballard Power (BLDP)</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">示意資料，非即時查證：FCEL H1 FY26營收YoY+17.2%為10-Q實際數字但無正P/E故未納入本圖；BE成長率取自本repo研究/be-analysis-2026q2/既有分析，EV/Revenue倍數區間為概估值；PLUG/BLDP之成長率與倍數均為方向性示意，非精確數字，勿作為投資決策依據</div>
+</div>
+      <div class="note red">⚑ 本圖為框架強制要求之必備圖表，但資訊量必然有限，須謹慎解讀：（1）FCEL 本身是GAAP虧損公司，無正P/E可繪；（2）本次研究過程未接入即時市場報價工具，無法取得 Bloom Energy（BE）、Plug Power（PLUG）、Ballard Power Systems（BLDP）等同業的即時股價、市值或EV，故無法計算精確的EV/Revenue倍數；（3）下表僅能提供依一般性知識得出的<b>粗略、近似、示意性</b>區間（非即時查證數字，且模型知識截止時間早於本報告撰寫日期數月，成長型股票的倍數在此期間可能已大幅變動），僅供呈現「估值分布形狀」的示意用途，讀者在做任何決策前務必自行查詢當下即時報價與財報重新計算。
+        <br><br><b>示意資料（近似值，非即時報價，請勿直接引用）：</b>
+        <br>• FuelCell Energy (FCEL)：H1 FY26 營收YoY +17.2%（此數字為10-Q實際數字，來源可靠）；EV/Revenue 因無即時股價無法計算，略去。
+        <br>• Bloom Energy (BE)：燃料電池／固態氧化物同業，本репository內另有 <em>research/be-analysis-2026q2/</em> 完整分析，該篇揭露 BE 近期營收YoY成長率遠高於FCEL、且已具備正的非GAAP獲利能力（非GAAP本益比約100倍上下量級），與FCEL的GAAP深度虧損狀態形成鮮明對比——BE的EV/Revenue倍數區間概估中高档（示意性區間約4-8x，未經即時查證，僅供方向參考）。
+        <br>• Plug Power (PLUG)：氫能／燃料電池同業，長期處GAAP虧損與現金消耗狀態，市場給予的EV/Revenue倍數區間概估偏低（示意性區間約1-3x，未經即時查證）。
+        <br>• Ballard Power Systems (BLDP)：燃料電池動力系統同業，規模較小、營收成長波動大，EV/Revenue倍數區間概估中等（示意性區間約2-5x，未經即時查證）。
+        <br>以上倍數區間僅為方向性參考，非本報告的可靠估值結論來源。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">更有意義的替代分析：現金跑道（Cash Runway）</div>
+      <div class="bar-row">
+        <div class="bar-lbl">不受限現金（2026/4/30）</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:100%;background:#2563eb;">$373.2M</div></div>
+        <div class="bar-num">$373.2M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">H1 FY26 季均營運現金消耗</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:8.2%;background:#b91c1c;">$30.6M</div></div>
+        <div class="bar-num">$30.6M／季</div>
+      </div>
+      <p style="font-size:12px;color:#333;line-height:1.7;margin-top:10px;">計算方式：H1 FY26 營運活動淨現金流出 $61.2M ÷ 2 個財季 ＝ 季均消耗約 $30.6M／季。現金跑道 ＝ $373.2M ÷ $30.6M／季 ≈ <b>12.2 個財季（約3.0年）</b>，此估算<b>假設營運燒錢速率維持不變、且不考慮季末後已知的額外 $52.9M ATM 增發（會延長跑道）、也不考慮未來資本支出加速（Torrington產能擴張 $200-275M 若啟動將明顯壓縮跑道）</b>，僅為現狀延伸的粗略估算，非官方財測。</p>
+      <div class="note grey">⚑ 相較於「無意義的P/E」，現金跑道分析更能回答投資人真正關心的問題：以目前燒錢速度，公司在不進一步稀釋股權的情況下還能撐多久。約3年的粗估跑道看似寬裕，但管理層同時宣布 $200-275M 的 Torrington 擴產計畫（見「特殊交易/事件」分頁）——若擴產資本支出實際啟動，將直接侵蝕此處計算的跑道年限，這正是本報告估值觀察 tab 的核心觀察重點：帳面現金充裕與資本支出計畫的張力。資料來源：10-Q Consolidated Statements of Cash Flows（H1 FY26 營運現金流）與資產負債表（期末不受限現金），見 <em>FCEL Q2 10-Q Key Data.md</em>。</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">互證對照表 — 管理層說法 vs 財報科目驗證</div>
+      <div class="tbl-scroll">
+        <table class="wide">
+          <tr><th style="text-align:left">管理層說法（法說會）</th><th style="text-align:left">對應財報科目</th><th style="text-align:left">驗證結果</th></tr>
+          <tr><td class="wrap">CFO：「we ended the quarter with $440.9 million of total cash equivalents, and restricted cash...providing a strong liquidity position」；「we remain essentially debt-free apart from the long-term financings on specific project assets」</td><td class="wrap">10-Q資產負債表：現金總額（不受限$373.2M＋受限$67.7M）＝$440.9M；Note 17：總負債$134.2M，幾乎全為專案層級EXIM/back-leverage/售後租回融資</td><td class="wrap pos">現金數字完全吻合✓；「essentially debt-free」以「公司層級（非專案）負債極小」的相對意義成立，並非字面零負債，屬合理但需精確理解的框架性說法</td></tr>
+          <tr><td class="wrap">CEO：轉換pipeline為在手訂單是「the goal of converting submitted proposals into contracted backlog <b>within this fiscal year</b>」——刻意使用「目標」而非「承諾」的語氣</td><td class="wrap">法說會揭露pipeline由1季內成長逾250%至4GW；同時10-Q/法說會揭露總在手訂單反而年減：$1.14B（2026/4/30）vs $1.26B（2025/4/30）</td><td class="wrap neg">明顯張力——管理層口中「快速成長的4GW pipeline」與實際「在手訂單年減」同時存在，尚未有任何一筆4GW pipeline轉換為backlog的具體證據；「within this fiscal year」本身已是管理層自行加上的不確定性語氣，讀者不應將pipeline成長直接解讀為backlog成長</td></tr>
+          <tr><td class="wrap">CEO：Torrington擴產「in strict alignment with contracted backlog, market demand, and structured capital support...ensuring we do not build ahead of the market or compromise our stewardship of stockholder capital」——強調紀律與不超前部署</td><td class="wrap">現金流量表：H1 FY26 融資活動淨流入$169.1M中，$155.3M來自ATM股票增發（股東稀釋）；資產負債表：流通股數半年增加37.9%</td><td class="wrap neg">張力存在——本季支撐現金部位與未來擴產能力的資金裡，逾九成一（$155.3M/$169.1M）來自股權稀釋而非營運自主造血或專案融資，「stewardship of stockholder capital」與「用大量增發股票籌措擴產資金」之間是否算「紀律」，取決於讀者對稀釋成本的容忍度，管理層並未在逐字稿中主動提及此張力</td></tr>
+          <tr><td class="wrap">法說會全程（CEO開場、CFO財務回顧、6位分析師Q&amp;A）<b>未主動提及GGE客戶集中度</b>，僅描述為「ongoing module deliveries to Gyeonggi Green Energy」等正面敘事</td><td class="wrap">FY25 10-K揭露：GGE占FY2025合併營收<b>46%</b>，較FY2024的18%一年內暴增；前五大客戶合計占82%</td><td class="wrap neg">重大沉默訊號——依框架「留白反推」原則，管理層對近乎「單一客戶占營收近半」的集中度風險選擇不主動著墨，本身即是值得放入風險矩陣的訊號，而非單純遺漏；詳見風險矩陣分頁</td></tr>
+          <tr><td class="wrap">CFO：「adjusted EBITDA for the second quarter of fiscal 2026 was negative $17.1 million, an improvement from negative $19.3 million...This 12% year-over-year improvement」</td><td class="wrap">依CFO揭露之起訖數字回算：($19.3M−$17.1M)/$19.3M＝11.4%</td><td class="wrap neu">方向與大致幅度吻合✓，管理層口徑「12%」較精算的11.4%略為取整偏樂觀，差距在合理四捨五入範圍內，非重大失真</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="foot-note">本報告僅供資訊參考，非投資建議。所有財務數字取自 SEC EDGAR 公開申報文件（FuelCell Energy, Inc. Form 10-Q，季度結束2026/4/30）與 2026年6月8日法說會逐字稿，交叉覆核方法與資料來源詳見同資料夾內 <em>FCEL Q2 10-Q Key Data.md</em>、<em>FCEL Prior 10-Q Trend Data.md</em>、<em>FCEL 10-K Supply Chain Notes.md</em>、<em>FCEL Q2 Earnings Call Script.md</em>。同業估值比較圖表所用之BE／PLUG／BLDP倍數區間為未經即時查證之示意性數字，切勿作為投資決策依據。</div>
+  </div>
+
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
