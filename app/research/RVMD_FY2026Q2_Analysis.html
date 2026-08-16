@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RVMD — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 22px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 18px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .cf-section { margin-bottom: 18px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 18px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Revolution Medicines, Inc.（RVMD）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>特殊交易／技術與產品線／供應鏈／風險矩陣／損益表／業務部門／資產負債表／現金流量／估值觀察（共 9 個分頁）
+  &nbsp;·&nbsp; 法說會日期：2026 年 8 月 5 日（財季結束 2026/6/30）
+  &nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2 FY2026 Form 10-Q（2026/8/5 申報）、Q1 FY2026 Form 10-Q（2026/5/6）、FY2025 Form 10-K（2026/2/25）、2026 年 Form 4</p>
+  <p style="margin-top:8px;padding:8px 10px;background:#f8f9fb;border-left:3px solid #94a3b8;border-radius:4px;color:#555;">
+  ⚑ <b>Fallback 模式說明</b>：本季法說會逐字稿唯一可得的完整來源為付費牆平台（Seeking Alpha），版權規則不允許大段引用第三方付費逐字稿。依框架規定，本報告<b>省略 Q&amp;A 問答分析 tab</b>（原 10-tab 之第 1 tab），改以 9 個 tab 呈現；其餘所有內容（財報數字、SEC filings 交叉查核、法規里程碑、風險矩陣）皆為第一手公開資料，不受影響。</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('deal',this)">特殊交易／事件</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ TAB: 特殊交易/事件 ============ -->
+  <div id="panel-deal" class="panel active">
+    <div class="card">
+      <div class="card-title">本季核心事件：daraxonrasib NDA 獲 FDA 受理＋RASolute 302 樞紐試驗數據</div>
+      <p>Q2 FY2026（2026年4–6月）是 RVMD 成立以來最關鍵的一季：公司公布 Phase 3 樞紐試驗 RASolute 302（daraxonrasib 對比化療用於二線轉移性胰臟癌 PDAC）的正面數據，FDA 隨即受理其新藥申請（NDA），股價在此期間從約 $99 一路推升至 $200 以上（52 週漲幅 547.6%）。同一季，公司完成規模空前的資本市場動作（股權增發＋可轉換公司債＋Royalty Pharma 第二批權利金），為潛在的首次商業化上市預作準備。以下以四象限拆解這個事件的規模、時程、財務承諾與尚待驗證之處。</p>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>① 規模與科學依據</h4>
+        <ul>
+          <li>RASolute 302（intent-to-treat族群）：daraxonrasib 中位整體存活期（OS）13.2 個月 vs 化療組 6.7 個月，風險比（HR）0.40（p&lt;0.0001）</li>
+          <li>PFS 亦達統計顯著與臨床有意義改善；安全性「可控管、無新安全訊號」</li>
+          <li>FDA 已受理 daraxonrasib 用於「先前治療過之轉移性胰臟癌」的 NDA</li>
+          <li>已取得：CNPV（Commissioner's National Priority Voucher）優先審查券、FDA／EMA 孤兒藥資格（ODD）、FDA 突破性療法認定（PDAC 二線 KRAS G12 突變族群 ＋ NSCLC 非 G12C KRAS 突變族群）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>② 時程</h4>
+        <ul>
+          <li>NDA 已於 2026 年 7 月獲 FDA 受理審查，官方 PDUFA 目標審查完成日<b>未於 10-Q／8-K 揭露</b></li>
+          <li>EMA 已啟動 Cancer Medicines Pathfinder 專案下的分階段審查</li>
+          <li>擴大使用計畫（Expanded Access）已治療逾 2,000 名患者，核准率逾 90%，涵蓋近全美 50 州＋波多黎各</li>
+          <li>商業化籌備已展開（美國銷售團隊建置中），惟尚無正式核准日期</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>③ 財務承諾</h4>
+        <ul>
+          <li>2026 年 4 月：股權公開發行 1,214.79 萬股 @ $142.00／股，毛額約 $1,725.0M（淨額約 $1,651.4M）</li>
+          <li>同步發行 $500.0M 0.50% 2033 到期可轉換公司債（淨額約 $487.1M），轉換價約 $198.80／股</li>
+          <li>Royalty Pharma Tranche 2：$250.0M（2026 年 5 月收到），觸發條件即為 RASolute 302 正面數據＋NDA 提交決定</li>
+          <li>Term Loan Facility 第一批 $250.0M：<b>核准後 45 天內強制動用</b>（若 2028/1/1 前取得 PDAC 核准），利率 SOFR（floor 3.5%）+5.75%</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>④ 尚待驗證</h4>
+        <ul>
+          <li>FDA 實際核准日期／是否適用優先審查（6 個月）仍未知</li>
+          <li>RASolute 302 官方稱「第一次期中分析」但 PFS／OS 端點「視為最終」——期中分析族群與完整最終分析在統計性質上仍有差異</li>
+          <li>EMA 分階段審查總耗時未知，可能與 FDA 時程不同步</li>
+          <li>首次商業化執行力（銷售團隊建置、給付談判、實際處方轉換率）完全未經驗證</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問（盡職調查式追問）</h4>
+      <ol>
+        <li>FDA 是否已核發具體 PDUFA 目標審查完成日？優先審查（6 個月）或標準審查（10 個月）程序適用於本案？管理層與 8-K 新聞稿皆未提及。</li>
+        <li>RASolute 302「first interim analysis」與「considered final」兩種用詞並列，精確的統計意涵為何——是否仍存在後續分析改變結論的機率？</li>
+        <li>Term Loan Facility Tranche 1 的「核准後 45 天內強制動用」條款，對應的實際有效利率（SOFR floor 3.5%+5.75% ≈ 9%+）是否已被市場完整定價進目前的估值？</li>
+        <li>EMA Pathfinder「分階段審查」預期耗時多久？與美國核准時程是否同步，還是可能出現數季落差？</li>
+        <li>約 60 人規模的美國銷售團隊建置成本，是否已完全反映在 Q2 G&amp;A $110.2M（YoY +172%）中，或後續仍將持續攀升——這與財測上修至 $2.1–2.2B 的關係為何？</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============ TAB: 技術與產品線 ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="card">
+      <div class="card-title">RAS(ON) 抑制劑平台總覽</div>
+      <p>RVMD 的核心技術是<b>結構導向藥物設計（structure-based drug discovery）</b>發展出的 tri-complex（三元複合物）小分子，直接結合 RAS 蛋白的「活化態」（RAS(ON)）而非傳統 KRAS(OFF) 抑制劑鎖定的「非活化態」。RAS 突變集中在三個熱點位置：G12、G13、Q61，RVMD 依此發展出「多重選擇性」（daraxonrasib，橫跨三熱點）與「單一突變選擇性」（zoldonrasib／elironrasib／RMC-5127，各自鎖定 G12D／G12C／G12V）兩條並行路線，構成可組合使用、覆蓋更廣突變譜的產品組合策略。</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">研發費用依管線分佈（Q2 FY25 vs Q2 FY26）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 388" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="388" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">RVMD 研發費用依管線分佈（Q2 FY25 vs Q2 FY26）</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6b6b6b" font-family="sans-serif">Daraxonrasib、Zoldonrasib 為研發費用成長主力，反映多項 Phase 3 樞紐試驗同步推進</text><line x1="22" y1="56" x2="876" y2="56" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="71" width="10" height="10" rx="1" fill="#d97706"/><text x="40" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 FY25</text><rect x="108.28" y="71" width="10" height="10" rx="1" fill="#7c3aed"/><text x="126.28" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 FY26</text><line x1="170" y1="96" x2="170" y2="330" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="304" y1="96" x2="304" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="304" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">25</text><line x1="438" y1="96" x2="438" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="438" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="572" y1="96" x2="572" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="572" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">75</text><line x1="706" y1="96" x2="706" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="706" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="840" y1="96" x2="840" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="840" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">125 百萬美元 (US$M)</text><line x1="170" y1="96" x2="170" y2="330" stroke="#111111" stroke-width="1.2"/><rect x="170" y="103.55" width="412.18" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="120.4" width="609.43" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="123.4" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Daraxonrasib</text><rect x="170" y="150.35" width="125.96" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="167.2" width="343.04" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="170.2" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Zoldonrasib</text><rect x="170" y="197.15" width="97.55" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="214" width="65.39" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="217" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Elironrasib</text><rect x="170" y="243.95" width="12.33" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="260.8" width="47.7" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="263.8" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">RMC-5127</text><rect x="170" y="290.75" width="123.82" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="307.6" width="182.24" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="310.6" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">臨床前管線</text><text x="22" y="376" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：RVMD FY2026 Q2 10-Q，Note "Results of operations" 研發費用細項表</text></svg>
+</div>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>Daraxonrasib（RMC-6236）— 多重選擇性 RAS(ON) 抑制劑</h4>
+        <div class="meta">口服 tri-complex ｜ 同時抑制 G12／G13／Q61 熱點突變 ｜ NDA 審查中</div>
+        <p>唯一同時涵蓋三大 RAS 突變熱點的口服抑制劑，適用於突變異質性高的腫瘤。PDAC 二線 NDA 已獲受理；NSCLC／CRC 仍在臨床開發。Phase 3：RASolute 303（1L PDAC ± 化療）、RASolute 304（PDAC 輔助治療）、RASolute 309（1L G12D PDAC，與 zoldonrasib 對照）、RASolve 301（NSCLC，對比 docetaxel，預計 2026 完成收案、2027 讀值）。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>Zoldonrasib（RMC-9805）— G12D 選擇性抑制劑</h4>
+        <div class="meta">口服、共價不可逆抑制 ｜ NSCLC 突破性療法認定</div>
+        <p>低奈莫耳濃度即可抑制 RAS 訊號傳導，共價鍵結使 G12D 突變不可逆失活。已獲 FDA 突破性療法認定（KRAS G12D 突變 NSCLC，經 anti-PD-1/PD-L1 與含鉑化療治療後）。Phase 3：RASolute 305（1L PDAC 合併化療，安慰劑對照）、RASolve 308（1L G12D NSCLC）。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>Elironrasib（RMC-6291）＋新一代平台 — G12C 選擇性</h4>
+        <div class="meta">亞奈莫耳濃度效力 ｜ 直接抑制 RAS(ON) 而非鎖定 OFF 態</div>
+        <p>與第一代 KRAS(OFF) G12C 抑制劑（鎖定非活化態）機制上根本不同，直接抑制活化態 G12C，設計上鎖定經化療＋免疫治療、但未曾使用過 G12C 抑制劑的患者。已獲 NSCLC 突破性療法認定。Phase 3 RASolve 307（1L G12C NSCLC 合併標準治療）預計 2026Q4 啟動。公司另規劃一款全新 tri-complex 抑制劑類別，目標克服 RAS 驅動抗藥性，首例臨床試驗預計 2026Q4 啟動。</p>
+      </div>
+      <div class="tech-card r">
+        <h4>RMC-5127 — G12V 選擇性抑制劑（早期）</h4>
+        <div class="meta">皮莫耳濃度效力 ｜ 非共價結合 ｜ Ph1 劑量爬升中</div>
+        <p>首例臨床試驗（劑量爬升）進行中，預計 2026 下半年確定 Phase 2 建議劑量（RP2D），2027 年公布初步臨床數據。另有兩項臨床前階段的單一突變選擇性抑制劑 RMC-0708（Q61H）與 RMC-8839（G13C），臨床開發時程視投資組合優先順序而定，尚未排定進入臨床。</p>
+      </div>
+    </div>
+
+    <div class="flow-box">
+      <div class="card-title">長期需求場景（因果鏈）</div>
+      <div class="flow-chain">
+        <span class="node">美國每年逾19萬例新診斷RAS突變癌症（NSCLC~6萬／CRC~7.5萬／PDAC~5.6萬）</span>
+        <span class="arrow">→</span>
+        <span class="node">第一代KRAS(OFF)抑制劑僅涵蓋G12C單一突變且易生抗藥性</span>
+        <span class="arrow">→</span>
+        <span class="node">RAS(ON)多重＋單一選擇性組合策略可覆蓋更廣突變譜、延緩抗藥性</span>
+        <span class="arrow">→</span>
+        <span class="node">daraxonrasib若於PDAC（存活期最短的主要癌症之一）率先核准，將是RAS(ON)機制首次商業驗證</span>
+        <span class="arrow">→</span>
+        <span class="node">為後續NSCLC/CRC適應症與多藥組合療法建立範本、支撐長期管線價值</span>
+      </div>
+    </div>
+    <div class="note grey">⚑ 人工解讀：本季研發費用成長最快的是 zoldonrasib（Q2 YoY +172%），反映其 NSCLC 突破性療法認定後臨床試驗加速擴大；daraxonrasib 雖仍是最大單一項目，YoY 成長率（+48%）已低於 zoldonrasib，顯示公司資源配置正從「單一領先藥物」轉向「多資產平行推進」。資料來源：RVMD FY2026 Q2 10-Q，Results of operations 研發費用細項表。</div>
+  </div>
+
+  <!-- ============ TAB: 供應鏈 ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="note grey">⚑ 說明：RVMD 為臨床階段生技公司，無傳統製造供應鏈可揭露（未與任何第三方簽署長期商業供應合約）。本 tab 依框架精神，改以其「資金結構」與「研發協作網絡」作為供應鏈類比——資金供應方相當於上游供應商，研發支出流向相當於下游用途，科學協作夥伴則是另一條無金流揭露的「服務供應鏈」。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">結構：資金與研發協作關係圖</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1223.5 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1223.5" height="702" fill="#ffffff"/><text x="611.75" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">RVMD 資金結構與研發協作關係圖（供應鏈類比）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">資金／服務供應方</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">Revolution Medicines</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">研發管線與支出用途</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">審查與潛在商業化</text><defs><marker id="arr-c2600a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#c2600a"/></marker><marker id="arr-2563eb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker><marker id="arr-94a3b8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker><marker id="arr-16a34a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#16a34a"/></marker></defs><polyline points="161.25000000000006,106 161.25000000000006,124 515.75,124 515.75,222" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="261" y="115" width="155" height="18" rx="3" fill="#ffffff"/><text x="338.5" y="128" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">$250M Tranche2（2026/5）</text><polyline points="388.10000000000014,106 388.10000000000014,146 568.75,146 568.75,222" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="434.75" y="137" width="87.35" height="18" rx="3" fill="#ffffff"/><text x="478.43" y="150" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">淨募得$487.1M</text><polyline points="608,106 608,168 621.75,168 621.75,222" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="558" y="159" width="113.75" height="18" rx="3" fill="#ffffff"/><text x="614.88" y="172" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">H1 FY26 淨$141.9M</text><polyline points="824.9,106 824.9,190 674.75,190 674.75,222" fill="none" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arr-94a3b8)" stroke-dasharray="6 5"/><polyline points="1065.5,106 1065.5,208 727.75,208 727.75,222" fill="none" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arr-94a3b8)" stroke-dasharray="6 5"/><polyline points="621.75,282 621.75,300 368.6875,300 368.6875,398" fill="none" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arr-16a34a)"/><rect x="443.84" y="291" width="102.75" height="18" rx="3" fill="#ffffff"/><text x="495.22" y="304" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">H1 FY26 $227.8M</text><polyline points="621.75,282 621.75,322 583.1875,322 583.1875,398" fill="none" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arr-16a34a)"/><rect x="551.09" y="313" width="102.75" height="18" rx="3" fill="#ffffff"/><text x="602.47" y="326" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">H1 FY26 $117.9M</text><polyline points="621.75,282 621.75,344 641.1875,344 641.1875,398" fill="none" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arr-16a34a)"/><rect x="583.12" y="335" width="96.7" height="18" rx="3" fill="#ffffff"/><text x="631.47" y="348" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">H1 FY26 $39.5M</text><polyline points="621.75,282 621.75,366 874.9375,366 874.9375,398" fill="none" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arr-16a34a)"/><rect x="696.97" y="357" width="102.75" height="18" rx="3" fill="#ffffff"/><text x="748.34" y="370" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">H1 FY26 $211.5M</text><polyline points="312.9875,458 312.9875,476 409.88749999999993,476 409.88749999999993,574" fill="none" stroke="#c2600a" stroke-width="1.6" marker-end="url(#arr-c2600a)"/><polyline points="604.7875,604 638.7875,604" fill="none" stroke="#c2600a" stroke-width="1.6" marker-end="url(#arr-c2600a)"/><g><rect x="60" y="46" width="202.5" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="161.25" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Royalty Pharma</text><text x="161.25" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">權利金收購＋定期貸款 Term Loan</text></g><g><rect x="296.5" y="46" width="183.2" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="388.1" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">2033可轉換公司債持有人</text><text x="388.1" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$500M，0.50%，2033到期</text></g><g><rect x="513.7" y="46" width="188.6" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="608" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">TD Cowen ATM股權投資人</text><text x="608" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">2026 ATM 上限$1B</text></g><g><rect x="736.3" y="46" width="177.2" height="60" rx="9" fill="rgb(240,242,245)" stroke="#94a3b8" stroke-width="1.4"/><text x="824.9" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">CRO／CMO 服務商</text><text x="824.9" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未具名、cGMP產能集中度風險</text></g><g><rect x="947.5" y="46" width="236" height="60" rx="9" fill="rgb(240,242,245)" stroke="#94a3b8" stroke-width="1.4"/><text x="1065.5" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">臨床協作夥伴</text><text x="1065.5" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">BMS／Amgen／Summit／Tango／Synnov…</text></g><g><rect x="503.75" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="621.75" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Revolution Medicines</text><text x="621.75" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">無產品營收，late-stage clinical o…</text></g><g><rect x="245.29" y="398" width="135.4" height="60" rx="9" fill="rgb(222,242,230)" stroke="#16a34a" stroke-width="1.4"/><text x="312.99" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Daraxonrasib</text><text x="312.99" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">NDA 審查中（PDAC…</text></g><g><rect x="414.69" y="398" width="180.5" height="60" rx="9" fill="rgb(222,242,230)" stroke="#16a34a" stroke-width="1.4"/><text x="504.94" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Zoldonrasib</text><text x="504.94" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Ph1/2，NSCLC突破性療法認定</text></g><g><rect x="629.19" y="398" width="199.75" height="60" rx="9" fill="rgb(222,242,230)" stroke="#16a34a" stroke-width="1.4"/><text x="729.06" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Elironrasib＋新一代平台</text><text x="729.06" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">RMC-5127／新一代RAS(ON)抑制劑</text></g><g><rect x="862.94" y="398" width="135.28" height="60" rx="9" fill="rgb(222,242,230)" stroke="#16a34a" stroke-width="1.4"/><text x="930.58" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">G&amp;A／商業化籌備</text><text x="930.58" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">H1 FY26 $211.5M</text></g><g><rect x="397.89" y="574" width="206.9" height="60" rx="9" fill="rgb(246,233,221)" stroke="#c2600a" stroke-width="1.4"/><text x="501.34" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">FDA／EMA 審查</text><text x="501.34" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">CNPV優先審查券／EMA Pathfinder</text></g><g><rect x="638.79" y="574" width="206.83" height="60" rx="9" fill="rgb(246,233,221)" stroke="#c2600a" stroke-width="1.4"/><text x="742.2" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">潛在商業化（PDAC／NSCLC）</text><text x="742.2" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">尚待核准，無時間表保證</text></g><rect x="290.25" y="663" width="22" height="2.4" fill="#2563eb"/><text x="320.25" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">資本市場／權利金融資</text><line x1="448.25" y1="664" x2="470.25" y2="664" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 4"/><text x="478.25" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">研發服務／科學協作（無公開金流）</text><rect x="672.25" y="663" width="22" height="2.4" fill="#16a34a"/><text x="702.25" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">研發／管理支出流向</text><rect x="819.25" y="663" width="22" height="2.4" fill="#c2600a"/><text x="849.25" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">法規審查路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2026 Q2 10-Q／FY2025 10-K。灰色虛線＝科學協作關係，無對外揭露之金流數字</div>
+</div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">流量：本期資金來源與支出流向（六個月累計，百萬美元）</div>
+      <div id="sankeyEmbed_rvmdq2" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"eq2026","label":"2026年4月股權公開發行","color":"#2563eb"},{"id":"notes","label":"2033可轉換公司債持有人","color":"#2563eb"},{"id":"rp","label":"Royalty Pharma","color":"#2563eb"},{"id":"atm","label":"TD Cowen ATM股權投資人","color":"#2563eb"},{"id":"other_fin","label":"選擇權行使／ESPP等","color":"#93c5fd"},{"id":"rvmd","label":"Revolution Medicines","color":"#15181a"},{"id":"dara","label":"Daraxonrasib","color":"#16a34a"},{"id":"zold","label":"Zoldonrasib","color":"#16a34a"},{"id":"eliron","label":"Elironrasib＋新一代平台","color":"#16a34a"},{"id":"precl","label":"臨床前管線與研發支援性支出","color":"#16a34a"},{"id":"ga","label":"G&A／商業化籌備","color":"#16a34a"},{"id":"cash","label":"現金與投資部位（尚未認列為費用）","color":"#94a3b8"}],"links":[{"source":"eq2026","target":"rvmd","value":1651.4},{"source":"notes","target":"rvmd","value":487.1},{"source":"rp","target":"rvmd","value":250},{"source":"atm","target":"rvmd","value":226.7},{"source":"other_fin","target":"rvmd","value":44},{"source":"rvmd","target":"dara","value":227.8},{"source":"rvmd","target":"zold","value":117.9},{"source":"rvmd","target":"eliron","value":39.7},{"source":"rvmd","target":"precl","value":353.5},{"source":"rvmd","target":"ga","value":211.5},{"source":"rvmd","target":"cash","value":1708.8}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_rvmdq2");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+<div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：RVMD FY2026 Q2 10-Q（籌資活動現金流／研發費用細項表）。示意性拆分：以本期認列費用估算用途，未逐項核對現金流量表非現金調整項；「現金與投資部位」為本期淨募資與費用認列之間的差額，多數尚留存於資產負債表。</div>
+    </div>
+    <div class="note grey">⚑ 兩圖節點命名一致（Royalty Pharma／2033可轉換公司債持有人／TD Cowen ATM股權投資人／CRO-CMO服務商／臨床協作夥伴／Daraxonrasib／Zoldonrasib／Elironrasib＋新一代平台／G&amp;A商業化籌備），結構圖交代「誰供給誰」，流量圖交代「金額多寡」。灰色虛線（CRO/CMO、臨床協作夥伴）無公開流量數據，僅示意關係存在。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">Royalty Pharma 權利金購買協議（2025年6月簽署）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">批次</th><th style="text-align:left">觸發條件</th><th>金額</th><th style="text-align:left">狀態</th></tr>
+        <tr><td>Tranche 1（前置）</td><td class="wrap">簽約即生效</td><td>$250.0M</td><td>已收（2025/6）</td></tr>
+        <tr><td>Tranche 2</td><td class="wrap">2028/1/1前 RASolute 302正面數據＋NDA提交決定</td><td>$250.0M</td><td>已收（2026/5）</td></tr>
+        <tr><td>Tranche 3（自選）</td><td class="wrap">2028/7/1前 FDA核准RMC-6236用於2L轉移性PDAC</td><td>最高$250.0M</td><td>未動用</td></tr>
+        <tr><td>Tranche 4（自選）</td><td class="wrap">2029/1/1前達成特定淨銷售里程碑</td><td>最高$250.0M</td><td>未動用</td></tr>
+        <tr><td>Tranche 5（自選）</td><td class="wrap">2030/1/1前1L PDAC Phase3正面讀值＋申請決定/行動</td><td>最高$250.0M（與Tranche4合併上限）</td><td>未動用</td></tr>
+        <tr class="total"><td>若全數動用，權利金費率</td><td class="wrap">依年淨銷售分級：$0-2B / $2-4B / $4-8B / $8B以上</td><td>7.80% / 4.55% / 2.40% / 0%</td><td>—</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note">⚑ 人工解讀：Term Loan Facility（同一對手方 Royalty Pharma 關係企業，另一份合約）提供最高 $750.0M 定期貸款，第一批 $250.0M 於「FDA核准daraxonrasib用於2L PDAC後45天內」<b>強制</b>動用（若2028/1/1前核准），利率 SOFR（floor 3.5%）+5.75%，以公司幾乎全部資產擔保。截至2026/6/30尚未動用、未認列負債。資料來源：FY2026 Q2 10-Q Note 8／Note 9。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">研發協作夥伴（科學／臨床協作，非授權收入）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">夥伴</th><th style="text-align:left">簽約時間</th><th style="text-align:left">合作內容</th></tr>
+        <tr><td>Bristol Myers Squibb</td><td>2026/2</td><td class="wrap">BMS主導試驗，評估其 navlimetostat（PRMT5抑制劑）合併 daraxonrasib 用於PDAC</td></tr>
+        <tr><td>Synnovation Therapeutics</td><td>2026/4</td><td class="wrap">Synnovation主導試驗，評估其 SNV1521（PARP1抑制劑）合併 daraxonrasib 用於PDAC</td></tr>
+        <tr><td>Amgen</td><td>2025/2</td><td class="wrap">Amgen主導試驗，評估其 AMG 193 合併 daraxonrasib 用於2L PDAC</td></tr>
+        <tr><td>Summit Therapeutics</td><td>2025/6</td><td class="wrap">評估 RVMD 多項 RAS(ON) 抑制劑合併 Summit 的 ivonescimab（PD-1/VEGF雙特異性抗體），多實體瘤試驗</td></tr>
+        <tr><td>Tango Therapeutics</td><td>2024/11</td><td class="wrap">Tango主導試驗，評估其 vopimetostat 合併 daraxonrasib/zoldonrasib 用於MTAP缺失PDAC/NSCLC</td></tr>
+        <tr><td>Iambic Therapeutics</td><td>2025/5</td><td class="wrap">AI藥物發現協作，非臨床試驗性質</td></tr>
+        <tr><td>Break Through Cancer</td><td>2024/11</td><td class="wrap">daraxonrasib患者切片生物標記研究協作</td></tr>
+        <tr><td>Aethon Therapeutics</td><td>2024/3</td><td class="wrap">雙特異性抗體研究協作，RVMD保留下游開發選擇權</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note yellow">⚑ 已終止的歷史合作：RVMD 於2018年與 Sanofi 關係企業 Aventis/Genzyme 簽署 SHP2 抑制劑（RMC-4630）合作，取得$50.0M前置款；該合作與現行 RAS(ON) 平台無關，已於2023年6月終止，2024、2025年協作收入均為零。若外部資料誤認 RVMD 目前與 Sanofi 有現行合作，屬過時資訊。</div>
+
+    <div class="note red">⚑ 製造與供應鏈風險：10-K 明確揭露「目前未與任何第三方製造商簽署長期商業供應合約」，所有臨床/臨床前物料製造皆透過可於30-90天內終止的合約進行；未具名任何 CMO/CDMO。10-K 並揭露「與部分曾被BIOSECURE Act相關政策討論點名之中國公司有業務往來」，惟未具名個別廠商，屬集中度風險的質化揭露而非量化揭露。單株抗體等生技藥品的cGMP產能供給方數量有限，構成產業普遍性瓶頸風險。</div>
+  </div>
+
+  <!-- ============ TAB: 風險矩陣 ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="note grey">⚑ Fallback模式資料限制：本 tab 因無可合法引用的法說會逐字稿，管理層對風險的口頭表述（措辭、迴避方式）無法納入分析；以下風險論證完全基於 SEC filings（10-Q／10-K／Form 4）與公開新聞稿。</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">監理核准不確定性——無官方審查時程</div>
+        FDA 已受理 daraxonrasib 的 NDA，但截至本報告完成日，公司未揭露官方 PDUFA 目標審查完成日，也未說明是否適用優先審查程序。RASolute 302 本身仍被稱為「第一次期中分析」。整個 Q2 財測上修（GAAP營業費用$2.1-2.2B）與商業化籌備支出，都建立在「核准將會發生」的假設上——若審查結果不如預期或時程大幅延後，公司的成本結構將難以迅速收縮。
+        <div class="risk-source">來源：FY2026 Q2 10-Q Item 2 業務概況；8-K新聞稿（2026/8/5）</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">單一機制平台集中風險</div>
+        公司全部臨床與臨床前管線（daraxonrasib／zoldonrasib／elironrasib／RMC-5127／新一代平台／RMC-0708／RMC-8839）皆建立在同一套 RAS(ON) tri-complex 技術之上。若該機制在人體長期用藥的安全性或抗藥性表現上出現系統性問題，將同時衝擊全部管線，而非單一藥物風險可分散。
+        <div class="risk-source">來源：FY2026 Q2 10-Q「Overview」段落管線說明</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">融資結構槓桿與限制條款</div>
+        Royalty Pharma 權利金購買協議與 Term Loan Facility 均附有慣例但實質的限制條款（處分特定資產、產生留置權、diligence義務等），且 Term Loan 以公司幾乎全部資產作擔保。10-Q 明確揭露「若無法遵守 Royalty Pharma 相關條款，可能被要求交出擔保資產」。
+        <div class="risk-source">來源：FY2026 Q2 10-Q Item 1A 風險因子，Royalty Pharma Agreements段落</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">稀釋壓力持續存在</div>
+        2033可轉換公司債（轉換價$198.80，若股價持續高於此水位可能被要求轉換）、公開發行認股權證（RVMDW，2026年12月到期，行使價$11.50）、未歸屬選擇權（1,836萬股）與RSU（508萬股）合計構成顯著潛在稀釋來源；2026年ATM尚有額度可持續發行新股。
+        <div class="risk-source">來源：FY2026 Q2 10-Q Note 10／Note 11／Note 12</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">RAS/MAPK路徑競爭格局</div>
+        RVMD並非RAS路徑唯一玩家：Amgen（LUMAKRAS/sotorasib）、BMS（自Mirati取得的adagrasib）等已有核准上市的KRAS G12C抑制劑；Verastem（avutometinib，已核准用於LGSOC）、Erasca、BridgeBio Oncology等同業亦在推進RAS/MAPK路徑資產。daraxonrasib若核准，將是首個「多重選擇性RAS(ON)」機制商業化案例，差異化定位需要臨床證據持續驗證，而非僅靠機制新穎性。
+        <div class="risk-source">來源：同業比較研究（見估值觀察 tab）</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">首次商業化執行力未經驗證</div>
+        公司從未有產品上市經驗，目前建置的美國銷售團隊、給付覆蓋談判、病患支援計畫等能力全部是首次執行。G&amp;A費用Q2 YoY+172%已反映籌備投入，但實際商業化執行效果只有等到產品真正核准上市後才能驗證。
+        <div class="risk-source">來源：FY2026 Q2 10-Q MD&amp;A，G&amp;A費用變動說明</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">EQRx併購相關訴訟（已和解、待法院核准）</div>
+        Nemeth v. Casdin案（源自2021年EQRx與CMLS III合併的股東爭議，RVMD僅以EQRx權益繼受人身分被列為被告之一）已於2026年1月達成和解協議並提交法院，2026年6月18日法院核准並駁回訴訟。公司已提列約$5.0M準備金（扣除預期保險理賠後淨額）。
+        <div class="risk-source">來源：FY2026 Q2 10-Q Note 7 Legal matters</div>
+      </div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #b91c4a;">
+      <div class="card-title" style="color:#b91c4a;">⚑ 獨創前瞻風險——「強制槓桿時間窗」與稀釋事件的疊加</div>
+      <p>把三份看似獨立的合約條款拼在一起看，會浮現一個管理層沒有明講、市場也未必已定價的風險：<b>Term Loan Facility要求公司在daraxonrasib取得FDA核准後45天內強制動用第一批$250.0M定期貸款</b>（利率SOFR floor 3.5%+5.75%，以近乎全部資產擔保）——這代表公司在核准當下並「沒有選擇是否舉債、只能選擇何時」。而這個強制舉債的時間窗，恰好與另外兩個事件高度重疊：（1）RVMDW認股權證將於<b>2026年12月到期</b>，屆時若股價仍遠高於$11.50行使價，會出現一次性的行使／稀釋潮；（2）2033可轉換公司債的轉換價為$198.80，以2026/8/14收盤價$203.71計算已略高於轉換價，意味著債券持有人已具備轉換誘因。三者疊加的結果是：<b>核准後的45天內，公司可能同時面臨「被合約義務綁定新增$250M高息負債」與「既有可轉債/權證潮水式稀釋」</b>，而非市場一般假設的「核准＝現金部位進一步增厚、稀釋壓力自然下降」。目前的估值敘事（市值$43.7B、淨現金部位近$3.4B）似乎預設了核准是純粹利多，但這個強制槓桿條款代表核准當下的資本結構變化，比表面上複雜、且部分是公司無法自主選擇的。</p>
+    </div>
+
+    <div class="note grey">⚑ 內部人交易訊號（Form 4，全年觀察）：2026年全年所有內部人Form 4申報，型態一致為「10b5-1計畫下的選擇權行使＋即時出售」，交易日期集中在既定計畫設定日（COO Margaret Horn計畫設於2026/3/12；董事Sushil Patel計畫設於2026/3/30）附近，<b>全年查無任何一筆非計畫性的公開市場買進</b>。2026年7-8月（Q2法說會前後）完全沒有Form 4申報。這代表無法從內部人交易讀出額外的管理層信心訊號——既非負面（賣出是既定計畫、非機會主義出脫），也非正面（沒有人在股價大漲後選擇加碼買進）。</div>
+  </div>
+
+  <!-- ============ TAB: 損益表 ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$0</div><div class="kpi-lbl">產品營收</div><div class="kpi-sub">無核准產品，尚未產生營收</div></div>
+      <div class="kpi"><div class="kpi-val neg" style="color:#b91c1c;">$644.4M</div><div class="kpi-lbl">Q2淨損</div><div class="kpi-sub neg">YoY +160.1%（去年同期$247.8M）</div></div>
+      <div class="kpi"><div class="kpi-val">$394.9M</div><div class="kpi-lbl">Q2研發費用（R&amp;D）</div><div class="kpi-sub neg">YoY +76.2%</div></div>
+      <div class="kpi"><div class="kpi-val">$110.2M</div><div class="kpi-lbl">Q2管理費用（G&amp;A）</div><div class="kpi-sub neg">YoY +171.6%</div></div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">逐季損益趨勢（R&amp;D／G&amp;A／淨損，8季）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">RVMD 逐季損益趨勢（R&amp;D／G&amp;A／淨損）</text><line x1="76" y1="456" x2="864" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355.5" x2="864" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="255" x2="864" y2="255" stroke="#eeeeee" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="76" y1="154.5" x2="864" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元 (US$M)</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY24Q3</text><line x1="188.57" y1="456" x2="188.57" y2="460" stroke="#999999" stroke-width="1"/><text x="188.57" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY24Q4</text><line x1="301.14" y1="456" x2="301.14" y2="460" stroke="#999999" stroke-width="1"/><text x="301.14" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY25Q1</text><line x1="413.71" y1="456" x2="413.71" y2="460" stroke="#999999" stroke-width="1"/><text x="413.71" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY25Q2</text><line x1="526.29" y1="456" x2="526.29" y2="460" stroke="#999999" stroke-width="1"/><text x="526.29" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY25Q3</text><line x1="638.86" y1="456" x2="638.86" y2="460" stroke="#999999" stroke-width="1"/><text x="638.86" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY25Q4</text><line x1="751.43" y1="456" x2="751.43" y2="460" stroke="#999999" stroke-width="1"/><text x="751.43" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY26Q1</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY26Q2</text><polyline points="76,379.72 188.57,361.48 301.14,352.64 413.71,343.39 526.29,324.09 638.86,307.81 751.43,283.14 864,257.56" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="379.72" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="188.57" cy="361.48" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="301.14" cy="352.64" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="413.71" cy="343.39" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="526.29" cy="324.09" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="638.86" cy="307.81" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="751.43" cy="283.14" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="864" cy="257.56" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><polyline points="76,443.94 188.57,441.83 301.14,438.41 413.71,435.6 526.29,429.47 638.86,422.48 751.43,405.1 864,400.62" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="443.94" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="188.57" cy="441.83" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="301.14" cy="438.41" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="413.71" cy="435.6" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="526.29" cy="429.47" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="638.86" cy="422.48" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="751.43" cy="405.1" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="864" cy="400.62" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><polyline points="76,377.46 188.57,358.21 301.14,348.77 413.71,331.48 526.29,302.64 638.86,272.64 751.43,227.97 864,132.19" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="377.46" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="188.57" cy="358.21" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="301.14" cy="348.77" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="413.71" cy="331.48" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="526.29" cy="302.64" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="638.86" cy="272.64" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="751.43" cy="227.97" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="864" cy="132.19" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><line x1="263.25" y1="40" x2="279.25" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="285.25" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">研發費用(R&amp;D)</text><line x1="384.88" y1="40" x2="400.88" y2="40" stroke="#dc2626" stroke-width="2.4"/><text x="406.88" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">管理費用(G&amp;A)</text><line x1="506.5" y1="40" x2="522.5" y2="40" stroke="#16a34a" stroke-width="2.4"/><text x="528.5" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">淨損(Net Loss)</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：SEC EDGAR 各期 10-Q／10-K（XBRL），詳見估值觀察 tab 註記</div>
+</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">逐季損益表（百萬美元，除每股數字外）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">項目</th><th>FY24Q3</th><th>FY24Q4⚑</th><th>FY25Q1</th><th>FY25Q2</th><th>FY25Q3</th><th>FY25Q4⚑</th><th>FY26Q1</th><th>FY26Q2</th></tr>
+        <tr><td>研發費用</td><td>151.8</td><td>188.1</td><td>205.7</td><td>224.1</td><td>262.5</td><td>294.9</td><td>344.0</td><td>394.9</td></tr>
+        <tr><td>管理費用</td><td>24.0</td><td>28.2</td><td>35.0</td><td>40.6</td><td>52.8</td><td>66.7</td><td>101.3</td><td>110.2</td></tr>
+        <tr class="total"><td>總營業費用</td><td>175.7</td><td>216.3</td><td>240.8</td><td>264.7</td><td>315.3</td><td>361.6</td><td>445.2</td><td>505.1</td></tr>
+        <tr><td>淨損</td><td>(156.3)</td><td>(194.6)</td><td>(213.4)</td><td>(247.8)</td><td>(305.2)</td><td>(364.9)</td><td>(453.8)</td><td>(644.4)</td></tr>
+        <tr><td>每股淨損（基本＝稀釋）</td><td>(0.94)</td><td>(1.13)</td><td>(1.13)</td><td>(1.31)</td><td>(1.61)</td><td>(1.89)</td><td>(2.29)</td><td>(3.06)</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ FY24Q4／FY25Q4 為推算值（全年10-K數字減去前三季10-Q累計數）；RVMD不單獨揭露Q4數字。資料來源：SEC EDGAR XBRL company facts（各期10-Q／10-K），逐一以us-gaap分類核對。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">H1 FY2026 vs H1 FY2025 累計比較</div>
+      <div class="tbl-scroll">
+      <table>
+        <tr><th style="text-align:left">項目</th><th>H1 FY26</th><th>H1 FY25</th><th>增減</th></tr>
+        <tr><td>研發費用</td><td>$738.9M</td><td>$429.9M</td><td class="neg">+$309.0M（+71.9%）</td></tr>
+        <tr><td>管理費用</td><td>$211.5M</td><td>$75.6M</td><td class="neg">+$135.9M（+179.8%）</td></tr>
+        <tr><td>利息收入</td><td>$55.1M</td><td>$47.3M</td><td class="pos">+$7.8M</td></tr>
+        <tr><td>利息費用</td><td>($36.0M)</td><td>($0.9M)</td><td class="neg">+$35.1M（Royalty Pharma非現金利息＋可轉債利息）</td></tr>
+        <tr><td>認股權證公允價值變動</td><td>($166.8M)</td><td>($2.1M)</td><td class="neg">股價大漲導致非現金負債重估</td></tr>
+        <tr class="total"><td>淨損</td><td>($1,098.2M)</td><td>($461.2M)</td><td class="neg">+$636.98M</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="note">⚑ GAAP／非GAAP差異：RVMD未揭露任何非GAAP調整指標，全部財務數字均為GAAP口徑，無需另行拆解。財測 vs 實際：公司已將FY2026 GAAP營業費用財測上修至<b>$2.1B–$2.2B</b>（含股權薪酬$270-290M），對比H1實際營業費用$950.4M，隱含H2財測中位數約$1.15-1.25B，較H1加速約25-35%——與商業化籌備和多項Phase 3試驗同步擴大收案的時程一致。公司未提供FY2027正式展望，但多項讀值（RASolve 301於2027、RMC-5127初步數據2027、CRC組合數據2026Q4）意味研發支出在可預見的未來仍將維持高檔。</div>
+  </div>
+
+  <!-- ============ TAB: 業務部門 ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="note grey">⚑ RVMD無傳統事業部（Business Unit），本 tab 依框架精神以四大臨床階段管線資產作為「BU」類比，聚焦財務數字背後的技術/產品層級解析。量價拆分（出貨量 vs ASP）於本公司無此資料/不適用——無核准產品、無出貨量與售價概念。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">各管線研發費用對比（Q2 FY25 vs Q2 FY26）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 388" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="388" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">RVMD 研發費用依管線分佈（Q2 FY25 vs Q2 FY26）</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6b6b6b" font-family="sans-serif">Daraxonrasib、Zoldonrasib 為研發費用成長主力，反映多項 Phase 3 樞紐試驗同步推進</text><line x1="22" y1="56" x2="876" y2="56" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="71" width="10" height="10" rx="1" fill="#d97706"/><text x="40" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 FY25</text><rect x="108.28" y="71" width="10" height="10" rx="1" fill="#7c3aed"/><text x="126.28" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 FY26</text><line x1="170" y1="96" x2="170" y2="330" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="304" y1="96" x2="304" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="304" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">25</text><line x1="438" y1="96" x2="438" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="438" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="572" y1="96" x2="572" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="572" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">75</text><line x1="706" y1="96" x2="706" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="706" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="840" y1="96" x2="840" y2="330" stroke="#eeeeee" stroke-width="1"/><text x="840" y="346" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">125 百萬美元 (US$M)</text><line x1="170" y1="96" x2="170" y2="330" stroke="#111111" stroke-width="1.2"/><rect x="170" y="103.55" width="412.18" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="120.4" width="609.43" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="123.4" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Daraxonrasib</text><rect x="170" y="150.35" width="125.96" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="167.2" width="343.04" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="170.2" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Zoldonrasib</text><rect x="170" y="197.15" width="97.55" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="214" width="65.39" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="217" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Elironrasib</text><rect x="170" y="243.95" width="12.33" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="260.8" width="47.7" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="263.8" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">RMC-5127</text><rect x="170" y="290.75" width="123.82" height="14.85" fill="#d97706" rx="1" data-dim="Q2 FY25"/><rect x="170" y="307.6" width="182.24" height="14.85" fill="#7c3aed" rx="1" data-dim="Q2 FY26"/><text x="160" y="310.6" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">臨床前管線</text><text x="22" y="376" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：RVMD FY2026 Q2 10-Q，Note "Results of operations" 研發費用細項表</text></svg>
+</div>
+    </div>
+
+    <div class="bu-grid">
+      <div class="bu-card b">
+        <div class="bu-name">Daraxonrasib（RMC-6236）</div>
+        <div class="bu-abbr">多重選擇性 RAS(ON) 抑制劑 · NDA審查中</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 研發費用</span><span class="bu-stat-val">$113.7M<span class="bu-delta">+47.9%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 研發費用</span><span class="bu-stat-val">$227.8M<span class="bu-delta">+57.7%</span></span></div>
+        <p style="font-size:12px;color:#333;line-height:1.6;margin-top:8px;">技術本質是一款口服 tri-complex 小分子，其結合位點同時涵蓋 RAS 蛋白 G12、G13、Q61 三大突變熱點，透過鎖定 RAS(ON) 活化態達成廣譜抑制。此設計解決了單一突變選擇性藥物在腫瘤異質性（同一腫瘤內存在多種RAS突變亞株）下容易失效的問題。目前的核心價值驅動來自 PDAC 這個歷史上藥物反應率極低的癌種——若核准上市，將是「多重選擇性RAS(ON)機制」的首次商業驗證，直接決定後續 zoldonrasib、elironrasib 等單一選擇性資產的市場信任基礎。</p>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">Zoldonrasib（RMC-9805）</div>
+        <div class="bu-abbr">G12D選擇性抑制劑 · NSCLC突破性療法認定</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 研發費用</span><span class="bu-stat-val">$64.0M<span class="bu-delta">+172.1%</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 研發費用</span><span class="bu-stat-val">$117.9M<span class="bu-delta">+145.6%</span></span></div>
+        <p style="font-size:12px;color:#333;line-height:1.6;margin-top:8px;">採共價鍵結機制，一旦與G12D突變的RAS蛋白結合即不可逆失活，理論上可提供比非共價抑制劑更持久的訊號抑制。G12D是PDAC與NSCLC中最常見的RAS突變亞型之一，臨床開發策略採「與daraxonrasib組合」（RASolute 309，鎖定G12D患者族群）與「獨立適應症」（RASolute 305、RASolve 308）雙軌並行，是本季研發費用成長最快的資產，反映其優先順序正在快速提升。</p>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">Elironrasib＋新一代平台</div>
+        <div class="bu-abbr">G12C選擇性（RMC-6291）＋RMC-5127（G12V）等早期資產</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2 FY26 研發費用</span><span class="bu-stat-val">$21.1M<span class="bu-delta neg">合計約持平</span></span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">H1 FY26 研發費用</span><span class="bu-stat-val">$39.7M<span class="bu-delta">+15.4%</span></span></div>
+        <p style="font-size:12px;color:#333;line-height:1.6;margin-top:8px;">Elironrasib鎖定G12C突變，與市場上已核准的第一代KRAS(OFF) G12C抑制劑（如sotorasib）機制不同——直接抑制活化態而非鎖定非活化態，設計目標是對這類已核准抑制劑產生抗藥性或未曾使用過的患者族群提供新選項。RMC-5127（G12V）與規劃中的新一代抗藥性抑制劑仍處於Ph1/臨床前階段，代表公司管線的「下一棒」，其研發強度將隨臨床階段推進而顯著提升（可對照daraxonrasib、zoldonrasib從早期到樞紐試驗期間的費用成長軌跡）。</p>
+      </div>
+    </div>
+
+    <div class="note">⚑ 人工解讀：Daraxonrasib、Zoldonrasib合計占Q2研發費用的45%（$177.7M／$394.9M），兩者皆處於Phase 3樞紐試驗密集執行期，是當前現金燒錢速度的主要驅動力；Elironrasib＋新一代平台雖然費用相對較低，但其YoY成長率（+15%對比公司整體+76%）明顯落後，顯示公司資源配置正朝向「押注已有樞紐數據的資產優先」集中，而非平均分配到全部管線。資料來源：RVMD FY2026 Q2 10-Q，Results of operations 研發費用細項表。</div>
+  </div>
+
+  <!-- ============ TAB: 資產負債表 ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="tbl-wrap">
+      <div class="tbl-title">三期別資產負債表比較（百萬美元）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">項目</th><th>2026/6/30</th><th>2026/3/31</th><th>2025/12/31</th></tr>
+        <tr class="section-head"><td colspan="4">資產</td></tr>
+        <tr><td>現金及約當現金</td><td>815.4</td><td>440.9</td><td>383.7</td></tr>
+        <tr><td>約當投資（短期）</td><td>3,122.5</td><td>1,467.1</td><td>1,641.9</td></tr>
+        <tr><td>預付費用及其他流動資產</td><td>90.4</td><td>—</td><td>49.4</td></tr>
+        <tr class="subtotal"><td>流動資產合計</td><td>4,028.3</td><td>—</td><td>2,075.0</td></tr>
+        <tr><td>不動產及設備，淨額</td><td>34.6</td><td>—</td><td>33.2</td></tr>
+        <tr><td>使用權資產（營運租賃）</td><td>127.8</td><td>129.9</td><td>132.1</td></tr>
+        <tr><td>無形資產，淨額</td><td>55.8</td><td>—</td><td>55.8</td></tr>
+        <tr><td>商譽</td><td>14.6</td><td>—</td><td>14.6</td></tr>
+        <tr class="total"><td>資產總額</td><td>4,323.3</td><td>2,253.7</td><td>2,354.5</td></tr>
+        <tr class="section-head"><td colspan="4">負債</td></tr>
+        <tr><td>應付帳款</td><td>88.4</td><td>—</td><td>64.6</td></tr>
+        <tr><td>應計費用及其他流動負債</td><td>248.9</td><td>—</td><td>209.3</td></tr>
+        <tr><td>營運租賃負債（流動）</td><td>16.8</td><td>—</td><td>16.5</td></tr>
+        <tr><td>營運租賃負債（非流動）</td><td>137.7</td><td>—</td><td>142.2</td></tr>
+        <tr><td>權利金出售相關負債</td><td>548.5</td><td>—</td><td>268.4</td></tr>
+        <tr><td>可轉換公司債（非流動）</td><td>487.4</td><td>—</td><td>0.0</td></tr>
+        <tr><td>認股權證負債</td><td>185.3</td><td>—</td><td>18.5</td></tr>
+        <tr class="total"><td>負債總額</td><td>1,717.0</td><td>753.8</td><td>723.2</td></tr>
+        <tr class="section-head"><td colspan="4">股東權益</td></tr>
+        <tr><td>股東權益總額</td><td>2,606.2</td><td>1,499.9</td><td>1,631.3</td></tr>
+        <tr><td>累計赤字</td><td>(3,967.3)</td><td>—</td><td>(2,869.1)</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ 2026/3/31（Q1）部分細項未逐一取得原始10-Q細目，以「—」標示；期末彙總數字（資產/負債/股東權益總額）已交叉核對XBRL company facts，可信。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">應收帳款天數（DSO）、客戶預付款、採購承諾——四項必備追蹤</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">項目</th><th style="text-align:left">結果</th></tr>
+        <tr><td>應收帳款天數（DSO）</td><td class="wrap" style="text-align:left">無此資料／不適用。RVMD無產品營收，資產負債表無應收帳款科目，10-Q自2025年起亦未再揭露該XBRL標籤。</td></tr>
+        <tr><td>客戶預付款（合約負債）</td><td class="wrap" style="text-align:left">無此資料／不適用。公司無產品營收，合約負債／遞延收入科目餘額自2023年中即已歸零，本季及對比期均無此項目。</td></tr>
+        <tr><td>採購承諾</td><td class="wrap" style="text-align:left">10-Q／10-K「Commitments and contingencies」附註<b>未揭露量化的無條件採購承諾（unconditional purchase obligations）分層到期表</b>。僅有質化揭露：與CRO（臨床試驗）、CMO（臨床試驗物料）及其他供應商之合約「可由公司於30-90天內以書面通知隨時終止」，不構成需分層揭露之堅實承諾。</td></tr>
+        <tr><td>未開始租賃（lease not yet commenced）</td><td class="wrap" style="text-align:left">10-Q未以此標籤明確揭露。最接近的個案是 500 Building：租約於2024年7月簽署，惟實際交屋（進駐、認列使用權資產）延至2024年10月，屬於執行與生效之間的落差，但未被標記為ASC 842定義下的「尚未開始租賃」。</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">營運租賃到期表（截至2026/6/30，未折現，百萬美元）</div>
+      <div class="tbl-scroll">
+      <table>
+        <tr><th style="text-align:left">年度</th><th>金額</th></tr>
+        <tr><td>2026（剩餘六個月）</td><td>10.7</td></tr>
+        <tr><td>2027</td><td>20.2</td></tr>
+        <tr><td>2028</td><td>21.9</td></tr>
+        <tr><td>2029</td><td>22.6</td></tr>
+        <tr><td>2030</td><td>23.4</td></tr>
+        <tr><td>其後</td><td>129.9</td></tr>
+        <tr class="total"><td>未折現租賃給付總額</td><td>228.7</td></tr>
+        <tr><td>減：內含利息</td><td>(70.2)</td></tr>
+        <tr><td>減：租賃應收款</td><td>(4.1)</td></tr>
+        <tr class="total"><td>營運租賃負債總額</td><td>154.5</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ 加權平均折現率7.97%，加權平均剩餘租期9.5年。主要租賃標的為Redwood City, California總部園區（293,906平方呎，租期至2035年12月），房東已提供累計$20.3M租戶裝修津貼；公司對部分空間（600、400棟）已簽訂轉租合約。資料來源：FY2026 Q2 10-Q Note 7 Leases。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">主要負債科目說明</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">科目</th><th style="text-align:left">說明</th></tr>
+        <tr><td>權利金出售相關負債</td><td class="wrap" style="text-align:left">會計上以「債務融資」入帳（而非銷售），因公司對未來權利金的產生仍有重大持續參與。期初$268.4M→＋Tranche2募得$250.0M→－發行成本$5.0M→＋非現金利息$34.4M→＋成本攤銷$0.7M＝期末$548.5M。</td></tr>
+        <tr><td>可轉換公司債（2033到期）</td><td class="wrap" style="text-align:left">本金$500.0M，票面利率0.50%，淨帳面價值$487.4M（扣除未攤銷發行成本$12.6M）。轉換價約$198.80／股，公允價值估計$625.7M（Level 2輸入值，市場交易價高於帳面成本）。</td></tr>
+        <tr><td>認股權證負債（RVMDW）</td><td class="wrap" style="text-align:left">源自2023年EQRx併購，公開＋私募權證合計約1,973.3萬份，每份可購買0.1112股，行使價$11.50，2026年12月到期。因結算條款不符合「fix-for-fixed」認股權豁免，須按公允價值列為負債，每季隨股價變動marked-to-market計入損益（純會計項目，非現金流出）。</td></tr>
+        <tr><td>Term Loan Facility</td><td class="wrap" style="text-align:left">最高$750.0M（3批各$250.0M），截至2026/6/30<b>尚未動用、未認列負債</b>；第一批將於FDA核准後45天內強制動用（見風險矩陣 tab）。</td></tr>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB: 現金流量 ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="chart-wrap">
+      <div class="chart-title">現金流量橋接（2026上半年，現金及約當現金）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">RVMD 現金流量橋接（2026上半年，現金及約當現金）</text><line x1="78" y1="424" x2="870" y2="424" stroke="#eeeeee" stroke-width="1"/><text x="68" y="428" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-2,000</text><line x1="78" y1="300" x2="870" y2="300" stroke="#eeeeee" stroke-width="1"/><text x="68" y="304" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-1,000</text><line x1="78" y1="176" x2="870" y2="176" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="180" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="52" x2="870" y2="52" stroke="#eeeeee" stroke-width="1"/><text x="68" y="56" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><text x="68" y="40" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元 (US$M)</text><line x1="78" y1="52" x2="78" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="176" x2="870" y2="176" stroke="#111111" stroke-width="1.2"/><line x1="189.2" y1="128.42" x2="283.6" y2="128.42" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="347.6" y1="220.37" x2="442" y2="220.37" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="506" y1="404.64" x2="600.4" y2="404.64" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="664.4" y1="74.9" x2="758.8" y2="74.9" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="125.2" y="128.42" width="64" height="47.58" fill="#334155" fill-opacity="0.9" rx="2"/><text x="157.2" y="121.42" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">383.7</text><text x="157.2" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-30 157.2 438)">期初現金（2025/12/31）</text><rect x="283.6" y="128.42" width="64" height="91.95" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="315.6" y="235.37" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-741.5</text><text x="315.6" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">營運活動現金流</text><rect x="442" y="220.37" width="64" height="184.28" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="474" y="419.64" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-1,486</text><text x="474" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">投資活動現金流</text><rect x="600.4" y="74.9" width="64" height="329.74" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="632.4" y="67.9" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+2,659</text><text x="632.4" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">籌資活動現金流</text><rect x="758.8" y="74.9" width="64" height="101.1" fill="#334155" fill-opacity="0.9" rx="2"/><text x="790.8" y="67.9" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">815.3</text><text x="790.8" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-30 790.8000000000001 438)">期末現金（2026/6/30）</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：RVMD FY2026 Q2 10-Q，現金流量表（六個月累計，僅計現金及約當現金，不含約當投資部位）</div>
+</div>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">六個月累計現金流量（2026 vs 2025，百萬美元）</div>
+      <div class="cf-row"><span class="cf-lbl">營運活動現金流（H1 FY26）</span><span class="cf-val neg">($741.5M)</span></div>
+      <div class="cf-row"><span class="cf-lbl">營運活動現金流（H1 FY25）</span><span class="cf-val neg">($416.2M)</span></div>
+      <div class="cf-row"><span class="cf-lbl">投資活動現金流（H1 FY26）</span><span class="cf-val neg">($1,486.1M)</span></div>
+      <div class="cf-row"><span class="cf-lbl">投資活動現金流（H1 FY25）</span><span class="cf-val pos">$18.3M</span></div>
+      <div class="cf-row"><span class="cf-lbl">籌資活動現金流（H1 FY26）</span><span class="cf-val pos">$2,659.2M</span></div>
+      <div class="cf-row"><span class="cf-lbl">籌資活動現金流（H1 FY25）</span><span class="cf-val pos">$257.5M</span></div>
+      <div class="cf-row total-row"><span class="cf-lbl">現金及約當現金淨變動（H1 FY26）</span><span class="cf-val pos">+$431.7M</span></div>
+    </div>
+
+    <div class="note">⚑ 人工解讀：投資活動現金流的巨額流出（-$1,486.1M）主要是把募資所得大量轉入約當投資部位（可交易證券），而非資本支出——RVMD不動產及設備淨額僅$34.6M，資本支出規模極小。真正代表「燒錢速度」的是營運活動現金流：H1 FY26為-$741.5M（約每季-$370.75M），較H1 FY25的-$416.2M顯著擴大（+78.2%），與研發／管理費用同步攀升的趨勢一致。籌資活動的$2,659.2M主要由四月股權增發（淨$1,651.4M）、可轉換公司債（淨$487.1M）、Royalty Pharma Tranche2（$250.0M）與ATM持續發行（合計淨約$226.7M）構成，詳見供應鏈 tab 資金流向圖。資料來源：FY2026 Q2 10-Q MD&amp;A，Liquidity and Capital Resources段落。</div>
+
+    <div class="note grey">⚑ 公司未單獨揭露季度層級（僅Q2單季，不含Q1）的三大類現金流細目，僅提供六個月累計數字，故本tab以H1累計比較呈現，無法提供逐季趨勢圖。</div>
+  </div>
+
+  <!-- ============ TAB: 估值觀察 ============ -->
+  <div id="panel-val" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$43.7B</div><div class="kpi-lbl">市值</div><div class="kpi-sub">2026/8/14收盤 $203.71，214.34M股</div></div>
+      <div class="kpi"><div class="kpi-val">~$3.4B</div><div class="kpi-lbl">淨現金部位</div><div class="kpi-sub">現金+投資 $3.9B － 有息負債 $0.5B</div></div>
+      <div class="kpi"><div class="kpi-val">~$40.3B</div><div class="kpi-lbl">隱含企業價值（EV）</div><div class="kpi-sub">市值－淨現金</div></div>
+      <div class="kpi"><div class="kpi-val neg" style="color:#b91c1c;">N/A</div><div class="kpi-lbl">本益比（P/E）</div><div class="kpi-sub neg">GAAP虧損，無法計算</div></div>
+    </div>
+
+    <div class="note yellow">⚑ 本益比不適用之說明（框架要求之必備討論）：RVMD無產品營收、GAAP持續虧損，傳統本益比（P/E）在分母為負值時無數學意義，比較同業本益比同樣不具參考價值——研究中挑選的六家同業（Erasca、Verastem、Relay、Nuvation Bio、BridgeBio Oncology、RVMD自身）<b>全數為GAAP虧損</b>，本益比對整個同業族群都是未定義狀態，並非RVMD個案問題。因此，本框架要求之必備散點圖改以「市值 × 現金跑道（季度）× 燒錢速度（氣泡大小）」三維呈現，是臨床階段生技股估值分析中更常用、也更具資訊量的替代指標。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">同業比較：市值、現金跑道與燒錢速度（此圖為框架要求之必備圖表，已依產業特性調整衡量指標）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">RVMD vs 臨床階段RAS／腫瘤同業：市值、現金跑道與燒錢速度</text><line x1="76" y1="458" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="860" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="76" y1="293.2" x2="860" y2="293.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="297.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="210.8" x2="860" y2="210.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="214.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30</text><line x1="76" y1="128.4" x2="860" y2="128.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="132.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="76" y1="46" x2="860" y2="46" stroke="#eeeeee" stroke-width="1"/><text x="66" y="50" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="46" x2="76" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">5</text><line x1="206.67" y1="46" x2="206.67" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="206.67" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">6</text><line x1="337.33" y1="46" x2="337.33" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="337.33" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">7</text><line x1="468" y1="46" x2="468" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="468" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">8</text><line x1="598.67" y1="46" x2="598.67" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="598.67" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">9</text><line x1="729.33" y1="46" x2="729.33" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="729.33" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="860" y1="46" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="860" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">11</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">現金跑道（季度，依FY26財測推算）</text><text x="18" y="252" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252)">市值（十億美元）</text><line x1="546.4" y1="46" x2="546.4" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="550.4" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 8.60</text><line x1="76" y1="431.1" x2="860" y2="431.1" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="426.1" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 3.26</text><circle cx="533.33" cy="97.91" r="26" fill="#0891b2" fill-opacity="0.55" stroke="#0891b2" stroke-width="1.5"/><circle cx="846.93" cy="422.16" r="9.37" fill="#d97706" fill-opacity="0.55" stroke="#d97706" stroke-width="1.5"/><circle cx="794.67" cy="440.04" r="8.12" fill="#7c3aed" fill-opacity="0.55" stroke="#7c3aed" stroke-width="1.5"/><circle cx="219.73" cy="451.98" r="7.7" fill="#0891b2" fill-opacity="0.55" stroke="#0891b2" stroke-width="1.5"/><circle cx="559.47" cy="405.02" r="6.8" fill="#db2777" fill-opacity="0.55" stroke="#db2777" stroke-width="1.5"/><circle cx="180.53" cy="453.06" r="6.04" fill="#65a30d" fill-opacity="0.55" stroke="#65a30d" stroke-width="1.5"/><text x="533.33" y="66.91" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">RVMD</text><text x="846.93" y="407.78" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">RLAY</text><text x="794.67" y="426.92" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">NUVB</text><text x="219.73" y="439.28" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">BBOT</text><text x="559.47" y="393.21" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">ERAS</text><text x="180.53" y="442.02" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">VSTM</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">氣泡大小＝最近一季淨損（燒錢速度，百萬美元）。同業本益比（P/E）因全數為GAAP虧損而不適用，故以市值×現金跑道×燒錢速度替代，見估值觀察 tab 說明。資料來源：各公司FY2026 Q2 10-Q／8-K，2026/8/14收盤市值</div>
+</div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">臨床階段RAS／腫瘤同業比較（2026年8月中旬資料）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">公司</th><th>市值</th><th>現金及投資</th><th>單季淨損</th><th>現金跑道</th><th style="text-align:left">管線階段</th></tr>
+        <tr><td><strong>RVMD</strong></td><td>$43.7B</td><td>$3.9B</td><td>$644.4M</td><td>~8-9季</td><td style="text-align:left">NDA審查中（daraxonrasib，PDAC）；NSCLC/CRC Ph3</td></tr>
+        <tr><td>Erasca（ERAS）</td><td>$6.43B</td><td>$0.38B（H1，7月增資後近$1.0B）</td><td>$44.1M</td><td>~8.7季</td><td style="text-align:left">Ph1/2，未申請NDA</td></tr>
+        <tr><td>Verastem（VSTM）</td><td>$0.60B</td><td>$0.20B</td><td>$34.7M（淨營收後）</td><td>~5.8季</td><td style="text-align:left">已商業化（AVMAPKI FAKZYNJA，LGSOC）</td></tr>
+        <tr><td>Relay Therapeutics（RLAY）</td><td>$4.35B</td><td>$0.91B</td><td>$83.7M</td><td>~10.9季</td><td style="text-align:left">Ph1/2（非RAS路徑，精準醫療平台）</td></tr>
+        <tr><td>Nuvation Bio（NUVB）</td><td>$2.18B</td><td>$0.66B</td><td>$62.8M（淨營收後）</td><td>~10.5季</td><td style="text-align:left">已商業化（IBTROZI，ROS1抑制劑）</td></tr>
+        <tr><td>BridgeBio Oncology（BBOT）</td><td>$0.73B</td><td>$0.34B</td><td>$56.5M</td><td>~6.1季</td><td style="text-align:left">Ph1（RAS路徑：KRAS G12C(ON)、RAS-PI3Kα）</td></tr>
+      </table>
+      </div>
+    </div>
+    <div class="note grey">⚑ Repare Therapeutics（RPTX，原可比同業）已於2026/1/28被XenoTherapeutics收購下市，排除比較。VSTM／NUVB已進入商業化階段，其「淨損」已扣除產品營收，與其餘純研發階段公司的燒錢速度不完全同基礎，比較時應留意。資料來源：各公司FY2026 Q2 10-Q／8-K，2026/8/14收盤市值。</div>
+
+    <div class="note">⚑ 重要脈絡：據公開報導，Merck曾於2026年1月與RVMD進行收購洽談，出價區間約$28-32B，因價格未能談攏而破局。RVMD目前市值（$43.7B）已<b>顯著高於</b>當時傳出的收購價區間——換言之，市場目前對daraxonrasib核准後的價值認定，已經超越了大型藥廠一月時願意支付的價格上限。這既可解讀為「RASolute 302數據＋NDA受理後基本面實質改善，重新定價合理」，也可解讀為「市場情緒可能已跑在監理結果確認之前」，兩種解讀都需要後續實際核准結果來驗證，是本輪估值最關鍵的觀察點。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">利息保障倍數</div>
+      <div class="tbl-scroll">
+      <table>
+        <tr><th style="text-align:left">項目</th><th>Q2 FY26</th><th style="text-align:left">意義</th></tr>
+        <tr><td>營業損失（EBIT代理）</td><td>($505.1M)</td><td style="text-align:left">GAAP營業層級即為虧損，非僅利息前後的差異</td></tr>
+        <tr><td>利息費用</td><td>$23.8M</td><td style="text-align:left">Royalty Pharma非現金利息攤銷＋可轉債票面利息</td></tr>
+        <tr><td>利息保障倍數</td><td class="neg">約 -21.2x</td><td style="text-align:left">深度負值——公司完全無法用營業利益覆蓋利息支出，償債能力倚賴現有現金部位而非營運現金流，這在GAAP尚未達損益兩平的臨床階段生技股是常態，但仍是必須揭露的結構性事實</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">互證對照表（管理層／市場敘事 vs 財報數字驗證）</div>
+      <div class="tbl-scroll">
+      <table class="wide">
+        <tr><th style="text-align:left">管理層／市場敘事</th><th style="text-align:left">財報科目驗證</th></tr>
+        <tr><td class="wrap">RASolute 302為支撐NDA的「正面數據」</td><td class="wrap">Royalty Pharma Tranche 2（$250.0M）的觸發條件即為「RASolute302正面數據＋NDA提交決定」，且已於2026年5月實際入帳——代表這是經過外部商業對手方以真金白銀認可的里程碑，非公司單方面樂觀表述</td></tr>
+        <tr><td class="wrap">現有現金部位「可支撐至少未來12個月營運」（10-Q揭露原文）</td><td class="wrap">H1 FY26營運現金流出$741.5M（約每季$370.75M），現金+投資部位$3.9B，靜態推算可支撐約10.5季——遠高於10-Q最低承諾的4季（12個月），有顯著安全邊際；惟財測顯示H2支出將加速，此邊際會隨之收斂</td></tr>
+        <tr><td class="wrap">G&amp;A費用大增「為商業化籌備投資」</td><td class="wrap">G&amp;A Q2 YoY+171.6%，遠高於R&amp;D的+76.2%，且10-Q MD&amp;A明確將增幅歸因於「commercial preparation activities」與人員擴編——方向與說法一致，並非籠統帶過</td></tr>
+        <tr><td class="wrap">$151.0M認股權證公允價值變動「與營運無關」</td><td class="wrap">10-Q明確揭露該負債100%隨公司自身股價波動marked-to-market，屬2023年EQRx併購遺留的會計項目，2026年12月到期後即消失——性質上確實與R&amp;D/G&amp;A等經常性營運費用不同，佐證此為非現金、非經常性項目</td></tr>
+        <tr><td class="wrap">法說會與正式文件全程未主動提及EQRx併購相關的Nemeth v. Casdin訴訟進展</td><td class="wrap">10-Q Note 7完整揭露訴訟已於2026年1月和解、6月18日獲法院核准駁回，並已提列$5.0M準備金——屬於「未在法說會口頭提及，但已在10-Q完整揭露」的沉默訊號，非隱瞞不揭露</td></tr>
+        <tr><td class="wrap">內部人交易「僅為既定10b5-1計畫」（未見於本季新聞稿，但為一般假設）</td><td class="wrap">Form 4顯示全年交易日期集中於既定計畫設定日附近（COO計畫設於2026/3/12、董事計畫設於2026/3/30），且Q2法說會前後完全無申報，與「非機會主義交易」的假設一致，但也代表沒有任何內部人在股價新高時選擇加碼買進</td></tr>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-note">僅供資訊參考，非投資建議。資料來源：SEC EDGAR（10-Q／10-K／Form 4／8-K）、公司投資人關係網站、公開市場資訊。Fallback模式：因無可合法引用之逐字稿，本報告省略Q&amp;A問答分析tab。</div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
