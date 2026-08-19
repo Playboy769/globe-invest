@@ -481,46 +481,96 @@ function fetchUrl(url) {
   });
 }
 
-// ── Market Weather dashboard (FRED-sourced macro stress indicators) ──
-// All 5 series are official, free, daily-updated FRED data — no unofficial/undocumented
-// endpoints in the mix, so there's nothing here that can silently break on a format change.
-const FRED_SERIES = [
-  { id: 'VIXCLS',       label: '波動率指數 VIX',       desc: '選擇權隱含波動率，市場恐慌程度的即時溫度計。數值越高代表市場預期未來波動越劇烈。' },
-  { id: 'T10Y2Y',       label: '10年-2年公債利差',     desc: '長短天期公債殖利率之差。轉負（倒掛）historically 是衰退的領先訊號之一。' },
-  { id: 'BAMLH0A0HYM2', label: '高收益債利差',         desc: '高收益（垃圾）債相對公債的加碼殖利率。走闊代表信用市場風險胃納下降。' },
-  { id: 'BAMLC0A0CM',   label: '投資級債利差',         desc: '投資級公司債相對公債的加碼殖利率，信用市場的基準線，較不受個別違約事件干擾。' },
-  { id: 'NFCI',         label: '芝加哥聯準銀行金融情勢指數', desc: '綜合流動性、信用、槓桿多項指標的複合指數。正值代表金融情勢緊縮於歷史平均。' },
+// ── Market Weather dashboard (Yahoo Finance-sourced macro stress proxies) ──
+// Switched from FRED (official, key-gated) to Yahoo's unofficial chart endpoint — the same
+// query1.finance.yahoo.com/v8/finance/chart/ host already used elsewhere in this file (see
+// fetchSymbol/getTaiexCloses) — so no API key to provision, but also no uptime guarantee:
+// this endpoint is undocumented and can change shape or start blocking datacenter IPs without
+// notice. Each indicator is fetched independently and degrades to {error} on its own so one
+// broken symbol doesn't blank the whole dashboard.
+//
+// Only 4 of the original 5 FRED series survive the switch:
+//  - NFCI (Chicago Fed's ~100-variable composite financial-conditions index) has no
+//    Yahoo/price-data equivalent at all and was dropped rather than faked.
+//  - The 10Y-2Y curve became 10Y-3M (^TNX − ^IRX) — Yahoo has no 2-year Treasury yield
+//    ticker; 10Y-3M is if anything the more standard inversion/recession signal academically.
+//  - High-yield / investment-grade "spreads" are no longer true OAS spreads in bps (Yahoo has
+//    no bond-spread data) — they're ETF price-ratio proxies (HYG/IEF, LQD/IEF) for credit
+//    risk appetite. Ratio falling = credit weakening vs Treasuries = rising stress.
+// `invert: true` marks indicators where a LOW raw value means HIGH stress (curve inversion,
+// ratio deterioration) so the stress percentile direction is consistent with VIX (where high
+// raw value = high stress) before averaging into avgPercentile.
+const MW_SERIES = [
+  { id: 'VIX', label: '波動率指數 VIX', symbols: ['^VIX'], kind: 'level', invert: false,
+    desc: '選擇權隱含波動率，市場恐慌程度的即時溫度計。數值越高代表市場預期未來波動越劇烈。' },
+  { id: 'T10Y3M', label: '10年-3個月公債利差', symbols: ['^TNX', '^IRX'], kind: 'spread', invert: true,
+    desc: '10年期減3個月期公債殖利率之差。轉負（倒掛）historically 是衰退的領先訊號之一，學術上比10年-2年利差更常被當作標準預測指標（Yahoo無2年期公債殖利率報價，故以此替代）。' },
+  { id: 'HY_PROXY', label: '高收益債風險胃納（HYG/IEF 比值）', symbols: ['HYG', 'IEF'], kind: 'ratio', invert: true,
+    desc: '高收益債ETF相對公債ETF的價格比值——非官方OAS利差基點數，是用ETF相對報酬走勢間接代理信用市場風險胃納。比值走低代表高收益債相對公債走弱，隱含風險胃納下降。' },
+  { id: 'IG_PROXY', label: '投資級債風險胃納（LQD/IEF 比值）', symbols: ['LQD', 'IEF'], kind: 'ratio', invert: true,
+    desc: '投資級公司債ETF相對公債ETF的價格比值——同樣是間接代理指標，非官方OAS利差基點數。比值走低代表投資級債相對公債走弱。' },
 ];
-const MW_TTL = 60 * 60 * 1000; // 1 hour — far shorter than FRED's own once-daily update cadence;
-                                // this just caps how often concurrent visitors re-hit the FRED API.
+const MW_TTL = 60 * 60 * 1000; // 1 hour cache, caps how often concurrent visitors re-hit Yahoo
 let _mwCache = null, _mwTime = 0;
 
-async function fetchFredSeries(seriesId) {
-  const key = process.env.FRED_API_KEY;
-  if (!key) throw new Error('FRED_API_KEY not configured');
-  const url = 'https://api.stlouisfed.org/fred/series/observations?series_id=' + seriesId +
-    '&api_key=' + key + '&file_type=json&sort_order=asc&limit=260';
+async function fetchYahooCloses(symbol) {
+  const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(symbol) +
+    '?interval=1d&range=2y&includePrePost=false';
   const raw = await fetchUrl(url);
   const data = JSON.parse(raw);
-  const obs = (data.observations || [])
-    .filter((o) => o.value !== '.')
-    .map((o) => ({ date: o.date, value: parseFloat(o.value) }));
-  if (!obs.length) throw new Error('no observations returned');
-  const latest = obs[obs.length - 1];
-  const sorted = obs.map((o) => o.value).slice().sort((a, b) => a - b);
-  const rank = sorted.filter((v) => v <= latest.value).length;
-  const percentile = Math.round((rank / sorted.length) * 100);
-  return { latest: latest.value, latestDate: latest.date, history: obs, percentile };
+  const result = data.chart && data.chart.result && data.chart.result[0];
+  if (!result) throw new Error('no chart data for ' + symbol);
+  const timestamps = result.timestamp || [];
+  const closes = (result.indicators.quote[0] || {}).close || [];
+  const points = [];
+  for (let i = 0; i < timestamps.length; i++) {
+    if (closes[i] == null) continue;
+    points.push({ date: new Date(timestamps[i] * 1000).toISOString().slice(0, 10), value: closes[i] });
+  }
+  if (!points.length) throw new Error('no usable closes for ' + symbol);
+  return points;
 }
 
-// Each series is fetched independently and a single failure degrades to
-// {error} for that one card rather than failing the whole endpoint — FRED
-// being the one external dependency in this feature, a transient outage on
-// one series shouldn't blank the entire dashboard.
+// Inner-joins two date-keyed series on date and combines each matched pair — used to turn
+// two raw price/yield series into one derived spread or ratio series.
+function combineSeries(seriesA, seriesB, combine) {
+  const mapB = new Map(seriesB.map((p) => [p.date, p.value]));
+  const out = [];
+  for (const a of seriesA) {
+    const b = mapB.get(a.date);
+    if (b === undefined) continue;
+    out.push({ date: a.date, value: combine(a.value, b) });
+  }
+  return out;
+}
+
+async function fetchMwIndicator(spec) {
+  let history;
+  if (spec.symbols.length === 1) {
+    history = await fetchYahooCloses(spec.symbols[0]);
+  } else {
+    const [a, b] = await Promise.all(spec.symbols.map(fetchYahooCloses));
+    // ^TNX / ^IRX closes are already actual yield percentages (e.g. 4.68 == 4.68%),
+    // no ×10/×1000 rescaling needed — verified directly against the live endpoint.
+    const combine = spec.kind === 'spread' ? (av, bv) => av - bv : (av, bv) => av / bv;
+    history = combineSeries(a, b, combine);
+  }
+  if (history.length < 2) throw new Error('insufficient overlapping data for ' + spec.id);
+  history = history.slice(-260);
+
+  const latestPoint = history[history.length - 1];
+  const sortedVals = history.map((p) => p.value).slice().sort((x, y) => x - y);
+  const rank = sortedVals.filter((v) => v <= latestPoint.value).length;
+  let percentile = Math.round((rank / sortedVals.length) * 100);
+  if (spec.invert) percentile = 100 - percentile;
+
+  return { latest: latestPoint.value, latestDate: latestPoint.date, history, percentile };
+}
+
 async function getMarketWeather() {
   if (_mwCache && Date.now() - _mwTime < MW_TTL) return _mwCache;
-  const results = await Promise.allSettled(FRED_SERIES.map((s) => fetchFredSeries(s.id)));
-  const indicators = FRED_SERIES.map((s, i) => {
+  const results = await Promise.allSettled(MW_SERIES.map(fetchMwIndicator));
+  const indicators = MW_SERIES.map((s, i) => {
     const r = results[i];
     if (r.status === 'fulfilled') return { id: s.id, label: s.label, desc: s.desc, error: null, ...r.value };
     return { id: s.id, label: s.label, desc: s.desc, error: r.reason.message, latest: null, latestDate: null, history: [], percentile: null };
@@ -1360,6 +1410,7 @@ const server = http.createServer(async (req, res) => {
   else if (url === '/brownian'   || url === '/brownian/')   fp = path.join(APP_DIR, 'brownian',   'index.html');
   else if (url === '/sankey'     || url === '/sankey/')     fp = path.join(APP_DIR, 'sankey',     'index.html');
   else if (url === '/earnings-quiz' || url === '/earnings-quiz/') fp = path.join(APP_DIR, 'earnings-quiz', 'index.html');
+  else if (url === '/mounjaro' || url === '/mounjaro/') fp = path.join(APP_DIR, 'mounjaro', 'index.html');
   else if (url === '/market-weather' || url === '/market-weather/') fp = path.join(APP_DIR, 'market-weather', 'index.html');
   // Unlike the other single-file apps this one fetches siblings by relative URL,
   // so it must be served from a trailing-slash path or those resolve to root.
