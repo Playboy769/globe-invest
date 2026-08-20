@@ -341,6 +341,10 @@ html{scroll-behavior:smooth}
 
     <div class="marg"><b>對照 Nvidia</b>Vera Rubin 的機櫃組裝（含 L10 整機組裝）主要由 Foxconn、Quanta、Wistron 三家台廠負責，另涉及約 150 家台灣供應鏈廠商；Nvidia 近期也調整策略，集中委由少數 ODM 主導整機組裝，單機櫃組裝時間據稱已從約 2 小時壓縮到 5 分鐘。</div>
 
+    <h3>放進整個 AI 伺服器 ODM 市場的規模對照</h3>
+    <p>TrendForce 的產業估計顯示，AI 伺服器機櫃組裝市場目前大致是 Foxconn 約占四成、Quanta 約二至三成、Wistron 約一成的集中結構；三家台灣 ODM 在 2025 年營收皆已突破新台幣 1 兆元（約 320 億美元）。把這個規模對照放進來看，AMD 選擇 <strong>Wiwynn</strong>（一家規模明顯小於 Foxconn／Quanta 的 ODM）作為 Helios 機櫃平台的主要設計夥伴，而非直接找上這個市場裡份額最大的 Foxconn——這與 Nvidia／Vera Rubin 同時動用 Foxconn、Quanta、Wistron 三大龍頭形成對比，也呼應本節「分工發包」的敘事：AMD 傾向與較專精、較願意深度客製的中型夥伴綁定，而非單純比拚誰的產能規模最大。</p>
+    <p class="cap full"><b>標註</b>　ODM 市占估算為 TrendForce 產業報告的量級整理，實際份額會隨統計口徑（機櫃組裝 vs 全機種類 AI 伺服器）而有出入，僅供規模參考。</p>
+
     <div class="callout">
       <span class="ck">兩條路線在這一環的分歧</span>
       <p>AMD 把「機櫃平台設計」（Wiwynn）與「網通子系統」（Celestica）明確拆分給不同專責夥伴，靠專業分工換取彈性；Nvidia 傾向由少數幾家 ODM 端到端整合，靠單一窗口換取執行速度與良率一致性。<strong>這不是誰的模式比較先進，而是「開放生態系」與「垂直整合」這個貫穿全文的主軸，在供應鏈這一層的第一次出現。</strong></p>
@@ -448,6 +452,21 @@ html{scroll-behavior:smooth}
       <p>Vera Rubin NVL72 的尖峰功耗官方尚未正式公布，市場估計約落在 240–250kW，與 Helios 的 225–245kW 相近——兩家在單機櫃功耗量級上其實非常接近，差異主要在機構尺寸（Helios 約為 NVL72 的兩倍）與供電拓樸的實作細節。這代表資料中心若要同時支援兩種平台，機房供電容量（每機櫃 200kW+ 級）的規劃邏輯相似，但機櫃佔地面積需求不同。</p>
     </div>
     <div class="marg"><b>與 Schneider Electric 的合作</b>AMD 與施耐德電機共同發布 Helios 機櫃供電／冷卻的資料中心參考標準，協助資料中心業者針對這套液冷拓樸設計對應設施——這類「參考設計」的存在本身，反映的是機房業者需要一份不必自行從零推導的施工基準。</div>
+
+    <h3>放進更廣的產業對照：每顆加速器的功耗量級</h3>
+    <p>把 Helios／Vera Rubin 之外的 AI 加速器平台也放進來看，會發現「merchant silicon 機櫃」（AMD、Nvidia 這類對外銷售的通用 GPU）與「hyperscaler 自研 ASIC」（Google TPU、Microsoft Maia 這類只供內部或雲端客戶使用的客製晶片）走的是不同的功耗密度路線：</p>
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>平台</th><th class="wrap">類型</th><th class="n">每顆加速器功耗（概估）</th></tr></thead>
+        <tbody>
+          <tr><td>Helios（MI455X）</td><td>Merchant silicon，對外銷售</td><td class="n">約 3.1–3.4 kW／GPU（235kW÷72）</td></tr>
+          <tr><td>Vera Rubin NVL72</td><td>Merchant silicon，對外銷售</td><td class="n">約 3.3–3.5 kW／GPU（245kW÷72，估）</td></tr>
+          <tr><td>Google TPU v7 機架</td><td>自研 ASIC，僅供 Google 內部／雲端客戶</td><td class="n">約 1.4 kW／顆（90kW÷64 顆）</td></tr>
+          <tr><td>Microsoft Maia 200</td><td>自研 ASIC，僅供 Azure 內部使用</td><td class="n">約 0.75–0.9 kW／顆（單顆 TDP）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ 各平台的機架／顆數統計基準不同（Helios、Vera Rubin 是 72 顆規模的機櫃，TPU v7 引用的是 64 顆的機架），此表僅取「總功耗 ÷ 顆數」做量級對照，不代表同一規格基準；Maia 200 為單顆晶片 TDP，非機架總功耗。可以看出 AMD、Nvidia 這類對外銷售、需要兼顧通用工作負載的 GPU，單顆功耗密度明顯高於 Google、Microsoft 針對自家特定負載深度優化的客製 ASIC——這也是機房散熱與供電規劃時，merchant silicon 機櫃通常需要更積極液冷方案的原因之一。</p>
   </div>
 </details>
 
@@ -465,13 +484,20 @@ html{scroll-behavior:smooth}
           <tr><td>Rubin R200（GPU）</td><td class="n">~$50,000–55,000／顆</td><td>Morgan Stanley：NVL72 機櫃內 72 顆 GPU 合計近 $400 萬，平均約 $55,500／顆</td></tr>
           <tr><td>EPYC 9006 頂規（256 核）</td><td class="n">最高 $14,904／顆</td><td>外流零售牌價，非雲端大量採購折扣價</td></tr>
           <tr><td>Vera CPU</td><td class="n">~$5,000／顆（量產折扣後）</td><td>Morgan Stanley：NVL72 機櫃 36 顆 CPU 合計約 $18 萬；折扣前報價「遠高於 $20,000」／顆</td></tr>
+          <tr><td>Vera Rubin Superchip（1 CPU＋2 GPU）</td><td class="n">$38,902／組</td><td>UBS BOM 拆解：記憶體（SOCAMM2＋HBM4）占 $24,297，約 62% 成本</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="cap full"><b>標註</b>　EPYC 頂規牌價與 Vera CPU 量產折扣後估算的計價基礎不同，不宜直接相減比較；折扣前 Vera CPU 報價（$20K+）才是與 EPYC 牌價較可比的基準，兩者量級其實接近。</p>
+    <p class="cap full"><b>標註</b>　EPYC 頂規牌價與 Vera CPU 量產折扣後估算的計價基礎不同，不宜直接相減比較；折扣前 Vera CPU 報價（$20K+）才是與 EPYC 牌價較可比的基準，兩者量級其實接近。UBS 的 Superchip 估算與 Morgan Stanley 的單顆 GPU／CPU 估算是不同機構、不同拆解顆粒度的獨立估算，兩者量級可互相印證但不宜逐項相加。</p>
 
     <h3>機櫃成本拆解：Vera Rubin 的 BOM 估算</h3>
     <p>Morgan Stanley 對 VR200 NVL72 做了由下而上的物料成本拆解：GPU（72 顆 Rubin）約 4.00M 美元，占比最大，較 Blackwell 世代的 GPU 成本（約 2.5M）暴增 57%；記憶體（HBM4＋LPDDR5X）約 2.00M，較前代暴增 435%，是總成本上升的主因；CPU（36 顆 Vera）約 0.18M；其餘 NVLink 交換器、網通晶片、散熱、電源、PCB、基板、被動元件等約 1.62M。合計約 <strong>7.80M 美元</strong>——這是目前唯一有公開細項的機櫃級成本拆解，AMD 側尚無對等的公開拆解。</p>
+    <p>UBS 從更細的「單組 Superchip」顆粒度提供了交叉驗證：一組 Vera Rubin Superchip（1 顆 Vera CPU＋2 顆 Rubin GPU）BOM 成本約 $38,902，其中記憶體相關的 SOCAMM2（Vera CPU 用）與 HBM4（Rubin GPU 用）合計 $24,297，占整組成本約 62%——高於前一代 GB300（Blackwell Ultra）的 53%；換算下來，Superchip 整體成本較 GB300 世代增加約 2.1 倍，其中記憶體部分的成本漲幅更達 2.5 倍。這組數字從晶片組層級印證了 Morgan Stanley 機櫃層級拆解的結論：<strong>Vera Rubin 世代的成本膨脹主因是記憶體，而非邏輯晶片本身</strong>，且這個趨勢並非單一機構的孤立估算。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="460" fill="#ffffff"/><text x="450" y="30" text-anchor="middle" font-size="15" font-weight="600" fill="#0B0D0C" font-family="sans-serif">Vera Rubin Superchip 成本結構</text><path d="M260,62 A150,150 0 0 1 262.33,361.98 L261.28,294.49 A82.5,82.5 0 0 0 260,129.5 Z" fill="#182456" stroke="#ffffff" stroke-width="2" data-dim="SOCAMM2（Vera CPU 記憶體）"/><text x="376.25" y="215.1" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="SOCAMM2（Vera CPU 記憶體）">49.8%</text><path d="M262.33,361.98 A150,150 0 0 1 152.57,107.32 L200.91,154.42 A82.5,82.5 0 0 0 261.28,294.49 Z" fill="#0f6f8a" stroke="#ffffff" stroke-width="2" data-dim="其他半導體與製造成本"/><text x="153.24" y="262.01" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="其他半導體與製造成本">37.5%</text><path d="M152.57,107.32 A150,150 0 0 1 260,62 L260,129.5 A82.5,82.5 0 0 0 200.91,154.42 Z" fill="#8f1f1f" stroke="#ffffff" stroke-width="2" data-dim="HBM4（Rubin GPU 記憶體）"/><text x="214.82" y="108.89" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="HBM4（Rubin GPU 記憶體）">12.7%</text><text x="260" y="210" text-anchor="middle" font-size="24" font-weight="600" fill="#0B0D0C" font-family="sans-serif">38,902</text><text x="260" y="228" text-anchor="middle" font-size="11" fill="#6E7471" font-family="sans-serif">美元／顆</text><g data-dim="SOCAMM2（Vera CPU 記憶體）"><rect x="490" y="181" width="12" height="12" rx="2" fill="#182456"/><text x="510" y="190" font-size="12.5" fill="#383D3B" font-family="sans-serif">SOCAMM2（Vera CPU 記憶體）</text><text x="870" y="190" text-anchor="end" font-size="12" fill="#6E7471" font-family="sans-serif">19,355 美元／顆　49.8%</text></g><g data-dim="其他半導體與製造成本"><rect x="490" y="207" width="12" height="12" rx="2" fill="#0f6f8a"/><text x="510" y="216" font-size="12.5" fill="#383D3B" font-family="sans-serif">其他半導體與製造成本</text><text x="870" y="216" text-anchor="end" font-size="12" fill="#6E7471" font-family="sans-serif">14,604 美元／顆　37.5%</text></g><g data-dim="HBM4（Rubin GPU 記憶體）"><rect x="490" y="233" width="12" height="12" rx="2" fill="#8f1f1f"/><text x="510" y="242" font-size="12.5" fill="#383D3B" font-family="sans-serif">HBM4（Rubin GPU 記憶體）</text><text x="870" y="242" text-anchor="end" font-size="12" fill="#6E7471" font-family="sans-serif">4,943 美元／顆　12.7%</text></g></svg>
+  <div style="font-size:12px;color:#6E7471;text-align:center;margin-top:6px;">資料來源：UBS BOM 拆解估算；Superchip＝1 顆 Vera CPU＋2 顆 Rubin GPU，總計 $38,902／顆</div>
+    </div>
 
     <div class="callout">
       <span class="ck">兩個機構的估算差了一倍以上，這件事本身就是重要資訊</span>
@@ -552,6 +578,7 @@ html{scroll-behavior:smooth}
   <summary><span class="st-n">07</span><span class="st-main"><span class="st-t">生態夥伴：AMD 有沒有一家像 Nebius 的公司</span><span class="st-sub">功能上最接近的對應者是 TensorWave，但資本連結方式跟 Nvidia／Nebius 完全不同。</span></span><span class="st-sig">0%<small>vs</small>9.3%<i>供應商入股比例</i></span></summary>
   <div class="body">
     <p>Nebius 的角色是「Nvidia 專屬的獨立 GPU 雲」，Nvidia 對它直接入股約 9.3%，另有 20 億美元投資承諾。AMD 這邊功能上最接近的對應者是 <strong>TensorWave</strong>——專門建置 AMD Instinct GPU 雲端算力的獨立業者，2024 年 10 月透過 SAFE 募得 4,300 萬美元用於擴充團隊、機房容量與採購 MI300X，目前已排入 Helios 部署佇列。與 Nebius 的相似之處：兩者都是「不跟自家雲端業務競爭、專心賣單一供應商 GPU 算力」的獨立業者。</p>
+    <p>Nvidia 對 neocloud 的股權投資不只 Nebius 一家。<strong>CoreWeave</strong> 是另一個更大的案例：Nvidia 對 CoreWeave 的持股在 2026 年第一季加碼後升至約 11%（約 4,720 萬股，市值約 49 億美元），是 Nvidia 股權投資組合中第二大的持倉；CoreWeave 本身 2026 年第一季營收 21 億美元，較去年同期的 9.82 億美元大幅成長，營收在手訂單（backlog）達 994 億美元。兩個案例合在一起看，Nvidia／neocloud 的股權投資已經是一種重複出現的模式，而不是 Nebius 的個案。</p>
 
     <div class="tbl full">
       <table>
@@ -561,14 +588,19 @@ html{scroll-behavior:smooth}
           <tr><td>Crusoe</td><td>多廠牌 Neocloud（同時提供 AMD 與 Nvidia GPU）</td><td>提供 MI300X 執行個體，採購獎勵關係</td></tr>
           <tr><td>DigitalOcean、Vultr</td><td>中大型雲端服務商，多廠牌</td><td>列名 AMD 採購獎勵合作對象</td></tr>
           <tr><td>AWS、Oracle OCI</td><td>超大型公有雲</td><td>Oracle 已承諾 5 萬顆 MI450／OCI；AWS 列名採購獎勵合作對象</td></tr>
+          <tr><td>CoreWeave</td><td>Nvidia 專屬 Neocloud（歷史上以 Nvidia GPU 為主）</td><td>Nvidia 直接入股約 11%，市值約 49 億美元</td></tr>
         </tbody>
       </table>
     </div>
 
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#0B0D0C" font-family="sans-serif">Nvidia／AMD 對專屬 Neocloud 的股權投資比例</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6E7471" font-family="sans-serif">Nvidia 直接入股 Nebius、CoreWeave；AMD 對 TensorWave 尚無對等股權投資（見本節）</text><line x1="22" y1="56" x2="876" y2="56" stroke="#DCDFDB" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#BFC3BE" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">0</text><line x1="78" y1="378.4" x2="876" y2="378.4" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="382.4" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">2.50</text><line x1="78" y1="300.8" x2="876" y2="300.8" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="304.8" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">5</text><line x1="78" y1="223.2" x2="876" y2="223.2" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="227.2" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">7.50</text><line x1="78" y1="145.6" x2="876" y2="145.6" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="149.6" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">10</text><line x1="78" y1="68" x2="876" y2="68" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="72" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">12.5 ％</text><line x1="78" y1="456" x2="876" y2="456" stroke="#0B0D0C" stroke-width="1.2"/><rect x="116.24" y="167.33" width="189.52" height="288.67" fill="#584B7C" rx="1" data-dim="股權比例"/><text x="211" y="161.33" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="股權比例">9.30</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">Nebius（Nvidia</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9AA09C" font-family="sans-serif">入股）</text><rect x="382.24" y="114.56" width="189.52" height="341.44" fill="#584B7C" rx="1" data-dim="股權比例"/><text x="477" y="108.56" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="股權比例">11</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">CoreWeave（Nvidia</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9AA09C" font-family="sans-serif">入股）</text><rect x="648.24" y="456" width="189.52" height="1.5" fill="#584B7C" rx="1" data-dim="股權比例"/><text x="743" y="450" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="股權比例">0</text><text x="743" y="472" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">TensorWave（AMD</text><text x="743" y="485" text-anchor="middle" font-size="10" fill="#9AA09C" font-family="sans-serif">專屬，無入股）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Nvidia 13F／公開報導（Nebius 9.3%、CoreWeave 11%）；AMD 對 TensorWave 為採購獎勵關係，非入股</text></svg>
+    </div>
+
     <div class="callout">
       <span class="ck">關鍵差異：股權投資 vs 客戶採購獎勵</span>
-      <p>Nvidia 對 Nebius／CoreWeave 是直接股權投資，真金白銀買股份、綁定股價與供應鏈利益。AMD 目前並未對 TensorWave 或其他 neocloud 做出對等的股權投資——AMD 在 2026 年最大的一筆股權投資（最高 50 億美元）投進了 <strong>Anthropic</strong>，但 Anthropic 是模型／應用層的 AI 實驗室客戶，不是基礎設施 neocloud。AMD 對 neocloud 業者的支持目前以採購獎勵／折扣為主，不是入股。</p>
-      <p>市場上還沒有一家 neocloud 同時滿足「AMD 專屬」＋「AMD 入股」兩個條件——這與 Nvidia／Nebius 的關係結構有本質不同，是評估兩家公司生態系護城河時容易被忽略的一點。</p>
+      <p>Nvidia 對 Nebius／CoreWeave 是直接股權投資，真金白銀買股份、綁定股價與供應鏈利益，且這種投資已形成一套可重複的模式而非單一個案。AMD 目前並未對 TensorWave 或其他 neocloud 做出對等的股權投資——AMD 在 2026 年最大的一筆股權投資（最高 50 億美元）投進了 <strong>Anthropic</strong>，但 Anthropic 是模型／應用層的 AI 實驗室客戶，不是基礎設施 neocloud。AMD 對 neocloud 業者的支持目前以採購獎勵／折扣為主，不是入股。</p>
+      <p>市場上還沒有一家 neocloud 同時滿足「AMD 專屬」＋「AMD 入股」兩個條件——這與 Nvidia／Nebius／CoreWeave 的關係結構有本質不同，是評估兩家公司生態系護城河時容易被忽略的一點。值得留意的是，這種循環式的股權投資（Nvidia 入股 neocloud，neocloud 再用這筆資金向 Nvidia 採購 GPU）本身也引來市場對「循環融資」（circular financing）的質疑——這是評估 Nvidia 生態系護城河的另一面，超出本文供應鏈與硬體對照的範圍，暫不展開。</p>
     </div>
   </div>
 </details>
@@ -582,9 +614,14 @@ html{scroll-behavior:smooth}
     <p>Nvidia 從 NVL72 世代開始，交付給客戶的已經是「插電即可運算」的完整機櫃：GPU、NVLink 互連、網通、散熱、電源與軟體棧由 Nvidia 統一設計並主導整合（見 06 節），客戶端的決策被簡化為「買或不買」。AMD 的 GPU 出貨目前仍以晶片級為主要交付單位——客戶須自行完成 8 顆以上 GPU 規模的擴展拓樸設計、與 ROCm 軟體生態的相容性驗證，以及液冷與高速網路的機房整合。這些整合工作消耗的是客戶自身的工程資源與時間，即本文所稱的「摩擦成本」。</p>
     <p>Helios 的出現，是 AMD 第一次把「機櫃級整合」明確搬進自己的產品藍圖（見 01–02 節機構與 tray 規格），本質上是在壓低這項摩擦成本，把 AMD 的交付單位從「晶片」往「機櫃」靠攏。但 Vera Rubin 仍握有先發優勢：CUDA 生態系的成熟度與 Nvidia 既有的整機出貨經驗，讓其客戶端的摩擦成本結構性更低——這與 03 節「誰在賭 chiplet」的判讀是同一個主軸的延伸：AMD 押注的是開放生態系終將攤平摩擦成本，Nvidia 押注的是既有生態系的轉換成本高到客戶不會輕易承擔這項摩擦。</p>
     <div class="marg"><b>與 01 節的關係</b>AMD 不是完全不做整合，而是把整合工作分包給 Sanmina／Wiwynn／Celestica 等專責夥伴（見 01 節），機櫃平台設計與網通子系統拆給不同廠商各自負責；Nvidia 則傾向收攏在少數 ODM 手上做端到端整合。分工方式不同，最終體現在客戶收到的完成度也不同。</div>
+
+    <h3>對照案例：Intel Gaudi 有機櫃級設計，仍然沒有跨過摩擦力這一關</h3>
+    <p>Intel 其實比 AMD 更早嘗試把「機櫃級整合」寫進產品藍圖：2025 年發表的 Gaudi 3 機櫃級參考設計最多可容納 64 顆加速器、搭配 8.2TB 高頻寬記憶體，走開放模組化設計、支援液冷，訴求正是降低客戶自行整合的門檻，也曾被市場預期 2026 年有機會拿下 15–20% 的 AI 加速器市占。但 Intel 已在 2025 年初取消原訂接替 Gaudi 的次世代 GPU「Falcon Shores」商用計畫（改為內部測試晶片），並確認 Gaudi 3 是這條標準 GPU 產品線的最後一代，轉向代號 Jaguar Shores、更聚焦系統層級整合的全新路線。</p>
+    <p class="cap full"><b>標註</b>　⚑ Intel 的案例對本節「摩擦成本」判讀是一則重要的反例：光有機櫃級硬體設計，不足以讓客戶願意跨過遷移門檻——Gaudi 3 的軟體堆疊（SynapseAI）成熟度與生態系規模仍遠不及 CUDA，這與 12 節「軟體護城河」的判讀是同一個問題的兩面。這也是評估 Helios／ROCm 能否複製成功的重要對照組：硬體摩擦力可以透過機櫃級設計壓低，但軟體摩擦力需要更長時間的生態系投入才能追平，兩者不是同一個時間表。</p>
+
     <div class="callout">
       <span class="ck">規格對照表回答不了的問題</span>
-      <p>摩擦成本不會反映在任何一張性能規格表上，卻直接影響客戶的總持有成本（TCO）與導入速度。<strong>「Helios 的規格追上 Vera Rubin了嗎」與「Helios 的部署摩擦力追上 Vera Rubin 了嗎」是兩個不同的問題</strong>，本文 03、06 節處理的是前者，這一節指出的是後者——目前仍缺乏公開、可比較的實測數據能直接回答。</p>
+      <p>摩擦成本不會反映在任何一張性能規格表上，卻直接影響客戶的總持有成本（TCO）與導入速度。<strong>「Helios 的規格追上 Vera Rubin了嗎」與「Helios 的部署摩擦力追上 Vera Rubin 了嗎」是兩個不同的問題</strong>，本文 03、06 節處理的是前者，這一節指出的是後者——目前仍缺乏公開、可比較的實測數據能直接回答。Intel Gaudi 的案例提醒我們，這個問題的答案不必然隨時間自動變好。</p>
     </div>
   </div>
 </details>
@@ -594,9 +631,14 @@ html{scroll-behavior:smooth}
   <div class="body">
     <p>在 Helios 之前，客戶購入 AMD GPU 後，CPU 與網通晶片的選型仍是獨立決策，AMD 的搭售率（attach rate，即客戶同時採購 AMD 多項晶片的比例）長期受限於其他晶片供應商的競爭。Helios 的機櫃藍圖將 EPYC Venice CPU 與 Pensando Vulcano 網卡明訂為預設配置（見 02 節：每個 Compute Tray 為 4×MI455X＋1×EPYC Venice），客戶一旦採用 Helios 架構，AMD 的 CPU 與網通晶片即成為預設而非選配——搭售率因此從「取決於客戶另外決策」轉為「寫進系統設計」，理論上更可預期，也更難被單獨替換掉而不影響整體效能。</p>
     <p>商業模式上，AMD 仍維持晶片設計商的定位：機櫃的組裝、量產與庫存風險由 Sanmina／Wiwynn／Celestica 等專責夥伴承擔（見 01 節），AMD 本身的營收落點集中在機櫃內高單價矽晶片（MI455X、Venice、Pensando）。這種分工讓 AMD 以相對輕的資產投入專注在晶片銷售，同時迴避整機製造與庫存的沉重風險；代價是機櫃整體的規格主導權與利潤分配，不完全掌握在 AMD 一家手中——這與 Nvidia 對整機規格與利潤分配的高度掌控（見 06 節「開放生態 vs 垂直整合」callout）形成對比。</p>
+
+    <h3>「預設搭售」已經出現在真實交易裡：Meta 的案例</h3>
+    <p>2026 年 2 月 AMD 與 Meta 簽署的 6GW GPU 合約，公開揭露的部署內容明確寫著「首階段部署為客製化 Instinct GPU（MI450 架構）搭配第六代 EPYC CPU」——CPU 從一開始就寫進交易條款，而不是 Meta 事後另外評估要不要搭配 EPYC。這與本節「藍圖預設」的論點是同一件事的商業合約版本：搭售率不再只是 Helios 產品設計上的預設，也開始出現在客戶簽約當下的條款結構裡。AMD 官方同時揭露 EPYC 雲端部署較去年同期成長 50%，涵蓋 Google、Microsoft Azure、Oracle、AWS 等平台——可以看出 AMD 的 CPU／GPU 搭售策略在 Helios 之前就已經在雲端市場鋪墊，Helios 只是把它進一步寫進硬體藍圖。</p>
+    <p class="cap full"><b>標註</b>　Meta 6GW 合約的 CPU／GPU 綁定內容為公開揭露的交易結構摘要，非逐項財務條款；EPYC 雲端部署成長率取自 AMD 官方口徑，未區分是否為 Instinct GPU 搭售或獨立採購 EPYC。</p>
+
     <div class="callout">
       <span class="ck">兩種搭售率的鞏固方式不同</span>
-      <p>Nvidia 的高搭售率來自封閉生態系的強制綁定——CUDA 與 NVLink 的轉換成本讓客戶選擇有限；AMD 的搭售率提升則來自開放架構下的預設最優解——客戶理論上仍可替換其中一項，但替換後系統效能會打折扣。<strong>能否把「藍圖預設」真正轉化為長期營收貢獻，取決於客戶是否照著預設配置採購，而非事後拆分選購</strong>——這是目前公開資訊尚無法驗證的執行細節。</p>
+      <p>Nvidia 的高搭售率來自封閉生態系的強制綁定——CUDA 與 NVLink 的轉換成本讓客戶選擇有限；AMD 的搭售率提升則來自開放架構下的預設最優解——客戶理論上仍可替換其中一項，但替換後系統效能會打折扣。<strong>能否把「藍圖預設」真正轉化為長期營收貢獻，取決於客戶是否照著預設配置採購，而非事後拆分選購</strong>——Meta 6GW 合約的 CPU／GPU 綁定條款是目前公開資訊裡最接近直接證據的一筆，但仍是單一案例，尚不足以推論為普遍執行成果。</p>
     </div>
   </div>
 </details>
@@ -616,26 +658,36 @@ html{scroll-behavior:smooth}
       <span class="ck">這張圖真正指出的問題</span>
       <p>這張圖不是要證明「Helios 比較便宜」是唯一正確答案——05 節已說明 Vera Rubin 的兩個估算本身相差超過一倍，分歧本身就是重要資訊。這張圖真正要指出的是一個更基本的方法論問題：<strong>拿 Helios 跟哪一代 Nvidia 產品比較，會直接決定「貴」或「便宜」這個結論該怎麼下</strong>——跨世代比較（對 GB200/300）與同代比較（對 Vera Rubin）幾乎必然得出相反的結論，而這正是本文 00 節第四個賭注（定價方法論本身）在三代對照下的具體樣貌。</p>
     </div>
+
+    <h3>更細顆粒度的印證：晶片組層級的世代漲幅</h3>
+    <p>05 節提到 UBS 對 Vera Rubin Superchip（1 CPU＋2 GPU）的 BOM 拆解為 $38,902／組，其中記憶體占比達 62%；同一份拆解也回溯了前一代 GB300（Blackwell Ultra）的對應數字——GB300 世代的記憶體占比是 53%，換算下來 Vera Rubin 整組 Superchip 成本較 GB300 上漲約 2.1 倍，記憶體部分的漲幅更達 2.5 倍。這組「晶片組層級」的世代漲幅，與 05 節「機櫃層級」Morgan Stanley 拆解出的 GPU 成本較 Blackwell 世代暴增 57%、記憶體暴增 435% 方向一致，等於是用兩種不同的拆解顆粒度、兩家不同機構，各自獨立指向同一個結論：<strong>Vera Rubin 世代的成本結構性上漲，主要由記憶體而非邏輯運算晶片驅動</strong>，這也是 Helios 相對 Blackwell 世代顯得「便宜」的部分原因——AMD 尚未公開對等顆粒度的世代對比拆解，此處僅能單向印證 Nvidia 側的漲幅。</p>
+
+    <div class="callout">
+      <span class="ck">價格排序背後，其實是同一場記憶體漲價</span>
+      <p>三代價格排序（GB200/300 ≤ Helios &lt; Vera Rubin）表面上看是不同廠商、不同世代的定價策略差異，但拆到晶片組與機櫃兩個層級都指向同一個驅動因子：2026 年 HBM4／SOCAMM2 記憶體現貨價格的結構性上漲。<strong>Helios 相對 Vera Rubin「便宜」，某種程度上是因為它的記憶體世代升級幅度（HBM4，見 03 節）沒有疊加 Nvidia 那樣的 CPU 端 SOCAMM2 同步漲價</strong>，而不完全是兩家公司定價策略本身的差異——這是本節價格排序之外，值得留意的第二層解讀。</p>
+    </div>
   </div>
 </details>
 
 <details class="stage" id="s11">
   <summary><span class="st-n">11</span><span class="st-main"><span class="st-t">市占率：從個位數缺口到潛在雙位數的視窗</span><span class="st-sub">AI 加速器市場長期由 Nvidia 主導八成以上，AMD 的機會窗口落在 Helios 出貨後的 2027–2028 年——但這是尚未發生的執行結果，不是已確認的財報數字。</span></span><span class="st-sig">個位數→雙位數<i>2027–2028（預期）</i></span></summary>
   <div class="body">
-    <p>AMD 在 AI 加速器市場的營收市占率過去數年大致落在個位數區間（產業評論常見引述約 3%–8%），Nvidia 則長期維持八成以上的主導地位；這個落差反映的是 03 節提到的軟體生態成熟度差距，也是 05 節「Helios 是否貴」爭論背後真正的商業風險所在——即使規格與定價具吸引力，市占率是否真的轉移，最終仍要看客戶的實際採購與續約行為，而非任何一次發表會的宣稱。</p>
-    <p>Helios 已公開的容量承諾（見 05 節：Microsoft、Meta、Anthropic、Oracle、OpenAI 等，累積約 14–20GW）若能如期落地執行，產業評論預期有機會協助 AMD 在 2027–2028 年間將市占率推升至雙位數區間。</p>
+    <p>AMD 在 AI 加速器市場的營收市占率過去數年大致落在個位數區間——產業估算機構 SiliconAnalysts 估計 AMD Instinct GPU 產線 2025 年營收約 70–80 億美元，對應約 5%–7% 的 AI 加速器市占；Nvidia 則長期維持八成以上的主導地位。這個落差反映的是 03 節提到的軟體生態成熟度差距，也是 05 節「Helios 是否貴」爭論背後真正的商業風險所在——即使規格與定價具吸引力，市占率是否真的轉移，最終仍要看客戶的實際採購與續約行為，而非任何一次發表會的宣稱。</p>
+    <p>官方財報提供了一個更確定的錨點：AMD 資料中心事業群（EPYC CPU＋Instinct GPU 合計，官方未拆分 GPU 單獨貢獻）2025 全年營收為 166 億美元，較 2024 年的 126 億美元成長 32%。這個數字無法單獨證明 GPU 市占率的變化，但確認了整體資料中心business 的成長動能，與 SiliconAnalysts 的 GPU 單項估算方向一致。</p>
 
-    <div class="figs">
-      <div class="fg"><span class="v">3–8<small>%</small></span><span class="k">AMD 近年 AI 加速器營收市占率區間（產業評論估計）</span></div>
-      <div class="fg"><span class="v">80<small>%+</small></span><span class="k">Nvidia 同期市占率</span></div>
-      <div class="fg"><span class="v">14–20<small>GW</small></span><span class="k">Helios 已公開容量承諾累積（見 05 節）</span></div>
-      <div class="fg"><span class="v">2027–28</span><span class="k">產業評論預期市占率轉折窗口</span></div>
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#0B0D0C" font-family="sans-serif">AMD 資料中心事業群年度營收</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6E7471" font-family="sans-serif">EPYC CPU＋Instinct GPU 合計；未官方拆分 GPU 單獨貢獻</text><line x1="22" y1="56" x2="876" y2="56" stroke="#DCDFDB" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#BFC3BE" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">0</text><line x1="78" y1="359" x2="876" y2="359" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="363" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">5</text><line x1="78" y1="262" x2="876" y2="262" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="266" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">10</text><line x1="78" y1="165" x2="876" y2="165" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="169" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">15</text><line x1="78" y1="68" x2="876" y2="68" stroke="#EEEEEE" stroke-width="1"/><text x="68" y="72" text-anchor="end" font-size="11" fill="#6E7471" font-family="sans-serif">20 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#0B0D0C" stroke-width="1.2"/><rect x="134.86" y="211.56" width="285.28" height="244.44" fill="#584B7C" rx="1" data-dim="資料中心事業群營收"/><text x="277.5" y="205.56" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="資料中心事業群營收">12.6</text><text x="277.5" y="476" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">FY2024</text><rect x="533.86" y="133.96" width="285.28" height="322.04" fill="#584B7C" rx="1" data-dim="資料中心事業群營收"/><text x="676.5" y="127.96" text-anchor="middle" font-size="10" fill="#383D3B" font-family="sans-serif" data-dim="資料中心事業群營收">16.6</text><text x="676.5" y="476" text-anchor="middle" font-size="11" fill="#383D3B" font-family="sans-serif">FY2025</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：AMD 官方 FY2025 全年財報新聞稿（+32% YoY）</text></svg>
     </div>
-    <p class="cap full"><b>標註</b>　⚑ 3–8% 與雙位數轉折窗口為產業評論常見引述之整理，非單一機構具名報告的精確數字，信心度低於本文其餘標註公開規格／具名機構估算之處，僅供量級與方向參考。</p>
+
+    <p>Helios 已公開的容量承諾（見 05 節：Microsoft、Meta、Anthropic、Oracle、OpenAI 等，累積約 14–20GW）若能如期落地執行，產業評論預期有機會協助 AMD 在 2027–2028 年間將 AI 加速器市占率推升至雙位數區間。</p>
+
+    <h3>一家公司，兩種市占率階段</h3>
+    <p>值得放在一起看的是，AMD 的 CPU 業務（EPYC）與 GPU 業務（Instinct）目前處於完全不同的競爭階段。Mercury Research 的資料顯示，AMD 在 x86 伺服器 CPU 市場已創下約 46% 的營收市占率新高，與 Intel 形成接近勢均力敵的兩強格局——這是一個已經打贏、進入成熟競爭階段的市場。相對地，AMD 在 AI 加速器市場仍是個位數市占的挑戰者，面對 Nvidia 八成以上的結構性主導。<strong>同一家公司的兩個核心產品線，走在市占率曲線的完全不同階段</strong>：EPYC 的故事是「如何守住並擴大既有優勢」，Instinct／Helios 的故事則是「能否複製 EPYC 走過的路」——這也是本節 09、E 段「搭售率」論點的另一層意義：AMD 若能把已經成功的 CPU 市占率，透過 Helios 藍圖的預設搭售，部分嫁接到仍在爬坡的 GPU 業務上，會是比單純比拚 GPU 規格更有效的市占率槓桿。</p>
+    <p class="cap full"><b>標註</b>　⚑ SiliconAnalysts 的 GPU 營收與市占估算為第三方產業推算，非 AMD 官方拆分數字，信心度低於 AMD 官方財報總額；Mercury Research 的 x86 伺服器市占數字則是具名機構的具體統計，信心度較高，兩者不宜混為同一等級的數據。</p>
 
     <div class="callout">
       <span class="ck">規格追平不等於市占率轉移</span>
-      <p>Helios 無法在短期內推翻 Nvidia 的絕對主導地位，07 節已說明 CUDA 生態系與 Nebius 這類專屬股權綁定的護城河依然深厚。Helios 真正改變的，是 AMD 從「性價比替代選項」升級為「機櫃級市場具備實質威脅的替代平台」——<strong>這個定位轉換本身，比任何單一季度的市占率百分點更值得追蹤</strong>，也呼應本文 00 節論點：兩條路線是兩套不同的商業賭注，哪一邊賭對要等 2027–2028 年客戶的真實續約與擴充決策才會揭曉。</p>
+      <p>Helios 無法在短期內推翻 Nvidia 的絕對主導地位，07 節已說明 CUDA 生態系與 Nebius、CoreWeave 這類專屬股權綁定的護城河依然深厚。Helios 真正改變的，是 AMD 從「性價比替代選項」升級為「機櫃級市場具備實質威脅的替代平台」——<strong>這個定位轉換本身，比任何單一季度的市占率百分點更值得追蹤</strong>，也呼應本文 00 節論點：兩條路線是兩套不同的商業賭注，哪一邊賭對要等 2027–2028 年客戶的真實續約與擴充決策才會揭曉。</p>
     </div>
   </div>
 </details>
@@ -649,6 +701,10 @@ html{scroll-behavior:smooth}
     <p>2026 年 AMD Advancing AI 發表會上，Anthropic 共同創辦人暨技術長 Tom Brown 分享了一則案例：一名工程師將一台全新的 AMD Instinct MI355X 機櫃交給 Claude，僅下達「把這台機器搞起來」的指令便讓它跑過一個週末，最終產出的是一張持續改善的模型效能曲線，過程中沒有人工介入寫程式碼。過去要讓全新硬體從開箱到穩定運作，通常需要專職團隊耗費數週甚至數月，處理驅動載入、記憶體分層、卡間通訊等大量未見於官方文件的細節——這正是 CUDA 生態十年累積調優知識所構築的護城河核心。Tom Brown 同時公開表示 Anthropic 計畫部署高達 2GW 的 AMD 運算容量並明確表達對 MI355 的偏好，與 05、11 節已披露的 Anthropic 容量承諾是同一件事的不同切面，這裡不重複列數字。</p>
     <p>類似論述不只出現在 AMD 陣營。DeepSeek 創辦人梁文鋒在一場外流的投資人交流會談話中表示，Nvidia 的 CUDA 生態護城河正快速瓦解，主因是 AI 已經能自行編寫程式碼，大幅降低了建立替代軟體生態系的人力門檻——DeepSeek 訓練 V3 模型時雖仍使用 Nvidia GPU，但已轉為自行開發高階編譯器 TileLang，不再依賴 Nvidia 的軟體生態；梁文鋒並透露 DeepSeek 已取得約 1.6 萬張華為 Ascend 950 卡用於實測，認為其 950 超節點在性能與價格上可望完全替代 Nvidia GB200、GB300 的工作負載，並預期國產晶片的軟體適配問題可望於一年內大致解決，真正瓶頸將轉為製造產能。</p>
     <div class="marg"><b>與 08 節的關係</b>本節談的是軟體整合摩擦，08 節談的是硬體機櫃整合摩擦——兩者是同一個「摩擦成本」主軸在不同層次的展現：硬體摩擦決定客戶要不要買，軟體摩擦決定買了之後能不能順利跑起來。</div>
+
+    <h3>第三個案例：同一家實驗室，同時押注三個軟體堆疊</h3>
+    <p>比 Anthropic 單一個 MI355 故事更值得注意的，是 Anthropic 自身押注的廣度。除了 AMD（Claude 自主完成 MI355X 開機調優、計畫部署最高 2GW 容量）之外，Anthropic 也是 Amazon 自研 AI 晶片 Trainium 軟體生態的直接貢獻者——公開資訊顯示 Anthropic 投入工程資源協助強化 AWS 的 Neuron 軟體棧，並規劃將 5GW 的現有與未來 Trainium 世代容量納入自身運算組合；OpenAI 則另外承諾約 2GW 的 Trainium 容量，預計 2027 年起逐步上量。與此同時，Nvidia GPU 仍是這些實驗室訓練與推論工作負載的主力平台。<strong>同一批最有能力自行判斷「哪個軟體棧真的堪用」的買家，選擇同時在 CUDA、ROCm、AWS Neuron 三套軟體堆疊上都投入工程資源</strong>，而不是押寶單一贏家——這本身就是對「CUDA 護城河是否仍不可逾越」這個問題，比任何單一則調優故事更有份量的間接證據：如果轉換成本仍然高不可攀，理性的買家不會同時分攤三份工程投入。</p>
+    <p class="cap full"><b>標註</b>　Anthropic 對 AWS Neuron 軟體棧的工程貢獻與 Trainium 容量規劃，及 OpenAI 的 Trainium 承諾，均為 AWS／Anthropic／OpenAI 公開揭露之合作內容整理，非本文獨立查證的工程投入規模。</p>
 
     <h3>護城河沒有消失，只是性質改變了</h3>
     <p>CUDA 今天仍握有結構性優勢：Nvidia 把晶片、互連網路與系統軟體整套綁定銷售，這種深度整合的效率無法在一個週末內複製；成熟的除錯工具鏈與整個開源生態「CUDA 優先」的慣性，也讓多數團隊在動輒燒掉數百萬美元的長時間訓練任務上，傾向選擇「已驗證可行」而非「理論上可行」的路線。但護城河的性質正在改變——兩年前的 CUDA 護城河近似「不可進入」：多數團隊光是移植一個核心運算，就要耗費大量時間摸索官方文件沒寫的細節；今天則正在變成「偏好性」：客戶技術上可以離開，只是離開後的效能與穩定性仍有落差，且既有工程習慣仍長在 CUDA 之上。</p>
@@ -720,6 +776,18 @@ html{scroll-behavior:smooth}
     <li><a href="https://newsletter.semianalysis.com/p/can-amd-break-the-cuda-moat-amd-advancing">SemiAnalysis — Can AMD Break the CUDA Moat?</a></li>
     <li><a href="https://money.udn.com/money/story/5603/9646958">經濟日報／聯合新聞網 — DeepSeek 內部交流會曝光，梁文鋒談 CUDA 護城河瓦解</a></li>
     <li><a href="https://technews.tw/2026/07/24/deepseeks-liang-wenfeng-tells-investors-restraint-is-the-business-model/">科技新報 — 梁文鋒投資人會議談話（華為 Ascend 950 細節）</a></li>
+    <li><a href="https://www.digitimes.com/news/a20260109PD249/revenue-ai-server-foxconn-wistron-quanta.html">DigiTimes — Foxconn／Wistron／Quanta AI 伺服器營收破兆</a></li>
+    <li><a href="https://www.spheron.network/blog/hyperscaler-custom-ai-chips-2026-trainium-tpu-maia-mtia-vs-nvidia-gpu/">Spheron Network — 2026 年超大規模業者自研 AI 晶片對照（TPU／Maia／Trainium）</a></li>
+    <li><a href="https://tech.yahoo.com/ai/copilot/articles/microsoft-says-newest-ai-chip-160218268.html">Yahoo Tech — Microsoft Maia 200 規格與功耗</a></li>
+    <li><a href="https://www.digitimes.com/news/a20260810PD241/rubin-hbm4-cost-nvidia-chips.html">DigiTimes — UBS：Vera Rubin 記憶體占成本 62%</a></li>
+    <li><a href="https://www.fool.com/investing/2026/05/18/nvidia-doubled-down-on-its-second-largest-ai-holdi/">The Motley Fool — Nvidia 加碼 CoreWeave 股權至 11%</a></li>
+    <li><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/intel-cancels-falcon-shores-gpu-for-ai-workloads-jaguar-shores-to-be-successor">Tom's Hardware — Intel 取消 Falcon Shores，轉向 Jaguar Shores</a></li>
+    <li><a href="https://pcoutlet.com/software/ai/intel-ends-gaudi-line-what-jaguar-shores-means-for-the-future-of-ai-hardware">PC Outlet — Intel 終結 Gaudi 產品線</a></li>
+    <li><a href="https://www.amd.com/en/newsroom/press-releases/2026-2-3-amd-reports-fourth-quarter-and-full-year-2025-fina.html">AMD 官方新聞稿 — FY2025 第四季暨全年財報</a></li>
+    <li><a href="https://www.tomshardware.com/pc-components/cpus/amd-reaches-46-percent-of-server-x86-cpu-revenue-intel-still-controls-70-percent-of-the-consumer-pc-market-share">Tom's Hardware — Mercury Research：AMD x86 伺服器營收占 46%</a></li>
+    <li><a href="https://siliconanalysts.com/analysis/amd-vs-nvidia-ai-gpu-market-share-2026">SiliconAnalysts — AMD vs Nvidia AI GPU 市占分析 2026</a></li>
+    <li><a href="https://www.anthropic.com/news/anthropic-amazon-trainium">Anthropic 官方 — 與 Amazon Trainium 的合作公告</a></li>
+    <li><a href="https://www.constellationr.com/insights/news/amd-continues-ride-epyc-gpu-data-center-waves">Constellation Research — AMD EPYC／GPU 資料中心動能（含 Meta 6GW 交易細節）</a></li>
   </ol>
 
   <div class="foot">
