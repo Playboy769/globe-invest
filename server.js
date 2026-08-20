@@ -1411,6 +1411,7 @@ const server = http.createServer(async (req, res) => {
   else if (url === '/sankey'     || url === '/sankey/')     fp = path.join(APP_DIR, 'sankey',     'index.html');
   else if (url === '/earnings-quiz' || url === '/earnings-quiz/') fp = path.join(APP_DIR, 'earnings-quiz', 'index.html');
   else if (url === '/mounjaro' || url === '/mounjaro/') fp = path.join(APP_DIR, 'mounjaro', 'index.html');
+  else if (url === '/agentic-ai' || url === '/agentic-ai/') fp = path.join(APP_DIR, 'agentic-ai', 'index.html');
   else if (url === '/market-weather' || url === '/market-weather/') fp = path.join(APP_DIR, 'market-weather', 'index.html');
   // Unlike the other single-file apps this one fetches siblings by relative URL,
   // so it must be served from a trailing-slash path or those resolve to root.
