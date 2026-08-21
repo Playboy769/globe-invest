@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="DRAM 與 NAND 終端價格波動得像大宗商品，但堆疊、微縮與良率門檻卻是半導體業最高的一群——逐層拆解這道門檻的本質，以及荷蘭出口管制如何把 CXMT／YMTC 的技術追趕鎖在一個可量化的成本地板之上。">
+<meta name="color-scheme" content="light dark">
+<title>不是大宗商品：DRAM／NAND 的技術門檻與地緣政治鎖喉</title>
+<style>
+:root{
+  --bg:#FFFFFF;
+  --paper:#FFFFFF;
+  --paper-2:#FFFFFF;
+  --ink:#0B0D0C;
+  --ink-2:#383D3B;
+  --ink-3:#6E7471;
+  --ink-4:#9AA09C;
+  --rule:#BFC3BE;
+  --rule-2:#DCDFDB;
+  --acc:#96540E;
+  --acc-2:#B8763A;
+  --acc-wash:#FBF1E4;
+  --inv-bg:#0B0D0C;
+  --inv-ink:#FFFFFF;
+
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","Times New Roman",Georgia,serif;
+  --sans:"Noto Sans TC","Source Han Sans TC","PingFang TC","Microsoft JhengHei","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+
+  --read:min(100%,38rem);
+  --wide:min(100%,64rem);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;
+    --ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+    --rule:#2A2D2A;--rule-2:#1E211E;
+    --acc:#E3A85C;--acc-2:#EDC088;--acc-wash:#241C10;
+    --inv-bg:#EFEFEC;--inv-ink:#0A0B0B;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;
+  --ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+  --rule:#2A2D2A;--rule-2:#1E211E;
+  --acc:#E3A85C;--acc-2:#EDC088;--acc-wash:#241C10;
+  --inv-bg:#EFEFEC;--inv-ink:#0A0B0B;
+}
+:root[data-theme="light"]{
+  --bg:#FFFFFF;--paper:#FFFFFF;--paper-2:#FFFFFF;
+  --ink:#0B0D0C;--ink-2:#383D3B;--ink-3:#6E7471;--ink-4:#9AA09C;
+  --rule:#BFC3BE;--rule-2:#DCDFDB;
+  --acc:#96540E;--acc-2:#B8763A;--acc-wash:#FBF1E4;
+  --inv-bg:#0B0D0C;--inv-ink:#FFFFFF;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.88;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+p{margin:0 0 1.15em}
+a{color:var(--acc);text-underline-offset:3px;text-decoration-thickness:.06em}
+a:hover{color:var(--acc-2)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:1px}
+strong{font-weight:700}
+em{font-style:normal;border-bottom:1px solid var(--rule)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+code{font-family:var(--mono);font-size:.85em;color:var(--ink-2)}
+ul,ol{margin:.5rem 0 1.15em;padding-left:1.35rem}
+li{margin:.34em 0}
+li::marker{color:var(--ink-4)}
+
+.wrap{max-width:78rem;margin:0 auto;padding:0 clamp(1.1rem,4vw,3rem) 7rem}
+
+.mast{padding:clamp(3rem,9vw,7rem) 0 0}
+.mast-top{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;align-items:baseline;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--ink);padding-bottom:.7rem;margin-bottom:clamp(1.8rem,4vw,3rem)}
+.mast-top .sp{flex:1}
+h1{font-family:var(--serif);font-weight:700;
+  font-size:clamp(2.5rem,7.2vw,5.4rem);line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 clamp(1.2rem,3vw,2rem);max-width:16ch;text-wrap:balance}
+h1 .thin{font-weight:400;color:var(--ink-3)}
+.deck{font-family:var(--serif);font-size:clamp(1.06rem,2.2vw,1.42rem);line-height:1.72;
+  color:var(--ink-2);max-width:42rem;margin:0 0 2rem}
+.deck b{color:var(--ink);font-weight:700}
+.byline{display:flex;flex-wrap:wrap;gap:.4rem 2.2rem;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:var(--ink-3);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:.8rem 0;margin-bottom:clamp(2.4rem,6vw,4rem)}
+.byline b{color:var(--ink-2);font-weight:600}
+
+.model{border:1px solid var(--ink);background:var(--paper);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.model-head{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center;justify-content:space-between;
+  padding:.75rem .95rem;border-bottom:1px solid var(--rule)}
+.model-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+.model-title b{color:var(--ink);font-weight:600}
+.strip{display:flex;overflow-x:auto;scrollbar-width:thin}
+.strip::-webkit-scrollbar{height:5px}
+.strip::-webkit-scrollbar-thumb{background:var(--rule)}
+.seg{flex:1 0 8.4rem;min-width:8.4rem;text-align:left;padding:.7rem .7rem .75rem;
+  border-right:1px solid var(--rule-2);position:relative;transition:background .15s}
+.seg:last-child{border-right:0}
+.seg:hover .seg-t{color:var(--acc)}
+.seg:hover .seg-v{color:var(--ink-2)}
+.seg-n{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-4);margin-bottom:.15rem}
+.seg-t{display:block;font-size:12.6px;line-height:1.35;font-weight:600;color:var(--ink);margin-bottom:.3rem}
+.seg-v{display:block;font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-3);min-height:2.2em}
+.seg.on{background:var(--acc-wash)}
+.seg.on::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--acc)}
+.seg.on .seg-t{color:var(--acc)}
+
+.thesis{max-width:var(--wide);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.sec-mark{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem}
+.sec-mark::after{content:"";flex:1;height:1px;background:var(--rule)}
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.65rem,3.6vw,2.5rem);
+  line-height:1.18;letter-spacing:-.022em;margin:0 0 .9rem;max-width:24ch;text-wrap:balance}
+h3{font-family:var(--sans);font-size:.86rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);margin:2.4rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+h4{font-size:.92rem;font-weight:700;margin:1.5rem 0 .35rem;color:var(--ink)}
+.lede{font-family:var(--serif);font-size:1.08rem;line-height:1.75;color:var(--ink-2);max-width:var(--read);margin:0 0 1.8rem}
+
+.phase-rule{display:flex;align-items:baseline;gap:1rem;margin:clamp(3rem,7vw,5rem) 0 1.5rem;
+  border-top:2px solid var(--ink);padding-top:.6rem}
+.phase-rule .pk{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+.phase-rule .pd{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+
+.stage{border-bottom:1px solid var(--rule);max-width:var(--wide)}
+.stage>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:3.2rem 1fr auto 1.2rem;
+  gap:1rem;align-items:baseline;padding:1.35rem 0;transition:opacity .15s}
+.stage>summary::after{content:"＋";font-family:var(--mono);font-size:13px;color:var(--ink-4);
+  justify-self:end;padding-top:.3rem}
+.stage[open]>summary::after{content:"－";color:var(--acc)}
+.stage>summary::-webkit-details-marker{display:none}
+.stage>summary:hover{opacity:.65}
+.st-n{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--ink-4);padding-top:.35rem}
+.st-main{min-width:0}
+.st-t{font-family:var(--serif);font-size:clamp(1.2rem,2.6vw,1.65rem);font-weight:700;
+  line-height:1.28;letter-spacing:-.018em;margin-bottom:.28rem;text-wrap:balance}
+.st-sub{font-size:13.6px;line-height:1.6;color:var(--ink-3);max-width:44rem}
+.st-sig{font-family:var(--mono);font-size:11px;color:var(--acc);white-space:nowrap;padding-top:.4rem;text-align:right}
+.st-sig i{display:block;font-style:normal;color:var(--ink-4);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+.body{padding:.4rem 0 3rem;animation:fade .28s ease}
+.body>.full{max-width:var(--wide)}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.body>p,.body>ul,.body>ol,.body>h3,.body>h4,.body>.callout,.body>.eq,.body>.lede{max-width:var(--read)}
+.body>p:first-of-type::first-letter{font-family:var(--serif);float:left;font-size:3.15rem;line-height:.86;
+  font-weight:700;padding:.16rem .5rem .1rem 0;color:var(--ink)}
+@media(min-width:900px){
+  .body{display:grid;grid-template-columns:minmax(0,var(--read)) 1fr;gap:0 2.5rem;align-items:start}
+  .body>*{grid-column:1}
+  .body>.full{grid-column:1/-1;max-width:var(--wide)}
+  .body>.marg{grid-column:2;margin:0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+    border-top:1px solid var(--ink);padding-top:.5rem;max-width:17rem}
+}
+.marg{margin:1.2rem 0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+  border-top:1px solid var(--ink);padding-top:.5rem}
+.marg b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-2);margin-bottom:.35rem}
+
+.callout{background:var(--paper);border:1px solid var(--ink);padding:1.05rem 1.15rem;margin:1.7rem 0}
+.callout .ck{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:.5rem}
+.callout p{margin:0 0 .8em;font-size:15px;line-height:1.8;color:var(--ink-2)}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+
+.eq{font-family:var(--mono);font-size:12.4px;line-height:1.95;color:var(--ink-2);
+  background:var(--paper-2);border-left:2px solid var(--acc);padding:.85rem 1rem;margin:1.2rem 0;
+  overflow-x:auto;white-space:pre;font-variant-numeric:tabular-nums}
+
+.tbl{overflow-x:auto;margin:1.5rem 0;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:13.4px;line-height:1.62}
+.tbl table{min-width:42rem}
+th,td{text-align:left;padding:.6rem .85rem;border-bottom:1px solid var(--rule-2);vertical-align:top}
+thead th{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid var(--ink);white-space:nowrap;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp td{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;padding-top:1.1rem;
+  text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--ink);border-bottom-color:var(--rule)}
+td.hit{background:var(--acc-wash)}
+.cap{font-size:12.4px;line-height:1.7;color:var(--ink-3);margin:-.9rem 0 1.9rem;max-width:var(--wide)}
+.cap b{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+
+.lvl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;white-space:nowrap;color:var(--ink)}
+.lvl i{font-style:normal;color:var(--ink-4)}
+
+.figs{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule);margin:1.6rem 0}
+.fg{padding:.85rem .9rem .95rem;border-right:1px solid var(--rule-2)}
+.fg:last-child{border-right:0}
+.fg .v{display:block;font-family:var(--mono);font-size:1.5rem;font-weight:500;letter-spacing:-.03em;
+  line-height:1.15;font-variant-numeric:tabular-nums}
+.fg .v small{font-size:.55em;letter-spacing:0;color:var(--ink-3);margin-left:.15em}
+.fg .k{display:block;font-size:11.5px;line-height:1.5;color:var(--ink-3);margin-top:.35rem}
+
+.lad{margin:1.4rem 0}
+.lad-r{display:grid;grid-template-columns:9rem 1fr 6.5rem;gap:.7rem;align-items:center;margin:.3rem 0;font-size:12.6px}
+.lad-l{color:var(--ink-2);line-height:1.35}
+.lad-t{height:12px;background:var(--paper-2);border:1px solid var(--rule-2)}
+.lad-f{height:100%;background:var(--ink)}
+.lad-f.a{background:var(--acc)}
+.lad-v{font-family:var(--mono);font-size:11px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+
+.calc{border:1px solid var(--ink);background:var(--paper);margin:1.6rem 0}
+.calc-h{padding:.6rem .9rem;border-bottom:1px solid var(--rule);font-family:var(--mono);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.calc-i{display:grid;gap:.85rem;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));padding:.95rem}
+.calc-i label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:.3rem}
+.calc-i input{width:100%;font-family:var(--mono);font-size:14px;padding:.35rem .45rem;background:var(--paper-2);
+  color:var(--ink);border:1px solid var(--rule);border-radius:0;font-variant-numeric:tabular-nums}
+.calc-i input:focus{border-color:var(--acc);outline:none}
+.calc-o{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));border-top:1px solid var(--rule)}
+.co{padding:.6rem .8rem .7rem;border-right:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2)}
+.co .v{display:block;font-family:var(--mono);font-size:1.12rem;font-weight:500;color:var(--acc);
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.co .k{display:block;font-size:10.5px;line-height:1.45;color:var(--ink-3);margin-top:.2rem}
+.calc-n{padding:.7rem .9rem;font-size:12px;line-height:1.7;color:var(--ink-3);border-top:1px solid var(--rule)}
+
+.foot{border-top:2px solid var(--ink);margin-top:4rem;padding-top:1.5rem;max-width:var(--wide);
+  font-size:12.6px;line-height:1.85;color:var(--ink-3)}
+.srcs{columns:2;column-gap:2.5rem;font-size:12.3px;line-height:1.8}
+@media(max-width:700px){.srcs{columns:1}}
+.srcs li{break-inside:avoid;margin:.2em 0}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.05rem .35rem;color:var(--ink-3);white-space:nowrap}
+
+.tools{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0 0}
+.tools button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.3rem .75rem;color:var(--ink-3)}
+.tools button:hover{border-color:var(--ink);color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <span>DRAM ／ NAND</span><span>技術門檻與出口管制解剖</span><span class="sp"></span><span>2026</span>
+  </div>
+  <h1>不是大宗商品：<br>記憶體業<span class="thin">最貴的那道牆</span></h1>
+  <p class="deck">DRAM 與 NAND 的終端報價像大宗商品一樣暴漲暴跌，但能做出這兩種晶片的公司，全球只有六家。2026 年 7 月，中國 DRAM 廠長鑫存儲（CXMT）在上海科創板單日暴漲 466%，市值衝上約 4,890 億美元；不到兩週後，蘋果一場想用 CXMT 議價施壓三星、SK 海力士的算盤，卻在 CXMT <b>連折扣都給不起</b>的現實面前落空。這篇筆記要拆開的，就是「技術門檻」與「出口管制」這兩個常被當成抽象說法的詞，在 2026 年這兩件真實事件裡，究竟是怎麼變成一條可以量化的成本地板。</p>
+  <div class="byline">
+    <span><b>版本</b>　2026-08-21</span>
+    <span><b>主線</b>　DRAM：三星／SK 海力士／美光　vs　CXMT</span>
+    <span><b>對照</b>　NAND：三星／SK 海力士／鎧俠／美光　vs　YMTC</span>
+    <span><b>環節</b>　10</span>
+    <span><b>數據</b>　公開規格／產業估計／本文推導</span>
+  </div>
+</header>
+
+<!-- ══════════ 概覽帶 ══════════ -->
+<section class="model" aria-label="十環節概覽">
+  <div class="model-head">
+    <span class="model-title"><b>十環節概覽</b>　點一段直接跳過去</span>
+  </div>
+  <div class="strip" id="strip">
+    <button class="seg" data-go="s01"><span class="seg-n">01</span><span class="seg-t">三重門檻</span><span class="seg-v">微縮・堆疊・良率</span></button>
+    <button class="seg" data-go="s02"><span class="seg-n">02</span><span class="seg-t">資本強度</span><span class="seg-v">DRAM CapEx $61.3B／2026</span></button>
+    <button class="seg" data-go="s03"><span class="seg-n">03</span><span class="seg-t">EUV 鎖喉</span><span class="seg-v">荷蘭限制起於 2019</span></button>
+    <button class="seg" data-go="s04"><span class="seg-n">04</span><span class="seg-t">DUV 繞道</span><span class="seg-v">多耗約 30% 晶圓起始</span></button>
+    <button class="seg" data-go="s05"><span class="seg-n">05</span><span class="seg-t">市占現況</span><span class="seg-v">CXMT 8%・YMTC 14%</span></button>
+    <button class="seg" data-go="s06"><span class="seg-n">06</span><span class="seg-t">HBM 前線</span><span class="seg-v">CXMT 落後約 3 年</span></button>
+    <button class="seg" data-go="s07"><span class="seg-n">07</span><span class="seg-t">CXMT 上市</span><span class="seg-v">$8.6B・單日 +466%</span></button>
+    <button class="seg" data-go="s08"><span class="seg-n">08</span><span class="seg-t">蘋果槓桿破局</span><span class="seg-v">CXMT 拒絕降價</span></button>
+    <button class="seg" data-go="s09"><span class="seg-n">09</span><span class="seg-t">歷史對照</span><span class="seg-v">1986 美日半導體協定</span></button>
+    <button class="seg" data-go="s10"><span class="seg-n">10</span><span class="seg-t">台灣供應鏈</span><span class="seg-v">南亞科・華邦電・群聯</span></button>
+  </div>
+</section>
+
+<!-- ══════════ 00 論點 ══════════ -->
+<section class="thesis" id="s00">
+  <p class="sec-mark">00 · 論點</p>
+  <h2>兩個 2026 年的真實事件，比任何抽象說法都更能說明這道門檻有多硬</h2>
+  <p class="lede">「DRAM／NAND 技術與資本門檻高」「先進微影設備被出口管制卡住」這兩句話，在半導體討論裡幾乎已經聽到麻木。但 2026 年夏天發生的兩件事，把這兩句抽象敘述變成了可以用數字驗證的具體案例。</p>
+
+  <div style="max-width:var(--read)">
+    <p>第一件事：CXMT 在 7 月 27 日掛牌上海科創板，募資 86 億美元，掛牌首日股價暴漲 466%，市值衝上約 4,890 億美元人民幣（約當美元），一度觸及 535% 的盤中漲幅——這是 2026 年亞洲規模最大的 IPO。市場的解讀是「中國記憶體技術追趕速度比預期快得多」；但同一週，Nomura 估這家公司股價還會再翻三倍，Morningstar 卻同時指出它有一道<strong>約 30% 的成本天花板</strong>——兩家機構對同一家公司的估值分歧，本身就是重要訊號。</p>
+    <p>第二件事、也是本文認為更關鍵的一件：蘋果在 2026 年 8 月被曝出曾測試 CXMT 的 DRAM，目的是想找一個「可信的中國替代選項」，回頭向三星、SK 海力士施壓降價。結果 CXMT 拒絕給出低於三星、SK 海力士的報價——不是不想給折扣，而是<strong>沒有折扣空間可以給</strong>：CXMT 因為拿不到 EUV 設備，必須用老一代 DUV 微影搭配多重曝光技術，同樣的產出要多耗約 30% 的晶圓起始片數，這道成本劣勢讓「跟韓廠打平」已經是 CXMT 的定價地板，而不是它可以往下讓的空間。</p>
+    <p>把這兩件事放在一起看，會得到本文的核心判讀：<strong>「技術門檻高」不是公關語言，而是一個具體可以算出來的成本乘數；「出口管制鎖住先進製程」也不是政治表態，而是這個成本乘數之所以存在的直接原因。</strong>兩者疊在一起，決定了 CXMT／YMTC 即使拿到充沛資本（86 億美元 IPO 現金）、即使市占率數字持續攀升，仍然無法把「市占率追上」直接兌現成「定價權追上」——這正是本文接下來十個環節要逐層拆開驗證的命題。</p>
+  </div>
+
+  <div class="figs">
+    <div class="fg"><span class="v">466<small>%</small></span><span class="k">CXMT 掛牌首日漲幅</span></div>
+    <div class="fg"><span class="v">30<small>%</small></span><span class="k">CXMT DUV 多重曝光相對 EUV 多耗的晶圓起始片數</span></div>
+    <div class="fg"><span class="v">8<small>%</small></span><span class="k">CXMT 全球 DRAM 市占率（2026 Q1，排名第四）</span></div>
+    <div class="fg"><span class="v">~3<small>年</small></span><span class="k">CXMT 在 HBM 世代技術上落後韓廠的估計差距</span></div>
+  </div>
+
+  <div class="callout" style="max-width:var(--read)">
+    <span class="ck">本文的核心判讀</span>
+    <p>市占率是落後指標，成本結構才是領先指標。CXMT／YMTC 的市占率數字（DRAM 8%、NAND 14%）已經足以引發華盛頓的國會調查與國防部採購禁令，但蘋果的案例證明：<strong>只要 EUV 這道閘門沒開，市占率的成長就無法轉換成定價權的成長。</strong>這道閘門什麼時候鬆動、會不會鬆動，才是接下來幾年真正決定這場競賽走向的變數，而不是任何一季的市占率數字。</p>
+  </div>
+
+  <div class="tools">
+    <button id="expand-all">全部展開</button>
+    <button id="collapse-all">全部收合</button>
+  </div>
+</section>
+
+<!-- ══════════ A ══════════ -->
+<div class="phase-rule"><span class="pk">A · 門檻的本質</span><span class="pd">為什麼記憶體不是低技術大宗商品</span></div>
+
+<details class="stage" id="s01">
+  <summary><span class="st-n">01</span><span class="st-main"><span class="st-t">三重門檻：微縮、堆疊、良率</span><span class="st-sub">DRAM 與 NAND 的物理限制完全不同，但都指向同一個結果——這不是隨便一家新進者靠資本就能複製的產業。</span></span><span class="st-sig">300+<i>層／3D NAND 世代</i></span></summary>
+  <div class="body">
+    <p>DRAM 的每一個位元由「一顆電晶體＋一顆電容」（1T1C）構成，資料以電荷形式存在電容上。這顆電容會持續漏電（次臨界漏電流、接面漏電），所以每隔約 64 毫秒就必須整顆晶片重新讀取再寫回一次——這正是「Dynamic」這個字的來源。問題在於：製程節點每微縮一代，電容的平面佔地跟著縮小，但電容值必須維持在能被可靠讀出的門檻之上，不能同比例下降。工程上唯一的解法是把電容「長高」——做成深溝槽或高柱狀結構，長寬比在先進世代可達 40 比 1 以上。長寬比一旦拉到這個量級，蝕刻與填孔的精度要求就直接把微影設備的等級往上頂。</p>
+
+    <div class="marg"><b>動畫版原理參考</b>DRAM 電容＋刷新機制與 NAND 浮動閘極／電荷捕捉層的運作方式，可參考 Redknot-乔红 的科普動畫系列（見附錄延伸連結）；本節文字為本文對半導體業界公開技術資料的整理，非逐字轉引自任何單一影片。</div>
+
+    <h3>NAND 的門檻在另一個方向：從平面走向垂直</h3>
+    <p>NAND 儲存的是困在絕緣層中的電荷——現代 3D NAND 多數採用電荷捕捉（charge-trap）架構，電荷困在一層氮化矽薄膜裡，由環繞式閘極控制。2013 年前的平面（2D）NAND 曾試圖靠微縮製程節點衝密度，但縮到約 15–19nm 附近就撞牆：相鄰儲存單元的電荷會互相干擾，可靠度直接崩潰。業界因此在 2013 年前後全面轉向「向上蓋樓」——不再微縮平面尺寸，改成把上百層儲存單元疊在同一根垂直通道上，靠增加層數換取密度成長。</p>
+    <p>這條路線的製造難度在於：要在 300 層以上交替堆疊的薄膜裡，鑽出一個從頭到尾垂直、直徑均勻的通道孔（長寬比可達 60–80 比 1），再於孔壁依序沉積穿隧氧化層、電荷捕捉層、阻擋氧化層與多晶矽通道——任何一層厚度不均，都會讓孔底部與頂部的儲存單元電性表現不一致，直接反映成良率損失。這也是為什麼「層數」本身不是唯一指標：2026 年 Kioxia 用 332 層做到的面密度，實測超過三星 400 層以上世代的產品，差距逾三成——多疊層數若沒有搭配同等精度的孔徑控制與薄膜均勻度，換來的可能是更差的良率而非更高的密度。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>廠商</th><th class="n">量產層數（約，2026）</th><th class="wrap">備註</th></tr></thead>
+        <tbody>
+          <tr><td>三星 Samsung</td><td class="n">約 286–400+</td><td>第十代 V-NAND，400 層世代已發表並邁向量產；900 層為研發階段展示</td></tr>
+          <tr><td>SK 海力士 SK hynix</td><td class="n">約 321</td><td>第九代 3D NAND</td></tr>
+          <tr><td>鎧俠／Sandisk Kioxia/SanDisk</td><td class="n">約 332</td><td>第十代 BiCS，樣品出貨；面密度實測超越三星 400 層世代約 38%</td></tr>
+          <tr><td>美光 Micron</td><td class="n">約 276</td><td>232 層世代之後的量產世代</td></tr>
+          <tr><td>長江存儲 YMTC</td><td class="n">約 267，300+ 層在研發中</td><td>Xtacking 架構，2026 年推 3D QLC X4-6080（維持 294 層級）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ 各廠「層數」統計口徑（實體層 vs 有效儲存層）與世代命名方式不完全一致，媒體引用數字時常有出入，本表取多方報導的量級整理，僅供廠商間相對位置參考，不宜逐一相減比較。</p>
+
+    <div class="callout">
+      <span class="ck">下游的真實代價：URE 與 RAID5</span>
+      <p>層數與容量的競賽不是沒有代價的技術炫技，它會直接轉嫁到下游系統設計。NAND 顆粒的不可修復讀取錯誤率（URE）通常落在每讀取 10¹⁴–10¹⁵ 位元發生一次的量級；當單顆硬碟容量隨堆疊層數成長衝上十幾 TB，一次完整的 RAID 5 陣列重建（重建時必須讀過陣列中其餘每一顆硬碟的全部容量）所讀取的總位元數，已經逼近甚至超過這個 URE 門檻。這意味著：陣列裡一顆硬碟故障、進入重建程序時，另一顆硬碟只要在重建過程中撞上一次 URE（不是硬碟損毀，只是一個讀取錯誤），重建就可能失敗——這正是儲存業界近年把大容量陣列的標準從單一備援的 RAID 5 轉向雙備援 RAID 6 或抹除碼（erasure coding）的直接原因。<strong>層數競賽帶來的容量成長，把可靠度風險從晶圓廠一路推到了資料中心的機櫃裡。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s02">
+  <summary><span class="st-n">02</span><span class="st-main"><span class="st-t">資本強度：一座新廠要價 100–200 億美元</span><span class="st-sub">記憶體業 2026 年僅 DRAM 一項的全球資本支出就達 613 億美元，任何新進者要在這個規模下站穩腳步，起跳門檻就是十位數美元。</span></span><span class="st-sig">$61.3B<i>DRAM 業 2026 CapEx</i></span></summary>
+  <div class="body">
+    <p>TrendForce 估計 2026 年全球 DRAM 產業資本支出將達 613 億美元，NAND Flash 支出達 222 億美元；單一座先進記憶體晶圓廠（無論 DRAM 或 NAND）的建置成本，業界估計落在 100–200 億美元量級。這個規模意味著：即使一家新進者拿到充沛的一次性資本（例如 CXMT 這次 86 億美元的 IPO 現金），也僅夠支應一座新廠建置成本的一部份，且必須逐年投入才能維持製程世代不掉隊——資本門檻不是「一次跨過去」的門檻，而是「持續繳費」的門檻。</p>
+
+    <h3>四大廠 2026 年產能對照</h3>
+    <p>把資本支出換算成實際產能規模更容易感受量級差距：三家既有龍頭 2026 年底的月產能預估都在 380 千片以上，CXMT 則預計逼近 350 千片——數字看起來已相當接近，但要注意這是「約當 12 吋晶圓片數」，並未反映製程良率與單片產出位元數的落差（見 01 節）。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="300" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">DRAM 月產能對照（2026年底預估）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="170" y1="48" x2="170" y2="242" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="258" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="337.5" y1="48" x2="337.5" y2="242" stroke="#eeeeee" stroke-width="1"/><text x="337.5" y="258" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="505" y1="48" x2="505" y2="242" stroke="#eeeeee" stroke-width="1"/><text x="505" y="258" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="672.5" y1="48" x2="672.5" y2="242" stroke="#eeeeee" stroke-width="1"/><text x="672.5" y="258" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="840" y1="48" x2="840" y2="242" stroke="#eeeeee" stroke-width="1"/><text x="840" y="258" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">800 千片/月</text><line x1="170" y1="48" x2="170" y2="242" stroke="#111111" stroke-width="1.2"/><rect x="170" y="55.79" width="603" height="32.92" fill="#2563eb" rx="1" data-dim="月產能（千片，12吋約當）"/><text x="778" y="75.75" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="月產能（千片，12吋約當）">720</text><text x="160" y="76.25" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">三星 Samsung</text><rect x="170" y="104.29" width="498.31" height="32.92" fill="#2563eb" rx="1" data-dim="月產能（千片，12吋約當）"/><text x="673.31" y="124.25" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="月產能（千片，12吋約當）">595</text><text x="160" y="124.75" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">SK 海力士 SK hynix</text><rect x="170" y="152.79" width="322.44" height="32.92" fill="#2563eb" rx="1" data-dim="月產能（千片，12吋約當）"/><text x="497.44" y="172.75" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="月產能（千片，12吋約當）">385</text><text x="160" y="173.25" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">美光 Micron</text><rect x="170" y="201.29" width="293.13" height="32.92" fill="#2563eb" rx="1" data-dim="月產能（千片，12吋約當）"/><text x="468.13" y="221.25" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="月產能（千片，12吋約當）">350</text><text x="160" y="221.75" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">長鑫存儲 CXMT</text><text x="22" y="288" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：產業估計整理（TrendForce 等），12吋晶圓約當值；四家統計口徑略有差異，僅供量級對照</text></svg>
+    </div>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>廠商</th><th class="n">2026 年資本支出（估）</th><th class="wrap">備註</th></tr></thead>
+        <tbody>
+          <tr><td>SK 海力士 SK hynix</td><td class="n">約 $20.5B</td><td>年增約 17%</td></tr>
+          <tr><td>美光 Micron</td><td class="n">約 $13.5B（FY26）</td><td>年增約 23%，加速 HBM 與美國本土產能</td></tr>
+          <tr><td>三星 Samsung</td><td class="n">約 $20B（記憶體部分，估）</td><td>⚑ 聚焦 1c 製程 DRAM／HBM 與 P4L 擴產；三星整體半導體 2026 年累計資本支出另有約 $73B 的估計口徑，兩者非同一統計基礎，信心度較低</td></tr>
+          <tr><td>三星＋SK 海力士 聯合擴產計畫</td><td class="n">約 $870B（至 2027，估）</td><td>⚑ 涵蓋多年期、多廠區的產業估計彙總，非單一年度數字</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　CXMT 的 2026 年資本支出未見官方單獨揭露；其 IPO 說明書指出募得的 86 億美元中約 70% 將用於晶圓廠產能升級與 DRAM 技術暨設備開發，可作為其資本投入方向的參考，但不等於年度 CapEx 總額。</p>
+
+    <div class="callout">
+      <span class="ck">資本不是問題，設備才是問題</span>
+      <p>CXMT 這次 IPO 募得的 86 億美元現金，規模已足以匹敵 SK 海力士整年 CapEx 的四成——資本市場顯然願意持續為中國記憶體業輸血。但 03、04 節會說明：資本能買到晶圓廠土地、廠房、DUV 設備與人力，唯獨買不到 ASML 的 EUV 機台。<strong>這正是為什麼「CXMT 資本雄厚」與「CXMT 技術追上」是兩件必須分開評估的事——本文 02 到 04 節要處理的，正是這兩者之間那道無法用錢直接填平的縫隙。</strong></p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ B ══════════ -->
+<div class="phase-rule"><span class="pk">B · 地緣政治鎖喉</span><span class="pd">誰把 EUV 鎖住，又是怎麼鎖的</span></div>
+
+<details class="stage" id="s03">
+  <summary><span class="st-n">03</span><span class="st-main"><span class="st-t">EUV 是怎麼被鎖住的：從瓦聖納協議到 MATCH Act</span><span class="st-sub">荷蘭政府自 2019 年起，在美方協調下限制 ASML 的 EUV 設備出貨中國——這條線至今沒有鬆動，2026 年反而在收緊。</span></span><span class="st-sig">2019<i>荷蘭首度限制起點</i></span></summary>
+  <div class="body">
+    <p>ASML 是全球唯一能量產 EUV（極紫外光）微影機台的廠商，這類機台是製造最先進邏輯與記憶體晶片不可替代的工具。自 2019 年起，美國與荷蘭政府在《瓦聖納協議》（Wassenaar Arrangement）框架下協調，限制 ASML 向中國出貨 EUV 系統；ASML 至今從未出貨過一台 EUV 機台到中國。荷蘭的出口管制不只涵蓋最先進的 EUV，連部分較舊的浸潤式 DUV 機型（如 2100i、2050i、2000i、1970i、1980i 系列）未經荷蘭政府核發許可，同樣不得出貨中國。</p>
+
+    <h3>2026 年：管制不但沒鬆，反而在往兩個方向擴大</h3>
+    <p>2026 年出現兩條進一步收緊的訊號。第一，美國商務部長 Howard Lutnick 自 2026 年 4 月起，多次私下約談 ASML 高層，質疑該公司是否有一台 EUV 系統違規流入中國——這代表美方對既有管制的執行力道本身產生了疑慮，而不只是規則夠不夠嚴的問題。第二，美國國會正在審議《MATCH 法案》（MATCH Act），目標是把美國對盟友的出口管制施壓「強制化」——若通過，不僅會禁止 ASML 出貨更多舊款 DUV 機型給中國，甚至會禁止 ASML 維護「已經賣到中國」的既有機台；美方同時也在向荷蘭施壓，準備要求荷蘭幾乎全面禁止 ASML 對中國出售任何製程設備。</p>
+
+    <div class="figs">
+      <div class="fg"><span class="v">0<small>台</small></span><span class="k">ASML 歷來出貨中國的 EUV 系統數量</span></div>
+      <div class="fg"><span class="v">2019<small>起</small></span><span class="k">荷蘭在瓦聖納框架下限制 EUV 對中國出貨的起點</span></div>
+      <div class="fg"><span class="v">2027<small>前</small></span><span class="k">ASML EUV 交機排程已滿檔至此，即使解禁短期內產能也優先既有客戶</span></div>
+      <div class="fg"><span class="v">2026-04<small>起</small></span><span class="k">美國商務部長開始就 ASML 是否違規出貨中國展開約談</span></div>
+    </div>
+
+    <p>值得留意的是：NAND 生產不像 DRAM 那樣直接依賴 EUV——NAND 晶圓廠使用的 DUV 微影與蝕刻／沉積設備供應商較多元，市場上可取得性遠高於 EUV。這解釋了 05 節會看到的一個現象：<strong>YMTC 在 NAND 市占率上的進展，明顯快於 CXMT 在 DRAM 市占率上的進展</strong>——兩者面對的設備管制強度並不對稱，NAND 這道牆本來就比 DRAM 矮。</p>
+
+    <div class="callout">
+      <span class="ck">管制的目標不是「今天」，而是「維持世代差距」</span>
+      <p>即使荷蘭政府今天全面解禁，ASML 的 EUV 交機排程已經滿到 2027 年，中國廠商就算拿到訂單也要排隊——這意味著出口管制真正鎖住的不是「中國永遠做不出先進記憶體」，而是<strong>維持一個持續存在、可能被拉長也可能被縮短的世代差距</strong>。這個框架會在 06 節（HBM）與 09 節（歷史對照）反覆出現：門檻的意義從來不是「不可能」，而是「要花多久、多貴」。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s04">
+  <summary><span class="st-n">04</span><span class="st-main"><span class="st-t">DUV 繞道：CXMT 怎麼在沒有 EUV 的情況下量產先進 DRAM</span><span class="st-sub">答案是自對準多重曝光——用更多道工序換一道被鎖住的機台，代價是良率與成本，不是免費的替代方案。</span></span><span class="st-sig">+30%<i>晶圓起始片數</i></span></summary>
+  <div class="body">
+    <p>CXMT 採用的繞道方案是「DUV 多重曝光」：用 193nm 波長的浸潤式 DUV 機台，搭配自對準雙重曝光（SADP）或自對準四重曝光（SAQP）技術，把原本 EUV 一道曝光就能完成的精細圖形，拆成兩到四道分開的曝光與蝕刻工序疊加完成。這不是免費的替代——每多一道曝光工序，就多累積一次疊對誤差（overlay error），也多一道可能拉低良率的製程步驟。</p>
+
+    <h3>量化到「多耗多少」</h3>
+    <p>業界估計，CXMT 的 DUV 多重曝光路線要達到與 EUV 廠商相同的產出，大約需要多耗 <strong>30%</strong> 的晶圓起始片數（wafer starts）——換句話說，做出同樣數量的合格晶片，CXMT 要多跑三成的晶圓進入產線。這個成本劣勢直接反映在每位元成本（cost-per-bit）上，也正是 08 節「蘋果案例」裡 CXMT 無法降價的根本原因：跟上三星、SK 海力士的報價已經是 CXMT 的成本地板，不是還有餘裕可以往下讓的空間。在更高資料速率的產品上（例如 LPDDR6，業界報導 CXMT 版本約落在 12.8 Gbps，落後主流的 14.4 Gbps），累積的疊對誤差還會進一步壓縮可靠通過速度分級（speed binning）的晶粒比例，等於這道劣勢會隨著產品往高階走而放大，不會隨時間自然收斂。</p>
+
+    <div class="calc full">
+      <div class="calc-h">互動推算器　·　DUV 多重曝光的晶圓起始片數代價</div>
+      <div class="calc-i">
+        <div><label for="i-target">目標合格產出（任意單位）</label><input id="i-target" type="number" value="100000" min="1" step="1000"></div>
+        <div><label for="i-overhead">DUV 相對 EUV 多耗比例 %</label><input id="i-overhead" type="number" value="30" min="0" step="1"></div>
+        <div><label for="i-cost">EUV 廠每片晶圓成本（任意幣值單位）</label><input id="i-cost" type="number" value="10000" min="1" step="100"></div>
+      </div>
+      <div class="calc-o">
+        <div class="co"><span class="v" id="o-euv">—</span><span class="k">EUV 路線所需晶圓起始片數</span></div>
+        <div class="co"><span class="v" id="o-duv">—</span><span class="k">DUV 多重曝光路線所需晶圓起始片數</span></div>
+        <div class="co"><span class="v" id="o-mult">—</span><span class="k">每位元成本乘數</span></div>
+      </div>
+      <p class="calc-n">計算式：EUV 片數 ＝ 目標產出（單位換算）；DUV 片數 ＝ EUV 片數 ×（1＋多耗比例）；成本乘數 ＝ DUV 片數 ÷ EUV 片數。⚑ 預設值對應本節引用的「約多耗 30%」估計：同樣的目標產出，CXMT 這條路線要多跑近三成的晶圓，等同每位元成本天生比 EUV 廠高出這個乘數——這就是 08 節蘋果案例裡「CXMT 連折扣都給不起」的算術根源。</p>
+    </div>
+
+    <h3>第三條路：Bonded DRAM</h3>
+    <p>除了多重曝光，CXMT 也在測試第三條繞道路線——「接合式 DRAM」（Bonded DRAM）：把記憶胞陣列與周邊控制電路分別製作在兩片晶圓上，各自用 DUV 多重曝光在各自能達到的製程節點上完成圖案化，再用晶圓對晶圓混合鍵合（hybrid bonding）技術把兩片晶圓接合成一顆晶片。這個做法的邏輯是「把單一晶圓的微縮壓力，拆成兩片晶圓分別承擔」，藉此降低對單一曝光精度的要求——但混合鍵合本身也是精度要求極高的製程，是否能真正降低整體成本仍待驗證。</p>
+
+    <div class="callout">
+      <span class="ck">繞道不是免費的，只是把成本換了一個名目</span>
+      <p>DUV 多重曝光證明了一件事：<strong>出口管制擋不住「做出來」，只能讓「做出來」變貴。</strong>這正是本文 00 節論點的技術根源——CXMT 不是做不出先進 DRAM，而是做出來的每一顆都比對手貴上一截。這道成本差距會不會隨良率爬升而縮小，是接下來幾年最值得追蹤的變數；但至少截至 2026 年 8 月（見 08 節），這道差距仍然真實存在，且大到讓 CXMT 在一次重要的商業談判裡完全沒有議價空間。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ C ══════════ -->
+<div class="phase-rule"><span class="pk">C · 現況與差距</span><span class="pd">市占率數字，以及它們還沒說出口的部分</span></div>
+
+<details class="stage" id="s05">
+  <summary><span class="st-n">05</span><span class="st-main"><span class="st-t">市占率現況：DRAM 排第四，NAND 排第三</span><span class="st-sub">兩個市場的追趕速度並不對稱——這正好對應 03 節「NAND 這道牆本來就比 DRAM 矮」的判讀。</span></span><span class="st-sig">8%<small>vs</small>14%<i>CXMT DRAM／YMTC NAND</i></span></summary>
+  <div class="body">
+    <p>2026 年第一季，CXMT 的全球 DRAM 出貨市占率約 8%，排名第四，落後三星（38%）、SK 海力士（29%）、美光（22%）。分析師估計 CXMT 在核心 DRAM 技術上落後領先廠商約兩到三個世代。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="460" fill="#ffffff"/><text x="450" y="30" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">DRAM 全球市占率（2026 Q1，出貨量）</text><path d="M260,212 L260,62 A150,150 0 0 1 362.68,321.35 Z" fill="#2563eb" stroke="#ffffff" stroke-width="2" data-dim="三星 Samsung"/><text x="346.47" y="181.76" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="三星 Samsung">38.0%</text><path d="M260,212 L362.68,321.35 A150,150 0 0 1 128.55,284.26 Z" fill="#dc2626" stroke="#ffffff" stroke-width="2" data-dim="SK 海力士 SK hynix"/><text x="245.45" y="307.86" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="SK 海力士 SK hynix">29.0%</text><path d="M260,212 L128.55,284.26 A150,150 0 0 1 164.39,96.42 Z" fill="#16a34a" stroke="#ffffff" stroke-width="2" data-dim="美光 Micron"/><text x="168.65" y="198.57" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="美光 Micron">22.0%</text><path d="M260,212 L164.39,96.42 A150,150 0 0 1 231.89,64.66 Z" fill="#d97706" stroke="#ffffff" stroke-width="2" data-dim="長鑫存儲 CXMT"/><text x="220.4" y="131.85" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="長鑫存儲 CXMT">8.0%</text><path d="M260,212 L231.89,64.66 A150,150 0 0 1 260,62 Z" fill="#7c3aed" stroke="#ffffff" stroke-width="2" data-dim="其他"/><g data-dim="三星 Samsung"><rect x="490" y="155" width="12" height="12" rx="2" fill="#2563eb"/><text x="510" y="164" font-size="12.5" fill="#222222" font-family="sans-serif">三星 Samsung</text><text x="870" y="164" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">38 %　38.0%</text></g><g data-dim="SK 海力士 SK hynix"><rect x="490" y="181" width="12" height="12" rx="2" fill="#dc2626"/><text x="510" y="190" font-size="12.5" fill="#222222" font-family="sans-serif">SK 海力士 SK hynix</text><text x="870" y="190" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">29 %　29.0%</text></g><g data-dim="美光 Micron"><rect x="490" y="207" width="12" height="12" rx="2" fill="#16a34a"/><text x="510" y="216" font-size="12.5" fill="#222222" font-family="sans-serif">美光 Micron</text><text x="870" y="216" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">22 %　22.0%</text></g><g data-dim="長鑫存儲 CXMT"><rect x="490" y="233" width="12" height="12" rx="2" fill="#d97706"/><text x="510" y="242" font-size="12.5" fill="#222222" font-family="sans-serif">長鑫存儲 CXMT</text><text x="870" y="242" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">8 %　8.0%</text></g><g data-dim="其他"><rect x="490" y="259" width="12" height="12" rx="2" fill="#7c3aed"/><text x="510" y="268" font-size="12.5" fill="#222222" font-family="sans-serif">其他</text><text x="870" y="268" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">3 %　3.0%</text></g></svg>
+      <div style="font-size:12px;color:#6E7471;text-align:center;margin-top:6px;">資料來源：Counterpoint Research 2026 Q1 Memory &amp; Storage Tracker</div>
+    </div>
+
+    <p>NAND 市場的排位變動更值得注意。2026 年第二季，YMTC 出貨市占率攀升至 14%，年增 22%，<strong>首度超車日廠鎧俠（Kioxia，14%，四捨五入後同數字但實際略低於 YMTC）躋身全球出貨量第三名</strong>，僅次於三星（25%）與 SK 海力士（22%）。但這個排名要打一個折扣看：YMTC 雖然出貨量排第三，營收排名卻只到第五——因為它的產品組合仍集中在消費性應用，高單價的資料中心企業級 SSD（eSSD）占比偏低，而 2026 年第二季市場正好是 eSSD 占比衝上總出貨 48% 的一季，YMTC 在最賺錢的那個區塊參與度還不高。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="460" fill="#ffffff"/><text x="450" y="30" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">NAND 全球市占率（2026 Q2，出貨量）</text><path d="M260,212 L260,62 A150,150 0 0 1 410,212 Z" fill="#2563eb" stroke="#ffffff" stroke-width="2" data-dim="三星 Samsung"/><text x="325.76" y="150.24" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="三星 Samsung">25.0%</text><path d="M260,212 L410,212 A150,150 0 0 1 288.11,359.34 Z" fill="#dc2626" stroke="#ffffff" stroke-width="2" data-dim="SK 海力士 SK hynix"/><text x="331.66" y="275.28" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="SK 海力士 SK hynix">22.0%</text><path d="M260,212 L288.11,359.34 A150,150 0 0 1 164.39,327.58 Z" fill="#16a34a" stroke="#ffffff" stroke-width="2" data-dim="長江存儲 YMTC"/><text x="236.87" y="306.08" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="長江存儲 YMTC">14.0%</text><path d="M260,212 L164.39,327.58 A150,150 0 0 1 110,212 Z" fill="#d97706" stroke="#ffffff" stroke-width="2" data-dim="鎧俠 Kioxia"/><text x="175.85" y="255.6" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="鎧俠 Kioxia">14.0%</text><path d="M260,212 L110,212 A150,150 0 0 1 157.32,102.65 Z" fill="#7c3aed" stroke="#ffffff" stroke-width="2" data-dim="美光 Micron"/><text x="174.65" y="179.07" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="美光 Micron">13.0%</text><path d="M260,212 L157.32,102.65 A150,150 0 0 1 250.58,62.3 Z" fill="#0891b2" stroke="#ffffff" stroke-width="2" data-dim="SanDisk"/><text x="223.07" y="130.65" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff" font-family="sans-serif" data-dim="SanDisk">11.0%</text><path d="M260,212 L250.58,62.3 A150,150 0 0 1 260,62 Z" fill="#db2777" stroke="#ffffff" stroke-width="2" data-dim="其他"/><g data-dim="三星 Samsung"><rect x="490" y="129" width="12" height="12" rx="2" fill="#2563eb"/><text x="510" y="138" font-size="12.5" fill="#222222" font-family="sans-serif">三星 Samsung</text><text x="870" y="138" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">25 %　25.0%</text></g><g data-dim="SK 海力士 SK hynix"><rect x="490" y="155" width="12" height="12" rx="2" fill="#dc2626"/><text x="510" y="164" font-size="12.5" fill="#222222" font-family="sans-serif">SK 海力士 SK hynix</text><text x="870" y="164" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">22 %　22.0%</text></g><g data-dim="長江存儲 YMTC"><rect x="490" y="181" width="12" height="12" rx="2" fill="#16a34a"/><text x="510" y="190" font-size="12.5" fill="#222222" font-family="sans-serif">長江存儲 YMTC</text><text x="870" y="190" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">14 %　14.0%</text></g><g data-dim="鎧俠 Kioxia"><rect x="490" y="207" width="12" height="12" rx="2" fill="#d97706"/><text x="510" y="216" font-size="12.5" fill="#222222" font-family="sans-serif">鎧俠 Kioxia</text><text x="870" y="216" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">14 %　14.0%</text></g><g data-dim="美光 Micron"><rect x="490" y="233" width="12" height="12" rx="2" fill="#7c3aed"/><text x="510" y="242" font-size="12.5" fill="#222222" font-family="sans-serif">美光 Micron</text><text x="870" y="242" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">13 %　13.0%</text></g><g data-dim="SanDisk"><rect x="490" y="259" width="12" height="12" rx="2" fill="#0891b2"/><text x="510" y="268" font-size="12.5" fill="#222222" font-family="sans-serif">SanDisk</text><text x="870" y="268" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">11 %　11.0%</text></g><g data-dim="其他"><rect x="490" y="285" width="12" height="12" rx="2" fill="#db2777"/><text x="510" y="294" font-size="12.5" fill="#222222" font-family="sans-serif">其他</text><text x="870" y="294" text-anchor="end" font-size="12" fill="#555555" font-family="sans-serif">1 %　1.0%</text></g></svg>
+      <div style="font-size:12px;color:#6E7471;text-align:center;margin-top:6px;">資料來源：Counterpoint Research 2026 Q2 Memory &amp; Storage Tracker；YMTC 首度超車 Kioxia 躋身全球出貨量第三</div>
+    </div>
+
+    <div class="marg"><b>YMTC 的官方目標</b>YMTC 已於 2025 年 9 月registered成立「長存三期（武漢）」，目標是 2026 年底前把全球 NAND 出貨市占率推升至 15%——2026 Q2 的 14% 已相當接近這個目標。</div>
+
+    <div class="callout">
+      <span class="ck">出貨量市占率會誤導，因為它沒告訴你「賣的是什麼」</span>
+      <p>DRAM 與 NAND 的市占率排名看似都在向 CXMT／YMTC 傾斜，但兩者的「含金量」差很多：CXMT 的 8% 是在美光、SK 海力士、三星都聚焦利潤更高的 HBM／伺服器產品時，靠消費級與利基型 DRAM 撐起來的；YMTC 的 14% 同樣集中在消費端，尚未真正打入占比最重的企業級 eSSD 市場。<strong>市占率數字本身正在快速逼近，但市占率背後的產品組合與利潤率，追趕速度慢得多</strong>——這正是 06 節要進一步拆開的 HBM 戰場。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s06">
+  <summary><span class="st-n">06</span><span class="st-main"><span class="st-t">HBM：AI 需求下的最前線戰場</span><span class="st-sub">三家龍頭壟斷 95% 以上的 HBM 市場，CXMT 才剛做到 HBM3 量產，落後幅度估計約三年。</span></span><span class="st-sig">95%<small>+</small><i>三星／SK海力士／美光合計市占</i></span></summary>
+  <div class="body">
+    <p>HBM（高頻寬記憶體）是 2026 年記憶體業獲利最豐厚、也是 AI 加速卡不可或缺的關鍵零組件——本系列另一篇筆記《拆開兩座機櫃：AMD Helios 對照 Nvidia Vera Rubin》已詳細拆解過 HBM4 在機櫃層級的成本占比（Vera Rubin 單組 Superchip 裡，記憶體成本占比已逼近六成），此處不重複，只聚焦中國廠商在這個戰場上的位置。</p>
+    <p>三星、SK 海力士、美光三家合計壟斷全球 HBM 市場 95% 以上。三星的 16 層 HBM4 已通過 Nvidia、AMD 認證並率先量產；SK 海力士規劃 HBM4 於稍後量產；美光則聚焦 12 層堆疊方案。CXMT 目前只做到 HBM3 量產，技術世代落後估計約三年——它的初期產品多半仍是 HBM3E 或 HBM3，落後正持續推進 HBM4／HBM4E 的競爭對手一到兩個世代。市場預估 CXMT 2026 年 HBM3 相關晶粒（die）產出約 700 萬顆，約可支援 60 萬顆效能相當於 Nvidia H100 等級的 AI 晶片——這個量級相對三星、SK 海力士的月產能，仍是小巫見大巫。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>廠商</th><th class="wrap">HBM 世代進度（2026）</th><th class="wrap">認證／量產狀態</th></tr></thead>
+        <tbody>
+          <tr><td>三星 Samsung</td><td>16 層 HBM4</td><td>已通過 Nvidia、AMD 認證，率先量產</td></tr>
+          <tr><td>SK 海力士 SK hynix</td><td>HBM4</td><td>規劃量產中</td></tr>
+          <tr><td>美光 Micron</td><td>HBM4（12 層堆疊）</td><td>聚焦 12 層堆疊方案</td></tr>
+          <tr><td>長鑫存儲 CXMT</td><td>HBM3（HBM3E 尚在推進）</td><td>已量產 HBM3，落後約 3 年</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　⚑ HBM3→HBM3E→HBM4 世代落差以外部研究機構「約三年」估計整理，各機構口徑略有差異；此差距近年已從「五年以上」大幅收斂，但收斂速度不等於已經追平。</p>
+
+    <div class="callout">
+      <span class="ck">為什麼 HBM 是比 DRAM 市占率更關鍵的觀察指標</span>
+      <p>HBM 的核心製程是把多層 DRAM 晶粒用矽穿孔（TSV）與混合鍵合垂直堆疊——這等於把 01 節「DRAM 電容微縮」與「先進封裝精度」兩道門檻疊在一起，任何一道良率沒跟上都會讓整組堆疊報廢。CXMT 目前連 HBM3 量產都才剛起步，代表它在「基礎 DRAM 製程」與「先進封裝」這兩條技能樹上都還在追趕——03、04 節的 EUV／DUV 落差，會在 HBM 這個更高難度的產品上被進一步放大，而不是縮小。這也是為什麼即使 CXMT 的 DRAM 整體市占率持續成長，它在 AI 加速卡這個 2026 年最賺錢的記憶體應用場景裡，幾乎還沒有真正的存在感。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ D ══════════ -->
+<div class="phase-rule"><span class="pk">D · 現實驗證</span><span class="pd">兩個 2026 年案例，把抽象的門檻變成具體數字</span></div>
+
+<details class="stage" id="s07">
+  <summary><span class="st-n">07</span><span class="st-main"><span class="st-t">案例一：CXMT 上海科創板上市——86 億美元戰爭基金，與隨之而來的國安疑慮</span><span class="st-sub">單日暴漲 466%，市值衝上 4,890 億美元，卻同時觸發國防部採購禁令與國會安全調查——資本市場與國安機關對同一件事給出了完全相反的訊號。</span></span><span class="st-sig">$489B<i>掛牌市值（約當）</i></span></summary>
+  <div class="body">
+    <p>CXMT 於 2026 年 7 月 27 日在上海科創板掛牌，發行價每股 8.66 元人民幣，開盤即衝上 49.50 元，收盤漲幅約 466%（盤中一度觸及 535%），市值來到約人民幣 3.31 兆元（約當 4,890 億美元），成為 A 股市值最高的上市公司之一，也是 2026 年迄今亞洲規模最大的 IPO。CXMT 目前產能排名中國第一、全球第四，2025 年已轉虧為盈，並預告 2026 上半年營收年增逾 600%、淨利年增逾 2,200%。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 426" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="426" fill="#ffffff"/><text x="450" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">出口管制與 CXMT／YMTC 追趕時間軸</text><line x1="224" y1="58" x2="224" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="224" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2019 Q1</text><line x1="243.18" y1="58" x2="243.18" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="262.35" y1="58" x2="262.35" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="281.53" y1="58" x2="281.53" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="281.53" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2019 Q4</text><line x1="300.71" y1="58" x2="300.71" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="319.88" y1="58" x2="319.88" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="339.06" y1="58" x2="339.06" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="339.06" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2020 Q3</text><line x1="358.24" y1="58" x2="358.24" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="377.41" y1="58" x2="377.41" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="396.59" y1="58" x2="396.59" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="396.59" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2021 Q2</text><line x1="415.76" y1="58" x2="415.76" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="434.94" y1="58" x2="434.94" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="454.12" y1="58" x2="454.12" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="454.12" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2022 Q1</text><line x1="473.29" y1="58" x2="473.29" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="492.47" y1="58" x2="492.47" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="511.65" y1="58" x2="511.65" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="511.65" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2022 Q4</text><line x1="530.82" y1="58" x2="530.82" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="550" y1="58" x2="550" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="569.18" y1="58" x2="569.18" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="569.18" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2023 Q3</text><line x1="588.35" y1="58" x2="588.35" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="607.53" y1="58" x2="607.53" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="626.71" y1="58" x2="626.71" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="626.71" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2024 Q2</text><line x1="645.88" y1="58" x2="645.88" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="665.06" y1="58" x2="665.06" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="684.24" y1="58" x2="684.24" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="684.24" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2025 Q1</text><line x1="703.41" y1="58" x2="703.41" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="722.59" y1="58" x2="722.59" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="741.76" y1="58" x2="741.76" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="741.76" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2025 Q4</text><line x1="760.94" y1="58" x2="760.94" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="780.12" y1="58" x2="780.12" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="799.29" y1="58" x2="799.29" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="799.29" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2026 Q3</text><line x1="818.47" y1="58" x2="818.47" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="837.65" y1="58" x2="837.65" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="856.82" y1="58" x2="856.82" y2="400" stroke="#eeeeee" stroke-width="1"/><text x="856.82" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2027 Q2</text><line x1="876" y1="58" x2="876" y2="400" stroke="#eeeeee" stroke-width="1"/><line x1="224" y1="58" x2="876" y2="58" stroke="#111111" stroke-width="1.2"/><text x="14" y="80" font-size="11" font-weight="600" fill="#111111" letter-spacing=".04em" font-family="sans-serif">出口管制／地緣政治</text><line x1="14" y1="85" x2="876" y2="85" stroke="#dddddd" stroke-width="1"/><text x="24" y="108" font-size="11.5" fill="#222222" font-family="sans-serif">荷蘭在 Wassenaar 架構下限制 AS…</text><path d="M224,97.5 L230.5,104 L224,110.5 L217.5,104 Z" fill="#b91c1c" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="120" width="862" height="32" fill="#fafafa"/><text x="24" y="140" font-size="11.5" fill="#222222" font-family="sans-serif">美國商務部將 YMTC 列入出口管制…</text><path d="M511.6470588235294,129.5 L518.1470588235294,136 L511.6470588235294,142.5 L505.1470588235294,136 Z" fill="#b91c1c" stroke="#ffffff" stroke-width="1.5"/><text x="24" y="172" font-size="11.5" fill="#222222" font-family="sans-serif">美國國防部將 YMTC 列入 1260H …</text><path d="M607.5294117647059,161.5 L614.0294117647059,168 L607.5294117647059,174.5 L601.0294117647059,168 Z" fill="#b91c1c" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="184" width="862" height="32" fill="#fafafa"/><text x="24" y="204" font-size="11.5" fill="#222222" font-family="sans-serif">CXMT 遭美國防部採購禁令：直接禁…</text><rect x="799.08" y="192" width="76.71" height="16" rx="3" fill="#b91c1c" fill-opacity="0.85"/><text x="24" y="236" font-size="11.5" fill="#222222" font-family="sans-serif">美方向荷蘭施壓擴大禁令；MATCH …</text><rect x="780.12" y="224" width="29.49" height="16" rx="3" fill="#ea580c" fill-opacity="0.85"/><text x="14" y="264" font-size="11" font-weight="600" fill="#111111" letter-spacing=".04em" font-family="sans-serif">CXMT／YMTC 追趕進度</text><line x1="14" y1="269" x2="876" y2="269" stroke="#dddddd" stroke-width="1"/><rect x="14" y="272" width="862" height="32" fill="#fafafa"/><text x="24" y="292" font-size="11.5" fill="#222222" font-family="sans-serif">YMTC NAND 市占率達 14%，首度超…</text><path d="M780.1176470588235,281.5 L786.6176470588235,288 L780.1176470588235,294.5 L773.6176470588235,288 Z" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/><text x="24" y="324" font-size="11.5" fill="#222222" font-family="sans-serif">CXMT 上海科創板上市，募資 86 …</text><path d="M804.6552814674325,313.5 L811.1552814674325,320 L804.6552814674325,326.5 L798.1552814674325,320 Z" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="336" width="862" height="32" fill="#fafafa"/><text x="24" y="356" font-size="11.5" fill="#222222" font-family="sans-serif">IPO 單日暴漲 466%，觸發國會安…</text><path d="M804.8614800759021,345.5 L811.3614800759021,352 L804.8614800759021,358.5 L798.3614800759021,352 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><text x="24" y="388" font-size="11.5" fill="#222222" font-family="sans-serif">蘋果測試 CXMT DRAM 議價破局，…</text><path d="M806.7172675521754,377.5 L813.2172675521754,384 L806.7172675521754,390.5 L800.2172675521754,384 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><line x1="809.81" y1="58" x2="809.81" y2="400" stroke="#111111" stroke-width="1.6" stroke-dasharray="5 3"/><text x="804.81" y="416" text-anchor="end" font-size="10.5" fill="#111111" font-weight="600" font-family="sans-serif">本文撰寫時點</text></svg>
+      <div style="font-size:12px;color:#6E7471;text-align:center;margin-top:6px;">資料來源：本文彙整公開報導；「美方向荷蘭施壓」一項標示為持續進行中（至本文撰寫時點 2026-08-21 尚未有最終結果）</div>
+    </div>
+
+    <h3>兩種恐慌的同時發生：股價恐慌與國安恐慌</h3>
+    <p>IPO 隔天，SanDisk 股價下跌 12%、美光下跌 5%、SK 海力士下跌 6%——市場的第一反應是「中國記憶體業比想像中強」。但幾乎在同一時間，至少半打美國國會議員準備聯名致函川普政府，一名聯邦官員向媒體表示「有真實的懷疑」認為中共當局介入了這波股價行情；CXMT 是否會被納入美國商務部實體清單，成了懸而未決的變數——若真被納入，將嚴重限制它取得製造設備升級的能力。與此同時，依據 2024 財年《國防授權法案》（NDAA）第 805 條，美國國防部已從 2026 年 6 月 30 日起禁止與 CXMT 這類「1260H 清單」實體直接簽約或續約；一年後的 2027 年 6 月 30 日，間接採購禁令也將生效——換句話說，CXMT 即使掛牌成功、募資到位，來自美國政府體系的採購大門正在被逐步關上。</p>
+
+    <h3>兩家機構，兩種解讀：Nomura 看好三倍，Morningstar 抓出 30% 成本天花板</h3>
+    <p>掛牌後，日系券商 Nomura 看好 CXMT 股價還有三倍空間；同一時間 Morningstar 則指出一道約 30% 的成本天花板（即 04 節 DUV 多重曝光帶來的成本劣勢），以及約三年的 HBM 世代落差、2027 年底才會全面生效的美國聯邦採購禁令，共同把這個天價估值的合理性打上問號。<strong>這正呼應本系列另一篇筆記（AMD Helios vs Vera Rubin）00 節提出的判讀模式：兩家機構對同一件事給出差異巨大的結論，這個分歧本身往往比任何單一數字更值得停留。</strong></p>
+
+    <div class="callout">
+      <span class="ck">資本市場的熱情，蓋不住成本結構的現實</span>
+      <p>466% 的單日漲幅是市場情緒的訊號，不是技術追趕速度的訊號。把 IPO 熱潮、國會調查、國防部禁令、機構估值分歧四件事放在一起看，會發現華盛頓與投資人對「CXMT 有多危險」的判斷幾乎完全相反——這種分歧本身就是本文 00 節論點的最佳註腳：<strong>市占率與資本能同時快速成長，但成本結構（04 節那道 30% 的地板）不會因為股價上漲而跟著消失。</strong>08 節會看到，這道成本地板在一次真實商業談判裡是怎麼具體發揮作用的。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s08">
+  <summary><span class="st-n">08</span><span class="st-main"><span class="st-t">案例二：蘋果的槓桿賭注為何失敗</span><span class="st-sub">蘋果想用 CXMT 當籌碼向三星、SK 海力士議價，結果 CXMT 連折扣都給不起——這是「技術門檻＝成本地板」這個抽象命題在真實談判桌上的具體證據。</span></span><span class="st-sig">0<i>CXMT 願意給出的折扣空間</i></span></summary>
+  <div class="body">
+    <p>2026 年記憶體全面缺貨、報價飆漲，幾乎讓所有蘋果裝置的物料成本跟著上升。蘋果於是進入測試 CXMT DRAM 顆粒的階段，盤算是：只要能證明自己有一個「可信的中國替代供應商」，就能反過來向三星、SK 海力士施壓，要求它們壓低報價。這個策略在其他零組件類別上，蘋果過去不是沒有成功過。</p>
+    <p>但這次的結果是：CXMT 拒絕給出折扣。當蘋果試圖為 LPDDR5X 議一個更低的報價時，CXMT 直接回絕，報價維持在與三星、SK 海力士相同甚至更高的水準。原因正是 04 節拆解過的成本結構——CXMT 因為缺乏 EUV，必須靠 DUV 多重曝光生產，同樣的產出要多耗約 30% 的晶圓起始片數，這道額外成本讓「與韓廠打平」已經是 CXMT 的定價下限，而不是它還有空間可以往下讓的起點。沒有一個可信的更便宜替代選項可以拿出來，蘋果這步棋等於落空：三星、SK 海力士因此不再面臨更低價格的競爭壓力。</p>
+
+    <div class="figs">
+      <div class="fg"><span class="v">30<small>%</small></span><span class="k">CXMT 相對 EUV 廠的晶圓起始片數劣勢（見 04 節）</span></div>
+      <div class="fg"><span class="v">≥<small></small></span><span class="k">CXMT 對蘋果的 LPDDR5X 報價，相對三星／SK 海力士的相對水準</span></div>
+      <div class="fg"><span class="v">0<small></small></span><span class="k">蘋果最終取得的折扣</span></div>
+    </div>
+
+    <div class="callout">
+      <span class="ck">這正是本文 00 節論點的最直接證據</span>
+      <p>如果「技術門檻」只是一句公關語言，CXMT 大可以用虧本價搶下蘋果這張指標性訂單，換取品牌信任與後續議價力——這在商業競爭裡是常見打法。但它沒有這麼做，<strong>因為它做不到</strong>：04 節算出來的那道 30% 成本劣勢，不是本文的理論推導，而是在一次蘋果與 CXMT 的真實議價桌上，被具體驗證過的地板。市占率數字（05 節）可以靠低毛利甚至虧損衝出來，但當買家主動找上門要求更低價格時，成本結構是唯一說了算的東西。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ E ══════════ -->
+<div class="phase-rule"><span class="pk">E · 歷史與供應鏈</span><span class="pd">這不是第一次用貿易手段打斷技術追趕</span></div>
+
+<details class="stage" id="s09">
+  <summary><span class="st-n">09</span><span class="st-main"><span class="st-t">歷史對照：1986 年美日半導體協定</span><span class="st-sub">上一次「用貿易手段介入記憶體技術競爭」的先例，結局既不是日本被打垮，也不是管制完全無效，而是第三方（韓國、台灣）意外崛起。</span></span><span class="st-sig">70%<small>→</small>20%<i>美國 DRAM 市占率 1978–1986</i></span></summary>
+  <div class="body">
+    <p>1978 到 1987 年間，日本的全球半導體市占率從 28% 攀升到 50%，美國則從 55% 掉到 44%；單看 DRAM，美國市占率從 1978 年的 70% 崩跌到 1986 年的 20%，日本則從不到 30% 暴衝到 75%。這段期間被指控的是「傾銷」——日本廠商以低於成本的價格在海外市場拋售 DRAM，換取市占率。1986 年 9 月 2 日，美日兩國簽署《美日半導體協定》，日本承諾改善外國企業進入日本市場的待遇，並停止在全球市場的傾銷行為。</p>
+
+    <h3>結局：管制的最大受益者不是發起管制的一方</h3>
+    <p>這份協定的直接輸家是半導體的下游使用者，尤其是依賴 DRAM 的電腦製造商——供給受限推升了價格。但更值得注意的是中期結局：到 1993 年，美國重新奪回產業市占率領先地位；與此同時，日本廠商在泡沫經濟破裂後普遍投資不足，加上垂直整合的管理結構效率低落，讓當時還是配角的<strong>南韓與台灣廠商藉機在技術創新上迎頭趕上</strong>——這正是三星、SK 海力士今天能站上 DRAM 龍頭位置的歷史起點之一。</p>
+
+    <div class="callout">
+      <span class="ck">歷史不會重演，但機制值得對照</span>
+      <p>1986 年那次管制的機制是貿易配額與反傾銷協定，鎖住的是「價格與市場准入」；這次對 CXMT／YMTC 的管制機制是設備出口管制，鎖住的是「先進製程的可取得性」——兩者的作用點不同，不能直接類比套用同一套劇本。但有一個結構性教訓值得放進本文的判讀框架：<strong>當一場管制成功拖慢了頭號目標的技術進程，市場份額的空缺往往不會乖乖回流到發起管制的一方，而是被場邊的第三者撿走。</strong>上一輪是南韓、台灣；這一輪如果荷蘭與美國真的把 CXMT／YMTC 的追趕速度長期壓在世代差距之內，誰會是下一個意外受益者——是既有三巨頭鞏固優勢，還是南亞科、力積電這類台灣廠商在利基型記憶體找到新的成長空間（見 10 節）——是接下來幾年真正值得持續追蹤的問題，而不是本文能替讀者下的結論。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s10">
+  <summary><span class="st-n">10</span><span class="st-main"><span class="st-t">台灣供應鏈連動：誰在這場資本支出競賽裡卡位</span><span class="st-sub">台灣廠商多半不直接參與 DRAM／NAND 晶圓製造的正面對決，而是在利基型記憶體、模組與控制晶片這幾個側翼卡位受惠。</span></span><span class="st-sig">4<i>家台灣受惠廠商（本節聚焦）</i></span></summary>
+  <div class="body">
+    <p>台灣在 DRAM／NAND 主流晶圓製造上並非直接參賽者——三星、SK 海力士、美光、CXMT、YMTC 這場正面對決的主戰場在南韓、美國與中國。但 2026 年這波由 HBM 排擠效應帶動的記憶體超級循環（HBM 產能被三巨頭優先挪去做 AI 加速卡用的高毛利產品，排擠了傳統 DRAM／NAND 的供給），讓台灣幾家聚焦利基型記憶體與周邊模組的廠商明顯受惠。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>公司</th><th class="wrap">定位</th><th class="wrap">2026 年受惠邏輯</th></tr></thead>
+        <tbody>
+          <tr><td>南亞科 Nanya Technology（2408）</td><td>台灣唯一自有晶圓廠的 DRAM 設計製造廠</td><td>受惠 HBM 排擠效應推升傳統 DRAM 報價，加速 DDR5、LPDDR5 與 AI 客製化記憶體布局</td></tr>
+          <tr><td>華邦電 Winbond（2344）</td><td>利基型記憶體（DDR4／LPDDR4／NOR Flash／SLC NAND）</td><td>三巨頭把產能轉向 HBM／先進 DRAM 後，退出的舊世代利基市場報價同步走高</td></tr>
+          <tr><td>群聯 Phison（8299）</td><td>NAND 控制晶片與模組整合</td><td>NAND 報價上漲加上 AI 資料中心擴建帶動的儲存需求成長，直接反映在控制晶片出貨與模組毛利</td></tr>
+          <tr><td>力積電 Powerchip（6770）</td><td>晶圓代工（含利基型記憶體代工）</td><td>承接部分不需要最先進製程的記憶體與邏輯代工訂單</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　本表聚焦與記憶體報價／需求直接相關的台灣上市公司，非窮舉整條供應鏈；各公司實際受惠幅度取決於個別產品組合與客戶結構，本文未逐一查證各公司財報數字，僅整理公開產業報導的受惠邏輯方向。</p>
+
+    <div class="callout">
+      <span class="ck">台灣供應鏈的位置：側翼受惠者，不是正面參賽者</span>
+      <p>把 09 節的歷史對照接回這裡看會更清楚：1986 年那一輪美日貿易管制，最終讓場邊的南韓、台灣廠商意外崛起成為新的正面參賽者；但 2026 年這一輪，台灣廠商目前的角色更多是「側翼受惠」——靠三巨頭把產能重心移往 HBM／先進 DRAM 後空出來的利基型市場報價上漲得利，而不是直接下場挑戰三星、SK 海力士、美光在先進製程上的地位。這個角色會不會隨時間演變成更主動的參與者，取決於南亞科這類廠商在 HBM 或先進封裝領域是否能找到切入點——這是一個開放問題，本文暫不做預測。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ 附錄 ══════════ -->
+<section class="thesis" id="appendix" style="margin-top:clamp(3rem,7vw,5rem)">
+  <p class="sec-mark">◇ · 附錄</p>
+  <h2>方法、數據標註與來源</h2>
+
+  <div style="max-width:var(--read)">
+    <h3>三類數據的區分</h3>
+    <ul>
+      <li><span class="tag">公開規格</span>　廠商官方揭露或 IPO 說明書之數值（如 CXMT 產能規劃、YMTC 產品世代）。</li>
+      <li><span class="tag">產業估計</span>　研究機構匯整之區間值或點估計（市占率、CapEx、技術世代差距）。這類數字波動大，本文一律標明來源機構與估算基礎。</li>
+      <li><span class="tag">本文推導</span>　由前兩類明示公式推得（DUV 晶圓起始片數推算器）。假設寫在公式旁，可自行代入不同參數複核。</li>
+    </ul>
+
+    <h3>已知限制</h3>
+    <p>本文寫成於 2026 年 8 月下旬，CXMT 是否會被美國商務部納入實體清單、MATCH Act 是否通過、荷蘭是否進一步擴大對 ASML 的出口限制，截至撰稿時均尚無定論——07 節的時間軸圖已將這些進行中事項標示為「持續進行」而非既定結果。市占率數字（05 節）與產能估計（02 節）採不同機構、不同統計口徑，僅供量級參考，不宜直接用於財務建模。09 節的歷史對照為本文對公開歷史文獻的整理與類比推論，兩次管制的法律機制本質不同，類比僅供框架參考，不代表本文預測相同結局會重演。10 節台灣供應鏈段落未逐一查證個別公司財報，受惠邏輯之方向性整理，信心度低於本文其餘具名機構估算之處。</p>
+  </div>
+
+  <h3>延伸科普影片</h3>
+  <p style="max-width:var(--read);font-size:13.5px;color:var(--ink-3);margin-bottom:1rem">以下為 Redknot-乔红（B站／YouTube 科普動畫創作者）的原理動畫系列，用於輔助理解 01 節提到的晶胞層級運作機制，屬於視覺化輔助參考，非本文數據來源；本文相關技術敘述為對半導體業界公開技術資料的整理，未逐字轉引影片內容。</p>
+  <ul style="max-width:var(--read);font-size:13.5px;margin-bottom:2rem">
+    <li><a href="https://www.youtube.com/watch?v=bqImyyk1bMQ">用最好的動畫為你講解——內存的原理</a>　DRAM 電容儲存與刷新機制動畫解說</li>
+    <li><a href="https://www.youtube.com/watch?v=rQR_0WZzjV4">用最好的動畫為你講解——固態硬碟（SSD）的原理</a>　浮動閘極／電荷捕捉與 NAND Flash 動畫解說</li>
+    <li><a href="https://www.youtube.com/watch?v=yF2BY8kQfyo">用最好的動畫為你講解——HBM 的原理</a>　TSV 堆疊與 HBM 製造流程動畫解說</li>
+    <li><a href="https://www.youtube.com/watch?v=FvWfAgNyEWc">什麼是硬碟陣列？Raid 5 為什麼不安全？</a>　URE 與 RAID 5 重建風險動畫解說，對應本文 01 節「下游代價」一段</li>
+  </ul>
+
+  <h3>主要參考來源</h3>
+  <ol class="srcs">
+    <li><a href="https://www.techpowerup.com/342882/memory-industry-to-maintain-cautious-capex-in-2026-with-limited-impact-on-bit-supply-growth">TechPowerUp — 2026 年記憶體業 CapEx 展望</a></li>
+    <li><a href="https://www.trendforce.com/presscenter/news/20251113-12780.html">TrendForce — DRAM／NAND 2026 年資本支出估計</a></li>
+    <li><a href="https://www.digitimes.com/news/a20251218VL201/micron-2026-fab-capex-expansion.html">DigiTimes — 美光 FY26 CapEx 上修至 200 億美元</a></li>
+    <li><a href="https://semiengineering.com/how-to-make-3d-nand/">SemiEngineering — 3D NAND 製造流程解析</a></li>
+    <li><a href="https://www.techpowerup.com/350478/samsung-and-sk-hynix-to-expand-semiconductor-capacity-with-usd-870-billion-plan">TechPowerUp — 三星／SK 海力士 8,700 億美元擴產計畫</a></li>
+    <li><a href="https://en.sedaily.com/finance/2026/01/01/samsung-sk-hynix-launch-massive-chip-capex-race-investment">Seoul Economic Daily — 三星／SK 海力士 CapEx 競賽</a></li>
+    <li><a href="https://asiatimes.com/2026/07/chinas-multi-front-campaign-to-blunt-and-beat-us-chip-bans/">Asia Times — 中國多線因應美方晶片禁令</a></li>
+    <li><a href="https://nltimes.nl/2026/08/20/us-preparing-force-netherlands-ban-asml-selling-china">NL Times — 美國擬迫使荷蘭全面禁售 ASML 設備予中國</a></li>
+    <li><a href="https://www.aipolicybulletin.org/articles/dutch-export-controls-dont-go-far-enough-on-china">AI Policy Bulletin — 荷蘭出口管制現況評估</a></li>
+    <li><a href="https://finance.biggo.com/news/M2Meb54BX0tZvRTv47qz">BigGo Finance — CXMT 通過科創板審核，估值 44 億美元</a></li>
+    <li><a href="https://www.cnbc.com/2026/07/27/cxmt-china-market-debut-chipmaker-ipo.html">CNBC — CXMT 掛牌單日暴漲 466%</a></li>
+    <li><a href="https://asia.nikkei.com/business/markets/cxmt-listing-propels-star-market-china-s-nasdaq-to-the-big-time">Nikkei Asia — CXMT 掛牌推升科創板地位</a></li>
+    <li><a href="https://www.techtimes.com/articles/321667/20260727/cxmt-debuts-489b-dod-ban-three-year-hbm-deficit-trail-pop.htm">Tech Times — CXMT 掛牌市值 4,890 億美元，國防部禁令與 HBM 落差並存</a></li>
+    <li><a href="https://www.techtimes.com/articles/321807/20260728/cxmts-466-first-day-surge-spooked-micron-triggered-capitol-hill-probe.htm">Tech Times — CXMT 暴漲觸發國會調查，美光股價受衝擊</a></li>
+    <li><a href="https://www.techtimes.com/articles/321720/20260727/cxmt-surges-466-489b-nomura-sees-tripling-morningstar-flags-30-cost-ceiling.htm">Tech Times — Nomura 看好三倍 vs Morningstar 30% 成本天花板</a></li>
+    <li><a href="https://redstate.com/wardclark/2026/07/28/us-lawmakers-sound-alarm-security-probe-launched-on-chinese-chipmaker-cxmt-amid-ipo-concerns-n2204864">RedState — 美國國會議員對 CXMT IPO 展開安全調查</a></li>
+    <li><a href="https://www.techtimes.com/articles/323140/20260805/apples-cxmt-gambit-collapses-duv-cost-gap-locks-samsungs-pricing-power.htm">Tech Times — 蘋果的 CXMT 槓桿賭注失敗，DUV 成本差鎖住三星定價權</a></li>
+    <li><a href="https://www.macrumors.com/2026/08/06/apples-bid-to-use-chinese-chipmaker-backfires/">MacRumors — 蘋果借力 CXMT 議價策略失效</a></li>
+    <li><a href="https://www.sammyfans.com/2026/08/10/apple-iphone-close-to-using-cxmt-dram/">Sammy Fans — 蘋果評估使用 CXMT DRAM 的過程</a></li>
+    <li><a href="https://finance.biggo.com/news/b3aa3e99-4741-451c-9735-bd7839939926">BigGo Finance — CXMT 拒絕成為 iPhone 第三家 DRAM 供應商</a></li>
+    <li><a href="https://www.linkedin.com/pulse/extension-duv-multipatterning-toward-3nm-frederick-chen">LinkedIn／Frederick Chen — DUV 多重曝光技術延伸至 3nm 的分析</a></li>
+    <li><a href="https://finance.biggo.com/news/WxjniZ0Bh5an-7GhJc_9">BigGo Finance — HBM4 量產競賽，CXMT 加速追趕</a></li>
+    <li><a href="https://wccftech.com/report-china-closes-hbm-gap-with-korea-to-just-three-years-as-cxmt-hits-technology-parity-on-hbm3/">WCCFTech — 中國 HBM 落差收斂至三年，CXMT 達成 HBM3 技術對等</a></li>
+    <li><a href="https://www.cnbc.com/2026/07/31/cxmts-sk-hynix-samsung-micron-memory-chip.html">CNBC — CXMT 掛牌後對三大龍頭的下一步挑戰</a></li>
+    <li><a href="https://ai-frontiers.org/articles/high-bandwidth-memory-critical-gaps-us-export-controls">AI Frontiers — HBM 出口管制的關鍵缺口分析</a></li>
+    <li><a href="https://counterpointresearch.com/en/insights/nand-revenues-record-high-q1-2026-from-ai-demand">Counterpoint Research — 2026 Q1 全球 NAND 營收創新高</a></li>
+    <li><a href="https://counterpointresearch.com/en/insights/server-led-essds-hit-48-percent-of-nand-shipments">Counterpoint Research — 企業級 eSSD 占 NAND 出貨 48%，YMTC 躋身全球前三</a></li>
+    <li><a href="https://www.digitalcitizen.life/ymtc-becomes-worlds-third-largest-nand-supplier-with-14-percent-market-share">Digital Citizen — YMTC 成為全球第三大 NAND 供應商</a></li>
+    <li><a href="https://www.blocksandfiles.com/flash/2026/07/03/kioxia-and-sandisk-sample-shipping-332-layer-3d-nand/5266362">Blocks and Files — Kioxia／SanDisk 332 層 3D NAND 樣品出貨</a></li>
+    <li><a href="https://www.techtimes.com/articles/323160/20260805/kioxia-squeezes-38-more-data-per-chip-samsung-68-fewer-layers.htm">Tech Times — Kioxia 以更少層數做到更高密度</a></li>
+    <li><a href="https://www.blocksandfiles.com/flash/2026/05/28/samsung-opens-door-to-900-layer-3d-nand/5247975">Blocks and Files — 三星展示 900 層 3D NAND 研發成果</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/1986_U.S.%E2%80%93Japan_Semiconductor_Agreement">Wikipedia — 1986 年美日半導體協定</a></li>
+    <li><a href="https://www.nber.org/system/files/chapters/c8717/c8717.pdf">NBER — 美日半導體貿易衝突研究</a></li>
+    <li><a href="https://eu.36kr.com/en/p/3427828915801473">36Kr — 40 年後美國對南韓的類似策略</a></li>
+    <li><a href="https://www.esunsec.com.tw/article/post/623">元大證券 — 記憶體超級循環，六家台廠受惠整理</a></li>
+    <li><a href="https://www.cw.com.tw/article/5141395">天下雜誌 — 2026 記憶體概念股與台廠供應鏈</a></li>
+    <li><a href="https://www.morningstar.com/stocks/cxmt-ipo-an-undervalued-china-memory-chip-stock">Morningstar — CXMT IPO 評價分析</a></li>
+    <li><a href="https://www.tomshardware.com/tech-industry/cxmt-closes-up-466-percent-in-shanghai-debut-with-no-hbm-project-in-its-ipo-prospectus">Tom's Hardware — CXMT 說明書未列 HBM 專案，募資聚焦 DRAM 產能</a></li>
+  </ol>
+
+  <div class="foot">
+    <p><strong>不是大宗商品：DRAM／NAND 的技術門檻與地緣政治鎖喉</strong>　·　2026-08-21　·　主線 DRAM：三星／SK 海力士／美光 對照 CXMT；NAND：三星／SK 海力士／鎧俠／美光 對照 YMTC。</p>
+    <p>本文為技術與產業結構分析，所有財務性、產能性數字皆為公開資訊之整理與推導，<strong>僅供資訊參考，非投資建議</strong>。文中提及之公司名稱僅為技術與產業環節之代表性舉例，不構成任何評價或推薦。</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var d = document;
+
+  /* ── 概覽帶導航：點擊展開對應環節並捲動 ── */
+  var stages = [].slice.call(d.querySelectorAll('.stage'));
+  var segBtns = [].slice.call(d.querySelectorAll('.seg'));
+  segBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var el = d.getElementById(b.getAttribute('data-go'));
+      if (!el) return;
+      el.open = true;
+      el.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  /* ── 當前位置回標到概覽帶 ── */
+  if ('IntersectionObserver' in window) {
+    var ratio = {};
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ ratio[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bv = 0;
+      stages.forEach(function(s){ var v = ratio[s.id] || 0; if (v > bv) { bv = v; best = s.id; } });
+      segBtns.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-go') === best); });
+    }, { rootMargin: '-10% 0px -55% 0px', threshold: [0, .15, .4, .8] });
+    stages.forEach(function(s){ io.observe(s); });
+  }
+
+  /* ── 全部展開／收合 ── */
+  d.getElementById('expand-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = true; });
+  });
+  d.getElementById('collapse-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = false; });
+  });
+
+  /* ── DUV 晶圓起始片數 推算器 ── */
+  var iid = ['i-target','i-overhead','i-cost'], el = {};
+  iid.forEach(function(i){ el[i] = d.getElementById(i); });
+  var out = {};
+  ['o-euv','o-duv','o-mult'].forEach(function(i){ out[i] = d.getElementById(i); });
+
+  function pos(v, f){ var n = parseFloat(v); return (isFinite(n) && n >= 0) ? n : f; }
+  function fmt(v, p){ return isFinite(v) ? v.toLocaleString('en-US', { minimumFractionDigits: p, maximumFractionDigits: p }) : '—'; }
+
+  function calc(){
+    var target = pos(el['i-target'].value, 100000),
+        overhead = pos(el['i-overhead'].value, 30),
+        cost = pos(el['i-cost'].value, 10000);
+
+    var euvWafers = target / 1000;
+    var duvWafers = euvWafers * (1 + overhead / 100);
+    var mult = duvWafers / euvWafers;
+
+    out['o-euv'].textContent = fmt(euvWafers, 0) + ' 片';
+    out['o-duv'].textContent = fmt(duvWafers, 0) + ' 片';
+    out['o-mult'].textContent = fmt(mult, 2) + '×';
+  }
+  iid.forEach(function(i){ el[i].addEventListener('input', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
