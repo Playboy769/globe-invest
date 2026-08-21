@@ -313,6 +313,17 @@ html{scroll-behavior:smooth}
 
     <div class="marg"><b>動畫版原理參考</b>DRAM 電容＋刷新機制與 NAND 浮動閘極／電荷捕捉層的運作方式，可參考 Redknot-乔红 的科普動畫系列（見附錄延伸連結）；本節文字為本文對半導體業界公開技術資料的整理，非逐字轉引自任何單一影片。</div>
 
+    <h3>連 EUV 本身也在分代：數值孔徑如何決定解析度極限</h3>
+    <p>微影設備能刻出多細的線，由「瑞利判據」（Rayleigh criterion）這條公式決定：</p>
+    <div class="eq full">CD = k₁ × λ / NA
+
+CD　　可解析的最小特徵尺寸（Critical Dimension）
+k₁　　製程相關修正係數（＜1，製程越成熟能壓得越低）
+λ　　　光源波長（EUV 固定為 13.5nm）
+NA　　數值孔徑（Numerical Aperture）：光學系統收光聚焦的能力</div>
+    <p>公式的意思很直接：波長固定不變時，NA 越大，能解析的特徵尺寸就越小。這正是 EUV 世代持續微縮的機制——不是換光源，而是把 NA 一路推高。2019 年起大規模部署的第一代 EUV 機台 NA 為 <strong>0.33</strong>，可解析極限約 13nm；ASML 新一代 TWINSCAN EXE:5000／5200 系列（業界稱 High-NA EUV）把 NA 推高到 <strong>0.55</strong>，解析度極限進一步壓到 8nm 以下。這批機台造價約每台 4 億美元，2024 年首度交付 Intel 用於其 14A 製程節點的關鍵層，2026 年已跨過研發階段、進入量產部署。</p>
+    <div class="marg"><b>這對本文論點意味著什麼</b>CXMT 連 0.33 NA 的第一代 EUV 都拿不到，而三星、SK 海力士、美光已經在布局 0.55 NA 的 High-NA 世代——出口管制鎖住的不是一道單一的門，而是一整條持續往前推進的技術世代；即使有朝一日低 NA 機型解禁，屆時業界的技術前緣早已推進到下一關。</div>
+
     <h3>NAND 的門檻在另一個方向：從平面走向垂直</h3>
     <p>NAND 儲存的是困在絕緣層中的電荷——現代 3D NAND 多數採用電荷捕捉（charge-trap）架構，電荷困在一層氮化矽薄膜裡，由環繞式閘極控制。2013 年前的平面（2D）NAND 曾試圖靠微縮製程節點衝密度，但縮到約 15–19nm 附近就撞牆：相鄰儲存單元的電荷會互相干擾，可靠度直接崩潰。業界因此在 2013 年前後全面轉向「向上蓋樓」——不再微縮平面尺寸，改成把上百層儲存單元疊在同一根垂直通道上，靠增加層數換取密度成長。</p>
     <p>這條路線的製造難度在於：要在 300 層以上交替堆疊的薄膜裡，鑽出一個從頭到尾垂直、直徑均勻的通道孔（長寬比可達 60–80 比 1），再於孔壁依序沉積穿隧氧化層、電荷捕捉層、阻擋氧化層與多晶矽通道——任何一層厚度不均，都會讓孔底部與頂部的儲存單元電性表現不一致，直接反映成良率損失。這也是為什麼「層數」本身不是唯一指標：2026 年 Kioxia 用 332 層做到的面密度，實測超過三星 400 層以上世代的產品，差距逾三成——多疊層數若沒有搭配同等精度的孔徑控制與薄膜均勻度，換來的可能是更差的良率而非更高的密度。</p>
@@ -330,6 +341,23 @@ html{scroll-behavior:smooth}
       </table>
     </div>
     <p class="cap full"><b>標註</b>　⚑ 各廠「層數」統計口徑（實體層 vs 有效儲存層）與世代命名方式不完全一致，媒體引用數字時常有出入，本表取多方報導的量級整理，僅供廠商間相對位置參考，不宜逐一相減比較。</p>
+
+    <h3>良率不是感覺出來的，是算出來的</h3>
+    <p>「良率」聽起來是工程直覺，但業界有兩條標準公式可以直接算：卜瓦松模型（Poisson model）</p>
+    <div class="eq full">Y = e^(−A×D₀)　　　　（卜瓦松模型，假設缺陷均勻分布）
+
+Y = [(1−e^(−A×D₀)) / (A×D₀)]²　　（墨菲模型，考慮缺陷群聚，較貼近大面積晶粒）
+
+A　　晶粒面積（cm²）
+D₀　　缺陷密度：每平方公分的關鍵缺陷數</div>
+    <p>業界揭露的量級可以直接代進這條公式：成熟製程的 D₀ 通常已壓到 0.1 以下，對應約 90% 以上的高良率；先進製程量產初期則常落在 0.3–0.5，良率明顯偏低，須靠時間與製程調校逐步爬升。把這個區間畫成曲線，會看到良率不是線性下降，而是隨 D₀ 上升加速崩落：</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">缺陷密度對晶粒良率的敏感度（橫軸 D0，單位：缺陷數／cm²）</text><line x1="76" y1="456" x2="864" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="864" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="295.2" x2="864" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="76" y1="214.8" x2="864" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="76" y1="134.4" x2="864" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">80</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">D0=0.05</text><line x1="233.6" y1="456" x2="233.6" y2="460" stroke="#999999" stroke-width="1"/><text x="233.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">D0=0.1</text><line x1="391.2" y1="456" x2="391.2" y2="460" stroke="#999999" stroke-width="1"/><text x="391.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">D0=0.2</text><line x1="548.8" y1="456" x2="548.8" y2="460" stroke="#999999" stroke-width="1"/><text x="548.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">D0=0.3</text><line x1="706.4" y1="456" x2="706.4" y2="460" stroke="#999999" stroke-width="1"/><text x="706.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">D0=0.4</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">D0=0.5</text><polyline points="76,72.89 233.6,91.79 391.2,125.56 548.8,156.11 706.4,183.04 864,207.16" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="72.89" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="233.6" cy="91.79" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="391.2" cy="125.56" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="548.8" cy="156.11" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="706.4" cy="183.04" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="864" cy="207.16" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><text x="76" y="62.89" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">95.3</text><text x="233.6" y="81.79" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">90.6</text><text x="391.2" y="115.56" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">82.2</text><text x="548.8" y="146.11" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">74.6</text><text x="706.4" y="173.04" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">67.9</text><text x="864" y="197.16" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">61.9</text><line x1="371.36" y1="40" x2="387.36" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="393.36" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Murphy 模型晶粒良率</text></svg>
+      <div style="font-size:12px;color:#6E7471;text-align:center;margin-top:6px;">本文依 Murphy 良率模型 Y=[(1-e^(-AD))/(AD)]² 推算，假設代表性晶粒面積 A=1 cm²；D0 區間取自業界揭露的成熟製程基準（&lt;0.1）與先進製程量產初期基準（0.3–0.5）。此為示意曲線，非任何特定廠商之實際良率數字，橫軸為缺陷密度 D0（缺陷數／cm²）。</div>
+    </div>
+
+    <p>把這條曲線放回本文脈絡看：D₀ 每往右移一格——等同製程越不成熟，或製程步驟越多、越容易累積缺陷——良率就沿著曲線加速下墜。這正是 04 節「DUV 多重曝光要多耗 30% 晶圓」這個產業估計數字背後的數學結構：多重曝光不必然代表單一機台的物理缺陷率變差，而是讓整條製程流程的「有效」缺陷曝險（每多一道曝光／蝕刻／清洗步驟，就多一次獨立的出錯機會）等同於在這條曲線上被推往右側——04 節會把這個模型具體接回 CXMT 的成本結構。</p>
 
     <div class="callout">
       <span class="ck">下游的真實代價：URE 與 RAID5</span>
@@ -362,6 +390,14 @@ html{scroll-behavior:smooth}
       </table>
     </div>
     <p class="cap full"><b>標註</b>　CXMT 的 2026 年資本支出未見官方單獨揭露；其 IPO 說明書指出募得的 86 億美元中約 70% 將用於晶圓廠產能升級與 DRAM 技術暨設備開發，可作為其資本投入方向的參考，但不等於年度 CapEx 總額。</p>
+
+    <h3>製程節點轉換：資本支出真正的驅動力</h3>
+    <p>CapEx 數字每年都在漲，但真正燒錢的不是「維持現有產線」，而是「切換到下一個節點」——每換一代 DRAM 節點（1a→1b→1c→1d）或每往上疊一批 NAND 層數，都要匹配新一批微影、蝕刻、沉積設備，這正是本節開頭「起跳門檻是十位數美元」的來源。把兩條產品線的世代轉換時間點攤開來看，會發現這是一場幾乎沒有終點的接力賽：</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem)">
+  <svg viewBox="0 0 900 458" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="458" fill="#ffffff"/><text x="450" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">製程節點世代路線圖：DRAM 1c／1d 與 NAND 層數演進</text><line x1="224" y1="58" x2="224" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="224" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2021</text><line x1="317.14" y1="58" x2="317.14" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="317.14" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2022</text><line x1="410.29" y1="58" x2="410.29" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="410.29" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2023</text><line x1="503.43" y1="58" x2="503.43" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="503.43" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2024</text><line x1="596.57" y1="58" x2="596.57" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="596.57" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2025</text><line x1="689.71" y1="58" x2="689.71" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="689.71" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2026</text><line x1="782.86" y1="58" x2="782.86" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="782.86" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2027</text><line x1="876" y1="58" x2="876" y2="432" stroke="#eeeeee" stroke-width="1"/><text x="876" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2028</text><line x1="224" y1="58" x2="876" y2="58" stroke="#111111" stroke-width="1.2"/><text x="14" y="80" font-size="11" font-weight="600" fill="#111111" letter-spacing=".04em" font-family="sans-serif">NAND 層數世代</text><line x1="14" y1="85" x2="876" y2="85" stroke="#dddddd" stroke-width="1"/><text x="24" y="108" font-size="11.5" fill="#222222" font-family="sans-serif">美光全球首發 176 層 3D NAND（…</text><path d="M224,97.5 L230.5,104 L224,110.5 L217.5,104 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="120" width="862" height="32" fill="#fafafa"/><text x="24" y="140" font-size="11.5" fill="#222222" font-family="sans-serif">SK 海力士 321 層 3D NAND 樣品…</text><path d="M464.6190476190476,129.5 L471.1190476190476,136 L464.6190476190476,142.5 L458.1190476190476,136 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><text x="24" y="172" font-size="11.5" fill="#222222" font-family="sans-serif">三星 286 層 3D NAND 量產</text><path d="M526.7142857142858,161.5 L533.2142857142858,168 L526.7142857142858,174.5 L520.2142857142858,168 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="184" width="862" height="32" fill="#fafafa"/><text x="24" y="204" font-size="11.5" fill="#222222" font-family="sans-serif">美光 276 層 3D NAND（B68S）量…</text><path d="M565.5238095238095,193.5 L572.0238095238095,200 L565.5238095238095,206.5 L559.0238095238095,200 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><text x="24" y="236" font-size="11.5" fill="#222222" font-family="sans-serif">三星 400 層（第十代 V-NAND）發…</text><path d="M689.7142857142858,225.5 L696.2142857142858,232 L689.7142857142858,238.5 L683.2142857142858,232 Z" fill="#0891b2" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="248" width="862" height="32" fill="#fafafa"/><text x="24" y="268" font-size="11.5" fill="#222222" font-family="sans-serif">鎧俠／SanDisk 332 層（BiCS10…</text><path d="M736.7864823348831,257.5 L743.2864823348831,264 L736.7864823348831,270.5 L730.2864823348831,264 Z" fill="#2563eb" stroke="#ffffff" stroke-width="1.5"/><text x="14" y="296" font-size="11" font-weight="600" fill="#111111" letter-spacing=".04em" font-family="sans-serif">DRAM 節點世代</text><line x1="14" y1="301" x2="876" y2="301" stroke="#dddddd" stroke-width="1"/><text x="24" y="324" font-size="11.5" fill="#222222" font-family="sans-serif">主要廠商 1c 節點量產起步（估）</text><path d="M689.7142857142858,313.5 L696.2142857142858,320 L689.7142857142858,326.5 L683.2142857142858,320 Z" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="336" width="862" height="32" fill="#fafafa"/><text x="24" y="356" font-size="11.5" fill="#222222" font-family="sans-serif">三星 1d 節點開發完成（估）</text><path d="M751.8095238095239,345.5 L758.3095238095239,352 L751.8095238095239,358.5 L745.3095238095239,352 Z" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/><text x="24" y="388" font-size="11.5" fill="#222222" font-family="sans-serif">SK 海力士 1d 節點開發完成（估）</text><path d="M775.0952380952381,377.5 L781.5952380952381,384 L775.0952380952381,390.5 L768.5952380952381,384 Z" fill="#b45309" stroke="#ffffff" stroke-width="1.5"/><rect x="14" y="400" width="862" height="32" fill="#fafafa"/><text x="24" y="420" font-size="11.5" fill="#222222" font-family="sans-serif">三星 1d 試產線建置→量產目標（估…</text><rect x="782.86" y="408" width="92.89" height="16" rx="3" fill="#d97706" fill-opacity="0.85"/><line x1="749.06" y1="58" x2="749.06" y2="432" stroke="#111111" stroke-width="1.6" stroke-dasharray="5 3"/><text x="754.06" y="448" text-anchor="start" font-size="10.5" fill="#111111" font-weight="600" font-family="sans-serif">本文撰寫時點</text></svg>
+      <div style="font-size:12px;color:#6E7471;text-align:center;margin-top:6px;">資料來源：本文彙整公開產業報導（TrendForce、DigiTimes 等）；⚑ 2026 年以後之節點時程為廠商規劃目標，非既定結果，實際時程可能因良率與客戶認證而調整</div>
+    </div>
 
     <div class="callout">
       <span class="ck">資本不是問題，設備才是問題</span>
@@ -420,6 +456,9 @@ html{scroll-behavior:smooth}
       <p class="calc-n">計算式：EUV 片數 ＝ 目標產出（單位換算）；DUV 片數 ＝ EUV 片數 ×（1＋多耗比例）；成本乘數 ＝ DUV 片數 ÷ EUV 片數。⚑ 預設值對應本節引用的「約多耗 30%」估計：同樣的目標產出，CXMT 這條路線要多跑近三成的晶圓，等同每位元成本天生比 EUV 廠高出這個乘數——這就是 08 節蘋果案例裡「CXMT 連折扣都給不起」的算術根源。</p>
     </div>
 
+    <h3>把 01 節的良率模型接回來：「多耗 30%」的數學結構</h3>
+    <p>01 節的墨菲模型說明了一件事：良率不是線性隨缺陷密度下降，而是隨著「有效缺陷曝險」（A×D₀）呈指數－平方關係加速下墜。DUV 多重曝光多做的兩到三道額外曝光／蝕刻／清洗步驟，不必然代表 ASML 的 DUV 機台本身比 EUV 機台「更容易出錯」，但每一道獨立的圖案轉印步驟都是一次獨立的疊對誤差來源——多道步驟疊加的統計效果，等同於把整條產線從 01 節那條良率曲線上「單次曝光、接近成熟製程」的區間（D₀&lt;0.1，良率 90%+），推往「多重曝光、接近先進製程量產初期」的區間（D₀ 0.3–0.5，良率 62–75%）。這正是「多耗 30% 晶圓起始片數」這個產業估計數字背後可以自洽解釋的物理與統計根源，而不是一個孤立、缺乏機制解釋的百分比。</p>
+
     <h3>第三條路：Bonded DRAM</h3>
     <p>除了多重曝光，CXMT 也在測試第三條繞道路線——「接合式 DRAM」（Bonded DRAM）：把記憶胞陣列與周邊控制電路分別製作在兩片晶圓上，各自用 DUV 多重曝光在各自能達到的製程節點上完成圖案化，再用晶圓對晶圓混合鍵合（hybrid bonding）技術把兩片晶圓接合成一顆晶片。這個做法的邏輯是「把單一晶圓的微縮壓力，拆成兩片晶圓分別承擔」，藉此降低對單一曝光精度的要求——但混合鍵合本身也是精度要求極高的製程，是否能真正降低整體成本仍待驗證。</p>
 
@@ -477,6 +516,70 @@ html{scroll-behavior:smooth}
       </table>
     </div>
     <p class="cap full"><b>標註</b>　⚑ HBM3→HBM3E→HBM4 世代落差以外部研究機構「約三年」估計整理，各機構口徑略有差異；此差距近年已從「五年以上」大幅收斂，但收斂速度不等於已經追平。</p>
+
+    <h3>堆疊怎麼疊上去：TSV 與混合鍵合的精度代價</h3>
+    <p>HBM 是把十幾片 DRAM 核心晶粒用矽穿孔（TSV，Through-Silicon Via）垂直打通、再逐片黏合而成的三維結構。傳統做法用「微凸塊」（microbump）連接每片晶粒，凸塊間距約在 40 微米量級；HBM4 世代為了塞進更多、更密的垂直連接，把接墊間距壓縮到約 <strong>10 微米</strong>，越來越多廠商轉向「混合鍵合」（hybrid bonding）——晶圓與晶圓（或晶粒與晶圓）之間不再靠凸塊，而是讓兩片晶圓的介電層與金屬層直接對準、鍵合在一起，達到接近晶圓原生互連的密度。</p>
+    <p>代價是對準精度的要求近乎苛刻：業界揭露的規格要求鍵合表面粗糙度須壓在 0.5 奈米以下，十幾層堆疊要維持次微米等級的疊對精度——<strong>一次 100 奈米量級的偏移，就足以讓整組堆疊報廢</strong>，估計單組成本約 2 萬美元；早期 HBM4 原型的良率損失中，約 12% 可歸因於高密度 TSV 結構在封裝過程中的熱應力。</p>
+
+    <div class="full" style="max-width:var(--wide);margin:1.6rem 0">
+<div style="max-width:720px;margin:0 auto;border:1px solid var(--rule);padding:1rem clamp(.5rem,3vw,1.5rem);background:#fff">
+<svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+<rect x="0" y="0" width="720" height="470" fill="#ffffff"/>
+<text x="360" y="24" text-anchor="middle" font-size="14.5" font-weight="600" fill="#111111" font-family="sans-serif">HBM4 記憶體堆疊剖面示意圖（簡化，實際堆疊層數更多）</text>
+<rect x="170" y="50" width="260" height="32" rx="2" fill="#F5F1EA" stroke="#6E7471" stroke-width="1"/>
+<rect x="170" y="82" width="260" height="6" fill="#B8763A"/>
+<rect x="170" y="88" width="260" height="32" rx="2" fill="#F5F1EA" stroke="#6E7471" stroke-width="1"/>
+<rect x="170" y="120" width="260" height="6" fill="#B8763A"/>
+<line x1="230" y1="126" x2="230" y2="168" stroke="#9AA09C" stroke-width="1.3" stroke-dasharray="3 3"/>
+<line x1="300" y1="126" x2="300" y2="168" stroke="#9AA09C" stroke-width="1.3" stroke-dasharray="3 3"/>
+<line x1="370" y1="126" x2="370" y2="168" stroke="#9AA09C" stroke-width="1.3" stroke-dasharray="3 3"/>
+<rect x="170" y="126" width="260" height="42" fill="none" stroke="#DCDFDB" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="300" y="152" text-anchor="middle" font-size="20" fill="#6E7471" font-family="sans-serif">⋮</text>
+<rect x="170" y="168" width="260" height="32" rx="2" fill="#F5F1EA" stroke="#6E7471" stroke-width="1"/>
+<rect x="170" y="200" width="260" height="6" fill="#B8763A"/>
+<rect x="170" y="206" width="260" height="32" rx="2" fill="#F5F1EA" stroke="#6E7471" stroke-width="1"/>
+<rect x="170" y="238" width="260" height="8" fill="#96540E"/>
+<rect x="170" y="246" width="260" height="44" rx="2" fill="#EDE6D8" stroke="#6E7471" stroke-width="1"/>
+<line x1="200" y1="290" x2="200" y2="306" stroke="#6E7471" stroke-width="2"/>
+<line x1="250" y1="290" x2="250" y2="306" stroke="#6E7471" stroke-width="2"/>
+<line x1="300" y1="290" x2="300" y2="306" stroke="#6E7471" stroke-width="2"/>
+<line x1="350" y1="290" x2="350" y2="306" stroke="#6E7471" stroke-width="2"/>
+<line x1="400" y1="290" x2="400" y2="306" stroke="#6E7471" stroke-width="2"/>
+<rect x="150" y="306" width="300" height="34" rx="2" fill="#DCD5C6" stroke="#6E7471" stroke-width="1"/>
+<line x1="230" y1="50" x2="230" y2="126" stroke="#96540E" stroke-width="1.6"/>
+<line x1="230" y1="168" x2="230" y2="290" stroke="#96540E" stroke-width="1.6"/>
+<line x1="300" y1="50" x2="300" y2="126" stroke="#96540E" stroke-width="1.6"/>
+<line x1="300" y1="168" x2="300" y2="290" stroke="#96540E" stroke-width="1.6"/>
+<line x1="370" y1="50" x2="370" y2="126" stroke="#96540E" stroke-width="1.6"/>
+<line x1="370" y1="168" x2="370" y2="290" stroke="#96540E" stroke-width="1.6"/>
+<circle cx="230" cy="66" r="3" fill="#96540E"/><circle cx="300" cy="66" r="3" fill="#96540E"/><circle cx="370" cy="66" r="3" fill="#96540E"/>
+<circle cx="230" cy="104" r="3" fill="#96540E"/><circle cx="300" cy="104" r="3" fill="#96540E"/><circle cx="370" cy="104" r="3" fill="#96540E"/>
+<circle cx="230" cy="184" r="3" fill="#96540E"/><circle cx="300" cy="184" r="3" fill="#96540E"/><circle cx="370" cy="184" r="3" fill="#96540E"/>
+<circle cx="230" cy="222" r="3" fill="#96540E"/><circle cx="300" cy="222" r="3" fill="#96540E"/><circle cx="370" cy="222" r="3" fill="#96540E"/>
+<circle cx="230" cy="268" r="3" fill="#96540E"/><circle cx="300" cy="268" r="3" fill="#96540E"/><circle cx="370" cy="268" r="3" fill="#96540E"/>
+<line x1="430" y1="66" x2="463" y2="60" stroke="#9AA09C" stroke-width="1"/>
+<line x1="430" y1="104" x2="463" y2="104" stroke="#9AA09C" stroke-width="1"/>
+<line x1="430" y1="147" x2="463" y2="147" stroke="#9AA09C" stroke-width="1"/>
+<line x1="430" y1="222" x2="463" y2="222" stroke="#9AA09C" stroke-width="1"/>
+<line x1="430" y1="268" x2="463" y2="268" stroke="#9AA09C" stroke-width="1"/>
+<line x1="430" y1="323" x2="463" y2="323" stroke="#9AA09C" stroke-width="1"/>
+<text x="467" y="64" font-size="12.5" fill="#222222" font-family="sans-serif">核心晶粒 Core Die</text>
+<text x="467" y="108" font-size="12.5" fill="#222222" font-family="sans-serif">TSV 貫通矽穿孔</text>
+<text x="467" y="142" font-size="12.5" fill="#222222" font-family="sans-serif">⋮ 中間層省略</text>
+<text x="467" y="157" font-size="12.5" fill="#222222" font-family="sans-serif">實際堆疊可達 16 層</text>
+<text x="467" y="217" font-size="12.5" fill="#222222" font-family="sans-serif">混合鍵合介面</text>
+<text x="467" y="232" font-size="12.5" fill="#222222" font-family="sans-serif">Pad Pitch ≈10µm</text>
+<text x="467" y="272" font-size="12.5" fill="#222222" font-family="sans-serif">基礎邏輯緩衝晶粒 Buffer Die</text>
+<text x="467" y="327" font-size="12.5" fill="#222222" font-family="sans-serif">封裝基板／中介層 Interposer</text>
+<rect x="20" y="366" width="680" height="52" fill="#FBF1E4" stroke="#96540E" stroke-width="1"/>
+<text x="34" y="386" font-size="12" fill="#5C3A0A" font-family="sans-serif">⚠ 疊對誤差達 100nm，整組堆疊即報廢（估算單組成本約 $20,000）</text>
+<text x="34" y="404" font-size="12" fill="#5C3A0A" font-family="sans-serif">早期 HBM4 原型約 12% 良率損失源自高密度 TSV 結構的熱應力</text>
+<text x="360" y="446" text-anchor="middle" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">示意圖：本文繪製，非官方剖面圖，比例經簡化；數字出處見本節內文引用來源</text>
+</svg>
+</div>
+    </div>
+    <p class="cap full"><b>標註</b>　TSV／混合鍵合接墊間距、良率損失比例引用自封裝產業技術報導與研究整理，非本文獨立量測；「整組報廢」之成本估算為業界討論脈絡下的量級參考，非特定廠商財報揭露數字。</p>
+    <div class="marg"><b>把 04 節的模型接回來</b>混合鍵合本身就是一種「多一道極高精度步驟」的製程——04 節「DUV 多重曝光讓有效缺陷曝險上升」的邏輯，在 HBM 封裝這一層再疊加一次：CXMT 要同時扛住「核心 DRAM 製程的有效 D₀ 偏高」與「先進封裝的次微米對準精度」兩道獨立的良率風險，這也是為什麼它的 HBM 進度（僅 HBM3 量產）比整體 DRAM 市占率（05 節，8%）看起來更落後的原因。</div>
 
     <div class="callout">
       <span class="ck">為什麼 HBM 是比 DRAM 市占率更關鍵的觀察指標</span>
@@ -583,11 +686,11 @@ html{scroll-behavior:smooth}
     <ul>
       <li><span class="tag">公開規格</span>　廠商官方揭露或 IPO 說明書之數值（如 CXMT 產能規劃、YMTC 產品世代）。</li>
       <li><span class="tag">產業估計</span>　研究機構匯整之區間值或點估計（市占率、CapEx、技術世代差距）。這類數字波動大，本文一律標明來源機構與估算基礎。</li>
-      <li><span class="tag">本文推導</span>　由前兩類明示公式推得（DUV 晶圓起始片數推算器）。假設寫在公式旁，可自行代入不同參數複核。</li>
+      <li><span class="tag">本文推導</span>　由前兩類明示公式推得（DUV 晶圓起始片數推算器、Murphy 良率模型 D₀ 敏感度曲線）。假設寫在公式旁，可自行代入不同參數複核。</li>
     </ul>
 
     <h3>已知限制</h3>
-    <p>本文寫成於 2026 年 8 月下旬，CXMT 是否會被美國商務部納入實體清單、MATCH Act 是否通過、荷蘭是否進一步擴大對 ASML 的出口限制，截至撰稿時均尚無定論——07 節的時間軸圖已將這些進行中事項標示為「持續進行」而非既定結果。市占率數字（05 節）與產能估計（02 節）採不同機構、不同統計口徑，僅供量級參考，不宜直接用於財務建模。09 節的歷史對照為本文對公開歷史文獻的整理與類比推論，兩次管制的法律機制本質不同，類比僅供框架參考，不代表本文預測相同結局會重演。10 節台灣供應鏈段落未逐一查證個別公司財報，受惠邏輯之方向性整理，信心度低於本文其餘具名機構估算之處。</p>
+    <p>本文寫成於 2026 年 8 月下旬，CXMT 是否會被美國商務部納入實體清單、MATCH Act 是否通過、荷蘭是否進一步擴大對 ASML 的出口限制，截至撰稿時均尚無定論——07 節的時間軸圖已將這些進行中事項標示為「持續進行」而非既定結果。市占率數字（05 節）與產能估計（02 節）採不同機構、不同統計口徑，僅供量級參考，不宜直接用於財務建模。09 節的歷史對照為本文對公開歷史文獻的整理與類比推論，兩次管制的法律機制本質不同，類比僅供框架參考，不代表本文預測相同結局會重演。10 節台灣供應鏈段落未逐一查證個別公司財報，受惠邏輯之方向性整理，信心度低於本文其餘具名機構估算之處。01、04 節的 Murphy 良率模型曲線為本文依業界揭露之 D₀ 基準區間（成熟製程 &lt;0.1、先進製程量產初期 0.3–0.5）代入公式推算的<strong>示意曲線</strong>，用以說明缺陷密度與良率的數學關係，並非任何特定廠商（包含 CXMT）實際揭露的良率數字；04 節「有效 D₀ 偏高」的說法是本文對「多重曝光為何多耗 30% 晶圓」提出的機制性解釋，並非業界公開揭露 CXMT 實際 D₀ 數值。02、06 節新增之製程節點時程與 TSV／混合鍵合規格同樣彙整自公開產業報導，CXMT／YMTC 之官方節點命名因行銷成分與透明度問題不予具體引用，僅使用層數、良率估計等可獨立查證之參數（見本文對話脈絡之編輯決定）。</p>
   </div>
 
   <h3>延伸科普影片</h3>
@@ -604,6 +707,21 @@ html{scroll-behavior:smooth}
     <li><a href="https://www.techpowerup.com/342882/memory-industry-to-maintain-cautious-capex-in-2026-with-limited-impact-on-bit-supply-growth">TechPowerUp — 2026 年記憶體業 CapEx 展望</a></li>
     <li><a href="https://www.trendforce.com/presscenter/news/20251113-12780.html">TrendForce — DRAM／NAND 2026 年資本支出估計</a></li>
     <li><a href="https://www.digitimes.com/news/a20251218VL201/micron-2026-fab-capex-expansion.html">DigiTimes — 美光 FY26 CapEx 上修至 200 億美元</a></li>
+    <li><a href="https://www.asml.com/en/products/euv-lithography-systems/twinscan-exe-5000">ASML — TWINSCAN EXE:5000 High-NA EUV 系統規格</a></li>
+    <li><a href="https://www.tomshardware.com/tech-industry/semiconductors/intel-installs-industrys-first-commercial-high-na-euv-lithography-tool-asml-twinscan-exe-5200b-sets-the-stage-for-14a">Tom's Hardware — Intel 安裝首台商用 High-NA EUV 機台</a></li>
+    <li><a href="https://www.asml.com/en/company/stories/2024/5-things-high-na-euv">ASML — High-NA EUV 五個關鍵知識點</a></li>
+    <li><a href="https://www.guru3d.com/story/samsung-reportedly-targets-september-2026-completion-for-1dnanometer-dram">Guru3D — 三星 1d 奈米級 DRAM 目標時程</a></li>
+    <li><a href="https://www.digitimes.com/news/a20260618PD203/samsung-dram-production-roadmap-2027.html">DigiTimes — 三星 1d DRAM 量產路線圖，試產線目標 2027</a></li>
+    <li><a href="https://www.patsnap.com/resources/blog/rd-blog/hbm4-die-to-wafer-hybrid-bonding-yield-loss-patsnap-eureka/">PatSnap — HBM4 晶圓對晶圓混合鍵合良率損失分析</a></li>
+    <li><a href="https://eureka.patsnap.com/report-hbm4-tsv-pitch-density-targets-and-si-pi-trade-offs">PatSnap Eureka — HBM4 TSV Pitch 密度目標與訊號完整性權衡</a></li>
+    <li><a href="https://semiengineering.com/hbm4-sticks-with-microbumps-postponing-hybrid-bonding/">SemiEngineering — HBM4 微凸塊與混合鍵合技術路線</a></li>
+    <li><a href="https://www.viksnewsletter.com/p/how-foundries-calculate-die-yield">Vik's Newsletter — 晶圓代工廠如何計算晶粒良率（Poisson／Murphy 模型）</a></li>
+    <li><a href="https://en.wikichip.org/wiki/defect_density">WikiChip — 缺陷密度（D0）定義與產業基準</a></li>
+    <li><a href="https://www.tomshardware.com/tech-industry/intel-says-defect-density-at-18a-is-healthy-potential-clients-are-lining-up">Tom's Hardware — Intel 18A 缺陷密度基準揭露</a></li>
+    <li><a href="https://semiengineering.com/how-to-make-3d-nand/">SemiEngineering — 3D NAND 製造流程解析（通道孔蝕刻與薄膜沉積）</a></li>
+    <li><a href="https://www.blocksandfiles.com/flash/2026/07/03/kioxia-and-sandisk-sample-shipping-332-layer-3d-nand/5266362">Blocks and Files — Kioxia／SanDisk 332 層 3D NAND 樣品出貨</a></li>
+    <li><a href="https://www.trendforce.com/news/2026/06/12/news-the-race-to-400-layer-nand-roadmaps-and-key-technologies-driving-samsung-sk-hynix-and-kioxia/">TrendForce — 400 層 NAND 競賽：三星、SK 海力士、鎧俠路線圖</a></li>
+    <li><a href="https://wccftech.com/sk-hynix-400-layer-nand-late-2025-321-layer-nand-1h-2025/">WCCFTech — SK 海力士 321 層 NAND 量產時程</a></li>
     <li><a href="https://semiengineering.com/how-to-make-3d-nand/">SemiEngineering — 3D NAND 製造流程解析</a></li>
     <li><a href="https://www.techpowerup.com/350478/samsung-and-sk-hynix-to-expand-semiconductor-capacity-with-usd-870-billion-plan">TechPowerUp — 三星／SK 海力士 8,700 億美元擴產計畫</a></li>
     <li><a href="https://en.sedaily.com/finance/2026/01/01/samsung-sk-hynix-launch-massive-chip-capex-race-investment">Seoul Economic Daily — 三星／SK 海力士 CapEx 競賽</a></li>
