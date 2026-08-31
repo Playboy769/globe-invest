@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA (NVDA) — FY2027 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; position: relative; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; padding-right: 90px; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height:1.5; }
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+  .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; }
+  .tab { padding: 10px 18px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.65; color: #333; margin-bottom:6px; }
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 16px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap:10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink:0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-text { line-height: 1.65; color: #333; }
+  .flag-box { background: #fef2f2; border: 1px solid #f5b5b5; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box .q-text { color: #7a2020; }
+  .flag-box.obs { background: #fff; border-color: #a9c9f5; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+  .flag-box.obs .q-text { color: #1e3a6e; }
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.7; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+  .sca-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .sca-box { border-radius: 8px; padding: 12px; }
+  .sca-box.blue { background: #fff; border: 1px solid #a9c9f5; }
+  .sca-box.green { background: #f0fdf4; border: 1px solid #a3dab1; }
+  .sca-box.orange { background: #fff7ed; border: 1px solid #f0c090; }
+  .sca-box.red { background: #fef2f2; border: 1px solid #f0aab8; }
+  .sca-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .sca-box.blue h4 { color: #1d4ed8; }
+  .sca-box.green h4 { color: #15803d; }
+  .sca-box.orange h4 { color: #c2600a; }
+  .sca-box.red h4 { color: #b91c4a; }
+  .sca-box ul { padding-left: 15px; }
+  .sca-box li { margin-bottom: 4px; line-height: 1.55; color: #333; }
+  .dd-list { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:14px 14px 14px 30px; margin-bottom:16px; }
+  .dd-list li { margin-bottom:8px; line-height:1.6; color:#333; }
+  .stance-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  .rev-chart { margin-bottom: 18px; }
+  .rev-row { display: flex; align-items: center; margin-bottom: 10px; gap: 10px; }
+  .rev-name { width: 240px; font-size: 12px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; line-height: 1.4; }
+  .rev-bar-wrap { flex: 1; background: #eef0f5; border-radius: 4px; height: 26px; overflow: hidden; }
+  .rev-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #fff; white-space:nowrap; }
+  .rev-val { width: 130px; font-size: 12px; font-weight: 700; text-align: right; color: #1a1a2e; }
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tech-card { border-radius: 8px; padding: 12px; border: 1px solid; }
+  .tech-card.dram { background: #fff; border-color: #a9c9f5; }
+  .tech-card.nand { background: #f5f3ff; border-color: #c7b8f0; }
+  .tech-card.hbm { background: #f0fdf4; border-color: #a3dab1; }
+  .tech-card.pkg { background: #fff7ed; border-color: #f0c090; }
+  .tech-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .tech-card.dram h4 { color: #1d4ed8; }
+  .tech-card.nand h4 { color: #6d28d9; }
+  .tech-card.hbm h4 { color: #15803d; }
+  .tech-card.pkg h4 { color: #c2600a; }
+  .tech-card ul { padding-left: 15px; }
+  .tech-card li { font-size: 12px; margin-bottom: 4px; line-height: 1.55; color: #333; }
+  .chain-layer { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px; margin-bottom:16px; }
+  .chain-layer h4 { font-size:12px; font-weight:700; margin-bottom:8px; }
+  .chain-up h4 { color:#c2600a; } .chain-core h4 { color:#2563eb; } .chain-down h4 { color:#15803d; }
+  .node { display:inline-block; background:#f5f6fa; border:1px solid #d5d9e2; border-radius:6px; padding:5px 9px; margin:3px 4px 3px 0; font-size:12px; }
+  .node .src { color:#94a3b8; font-size:10px; }
+  .conf-hi { border-left:3px solid #15803d; } .conf-mid { border-left:3px solid #c2600a; } .conf-lo { border-left:3px solid #b91c4a; }
+  .price-band { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 16px; }
+  .band-bar { height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; margin: 6px 0; font-size: 12px; font-weight: 600; }
+  .band-ceiling { background: #fff; color: #1d4ed8; border: 1px solid #a9c9f5; }
+  .band-floor { background: #fff7ed; color: #c2600a; border: 1px solid #f0c090; }
+  .band-label { font-size: 11px; color: #888; margin: 2px 0; }
+  .risk-item { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border: 1px solid #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border: 1px solid #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border: 1px solid #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.65; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 20px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+  .stat-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap:wrap; }
+  .stat-box { flex: 1; min-width:120px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .note { font-size:11px; color:#94a3b8; margin-top:6px; margin-bottom:16px; line-height:1.5; }
+  .footer { font-size:11px; color:#94a3b8; text-align:center; margin-top:20px; }
+  table { width:100%; border-collapse: collapse; margin-bottom: 16px; }
+  th { color:#555; background:#f5f6fa; padding:7px 10px; text-align:right; font-size:11px; border-bottom:1px solid #e2e4ea; }
+  th:first-child { text-align:left; }
+  td { padding:7px 10px; border-bottom:1px solid #eee; text-align:right; color:#333; }
+  td:first-child { text-align:left; }
+  td strong, th:first-child { color:#1a1a2e; }
+  .chart-wrap { margin-bottom: 18px; }
+
+  /* ---- Financials-only rules ---- */
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 18px; }
+  .kpi { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px; text-align:center; }
+  .kpi .v { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi .l { font-size: 11px; color:#666; margin-top:3px; }
+  .kpi .d { font-size: 11px; margin-top:3px; font-weight:600; }
+  .up { color:#15803d; } .down { color:#b91c1c; }
+  tr.total td { font-weight:700; background:#fafbfd; border-top:2px solid #e2e4ea; }
+  tr.sub td:first-child { padding-left:22px; color:#666; }
+  tr.section-head td { background:#f5f6fa; font-weight:700; color:#1a1a2e; padding-top:10px; }
+  .flag { font-size:11px; color:#7a2020; background:#fef2f2; border:1px solid #f5b5b5; border-radius:6px; padding:8px 10px; margin-top:8px; margin-bottom:16px; line-height:1.55; }
+  .flag b { color:#b91c1c; }
+  .flag.obs { background: #fff; border-color:#a9c9f5; color:#1e3a6e; } .flag.obs b { color:#1d4ed8; }
+  .seg-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .seg { border-radius:8px; padding:12px; border:1px solid; }
+  .seg.s1 { background: #fff; border-color:#a9c9f5; } .seg.s2 { background:#f0fdf4; border-color:#a3dab1; } .seg.s3 { background:#fdf2f8; border-color:#f0aac8; }
+  .seg h4 { font-size:12px; font-weight:700; margin-bottom:6px; } .seg.s1 h4{color:#1d4ed8;} .seg.s2 h4{color:#15803d;} .seg.s3 h4{color:#b91c6a;}
+  .seg .big { font-size:19px; font-weight:700; color:#1a1a2e; } .seg .sub { font-size:11px; color:#666; margin:2px 0 6px; }
+  .seg ul { padding-left:15px; } .seg li { font-size:11px; margin-bottom:3px; line-height:1.5; color:#333; }
+  .bu-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .bu-card { background:#fff; border:1px solid #e2e4ea; border-radius:8px; padding:12px; }
+  .bu-card h4 { font-size:12px; font-weight:700; color:#1a1a2e; margin-bottom:6px; }
+  .bu-card p { font-size:12px; line-height:1.6; color:#333; margin-bottom:6px; }
+  .bu-card ul { padding-left:15px; } .bu-card li { font-size:11.5px; margin-bottom:4px; line-height:1.55; color:#333; }
+  .meaning { color:#555; text-align:left; font-size:11px; line-height:1.5; }
+</style>
+</head>
+<body>
+<!-- cf-backlinks-widget: shows which CausalFrame canvases reference this report; renders nothing if none do -->
+<style>#cf-bl-root{display:none}#cf-bl-root.show{display:block;border-left:3px solid #d1591f;background:rgba(209,89,31,.08);border-radius:0 10px 10px 0;padding:14px 20px;margin:20px auto 0;max-width:1100px;font-family:'Calibri','Noto Sans TC',sans-serif}#cf-bl-root .cf-bl-head{display:flex;align-items:center;gap:6px;font-size:13px;color:#a94515;font-weight:600;margin-bottom:8px}#cf-bl-root .cf-bl-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;margin:0 7px 7px 0;border-radius:100px;background:#fff;border:1px solid rgba(209,89,31,.35);font-size:12px;color:#333;cursor:pointer;text-decoration:none}#cf-bl-root .cf-bl-chip:hover{border-color:#d1591f}#cf-bl-root .cf-bl-chip .n{color:#999;font-size:10.5px;margin-left:4px}</style>
+<div id="cf-bl-root"></div>
+<script>(function(){fetch('/api/causal-backlinks').then(function(r){return r.json();}).then(function(index){var mine=index[location.pathname];if(!mine||!mine.length)return;var root=document.getElementById('cf-bl-root');if(!root)return;root.className='show';root.innerHTML='<div class="cf-bl-head">\u{1F517} 此報告被引用於 '+mine.length+' 個 CausalFrame 因果圖</div>'+mine.map(function(h){return '<a class="cf-bl-chip" href="/causal" target="_blank" rel="noopener">'+h.fileName+'<span class="n">'+h.ticker+' · '+h.period+'</span></a>';}).join('');}).catch(function(){});})();</script>
+<!-- /cf-backlinks-widget -->
+
+<div class="page-header">
+  <h1>NVIDIA Corporation（NVDA）— FY2027 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／特殊事件深度拆解（Vera Rubin 爬坡與供給瓶頸 × 記憶體毛利率重設 × SB Energy/OpenAI 融資擔保）／技術與產品線／供應鏈／風險矩陣／損益表／業務部門／資產負債表／現金流量／估值觀察 &nbsp;·&nbsp; 法說會日期：2026年8月26日 &nbsp;·&nbsp; 交叉比對截至2026/7/26財季10-Q、FY2026 10-K 與 Form 4 內部人申報</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('special',this)">特殊事件深度拆解</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('is',this)">損益表</div>
+    <div class="tab" onclick="sw('seg',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ 1. Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">13</div><div class="stat-lbl">核心問題</div></div>
+      <div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口</div></div>
+    </div>
+    <div class="card" style="border-left:3px solid #2563eb;">
+      <div class="card-title">本 tab 的本質是話術偵測，不是摘要</div>
+      <p>本季的迴避手法從 Q1 的「用市場分類框架取代具體數字」升級為更直接的兩種：一是<strong>公開拒答</strong>——James Schneider 直接要求把供給瓶頸按嚴重度排序，Jensen 的回應是「有件好笑的事我可以講，但我不打算講」，然後整段迴避排序本身；二是<strong>用排序代替數字</strong>——Aaron Rakers 問每GW投資規模是否會從 $40B 進一步上探到 $60–80B、擴產是否為線性函數，Huang 只給「方向是往上、目標是無限接近算力上限」的定性答案，沒有觸及任何具體的解鎖條件或時間表。Stacy Rasgon 拆解 $200億 FY2028 上修來源的請求，也只換來重複「hyperscale vs. ACIE」兩區塊敘事，未逐項拆分 Vera CPU／Groq／漲價的貢獻比例。Vivek Arya 問 ~$500億 生態系承諾是否已是全貌、FY2028 現金部分多少，Huang 沒有正面回答是否還有更多，Kress 補充的也只是「承諾集中在前三年」的方向性說法。另外值得記一筆：<strong>全場 8 位分析師沒有一人問到 Ajay Puri（全球業務執行副總裁）在法說會前兩天遞交的離職 Form 4</strong>——詳見風險矩陣 tab。</p>
+    </div>
+
+    <!-- Joe Moore -->
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Joe Moore（Morgan Stanley）</div><div class="qa-topic">70% guide 的信心來源；與 100% 需求成長的缺口能否收斂</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">請說明給出 70% 這個數字、且首度guide到一整年之後的信心來源；這個數字與約 100% 需求成長之間的缺口，關鍵瓶頸是什麼？未來能不能收斂？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Jensen 從「AI 已經變得有用」談起：agentic AI 每次推理消耗的運算量是人類直接使用的 15–100 倍；ACIE（主權/區域AI/neocloud/AI新創/企業）約占一半業務且年成長約100%，長期規模可能超越雲端運算本身。強調基礎建設籌備週期拉長（土地/電力/廠房要提前兩三年卡位），並提到 NVIDIA 現在對上游（記憶體供應商）、下游（土地電力廠房公司）的能見度都遠高於以往。收尾：「我們的需求遠高於70%，但我們的供給讓我們有信心交付70%」，且首次guide整年是為了讓客戶/股東/供應鏈站在同一組資訊上。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Moore 明確問了「關鍵瓶頸是什麼」，Jensen 給的答案停留在「供應鏈很龐大、我們有很多合作夥伴」的定性層次，沒有具名任何一個具體瓶頸環節（晶圓、封裝、HBM、電力），要到後面 James Schneider 直接追問排序時才觸及，而那題管理層選擇整題迴避。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Moore:</b> "I wonder if you could give us color on the 70%, and what gives you the confidence to guide a full year out? ... what's the kind of key constraint that separates those numbers, and could you close those gaps over time?"<br><br><b>Huang:</b> "The amount of compute necessary for an agent versus a human using it is probably 15 to 100 times... even though our demand is much greater than 70%, our supply allows us to confidently deliver 70%."</div></div>
+      </div>
+    </div>
+
+    <!-- CJ Muse -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">CJ Muse（Cantor Fitzgerald）</div><div class="qa-topic">agentic 推論工作負載演變；ACIE／Groq 3 LPX 對份額的影響</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">投資人高度關注推論市佔；請談 agentic AI 工作負載的演變、每一代全端平台帶來的 TAM 成長、ACIE 的成長期待，以及 Groq 3 LPX 在其中的角色。</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">把 AI 生命週期拆成四階段（資料準備、預訓練、後訓練、agentic推論），強調 NVLink-72 機櫃架構（第三代）能橫跨四階段而不必為每階段各買一套系統。逐代每 GW 營收機會：Hopper ~$18B → Grace Blackwell ~$25B → Vera Rubin ~$40B（含五種網通＋Groq）。「每 GW 資料中心的投資規模從五年前約 $30億上升到今天約 $60億」。Groq 3 定位為高互動性/低延遲的利基型加購產品，「絕大多數資料中心仍會是 Vera Rubin NVLink-72」。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">問題直接問「份額如何演變」，回答給的是 TAM／每GW投資規模的成長敘事，並未提供任何現況或預測的市佔率百分比——與 Q1 report CJ Muse 那題的模式完全一致（同一位分析師、同一種問法、同一種迴避），顯示這不是單季偶發，而是管理層對「份額」這個詞的固定應對策略。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Muse:</b> "There's tremendous investor focus on your inference market share. Can you speak to the evolving workloads you're seeing with agentic AI and how you see your share evolving here over time..."<br><br><b>Huang:</b> "So each gigawatt of data center increased from, say, $30 billion about five years ago to now $60 billion today... the vast majority of the world's data centers will just be Vera Rubin NVLink-72."</div></div>
+      </div>
+    </div>
+
+    <!-- Stacy Rasgon -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Stacy Rasgon（Bernstein）</div><div class="qa-topic">FY2028 70% guide 隱含約 $2000億上修的組成拆解；若不受限的數字</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">70% FY2028 成長對比先前「三年 $1兆」的outlook，反推大約是 $2000億的上修；能否拆解這來自 Vera、CPU、Groq、漲價等哪些項目？若完全不受供給限制，數字會是多少？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">「不受限的數字會高很多，我們今年就已經 YoY 成長 100%」。把成長拆成 hyperscale（backlog $2兆，運算力上線直接拉動客戶自身營收與利潤）與 ACIE（企業/neocloud/主權AI，「這塊世界對所有人都是隱形的」）兩塊；再度重複每 GW 投資規模的三代演進數字（$18B→$25B→$40B）。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">Rasgon 明確要求逐項拆解（Vera／CPU／Groq／漲價），管理層完全沒有拆分，只給了「不受限會更高」與「hyperscale/ACIE 兩塊都在漲」的定性重述——這正是 Q1 report 就已經標記過的「兩／三區塊分類話術」，本季第二次出現在同一組回答模式裡。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Rasgon:</b> "I was just wondering if you could talk us through the contributors to that increase across the different products, the Vera and CPUs and Groq and everything else? ... I'm also curious, if it's a constrained number, what would it be if it wasn't constrained?"<br><br><b>Huang:</b> "The unconstrained would be a lot higher. We grew 100% year-over-year this year... most people see just hyperscalers. And that's half of the picture."</div></div>
+      </div>
+    </div>
+
+    <!-- Vivek Arya -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Vivek Arya（BofA）</div><div class="qa-topic">~$500億生態系承諾是否為全貌；投資 OpenAI/Anthropic 與其自研晶片的矛盾</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">把 CFO commentary 全部加總約 $500億——這是否等於全部生態系投資的總和，還是後面還有其他股權或投資？FY2028 現金部分是多少？另外，NVIDIA 大力投資的 OpenAI／Anthropic 都在自研晶片（如 OpenAI 剛提到的 Jalapeño），如何平衡這個矛盾？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Jensen 強調 NVIDIA 賣的是橫跨整個 AI 生命週期、可在任何雲端運行的全端平台，而非為單一雲端/服務設計的推論專用XPU；「我唯一後悔的是沒有更早、更多投資」，並預期投資的兩家公司近期可能上市。Kress 補充：承諾中的供給承諾部分是關鍵、集中在前三年，是支撐 Vera Rubin 產能與明年成長信心的依據。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">兩個具體問題——「$500億是否為全貌」與「FY2028現金部分多少」——都沒有被正面回答。第三個問題（自研晶片矛盾）Jensen 也只重申平台優勢與信心，未正面承認任何競爭風險或說明如果 OpenAI/Anthropic 自研晶片成功會如何影響 NVIDIA 對它們的營收曝險。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Arya:</b> "Is that the takeaway that that the sum of all your ecosystem investments over the next several years is in that ballpark, or are there other equity or other investments that could still be ahead?... how are you balancing this dynamic where you want to invest a lot in the ecosystem, but part of that ecosystem wants to develop competitive solutions?"<br><br><b>Huang:</b> "We're building something very different... I think the only regret that I have is that I didn't invest more and sooner."</div></div>
+      </div>
+    </div>
+
+    <!-- Timothy Arcuri -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Timothy Arcuri（UBS）</div><div class="qa-topic">開源模型崛起對 NVIDIA 是利是弊</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">開源模型（如 Nemotron）有機會在美國搶下更多工作負載份額，但許多終端需求其實是前沿封閉模型公司在驅動——部分投資人認為開源模型崛起對這些公司的成長是負面訊號。開源模型崛起對 NVIDIA 究竟是好是壞？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">「世界同時需要封閉與開源模型，兩者使用量都在飆升」；幾乎所有開源模型都跑在 NVIDIA 上，因為 NVIDIA 的裝機基礎與架構彈性最高（PC、DGX Spark、機器人、工作站、自建機房全涵蓋）。開源模型是 AI 新創與企業建立自有專屬 AI 的基礎，並舉網路資安公司為例。NVIDIA「是唯一一個能跑所有前沿模型的平台」，因此不論哪種模型勝出都對 NVIDIA 有利。</div></div>
+        <div class="flag-box obs"><div class="q-label">⚑ 觀察——本場最乾淨的一次正面回答</div><div class="q-text">與其他多數問答不同，這題被直接、完整地回應：不迴避二選一的框架，明確給出「兩者皆利多」的立場並附理由（架構覆蓋率、CUDA生態系）。與 Q1 report 交叉比對，NVIDIA 對「開源 vs 封閉模型份額」這類問題的答法相當一致，屬於管理層準備充分、樂於暢談的主題。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Arcuri:</b> "Do you see the rise of open models as being good for NVIDIA or ultimately negative?"<br><br><b>Huang:</b> "The world will need both closed models and open models. And both closed models and open models are skyrocketing in use. I would say nearly all open models run on NVIDIA."</div></div>
+      </div>
+    </div>
+
+    <!-- Ben Reitzes -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Ben Reitzes（Melius Research）</div><div class="qa-topic">遞歸自我改進（RSI）與潛在 AGI 是否會進一步推升需求</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">Jensen 提到明年需求成長 100%——遞歸自我改進（RSI，Anthropic／OpenAI 據稱進展順利）與 OpenAI 聲稱年底前可能達成 AGI，這對產業需求會不會是進一步的催化劑？對 NVIDIA 意味著什麼？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">「會進一步反轉向上」。多數 AI 已是 agentic（上個月剛跨過這個門檻），未來每家公司的 agent 數量會是員工數的十倍、百倍（NVIDIA 自己 4萬名員工，未來可能對應 40萬到400萬個 agent），這些 agent 24/7 持續運行。描述目前是「粗粒度的遞歸自我改進」——每次執行完會更新自己的技能檔（skill file / markdown）。認為 AGI 里程碑「在這個階段已經沒有意義」，重點是 AI 已經在做有生產力、能生成獲利 token 的工作，運算力越多、獲利 token 越多。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口</div><div class="q-text">問題問的是 RSI／AGI 對「需求」的具體催化路徑與量化影響，Jensen 給的是願景式敘事（agent 數量會是員工數的十到百倍）與一句「已經沒有意義」帶過 AGI 本身，沒有連結回任何供給規劃或財測數字上的調整——與 70% guide／supply-constrained 的框架之間留下一段沒有被量化銜接的敘事跳躍。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Reitzes:</b> "With the developments in RSI as well as AGI, what happens to industry demand? Does it inflect further?"<br><br><b>Huang:</b> "I appreciate that. It's going to inflect further... in a lot of ways, and for many tasks, we could say that we've already achieved AGI. I think all of those milestones... they're kind of senseless at this point."</div></div>
+      </div>
+    </div>
+
+    <!-- James Schneider -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">James Schneider（Goldman Sachs）</div><div class="qa-topic">70% supply vs. 100%+ demand 之間，最嚴重的瓶頸排序</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">請針對資料中心電力／廠房、DRAM、晶圓代工產能等項目，排序出哪些是目前最嚴重的供給瓶頸，幫助大家理解 70% 與 100%+ 需求之間缺口的具體構成。</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Jensen 開場直接說「有件好笑的事我可以講，但我不打算講」（暗指去年只要公開他跟誰吃晚餐，隔天股價就會反應），然後正式迴避排序：「答案是我們整條供應鏈都很吃緊，每個人都在全力衝刺」；產能是逐步而非一次性上線，良率會持續改善；重申目前供給約當 70% 需求，需要整條供應鏈一起努力。</div></div>
+        <div class="flag-box"><div class="q-label flag">⚑ 明確拒答</div><div class="q-text">這是本場通話裡最直接的一次拒答——不是重述框架帶過，而是管理層明白告訴分析師「我知道答案但選擇不講」，理由是點名任何一家供應商都可能立刻牽動其股價（暗示先前已發生過類似效應）。這與 Q1 report 觀察到的「話術轉移」性質不同，是更高規格的資訊管控。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Schneider:</b> "Can you maybe talk about some of the – or, rank order some of the most acute constraints, whether that be things like data center power and shell availability, DRAM, wafer foundry availability..."<br><br><b>Huang:</b> "There's something funny I could say, but I'm going to just not. Last year, one of the funnest things to do is just to go figure out where I go for dinner and who I have dinner with, and their stock price doubles the next day."</div></div>
+      </div>
+    </div>
+
+    <!-- Aaron Rakers -->
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Aaron Rakers（Wells Fargo）</div><div class="qa-topic">每 GW 投資規模是否會從 $40B 繼續上探至 $60–80B；擴產是否為線性函數</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block"><div class="q-label q">問題核心</div><div class="q-text">從 $25B（Grace Blackwell）到 $40B（Vera Rubin），若展望 Vera Rubin Ultra 等後續世代，是否應該預期 $40B 進一步上探到 $60B、$80B？產能擴張的能力是線性函數，還是有什麼機制能解鎖更快的供給成長？</div></div>
+        <div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">目標方向是「無限接近每GW的算力上限」——歷史軌跡從通用運算時代約 $3–5B/GW，到 Hopper $18B、Grace Blackwell $25B、Vera Rubin $40B，之後只會更高。只要生產力／耐用性／可租用性同步提升，客戶願意投資的意願就會持續，「資本回收期已經不到一年」（以 $50B 的資料中心為例）。</div></div>
+        <div class="flag-box obs"><div class="q-label">⚑ 觀察——方向性確認但無時間表</div><div class="q-text">Rakers 問的「線性 vs 解鎖式」擴產機制沒有被直接回答——Jensen 只給了方向性確認（會繼續往上），未觸及供給端的具體解鎖條件（如新一代封裝良率、新增晶圓產能開出時點）。與 Schneider 那題一樣落在「不談供給細節」的一致模式裡，顯示這是管理層本季刻意設定的邊界，而非單次個案。</div></div>
+        <div class="orig-box"><div class="orig-label">逐字稿原文</div><div class="orig-text"><b>Rakers:</b> "Should we really conceptualize like $40 billion goes to $60 billion, $80 billion?... Is it a linear function or is there something that kind of unlocks your ability to supply more demand..."<br><br><b>Huang:</b> "The speed-of-light answer, the perfect answer is actually infinity per gigawatt... I heard the other day that return on investment capital is now less than a year."</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2. Special Event ============ -->
+  <div id="panel-special" class="panel">
+    <div class="section-title">本季特殊事件：Vera Rubin 爬坡與供給瓶頸，疊加毛利率重設與一筆全新的 $105 億資料中心融資擔保</div>
+    <div class="card"><p>本季最重要的敘事轉折不是「成長是否延續」（Q2 營收 $96,221M、Q3 guide $108,000M，兩者都毫無疑問延續加速），而是<strong>供給端的兩個訊號同時轉為警訊</strong>：一是毛利率首度被管理層主動下修（Q3 74% → Q4 71–72% → FY2028 72–73%），理由是記憶體漲價幅度「超出先前預期，且明年還會更高」；二是資產負債表上的供給與產能承諾一季內從 $119B 暴增到 $279B，同時新增一筆 $105B 的 SB Energy/OpenAI 資料中心租賃擔保——這兩者共同描繪出「需求無虞、但把承諾兌現的代價正快速墊高」的圖像。三者互為因果：Vera Rubin 要如期爬坡，就要鎖更多記憶體與晶圓產能；記憶體越缺，價格越貴，毛利率就得下修；而為了鎖住土地電力廠房，NVIDIA 開始把自己的資產負債表押上去做擔保。</p></div>
+
+    <div class="section-title">① Vera Rubin 量產爬坡與供給瓶頸——70% guide 背後的真正故事</div>
+    <div class="sca-grid">
+      <div class="sca-box blue"><h4>規模</h4><ul>
+        <li>Vera Rubin 已於本月（2026年8月）開始量產出貨，已取得每一家主要 hyperscaler／AI cloud／系統 OEM 的採購訂單。</li>
+        <li>Q3 FY2027 guide 顯示 Vera Rubin 將占資料中心營收約 20%——換算 Q3 guide $108B、資料中心占比若維持約92-93%，Vera Rubin 單季營收落在約 $200億量級。</li>
+        <li>相對 Grace Blackwell Ultra：吞吐量/MW 提升 30x、每 token 成本降低 35x（管理層宣稱，尚無生產數據佐證）。</li>
+        <li>FY2028 guide 約 70% 成長，管理層明言「這是供給受限的展望」——不受限的話會顯著更高（管理層自陳「much higher」，未給數字）。</li>
+      </ul></div>
+      <div class="sca-box green"><h4>期限</h4><ul>
+        <li>量產出貨：2026年8月（Q3 FY2027 開始）。</li>
+        <li>Q3 占資料中心營收約 20%，Q4 起 hyperscale 成長預期重新加速，主因就是 Vera Rubin 供給隨時間增加。</li>
+        <li>供給瓶頸預期「至少持續到 FY2028 結束」——即整個明年供給都追不上需求。</li>
+      </ul></div>
+      <div class="sca-box orange"><h4>財務承諾／成本</h4><ul>
+        <li>供給與產能承諾一季內從 $119B（Q1 FY2027 末）暴增至 $279B（Q2 FY2027 末），主要用於記憶體與製造設施——是本季資產負債表上最大的單一 QoQ 變化。</li>
+        <li>存貨增至 $31.6B（原物料單獨就有 $11.3B，較年初 $3.8B 大增），為 Vera Rubin 出貨備貨。</li>
+        <li>毛利率因此被下修：Q3 74%（±50bp）→ Q4 71–72%（谷底）→ FY2028 72–73%（漲價執行後回升）。</li>
+      </ul></div>
+      <div class="sca-box red"><h4>尚待驗證</h4><ul>
+        <li>James Schneider 直接要求排序供給瓶頸（電力/廠房、DRAM、晶圓代工）被管理層公開拒答——外界仍無法判斷哪一環是真正的硬約束。</li>
+        <li>Aaron Rakers 問「每GW $40B 是否會進一步上探到$60-80B」與「產能擴張是否為線性函數」，管理層只給方向性確認，未談具體解鎖機制或時間表。</li>
+        <li>30x/35x 效能宣稱本季仍未有任何生產環境的第三方驗證數據（與 Q1 report 對 Rubin 宣稱的質疑一致，這是連續第二季只聞樓梯響）。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title">② 記憶體漲價與毛利率重設——本季最直白的一段管理層溝通</div>
+    <div class="price-band">
+      <div class="band-label">Q3 FY2027 → FY2028 毛利率路徑（管理層guide，GAAP／non-GAAP 口徑相同）</div>
+      <div class="band-bar band-ceiling"><span>Q2 FY2027 實際：75.0%</span><span>與Q1（74.9%）持平，Blackwell Ultra組合貢獻</span></div>
+      <div class="band-bar band-floor"><span>Q3 FY2027 guide：74%（±50bp）</span><span>Q4 FY2027 guide：71–72%（谷底）</span></div>
+      <div class="band-label">FY2028 全年 guide：72–73%（Q1 執行漲價後回升，尚未回到 Q2 FY2027 的 75.0%）</div>
+    </div>
+    <div class="card"><p>Colette Kress 選擇主動、罕見地直球處理這個議題（「我們想直接把話講開，而不是讓它變成一個懸而未決的問題」）：記憶體稀缺本身正是 AI 建設熱潮的產物，漲價幅度「超出我們先前預期，且明年還會更高」。與典型的成本上升不同，管理層把它定性為「需求過熱的症狀，而非單純吃掉利潤的外部衝擊」——言下之意是這輪漲價本身反映的正是 NVIDIA 自己驅動的需求。這段溝通與 Q1 report 供應鏈 tab 觀察到的記憶體集中度風險（SK Hynix／Micron／Samsung 三家supplier）直接呼應：現在集中度風險已經從「潛在」變成「已兌現、且將持續到明年」的實際毛利率衝擊。</p></div>
+
+    <div class="section-title">③ SB Energy／OpenAI PORTS 園區擔保——資料中心融資條款首度大規模量化揭露</div>
+    <div class="sca-grid">
+      <div class="sca-box blue"><h4>規模</h4><ul>
+        <li>2026年8月，NVIDIA 與 SB Energy Corp. 關係企業簽署擔保協議，為 OpenAI 關係企業在 Ohio 州 Pike County「PORTS Technology Campus」的土地/電力/廠房建置提供信用擔保。</li>
+        <li>擔保上限（累計）：<strong>$105.0億</strong>——加上既有的 AI cloud 土地電力廠房擔保 $3.5億，全部擔保曝險合計 <strong>$108.5億</strong>（10-Q Note 10）。</li>
+        <li>涵蓋約 4.25GW IT 負載的九個資料中心分期建設；另持有選擇權，可依自身裁量為額外約 3.8GW 提供信用支持。</li>
+      </ul></div>
+      <div class="sca-box green"><h4>期限</h4><ul>
+        <li>每份擔保於對應租約開始生效時啟動，隨九期建設各自完工分期增加擔保金額，第一期預計 FY2029 開始。</li>
+        <li>租約期限 20 年；擔保曝險會隨 OpenAI 逐期履約遞減。</li>
+        <li>擔保於 OpenAI 取得令人滿意的信評，或各租約期滿時終止。</li>
+      </ul></div>
+      <div class="sca-box orange"><h4>財務承諾／成本</h4><ul>
+        <li>此為表外的<strong>擔保</strong>（非直接負債），僅在承租人（OpenAI）違約時觸發付款義務；限於租約與電力款項的「定義部分」，不涵蓋場址全部成本或承租人全部義務。</li>
+        <li>交換條件：園區將專屬服務 NVIDIA AI 基礎設施（有限例外）。</li>
+        <li>與 8 月同步宣布的「六家基礎建設資本方（Apollo/BlackRock/Blackstone/Brookfield/Goldman Sachs/KKR）合作、動員 $500億+ 第三方資本」的融資平台方向一致——NVIDIA 傾向用擔保與信用增強取代直接出資，把資本額度留給更長期的股權投資。</li>
+      </ul></div>
+      <div class="sca-box red"><h4>尚待驗證</h4><ul>
+        <li>若 OpenAI 發生違約或破產事件，NVIDIA 可能被迫承接租約、要求房東另尋承租人，或啟動出售程序——10-Q 明文警示「替代承租人或買家可能無法以理想條件或時程尋得」。</li>
+        <li>OpenAI 已同意就特定損失提供補償與賠償，但 10-Q 同樣提示「未必能及時或全額回收」。</li>
+        <li>這是 NVIDIA 財報史上首次把單一客戶的資料中心擔保曝險量化到 SEC 文件裡——過去這類安排多半停留在法說會的口頭敘述（見 Q1 report 對 Anthropic 合作條款「完全未揭露」的觀察），代表揭露規格正在提升，但也代表曝險規模正在變得肉眼可見地巨大。</li>
+      </ul></div>
+    </div>
+
+    <div class="section-title">核心疑問——管理層留白的盡職調查式追問</div>
+    <ol class="dd-list">
+      <li>供給瓶頸的真正排序是什麼？James Schneider 直接問、管理層直接拒答——電力/廠房、DRAM、晶圓代工／CoWoS 封裝，究竟哪一環才是硬約束？</li>
+      <li>記憶體漲價會不會蔓延到客戶端？管理層目前只承諾「盡量不轉嫁給客戶」，但如果 Q4 毛利率真的探底到 71–72%，NVIDIA 的訂價策略是否會調整？</li>
+      <li>SB Energy／OpenAI 擔保的「觸發情境」機率有多高？OpenAI 的信用狀況與這筆 $105億 曝險之間的關聯，市場目前完全依賴管理層自己的定性描述。</li>
+      <li>供給與產能承諾一季暴增 $160億（$119B→$279B），這筆增量裡有多少是「已簽約鎖定」、多少是「意向性、可能調整」？10-Q 本身承認這些協議「在某些情況下可取消、可重新安排」。</li>
+      <li>Vera CPU（$200億獨立TAM，Q1即已揭露）與 Groq 3 LPX（本季全面量產）兩者是否會與 Vera Rubin GPU 爭奪同一批受限的晶圓／封裝產能？管理層迄今未正面處理過這個排擠效應的問題。</li>
+    </ol>
+
+    <div class="section-title">雙欄立場：對 NVIDIA vs 對 OpenAI／整體生態系（SB Energy 擔保）</div>
+    <div class="stance-grid">
+      <div class="sca-box blue"><h4>對 NVIDIA——利／弊</h4><ul>
+        <li>↑ 用擔保（而非直接出資）換取 4.25GW＋選擇性 3.8GW 專屬產能，資本效率優於全額自建或直接投資。</li>
+        <li>↑ 深化與 OpenAI（NVIDIA Compute 承諾約12GW）的長期綁定，降低訂單被競爭架構取代的風險。</li>
+        <li>↓ 曝險上限達 $105億，一旦觸發違約，NVIDIA 可能被迫承接 20 年期租約或自行找買家/承租人。</li>
+        <li>↓ 供給與產能承諾暴增到 $279億＋$108.5億擔保，資產負債表的或有義務規模已遠超過去任何一季。</li>
+      </ul></div>
+      <div class="sca-box green"><h4>對 OpenAI／生態系——利／弊</h4><ul>
+        <li>↑ OpenAI 取得由 NVIDIA 信用背書的長期基礎建設，降低自身独立融資的難度與利率。</li>
+        <li>↑ 建立 PORTS 這類專屬園區，為未來多輪升級（20年内可支援多次設備世代更替）預留空間。</li>
+        <li>↓ 高度依賴單一供應商的信用擔保，若雙方關係生變或 OpenAI 信用狀況惡化，擔保條件與後續融資能力可能連動受限。</li>
+        <li>↓ 專屬使用條款（僅限 NVIDIA AI 基礎設施，有限例外）降低了 OpenAI 未來混用其他架構（如自研 Jalapeño 晶片）的彈性。</li>
+      </ul></div>
+    </div>
+    <p class="note">資料來源：Q2 FY2027 法說會（Colette 開場白毛利率guide與記憶體說明；Jensen 問答中的供給瓶頸、Vera Rubin爬坡回應）；10-Q Note 10（SB Energy擔保、供給與產能承諾表、AI cloud commitments）；10-Q MD&A（毛利率變動、記憶體採購obligation）。30x/35x 效能宣稱與供給瓶頸具體排序截至本報告製作時仍無法從任何 SEC 申報文件獨立驗證。</p>
+  </div>
+
+  <!-- ============ 3. Technology ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="section-title">分市場平台營收 — FY2027 Q2（百萬美元、QoQ／YoY、佔總營收比）</div>
+    <div class="rev-chart">
+      <div class="rev-row"><div class="rev-name">Hyperscale</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:100%;background:#059669;">51%</div></div><div class="rev-val">$48,710M / +13% QoQ</div></div>
+      <div class="rev-row"><div class="rev-name">AI Clouds／Industrial／Enterprise（ACIE）</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:82.8%;background:#10b981;">42%</div></div><div class="rev-val">$40,313M / +25% QoQ</div></div>
+      <div class="rev-row"><div class="rev-name">Edge Computing</div><div class="rev-bar-wrap"><div class="rev-bar" style="width:14.8%;background:#0ea5e9;">7%</div></div><div class="rev-val">$7,198M / +13% QoQ</div></div>
+    </div>
+    <p class="note">長條寬度以 Hyperscale = 100% 縮放。本季 10-Q 附註揭露「將一家公司由 ACIE 改分類至 Hyperscale」並回溯重編比較期——意味著 Hyperscale 的 YoY／QoQ 成長率有一部分是分類調整而非純有機成長。可報告部門觀點（不同會計切法、總額相同）：Compute & Networking $882.99億（+114% YoY）／Graphics $79.22億（+46% YoY）。來源：10-Q 附註13。</p>
+    <hr class="divider">
+    <div class="section-title">極致協同設計堆疊（四層）——Vera Rubin 世代更新</div>
+    <div class="tech-grid">
+      <div class="tech-card dram"><h4>① 資料中心運算</h4><ul>
+        <li>Blackwell（含 Blackwell Ultra）仍占系統出貨多數；Vera Rubin 已於 2026年8月開始量產出貨，取得所有主要 hyperscaler／AI cloud／系統 OEM 訂單。</li>
+        <li>宣稱：相對 Grace Blackwell Ultra，吞吐量/MW 提升 30×、每 token 成本降低 35×（尚無生產數據驗證）。</li>
+        <li>每 GW 資料中心投資規模：Hopper ~$18B → Grace Blackwell ~$25B → Vera Rubin ~$40B；Jensen 另稱近五年整體每GW投資已從約$30B來到約$60B。</li>
+        <li>Q3 FY2027 guide：Vera Rubin 占資料中心營收約 20%，Q4 起 hyperscale 成長預期加速。</li>
+      </ul></div>
+      <div class="tech-card nand"><h4>② 網通</h4><ul>
+        <li>網通業務再創新高，QoQ +18%。Spectrum-X Ethernet YoY 成長 2.6×，持續擴大在 Ethernet 網通市場的領先地位。</li>
+        <li>Vera Rubin 平台整合 NVLink（機櫃內）、InfiniBand 或 Ethernet（機櫃間）及本季新登場的 Groq LPU，構成五種網通型態以涵蓋整個資料中心。</li>
+        <li>Groq 3 LPX 機架式系統已全面量產，本季稍早在 Hot Chips 大會發表，token 生成速度接近次佳替代方案的 4 倍（Artificial Analysis 基準）；Nebius 為首發客戶，本季稍晚開始出貨。</li>
+      </ul></div>
+      <div class="tech-card hbm"><h4>③ CPU（Grace → Vera）</h4><ul>
+        <li>Vera CPU 已全面量產；獨立伺服器CPU總體需求約 $200億（Q1即揭露的口徑，本季未再更新獨立數字）。</li>
+        <li>Grace CPU（2021年推出）近12個月營收已超過 $50億；Vera 完成 agentic 任務速度較 spec 基準快 1.8×，每瓦頻寬達其他資料中心CPU的5倍。</li>
+        <li>領先客戶已開始出貨，包括 OCI、SpaceXAI，本季起新增 AWS；FY2028 CPU營收初步預期較本期倍增以上。</li>
+      </ul></div>
+      <div class="tech-card pkg"><h4>④ 邊緣／實體 AI</h4><ul>
+        <li>Edge Computing 平台（PC/工作站/機器人/車用/AI-RAN基地台）本季營收 $71.98億，QoQ +13%——Blackwell工作站需求強勁，部分抵銷消費PC市場疲弱（受記憶體與系統漲價壓抑）。</li>
+        <li>AWS 擴大合作範圍：除了新增200萬顆GPU（本季起至FY2029Q2），也宣布採用 NVIDIA 全套實體AI技術堆疊（Omniverse／Cosmos／Isaac／Jetson）為其倉儲機器人車隊賦能。</li>
+        <li>DGX Spark（個人邊緣AI裝置）與DGX Station工作站被 Jensen 多次提及作為「7×24小時運行 agent」的範例載體，呼應 agentic AI 需求敘事。</li>
+      </ul></div>
+    </div>
+    <hr class="divider">
+    <div class="section-title">管理層在推銷的因果鏈</div>
+    <div class="card"><p>Agentic AI 每次推理消耗運算量是人類直接使用的 15–100 倍 → hyperscaler capex 於 2026年逼近 $8000億、2027年上看 $1.3兆，且雲端產業 backlog 已超過 $2兆 → 供給端因記憶體與封裝產能受限，只能兌現約 70% 的真實需求成長（管理層guide FY2028 +70%，需求本身估計逼近或超過100%）→ 供給缺口迫使 NVIDIA 往供應鏈上下游更深介入（記憶體供應商、電力/土地/廠房夥伴），並開始以資產負債表信用擔保（SB Energy/OpenAI）換取專屬產能保證 → 每一代全端平台（Hopper→Blackwell→Vera Rubin）每GW投資規模持續墊高（$18B→$25B→$40B），但客戶端資本回收期反而縮短（管理層宣稱不到一年）→ 循環回到更大規模的下一輪資本支出承諾。多頭論述的核心是「supply-constrained」本身就是最強的需求證明；空頭反駁（詳見風險矩陣）則是這個循環正在讓 NVIDIA 自己的資產負債表承擔越來越大的或有義務（$279B供給承諾＋$108.5B擔保曝險），而毛利率已經開始因記憶體漲價被動下修，代表「protecting supply」的代價正從敘事層面轉為實際獲利能力的侵蝕。</p></div>
+  </div>
+
+<!-- ============ 4. Supply Chain ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="section-title">供應鏈——自 10-K、10-Q 與法說會結構化整理（含出處與信心註記）</div>
+    <div class="flag-box obs" style="margin-bottom:16px;"><div class="q-label">解讀註記</div><div class="q-text">與 Q1 相比，本季供應鏈的名單本身沒有變化（同一批代工／記憶體／封裝廠商），真正的變化在<strong>強度</strong>：供給與產能承諾一季暴增 $160億（$119B→$279B），且 Groq IP 授權應計負債從 $39.21億驟降至 $9.86億（本季已現金支付 $29.44億），代表 NVIDIA 正在加速結清舊義務、同時加碼鎖定新產能——供應鏈的「金流方向」比「名單構成」更值得本季關注。</div></div>
+
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-title">供應鏈結構圖：分層關係（誰供給誰、單一來源風險落在哪層）</div>
+      <p class="note" style="margin-bottom:10px;">下圖為結構圖（chain-diagram），節點命名與下方 Sankey 流量圖一致（TSMC／Samsung／SK Hynix／Micron／Foxconn／Wistron／Fabrinet／NVIDIA／Data Center／Edge Computing／Hyperscale／ACIE）；CoWoS 與 Groq 兩個虛線節點代表非典型供應關係（先進封裝製程本身即為 TSMC 產能、IP 授權而非零組件採購）。</p>
+<div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 2014.875 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="2014.88" height="702" fill="#ffffff"/><text x="1007.44" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">NVIDIA 供應鏈結構——上游代工/記憶體/封裝 → NVIDIA → 市場平台 → 下游客戶（FY2027 Q2）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">上游供應商（10-K Item 1）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">NVIDIA 核心</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">市場平台（10-Q 附註13）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">下游客戶與通路</text><defs><marker id="arr-2563eb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker><marker id="arr-7c3aed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7c3aed"/></marker><marker id="arr-ea580c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#ea580c"/></marker><marker id="arr-0891b2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#0891b2"/></marker><marker id="arr-b91c1c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#b91c1c"/></marker><marker id="arr-16a34a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#16a34a"/></marker><marker id="arr-0ea5e9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#0ea5e9"/></marker></defs><polyline points="147.775,106 147.775,124 72,124 72,222" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="59.89" y="115" width="100" height="18" rx="3" fill="#ffffff"/><text x="109.89" y="128" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">晶圓代工（主力）</text><polyline points="368.32500000000005,106 368.32500000000005,146 308.359375,146 308.359375,222" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="299.34" y="137" width="78" height="18" rx="3" fill="#ffffff"/><text x="338.34" y="150" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">代工／記憶體</text><polyline points="581.45,106 581.45,168 544.71875,168 544.71875,222" fill="none" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arr-7c3aed)"/><rect x="548.01" y="159" width="30.15" height="18" rx="3" fill="#ffffff"/><text x="563.08" y="172" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">HBM</text><polyline points="774.9125,106 774.9125,190 781.078125,190 781.078125,222" fill="none" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arr-7c3aed)"/><rect x="755.5" y="181" width="45" height="18" rx="3" fill="#ffffff"/><text x="778" y="194" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">記憶體</text><polyline points="975.8000000000001,106 975.8000000000001,208 1017.4375,208 1017.4375,222" fill="none" stroke="#ea580c" stroke-width="1.6" marker-end="url(#arr-ea580c)"/><rect x="968.62" y="199" width="56" height="18" rx="3" fill="#ffffff"/><text x="996.62" y="212" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">組裝測試</text><polyline points="1185.3500000000001,106 1185.3500000000001,208 1253.796875,208 1253.796875,222" fill="none" stroke="#ea580c" stroke-width="1.6" marker-end="url(#arr-ea580c)"/><rect x="1191.57" y="199" width="56" height="18" rx="3" fill="#ffffff"/><text x="1219.57" y="212" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">組裝測試</text><polyline points="1394.9,106 1394.9,208 1490.15625,208 1490.15625,222" fill="none" stroke="#ea580c" stroke-width="1.6" marker-end="url(#arr-ea580c)"/><rect x="1414.53" y="199" width="56" height="18" rx="3" fill="#ffffff"/><text x="1442.53" y="212" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">組裝測試</text><polyline points="1610.7749999999999,106 1610.7749999999999,208 1726.515625,208 1726.515625,222" fill="none" stroke="#0891b2" stroke-width="1.6" marker-end="url(#arr-0891b2)" stroke-dasharray="6 5"/><rect x="1640.65" y="199" width="56" height="18" rx="3" fill="#ffffff"/><text x="1668.65" y="212" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">先進封裝</text><polyline points="1856.875,106 1856.875,208 1962.875,208 1962.875,222" fill="none" stroke="#b91c1c" stroke-width="1.6" marker-end="url(#arr-b91c1c)" stroke-dasharray="6 5"/><rect x="1859.33" y="199" width="101.1" height="18" rx="3" fill="#ffffff"/><text x="1909.88" y="212" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">IP授權（非組件）</text><polyline points="1017.4375,282 1017.4375,300 981.0125,300 981.0125,398" fill="none" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arr-16a34a)"/><rect x="948.95" y="291" width="100.55" height="18" rx="3" fill="#ffffff"/><text x="999.23" y="304" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">Data Center為主</text><polyline points="1017.4375,282 1017.4375,322 1039.0125,322 1039.0125,398" fill="none" stroke="#16a34a" stroke-width="1.6" marker-end="url(#arr-16a34a)"/><rect x="968.87" y="313" width="118.7" height="18" rx="3" fill="#ffffff"/><text x="1028.22" y="326" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">Edge Computing平台</text><polyline points="892.975,458 892.975,476 853.4375,476 853.4375,574" fill="none" stroke="#0ea5e9" stroke-width="1.6" marker-end="url(#arr-0ea5e9)"/><rect x="852.63" y="467" width="41.15" height="18" rx="3" fill="#ffffff"/><text x="873.21" y="480" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">約55%</text><polyline points="892.975,458 892.975,498 911.4375,498 911.4375,574" fill="none" stroke="#0ea5e9" stroke-width="1.6" marker-end="url(#arr-0ea5e9)"/><rect x="845.06" y="489" width="114.3" height="18" rx="3" fill="#ffffff"/><text x="902.21" y="502" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">約45%，QoQ成長最快</text><polyline points="1134.4750000000001,458 1134.4750000000001,520 1181.4375,520 1181.4375,574" fill="none" stroke="#0ea5e9" stroke-width="1.6" marker-end="url(#arr-0ea5e9)"/><rect x="1139.86" y="511" width="36.2" height="18" rx="3" fill="#ffffff"/><text x="1157.96" y="524" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">100%</text><g><rect x="60" y="46" width="175.55" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="147.78" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">TSMC 台積電</text><text x="147.78" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">晶圓代工主力・10-K Item 1</text></g><g><rect x="269.55" y="46" width="197.55" height="60" rx="9" fill="rgb(224,233,252)" stroke="#2563eb" stroke-width="1.4"/><text x="368.33" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Samsung Electronics</text><text x="368.33" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">晶圓代工／記憶體・10-K Item 1</text></g><g><rect x="501.1" y="46" width="160.7" height="60" rx="9" fill="rgb(237,227,252)" stroke="#7c3aed" stroke-width="1.4"/><text x="581.45" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">SK Hynix</text><text x="581.45" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">HBM記憶體・10-K Item 1</text></g><g><rect x="695.8" y="46" width="158.22" height="60" rx="9" fill="rgb(237,227,252)" stroke="#7c3aed" stroke-width="1.4"/><text x="774.91" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Micron Technology</text><text x="774.91" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">記憶體・10-K Item 1</text></g><g><rect x="888.03" y="46" width="175.55" height="60" rx="9" fill="rgb(252,232,221)" stroke="#ea580c" stroke-width="1.4"/><text x="975.8" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Hon Hai／Foxconn</text><text x="975.8" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">組裝測試封裝・10-K Item 1</text></g><g><rect x="1097.58" y="46" width="175.55" height="60" rx="9" fill="rgb(252,232,221)" stroke="#ea580c" stroke-width="1.4"/><text x="1185.35" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Wistron</text><text x="1185.35" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">組裝測試封裝・10-K Item 1</text></g><g><rect x="1307.13" y="46" width="175.55" height="60" rx="9" fill="rgb(252,232,221)" stroke="#ea580c" stroke-width="1.4"/><text x="1394.9" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Fabrinet</text><text x="1394.9" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">組裝測試封裝・10-K Item 1</text></g><g><rect x="1516.68" y="46" width="188.2" height="60" rx="9" fill="rgb(220,240,244)" stroke="#0891b2" stroke-width="1.4"/><text x="1610.78" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">CoWoS 先進封裝</text><text x="1610.78" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">經TSMC製程・單一來源疊加風險</text></g><g><rect x="1738.88" y="46" width="236" height="60" rx="9" fill="rgb(245,223,223)" stroke="#b91c1c" stroke-width="1.4"/><text x="1856.88" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Groq, Inc.（IP授權）</text><text x="1856.88" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">應計購買對價 $9.86億（Q1曾達$39.21…</text></g><g><rect x="60" y="222" width="1914.88" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="1017.44" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">NVIDIA Corporation</text><text x="1017.44" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Compute &amp; Networking $882.99億(+114%YoY)／Graphics $79.22億(+46%YoY)</text></g><g><rect x="792.94" y="398" width="200.08" height="60" rx="9" fill="rgb(222,242,230)" stroke="#16a34a" stroke-width="1.4"/><text x="892.98" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Data Center（$89,023M）</text><text x="892.98" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">+117% YoY・+18% QoQ</text></g><g><rect x="1027.01" y="398" width="214.93" height="60" rx="9" fill="rgb(222,242,230)" stroke="#16a34a" stroke-width="1.4"/><text x="1134.48" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Edge Computing（$7,198M）</text><text x="1134.48" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">+27% YoY・+13% QoQ</text></g><g><rect x="629.44" y="574" width="236" height="60" rx="9" fill="rgb(221,242,252)" stroke="#0ea5e9" stroke-width="1.4"/><text x="747.44" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Hyperscale（$48,710M）</text><text x="747.44" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">+13% QoQ；本季有一家公司由ACIE改分…</text></g><g><rect x="899.44" y="574" width="236" height="60" rx="9" fill="rgb(221,242,252)" stroke="#0ea5e9" stroke-width="1.4"/><text x="1017.44" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">AI Clouds／Industrial／Ent…</text><text x="1017.44" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">+25% QoQ，成長最快；5大客戶佔應收帳…</text></g><g><rect x="1169.44" y="574" width="236" height="60" rx="9" fill="rgb(221,242,252)" stroke="#0ea5e9" stroke-width="1.4"/><text x="1287.44" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">PC／工作站／機器人／車用終端</text><text x="1287.44" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Blackwell工作站需求強勁，抵銷消費P…</text></g><rect x="420.34" y="663" width="22" height="2.4" fill="#2563eb"/><text x="450.34" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">晶圓代工</text><rect x="512.34" y="663" width="22" height="2.4" fill="#7c3aed"/><text x="542.34" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">記憶體（含HBM）</text><rect x="644.49" y="663" width="22" height="2.4" fill="#ea580c"/><text x="674.49" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">組裝測試封裝（OSAT）</text><line x1="804.69" y1="664" x2="826.69" y2="664" stroke="#0891b2" stroke-width="2" stroke-dasharray="5 4"/><text x="834.69" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">先進封裝（CoWoS，經TSMC製程）</text><line x1="1017.14" y1="664" x2="1039.14" y2="664" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 4"/><text x="1047.14" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">IP授權（非組件供應）</text><rect x="1176.24" y="663" width="22" height="2.4" fill="#16a34a"/><text x="1206.24" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">NVIDIA內部平台／財報口徑</text><rect x="1359.54" y="663" width="22" height="2.4" fill="#0ea5e9"/><text x="1389.54" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">下游客戶／通路（部分僅法說會具名）</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">來源：10-K Item 1「Manufacturing」（上游具名供應商）、10-Q 附註13（市場平台營收）、附註7（Groq IP授權）、法說會逐字稿（下游具名客戶，未經SEC文件揭露）</div>
+</div>
+      <div class="flag" style="margin-top:10px;"><b>⚑ 人工解讀：</b> <span>結構本身與 Q1 完全相同——NVIDIA 的供應鏈仍是「一層晶圓代工／記憶體＋一層封裝測試」，且晶圓代工與先進封裝（CoWoS）高度集中於 TSMC 單一供應商。真正變化在下方 Sankey 呈現的流量規模：Data Center 一項就占了 NVIDIA 總營收約 92.5%，較 Q1 的 92.2% 略升，代表資料中心以外的業務（Edge Computing）占比正在被稀釋，集中度風險持續上升。來源：10-K Item 1「Manufacturing」、10-Q 附註7／附註13。</span></div>
+    </div>
+
+    <div class="chain-layer chain-up"><h4>▲ 上游——NVIDIA 的供應商</h4>
+      <div class="node conf-hi">TSMC — 主力邏輯晶圓代工 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">Samsung Electronics — 晶圓代工與記憶體 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">SK Hynix — 記憶體（含 HBM）<span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">Micron Technology — 記憶體 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">Hon Hai Precision（Foxconn）— 組裝測試封裝 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">Wistron Corporation — 組裝測試封裝 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">Fabrinet — 組裝測試封裝 <span class="src">10-K Item 1</span></div>
+      <div class="node conf-mid">Groq, Inc. — 非專屬 IP 授權，應計負債驟降至 $9.86億（Q1為$39.21億，本季付款$29.44億）<span class="src">10-Q 附註 7／現金流量表</span></div>
+      <div class="node conf-mid">CoWoS 先進封裝（透過 TSMC）<span class="src">10-K Item 1</span></div>
+      <div class="node conf-hi">記憶體三大供應商漲價幅度「超出先前預期」，是本季毛利率下修的直接成因 <span class="src">法說會</span></div>
+    </div>
+
+    <div class="chain-layer chain-core"><h4>● 核心——NVIDIA 極致協同設計平台</h4>
+      <div class="node">Compute & Networking 部門：$882.99億（+114% YoY）</div>
+      <div class="node">Graphics 部門：$79.22億（+46% YoY）</div>
+      <div class="node">供給與產能承諾：$279億（較上季 $119億 大增 135%）</div>
+      <div class="node">股票代號 NVDA，FY2027 為 53 週特殊財年（Q4 將是 14 週）</div>
+      <p class="note">Jensen 明言的差異化：唯一一家透過極致協同設計自己打造每一層——晶片、系統、網通、軟體——同時保持平台開放讓夥伴整合的公司。</p>
+    </div>
+
+    <div class="chain-layer chain-down"><h4>▼ 下游——客戶與通路</h4>
+      <div class="node conf-mid">5 家未具名直接客戶：合計占 Q2 FY27 應收帳款餘額 70%（22%、14%、13%、11%、10%）<span class="src">10-Q 附註 7</span></div>
+      <div class="node conf-mid">Q2 單季僅 1 家直接客戶佔營收10%以上（16%）；H1累計3家（16%/15%/13%）<span class="src">10-Q 附註13</span></div>
+      <div class="node conf-mid">1 家未具名「AI 研究與部署公司」——間接，透過雲端服務採購 <span class="src">10-Q 附註 13</span></div>
+      <div class="node conf-hi">SB Energy Corp./OpenAI — PORTS Technology Campus，4.25GW＋選擇性3.8GW，擔保上限$105億 <span class="src">10-Q 附註10</span></div>
+      <div class="node conf-hi">AWS — 本季起加碼200萬顆GPU（至FY2029Q2）＋採用全套實體AI技術堆疊 <span class="src">法說會</span></div>
+      <div class="node conf-hi">六家基礎建設資本方（Apollo/BlackRock/Blackstone/Brookfield/Goldman Sachs/KKR）— 融資平台動員$500億+第三方資本 <span class="src">法說會＋10-Q Item2</span></div>
+      <div class="node conf-mid">日本Noetra／南韓LG、Hyundai／歐洲35座新增超級電腦 — 主權AI擴張 <span class="src">法說會</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">供應鏈流向：上游供應商 → NVIDIA → 市場平台</div>
+      <p class="note">上游連結寬度為示意性相對權重估計（按 Q1 權重依 Q2 總營收比例縮放；NVIDIA 未揭露個別供應商的金額分配）；NVIDIA→Data Center/Edge Computing 與 Data Center→Hyperscale/ACIE 的流向則是 10-Q 附註 13 真實申報的營收數字（百萬美元）。</p>
+<div id="sankeyEmbed_nvdaQ2SupplyChain" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"tsmc","label":"TSMC 台積電（晶圓代工主力）","color":"#2563eb"},{"id":"samsung","label":"Samsung Electronics（晶圓代工／記憶體）","color":"#7c3aed"},{"id":"hynix","label":"SK Hynix（HBM 記憶體）","color":"#9333ea"},{"id":"micron","label":"Micron Technology（記憶體）","color":"#a855f7"},{"id":"foxconn","label":"Hon Hai／Foxconn（組裝測試封裝）","color":"#ea580c"},{"id":"wistron","label":"Wistron（組裝測試封裝）","color":"#f97316"},{"id":"fabrinet","label":"Fabrinet（組裝測試封裝）","color":"#fb923c"},{"id":"nvda","label":"NVIDIA Corporation","color":"#16a34a"},{"id":"dc","label":"Data Center（$89,023M）","color":"#0d9488"},{"id":"edge","label":"Edge Computing（$7,198M）","color":"#0ea5e9"},{"id":"hyperscale","label":"Hyperscale（$48,710M）","color":"#059669"},{"id":"acie","label":"AI Clouds／Industrial／Enterprise（$40,313M）","color":"#10b981"}],"links":[{"source":"tsmc","target":"nvda","value":40086},{"source":"samsung","target":"nvda","value":9432},{"source":"hynix","target":"nvda","value":14148},{"source":"micron","target":"nvda","value":10022},{"source":"foxconn","target":"nvda","value":14148},{"source":"wistron","target":"nvda","value":5306},{"source":"fabrinet","target":"nvda","value":3084},{"source":"nvda","target":"dc","value":89023},{"source":"nvda","target":"edge","value":7198},{"source":"dc","target":"hyperscale","value":48710},{"source":"dc","target":"acie","value":40313}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_nvdaQ2SupplyChain");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+    </div>
+  </div>
+
+  <!-- ============ 5. Risk Matrix ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="section-title">風險矩陣——按嚴重度排序，附論證與申報文件出處</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text"><div class="risk-title">記憶體漲價侵蝕毛利率，且管理層自陳「明年還會更高」</div>管理層主動下修毛利率guide：Q3 74%（±50bp）→Q4 71–72%（谷底）→FY2028 72–73%，尚未回到 Q2 實際的 75.0%。這不是單季波動——Colette Kress 明確說「漲價幅度超出我們先前預期」，且是產業性、非NVIDIA可控的供給面問題（三大記憶體供應商同時吃緊）。10-Q 也揭露本季存貨已增至$31.6B、原物料單獨$11.3B（年初僅$3.8B），代表NVIDIA正在加速囤貨因應——若記憶體價格持續超預期上漲，Q4與FY2028毛利率guide本身可能再被下修。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text"><div class="risk-title">供給與產能承諾一季暴增135%，或有義務規模已達歷史新高</div>10-Q Note 10 揭露供給與產能承諾從 $119B（Q1末）暴增至 $279B（Q2末），加計雲端服務協議、未開始租賃、股權投資與資本支出，總承諾堆疊達 $366B；另有 AI cloud 相關承諾 $56B、SB Energy擔保$108.5B——合計超過 $500B 的廣義或有義務／承諾規模，且 10-Q 自承這些協議「在某些情況下可取消、可重新安排」，代表財測與實際兌現之間存在管理層自己都承認的不確定性。這正是 Vivek Arya 在法說會上追問卻沒有得到正面回答的那個「~$500億是否為全貌」的問題。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text"><div class="risk-title">SB Energy／OpenAI 擔保：單一交易對手信用曝險首度大規模量化</div>NVIDIA 首次在SEC文件揭露對單一客戶（OpenAI）的資料中心融資擔保，上限達$105億，涵蓋4.25GW（可選擇性擴大至8.05GW）的20年期租約。10-Q風險因子章節新增專段警示：若OpenAI違約或發生破產事件，NVIDIA可能被迫承接長期租約、尋找替代承租人或買家，且「未必能以理想條件或時程尋得」。OpenAI雖同意補償相關損失，但10-Q同樣提示「未必能及時或全額回收」。這把 NVIDIA 的資產負債表與單一前沿實驗室的信用狀況直接綁定，是與Q1報告觀察到的「Anthropic合作條款完全未揭露」性質不同、風險更具體可衡量的新曝險。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text"><div class="risk-title">應收帳款集中度加速上升，現金轉換品質下滑</div>五大直接客戶合計占應收帳款餘額70%（22%/14%/13%/11%/10%），較Q1末的64%（三家客戶）與FY2026年初的56%（三家客戶）明顯上升；DSO由Q1約45天跳升至Q2約60天，管理層自己在法說會上承認是「大型投資級客戶的多季延長付款條件」所致。現金流量表顯示Q2單季營業活動現金流僅約$24.1B，遠低於淨利$59.7B，缺口幾乎全部來自應收帳款增加$22.3B——淨利成長強勁但現金轉換品質正在下滑，值得在後續季度持續追蹤DSO與AR集中度是否進一步惡化。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text"><div class="risk-title">獲利品質：股權證券利得連續第二季墊高淨利，但幅度正在收斂</div>Q2稅前「其他收益，淨額」達$7,773M，幾乎全部（$7,771M）來自股權證券利得；核心淨利（僅按16.5%有效稅率對營業利益課稅估算）約$53.2B、核心稀釋EPS約$2.19，均低於財報揭露的$59.7B／$2.46。與Q1相比（核心EPS約$1.83 vs 財報$2.39，缺口$0.56），本季缺口收斂至約$0.27／股——顯示這股非營業收益對EPS的墊高效果正在減弱，但H1累計股權利得仍高達$23.7B，是判斷NVIDIA「核心」獲利能力時不可忽略的調整項。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text"><div class="risk-title">法說會前兩天：全球業務執行副總裁遞交離職申報，無人問及</div>Ajay K. Puri（EVP, Worldwide Field Operations，掌管NVIDIA全球業務組織）於2026年8月24日——法說會前兩天——申報Form 4，內容為「已於2026年8月24日自該職位退休，不再受Section 16規範」，申報中無任何股票交易（買賣表格均為空）。這是一次乾淨的離職通知，本身未必代表負面訊號，但時點（法說會前兩天）與角色（掌管全球業務、直接面對客戶）使其值得留意；全場8位分析師沒有一人在Q&A提及此事，管理層也未主動說明繼任安排。列為中度風險是基於「揭露缺口」而非「已證實的負面訊號」——後續季度應追蹤是否有正式繼任者公告。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text"><div class="risk-title">Groq/LPX 定位持續模糊，但財務曝險正在收斂</div>Groq IP授權應計負債從Q1的$39.21億大幅降至$9.86億，本季已現金支付$29.44億——這是與Q1報告標記的「Groq應計負債」直接對應、且已實質改善的項目。Jensen在本季法說會上首次承認「LPX」與Groq 3系列的技術定位（高互動性、低延遲、SRAM架構），較Q1時完全不提及Groq名稱已有進步，但仍未量化LPX/Groq產品線對整體營收的具體貢獻。列為低風險原因是財務曝險已大幅收斂，僅剩產品定位透明度問題。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text"><div class="risk-title">中國出口管制——曝險持續極小且無改善跡象，但也未惡化</div>Q2 H200對中國出貨仍低於資料中心營收1%，H1認列$0.4B與H200相關的超額存貨與採購義務減損；任何未來H200出貨均須承擔25%進口關稅且NVIDIA表示無法轉嫁給客戶。展望中「不含任何中國資料中心運算營收」，與Q1一致，維持低風險評等（曝險規模小且已充分反映於財測中）。</div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text"><div class="risk-title">內部人交易訊號——程序性，無加速賣出跡象</div>CEO與CFO自Q1法說會後6/23最後一次申報迄今（含法說會後4個交易日）均無新Form 4，符合法說會前後閉鎖期的標準做法。董事群6/23、6/29集中申報屬例行10b5-1計畫恢復；Tench Coxe兩次Code G（無償贈與）與Suzanne Nora Johnson的Code A（股權獎勵授予）均非市場性賣出。淨結論：本季內部人活動除Ajay Puri離職申報外全屬程序性，無加速賣出或異常訊號。</div>
+    </div>
+  </div>
+
+  <!-- ============ 6. Income Statement ============ -->
+  <div id="panel-is" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">$96,221M</div><div class="l">總營收</div><div class="d up">+18% QoQ ／ +106% YoY</div></div>
+      <div class="kpi"><div class="v">75.0%</div><div class="l">毛利率（GAAP＝non-GAAP）</div><div class="d up">+0.1pp QoQ ／ +2.6pp YoY</div></div>
+      <div class="kpi"><div class="v">$63,734M</div><div class="l">營業利益</div><div class="d up">+19% QoQ ／ +124% YoY</div></div>
+      <div class="kpi"><div class="v">$2.46</div><div class="l">稀釋每股盈餘</div><div class="d up">+3% QoQ ／ +128% YoY</div></div>
+    </div>
+
+    <div class="section-title">逐季趨勢（FY2026 Q1 – FY2027 Q2）</div>
+    <div class="chart-wrap"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">NVIDIA 逐季營收與毛利率趨勢（FY2026Q1–FY2027Q2）</text><line x1="76" y1="456" x2="824" y2="456" stroke="#eeeeee" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40,000</text><line x1="76" y1="322" x2="824" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60,000</text><line x1="76" y1="188" x2="824" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">80,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100,000</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">60</text><text x="834" y="326" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">65</text><text x="834" y="192" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">70</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">75</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY26Q1</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY26Q2</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY26Q3</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY26Q4</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY27Q1</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY27Q2</text><polyline points="76,428.78 225.6,410.82 375.2,342.06 524.8,267.55 674.4,177.18 824,79.32" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="428.78" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="225.6" cy="410.82" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="375.2" cy="342.06" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="524.8" cy="267.55" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="674.4" cy="177.18" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="79.32" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,442.6 225.6,123.68 375.2,96.88 524.8,54 674.4,56.68 824,54" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="442.6" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="225.6" cy="123.68" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="375.2" cy="96.88" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="524.8" cy="54" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="674.4" cy="56.68" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="54" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><line x1="377.25" y1="40" x2="393.25" y2="40" stroke="#182456" stroke-width="2.4"/><text x="399.25" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營收</text><line x1="444.25" y1="40" x2="460.25" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="466.25" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">毛利率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">來源：NVIDIA 10-Q（FY2026Q1–FY2027Q2），毛利率為GAAP口徑</div>
+</div></div>
+
+    <p class="flag obs"><b>⚑ 人工解讀：</b> 六季圖形顯示營收與毛利率並非同步變化——FY26Q1→Q2毛利率大跳升（60.5%→72.4%）主因去年同期H20減損基期效應消退，Q4FY26起毛利率已站穩75%附近的高原期，直到本季（Q2FY27）才因記憶體漲價出現Q3guide74%的首次主動下修訊號，趨勢線上尚未完全反映，需留意下一季更新後Q3實際值是否落在guide區間內。來源：10-Q（FY2026Q1–FY2027Q2各季）與 SEC XBRL company-facts API 交叉核對。</p>
+
+    <div class="section-title">損益表逐行 QoQ／YoY（$M，GAAP口徑）</div>
+    <table>
+      <tr><th>科目</th><th>Q2 FY2026</th><th>Q1 FY2027</th><th>Q2 FY2027</th><th>QoQ</th><th>YoY</th></tr>
+      <tr><td>營收</td><td>46,743</td><td>81,615</td><td><strong>96,221</strong></td><td class="up">+18%</td><td class="up">+106%</td></tr>
+      <tr class="sub"><td>營收成本</td><td>12,890</td><td>20,458</td><td>24,079</td><td>—</td><td>—</td></tr>
+      <tr><td>毛利</td><td>33,853</td><td>61,157</td><td><strong>72,142</strong></td><td>—</td><td>—</td></tr>
+      <tr><td>毛利率</td><td>72.4%</td><td>74.9%</td><td><strong>75.0%</strong></td><td class="up">+0.1pt</td><td class="up">+2.6pt</td></tr>
+      <tr class="sub"><td>研發費用</td><td>4,291</td><td>6,321</td><td>7,054</td><td>—</td><td class="down">+64%</td></tr>
+      <tr class="sub"><td>SG&amp;A</td><td>1,122</td><td>1,300</td><td>1,354</td><td>—</td><td class="down">+21%</td></tr>
+      <tr><td>營業費用合計</td><td>5,413</td><td>7,621</td><td>8,408</td><td class="down">+10%</td><td class="down">+55%</td></tr>
+      <tr class="total"><td>營業利益</td><td>28,440</td><td>53,536</td><td>63,734</td><td class="up">+19%</td><td class="up">+124%</td></tr>
+      <tr class="sub"><td>其他收益，淨額</td><td>2,766</td><td>15,929</td><td>7,773</td><td>—</td><td>—</td></tr>
+      <tr><td>稅前淨利</td><td>31,206</td><td>69,903</td><td>71,507</td><td>—</td><td>—</td></tr>
+      <tr class="sub"><td>所得稅費用（有效稅率）</td><td>4,784（15.3%）</td><td>11,582（16.6%）</td><td>11,819（16.5%）</td><td>—</td><td>—</td></tr>
+      <tr class="total"><td>淨利</td><td>26,422</td><td>58,321</td><td>59,688</td><td class="up">+2%</td><td class="up">+126%</td></tr>
+      <tr><td>稀釋每股盈餘</td><td>$1.08</td><td>$2.39</td><td>$2.46</td><td class="up">+3%</td><td class="up">+128%</td></tr>
+      <tr class="sub"><td>稀釋股數（百萬股）</td><td>24,532</td><td>24,391</td><td>24,285</td><td>—</td><td>—</td></tr>
+    </table>
+    <div class="flag obs"><b>⚑ 人工解讀：</b> 淨利QoQ僅+2%，遠低於營業利益QoQ+19%——落差來自「其他收益，淨額」從Q1的$15,929M（含$13.4B股權利得＋Groq/公司warrant等一次性項目）降至Q2的$7,773M。這不是獲利惡化，而是Q1那筆異常龐大的非營業利得沒有重演；營業利益本身的QoQ／YoY成長率才是判斷核心業務動能的正確指標。</div>
+
+    <div class="section-title">上半年（H1 FY2027）累計與展望</div>
+    <table>
+      <tr><th>科目</th><th>H1 FY2026</th><th>H1 FY2027</th><th>YoY</th></tr>
+      <tr><td>營收</td><td>$90,805M</td><td>$177,837M</td><td class="up">+96%</td></tr>
+      <tr><td>毛利率</td><td>66.6%</td><td>75.0%</td><td class="up">+8.4pt</td></tr>
+      <tr><td>營業利益</td><td>$50,078M</td><td>$117,270M</td><td class="up">+134%</td></tr>
+      <tr><td>淨利</td><td>$45,197M</td><td>$118,010M</td><td class="up">+161%</td></tr>
+      <tr><td>稀釋每股盈餘</td><td>$1.84</td><td>$4.85</td><td class="up">+164%</td></tr>
+    </table>
+    <p class="note">H1 FY2026毛利率受一次性$4.5B H20超額存貨與採購義務減損拖累（若剔除，H1FY26毛利率會顯著更高）——這是YoY毛利率+8.4pt裡有一部分屬於「基期效應」而非純粹的組合改善，實際改善幅度應參考Q2單季YoY+2.6pt較為乾淨。</p>
+
+    <div class="section-title">財測 vs 實際、下一季與下年度展望</div>
+    <div class="card">
+      <p><strong>Q3 FY2027 guide（本次法說會發布）：</strong>總營收 $108,000M（±2%），毛利率 GAAP／non-GAAP 均為 74%（±50bp），營業費用約 GAAP $9.2B／non-GAAP $9.0B，全年營業費用成長guide調升至「低50%區間」，FY2027全年稅率維持16–18%。</p>
+      <p><strong>FY2028 展望（首次guide整年）：</strong>營收成長約70%（YoY）——管理層明言「這是供給受限的展望」，實際需求成長率更高（未給精確數字，僅稱「much higher」）。毛利率path：Q4 FY2027觸底71–72%，FY2028全年回升至72–73%（漲價執行後）。</p>
+      <p class="note">Q3 FY2027 guide的$108,000M較Q2實際$96,221M隱含QoQ約+12.2%——顯著低於Q1→Q2的+18% QoQ，主因Vera Rubin剛開始爬坡（Q3僅占資料中心營收約20%）、hyperscale成長要等Q4起才重新加速。</p>
+    </div>
+  </div>
+
+  <!-- ============ 7. Business Segments ============ -->
+  <div id="panel-seg" class="panel">
+    <div class="section-title">市場平台別營收對比（Hyperscale／ACIE／Edge Computing，必備圖）</div>
+    <div class="chart-wrap"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">NVIDIA 市場平台別營收 QoQ（FY2027 Q1→Q2）</text><text x="22" y="41" text-anchor="start" font-size="12.5" fill="#6b6b6b" font-family="sans-serif">ACIE 為六個月中成長最快的市場平台：+25% QoQ、+138% YoY</text><line x1="22" y1="56" x2="876" y2="56" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="71" width="10" height="10" rx="1" fill="#182456"/><text x="40" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">FY27Q1</text><rect x="101.95" y="71" width="10" height="10" rx="1" fill="#8f1f1f"/><text x="119.95" y="80" font-size="11.5" fill="#333333" font-family="sans-serif">FY27Q2</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="384" x2="876" y2="384" stroke="#eeeeee" stroke-width="1"/><text x="68" y="388" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10,000</text><line x1="78" y1="312" x2="876" y2="312" stroke="#eeeeee" stroke-width="1"/><text x="68" y="316" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20,000</text><line x1="78" y1="240" x2="876" y2="240" stroke="#eeeeee" stroke-width="1"/><text x="68" y="244" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30,000</text><line x1="78" y1="168" x2="876" y2="168" stroke="#eeeeee" stroke-width="1"/><text x="68" y="172" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40,000</text><line x1="78" y1="96" x2="876" y2="96" stroke="#eeeeee" stroke-width="1"/><text x="68" y="100" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">50,000 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="146.04" width="93.76" height="309.96" fill="#182456" rx="1" data-dim="FY27Q1"/><rect x="212" y="105.29" width="93.76" height="350.71" fill="#8f1f1f" rx="1" data-dim="FY27Q2"/><text x="211" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Hyperscale</text><rect x="382.24" y="224.19" width="93.76" height="231.81" fill="#182456" rx="1" data-dim="FY27Q1"/><rect x="478" y="165.75" width="93.76" height="290.25" fill="#8f1f1f" rx="1" data-dim="FY27Q2"/><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">ACIE</text><rect x="648.24" y="410.14" width="93.76" height="45.86" fill="#182456" rx="1" data-dim="FY27Q1"/><rect x="744" y="404.17" width="93.76" height="51.83" fill="#8f1f1f" rx="1" data-dim="FY27Q2"/><text x="743" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Edge</text><text x="743" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">Computing</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">來源：NVIDIA 10-Q Note 13（市場平台營收，FY2027 Q1→Q2）</text></svg>
+</div></div>
+    <p class="note">此圖與技術與產品線 tab 的橫條為同一組數字，改用並排長條呈現 QoQ 變化幅度：ACIE（+25% QoQ）明顯快於 Hyperscale（+13% QoQ）與 Edge Computing（+13% QoQ）。</p>
+
+    <div class="section-title">可報告會計部門：Compute &amp; Networking vs. Graphics（三季利潤率趨勢）</div>
+    <table>
+      <tr><th>科目</th><th>Q2 FY2026</th><th>Q1 FY2027</th><th>Q2 FY2027</th></tr>
+      <tr><td>Compute &amp; Networking 營收</td><td>$41,331M</td><td>$74,550M</td><td><strong>$88,299M</strong></td></tr>
+      <tr><td>Compute &amp; Networking 營業利益</td><td>$28,363M</td><td>$53,335M</td><td><strong>$62,696M</strong></td></tr>
+      <tr><td>Compute &amp; Networking 營業利益率</td><td>68.6%</td><td>71.6%</td><td><strong>71.0%</strong></td></tr>
+      <tr><td>Graphics 營收</td><td>$5,412M</td><td>$7,065M</td><td><strong>$7,922M</strong></td></tr>
+      <tr><td>Graphics 營業利益</td><td>$2,242M</td><td>$2,941M</td><td><strong>$3,899M</strong></td></tr>
+      <tr><td>Graphics 營業利益率</td><td>41.4%</td><td>41.6%</td><td><strong>49.2%</strong></td></tr>
+    </table>
+    <p class="note">Graphics 營業利益率本季跳升近 8 個百分點（41.6%→49.2%），10-Q 將其歸因於 Blackwell 架構產品組合貢獻的營收成長——但 10-Q 並未拆解 Graphics 內部 GeForce 消費級與資料中心用 Blackwell 工作站繪圖卡各自的貢獻比例，屬留白反推的空間。量價拆分（出貨量 QoQ vs. ASP QoQ）：<strong>無此資料</strong>——NVIDIA 不揭露 GPU 出貨顆數或平均單價，僅能透過營收與毛利率間接推論組合變化。</p>
+
+    <div class="section-title">業務部門深度解析——產品本身是什麼、用在哪裡、為何客戶需要它</div>
+    <div class="bu-grid">
+      <div class="bu-card">
+        <h4>Compute &amp; Networking（占營收 91.8%，本季最主要成長引擎）</h4>
+        <p><strong>產品是什麼：</strong>以 Blackwell／Blackwell Ultra／Vera Rubin 資料中心 GPU 為核心，搭配 NVLink（機櫃內晶片互連）、InfiniBand 與 Spectrum-X Ethernet（機櫃間網通）、Vera CPU（Arm架構資料中心處理器）與 Groq LPU（低延遲推論加速器）構成的「全端 AI 工廠平台」，而非單一晶片產品。</p>
+        <p><strong>用在哪裡：</strong>雲端服務供應商（hyperscaler）與規模較小的 AI cloud／neocloud 用來搭建大型 GPU 叢集，執行大型語言模型的訓練（pretraining）、後訓練（post-training，如強化學習微調）與推論（inference，尤其是消耗運算量更高的 agentic 推論）。企業與主權國家客戶則用於建置自有的機密／受監管 AI 基礎設施。</p>
+        <ul>
+          <li>Blackwell Ultra（GB300 系列）：本季系統出貨仍占多數，MLPerf 推論基準測試全面領先，吞吐量較6個月前提升2.7倍、每token成本下降60%。</li>
+          <li>Vera Rubin：7種專用晶片橫跨5種加速機櫃設計，本季8月開始量產出貨；每GW投資規模達$40B（較Grace Blackwell的$25B再上一個台階），代表客戶每投資一座資料中心的NVIDIA內容金額持續墊高。</li>
+          <li>NVLink-72機櫃架構已進入第三代——把資料處理、預訓練、後訓練、agentic推論四個階段整合進同一套可互換的硬體，是NVIDIA主張自己「全生命週期通用」定位的技術基礎。</li>
+          <li>Vera CPU：客製Arm核心，與Rubin GPU/NVLink協同設計，相對x86效能/瓦特提升5倍，用於代理任務的協調層（orchestration）——「思考」在GPU上發生，「協調」在CPU上發生。</li>
+        </ul>
+      </div>
+      <div class="bu-card">
+        <h4>Graphics（占營收 8.2%，利潤率本季顯著改善）</h4>
+        <p><strong>產品是什麼：</strong>GeForce消費級遊戲顯示卡、NVIDIA RTX工作站/專業繪圖卡、雲端遊戲串流服務（GeForce NOW）與車用視覺運算平台，本質是面向終端消費者與內容創作者的圖形運算產品線，與Compute & Networking面向資料中心的架構不同（雖底層均採Blackwell世代技術）。</p>
+        <p><strong>用在哪裡：</strong>PC遊戲玩家的顯示卡升級需求、內容創作者（影像/3D渲染/AI輔助創作）用RTX工作站繪圖卡加速本地運算、車廠採用NVIDIA車用平台做座艙娛樂與輔助駕駛視覺運算。</p>
+        <ul>
+          <li>本季受惠Blackwell架構產品組合，帶動營業利益率由上季41.6%跳升至49.2%——反映高階Blackwell工作站繪圖卡出貨占比提升。</li>
+          <li>消費級PC市場需求偏疲弱，主因記憶體與系統整體價格上漲壓抑買氣，與Compute & Networking面臨的記憶體漲價是同一個供給面壓力源，只是終端市場的需求彈性不同（消費者比資料中心客戶更容易延後升級）。</li>
+          <li>Edge Computing平台（涵蓋部分Graphics與部分Compute & Networking產品，如DGX Spark／DGX Station邊緣AI裝置）本季營收$71.98億，QoQ+13%，是管理層在法說會上多次舉例「7×24小時運行AI agent」的實體載體。</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">依 2026-08-09 起適用的框架規則，本節聚焦財務數字背後對應的具體產品/技術拆解；市場區隔（誰在買、為何買）與長期需求場景敘事詳見「技術與產品線」tab。</p>
+  </div>
+
+  <!-- ============ 8. Balance Sheet ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="section-title">資產負債表三期別對比（$M）</div>
+    <table>
+      <tr><th>科目</th><th>2026-01-25（FY26末）</th><th>2026-04-26（Q1FY27末）</th><th>2026-07-26（Q2FY27末）</th></tr>
+      <tr><td>現金及約當現金</td><td>10,605</td><td>13,237</td><td><strong>22,443</strong></td></tr>
+      <tr><td>應收帳款，淨額</td><td>38,466</td><td>40,710</td><td><strong>63,059</strong></td></tr>
+      <tr><td>存貨</td><td>21,403</td><td>25,797</td><td><strong>31,575</strong></td></tr>
+      <tr><td>流動資產合計</td><td>125,605</td><td>150,995</td><td><strong>197,412</strong></td></tr>
+      <tr class="total"><td>資產總額</td><td>206,803</td><td>259,474</td><td><strong>320,272</strong></td></tr>
+      <tr><td>應計購買對價（Groq IP授權）</td><td>3,921</td><td>—</td><td><strong>986</strong></td></tr>
+      <tr><td>長期債務淨額</td><td>8,468（淨額）</td><td>—</td><td><strong>33,366</strong></td></tr>
+    </table>
+    <p class="note">2026年6月發行7個券別共$250億優先無擔保票據，是長期債務規模跳升的主因（非為併購或財務壓力籌資，用途為「一般公司用途」）。現金及約當現金＋可交易債務證券合計$56.6億（原文為$56.6B），另有$42.8B可交易股權證券——流動性充裕，長期債務利息保障倍數詳見下方。</p>
+
+    <div class="section-title">應收帳款天數（DSO）逐季趨勢——本季最乾淨的管理層說法↔財報互證</div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">~45天</div><div class="stat-lbl">Q1 FY2027（AR $40,710M ÷ 營收 $81,615M ×91天）</div></div>
+      <div class="stat-box"><div class="stat-val">~60天</div><div class="stat-lbl">Q2 FY2027（AR $63,059M ÷ 營收 $96,221M ×91天）</div></div>
+      <div class="stat-box"><div class="stat-val">+15天</div><div class="stat-lbl">QoQ 增幅</div></div>
+    </div>
+    <p class="note">Colette Kress法說會原話：「Days of sales outstanding increased to 60 days, reflecting extended payment terms for large purchases by certain investment-grade customers to be shipped over multiple quarters」——與本表算出的約60天幾乎完全吻合，是本季少數能被財報數字直接、乾淨驗證的管理層陳述。</p>
+
+    <div class="section-title">採購承諾與未開始租賃——一季暴增135%的承諾堆疊</div>
+    <table>
+      <tr><th>承諾類別</th><th>2027餘（$B）</th><th>2028</th><th>2029</th><th>2030</th><th>2031</th><th>2032+</th><th>合計</th></tr>
+      <tr><td>供給與產能承諾</td><td>92</td><td>87</td><td>88</td><td>6</td><td>5</td><td>1</td><td><strong>279</strong></td></tr>
+      <tr><td>雲端服務協議</td><td>3</td><td>8</td><td>7</td><td>6</td><td>4</td><td>1</td><td><strong>29</strong></td></tr>
+      <tr><td>資料中心未開始租賃（自用）</td><td>—</td><td>1</td><td>1</td><td>2</td><td>1</td><td>20</td><td><strong>25</strong></td></tr>
+      <tr><td>股權投資承諾</td><td>18</td><td>3</td><td>2</td><td>2</td><td>—</td><td>—</td><td><strong>25</strong></td></tr>
+      <tr><td>資本支出</td><td>7</td><td>1</td><td>—</td><td>—</td><td>—</td><td>—</td><td><strong>8</strong></td></tr>
+      <tr class="total"><td>小計</td><td>120</td><td>100</td><td>98</td><td>16</td><td>10</td><td>22</td><td><strong>366</strong></td></tr>
+      <tr><td>AI cloud 夥伴承諾（額外表）</td><td>—</td><td>6</td><td>8</td><td>7</td><td>6</td><td>9</td><td><strong>36</strong></td></tr>
+      <tr><td>資料中心未開始租賃（第三方）</td><td>—</td><td>—</td><td>1</td><td>1</td><td>1</td><td>17</td><td><strong>20</strong></td></tr>
+    </table>
+    <p class="note">供給與產能承諾（$279B）較上季$119B暴增135%，是本季資產負債表最大的單一變化——10-Q自陳這些協議「在某些情況下可取消、可重新安排」，代表數字本身帶有管理層自己承認的不確定性。與供應鏈tab揭露的長約供應商（TSMC/三大記憶體廠）交叉對照，這筆承諾正是Vera Rubin爬坡與記憶體漲價背後的資本佈局。另有SB Energy擔保$108.5億（見特殊事件tab），性質為表外或有負債、未列入本表的承諾總額。</p>
+
+    <div class="section-title">客戶預付款（合約負債／遞延收入）——逐季餘額變化</div>
+    <table>
+      <tr><th>時點</th><th>餘額（$M）</th><th>備註</th></tr>
+      <tr><td>H1 FY2027 期初（2026-01-25）</td><td>2,572</td><td>—</td></tr>
+      <tr><td>H1 期間新增</td><td>+17,709</td><td>其中客戶預付款 $15,600M</td></tr>
+      <tr><td>H1 期間認列為營收</td><td>−13,869</td><td>其中客戶預付款轉列 $13,000M</td></tr>
+      <tr class="total"><td>H1 FY2027 期末（2026-07-26）</td><td><strong>6,412</strong></td><td>較期初成長 149%</td></tr>
+    </table>
+    <p class="note">客戶預付款餘額大幅成長，直接印證管理層在法說會反覆強調的「客戶提前鎖單、投資級客戶延長付款週期同時也加大預付」敘事——與AR天數拉長（客戶晚付）看似矛盾，實則是同一件事的兩面：大型多季合約讓NVIDIA一邊收到更多預付款鎖定產能，一邊對已出貨部分給予更長的收款寬限，兩者都是「巨型客戶談判力提升」的訊號。另揭露：合約期限超過一年的剩餘履約義務達$3.2B，其中約39%預計於未來12個月內認列。</p>
+
+    <div class="section-title">利息保障倍數</div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">~280x</div><div class="stat-lbl">Q2 FY2027（營業利益 $63,734M ÷ 利息費用 $227M）</div></div>
+    </div>
+    <p class="note">儘管2026年6月新發$250億公司債使利息費用由去年同期$62M大增至$227M，倍數仍高達280倍，遠優於一般投資級門檻——長期債務風險極低，即使Q4毛利率如guide探底至71–72%，對利息保障倍數的實質影響也微乎其微。</p>
+  </div>
+
+  <!-- ============ 9. Cash Flow ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="section-title">四大類現金流（$M）——H1 FY2027 累計 vs. Q2 單季推算</div>
+    <table>
+      <tr><th>類別</th><th>H1 FY2026</th><th>Q1 FY2027（單季）</th><th>H1 FY2027（累計）</th><th>Q2 FY2027（推算單季）</th></tr>
+      <tr><td>營業活動現金流</td><td>42,779</td><td>50,344</td><td>74,421</td><td><strong>24,077</strong></td></tr>
+      <tr><td>投資活動現金流</td><td>−12,343</td><td>−26,429</td><td>−35,124</td><td><strong>−8,695</strong></td></tr>
+      <tr><td>籌資活動現金流</td><td>−27,386</td><td>−21,283</td><td>−27,459</td><td><strong>−6,176</strong></td></tr>
+      <tr><td>資本支出（購置不動產廠房設備）</td><td>−3,122</td><td>−1,757</td><td>−4,434</td><td><strong>−2,677</strong></td></tr>
+    </table>
+    <p class="note">Q2單季數字為「H1累計」減去「Q1單季」推算所得，因NVIDIA 10-Q現金流量表僅提供年初至今（YTD）口徑，未單獨揭露單季數字。</p>
+
+    <div class="section-title">FCF 橋接：淨利 → Q2 自由現金流（必備圖）</div>
+    <div class="chart-wrap"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">NVIDIA FCF 橋接：淨利 → Q2 自由現金流（FY2027 Q2）</text><line x1="78" y1="424" x2="870" y2="424" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="428" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="331" x2="870" y2="331" stroke="#eeeeee" stroke-width="1"/><text x="68" y="335" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20,000</text><line x1="78" y1="238" x2="870" y2="238" stroke="#eeeeee" stroke-width="1"/><text x="68" y="242" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40,000</text><line x1="78" y1="145" x2="870" y2="145" stroke="#eeeeee" stroke-width="1"/><text x="68" y="149" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60,000</text><line x1="78" y1="52" x2="870" y2="52" stroke="#eeeeee" stroke-width="1"/><text x="68" y="56" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">80,000</text><text x="68" y="40" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><line x1="78" y1="52" x2="78" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="424" x2="870" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="158.19" y1="146.45" x2="195.81" y2="146.45" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="257.19" y1="133.12" x2="294.81" y2="133.12" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="356.19" y1="169.25" x2="393.81" y2="169.25" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="455.19" y1="273.17" x2="492.81" y2="273.17" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="554.19" y1="312.05" x2="591.81" y2="312.05" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="653.19" y1="312.05" x2="690.81" y2="312.05" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="752.19" y1="324.49" x2="789.81" y2="324.49" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="96.81" y="146.45" width="61.38" height="277.55" fill="#334155" fill-opacity="0.9" rx="2"/><text x="127.5" y="139.45" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">59,688</text><text x="127.5" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">淨利</text><rect x="195.81" y="133.12" width="61.38" height="13.33" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="226.5" y="126.12" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+2,867</text><text x="226.5" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 226.5 438)">非現金加回項(SBC+D&amp;A+遞延稅+其他)</text><rect x="294.81" y="133.12" width="61.38" height="36.14" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="325.5" y="184.25" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-7,771</text><text x="325.5" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 325.5 438)">股權證券利得，net（非現金）</text><rect x="393.81" y="169.25" width="61.38" height="103.91" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="424.5" y="288.17" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-22,347</text><text x="424.5" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 424.5 438)">應收帳款增加（DSO 45→60天）</text><rect x="492.81" y="273.17" width="61.38" height="38.88" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="523.5" y="327.05" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-8,361</text><text x="523.5" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">其他營運資金變動</text><rect x="591.81" y="312.05" width="61.38" height="111.95" fill="#334155" fill-opacity="0.9" rx="2"/><text x="622.5" y="305.05" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">24,076</text><text x="622.5" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-30 622.5 438)">Q2營業活動現金流</text><rect x="690.81" y="312.05" width="61.38" height="12.45" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="721.5" y="339.49" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-2,677</text><text x="721.5" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 721.5 438)">資本支出（CapEx）</text><rect x="789.81" y="324.49" width="61.38" height="99.51" fill="#334155" fill-opacity="0.9" rx="2"/><text x="820.5" y="317.49" text-anchor="middle" font-size="11.5" font-weight="600" fill="#111111" font-family="sans-serif">21,399</text><text x="820.5" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">Q2自由現金流</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">來源：10-Q 現金流量表（H1 減 Q1，推得 Q2 單季）；淨利成長強勁但現金轉換受應收帳款遞延收款拖累</div>
+</div></div>
+    <div class="flag obs" style="margin-top:12px;"><b>⚑ 人工解讀：</b> 這張圖是本季報告最重要的一張財務圖——它直接回答「淨利創新高，為什麼現金流卻沒有等比例增加」這個問題。答案不是獲利品質惡化，而是<strong>應收帳款增加$22.3B這單一項目就吃掉了淨利的37%</strong>，遠大於股權證券利得（非現金，回沖$7.8B）與其他營運資金變動（合計$8.4B）的影響。與資產負債表tab的DSO分析（45天→60天）完全對應：這是客戶延長付款週期的直接現金流代價，不是壞帳或收入認列問題。Q2自由現金流$21.4B雖較Q1的$48.6B大幅下滑，但Q1的高FCF本身也部分受惠於當季應收帳款增幅較小（僅$2.2B）——兩季合計看，H1整體FCF（$74.4B營業現金流−$4.4B資本支出=$70.0B）仍完整反映了營收翻倍的獲利能力，只是在單季之間因收款節奏被拉開。</div>
+
+    <div class="section-title">營運／投資／籌資活動逐季組成</div>
+    <div class="card">
+      <p><strong>投資活動：</strong>Q2單季淨流出約$8.7B，主因購買股權與債務證券（含公開市場股權部位加碼），較Q1的$26.4B淨流出明顯收斂——Q1的大額流出主要來自購買非交易性證券$18.6B（對AI生態系的股權投資佈局），Q2該類支出已明顯放緩。</p>
+      <p><strong>籌資活動：</strong>Q2單季淨流出約$6.2B，遠低於Q1的$21.3B，主因Q2有$24.9B的新發債券現金流入部分抵銷了股票回購（H1合計回購2.03億股，耗資$39.8B）與股利發放（H1合計$6.3B，Q2起股利已提高至每股$0.25）。若排除發債流入，Q2籌資活動實際流出的規模其實與Q1相近，反映資本回饋節奏維持穩定。</p>
+      <p><strong>股東資本回饋：</strong>Q2單季回饋股東$26B（$20B回購＋$6B股利），年初至今回饋比例達自由現金流的60%，優於管理層原訂「50%以上」的目標，且管理層表態未來將「淨增加、扣除策略性用途後的超額自由現金流回饋比例」。</p>
+    </div>
+  </div>
+
+  <!-- ============ 10. Valuation ============ -->
+  <div id="panel-val" class="panel">
+    <div class="section-title">估值比率表（附「意義」欄）</div>
+    <table>
+      <tr><th>比率</th><th>數值</th><th class="meaning">意義</th></tr>
+      <tr><td>股價（2026-08-28收盤）</td><td>$217.89</td><td class="meaning">法說會後兩個交易日收盤，非申報文件數字，僅供估值示意</td></tr>
+      <tr><td>市值（約）</td><td>~$5,291B</td><td class="meaning">股價 × 稀釋股數 24,285M</td></tr>
+      <tr><td>run-rate 本益比（Q2 EPS年化）</td><td>~22.1x</td><td class="meaning">$217.89 ÷（$2.46×4）——用最新單季獲利年化，反映當下獲利能力</td></tr>
+      <tr><td>遠期本益比（市場共識，多方資料源）</td><td>~18–26x（區間，中位數約24.5x）</td><td class="meaning">各資料源差異達±5x以上，反映分析師FY2028 EPS預估仍相當分歧</td></tr>
+      <tr><td>PEG比率（遠期P/E ÷ FY2028營收成長guide 70%）</td><td>~0.35</td><td class="meaning">低於1通常被視為相對成長性「便宜」，但需留意70%本身是「供給受限」的展望，並非需求上限</td></tr>
+      <tr><td>股價營收比（P/S，概估TTM營收）</td><td>~17.5x</td><td class="meaning">TTM營收約$303B（H1FY27 $177.8B＋H2FY26 $125.1B）；高毛利率（75%）支撐較高P/S仍能被市場接受</td></tr>
+      <tr><td>股利殖利率</td><td>~0.46%</td><td class="meaning">季配息$0.25（5月剛從$0.01大幅調升），殖利率仍低，資本回饋以回購為主</td></tr>
+      <tr><td>回購殖利率（年化）</td><td>~1.5%</td><td class="meaning">以H1回購$39.8B年化估算 ÷ 市值</td></tr>
+      <tr><td>利息保障倍數</td><td>~280x</td><td class="meaning">詳見資產負債表tab；長期債務風險極低</td></tr>
+    </table>
+    <p class="flag obs"><b>⚑ 核心估值觀察：</b> 若改用「核心淨利」（剔除本季$7.77億股權證券利得的稅後影響，約$53.2B）計算，run-rate本益比會從~22.1x上升至~24.9x——與市場共識遠期P/E的中位數（~24.5x）幾乎重合。這意味著市場定價其實已經隱含地在用「核心獲利」而非「含股權利得的GAAP淨利」在評價NVIDIA，換言之市場並未被本季這筆非經常性利得誤導去支付過高的本益比。</p>
+
+    <div class="section-title">同業估值 vs 成長率（必備圖）</div>
+    <div class="chart-wrap"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">同業估值 vs 成長率：NVIDIA 相對半導體/AI 同業</text><line x1="76" y1="458" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="320.67" x2="860" y2="320.67" stroke="#eeeeee" stroke-width="1"/><text x="66" y="324.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="76" y1="183.33" x2="860" y2="183.33" stroke="#eeeeee" stroke-width="1"/><text x="66" y="187.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="76" y1="46" x2="860" y2="46" stroke="#eeeeee" stroke-width="1"/><text x="66" y="50" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">80</text><line x1="76" y1="46" x2="76" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="232.8" y1="46" x2="232.8" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="232.8" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">30</text><line x1="389.6" y1="46" x2="389.6" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="389.6" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="546.4" y1="46" x2="546.4" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="546.4" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="703.2" y1="46" x2="703.2" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="703.2" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="860" y1="46" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="860" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">70</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">營收成長率</text><text x="18" y="252" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252)">本益比</text><line x1="358.24" y1="46" x2="358.24" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="362.24" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 38</text><line x1="76" y1="432.25" x2="860" y2="432.25" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="427.25" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 23.8</text><circle cx="860" cy="427.1" r="26" fill="#182456" fill-opacity="0.55" stroke="#182456" stroke-width="1.5"/><circle cx="311.2" cy="437.4" r="16.63" fill="#b1408a" fill-opacity="0.55" stroke="#b1408a" stroke-width="1.5"/><circle cx="154.4" cy="451.13" r="14.97" fill="#0f6f8a" fill-opacity="0.55" stroke="#0f6f8a" stroke-width="1.5"/><circle cx="405.28" cy="100.93" r="9.97" fill="#8f1f1f" fill-opacity="0.55" stroke="#8f1f1f" stroke-width="1.5"/><text x="860" y="396.1" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">NVIDIA</text><text x="311.2" y="415.77" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">TSMC</text><text x="154.4" y="431.16" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Broadcom</text><text x="405.28" y="85.96" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">AMD</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">氣泡大小＝市值；本益比為遠期預估，各資料源差異達 ±5x（見估值觀察tab說明）；股價／市值約為 2026-08-28 收盤</div>
+</div></div>
+    <p class="note">本益比為遠期預估，取自多個公開資料源，彼此差異可達±5x以上（例如AVGO遠期P/E在不同資料源間報19x至24x不等，TSM在19x至27x不等）——此處採中位數/合理估計值僅供示意，非精確申報數字。市值與股價約為2026-08-28前後收盤。相對AMD（遠期P/E~72x，成長率~41%）與Broadcom/TSMC（成長率25–35%、P/E~21–23x），NVIDIA在「成長率最高、本益比反而最低」的象限，是本季同業比較最值得留意的定位——但需注意NVIDIA的70%成長本身是management自陳的「供給受限」展望，其餘三家的成長率相對較少受供給端限制論述影響，比較基礎並非完全對稱。</p>
+
+    <div class="section-title">互證對照表（強制交付物）——管理層說法 vs 財報科目驗證</div>
+    <table>
+      <tr><th>管理層說法（法說會／10-Q）</th><th>財報科目驗證</th></tr>
+      <tr><td>「DSO增加至60天，反映投資級大客戶延長付款週期」（Kress）</td><td>AR $63,059M ÷ 營收 $96,221M × 91天 ≈ 59.6天——與管理層說法幾乎完全吻合，是本季最乾淨的一組互證。</td></tr>
+      <tr><td>「年初至今已回饋自由現金流的60%」（Kress）</td><td>H1股票回購$39.8B＋股利$6.3B＝$46.1B；H1自由現金流（$74.4B營業現金流−$4.4B資本支出）＝$70.0B；$46.1B/$70.0B≈65.9%，方向一致但精確比例取決於FCF定義（是否計入其他調整項），非完全逐分吻合。</td></tr>
+      <tr><td>「記憶體漲價幅度超出先前預期，明年還會更高」（Kress）</td><td>毛利率guide連續下修：Q2實際75.0%→Q3 guide 74%→Q4 guide 71–72%（谷底）→FY2028 72–73%，趨勢與說法完全一致，且是管理層主動、罕見直接的溝通。</td></tr>
+      <tr><td>「Q2對中國的H200出貨低於資料中心營收1%」（法說會＋10-Q）</td><td>10-Q原文逐字確認：「shipments... were less than 1% of Data Center revenue」——完全吻合，且H1認列$0.4B的H200相關減損與此一致。</td></tr>
+      <tr><td>法說會全程未提及「Groq」名稱（僅稱「LPX」）</td><td>10-Q揭露Groq應計購買對價從$39.21億驟降至$9.86億，且現金流量表顯示本季已現金支付$29.44億——管理層口頭沉默但財報顯示這筆義務正在被積極清償，屬於「沉默本身也是訊號」的另一實例（延續Q1報告的觀察）。</td></tr>
+      <tr><td>法說會全程未提及Ajay Puri（EVP全球業務）離職一事</td><td>Form 4於8月24日（法說會前2天）申報其退休生效，無任何股票交易——8位分析師無人追問，管理層也未主動說明繼任安排，是本季最明顯的一處「管理層留白」。</td></tr>
+      <tr><td>10-Q footnote：「本季將一家公司由ACIE改分類至Hyperscale」（僅書面揭露，法說會未提及）</td><td>此舉機械性地墊高了Hyperscale的YoY／QoQ成長率（回溯重編比較期），Stacy Rasgon在Q&amp;A中關於「兩區塊規模相近」的提問本可直接引用此footnote驗證，但管理層僅以「對」一字帶過分類歸屬，未主動揭露這項重分類本身。</td></tr>
+      <tr><td>「Vera Rubin已取得所有主要hyperscaler/AI cloud/系統OEM的訂單」（Jensen）</td><td>10-Q證實供給與產能承諾一季暴增至$279B、存貨增至$31.6B（原物料$11.3B），與大規模預先鎖定產能以支應訂單的說法方向一致，但具體訂單金額或客戶名單仍未見於任何SEC文件。</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">僅供資訊參考，非投資建議 / For informational purposes only — not investment advice.</div>
+</div>
+
+<script>
+function sw(name, el) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  el.classList.add('active');
+}
+function toggleQA(header) {
+  header.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
