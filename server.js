@@ -731,12 +731,18 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204, CORS); res.end(); return; }
 
   // ── Auth gate: everything except /research/* (the intentionally-public earnings call
-  // reports) requires a valid local session or a fresh handoff token from the central
-  // login service. Default-deny, allowlist the public exception — not the other way
+  // reports) and Market Warning Radar (/warning, /high-price, and their /api/* endpoints —
+  // made public 2026-08-31 so OutsideFramework's Tools picker page can link straight to them
+  // with no login step) requires a valid local session or a fresh handoff token from the
+  // central login service. Default-deny, allowlist the public exceptions — not the other way
   // around, so a new route added later is gated by default. ──
   const gatePath = req.url.split('?')[0];
   if (gatePath === '/healthz') { res.writeHead(200, { 'Content-Type': 'text/plain' }); res.end('ok'); return; }
-  if (!gatePath.startsWith('/research/')) {
+  const isPublicPath = gatePath.startsWith('/research/') ||
+    gatePath === '/warning' || gatePath === '/warning/' ||
+    gatePath === '/high-price' || gatePath === '/high-price/' ||
+    gatePath.startsWith('/api/warning/') || gatePath.startsWith('/api/high-price/');
+  if (!isPublicPath) {
     let email = getSessionEmail(req);
     if (!email) {
       const incomingUrl = new URL(req.url, selfOrigin(req));
