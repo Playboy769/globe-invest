@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="從終端需求、融資結構、GPU雲端服務商、運算矽晶、系統整合到電力電網，十二個環節拆解 Neocloud 完整產業鏈，並標註台灣供應鏈在其中的位置。">
+<meta name="color-scheme" content="light dark">
+<title>從一紙合約到一座變電站：Neocloud 完整產業鏈解剖</title>
+<style>
+:root{
+  --bg:#FFFFFF;--paper:#FFFFFF;--paper-2:#FFFFFF;
+  --ink:#0B0D0C;--ink-2:#383D3B;--ink-3:#6E7471;--ink-4:#9AA09C;
+  --rule:#BFC3BE;--rule-2:#DCDFDB;
+  --acc:#584B7C;--acc-2:#736294;--acc-wash:#EDEAF3;
+  --inv-bg:#0B0D0C;--inv-ink:#FFFFFF;
+  --serif:"Noto Serif TC","Source Han Serif TC","Songti TC","Times New Roman",Georgia,serif;
+  --sans:"Noto Sans TC","Source Han Sans TC","PingFang TC","Microsoft JhengHei","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+  --read:min(100%,38rem);--wide:min(100%,64rem);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;--ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+    --rule:#2A2D2A;--rule-2:#1E211E;--acc:#AFA1DF;--acc-2:#C6BBEE;--acc-wash:#1A1727;--inv-bg:#EFEFEC;--inv-ink:#0A0B0B;}
+}
+:root[data-theme="dark"]{--bg:#0A0B0B;--paper:#111312;--paper-2:#171A18;--ink:#EFEFEC;--ink-2:#C1C4C0;--ink-3:#8A8F8B;--ink-4:#666B67;
+  --rule:#2A2D2A;--rule-2:#1E211E;--acc:#AFA1DF;--acc-2:#C6BBEE;--acc-wash:#1A1727;--inv-bg:#EFEFEC;--inv-ink:#0A0B0B;}
+:root[data-theme="light"]{--bg:#FFFFFF;--paper:#FFFFFF;--paper-2:#FFFFFF;--ink:#0B0D0C;--ink-2:#383D3B;--ink-3:#6E7471;--ink-4:#9AA09C;
+  --rule:#BFC3BE;--rule-2:#DCDFDB;--acc:#584B7C;--acc-2:#736294;--acc-wash:#EDEAF3;--inv-bg:#0B0D0C;--inv-ink:#FFFFFF;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.88;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+p{margin:0 0 1.15em}
+a{color:var(--acc);text-underline-offset:3px;text-decoration-thickness:.06em}
+a:hover{color:var(--acc-2)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:1px}
+strong{font-weight:700}
+em{font-style:normal;border-bottom:1px solid var(--rule)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+code{font-family:var(--mono);font-size:.85em;color:var(--ink-2)}
+ul,ol{margin:.5rem 0 1.15em;padding-left:1.35rem}
+li{margin:.34em 0}
+li::marker{color:var(--ink-4)}
+
+.wrap{max-width:78rem;margin:0 auto;padding:0 clamp(1.1rem,4vw,3rem) 7rem}
+
+.mast{padding:clamp(3rem,9vw,7rem) 0 0}
+.mast-top{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;align-items:baseline;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--ink);padding-bottom:.7rem;margin-bottom:clamp(1.8rem,4vw,3rem)}
+.mast-top .sp{flex:1}
+h1{font-family:var(--serif);font-weight:700;
+  font-size:clamp(2.3rem,6.6vw,4.9rem);line-height:1.06;letter-spacing:-.03em;
+  margin:0 0 clamp(1.2rem,3vw,2rem);max-width:17ch;text-wrap:balance}
+h1 .thin{font-weight:400;color:var(--ink-3)}
+.deck{font-family:var(--serif);font-size:clamp(1.06rem,2.2vw,1.42rem);line-height:1.72;
+  color:var(--ink-2);max-width:44rem;margin:0 0 2rem}
+.deck b{color:var(--ink);font-weight:700}
+.byline{display:flex;flex-wrap:wrap;gap:.4rem 2.2rem;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:var(--ink-3);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:.8rem 0;margin-bottom:clamp(2.4rem,6vw,4rem)}
+.byline b{color:var(--ink-2);font-weight:600}
+
+.model{border:1px solid var(--ink);background:var(--paper);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.model-head{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center;justify-content:space-between;
+  padding:.75rem .95rem;border-bottom:1px solid var(--rule)}
+.model-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3)}
+.model-title b{color:var(--ink);font-weight:600}
+.strip{display:flex;overflow-x:auto;scrollbar-width:thin}
+.strip::-webkit-scrollbar{height:5px}
+.strip::-webkit-scrollbar-thumb{background:var(--rule)}
+.seg{flex:1 0 7.4rem;min-width:7.4rem;text-align:left;padding:.7rem .7rem .75rem;
+  border-right:1px solid var(--rule-2);position:relative;transition:background .15s}
+.seg:last-child{border-right:0}
+.seg:hover .seg-t{color:var(--acc)}
+.seg:hover .seg-v{color:var(--ink-2)}
+.seg-n{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--ink-4);margin-bottom:.15rem}
+.seg-t{display:block;font-size:12.4px;line-height:1.35;font-weight:600;color:var(--ink);margin-bottom:.3rem}
+.seg-v{display:block;font-family:var(--mono);font-size:10.5px;line-height:1.5;color:var(--ink-3);min-height:2.2em}
+.seg.on{background:var(--acc-wash)}
+.seg.on::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--acc)}
+.seg.on .seg-t{color:var(--acc)}
+
+.thesis{max-width:var(--wide);margin-bottom:clamp(2.5rem,6vw,4rem)}
+.sec-mark{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;align-items:center;gap:.8rem;margin-bottom:1.1rem}
+.sec-mark::after{content:"";flex:1;height:1px;background:var(--rule)}
+h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.65rem,3.6vw,2.5rem);
+  line-height:1.18;letter-spacing:-.022em;margin:0 0 .9rem;max-width:24ch;text-wrap:balance}
+h3{font-family:var(--sans);font-size:.86rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);margin:2.4rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+h4{font-size:.92rem;font-weight:700;margin:1.5rem 0 .35rem;color:var(--ink)}
+.lede{font-family:var(--serif);font-size:1.08rem;line-height:1.75;color:var(--ink-2);max-width:var(--read);margin:0 0 1.8rem}
+
+.phase-rule{display:flex;align-items:baseline;gap:1rem;margin:clamp(3rem,7vw,5rem) 0 1.5rem;
+  border-top:2px solid var(--ink);padding-top:.6rem}
+.phase-rule .pk{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink)}
+.phase-rule .pd{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+
+.stage{border-bottom:1px solid var(--rule);max-width:var(--wide)}
+.stage>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:3.2rem 1fr auto 1.2rem;
+  gap:1rem;align-items:baseline;padding:1.35rem 0;transition:opacity .15s}
+.stage>summary::after{content:"＋";font-family:var(--mono);font-size:13px;color:var(--ink-4);
+  justify-self:end;padding-top:.3rem}
+.stage[open]>summary::after{content:"－";color:var(--acc)}
+.stage>summary::-webkit-details-marker{display:none}
+.stage>summary:hover{opacity:.65}
+.st-n{font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;color:var(--ink-4);padding-top:.35rem}
+.st-main{min-width:0}
+.st-t{font-family:var(--serif);font-size:clamp(1.2rem,2.6vw,1.65rem);font-weight:700;
+  line-height:1.28;letter-spacing:-.018em;margin-bottom:.28rem;text-wrap:balance}
+.st-sub{font-size:13.6px;line-height:1.6;color:var(--ink-3);max-width:44rem}
+.st-sig{font-family:var(--mono);font-size:11px;color:var(--acc);padding-top:.4rem;text-align:right;max-width:9.5rem}
+.st-sig i{display:block;font-style:normal;color:var(--ink-4);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase}
+.body{padding:.4rem 0 3rem;animation:fade .28s ease}
+.body>.full{max-width:var(--wide)}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.body>p,.body>ul,.body>ol,.body>h3,.body>h4,.body>.callout,.body>.eq,.body>.lede{max-width:var(--read)}
+.body>p:first-of-type::first-letter{font-family:var(--serif);float:left;font-size:3.15rem;line-height:.86;
+  font-weight:700;padding:.16rem .5rem .1rem 0;color:var(--ink)}
+@media(min-width:900px){
+  .body{display:grid;grid-template-columns:minmax(0,var(--read)) 1fr;gap:0 2.5rem;align-items:start}
+  .body>*{grid-column:1}
+  .body>.full{grid-column:1/-1;max-width:var(--wide)}
+  .body>.marg{grid-column:2;margin:0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+    border-top:1px solid var(--ink);padding-top:.5rem;max-width:17rem}
+}
+.marg{margin:1.2rem 0;font-size:12.8px;line-height:1.72;color:var(--ink-3);
+  border-top:1px solid var(--ink);padding-top:.5rem}
+.marg b{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-2);margin-bottom:.35rem}
+
+.callout{background:var(--paper);border:1px solid var(--ink);padding:1.05rem 1.15rem;margin:1.7rem 0}
+.callout .ck{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:.5rem}
+.callout p{margin:0 0 .8em;font-size:15px;line-height:1.8;color:var(--ink-2)}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+
+.tbl{overflow-x:auto;margin:1.5rem 0;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:13.2px;line-height:1.6}
+.tbl table{min-width:42rem}
+th,td{text-align:left;padding:.6rem .85rem;border-bottom:1px solid var(--rule-2);vertical-align:top}
+thead th{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid var(--ink);white-space:nowrap;font-weight:400}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.grp td{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;padding-top:1.1rem;
+  text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--ink);border-bottom-color:var(--rule)}
+td.hit{background:var(--acc-wash)}
+.cap{font-size:12.4px;line-height:1.7;color:var(--ink-3);margin:-.9rem 0 1.9rem;max-width:var(--wide)}
+.cap b{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+
+.lvl{font-family:var(--mono);font-size:12px;letter-spacing:.12em;white-space:nowrap;color:var(--ink)}
+.lvl i{font-style:normal;color:var(--ink-4)}
+
+.figs{display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));
+  border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule);margin:1.6rem 0}
+.fg{padding:.85rem .9rem .95rem;border-right:1px solid var(--rule-2)}
+.fg:last-child{border-right:0}
+.fg .v{display:block;font-family:var(--mono);font-size:1.42rem;font-weight:500;letter-spacing:-.03em;
+  line-height:1.15;font-variant-numeric:tabular-nums}
+.fg .v small{font-size:.55em;letter-spacing:0;color:var(--ink-3);margin-left:.15em}
+.fg .k{display:block;font-size:11.5px;line-height:1.5;color:var(--ink-3);margin-top:.35rem}
+
+.tl{margin:1.5rem 0;overflow-x:auto}
+.tl-in{min-width:42rem}
+.tl-r{display:grid;grid-template-columns:9.5rem 1fr 7rem;gap:.8rem;align-items:center;margin:.24rem 0;font-size:12.4px}
+.tl-l{color:var(--ink-2);line-height:1.35}
+.tl-t{position:relative;height:15px;border-bottom:1px solid var(--rule-2);
+  background:repeating-linear-gradient(90deg,var(--rule-2) 0 1px,transparent 1px 10%)}
+.tl-b{position:absolute;top:2px;bottom:2px;background:var(--ink)}
+.tl-b.hi{background:var(--acc)}
+.tl-b.rep{background:repeating-linear-gradient(90deg,var(--ink) 0 6%,transparent 6% 10%)}
+.tl-v{font-family:var(--mono);font-size:10px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tl-x{display:grid;grid-template-columns:9.5rem 1fr 7rem;gap:.8rem;margin-top:.35rem}
+.tl-xk{display:grid;grid-template-columns:repeat(10,1fr);font-family:var(--mono);font-size:9.5px;color:var(--ink-4)}
+
+.floop{margin:1.6rem 0;border:1px solid var(--rule);background:var(--paper);padding:1.1rem}
+.floop svg{display:block;width:100%;height:auto}
+.fl-lb{font-family:var(--mono);font-size:11.5px;fill:var(--ink)}
+.fl-lb2{font-family:var(--mono);font-size:9.5px;fill:var(--ink-3)}
+.fl-box{fill:var(--paper);stroke:var(--ink);stroke-width:1.2}
+.fl-box.a{stroke:var(--acc)}
+.fl-arr{stroke:var(--ink-3);stroke-width:1.3;fill:none;marker-end:url(#arrow)}
+.fl-arr.a{stroke:var(--acc);marker-end:url(#arrowA)}
+
+.tmap{overflow-x:auto;margin:1.6rem 0}
+.tmap-in{min-width:46rem;display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--rule-2);border:1px solid var(--ink)}
+.tmap-c{background:var(--paper);padding:.55rem .5rem;min-height:5.6rem}
+.tmap-c b{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ink-4);margin-bottom:.3rem}
+.tmap-c span{display:block;font-size:11px;line-height:1.5;color:var(--ink-2)}
+.tmap-c.hi{background:var(--acc-wash)}
+.tmap-c.hi span{color:var(--ink)}
+.tmap-c.no span{color:var(--ink-4)}
+
+.calc{border:1px solid var(--ink);background:var(--paper);margin:1.6rem 0}
+.calc-h{padding:.6rem .9rem;border-bottom:1px solid var(--rule);font-family:var(--mono);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.calc-i{display:grid;gap:.85rem;grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));padding:.95rem}
+.calc-i label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:.3rem}
+.calc-i input{width:100%;font-family:var(--mono);font-size:14px;padding:.35rem .45rem;background:var(--paper-2);
+  color:var(--ink);border:1px solid var(--rule);border-radius:0;font-variant-numeric:tabular-nums}
+.calc-i input:focus{border-color:var(--acc);outline:none}
+.calc-o{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));border-top:1px solid var(--rule)}
+.co{padding:.6rem .8rem .7rem;border-right:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2)}
+.co .v{display:block;font-family:var(--mono);font-size:1.12rem;font-weight:500;color:var(--acc);
+  font-variant-numeric:tabular-nums;line-height:1.3}
+.co .k{display:block;font-size:10.5px;line-height:1.45;color:var(--ink-3);margin-top:.2rem}
+.calc-n{padding:.7rem .9rem;font-size:12px;line-height:1.7;color:var(--ink-3);border-top:1px solid var(--rule)}
+
+.foot{border-top:2px solid var(--ink);margin-top:4rem;padding-top:1.5rem;max-width:var(--wide);
+  font-size:12.6px;line-height:1.85;color:var(--ink-3)}
+.srcs{columns:2;column-gap:2.5rem;font-size:12.3px;line-height:1.8}
+@media(max-width:700px){.srcs{columns:1}}
+.srcs li{break-inside:avoid;margin:.2em 0}
+.tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.05rem .35rem;color:var(--ink-3);white-space:nowrap}
+
+.tools{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0 0}
+.tools button{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:.3rem .75rem;color:var(--ink-3)}
+.tools button:hover{border-color:var(--ink);color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <span>Capital → Silicon → Rack → Grid</span><span>Neocloud 全鏈產業地圖</span><span class="sp"></span><span>2026</span>
+  </div>
+  <h1>從一紙合約<br>到一座<span class="thin">還沒併網的</span>變電站</h1>
+  <p class="deck">Neocloud（純網 GPU 雲端服務商）不是傳統意義上的雲端運算公司，而是把<b>四個長度差了一個數量級的時鐘</b>硬綁在同一張資產負債表上的槓桿賭注：晶片世代約 <b>12 個月</b>一輪，折舊假設卻用 <b>4–6 年</b>，承購長約簽的是 <b>5–6 年</b>，電網併網卻要等 <b>3–10 年</b>。本文沿著資本、服務商、運算矽晶、系統整合、基礎設施五層，拆解十二個環節，並標註台灣供應鏈在其中的位置。</p>
+  <div class="byline">
+    <span><b>版本</b>　2026-09-01</span>
+    <span><b>主線</b>　CoreWeave／Nebius／NVIDIA GB300 世代</span>
+    <span><b>環節</b>　12</span>
+    <span><b>資料</b>　公開財報／SEC 申報／產業報告彙整</span>
+  </div>
+</header>
+
+<section class="model" aria-label="全鏈互動模型">
+  <div class="model-head">
+    <span class="model-title"><b>全鏈模型</b>　點一個環節，直接跳過去讀</span>
+  </div>
+  <div class="strip" id="strip">
+    <button class="seg" data-go="s01"><span class="seg-n">A · 01</span><span class="seg-t">終端需求</span><span class="seg-v">OpenAI Stargate 意圖規模 $500B</span></button>
+    <button class="seg" data-go="s02"><span class="seg-n">A · 02</span><span class="seg-t">融資結構</span><span class="seg-v">CoreWeave 未償債務 &gt;$21B</span></button>
+    <button class="seg" data-go="s03"><span class="seg-n">A · 03</span><span class="seg-t">循環投資</span><span class="seg-v">Nvidia 私有部位 $47.9B</span></button>
+    <button class="seg" data-go="s04"><span class="seg-n">B · 04</span><span class="seg-t">服務商圖譜</span><span class="seg-v">產業規模估計 $20B→$180B</span></button>
+    <button class="seg" data-go="s05"><span class="seg-n">B · 05</span><span class="seg-t">承購長約</span><span class="seg-v">Nebius 積壓約 $45–49B</span></button>
+    <button class="seg" data-go="s06"><span class="seg-n">C · 06</span><span class="seg-t">加速器晶片</span><span class="seg-v">NVIDIA 市佔約 75–95%</span></button>
+    <button class="seg" data-go="s07"><span class="seg-n">C · 07</span><span class="seg-t">記憶體樽頸</span><span class="seg-v">HBM 2026 產能全數售罄</span></button>
+    <button class="seg" data-go="s08"><span class="seg-n">D · 08</span><span class="seg-t">系統整合</span><span class="seg-v">全年機櫃出貨估 7–8 萬台</span></button>
+    <button class="seg" data-go="s09"><span class="seg-n">D · 09</span><span class="seg-t">網路互連</span><span class="seg-v">CPO 較插拔式省電 5 倍</span></button>
+    <button class="seg" data-go="s10"><span class="seg-n">E · 10</span><span class="seg-t">電力與散熱</span><span class="seg-v">單櫃功率 130–140 kW</span></button>
+    <button class="seg" data-go="s11"><span class="seg-n">E · 11</span><span class="seg-t">不動產與電網</span><span class="seg-v">併網排隊 4–10 年</span></button>
+    <button class="seg" data-go="s12"><span class="seg-n">F · 12</span><span class="seg-t">台灣定位／風險收斂</span><span class="seg-v">三個時鐘的賭注</span></button>
+  </div>
+</section>
+
+<!-- ══════════ 00 論點 ══════════ -->
+<section class="thesis" id="s00">
+  <p class="sec-mark">00 · 論點</p>
+  <h2>四個時鐘：這條鏈上真正被賭的是什麼</h2>
+  <p class="lede">把 Neocloud 想成「賣算力的雲端公司」是最常見的誤讀。它更精確的身分，是一群把晶片更新速度、財務折舊假設、客戶合約年期、與電網建設速度這四條完全不同步的時間軸，硬性綁進同一份資產負債表的槓桿實驗。</p>
+
+  <div style="max-width:var(--read)">
+    <p>晶片世代的時鐘走得最快：NVIDIA 從 Hopper 到 Blackwell 到 Rubin，接近一年一代，AMD 的 MI300→MI350→MI400 也是同樣的節奏。可是承接這些晶片的財務假設走得慢得多——CoreWeave 把 GPU 折舊攤在 <strong>6 年</strong>、Lambda 攤在 <strong>5 年</strong>、Nebius 攤在 <strong>4 年</strong>。夾在中間的，是動輒 <strong>5–6 年</strong>的客戶承購長約（Meta 與 Nebius 簽 5 年、Anthropic 與 Nscale 簽 6 年），以及全鏈最慢的一環——電網併網與變壓器交期，動輒 <strong>3–10 年</strong>。</p>
+    <p>這四個時鐘只要有一個對不上，整條鏈上游到下游的信用評等都會被連動。<strong>這正是本文十二個環節共同在講的一件事：Neocloud 不是在賣運算力，是在賣「這四個時鐘會對齊」這個信念本身。</strong></p>
+  </div>
+
+  <div class="figs">
+    <div class="fg"><span class="v">~12<small>月</small></span><span class="k">晶片世代更替節奏（Blackwell→Rubin）</span></div>
+    <div class="fg"><span class="v">4–6<small>年</small></span><span class="k">GPU 折舊假設（CoreWeave／Lambda／Nebius）</span></div>
+    <div class="fg"><span class="v">5–6<small>年</small></span><span class="k">代表性承購長約年期</span></div>
+    <div class="fg"><span class="v">3–10<small>年</small></span><span class="k">電網併網與變壓器交期</span></div>
+  </div>
+
+  <div class="callout" style="max-width:var(--read)">
+    <span class="ck">本文的核心判讀</span>
+    <p>2024 年的稀缺是晶片；2026 年的稀缺已經下移到<strong>電力與電網設備</strong>；而 2027 年後真正決定誰活下來的，會是<strong>折舊假設能不能撐住晶片世代更替的速度</strong>——這件事現在還沒有答案，Michael Burry 對輝達與雲端巨頭的公開質疑，正是在賭這個假設會先破裂。</p>
+    <p>判讀任何一家 Neocloud 的成長故事時，要問的不是「它簽了多少億美元的合約」，而是<strong>「這份合約背後的 GPU，折舊完之前還能不能打過下兩代晶片」</strong>。</p>
+  </div>
+
+  <h3>四個時鐘疊圖</h3>
+  <div class="tl">
+    <div class="tl-in">
+      <div class="tl-r"><span class="tl-l">晶片世代（重複週期）</span><div class="tl-t"><div class="tl-b rep" style="left:0;width:100%"></div></div><span class="tl-v">每 ~12 個月一輪</span></div>
+      <div class="tl-r"><span class="tl-l">Nebius 折舊假設</span><div class="tl-t"><div class="tl-b" style="left:0;width:40%"></div></div><span class="tl-v">4 年</span></div>
+      <div class="tl-r"><span class="tl-l">Lambda 折舊假設</span><div class="tl-t"><div class="tl-b" style="left:0;width:50%"></div></div><span class="tl-v">5 年</span></div>
+      <div class="tl-r"><span class="tl-l">Meta–Nebius 承購長約</span><div class="tl-t"><div class="tl-b hi" style="left:0;width:50%"></div></div><span class="tl-v">5 年</span></div>
+      <div class="tl-r"><span class="tl-l">CoreWeave 折舊假設</span><div class="tl-t"><div class="tl-b" style="left:0;width:60%"></div></div><span class="tl-v">6 年</span></div>
+      <div class="tl-r"><span class="tl-l">Anthropic–Nscale 承購長約</span><div class="tl-t"><div class="tl-b hi" style="left:0;width:60%"></div></div><span class="tl-v">6 年</span></div>
+      <div class="tl-r"><span class="tl-l">CoreWeave DDTL 4.0 貸款年期</span><div class="tl-t"><div class="tl-b" style="left:0;width:60%"></div></div><span class="tl-v">6 年（2032 到期）</span></div>
+      <div class="tl-r"><span class="tl-l">電網併網排隊（保守端）</span><div class="tl-t"><div class="tl-b" style="left:0;width:30%"></div></div><span class="tl-v">3 年</span></div>
+      <div class="tl-r"><span class="tl-l">電網併網排隊（樂觀端）</span><div class="tl-t"><div class="tl-b" style="left:0;width:100%"></div></div><span class="tl-v">10 年・全程最慢</span></div>
+      <div class="tl-x"><span></span><div class="tl-xk"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>10</span></div><span></span></div>
+    </div>
+  </div>
+  <p class="cap"><b>標註</b>　橫軸為年數（自今日起算）。晶片世代列刻意畫成重複區塊，用以對照其餘各列都是「一次性、跨年」的假設；電網併網列刻意留到全長——它是唯一一個不隨資本或合約條件加速的變數。折舊年限與承購長約年期為公開資訊整理，個別交易條件不完全相同。</p>
+
+  <div class="tools">
+    <button id="expand-all">全部展開</button>
+    <button id="collapse-all">全部收合</button>
+  </div>
+</section>
+
+<!-- ══════════ A ══════════ -->
+<div class="phase-rule"><span class="pk">A · 資本與需求</span><span class="pd">錢從哪裡來、需求往哪裡去，以及為什麼這兩件事現在是同一個問題</span></div>
+
+<details class="stage" id="s01">
+  <summary><span class="st-n">01</span><span class="st-main"><span class="st-t">終端需求源頭：AI 實驗室與企業工作負載</span><span class="st-sub">Neocloud 的第一個客戶不是企業 IT 部門，是把運算當成銷貨成本的 AI 實驗室。</span></span><span class="st-sig">$500B<i>OpenAI Stargate 意圖</i></span></summary>
+  <div class="body">
+    <p>對 OpenAI、Anthropic、xAI 這類前沿模型實驗室而言，運算力不是資本支出的選配項，是<strong>銷貨成本（COGS）</strong>本身——這徹底改寫了傳統雲端客戶的採購邏輯：一般企業租雲端是為了彈性省成本，AI 實驗室租算力是因為自己蓋不夠快、也不見得蓋得起。這個結構性差異，是整條 Neocloud 鏈得以存在的起點。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>需求方</th><th>對手方</th><th class="n">規模</th><th>年期／結構</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>OpenAI</td><td>Microsoft Azure</td><td class="n">$250B</td><td>雲端服務採購承諾</td><td>與 Stargate 自建計畫並行</td></tr>
+          <tr><td>OpenAI</td><td>Stargate（多州自建＋合建）</td><td class="n">$500B</td><td>2025 年宣布之支出意圖</td><td>非單一合約，為多專案彙總規模</td></tr>
+          <tr><td>OpenAI</td><td>AMD</td><td class="n">數十億美元晶片量</td><td>部署承諾＋認股權證</td><td>OpenAI 同時成為 AMD 主要股東之一</td></tr>
+          <tr><td>OpenAI</td><td>NVIDIA</td><td class="n">最高 $100B</td><td>投資換取 GPU 部署承諾</td><td>詳見 03 節「循環投資」</td></tr>
+          <tr><td>Anthropic</td><td>Nscale</td><td class="n">$45B</td><td>6 年容量承購，460MW（西維吉尼亞）</td><td>Neocloud 產業已知最大單筆容量合約之一</td></tr>
+          <tr><td>Anthropic</td><td>Google（經 Broadcom 協力）</td><td class="n">約 3.5GW</td><td>TPU 運算容量，2027 年起</td><td>與 Nvidia 生態並行的另一條供應線</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　金額為公開揭露之合約或意圖規模，各筆交易的實際撥付節奏與或有條件未必逐年攤平；OpenAI 對 Stargate 的 $500B 為多專案彙總的支出意圖，非單一具約束力合約。</p>
+
+    <h3>從股權募資到合約承購：2026 年的結構轉向</h3>
+    <p>2026 年 5 月被觀察到一個關鍵的資本流向轉折：AI 基礎設施的資金流，從<strong>投機性股權</strong>轉向<strong>合約導向的運算承購</strong>。差別不在金額大小，而在交易的組成——主導性的交易類型變成運算合約，不是股權募資。Anthropic 與 OpenAI 都在這個階段各自鎖定了垂直整合的供應鏈。</p>
+
+    <div class="callout">
+      <span class="ck">為什麼這件事對 Neocloud 是決定性的</span>
+      <p>當客戶簽的是「不管用不用都要付錢」的容量承購合約（take-or-pay），這份合約本身就變成了可以拿去抵押借錢的資產——這正是 02 節 SPV 融資能夠成立的前提。<strong>終端需求方付出的不是一筆使用費，是一張可以被證券化的信用憑證。</strong></p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s02">
+  <summary><span class="st-n">02</span><span class="st-main"><span class="st-t">融資結構的演化：從股權募資到表外舉債</span><span class="st-sub">GPU 本身變成了抵押品，客戶合約變成了信用強化條件，資產負債表變成了可以被拆開的樂高。</span></span><span class="st-sig">A3<i>CoreWeave 首張投資級評等</i></span></summary>
+  <div class="body">
+    <p>Neocloud 的資本結構有一個共同的骨架：把 GPU 買進來的主體，不是母公司本身，而是一個為單筆貸款量身訂做、破產隔離的<strong>特殊目的公司（SPV）</strong>。SPV 拿貸款買 GPU、把 GPU 抵押給貸方、再用客戶的服務合約當作額外的信用強化——母公司則保有營運控制權，卻不必把全部負債直接記在自己的資產負債表上。</p>
+
+    <h3>案例一：CoreWeave 的 DDTL 系列與投資級突破</h3>
+    <p>CoreWeave 在 2026 年 3 月 31 日完成的 <strong>DDTL 4.0</strong> 是這個模式目前規模最大的一筆：借款主體是 <strong>CoreWeave Compute Acquisition Co. VIII, LLC</strong>，總額 <strong>$8.5B</strong>，其中浮動利率部分定價 SOFR + 2.25%、固定利率部分約 5.9%，2032 年 3 月到期，以該 SPV 幾乎全部資產為擔保，並以約 <strong>$19B 的 Meta 容量承購合約</strong>作為信用強化。這筆交易同時是<strong>史上第一筆取得投資等級評等的 GPU 抵押融資</strong>——Moody's 給 A3、DBRS 給 A(low)、Fitch 給 A-sf。CoreWeave 稍早也曾以 SOFR + 550bps、約 5 年期完成一筆 $2.6B 的 DDTL 5.5 額度。累計下來，CoreWeave 的未償債務總額已從 2024 年的不到 $8B 膨脹到超過 <strong>$21B</strong>。</p>
+
+    <h3>案例二：Meta–Blue Owl 的 Hyperion SPV</h3>
+    <p>Meta 為了興建路易斯安那州的 Hyperion 資料中心（逾 400 萬平方英尺、尖峰用電可達 5GW、預計 2029 年完工），與 Blue Owl Capital 合資成立 SPV「<strong>Beignet Investor</strong>」，Meta 持股 20%、Blue Owl 持股 80%。這個 SPV 募得 <strong>$30B</strong>，其中約 $27B 來自 PIMCO、BlackRock、Apollo 等機構的私募信貸貸款，另外 $3B 是 Blue Owl 出的股權。SPV 擁有資料中心、再把它租給 Meta——結果是 Meta 實質上借到了 $30B，卻不必把其中 $27B 的貸款記在自己的資產負債表上，帳上只會出現對 SPV 的股權投資與租賃負債。</p>
+
+    <div class="callout">
+      <span class="ck">這套劇本的共同邏輯</span>
+      <p>把「GPU／資料中心」與「客戶合約」兩樣資產一起丟進一個破產隔離的殼公司，母公司拿到現金與使用權，卻只需認列股權或租賃這種相對輕量的會計科目。這解釋了為什麼 2024 到 2026 年，Neocloud 與大型科技公司的資本支出能夠遠遠超前它們帳上顯示的負債成長速度。</p>
+    </div>
+
+    <h3>2026 年下半年浮現的裂縫</h3>
+    <p>私募信貸這一端已經出現壓力訊號：Blue Owl 的贖回機制開始被限制，約有 <strong>$14B</strong 資金被鎖住；Blackstone 則開始出售資料中心相關的股權部位，並放棄了一個維吉尼亞州的專案；Blue Owl 的違約率也在 2026 年 8 月來到五年高點。這些不是整條鏈崩潰的證據，但確實是「表外舉債能否無限期展延」這個假設第一次被市場真正測試。</p>
+
+    <div class="marg"><b>與 11 節的連結</b>Hyperion 這座資料中心本身，就是 11 節「不動產與電網」要處理的實體標的——融資結構解決了「誰出錢」，但解決不了「電網什麼時候併得上」。</div>
+  </div>
+</details>
+
+<details class="stage" id="s03">
+  <summary><span class="st-n">03</span><span class="st-main"><span class="st-t">循環投資：Nvidia 的下游資本佈局與監理疑慮</span><span class="st-sub">賣鏟子的人，同時也是買鏟子那群人最大的股東——這件事本身不違法，但讓傳統的信用分析工具失靈。</span></span><span class="st-sig">3<i>大風險之一（BIS）</i></span></summary>
+  <div class="body">
+    <p>Nvidia 在 2026 年成為 AI 產業最積極的投資者：私有公司部位到 2026 年 7 月已達 <strong>$47.9B</strong>，其中約 $18B 的股權承諾尚未動用；公開權益投資組合則超過 $40B、部分估計甚至已逾 $63B。這些投資不是分散配置，而是精準打在自己下游的客戶身上——CoreWeave（約 $4.7B 部位，源自 2026 年 1 月的 $2B 投資）、Nebius（9.3% 股權，同樣源自 $2B 投資）、xAI（$10B，後隨 xAI 併入 SpaceX 而轉換）、OpenAI（最高 $100B 的投資承諾）、Anthropic，以及待完成的 Hugging Face 收購案（$12.9B）。</p>
+
+    <div class="floop full">
+      <svg viewBox="0 0 900 300" role="img" aria-label="循環融資示意：Nvidia 投資 Neocloud／AI 實驗室，取得股權；Neocloud／AI 實驗室用資金向 Nvidia 採購 GPU；GPU 部署後產生的雲端服務再賣給下游企業與消費者；資金與晶片沿環形流動">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker>
+            <marker id="arrowA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--acc)"/></marker>
+          </defs>
+          <rect class="fl-box a" x="40" y="120" width="180" height="64" rx="2"/>
+          <text class="fl-lb" x="130" y="147" text-anchor="middle">NVIDIA</text>
+          <text class="fl-lb2" x="130" y="165" text-anchor="middle">晶片供應商／股權投資人</text>
+
+          <rect class="fl-box" x="360" y="30" width="200" height="64" rx="2"/>
+          <text class="fl-lb" x="460" y="57" text-anchor="middle">Neocloud</text>
+          <text class="fl-lb2" x="460" y="75" text-anchor="middle">CoreWeave／Nebius／xAI…</text>
+
+          <rect class="fl-box" x="360" y="210" width="200" height="64" rx="2"/>
+          <text class="fl-lb" x="460" y="237" text-anchor="middle">AI 實驗室</text>
+          <text class="fl-lb2" x="460" y="255" text-anchor="middle">OpenAI／Anthropic…</text>
+
+          <rect class="fl-box" x="700" y="120" width="160" height="64" rx="2"/>
+          <text class="fl-lb" x="780" y="147" text-anchor="middle">終端客戶</text>
+          <text class="fl-lb2" x="780" y="165" text-anchor="middle">企業／開發者／消費者</text>
+
+          <path class="fl-arr a" d="M220,140 Q290,90 360,68"/>
+          <text class="fl-lb2" x="255" y="90">股權投資</text>
+          <path class="fl-arr a" d="M220,164 Q290,214 360,238"/>
+          <text class="fl-lb2" x="255" y="222">股權投資／保供承諾</text>
+
+          <path class="fl-arr" d="M400,94 Q330,120 220,150"/>
+          <text class="fl-lb2" x="310" y="145">採購 GPU（用投資款）</text>
+          <path class="fl-arr" d="M400,210 Q330,180 220,158"/>
+          <text class="fl-lb2" x="330" y="195">採購 GPU（用投資款）</text>
+
+          <path class="fl-arr" d="M560,60 Q650,80 700,132"/>
+          <path class="fl-arr" d="M560,244 Q650,220 700,172"/>
+          <text class="fl-lb2" x="640" y="106">雲端服務／模型 API</text>
+
+          <path class="fl-arr" d="M700,175 Q560,320 130,184" stroke-dasharray="3 3"/>
+          <text class="fl-lb2" x="380" y="300" text-anchor="middle">終端付費 → 回頭支撐整條鏈的營收與估值</text>
+      </svg>
+    </div>
+    <p class="cap full"><b>標註</b>　示意圖為簡化後的資金與商品流向，不代表任一單筆交易的完整法律結構；虛線為「營收最終從哪裡回來」的邏輯回路，非實際資金路徑。</p>
+
+    <h3>典型個案：OpenAI–Microsoft–Nvidia–AMD 的交叉持股網</h3>
+    <p>OpenAI 承諾向 Microsoft Azure 採購 $250B 雲端服務、部署數十億美元規模的 AMD 晶片並同時成為 AMD 主要股東之一、再取得 Nvidia 最高 $100B 的投資（條件是承諾採購並部署數百萬顆 Nvidia GPU）。這個結構的實質是：<strong>Nvidia 用自己的資本，替自己未來的營收買單。</strong>國際清算銀行（BIS）在 2026 年年報中，把這類循環融資與「AI 資本支出泡沫」「主權債務脆弱性」並列為全球金融穩定的三大風險之一。</p>
+
+    <div class="callout">
+      <span class="ck">為什麼這比單純的「賣方信貸」更難分析</span>
+      <p>循環融資本身不必然不健康，但它把風險集中到一種傳統資產負債表分析看不出來的地方：一家 Neocloud 的<strong>營收、負債、與其供應商的股權投資，可能全部指向同一小群交易對手</strong>。當這幾個名字同時是你的客戶、你的股東、你的供應商時，「信用評等」這個概念本身的資訊量會被稀釋。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ B ══════════ -->
+<div class="phase-rule"><span class="pk">B · Neocloud 服務商層</span><span class="pd">這條鏈真正的「中間層」——租算力給別人，自己卻幾乎不擁有電網與晶圓廠</span></div>
+
+<details class="stage" id="s04">
+  <summary><span class="st-n">04</span><span class="st-main"><span class="st-t">GPU 雲端服務商圖譜：從 CoreWeave 到 Nscale 的競爭格局</span><span class="st-sub">同一個賽道裡，有人賣訓練算力、有人賣推論算力、有人只賣還沒蓋好的基礎設施。</span></span><span class="st-sig">$20B→$180B<i>產業規模區間估計</i></span></summary>
+  <div class="body">
+    <p>「Neocloud」指一群幾乎完全繞著 GPU 算力打造、不做傳統通用雲端業務的專業服務商。市場規模的估計因統計口徑差異頗大：一組估計是 2026 年約 <strong>$20B</strong>、2030 年逼近 <strong>$180B</strong>；另一組估計是 2025 年已超過 <strong>$25B</strong>、2031 年逼近 <strong>$400B</strong>。差異雖大，方向一致——這是目前雲端產業裡成長最快的子類別，也是資本市場對「AI 基礎設施」下注最直接的入口。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>公司</th><th>最新季度營收</th><th class="n">YoY</th><th>定位</th><th>折舊年限</th><th>資本結構特徵</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CoreWeave</strong></td><td class="n">$2.575B（26Q2）</td><td class="n">+112%</td><td>訓練算力龍頭；定價最高（H100 約 $6.16/hr，較同業高約 60%）</td><td class="n">6 年</td><td>SPV＋GPU 抵押貸款為主，已達投資級評等</td></tr>
+          <tr><td><strong>Nebius</strong></td><td class="n">$582.3M（26Q2）</td><td class="n">+454%</td><td>推論導向，垂直整合自有電力＋GPU＋雲端＋推論工具</td><td class="n">4 年</td><td>約 60% 成長靠客戶預付款（Meta／Microsoft）融資，40% 股權＋債務</td></tr>
+          <tr><td><strong>Lambda</strong></td><td class="n">&gt;$500M ARR（25/5）</td><td class="n">—</td><td>開發者導向，B200 定價最低（$6.69/hr）</td><td class="n">5 年</td><td>籌備 2026 上半年 IPO（Morgan Stanley／JPMorgan／Citi）</td></tr>
+          <tr><td><strong>Crusoe</strong></td><td class="n">未揭露</td><td class="n">—</td><td>源自油田伴生氣發電，2022 年轉入 AI 雲端</td><td class="n">—</td><td>GPU 租賃＋15 年淨租約＋購電協議三重收入；評估 2026Q4 IPO 或策略性合併</td></tr>
+          <tr><td><strong>Nscale</strong></td><td class="n">未揭露</td><td class="n">—</td><td>歐洲最大本土 Neocloud，投資人含 Microsoft／OpenAI／Nvidia</td><td class="n">—</td><td>2026/3 完成 $2B C 輪，估值 $14.6B</td></tr>
+          <tr><td>IREN／Applied Digital／TeraWulf／Cipher Mining／WhiteFiber</td><td class="n">—</td><td class="n">—</td><td>多數源自加密貨幣挖礦業者轉型 AI／HPC 代管</td><td class="n">—</td><td>依個別公司差異大，多數仍在建構長期合約基礎</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　營收與 YoY 為各公司揭露之最近季度數字；折舊年限依公開報導整理，實際政策可能因資產類別而異；定價為公開牌價，實際成交價因合約規模與年期而有折扣。</p>
+
+    <h3>差異化的三種打法</h3>
+    <p>CoreWeave 走的是規模與定價權路線：靠最早卡位 Nvidia 高階 GPU 供給、用溢價換取穩定的大型客戶（Meta、OpenAI、Anthropic 都是其客戶），角色更接近「AI 產業的包租公」。Nebius 走的是垂直整合路線：自建電力來源、自研推論工具鏈，試圖把毛利留在自己手上而非單純轉租硬體。IREN、Applied Digital 這類由加密貨幣礦場轉型而來的業者，則更接近純基礎設施出租商——賣的是已經通電、已經散熱設計好的機房空間，而非完整的雲端服務層。</p>
+
+    <div class="marg"><b>供給端的隱憂</b>Contrary Research 等機構估計，這波 Neocloud 熱潮裡約有兩成的參與者最終無法存活——多數死因不是找不到客戶，而是在 02 節談到的融資結構裡，資本成本與晶片折舊速度賽跑輸了。</div>
+  </div>
+</details>
+
+<details class="stage" id="s05">
+  <summary><span class="st-n">05</span><span class="st-main"><span class="st-t">產能承購模式：take-or-pay 長約如何把風險轉嫁上游</span><span class="st-sub">合約條款決定的不只是誰付錢，還決定了誰能拿這份合約去借錢。</span></span><span class="st-sig">$45–49B<i>Nebius 積壓訂單規模</i></span></summary>
+  <div class="body">
+    <p>Neocloud 產業普遍採用「<strong>不管用不用都要付錢</strong>」的容量承購合約（take-or-pay）：客戶承諾在合約年期內支付約定容量的費用，即使實際用量不足。這種結構表面上是定價機制，實質上是<strong>信用強化工具</strong>——它把一份原本波動的服務訂單，轉換成一份現金流可預測、可以拿去抵押借款的長期應收帳款。</p>
+
+    <p>Nebius 是這個模式最清楚的範例：截至 2026 年，公司積壓訂單約在 <strong>$45–49B</strong> 之間（不同報導口徑略有差異），主要來自 Meta（五年 $27B）與 Microsoft（$17.3–19.4B）兩筆合約；管理層預期 2026 年約 60% 的成長資本可由客戶預付款直接支應，其餘 40% 才需要靠股權與債務市場。Anthropic 與 Nscale 的 $45B、六年、460MW 合約走的是同一套邏輯，規模已是產業已知數一數二的單筆容量交易。</p>
+
+    <div class="callout">
+      <span class="ck">Forbes 的描述很傳神：CoreWeave 正在變成「AI 的包租公」</span>
+      <p>當 Meta、Anthropic 這類超大型客戶簽下多年期容量合約，Neocloud 的角色從「賣算力的技術公司」，更接近「把资料中心租給大型科技公司的地主」——差別只在於，這位地主自己也還沒把貸款還清，而抵押品正是租客尚未違約的那份租約。</p>
+    </div>
+
+    <h3>這個機制怎麼串起 02 節與 06 節</h3>
+    <p>順序是這樣走的：終端客戶簽下承購長約（01 節）→ Neocloud 拿這份合約去 SPV 借錢（02 節）→ 借到的錢拿去向 Nvidia／AMD 採購 GPU（06 節）→ Nvidia 再把賣 GPU 賺到的一部分錢，投資回終端客戶或 Neocloud 自己（03 節）。<strong>每一環都合理，但整條鏈只要有一環的客戶信用出問題，往回傳導的速度會比傳統雲端產業快得多</strong>——因為抵押品（GPU）與收入來源（合約）高度重疊、且都指向同一批對手方。</p>
+  </div>
+</details>
+
+<!-- ══════════ C ══════════ -->
+<div class="phase-rule"><span class="pk">C · 運算矽晶層</span><span class="pd">誰設計晶片、誰製造記憶體，決定了整條鏈的供給上限</span></div>
+
+<details class="stage" id="s06">
+  <summary><span class="st-n">06</span><span class="st-main"><span class="st-t">加速器晶片：NVIDIA、AMD 與客製 ASIC 三分天下</span><span class="st-sub">壟斷者持續壟斷，追趕者持續追趕，但真正在改寫格局的是第三條路：超大規模業者自己設計晶片。</span></span><span class="st-sig">≈95%<i>客製ASIC協同設計市佔</i></span></summary>
+  <div class="body">
+    <p>NVIDIA 在 AI 加速器市場的市佔率估計落在 <strong>75–95%</strong> 之間（依統計口徑差異甚大，多數分析師的中樞估計約在 80% 上下），主力產品沿 Hopper→Blackwell（B200／B300）→Rubin（R200）的年度節奏推進。AMD 是目前唯一具規模的通用 GPU 挑戰者，市佔約 5–7%：MI350 於 2025 年第三季開始出貨，2026 年 7 月的 Advancing AI 大會上發表 MI400 系列首批型號 MI455X 與 MI430X，單顆搭載 432GB HBM4（較 MI350 的 288GB HBM3e 增加 50%）；整機櫃平台 Helios 整合 72 顆 MI455X、合計 31TB HBM4，單櫃報價約 $5.25M，Microsoft 已在 2026 年 7 月宣布成為新買家。分析師普遍認為 AMD 硬體規格已「與 NVIDIA 相當」，差距在軟體生態，短期內仍將是「遙遠的第二名」。</p>
+
+    <h3>第三條路：超大規模業者的客製 ASIC</h3>
+    <p>Broadcom 與 Marvell 兩家共同掌握了約 <strong>95%</strong> 的客製 AI ASIC 協同設計市場——Broadcom 主導 Google TPU（自 2014 年起已合作七個世代）與 OpenAI 的客製晶片，已確認六大 XPU 客戶；2026 財年第一季 AI 半導體營收 $8.4B（YoY +106%），第二季財測 $10.7B，在手 AI 訂單積壓達 $73B，執行長 Hock Tan 表示已「看得到」2027 年 AI 晶片營收超過 $100B 的路徑。Marvell 則主導 AWS Trainium 與 Microsoft Maia：AWS 最新的 Trainium3 是其首顆 3 奈米晶片，FP8 算力達 2.517 PFLOPS、144GB HBM3E、頻寬 4.9TB/s，較上一代算力翻倍、記憶體提升 1.5 倍；Marvell 2026 年 AI ASIC 營收展望上看 $11B。2026 年 4 月市場並傳出 Google 正洽談擴大與 Marvell 的合作，為既有的 Broadcom TPU 專案之外新增一條推論晶片設計線。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>設計陣營</th><th>代表產品</th><th>主要客戶／夥伴</th><th>台灣對應角色</th></tr></thead>
+        <tbody>
+          <tr><td>NVIDIA（自有品牌 GPU）</td><td>Blackwell（B200／B300）→Rubin（R200）</td><td>面向所有 Neocloud 與超大規模業者銷售</td><td>TSMC 代工（4NP／後續先進節點）＋ CoWoS 先進封裝</td></tr>
+          <tr><td>AMD（自有品牌 GPU）</td><td>MI350→MI400 系列（Helios 機櫃）</td><td>Microsoft、Oracle 等</td><td>TSMC 代工</td></tr>
+          <tr><td>Broadcom（協同設計）</td><td>Google TPU、OpenAI 客製晶片</td><td>Google（七世代合作）、OpenAI</td><td>TSMC 代工；台灣 ASIC 設計服務廠競爭者</td></tr>
+          <tr><td>Marvell（協同設計）</td><td>AWS Trainium、Microsoft Maia</td><td>AWS、Microsoft，洽談中 Google</td><td>TSMC 代工</td></tr>
+          <tr><td>世芯-KY（Alchip）</td><td>北美超大規模客戶 AI 加速器 ASIC</td><td>北美 Hyperscaler（未具名客戶為主）</td><td>3 奈米量產中，2 奈米 NRE 收入陸續認列</td></tr>
+          <tr><td>創意電子（GUC）</td><td>Google CPU／AI ASIC 設計服務</td><td>Google 等</td><td>台積電轉投資，優先導入先進製程與封裝</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　市佔率為多方分析師估計之區間，實際依統計口徑（營收／出貨量／算力）差異甚大；台灣角色欄位標註為公開資訊整理，不代表獨家或排他關係。</p>
+
+    <div class="marg"><b>與台灣的交集</b>不論最終贏家是哪個陣營，這一層幾乎所有晶片的物理製造都繞不開台積電——這是 12 節「台灣供應鏈全景」的第一個交會點。</div>
+  </div>
+</details>
+
+<details class="stage" id="s07">
+  <summary><span class="st-n">07</span><span class="st-main"><span class="st-t">記憶體樽頸：HBM 三雄與供應緊缺</span><span class="st-sub">全世界只有三家公司能量產 HBM，而它們 2026 年的產能已經全部賣光。</span></span><span class="st-sig">2027–28<i>多方預估短缺延續年份</i></span></summary>
+  <div class="body">
+    <p>SK 海力士與美光 2026 年全年的 HBM 產能<strong>已在多年期供應協議下全數售罄</strong>；連同三星，這三家是全球僅有的量產級 HBM 供應商。三星記憶體事業負責人金載俊警告，記憶體全線的「顯著短缺」預計至少延續到 2027 年；多家賣方分析機構的預測則把短缺延續到 <strong>2028 年</strong>。</p>
+
+    <p>需求端的驅動因素很直接：NVIDIA B200 單顆搭載 192GB HBM3E，較 H100 的 80GB 增加 140%；AMD MI400 單顆 432GB HBM4，較 MI350 增加 50%。每一代加速器對記憶體的胃口都在跳躍式成長，而 HBM 的良率與產能爬升速度遠跟不上這個節奏。</p>
+
+    <div class="figs full">
+      <div class="fg"><span class="v">$36.1<small>B</small></span><span class="k">三星半導體事業 26Q1 營業利益（占全公司約 94%）</span></div>
+      <div class="fg"><span class="v">$35.5<small>B</small></span><span class="k">SK 海力士 26Q1 創紀錄營收</span></div>
+      <div class="fg"><span class="v">$27.8<small>B</small></span><span class="k">SK 海力士 26Q1 營業利益</span></div>
+      <div class="fg"><span class="v">+140<small>%</small></span><span class="k">B200 對 H100 的 HBM 容量增幅</span></div>
+    </div>
+
+    <div class="callout">
+      <span class="ck">連鎖效應</span>
+      <p>HBM 產能被 AI 加速器全數吃掉，排擠效應正在外溢到<strong>整個 DRAM 市場</strong>——消費性電子（手機、PC）的一般記憶體供給也因此被連帶收緊，這是 2026 年記憶體漲價潮不只發生在 AI 概念股身上的根本原因。往下游看，這也是 06 節裡每一代加速器規格躍升「頻寬持平但容量暴增」的直接後果：廠商在把有限的先進封裝產能，優先讓給容量更大的堆疊方案。</p>
+    </div>
+  </div>
+</details>
+
+<!-- ══════════ D ══════════ -->
+<div class="phase-rule"><span class="pk">D · 系統整合層</span><span class="pd">把矽晶變成一台可以插電運轉的機器，這一段台灣廠商幾乎全面在場</span></div>
+
+<details class="stage" id="s08">
+  <summary><span class="st-n">08</span><span class="st-main"><span class="st-t">伺服器與機櫃整合：台灣 ODM 四雄</span><span class="st-sub">從晶片到整櫃，最後把它組裝、認證、交機的，幾乎全是台灣廠商。</span></span><span class="st-sig">70–80k<i>全年機櫃出貨預估（台）</i></span></summary>
+  <div class="body">
+    <p>鴻海（Hon Hai／Foxconn）、廣達（Quanta）、緯創（Wistron）、緯穎（Wiwynn）是唯四取得 NVIDIA Certified Systems 認證、能交付 GB200／GB300 全機櫃的整合商。鴻海是第一家完成 GB200 與 GB300 全機櫃量產與交付的廠商，第三季機櫃出貨季增一度達 300%。摩根士丹利估計，<strong>2026 全年 GB200／GB300 NVL72 機櫃出貨量約落在 70,000–80,000 台</strong>，較 2025 年的約 29,000 台超過翻倍；2026 年 2 月單月全產業總出貨量約 6,500 台（月增 6%），鴻海當月單獨交付約 2,400 台。</p>
+
+    <div class="tbl full">
+      <table>
+        <thead><tr><th>公司</th><th>2026 Q1 營收</th><th class="n">YoY</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>鴻海（Foxconn）</td><td class="n">$66.6B</td><td class="n">+29.7%</td><td>經營層指引 2026 年 AI 伺服器營收占比拉高至 55–60%（2025 年約 52%）</td></tr>
+          <tr><td>廣達（Quanta）</td><td class="n">約 $25B</td><td class="n">+66.6%</td><td>—</td></tr>
+          <tr><td>緯創（Wistron）</td><td class="n">未單列</td><td class="n">三位數成長</td><td>GB300 放量驅動</td></tr>
+          <tr><td>緯穎（Wiwynn）</td><td class="n">未單列</td><td class="n">三位數成長</td><td>GB300 放量驅動</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap full"><b>標註</b>　營收與成長率為各公司公開財報揭露；「三位數成長」為多家財經媒體報導之季度或月度年增率描述，非精確單一數字。</p>
+
+    <h3>機構與散熱元件層</h3>
+    <p>整機櫃之下還有一層專做結構與散熱元件的供應商：鴻準（鴻海機構件子公司）、勤誠（伺服器機殼）、雙鴻（散熱模組，液冷市場先行者之一）、奇鋐（AVC，冷板市占約 50%）。這一層公司的共同背景，是過去十餘年在筆電散熱模組與精密機構件上累積的製造know-how，成為它們快速切入液冷賽道的跳板——這個先發優勢在 10 節會再展開。</p>
+  </div>
+</details>
+
+<details class="stage" id="s09">
+  <summary><span class="st-n">09</span><span class="st-main"><span class="st-t">網路互連：InfiniBand、Spectrum-X 與矽光子</span><span class="st-sub">GPU 再快，如果幾萬顆晶片之間搬不動資料，算力就是浪費在等待上。</span></span><span class="st-sig">5×<i>CPO 較插拔式光模組節能倍數</i></span></summary>
+  <div class="body">
+    <p>NVIDIA 的 Quantum-X InfiniBand 平台每埠可達 800Gb/s、單台交換器 144 埠，兩顆共封裝光學（CPO）晶片採液冷散熱。2026 下半年即將推出的 Spectrum-X Photonics 系列 CPO 交換器單機可達 102.4Tbps，透過減少雷射器數量帶來 <strong>5 倍</strong>的能效提升、<strong>63 倍</strong>訊號完整性與 <strong>10 倍</strong>網路韌性，部署速度也較傳統插拔式方案快 1.3 倍。這場「InfiniBand vs. Ethernet」的架構之爭，Broadcom 是 Spectrum-X 在乙太網路陣營最主要的競爭對手。</p>
+
+    <p>機櫃規格提升同步帶動了周邊零組件的升級週期：GB300 世代機櫃對快接頭（QD，quick disconnect）的採用率明顯提升，電源供應、液冷元件與 PCB／CCL（銅箔基板）規格也同步跳級。台灣的 PCB／CCL 供應商——台光電、台燿（6274）、金像電、臻鼎、聯茂——因此在 2026 年上半年迎來多輪漲價：4 月報價季增 10–40%，法人普遍預期漲勢延續至 2026 下半年與 2027 年，驅動力來自雲端服務商（CSP）搶產能、加上 AI 伺服器、光通訊、低軌衛星三個下游市場同時吃緊。</p>
+
+    <div class="marg"><b>台燿的雙重曝險</b>台燿同時供應 AI 伺服器用高階 CCL 與 800G 交換器用基板，是這一節「機櫃升級」與「網路升級」兩條需求線同時受惠的少數廠商之一。</div>
+  </div>
+</details>
+
+<!-- ══════════ E ══════════ -->
+<div class="phase-rule"><span class="pk">E · 基礎設施層</span><span class="pd">2024 年的稀缺是晶片，2026 年的稀缺是能不能把電送進來、把熱排出去</span></div>
+
+<details class="stage" id="s10">
+  <summary><span class="st-n">10</span><span class="st-main"><span class="st-t">電力與散熱：從電源供應器到液冷</span><span class="st-sub">單櫃功率密度十年翻了十倍，風冷從「夠用」變成「物理上不可能」。</span></span><span class="st-sig">130–140<i>kW／櫃（GB300 NVL72）</i></span></summary>
+  <div class="body">
+    <p>一台 GB300 NVL72 機櫃的功耗落在 130–140kW，加上 CPX（Cooling Performance Extension）擴充後，單顆 GPU 的 TDP 逼近 2,000W——這個密度已經遠遠超出氣冷散熱的物理極限，<strong>液冷從選配變成標準配備</strong>，電源供應與液冷連動的重要性也因此被拉高。</p>
+
+    <h3>電源供應器雙雄</h3>
+    <p>台達電與光寶科寡占 AI 資料中心電源供應器市場：法人估計台達電對大型 AI 運算中心客戶的供貨比重，將從 2025 年約 5 成拉高到 2026 年挑戰 7 成，光寶科的供貨比重同樣達到約 7 成。台達電管理層對市場釋出強烈樂觀訊號，直言資料中心強勁需求至少延續至 2026 下半年，並同步在泰國、台灣、美國擴充產能，2025–2026 資本支出維持約新台幣 400 億元的高檔水準。</p>
+
+    <h3>液冷供應鏈</h3>
+    <p>全球資料中心液冷市場規模從 2025 年的 $4.8B，估計成長到 2026 年的 $6B，並在 18.2% 的年複合成長率下於 2035 年達到 $27.1B。國際龍頭 Alfa Laval、Vertiv、Schneider Electric（Motivair）、Rittal 提供從熱交換器到冷卻液分配單元（CDU）的一站式方案；專攻晶片直接液冷的專業廠商則包括 CoolIT Systems、Boyd、LiquidStack、Accelsius、ZutaCore。台灣的雙鴻（Auras）與奇鋐（AVC）則把過去在筆電散熱模組與風扇設計上累積的深厚基礎，快速轉化為液冷賽道的先發優勢——這種製造經驗的移轉短期內不容易被競爭者複製。</p>
+
+    <div class="callout">
+      <span class="ck">判讀提醒</span>
+      <p>看到任何「AI 伺服器概念股」的分類，先問它屬於這條鏈的哪一層：<strong>電源供應器（把電變成晶片吃得下的電壓）</strong>與<strong>液冷（把晶片產生的熱搬出機房）</strong>是兩套完全不同的工程問題，供應商重疊度不高，景氣循環的領先或落後關係也不同。</p>
+    </div>
+  </div>
+</details>
+
+<details class="stage" id="s11">
+  <summary><span class="st-n">11</span><span class="st-main"><span class="st-t">資料中心不動產與電網：REIT、核能 PPA、變壓器瓶頸</span><span class="st-sub">2024 年大家在搶晶片，2026 年大家在搶還沒排到的併網容量。</span></span><span class="st-sig">4–10<i>年・電網併網排隊時間</i></span></summary>
+  <div class="body">
+    <p>美國資料中心代managed（colocation）市場規模預估從 2025 年的 $40.21B，以 16.5% 的年成長率擴大到 2026 年的 $46.84B，並於 2030 年達到 $72.37B。Equinix 與 Digital Realty 是這個市場的兩大龍頭——Equinix 專注於互連與零售型代管、毛利較高；Digital Realty 則在批發型代管居於主導地位；QTS、Iron Mountain、Applied Digital、Vantage Data Centers 也在加速擴張產能。空置率數據並未顯示供給過剩：根據 JLL 統計，整體產業出租率高達 99%，2026 年第一季北美四大市場的可用庫存年增 33%，空置率卻仍創新低——北維吉尼亞 0.3%、亞特蘭大 1%、達拉斯–沃斯堡 1.8%、芝加哥 2.2%。</p>
+
+    <h3>瓶頸下移：從晶片到變壓器</h3>
+    <p>2024 年的產業敘事還是「晶片不夠」；2026 年，瓶頸已經明確下移到高壓變壓器、開關設備與輸配電容量——這些設備的製造週期與電力公司的資本規劃週期是以「年」而非「晶片世代」計算的。美國約半數 2026 年的 AI 資料中心受到<strong>五年期</strong>電網變壓器交期積壓的影響，電網併網排隊時間普遍落在 <strong>4 到 10 年</strong>。這個約束正在重塑資料中心的選址策略——德州、喬治亞州因為有新增發電量、併網機會較多、法規流程較快，正吸引更多新建案。地方社區的反對聲浪也是實體約束的一環：2026 年第一季就有 75 個、總值 $130B 的專案被延遲或否決。</p>
+
+    <h3>核能重新登場</h3>
+    <p>Meta、Microsoft、Amazon、Google 四大超大規模業者，截至 2026 年 5 月已在 13 筆已知交易中累計承諾超過 <strong>9.8GW</strong> 的核能容量，合計投入超過 $50B。Meta 於 2026 年 1 月宣布最高 6.6GW 的長期穩定核能採購計畫，包括與 Vistra 簽署 20 年既有核電廠購電協議（PPA），以及與 TerraPower、Oklo 兩家先進反應爐開發商的前瞻協議；Google 則與 Kairos Power 簽署先進反應爐 PPA，並投資 Aalo Atomics 等新創；Constellation Energy 主打「表後（behind-the-meter）」策略，把資料中心直接共置在既有核電廠旁，省去長距離高壓輸電的環節。全球資料中心用電需求預計到 2027 年將翻倍，其中 AI 工作負載貢獻超過六成的成長。</p>
+
+    <div class="marg"><b>與 02 節的迴圈</b>Meta 的 Hyperion（02 節的 Blue Owl SPV 標的）正是這一節「不動產＋電網」約束最具體的案例——融資結構解決了誰出錢，卻解決不了那座變壓器什麼時候能通電。</div>
+  </div>
+</details>
+
+<!-- ══════════ F ══════════ -->
+<div class="phase-rule"><span class="pk">F · 收斂</span><span class="pd">把十二個環節收回同一個問題：誰先兌現、誰先違約，決定資本結構的順位</span></div>
+
+<details class="stage" id="s12">
+  <summary><span class="st-n">12</span><span class="st-main"><span class="st-t">台灣供應鏈全景定位與商業模式風險收斂</span><span class="st-sub">把台灣擺進這條鏈的每一層，會發現它幾乎無所不在——除了資本本身與晶片的原始設計圖。</span></span><span class="st-sig">6yr→2-3yr<i>折舊爭議的核心區間</i></span></summary>
+  <div class="body full">
+    <h3>台灣在十二個環節裡的位置</h3>
+    <div class="tmap">
+      <div class="tmap-in">
+        <div class="tmap-c no"><b>01 終端需求</b><span>不在此層——需求方為美系 AI 實驗室與超大規模業者</span></div>
+        <div class="tmap-c no"><b>02 融資結構</b><span>不在此層——SPV 與私募信貸集中在美系資本市場</span></div>
+        <div class="tmap-c no"><b>03 循環投資</b><span>不在此層——投資人與被投資人皆為美系公司</span></div>
+        <div class="tmap-c no"><b>04 服務商圖譜</b><span>不在此層——尚無台灣本土 Neocloud 進入這張榜單</span></div>
+        <div class="tmap-c no"><b>05 承購長約</b><span>不在此層——合約簽署方為美系客戶與服務商</span></div>
+        <div class="tmap-c hi"><b>06 加速器晶片</b><span>台積電代工幾乎全部陣營；世芯-KY、創意電子提供 ASIC 設計服務</span></div>
+        <div class="tmap-c no"><b>07 記憶體樽頸</b><span>三雄不含台灣廠商——DRAM／HBM 產能集中南韓與美系</span></div>
+        <div class="tmap-c hi"><b>08 系統整合</b><span>鴻海／廣達／緯創／緯穎壟斷 GB200／GB300 全機櫃認證交付</span></div>
+        <div class="tmap-c hi"><b>09 網路互連</b><span>台光電／台燿／金像電／臻鼎／聯茂供應 PCB／CCL 升級需求</span></div>
+        <div class="tmap-c hi"><b>10 電力散熱</b><span>台達電／光寶科寡占電源供應器；雙鴻／奇鋐液冷先發優勢</span></div>
+        <div class="tmap-c no"><b>11 不動產電網</b><span>不在此層——資料中心選址、電網與核能協議集中北美</span></div>
+        <div class="tmap-c hi"><b>12 收斂</b><span>台灣是實體製造與交付的關鍵節點，卻不承擔資本結構本身的風險</span></div>
+      </div>
+    </div>
+    <p class="cap full"><b>標註</b>　深色格為台灣廠商具明確角色之環節（06／08／09／10），淺色格為此環節目前未見具規模的台灣參與者。這個分布本身就是一個判讀：<strong>台灣幾乎壟斷了「把晶片變成一台能運轉的機器」這整段實體製造與交付，卻完全不在「誰出錢、誰承擔違約風險」這一段</strong>——這既是台灣供應鏈的護城河（不可替代的製造與交付能力），也是它的天花板（訂單多寡由 01–05 節的美系資本結構決定，議價權有限）。</p>
+
+    <h3>風險收斂一：折舊假設與晶片世代的賽跑</h3>
+    <p>Michael Burry 對 Nvidia 與大型雲端業者的公開質疑，核心就是這篇文章開頭的論點：GPU 的折舊年限（CoreWeave 6 年、Lambda 5 年、Nebius 4 年）是否合理，取決於一顆 GPU 的<strong>經濟有效壽命</strong>，而不是它的物理壽命。2020 到 2024 年間，多數大型科技公司持續<strong>延長</strong>伺服器與網路設備的折舊年限，直到 2025 年出現分歧——Amazon 對部分伺服器<strong>縮短</strong>了折舊年限，Meta 卻反向<strong>延長</strong>。如果主要雲端業者最終把折舊年限，從目前的 4–6 年整體下修到更貼近實際世代更替速度的 2–3 年，估計 2026 至 2028 年間的累計盈餘衝擊可能超過 <strong>$176B</strong>。</p>
+
+    <h3>風險收斂二：循環融資與私募信貸的裂縫</h3>
+    <p>BIS 已將循環融資列為 2026 年全球金融穩定三大風險之一；私募信貸市場則已出現初步壓力——Blue Owl 約 $14B 資金遭鎖住、Blackstone 出售資料中心部位並放棄專案、Blue Owl 違約率創五年新高。這些訊號還不足以證明整條鏈正在崩解，但足以說明「表外舉債可以無限期展延」這個假設，在 2026 年下半年第一次被市場真正檢驗。</p>
+
+    <h3>風險收斂三：產能過剩辯論</h3>
+    <p>目前的空置率數據（美國主要市場普遍低於 2%）尚不支持「已經蓋過頭」的論點——JLL 的統計顯示需求吸收速度仍快於供給成長。真正限制供給成長的，是 11 節談到的電網與社區反對，而非需求疲軟。但分析師也提醒，中國市場的供需失衡與技術路線快速轉換，是比北美更值得留意的產能過剩風險區。</p>
+
+    <div class="callout">
+      <span class="ck">一句話收斂判斷</span>
+      <p>Neocloud 完整產業鏈上，真正被賭的不是「晶片會不會過時」——晶片一定會過時，這是已知變數。真正的未知數是：<strong>當晶片一年一代、合約簽六年、電網要蓋十年時，這四個時鐘誰先對不上，誰就先違約；而誰先違約，決定的不是技術路線的優劣，是整條資本結構裡誰站在還沒被清算之前的位置。</strong>台灣供應鏈站在這條鏈裡最不可替代、卻也最不掌握這個問題答案的位置——它幾乎壟斷了「把賭注變成一台能運轉的機器」這件事，卻對「這場賭注最終賭不賭得贏」沒有話語權。</p>
+    </div>
+  </div>
+
+  <div class="calc full">
+    <div class="calc-h">情境試算・折舊年限下修的盈餘衝擊（簡化模型，僅供理解機制）</div>
+    <div class="calc-i">
+      <div><label>GPU 資本支出（$M）</label><input id="i-capex" type="number" value="10000" step="100"></div>
+      <div><label>目前折舊年限（年）</label><input id="i-life0" type="number" value="6" step="0.5" min="1"></div>
+      <div><label>下修後折舊年限（年）</label><input id="i-life1" type="number" value="3" step="0.5" min="1"></div>
+    </div>
+    <div class="calc-o">
+      <div class="co"><span class="v" id="o-dep0">—</span><span class="k">目前年化折舊費用（$M）</span></div>
+      <div class="co"><span class="v" id="o-dep1">—</span><span class="k">下修後年化折舊費用（$M）</span></div>
+      <div class="co"><span class="v" id="o-delta">—</span><span class="k">每年多認列的費用（$M）</span></div>
+      <div class="co"><span class="v" id="o-pct">—</span><span class="k">費用增幅（%）</span></div>
+    </div>
+    <div class="calc-n">模型假設直線折舊、不考慮殘值與稅盾效果，僅用於理解「折舊年限每縮短一年、盈餘要多吃多少」這個機制的量級，不是任何特定公司的財測。</div>
+  </div>
+</details>
+
+<h3 style="max-width:var(--wide)">參考資料</h3>
+<ol class="srcs">
+  <li><a href="https://www.marktechpost.com/2026/08/23/best-gpu-neoclouds-2026/">MarkTechPost — 2026 GPU Neocloud 定價與產能排名</a></li>
+  <li><a href="https://cryptopond.com/best-gpu-neoclouds-2026-coreweave-nebius-lambda-crusoe-and-groq-ranked-by-published-pricing-and-contracted-power/">Cryptopond — Neocloud 定價與承購電力排名</a></li>
+  <li><a href="https://www.signisys.com/blog/the-neocloud-revolution-how-20-billion-in-gpu-focused-providers-are-reshaping-the-cloud-market/">Signisys — Neocloud 產業規模估計</a></li>
+  <li><a href="https://qz.com/gpu-collateralized-debt-ai-neocloud-coreweave-financing-risks-050526">Quartz — GPU 抵押債務與 AI 融資風險</a></li>
+  <li><a href="https://investors.coreweave.com/news/news-details/2026/CoreWeave-Closes-Landmark-8-5-Billion-Financing-Facility-Achieving-First-Investment-Grade-Rated-GPU-backed-Financing/default.aspx">CoreWeave IR — $8.5B 投資級 GPU 抵押融資公告</a></li>
+  <li><a href="https://www.bloomberg.com/news/articles/2026-03-31/coreweave-crwv-raises-8-5-billion-gpu-loan-backed-by-meta-deal">Bloomberg — CoreWeave $8.5B Meta 擔保貸款</a></li>
+  <li><a href="https://www.sec.gov/Archives/edgar/data/1769628/000176962826000357/ex991pr.htm">SEC EDGAR — CoreWeave DDTL 5.5 揭露文件</a></li>
+  <li><a href="https://davefriedman.substack.com/p/coreweave-piles-on-more-debt">Dave Friedman — CoreWeave 債務結構分析</a></li>
+  <li><a href="https://www.bloomberg.com/graphics/2026-ai-circular-deals/">Bloomberg — AI 循環交易圖解</a></li>
+  <li><a href="https://io-fund.com/ai-stocks/nvidia-coreweave-nebius-circular-financing-gpu-boom">io-fund — Nvidia／CoreWeave／Nebius 循環融資</a></li>
+  <li><a href="https://capacityglobal.com/news/what-is-circular-financing/">Capacity — 循環融資對電信與資料中心業者的意義</a></li>
+  <li><a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/samsung-and-sk-hynix-warn-ai-driven-memory-shortages-could-last-until-2027-and-beyond-as-hbm-demand-explodes-customers-already-reserving-supply-years-ahead-while-the-wider-dram-market-begins-to-tighten">Tom's Hardware — 三星／SK 海力士記憶體短缺警告</a></li>
+  <li><a href="https://enkiai.com/data-center/hbm-supply-crisis-2026-the-bottleneck-redefining-ai/">EnkiAI — HBM 供應危機 2026</a></li>
+  <li><a href="https://www.digitimes.com/news/a20260210PD205/taiwan-ai-server-odm-demand-supply-chain-2026.html">DIGITIMES — 台灣伺服器 ODM 首季展望</a></li>
+  <li><a href="https://blogs.nvidia.com/blog/taiwan-ecosystem-ai-infrastructure/">NVIDIA Blog — 台灣產業龍頭與 AI 基礎建設</a></li>
+  <li><a href="https://inflect.com/blog/data-center-power-shortage-2026-why-grid-capacity-is-now-the-bigger-constraint-than-gpus">Inflect — 資料中心電力短缺：電網已取代晶片成為主要瓶頸</a></li>
+  <li><a href="https://tech-insider.org/us-ai-data-center-delays-cancellations-7gw-capacity-crisis-2026/">Tech Insider — 美國 AI 資料中心延遲與容量危機</a></li>
+  <li><a href="https://www.gminsights.com/industry-analysis/data-center-liquid-cooling-market">GM Insights — 資料中心液冷市場規模</a></li>
+  <li><a href="https://www.tomshardware.com/tech-industry/semiconductors/custom-ai-asics-examined-from-broadcom-to-mtia">Tom's Hardware — 客製 AI ASIC 現況（Broadcom／Google TPU／Meta MTIA）</a></li>
+  <li><a href="https://hashrateindex.com/blog/design-partners-ai-asic-market-part-2/">Hashrate Index — Broadcom 與 Marvell：AI ASIC 設計夥伴</a></li>
+  <li><a href="https://pe-insights.com/blue-owl-and-meta-close-record-30bn-financing-for-ai-data-centre-expansion-in-louisiana/">PE Insights — Blue Owl 與 Meta 完成 $30B Hyperion 融資</a></li>
+  <li><a href="https://www.matterfact.com/newsletter/2026-08-26-blue-owl-default-rate-five-year-high">Matterfact — Blue Owl 違約率創五年新高</a></li>
+  <li><a href="https://natlawreview.com/article/deep-quarry-useful-lives-gpus-key-considerations">National Law Review — GPU 折舊年限的關鍵考量</a></li>
+  <li><a href="https://www.peony.ink/blog/neocloud-capital-raise">Peony — 2026 Neocloud 資本募集：SPV 表外結構與 GPU 抵押資本堆疊</a></li>
+  <li><a href="https://www.nvidia.com/en-us/networking/products/silicon-photonics/">NVIDIA — Silicon Photonics 產品頁</a></li>
+  <li><a href="https://firstpasslab.com/blog/2026-03-15-nvidia-spectrum-x-ethernet-ai-fabric-deep-dive/">FirstPassLab — NVIDIA Spectrum-X 深度解析</a></li>
+  <li><a href="https://enkiai.com/data-center/meta-nuclear-firm-power/">EnkiAI — Meta 核能長期購電協議 6.6GW</a></li>
+  <li><a href="https://carnegieendowment.org/research/2026/06/beyond-the-hype-assessing-hyperscaler-nuclear-commitments-against-u-s-energy-realities">Carnegie Endowment — 超大規模業者核能承諾與美國能源現實</a></li>
+  <li><a href="https://ionanalytics.com/insights/mergermarket/crusoe-monitored-for-2026-ipo-as-company-evaluates-options/">ION Analytics — Crusoe 2026 IPO 評估中</a></li>
+  <li><a href="https://sacra.com/research/lambda-ipo/">Sacra — Lambda IPO 籌備進度</a></li>
+  <li><a href="https://www.datacenterdynamics.com/en/news/anthropic-signs-45bn-compute-capacity-agreement-with-nscale-report/">DCD — Anthropic 與 Nscale 簽署 $45B 運算容量協議</a></li>
+  <li><a href="https://cloudedjudgement.substack.com/p/clouded-judgement-52226-the-neocloud-boom">Clouded Judgement — Neocloud 熱潮觀察</a></li>
+  <li><a href="https://www.investing.com/analysis/nebius-just-locked-up-49b-in-ai-contracts-5-ways-to-play-the-neocloud-boom-200677144">Investing.com — Nebius 積壓訂單達 $49B</a></li>
+  <li><a href="https://www.cnbc.com/2026/07/21/nebius-stock-nvidia-stake-neocloud.html">CNBC — Nvidia 揭露 Nebius 持股</a></li>
+  <li><a href="https://www.cnbc.com/2026/05/09/nvidia-embraces-ai-investor-topping-40-billion-in-equity-bets-2026.html">CNBC — Nvidia 股權投資組合突破 $40B</a></li>
+  <li><a href="https://www.cnbc.com/2026/07/20/amd-helios-microsoft-ai-nvidia.html">CNBC — AMD Helios 機櫃與 Microsoft 新訂單</a></li>
+  <li><a href="https://www.app.dealroom.co/news/feed/us-colocation-market-to-reach-72-37b-by-2030-as-equinix-and-digital-realty-lead-expansion">Dealroom — 美國代管市場規模預測至 2030</a></li>
+  <li><a href="https://www.forbes.com/sites/robertszczerba/2026/07/22/130-billion-in-ai-data-centers-stalled-the-bottleneck-is-consent/">Forbes — $130B AI 資料中心因社區同意問題延宕</a></li>
+  <li><a href="https://www.forbes.com/sites/janakirammsv/2026/04/13/coreweave-becomes-ais-landlord-with-meta-and-anthropic-deals/">Forbes — CoreWeave 成為「AI 的包租公」</a></li>
+  <li><a href="https://money.udn.com/money/story/5612/9109934">經濟日報 — 台達電、光寶 AI 電源供貨比達 7 成</a></li>
+  <li><a href="https://finance.technews.tw/2026/04/20/ai-pcb-design/">TechNews — AI PCB 設計升級與台廠目標價</a></li>
+</ol>
+
+<div class="foot">
+  <p><strong>從一紙合約到一座變電站：Neocloud 完整產業鏈解剖</strong>　·　2026-09-01　·　主線案例 CoreWeave／Nebius／NVIDIA GB300 世代，收斂於台灣供應鏈定位。</p>
+  <p>本文為產業結構與供應鏈分析，所有財務性、產能性數字皆為公開資訊之整理與推導，部分市場規模與市佔率估計因統計口徑不同而存在明顯區間，已於內文標註。文中提及之公司名稱僅為產業結構之代表性舉例，不構成任何評價或推薦，<strong>僅供資訊參考，非投資建議</strong>。</p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var d = document;
+
+  var stages = [].slice.call(d.querySelectorAll('.stage'));
+  var segBtns = [].slice.call(d.querySelectorAll('.seg'));
+  segBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var el = d.getElementById(b.getAttribute('data-go'));
+      if (!el) return;
+      el.open = true;
+      el.scrollIntoView({ block: 'start' });
+    });
+  });
+
+  if ('IntersectionObserver' in window) {
+    var ratio = {};
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ ratio[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0; });
+      var best = null, bv = 0;
+      stages.forEach(function(s){ var v = ratio[s.id] || 0; if (v > bv) { bv = v; best = s.id; } });
+      segBtns.forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-go') === best); });
+    }, { rootMargin: '-10% 0px -55% 0px', threshold: [0, .15, .4, .8] });
+    stages.forEach(function(s){ io.observe(s); });
+  }
+
+  d.getElementById('expand-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = true; });
+  });
+  d.getElementById('collapse-all').addEventListener('click', function(){
+    stages.forEach(function(s){ s.open = false; });
+  });
+
+  var iid = ['i-capex','i-life0','i-life1'], el = {};
+  iid.forEach(function(i){ el[i] = d.getElementById(i); });
+  var out = {};
+  ['o-dep0','o-dep1','o-delta','o-pct'].forEach(function(i){ out[i] = d.getElementById(i); });
+
+  function pos(v, f, min){ var n = parseFloat(v); return (isFinite(n) && n > (min||0)) ? n : f; }
+  function fmt(v, p){ return isFinite(v) ? v.toLocaleString('en-US', { minimumFractionDigits: p, maximumFractionDigits: p }) : '—'; }
+
+  function calc(){
+    var capex = pos(el['i-capex'].value, 10000, 0),
+        life0 = pos(el['i-life0'].value, 6, 0.1),
+        life1 = pos(el['i-life1'].value, 3, 0.1);
+
+    var dep0 = capex / life0;
+    var dep1 = capex / life1;
+    var delta = dep1 - dep0;
+    var pct = dep0 > 0 ? (delta / dep0) * 100 : 0;
+
+    out['o-dep0'].textContent = fmt(dep0, 0);
+    out['o-dep1'].textContent = fmt(dep1, 0);
+    out['o-delta'].textContent = fmt(delta, 0);
+    out['o-pct'].textContent = fmt(pct, 0) + '%';
+  }
+  iid.forEach(function(i){ el[i].addEventListener('input', calc); });
+  calc();
+})();
+</script>
+</body>
+</html>
