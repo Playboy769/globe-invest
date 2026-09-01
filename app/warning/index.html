@@ -799,7 +799,9 @@ function setSpin(on){ const b=document.getElementById('refreshBtn'); b.classList
 async function apiFetch(key){
   try{
     const ctrl=new AbortController();
-    const tid=setTimeout(()=>ctrl.abort(),12000);
+    // 25 s: the STOCK_DAY_ALL / tpex-mainboard feeds can take 20 s+ on a cold
+    // server cache — a shorter abort here was making 漲跌分佈 give up too early.
+    const tid=setTimeout(()=>ctrl.abort(),25000);
     const r=await fetch('/api/warning/'+key,{signal:ctrl.signal});
     clearTimeout(tid);
     if(!r.ok) return [];
@@ -824,9 +826,9 @@ function refresh(){
   if(s==='warning'){ S.warn.loaded=false;  loadWarn(); }
   if(s==='inst')   { S.inst.loaded=false;  loadInst(); }
   if(s==='exdiv')  { S.exdiv.loaded=false; loadExDiv(); }
-  if(s==='hp')     { S.hp.loaded=false; S.hp.rows=[]; S.hp.metrics={}; S.hp.rt={}; loadHP(); }
+  if(s==='hp')     { S.hp.loaded=false; S.hp._retried=false; S.hp.rows=[]; S.hp.metrics={}; S.hp.rt={}; loadHP(); }
   else             { stopHPPoll(); }
-  if(s==='breadth'){ S.breadth.loaded=false; loadBreadth(); }
+  if(s==='breadth'){ S.breadth.loaded=false; S.breadth._retried=false; loadBreadth(); }
 }
 
 // ═══════════════════════════════════════════
@@ -1433,9 +1435,12 @@ async function loadHP(){
     const res=await fetch('/api/high-price/list');
     if(!res.ok) throw new Error('HTTP '+res.status);
     const data=await res.json();
-    S.hp.rows=Array.isArray(data)?data:[];
+    const rows=Array.isArray(data)?data:[];
+    if(!rows.length) throw new Error('資料尚未就緒');   // server cache still warming — retry
+    S.hp.rows=rows;
     S.hp.metrics={};
     S.hp.loaded=true;
+    S.hp._retried=false;
     document.getElementById('hp-cnt').textContent=S.hp.rows.length;
     document.getElementById('hp-tw').textContent=S.hp.rows.filter(r=>r.market==='twse').length;
     document.getElementById('hp-tp').textContent=S.hp.rows.filter(r=>r.market==='tpex').length;
@@ -1446,7 +1451,14 @@ async function loadHP(){
     loadHPMetrics();
     startHPPoll();
   }catch(e){
-    document.getElementById('hp-tbody').innerHTML=`<tr><td colspan="20" style="padding:40px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)}</td></tr>`;
+    const tb=document.getElementById('hp-tbody');
+    if(!S.hp._retried){
+      S.hp._retried=true;
+      tb.innerHTML=`<tr><td colspan="20" style="padding:36px;text-align:center;color:var(--ink-soft)">資料伺服器喚醒中，首次載入約需 20–30 秒…</td></tr>`;
+      setTimeout(()=>{ S.hp.loaded=false; loadHP(); },6000);
+    }else{
+      tb.innerHTML=`<tr><td colspan="20" style="padding:36px;text-align:center;color:var(--red-ink)">載入失敗：${esc(e.message)} · <a href="#" onclick="S.hp._retried=false;S.hp.loaded=false;loadHP();return false;">重試</a></td></tr>`;
+    }
   }
 }
 
@@ -1507,6 +1519,13 @@ async function loadBreadth(){
   if(twseRows.length || tpexRows.length){
     S.breadth.data = computeBreadth(twseRows, tpexRows);
     S.breadth.loaded = true;
+    S.breadth._retried = false;
+  } else if(!S.breadth._retried){
+    // Cold server cache — both feeds came back empty. Keep the loading state and
+    // retry once after ~6 s, by which time the background refresh has usually landed.
+    S.breadth._retried = true;
+    setTimeout(()=>{ S.breadth.loaded=false; loadBreadth(); }, 6000);
+    return;
   }
   setSpin(false); document.getElementById('updTime').textContent = nowStr();
   renderBreadth();

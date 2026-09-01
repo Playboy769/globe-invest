@@ -108,6 +108,37 @@ let _oilCache = null;
 let _oilCacheTime = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+// ── Stale-while-revalidate wrapper ───────────────────────────────────────────
+// The TWSE / TPEx OpenAPI list feeds (STOCK_DAY_ALL ~300 KB, tpex quotes ~350 KB,
+// BWIBBU_ALL, the company-info datasets) are slow to pull from Railway's US-East
+// region — a cold fan-out runs ~25-30 s. With a plain TTL, the first visitor after
+// the TTL lapses (and everyone, right after a container restart) pays that wait
+// synchronously, and Railway's edge 502s the request before it returns. This wraps
+// a zero-arg async builder so that past `ttl` the last good value is returned
+// immediately and refreshed in the background; the blocking path runs only on a
+// true cold start (no value yet, or older than `hardTtl`), and concurrent cold
+// callers share one in-flight fetch. A failed background refresh keeps serving the
+// previous value.
+function swrCache(fn, ttl, hardTtl) {
+  hardTtl = hardTtl || Infinity;
+  let value, ts = 0, inflight = null;
+  const run = () => {
+    if (!inflight) {
+      inflight = Promise.resolve().then(fn)
+        .then(v => { value = v; ts = Date.now(); return v; })
+        .catch(e => { console.warn('swrCache refresh failed:', e && e.message); throw e; })
+        .finally(() => { inflight = null; });
+    }
+    return inflight;
+  };
+  return async () => {
+    const age = Date.now() - ts;
+    if (value !== undefined && age < ttl) return value;
+    if (value !== undefined && age < hardTtl) { run().catch(() => {}); return value; }
+    return run();
+  };
+}
+
 // Sub-industry → broad sector mapping (for 高價股 page)
 const SECTOR_MAP = {
   '半導體業':'電子','電腦及週邊設備業':'電子','光電業':'電子','通訊網路業':'電子',
@@ -169,12 +200,9 @@ function calcBeta(sCloses, iCloses) {
   return varI ? +(cov/varI).toFixed(2) : null;
 }
 
-// High-price stock list cache (10 min)
-let _hpCache = null, _hpTime = 0;
-// Real-time quote cache (20 s)
-let _rtCache = null, _rtTime = 0;
-async function getHighPriceList() {
-  if (_hpCache && Date.now() - _hpTime < 10 * 60 * 1000) return _hpCache;
+// High-price stock list — 10 min fresh, served stale up to 1 h while refreshing
+let _rtCache = null, _rtTime = 0;   // real-time quote cache (20 s)
+async function _buildHighPriceList() {
   const coInfo = await getCompanyInfo();
   const [twseRes, tpexRes, bwibRes] = await Promise.allSettled([
     fetchUrl('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL').then(JSON.parse),
@@ -224,16 +252,12 @@ async function getHighPriceList() {
     }
   }
   stocks.sort((a,b) => b.price - a.price);
-  _hpCache = stocks; _hpTime = Date.now();
   return stocks;
 }
+const getHighPriceList = swrCache(_buildHighPriceList, 10 * 60 * 1000, 60 * 60 * 1000);
 
-// Company info cache (1 hour TTL)
-let _coInfoCache = null;
-let _coInfoTime  = 0;
-
-async function getCompanyInfo() {
-  if (_coInfoCache && Date.now() - _coInfoTime < 60 * 60 * 1000) return _coInfoCache;
+// Company info (industry / shares) — 1 h fresh, served stale up to 6 h while refreshing
+async function _buildCompanyInfo() {
   const info = {};
   const [twseIndRes, tpexRes, twseCorpRes] = await Promise.allSettled([
     fetchUrl('https://openapi.twse.com.tw/v1/opendata/t187ap14_L').then(JSON.parse),
@@ -263,14 +287,14 @@ async function getCompanyInfo() {
       else if (code)          info[code] = { industry: '', market: 'twse', shares };
     }
   }
-  _coInfoCache = info;
-  _coInfoTime  = Date.now();
   return info;
 }
+const getCompanyInfo = swrCache(_buildCompanyInfo, 60 * 60 * 1000, 6 * 60 * 60 * 1000);
 
 // Warning alerts cache (5 min TTL — intraday market alerts)
 const _warnCache = {};
 const _warnTime  = {};
+const _warnInflight = {};   // per-key in-flight refresh, to coalesce concurrent cold callers
 
 // OpenGraph metadata cache (24h TTL — CausalFrame embed preview cards)
 const _ogCache = {};
@@ -288,13 +312,29 @@ const WARN_APIS  = {
   'tpex-mainboard-quotes':  'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes',
 };
 
+function _refreshWarn(key) {
+  if (!_warnInflight[key]) {
+    _warnInflight[key] = fetchUrl(WARN_APIS[key])
+      .then(raw => {
+        const data = JSON.parse(raw);
+        _warnCache[key] = Array.isArray(data) ? data : [];
+        _warnTime[key]  = Date.now();
+        return _warnCache[key];
+      })
+      .finally(() => { _warnInflight[key] = null; });
+  }
+  return _warnInflight[key];
+}
+
+// Stale-while-revalidate, same rationale as swrCache() above: the STOCK_DAY_ALL /
+// tpex-mainboard feeds behind 漲跌分佈 are slow from US-East, so past the TTL we
+// serve the last good array at once and refresh in the background. Only a true cold
+// key (never fetched) blocks, and concurrent cold callers share one fetch.
 async function getWarnData(key) {
-  if (_warnCache[key] && Date.now() - (_warnTime[key] || 0) < CACHE_TTL) return _warnCache[key];
-  const raw  = await fetchUrl(WARN_APIS[key]);
-  const data = JSON.parse(raw);
-  _warnCache[key] = Array.isArray(data) ? data : [];
-  _warnTime[key]  = Date.now();
-  return _warnCache[key];
+  const age = Date.now() - (_warnTime[key] || 0);
+  if (_warnCache[key] !== undefined && age < CACHE_TTL) return _warnCache[key];
+  if (_warnCache[key] !== undefined) { _refreshWarn(key).catch(() => {}); return _warnCache[key]; }
+  return _refreshWarn(key);
 }
 
 function fetchMis(url) {
@@ -1455,4 +1495,19 @@ server.listen(PORT, () => {
   // Set POWERLOG_DISABLED=1 in a local checkout to avoid polling Taipower while
   // developing something unrelated.
   if (process.env.POWERLOG_DISABLED !== '1') powerlog.start();
+
+  // Warm the slow TWSE/TPEx-backed caches now, so the first visitor after a restart
+  // is served from cache instead of eating the ~25-30 s cold fan-out (which Railway's
+  // edge would 502 before it returns). Fire-and-forget; swrCache keeps them warm after.
+  // Set PRIME_DISABLED=1 locally to skip the trans-Pacific pull while developing.
+  if (process.env.PRIME_DISABLED !== '1') {
+    Promise.allSettled([
+      getHighPriceList(),                        // also primes getCompanyInfo()
+      getWarnData('twse-stock-day-all'),
+      getWarnData('tpex-mainboard-quotes'),
+    ]).then(rs => {
+      const failed = rs.filter(r => r.status === 'rejected').length;
+      if (failed) console.warn('cache prime: ' + failed + '/3 failed (retries on first request)');
+    });
+  }
 });
