@@ -499,9 +499,18 @@ async function buildVolSurface(symbol, maxExpiries) {
   };
 }
 
-function fetchUrl(url) {
+function fetchUrl(url, redirectsLeft = 3) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, { headers: BROWSER_HEADERS }, res => {
+      // TWSE occasionally 302s an OpenAPI path to a canonical URL (and 404s a
+      // retired one via redirect) — follow it, SSRF-guarded, same as fetchHtml().
+      if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location && redirectsLeft > 0) {
+        res.resume();
+        let next;
+        try { next = new URL(res.headers.location, url).toString(); } catch (e) { return reject(new Error('bad redirect')); }
+        if (isPrivateHost(new URL(next).hostname)) return reject(new Error('redirect to disallowed host'));
+        return fetchUrl(next, redirectsLeft - 1).then(resolve, reject);
+      }
       if (res.statusCode !== 200) {
         res.resume();
         return reject(new Error('HTTP ' + res.statusCode));
