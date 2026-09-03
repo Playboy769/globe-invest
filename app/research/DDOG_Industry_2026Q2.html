@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datadog 所處產業分析 — Observability 平台賽道競爭格局（2026Q2）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 22px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 6px; line-height: 1.6; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 16px 24px 48px; }
+  .tabs { display: flex; flex-wrap: wrap; border-bottom: 2px solid #e2e4ea; margin-bottom: 22px; }
+  .tab { padding: 9px 15px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 12.5px; white-space: nowrap; }
+  .tab.active { border-bottom-color: #7c3aed; color: #7c3aed; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 16px; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #7c3aed; margin-bottom: 10px; }
+  .card p { line-height: 1.75; color: #333; margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card ul { padding-left: 18px; margin-bottom: 10px; }
+  .card li { line-height: 1.7; color: #333; margin-bottom: 6px; }
+  .card li:last-child { margin-bottom: 0; }
+  b, strong { color: #1a1a2e; }
+
+  .lead { background: #f5f3ff; border: 1px solid #c7b8f0; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
+  .lead .card-title { color: #6d28d9; }
+  .lead p { color: #2e2a4a; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 20px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 130px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 13px; text-align: center; }
+  .stat-val { font-size: 21px; font-weight: 700; color: #7c3aed; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 13px; text-align: center; }
+  .kpi-val { font-size: 19px; font-weight: 700; color: #7c3aed; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 3px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow-x: auto; margin-bottom: 18px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #7c3aed; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { padding: 9px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 9px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; vertical-align: top; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #7c3aed; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .vcard { border-radius: 8px; padding: 14px; border: 1px solid; }
+  .vcard h4 { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .vcard .vsub { font-size: 11px; color: #666; margin-bottom: 9px; }
+  .vcard ul { padding-left: 16px; }
+  .vcard li { font-size: 12px; margin-bottom: 5px; line-height: 1.6; color: #333; }
+  .vcard.a { background: #f5f3ff; border-color: #c7b8f0; }
+  .vcard.a h4 { color: #6d28d9; }
+  .vcard.b { background: #eff6ff; border-color: #a9c9f5; }
+  .vcard.b h4 { color: #1d4ed8; }
+  .vcard.c { background: #f0fdf4; border-color: #a3dab1; }
+  .vcard.c h4 { color: #15803d; }
+  .vcard.d { background: #fff7ed; border-color: #f0c090; }
+  .vcard.d h4 { color: #c2600a; }
+  .vcard.e { background: #fef2f2; border-color: #f0aab8; }
+  .vcard.e h4 { color: #b91c4a; }
+  .vcard.n { background: #f8f9fb; border-color: #d5d9e2; }
+  .vcard.n h4 { color: #475569; }
+
+  .chain-layer { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 13px 15px; margin-bottom: 12px; border-left: 4px solid #94a3b8; }
+  .chain-layer.up { border-left-color: #c2600a; }
+  .chain-layer.mid { border-left-color: #2563eb; }
+  .chain-layer.plat { border-left-color: #7c3aed; }
+  .chain-layer.down { border-left-color: #15803d; }
+  .chain-layer h4 { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .chain-layer.up h4 { color: #c2600a; }
+  .chain-layer.mid h4 { color: #2563eb; }
+  .chain-layer.plat h4 { color: #7c3aed; }
+  .chain-layer.down h4 { color: #15803d; }
+  .sc-item { font-size: 12px; line-height: 1.7; color: #333; margin-bottom: 8px; }
+  .sc-item:last-child { margin-bottom: 0; }
+  .sc-src { font-size: 10.5px; color: #8a94a6; }
+  .conf { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 1px 6px; border-radius: 8px; border: 1px solid; margin-left: 4px; vertical-align: middle; white-space: nowrap; }
+  .conf.hi { color: #15803d; border-color: #a3dab1; }
+  .conf.mid { color: #92400e; border-color: #f0d090; }
+  .conf.lo { color: #b91c1c; border-color: #f0aaaa; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
+  .risk-item:last-child { margin-bottom: 0; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fee2e2; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fef3c7; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #dcfce7; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+
+  .note { font-size: 11.5px; color: #444; margin-top: 10px; margin-bottom: 18px; padding: 10px 13px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #7c3aed; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.blue { border-left-color: #2563eb; }
+  .note b { color: #1a1a2e; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 6px; overflow-x: auto; }
+  .chart-wrap .cw-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #7c3aed; margin-bottom: 10px; }
+
+  .tracklist { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 16px 16px 16px 32px; margin-bottom: 18px; }
+  .tracklist li { margin-bottom: 10px; line-height: 1.7; color: #333; }
+  .tracklist li:last-child { margin-bottom: 0; }
+
+  .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 24px; padding-top: 14px; border-top: 1px solid #eee; line-height: 1.7; }
+
+  @media (max-width: 720px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Datadog 所處產業分析 —— Observability 平台賽道的競爭格局</h1>
+  <p>
+    以 Datadog（DDOG）FY2026 Q2（季末 2026-06-30，8 月上旬公布）為觀察基準，分析 observability（可觀測性／APM／監控）
+    這個賽道的產業結構與競爭格局。八個分頁：產業總覽 ／ 市場規模與成長 ／ 價值鏈與產業結構 ／ 競爭格局：玩家分層 ／
+    Datadog 的定位與護城河 ／ 產業轉型節點：AI／LLM Observability ／ 財務與估值比較 ／ 結構性風險與追蹤清單。
+    寫法沿用「產品線與產線產業結構」系列，聚焦結構、因果鏈與收斂判斷，並納入財務與估值層。
+    資料來源：各公司 SEC 申報（DDOG 10-Q/10-K、DT/ESTC 10-Q/8-K）、法說會逐字稿與新聞稿、Gartner／IDC／Mordor 市場報告、
+    公開產業報導；查證日 2026-09-01。
+  </p>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('ov',this)">產業總覽</div>
+    <div class="tab" onclick="sw('market',this)">市場規模與成長</div>
+    <div class="tab" onclick="sw('chain',this)">價值鏈與產業結構</div>
+    <div class="tab" onclick="sw('land',this)">競爭格局：玩家分層</div>
+    <div class="tab" onclick="sw('ddog',this)">Datadog 的定位與護城河</div>
+    <div class="tab" onclick="sw('ai',this)">AI／LLM Observability 轉型</div>
+    <div class="tab" onclick="sw('fin',this)">財務與估值比較</div>
+    <div class="tab" onclick="sw('risk',this)">結構性風險與追蹤清單</div>
+  </div>
+
+  <!-- ============ 產業總覽 ============ -->
+  <div id="panel-ov" class="panel active">
+
+    <div class="lead">
+      <div class="card-title">一句話收斂判斷</div>
+      <p>
+        <b>Observability 已經從「買工具」變成「選平台」——中型市場的整併戰大局底定、Datadog 拿走最肥的一塊；真正還沒定的是三件事：
+        (1) AI 工作負載把「用量計費」的算盤重打一次、(2) OpenTelemetry 把換供應商的成本壓低、(3) 資安廠帶著預算與通路殺進來
+        （Cisco 併 Splunk、Palo Alto 併 Chronosphere）。</b>
+        Datadog 的護城河是「約 30 個模組長在同一份遙測資料上」的整併效應與多產品綁定；它的單點故障是「同一批 AI 巨鯨客戶」——
+        2026Q2 財報「最大客戶（市場普遍認為是 OpenAI）砍用量」一句話，就讓一份營收 +36%、還上修全年財測的財報，股價當天跌約 19%。
+        這正是本賽道結構性風險第一次在頭部公司身上現形。
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">A. 這個產業在做什麼</div>
+      <p>
+        Observability（可觀測性）是「讓工程團隊看得見自己系統內部狀態」的軟體。傳統上分三塊：
+        <b>基礎設施監控</b>（Infrastructure Monitoring，主機／容器／Kubernetes／雲端資源的健康度）、
+        <b>應用效能監控</b>（APM，程式碼層級的追蹤 trace、延遲、錯誤率）、
+        <b>日誌管理</b>（Log Management，把所有系統日誌集中起來搜尋與告警）。
+        近年再加上 <b>數位體驗監控</b>（RUM 真實使用者監控、Synthetics 合成監控）、<b>雲端資安</b>（Cloud SIEM、CSPM）、
+        以及最新的 <b>AI／LLM 可觀測性</b>（監控大型語言模型呼叫、token、幻覺、agent 行為與 GPU 機隊）。
+      </p>
+      <p>
+        產業的核心賣點從「單一工具」演進成「單一平台」：客戶把散落在各部門的十幾種開源／雲端／商用工具，
+        整併到同一個平台上，換取三件事——<b>資料統一</b>（同一份遙測資料，指標／追蹤／日誌互相關聯）、
+        <b>自動化工作流</b>（從偵測到修復端到端）、以及<b>成本節省</b>（少養一批工具與人力）。
+        Datadog 法說會反覆用「consolidation（整併）」描述客戶的採購動機，這是本賽道過去五年的主旋律。
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">B. 賽道現況：四個結構性事實</div>
+      <ul>
+        <li>
+          <b>市場定義本身是混亂的。</b> Gartner 在 2024 年把 APM、日誌管理、基礎設施監控併成單一「Observability Platforms」
+          傘狀市場，IDC 仍分開統計。所以你會同時看到「2026 年 30～40 億美元」（狹義 observability 平台軟體）與
+          「約 210 億美元」（Gartner APM＋observability 口徑）兩組差 5 倍的數字——比較任何「市占率」前要先確認是哪個口徑。
+          <span class="conf mid">信心度：中（多家報告口徑不一）</span>
+        </li>
+        <li>
+          <b>頭部集中、中段整併。</b> 2023–2026 三年內：Cisco 以 280 億美元併 Splunk（2024/3 完成）、
+          Francisco Partners＋TPG 以 65 億美元私有化 New Relic（2023/11）、Palo Alto Networks 以約 33.5 億美元併 Chronosphere（2026 宣布）、
+          Dynatrace 併 OpenTelemetry 管線商 BindPlane、Grafana Labs 送件 IPO（S-1，目標估值約 125 億美元）。
+          獨立純 observability 上市公司事實上只剩 <b>Datadog、Dynatrace、Elastic</b> 三家。
+          <span class="conf hi">信心度：高（公開併購案）</span>
+        </li>
+        <li>
+          <b>Datadog 是規模與成長雙料領先者。</b> FY2026 Q2 營收 11.2 億美元、年增 36%，是三家獨立上市公司裡唯一還在加速的；
+          Dynatrace ARR 21.4 億美元、年增 17%；Elastic 營收約 4.8 億美元／季、年增 15%。
+          Datadog 的季營收（11.2 億）已接近 Dynatrace 的兩倍。
+          <span class="conf hi">信心度：高（各公司財報）</span>
+        </li>
+        <li>
+          <b>兩股逆風同時吹向「按量計費」模式。</b> 其一是 OpenTelemetry（CNCF 僅次於 Kubernetes 的第二大專案，生產環境採用率約 41%）
+          讓遙測資料標準化、降低換平台成本；其二是「觀測資料成本失控」成為普遍痛點（調查稱 97% 的組織遇過帳單暴衝），
+          催生了「遙測管線／資料最佳化」這個新的中間層（Cribl、Chronosphere、Grafana Alloy、Dynatrace BindPlane）。
+          <span class="conf mid">信心度：中（產業調查＋廠商動作）</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">C. Datadog 在產業鏈中的定位（一句話）</div>
+      <p>
+        Datadog 是<b>「橫向整合的 SaaS 可觀測性平台」</b>——不生產硬體、單一營運分部、把約 30 個功能模組長在同一份遙測資料與同一個介面上，
+        商業模式是<b>用量制</b>（依主機數、擷取的日誌量、custom metrics 數、span 數計費）。
+        它的上游是「第三方雲端主機」（10-K 未具名，市場推定為 AWS/Azure/GCP，這三家同時被 10-K 列為「雲端監控」的直接競爭對手，
+        也是本季新簽 AI 訓練工作負載交易的客戶——三種關係重疊的「亦敵亦友」結構）；
+        下游是約 33,400 家企業客戶，其中約 4,720 家（14%）ARR 逾 10 萬美元、貢獻約 91% 的總 ARR。
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ============ 市場規模與成長 ============ -->
+  <div id="panel-market" class="panel">
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">~$21B</div><div class="kpi-lbl">Gartner APM＋observability 口徑（2026）</div></div>
+      <div class="kpi"><div class="kpi-val">~$3.4B</div><div class="kpi-lbl">狹義 observability 平台軟體（2026，Mordor）</div></div>
+      <div class="kpi"><div class="kpi-val">12–16%</div><div class="kpi-lbl">市場年複合成長率（各家估）</div></div>
+      <div class="kpi"><div class="kpi-val">~41%</div><div class="kpi-lbl">OpenTelemetry 生產環境採用率</div></div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="cw-title">圖一：市場規模與主要玩家營收軌跡（美元）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">Observability 市場規模與主要玩家營收軌跡（CY2021–2026E）</text><line x1="76" y1="456" x2="864" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="864" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5</text><line x1="76" y1="295.2" x2="864" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="76" y1="214.8" x2="864" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">15</text><line x1="76" y1="134.4" x2="864" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">25</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">十億美元</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">CY2021</text><line x1="233.6" y1="456" x2="233.6" y2="460" stroke="#999999" stroke-width="1"/><text x="233.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">CY2022</text><line x1="391.2" y1="456" x2="391.2" y2="460" stroke="#999999" stroke-width="1"/><text x="391.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">CY2023</text><line x1="548.8" y1="456" x2="548.8" y2="460" stroke="#999999" stroke-width="1"/><text x="548.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">CY2024</text><line x1="706.4" y1="456" x2="706.4" y2="460" stroke="#999999" stroke-width="1"/><text x="706.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">CY2025</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">CY2026E</text><polyline points="76,246.96 233.6,214.8 391.2,190.68 548.8,161.74 706.4,139.22 864,118.32" fill="none" stroke="#0891b2" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="246.96" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="233.6" cy="214.8" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="391.2" cy="190.68" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="548.8" cy="161.74" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="706.4" cy="139.22" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><circle cx="864" cy="118.32" r="3.6" fill="#ffffff" stroke="#0891b2" stroke-width="2"/><polyline points="76,439.44 233.6,428.99 391.2,421.75 548.8,412.91 706.4,400.85 864,384.28" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="439.44" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="233.6" cy="428.99" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="391.2" cy="421.75" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="548.8" cy="412.91" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="706.4" cy="400.85" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="864" cy="384.28" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><polyline points="76,444.74 233.6,441.05 391.2,437.35 548.8,433.01 706.4,428.66 864,424.64" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="444.74" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="233.6" cy="441.05" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="391.2" cy="437.35" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="548.8" cy="433.01" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="706.4" cy="428.66" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="864" cy="424.64" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><polyline points="76,446.19 233.6,442.17 391.2,438.79 548.8,435.58 706.4,432.2 864,428.82" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="446.19" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="233.6" cy="442.17" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="391.2" cy="438.79" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="548.8" cy="435.58" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="706.4" cy="432.2" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="864" cy="428.82" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><polyline points="76,454.39 233.6,453.59 391.2,451.98 548.8,450.69 706.4,448.76 864,446.19" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="454.39" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="233.6" cy="453.59" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="391.2" cy="451.98" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="548.8" cy="450.69" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="706.4" cy="448.76" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="864" cy="446.19" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><line x1="53.36" y1="40" x2="69.36" y2="40" stroke="#0891b2" stroke-width="2.4"/><text x="75.36" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">APM＋observability 市場（Gartner 口徑）</text><line x1="335.99" y1="40" x2="351.99" y2="40" stroke="#7c3aed" stroke-width="2.4"/><text x="357.99" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Datadog 營收</text><line x1="453.59" y1="40" x2="469.59" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="475.59" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Dynatrace 營收</text><line x1="583.84" y1="40" x2="599.84" y2="40" stroke="#16a34a" stroke-width="2.4"/><text x="605.84" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Elastic 營收</text><line x1="701.44" y1="40" x2="717.44" y2="40" stroke="#d97706" stroke-width="2.4"/><text x="723.44" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Grafana Labs ARR</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">市場＝Gartner APM＋observability IT 支出口徑（媒體轉引）；各公司為年度營收（財年口徑不同，Grafana 為 ARR）；2026 為財測中值／推估。查證日 2026-09。</div>
+</div>
+    </div>
+    <div class="note yellow">
+      ⚑ 人工解讀：這張圖要看的是<b>「玩家營收成長速度 vs 市場成長速度」的落差</b>。以 Gartner 傘狀口徑（約 210 億美元、年增約 12%）當分母，
+      Datadog（TTM 營收約 40 億、年增 36%）、Grafana（ARR 6 億、年增約 50%）都在<b>顯著快於市場</b>地搶份額；
+      Dynatrace（+17%）、Elastic（+15%）大致貼著市場成長；Splunk 在 Cisco 體內的 observability 部分則接近持平甚至下滑。
+      換句話說，這個「雙位數成長的市場」內部其實是<b>贏家通吃</b>：新增支出大量流向 Datadog 與少數雲原生新秀。
+      資料來源：Gartner IT 支出預測（市場規模，媒體轉引）、各公司 10-K/8-K 與新聞稿（營收／ARR）、Grafana 官方部落格（ARR 里程碑）。
+      市場規模的絕對值因口徑差異僅供趨勢參考。
+    </div>
+
+    <div class="card">
+      <div class="card-title">A. 為什麼市場數字差 5 倍</div>
+      <p>
+        2024 年 Gartner 把三個原本獨立的魔力象限（APM、日誌監控、基礎設施監控）合併成單一
+        <b>「Observability Platforms」</b>魔力象限，反映「客戶要的是平台不是點工具」這個現實。但這也造成市場規模估計出現兩個世界：
+      </p>
+      <ul>
+        <li><b>廣義（Gartner APM＋observability IT 支出口徑）</b>：2024 年約 183 億美元 → 2026 年約 210 億美元，年增約雙位數。這是「企業一年花在這類軟體上的總金額」。</li>
+        <li><b>狹義（Mordor／Research&amp;Markets 等「observability 平台軟體」口徑）</b>：2026 年約 32～44 億美元，2031 年約 69 億美元，CAGR 約 15.6%。這只算「純 observability 平台」這個產品分類。</li>
+      </ul>
+      <p>
+        兩者都對，只是切法不同。<b>做競爭分析時務必用同一把尺</b>：本報告後續談「份額」一律用廣義口徑（因為 Datadog 的日誌、資安、DEM 收入
+        在狹義口徑裡會被切走）。當有人說「Datadog 市占 30%」時，多半指的是「中型市場採用率」而非營收份額——Datadog 自己 40 億美元營收，
+        對 210 億市場約當 19%。
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">B. 需求端的三個結構性驅動力</div>
+      <ul>
+        <li>
+          <b>系統複雜度單向上升。</b> 微服務、Kubernetes、多雲、邊緣運算讓「一次請求跨越幾十個服務」成為常態，
+          人工盯儀表板已不可行——這是 observability 從「加分項」變「必需品」的根本原因，也是市場能維持雙位數成長的底層邏輯。
+        </li>
+        <li>
+          <b>平台整併（consolidation）。</b> 過去企業各部門各買各的（APM 用 A 家、日誌用 B 家、前端用 C 家），
+          現在為了資料互通與砍成本，往單一平台集中。Datadog 揭露 58% 客戶用 4 個以上模組、13% 用 10 個以上——
+          這個「多產品滲透」曲線就是整併紅利的量化證據。
+        </li>
+        <li>
+          <b>AI 工作負載創造新的觀測對象。</b> 訓練叢集（GPU 機隊、互連、散熱）、推論服務（token、延遲、成本）、
+          agent 行為（工具呼叫、決策鏈、幻覺）都需要新的監控維度。這是 2025–2026 才真正成形的增量市場，也是本報告獨立一個分頁討論的原因。
+        </li>
+      </ul>
+    </div>
+
+    <div class="note blue">
+      ⚑ 補充：市場成長的<b>逆風</b>同樣結構性——OpenTelemetry 讓「儀器層」標準化後，客戶握有「不用重寫程式碼就能換後端」的談判籌碼，
+      對所有專有計價的平台形成長期價格壓力；「遙測資料量爆炸 → 帳單暴衝」則讓一部分預算從「觀測平台」轉移到「遙測管線／取樣／冷儲存」
+      這類降本工具。淨效果是<b>市場總量仍成長，但每 GB 遙測資料的變現金額長期承壓</b>。
+    </div>
+
+  </div>
+
+  <!-- ============ 價值鏈與產業結構 ============ -->
+  <div id="panel-chain" class="panel">
+
+    <div class="chart-wrap">
+      <div class="cw-title">圖二：Observability 產業價值鏈與「亦敵亦友」結構<span style="font-weight:400;color:#888;text-transform:none;letter-spacing:0;"> — 圖寬，可左右捲動</span></div>
+      <div style="min-width:1760px;">
+  <svg viewBox="0 0 2052.75 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="2052.75" height="702" fill="#ffffff"/><text x="1026.38" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Observability 產業價值鏈與「亦敵亦友」結構</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">① 上游｜雲端基礎設施＋運算</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">② 儀器層｜資料採集標準</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">③ 平台層｜Observability 平台</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">④ 下游｜客戶產業</text><defs><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-7c3aed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7c3aed"/></marker><marker id="arr-c2600a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#c2600a"/></marker><marker id="arr-b91c1c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#b91c1c"/></marker></defs><polyline points="926.55,282 926.55,300 204,300 204,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="491.63" y="291" width="147.3" height="18" rx="3" fill="#ffffff"/><text x="565.28" y="304" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">OTel 資料進場（可攜性↑）</text><polyline points="926.55,282 926.55,322 592.05,322 592.05,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="926.55,282 926.55,344 926.55,344 926.55,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="1181.1999999999998,282 1181.1999999999998,366 259.8333333333333,366 259.8333333333333,398" fill="none" stroke="#7c3aed" stroke-width="1.6" marker-end="url(#arr-7c3aed)"/><rect x="659.52" y="357" width="122" height="18" rx="3" fill="#ffffff"/><text x="720.52" y="370" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">進場前瘦身（切變現）</text><polyline points="287.75,458 287.75,476 768.5999999999999,476 768.5999999999999,574" fill="none" stroke="#c2600a" stroke-width="1.6" marker-end="url(#arr-c2600a)" stroke-dasharray="6 5"/><rect x="446" y="467" width="164.35" height="18" rx="3" fill="#ffffff"/><text x="528.17" y="480" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">17 模組·九位數（Q2 砍用量）</text><polyline points="287.75,458 287.75,498 1003.4499999999999,498 1003.4499999999999,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="565.9" y="489" width="159.4" height="18" rx="3" fill="#ffffff"/><text x="645.6" y="502" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">整併紅利·非 AI 連 5 季加速</text><polyline points="287.75,458 287.75,520 1220.65,520 1220.65,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="690.73" y="511" width="126.95" height="18" rx="3" fill="#ffffff"/><text x="754.2" y="524" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">BYOC / FedRAMP High</text><polyline points="510.775,458 510.775,542 1350.15,542 1350.15,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="885.96" y="533" width="89" height="18" rx="3" fill="#ffffff"/><text x="930.46" y="546" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">大型受監管企業</text><polyline points="900.9999999999999,458 900.9999999999999,560 1162.65,560 1162.65,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="985.68" y="551" width="92.3" height="18" rx="3" fill="#ffffff"/><text x="1031.83" y="564" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">成本敏感 / K8s</text><polyline points="1555.2250000000001,458 1555.2250000000001,560 945.4499999999999,560 945.4499999999999,574" fill="none" stroke="#b91c1c" stroke-width="1.6" marker-end="url(#arr-b91c1c)" stroke-dasharray="6 5"/><rect x="1211.34" y="551" width="78" height="18" rx="3" fill="#ffffff"/><text x="1250.34" y="564" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">資安整包預算</text><polyline points="951.9250000000001,106 951.9250000000001,106 152,106 152,384 315.66666666666663,384 315.66666666666663,398" fill="none" stroke="#c2600a" stroke-width="1.6" marker-end="url(#arr-c2600a)" stroke-dasharray="6 5"/><rect x="145.33" y="375" width="177" height="18" rx="3" fill="#ffffff"/><text x="233.83" y="388" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">外包主機＋雲端監控競爭（三重）</text><polyline points="969.9250000000001,106 969.9250000000001,106 1966.75,106 1966.75,384 1702.75,384 1702.75,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="1795.75" y="375" width="78" height="18" rx="3" fill="#ffffff"/><text x="1834.75" y="388" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">原生工具內建</text><polyline points="1175.15,106 1175.15,106 106,106 106,384 371.5,384 371.5,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><rect x="198.65" y="375" width="80.2" height="18" rx="3" fill="#ffffff"/><text x="238.75" y="388" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">GPU 遙測接入</text><g><rect x="862.15" y="46" width="197.55" height="60" rx="9" fill="rgb(246,233,221)" stroke="#c2600a" stroke-width="1.4"/><text x="960.93" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">AWS / Azure / GCP</text><text x="960.93" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">雲端基礎設施 · Datadog 主機商</text></g><g><rect x="1093.7" y="46" width="162.9" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="1175.15" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">GPU / AI 運算</text><text x="1175.15" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">NVIDIA 生態 · neocloud</text></g><g><rect x="821.72" y="222" width="209.65" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="926.55" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">OpenTelemetry</text><text x="926.55" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">CNCF 第二大專案 · ~41% 生產採用</text></g><g><rect x="1065.38" y="222" width="231.65" height="60" rx="9" fill="rgb(237,227,252)" stroke="#7c3aed" stroke-width="1.4"/><text x="1181.2" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">遙測管線層</text><text x="1181.2" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Cribl / Grafana Alloy / BindPlane</text></g><g><rect x="192" y="398" width="191.5" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="287.75" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Datadog</text><text x="287.75" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">獨立上市 · ~30 模組 · 用量制</text></g><g><rect x="417.5" y="398" width="186.55" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="510.78" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Dynatrace</text><text x="510.78" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">獨立上市 · AIOps · 平台訂閱</text></g><g><rect x="638.05" y="398" width="138.15" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="707.13" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Elastic</text><text x="707.13" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">獨立上市 · 搜尋起…</text></g><g><rect x="810.2" y="398" width="181.6" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="901" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Grafana Labs</text><text x="901" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">私有(IPO S-1) · 開源大帳篷</text></g><g><rect x="1025.8" y="398" width="166.75" height="60" rx="9" fill="rgb(245,223,223)" stroke="#b91c1c" stroke-width="1.4"/><text x="1109.18" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Splunk</text><text x="1109.18" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Cisco 併購 $28B（2024）</text></g><g><rect x="1226.55" y="398" width="193.15" height="60" rx="9" fill="rgb(245,223,223)" stroke="#b91c1c" stroke-width="1.4"/><text x="1323.13" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">New Relic</text><text x="1323.13" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Francisco+TPG $6.5B（2023）</text></g><g><rect x="1453.7" y="398" width="203.05" height="60" rx="9" fill="rgb(245,223,223)" stroke="#b91c1c" stroke-width="1.4"/><text x="1555.23" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Chronosphere</text><text x="1555.23" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Palo Alto 併購 $3.35B（2026）</text></g><g><rect x="1690.75" y="398" width="236" height="60" rx="9" fill="rgb(246,233,221)" stroke="#c2600a" stroke-width="1.4"/><text x="1808.75" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">雲端原生工具</text><text x="1808.75" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">CloudWatch / Azure Monitor / GCP…</text></g><g><rect x="756.6" y="574" width="200.85" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="857.02" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">AI 原生公司</text><text x="857.02" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Datadog 巨鯨（8 家 &gt;$10M/年）</text></g><g><rect x="991.45" y="574" width="183.2" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="1083.05" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">金融／電商／媒體／SaaS</text><text x="1083.05" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">傳統企業上雲（非 AI 底層）</text></g><g><rect x="1208.65" y="574" width="153.5" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="1285.4" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">公部門／受監管產業</text><text x="1285.4" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FedRAMP · 資料主權</text></g><rect x="785.8" y="663" width="22" height="2.4" fill="#7c3aed"/><text x="815.8" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">平台間競爭</text><line x1="888.8" y1="664" x2="910.8" y2="664" stroke="#c2600a" stroke-width="2" stroke-dasharray="5 4"/><text x="918.8" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">亦敵亦友（主機／競爭／客戶三重）</text><line x1="1112.8" y1="664" x2="1134.8" y2="664" stroke="#b91c1c" stroke-width="2" stroke-dasharray="5 4"/><text x="1142.8" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">整併：策略／PE 併購</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">結構關係圖（非金額加權）。來源：Datadog FY2025 10-K（Item 1A／Competition）、各併購案新聞稿、CNCF 專案統計、Datadog Q1–Q2 FY2026 法說會。查證日 2026-09。</div>
+</div>
+    </div>
+    <div class="note yellow">
+      ⚑ 人工解讀：這張分層圖的重點是<b>中間兩層的張力</b>。「儀器層」被 OpenTelemetry 標準化後，價值往上下游轉移——
+      平台層要靠「分析深度＋工作流」而非「你資料出不去」來留客；上游雲端大廠則因為「同時是主機商、競爭者、AI 訓練客戶」，
+      對平台層構成三向不對稱風險。整併箭頭（虛線）標出過去三年的併購：Cisco→Splunk、PE→New Relic、Palo Alto→Chronosphere，
+      顯示<b>資安預算正在收購 observability 資產</b>。資料來源：Datadog FY2025 10-K（Item 1A 風險因素／Competition 章節）、
+      各併購案新聞稿、CNCF 專案統計。此為結構關係圖，非金額加權流向圖。
+    </div>
+
+    <div class="chain-layer up">
+      <h4>① 上游 —— 雲端基礎設施與運算資源</h4>
+      <div class="sc-item">
+        <b>AWS / Microsoft Azure / Google Cloud。</b> Datadog「將雲端解決方案的絕大部分基礎設施外包給第三方主機服務」
+        （10-K 未具名供應商）；同一份 10-K 的 Competition 章節<b>明確點名</b>這三家透過原生工具（CloudWatch、Azure Monitor、Cloud Operations）
+        在「雲端監控」領域構成直接競爭。<span class="conf hi">信心度：高（10-K 直接引述）</span>
+      </div>
+      <div class="sc-item">
+        <b>GPU／AI 運算供應商（NVIDIA 生態、neocloud）。</b> AI 訓練與推論工作負載的爆發，讓「GPU 機隊可觀測性」成為新的上游依賴點——
+        平台廠要能接進 NVIDIA DCGM、各家自研晶片（Trainium、TPU、Maia）的遙測。
+        <span class="conf mid">信心度：中（法說會敘述）</span>
+      </div>
+      <div class="sc-src">來源：Datadog FY2025 10-K Item 1A／Competition；Q1–Q2 FY2026 法說會。</div>
+    </div>
+
+    <div class="chain-layer mid">
+      <h4>② 儀器層 —— 資料採集與標準（正在被 OpenTelemetry 商品化）</h4>
+      <div class="sc-item">
+        <b>OpenTelemetry（OTel）。</b> CNCF 僅次於 Kubernetes 的第二大專案，供應商中立的追蹤／指標／日誌採集標準，
+        生產環境採用率約 41%（Grafana 2025 Observability 調查）。理論上，用 OTel 埋點的應用「不用重新埋點就能換觀測後端」。
+        <span class="conf hi">信心度：高（CNCF／公開調查）</span>
+      </div>
+      <div class="sc-item">
+        <b>遙測管線／資料最佳化層。</b> Cribl、Chronosphere（被 Palo Alto 併購）、Grafana Alloy、Dynatrace BindPlane（併購取得）——
+        專門在「資料進平台之前」做過濾、取樣、路由、冷熱分層，回應「觀測帳單暴衝」痛點。這一層的興起，本質上是在<b>切平台層的變現金額</b>。
+        <span class="conf mid">信心度：中（廠商產品線與併購動作）</span>
+      </div>
+      <div class="sc-item">
+        <b>Datadog 的反制。</b> 併購與自研遙測管線（Observability Pipelines）、Flex Logs（低成本日誌層）、
+        Infinite Cardinality Metrics（DASH 2026，讓高基數查詢不再額外收費）、BYOC／CloudPrem（讓資料留在客戶雲上）——
+        全都在削弱「OTel＋管線層」對它的威脅。<span class="conf hi">信心度：高（DASH 2026 新聞稿）</span>
+      </div>
+      <div class="sc-src">來源：CNCF 專案排名；Grafana 2025 Observability Survey；Datadog DASH 2026 新聞稿；各廠商產品頁。</div>
+    </div>
+
+    <div class="chain-layer plat">
+      <h4>③ 平台層 —— Observability 平台（本報告的競爭主戰場）</h4>
+      <div class="sc-item">
+        <b>獨立上市：</b> Datadog（DDOG，市值約 840 億）、Dynatrace（DT，約 140–155 億）、Elastic（ESTC，約 64 億）。
+      </div>
+      <div class="sc-item">
+        <b>被大廠吸收：</b> Splunk（Cisco，2024）、Chronosphere（Palo Alto Networks，2026）、SignalFx／AppDynamics（Cisco 舊併購）、
+        Sumo Logic（Francisco Partners，2023 私有化）。
+      </div>
+      <div class="sc-item">
+        <b>私有／PE：</b> New Relic（Francisco Partners＋TPG，2023，TTM 營收約 9.6 億）、Grafana Labs（估值約 90–125 億，已送 IPO S-1）。
+      </div>
+      <div class="sc-item">
+        <b>雲端原生（免費／綁定）：</b> AWS CloudWatch／X-Ray、Azure Monitor、Google Cloud Operations——「夠用就好」的預設選項，單雲、深度較淺。
+      </div>
+      <div class="sc-src">來源：各公司財報、併購新聞稿、市值資料（2026-09 前後）。</div>
+    </div>
+
+    <div class="chain-layer down">
+      <h4>④ 下游 —— 客戶產業與集中度</h4>
+      <div class="sc-item">
+        <b>客戶產業：</b> 網路服務、金融、電商／零售、遊戲、媒體、SaaS、製造、公部門。Datadog 特別點名「AI 原生公司」為快速成長客群，
+        並揭露「美洲因為 AI 活動集中而特別強勁」。<span class="conf hi">信心度：高（法說會）</span>
+      </div>
+      <div class="sc-item">
+        <b>集中度結構：</b> Datadog 約 33,400 家客戶中，約 4,720 家（14%）ARR 逾 10 萬美元、貢獻約 91% 總 ARR；
+        AI 原生巨鯨尾部更窄——31 家年支出逾 100 萬美元、8 家逾 1,000 萬美元。<span class="conf hi">信心度：高（Q2 FY2026 新聞稿／法說會）</span>
+      </div>
+      <div class="sc-item">
+        <b>單點風險：</b> 一位未具名「最大客戶」（九位數合約、用 17 個模組，市場普遍認為是 OpenAI）於 FY2026 Q2 續約但<b>調降用量</b>，
+        直接把 Q3 財測成長率從 36% 拉低到 28–29%。<span class="conf mid">信心度：中（客戶身分未經公司證實）</span>
+      </div>
+      <div class="sc-src">來源：Datadog Q2 FY2026 新聞稿與法說會逐字稿；媒體對「最大客戶」身分的推測。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">因果鏈：這個產業結構是怎麼演化出來的</div>
+      <p>
+        雲原生化推升系統複雜度 → 「三支柱（指標／追蹤／日誌）分開買」的痛點浮現 → 客戶要求平台整併、資料互通 →
+        Datadog 以「單一平台、模組化加購」模式吃下整併紅利、營收規模拉開 → 中段玩家（Splunk、New Relic、Sumo Logic、Chronosphere）
+        因規模不足、成長趨緩，陸續被策略買家或 PE 收購 → 資安廠（Cisco、Palo Alto）發現「observability 與 SIEM／XDR 共用遙測資料」，
+        帶著更大的預算與通路進場 → 同時 OpenTelemetry 標準化儀器層，把「資料鎖定」這道護城河抽掉，逼平台層改用「分析深度＋工作流自動化＋AI」
+        重新築牆 → AI 工作負載開出全新的觀測維度，成為下一輪份額重分配的戰場。
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ============ 競爭格局：玩家分層 ============ -->
+  <div id="panel-land" class="panel">
+
+    <div class="section-title">A. 玩家分層（依商業模式與戰略定位）</div>
+
+    <div class="grid2">
+      <div class="vcard a">
+        <h4>Datadog（DDOG）</h4>
+        <div class="vsub">獨立上市 · 橫向平台整併者 · 用量制</div>
+        <ul>
+          <li>約 30 個模組長在同一份遙測資料上，「加購一個模組」的邊際摩擦極低</li>
+          <li>FY26Q2 營收 $1.12B／+36%，三家獨立上市裡唯一加速</li>
+          <li>強項：雲原生、開發者體驗、多產品綁定、AI 原生客群</li>
+          <li>弱點：AI 巨鯨客戶集中、用量制對景氣與 OTel 敏感、估值高（P/S ~21x）</li>
+        </ul>
+      </div>
+      <div class="vcard b">
+        <h4>Dynatrace（DT）</h4>
+        <div class="vsub">獨立上市 · 大型企業 AIOps · 平台訂閱（DPS）</div>
+        <ul>
+          <li>ARR $2.14B／+17%；FY26 非 GAAP 營益率 29%、FCF 利潤率 26%——獲利能力遠優於 Datadog</li>
+          <li>Davis AI 因果引擎、自動根因分析；2025 Gartner MQ「執行力」最高</li>
+          <li>強項：大型／受監管企業、自動化 AIOps、獲利品質</li>
+          <li>弱點：成長只有中雙位數、開發者社群聲量弱、雲原生新客不如 Datadog</li>
+        </ul>
+      </div>
+      <div class="vcard c">
+        <h4>Grafana Labs</h4>
+        <div class="vsub">私有（已送 IPO S-1）· 開源大帳篷 · 消費制</div>
+        <ul>
+          <li>ARR ~$605M／年增約 50%；估值 $90–125 億</li>
+          <li>Grafana＋Loki／Tempo／Mimir 開源堆疊，訴求低成本、反鎖定、OTel 友善</li>
+          <li>強項：成本敏感客戶、Kubernetes 重度用戶、開源信任</li>
+          <li>弱點：變現率低、企業級銷售與服務深度仍在建、獲利數字未公開</li>
+        </ul>
+      </div>
+      <div class="vcard d">
+        <h4>Elastic（ESTC）</h4>
+        <div class="vsub">獨立上市 · 搜尋起家 · 資源制</div>
+        <ul>
+          <li>總營收 ~$478M/季／+15%；observability 是三大解決方案之一（另為 Search、Security）</li>
+          <li>ELK 堆疊安裝基數龐大，向量搜尋／GenAI 檢索是新成長點</li>
+          <li>強項：日誌與搜尋、自管部署、AI 檢索用例（$100k 客群 37% 用 AI 功能）</li>
+          <li>弱點：observability 純度低、APM 深度不如專業廠、成長趨緩</li>
+        </ul>
+      </div>
+      <div class="vcard e">
+        <h4>Splunk（Cisco 旗下）</h4>
+        <div class="vsub">被併入網通大廠 · 日誌／SIEM 為主 · 授權＋雲</div>
+        <ul>
+          <li>Splunk 總 ARR ~$4.2B；Cisco「Observability」產品類別 ~$274M/季、年增僅個位數（ThousandEyes 撐、Splunk observability 下滑）</li>
+          <li>核心價值在日誌分析與資安（SIEM），純 observability（ex-SignalFx）相對小</li>
+          <li>強項：大型企業安裝基數、資安與網通交叉銷售、Cisco 通路</li>
+          <li>弱點：整併期人才與產品動能流失、雲原生開發者不埋單</li>
+        </ul>
+      </div>
+      <div class="vcard n">
+        <h4>New Relic（Francisco Partners＋TPG）</h4>
+        <div class="vsub">PE 私有化 · APM 老牌 · 消費制先驅</div>
+        <ul>
+          <li>TTM 營收 ~$0.96B；約 80% 客戶採消費制計價</li>
+          <li>2020 年率先把 APM 改成「每 GB 擷取＋每席」定價，帶動全行業計價改革</li>
+          <li>強項：全端可觀測性、透明定價、既有客戶基數</li>
+          <li>弱點：私有化後資訊不透明、成長停滯、產品迭代節奏放慢</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="vcard n">
+        <h4>Chronosphere（Palo Alto Networks 併購中）</h4>
+        <div class="vsub">被資安廠收購 · 雲原生降本 · 消費制</div>
+        <ul>
+          <li>ARR &gt;$160M（2025/9）、三位數年增；併購對價約 $33.5 億</li>
+          <li>Prometheus 原生、前 Uber 團隊，強在「觀測資料成本控制」與 Kubernetes 規模化</li>
+          <li>意義：Palo Alto 帶著資安預算與通路進入 observability，複製 Cisco→Splunk 的路徑</li>
+        </ul>
+      </div>
+      <div class="vcard n">
+        <h4>雲端大廠原生工具</h4>
+        <div class="vsub">免費／綁定 · 單雲 · 淺</div>
+        <ul>
+          <li>AWS CloudWatch／X-Ray、Azure Monitor／App Insights、Google Cloud Operations</li>
+          <li>「夠用就好」的預設選項，隨雲端帳單一起出；跨雲、深度追蹤、統一 UX 是弱項</li>
+          <li>對 Datadog：既是主機商、又是競爭者、又是 AI 訓練客戶——三向不對稱關係</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">B. 產品模組覆蓋矩陣</div>
+    <div class="chart-wrap">
+      <div class="cw-title">圖三：主要 Observability 平台的產品模組覆蓋深度</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 390" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="390" fill="#ffffff"/><text x="450" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">Observability 平台產品模組覆蓋深度（0=無 1=基本 2=完整 3=市場領先）</text><text x="214.89" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">基礎設施監控</text><text x="292.67" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">APM／追蹤</text><text x="370.44" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">日誌管理</text><text x="448.22" y="54" text-anchor="start" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-40 448.2222222222222 54)">RUM／數位體驗</text><text x="526" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">Synthetics</text><text x="603.78" y="54" text-anchor="start" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-40 603.7777777777778 54)">Cloud SIEM／資…</text><text x="681.56" y="54" text-anchor="start" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif" transform="rotate(-40 681.5555555555555 54)">LLM／AI 可觀測</text><text x="759.33" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">網路監控</text><text x="837.11" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">CI/CD 可視化</text><text x="166" y="81" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Datadog</text><rect x="176" y="60" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="253.78" y="60" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="331.56" y="60" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="409.33" y="60" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="487.11" y="60" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="564.89" y="60" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="642.67" y="60" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="720.44" y="60" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="798.22" y="60" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><text x="166" y="115" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Dynatrace</text><rect x="176" y="94" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="253.78" y="94" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="331.56" y="94" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="409.33" y="94" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="487.11" y="94" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="564.89" y="94" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="642.67" y="94" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="720.44" y="94" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="798.22" y="94" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="115" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><text x="166" y="149" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Splunk（Cisco）</text><rect x="176" y="128" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="253.78" y="128" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="149" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="331.56" y="128" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="409.33" y="128" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="149" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="487.11" y="128" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="149" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="564.89" y="128" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="642.67" y="128" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="149" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="720.44" y="128" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="798.22" y="128" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="149" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><text x="166" y="183" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">New Relic</text><rect x="176" y="162" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="253.78" y="162" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="331.56" y="162" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="409.33" y="162" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="487.11" y="162" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="564.89" y="162" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="183" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="642.67" y="162" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="720.44" y="162" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="183" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="798.22" y="162" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="183" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><text x="166" y="217" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Grafana Labs</text><rect x="176" y="196" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="253.78" y="196" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="331.56" y="196" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="409.33" y="196" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="217" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="487.11" y="196" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="217" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="564.89" y="196" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="217" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="642.67" y="196" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="720.44" y="196" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="798.22" y="196" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="217" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><text x="166" y="251" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Elastic</text><rect x="176" y="230" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="253.78" y="230" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="331.56" y="230" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="409.33" y="230" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="251" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="487.11" y="230" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="251" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="564.89" y="230" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="642.67" y="230" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="720.44" y="230" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="251" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="798.22" y="230" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="251" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><text x="166" y="285" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">Chronosphere</text><rect x="176" y="264" width="77.78" height="34" fill="rgb(30,64,175)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="285" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3分</text><rect x="253.78" y="264" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="331.56" y="264" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="409.33" y="264" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="487.11" y="264" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="564.89" y="264" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="642.67" y="264" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="720.44" y="264" width="77.78" height="34" fill="rgb(169,185,228)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">1分</text><rect x="798.22" y="264" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="285" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><text x="166" y="319" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">雲端原生工具</text><rect x="176" y="298" width="77.78" height="34" fill="rgb(100,125,202)" stroke="#ffffff" stroke-width="1.5"/><text x="214.89" y="319" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2分</text><rect x="253.78" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="292.67" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="331.56" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="370.44" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="409.33" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="448.22" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="487.11" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="526" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="564.89" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="603.78" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="642.67" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="681.56" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="720.44" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="759.33" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="798.22" y="298" width="77.78" height="34" fill="rgb(239,246,255)" stroke="#ffffff" stroke-width="1.5"/><text x="837.11" y="319" text-anchor="middle" font-size="11" fill="#111111" font-weight="500" font-family="sans-serif">0分</text><rect x="176" y="346" width="8.83" height="12" fill="rgb(239,246,255)"/><rect x="184.33" y="346" width="8.83" height="12" fill="rgb(230,238,252)"/><rect x="192.67" y="346" width="8.83" height="12" fill="rgb(221,230,248)"/><rect x="201" y="346" width="8.83" height="12" fill="rgb(212,222,245)"/><rect x="209.33" y="346" width="8.83" height="12" fill="rgb(203,214,241)"/><rect x="217.67" y="346" width="8.83" height="12" fill="rgb(194,206,238)"/><rect x="226" y="346" width="8.83" height="12" fill="rgb(184,199,234)"/><rect x="234.33" y="346" width="8.83" height="12" fill="rgb(175,191,231)"/><rect x="242.67" y="346" width="8.83" height="12" fill="rgb(166,183,227)"/><rect x="251" y="346" width="8.83" height="12" fill="rgb(157,175,224)"/><rect x="259.33" y="346" width="8.83" height="12" fill="rgb(148,167,220)"/><rect x="267.67" y="346" width="8.83" height="12" fill="rgb(139,159,217)"/><rect x="276" y="346" width="8.83" height="12" fill="rgb(130,151,213)"/><rect x="284.33" y="346" width="8.83" height="12" fill="rgb(121,143,210)"/><rect x="292.67" y="346" width="8.83" height="12" fill="rgb(112,135,206)"/><rect x="301" y="346" width="8.83" height="12" fill="rgb(103,127,203)"/><rect x="309.33" y="346" width="8.83" height="12" fill="rgb(94,119,199)"/><rect x="317.67" y="346" width="8.83" height="12" fill="rgb(85,111,196)"/><rect x="326" y="346" width="8.83" height="12" fill="rgb(75,104,192)"/><rect x="334.33" y="346" width="8.83" height="12" fill="rgb(66,96,189)"/><rect x="342.67" y="346" width="8.83" height="12" fill="rgb(57,88,185)"/><rect x="351" y="346" width="8.83" height="12" fill="rgb(48,80,182)"/><rect x="359.33" y="346" width="8.83" height="12" fill="rgb(39,72,178)"/><rect x="367.67" y="346" width="8.83" height="12" fill="rgb(30,64,175)"/><text x="170" y="356" text-anchor="end" font-size="10.5" fill="#666666" font-family="sans-serif">0分</text><text x="382" y="356" font-size="10.5" fill="#666666" font-family="sans-serif">3分</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">綜合各家產品文件、Gartner 2025/2026 Observability Platforms 魔力象限定位與法說會揭露之主觀評分，非精確市占。查證日 2026-09。</div>
+</div>
+    </div>
+    <div class="note yellow">
+      ⚑ 人工解讀：格值為<b>「模組覆蓋深度」的主觀評分（0＝無、1＝基本、2＝完整、3＝市場領先）</b>，
+      綜合各家產品頁、Gartner 2025/2026 Observability Platforms 魔力象限定位與法說會揭露整理，非精確市占數字。
+      重點看兩件事：(1) <b>Datadog 那一列幾乎全滿</b>——這正是「橫向整併者」的定義，客戶不必為第 8 個需求換供應商；
+      (2) <b>右側三欄（Cloud SIEM／資安、LLM/AI 可觀測性、Network）</b>是新戰場，Datadog、Dynatrace、Splunk（靠資安）在這裡拉開與純 APM 廠的差距，
+      也是 Palo Alto／Cisco 想切入的接縫。資料來源：各廠商產品文件、Gartner MQ 摘要、Datadog/Dynatrace/Elastic 法說會與新聞稿（2025–2026）。
+    </div>
+
+    <div class="card">
+      <div class="card-title">C. 競爭態勢：三條戰線</div>
+      <ul>
+        <li>
+          <b>戰線一：向上打整併戰（Datadog vs Dynatrace vs Splunk）。</b> 爭的是「大型客戶把十幾種工具收斂到誰家平台」。
+          Datadog 靠模組廣度與開發者體驗、Dynatrace 靠自動化 AIOps 與獲利可持續性、Splunk 靠 Cisco 的資安與網通綁售。
+        </li>
+        <li>
+          <b>戰線二：向下守成本戰（Datadog/Dynatrace vs Grafana vs 雲端原生 vs OTel＋管線）。</b> 爭的是「成本敏感、開源傾向的客戶」。
+          Grafana 用開源與消費制低價搶入門，OTel＋Cribl／Chronosphere 用「資料進場前先瘦身」蠶食變現金額。
+          Datadog 用 Flex Logs／Infinite Cardinality／BYOC 迎戰。
+        </li>
+        <li>
+          <b>戰線三：搶新戰場（全員 vs AI／LLM 可觀測性）。</b> 訓練 GPU 機隊、LLM 呼叫、agent 行為的監控是空白地帶，
+          誰先把產品做深、誰先綁住 AI 原生客戶，誰就拿到下一輪成長。Datadog 目前領先（LLM Observability、GPU Monitoring、AI Guard、Agent Console），
+          但這也是它「客戶集中」風險的來源。
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ============ Datadog 的定位與護城河 ============ -->
+  <div id="panel-ddog" class="panel">
+
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">~30</div><div class="stat-lbl">平台模組數（DASH 2026 後）</div></div>
+      <div class="stat-box"><div class="stat-val">58% / 37% / 13%</div><div class="stat-lbl">客戶用 4+ / 6+ / 10+ 模組</div></div>
+      <div class="stat-box"><div class="stat-val">低 120%s</div><div class="stat-lbl">淨收入留存率（NRR，TTM）</div></div>
+      <div class="stat-box"><div class="stat-val">~91%</div><div class="stat-lbl">ARR 來自 $100k+ 客戶</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">A. 護城河：不是單一模組領先，而是「整併經濟學」</div>
+      <p>
+        Datadog 沒有任何一個模組是「全市場唯一最好」——APM 深度上 Dynatrace 不輸、日誌成本上 Grafana 更低、資安上 Splunk 更全。
+        它的護城河是<b>「約 30 個模組長在同一份遙測資料、同一個介面、同一張帳單上」所產生的整併經濟學</b>：
+      </p>
+      <ul>
+        <li><b>資料互通紅利。</b> 指標異常一鍵跳到對應 trace、trace 再跳到那一行日誌——跨模組關聯是「同平台」才有的價值，換供應商就失去。</li>
+        <li><b>加購摩擦趨近於零。</b> 客戶要第 5、第 8 個功能時，開通一個開關即可，不必走一輪 POC／採購／整合。這讓 Datadog 的 land-and-expand 飛輪轉得特別快。</li>
+        <li><b>多產品滲透就是量化證據。</b> 用 4+ 模組的客戶從一年前 52% 升到 58%、用 10+ 的從 7% 升到 13%——最深的族群成長最快，代表整併紅利在既有客戶內部持續加深，不只是靠拉新客。</li>
+        <li><b>NRR 低 120%s＋GRR 中高 90%s。</b> 客戶幾乎不流失（GRR），而且每年還多買兩成（NRR）——這是「平台黏著」最直接的財務指紋。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">B. 產品組合成熟度（26→約30 模組）</div>
+      <ul>
+        <li><b>成熟層：</b> 5 個模組各自 ARR 逾 1 億美元、另 3 個介於 5,000 萬–1 億——構成主要規模化營收基礎（基礎設施監控、APM、Log Management、RUM、Synthetics 一類）。RUM 單獨 ARR 已逾 2 億、年增 50%。</li>
+        <li><b>早期層：</b> 其餘約 18–22 個模組仍在生命週期早段，管理層認為每個長期都有逾 1 億 ARR 潛力，但未給個別數字或時程。</li>
+        <li><b>DASH 2026（2026/6）新增 100+ 功能：</b> Bits AI 擴張（Bits Release 發布驗證、Bits Code &amp; Testing）、Datadog for AI（GPU Monitoring、Agent Console、Data Observability、AI Guard）、BYOC 擴及日誌、Infinite Cardinality Metrics、Runtime Prioritization Engine（宣稱降低漏洞噪音 95%+）。</li>
+      </ul>
+      <div class="note">⚑ Datadog 不揭露各模組營收金額（單一營運分部），上述 ARR 分層與滲透率是唯一的公開量化指標，屬方向性參考。來源：Q1–Q2 FY2026 法說會、DASH 2026 新聞稿。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">C. 成長引擎的雙層結構</div>
+      <p>
+        Datadog 目前的 36% 成長由兩層疊加而成，理解這個結構才看得懂「最大客戶砍用量」為何殺傷力這麼大：
+      </p>
+      <ul>
+        <li><b>底層（非 AI 原生客戶）：</b> 成長率從一年前的 18% → Q1 的 20% 中段 → Q2 的<b>接近 30%</b>，連續 5 季加速。這是「傳統企業上雲＋平台整併」的廣泛紅利，分散、健康、可持續。</li>
+        <li><b>頂層（AI 原生客戶）：</b> 貢獻了 36% 與 28% 之間的差額。這一層集中度極高——31 家年支出逾百萬、8 家逾千萬，且其中一家「最大客戶」大到單獨拉低全公司財測。頂層放大了上行，也放大了下行。</li>
+      </ul>
+      <div class="note red">⚑ 雙層互證：法說會強調「非 AI 業務連 5 季加速」屬實且重要，但同一場財報揭露「最大客戶砍用量、Q3 成長率掉到 28–29%」——說明目前的「超額成長」有相當一塊建立在少數 AI 巨鯨的用量曲線上，而那條曲線公司自己也無法預測（Q1 才說「對最大客戶採更高保守度」，Q2 就真的縮了）。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">D. 相對競爭者的優劣勢（一頁總結）</div>
+      <div class="grid2">
+        <div class="vcard c">
+          <h4>Datadog 的相對優勢</h4>
+          <ul>
+            <li>模組廣度與加購摩擦（vs 所有人）</li>
+            <li>雲原生／開發者體驗與社群（vs Dynatrace、Splunk）</li>
+            <li>成長速度與 AI 原生客群卡位（vs 所有人）</li>
+            <li>單一平台的資料關聯體驗（vs Grafana 拼裝、雲端原生單雲）</li>
+          </ul>
+        </div>
+        <div class="vcard e">
+          <h4>Datadog 的相對弱點</h4>
+          <ul>
+            <li>獲利品質：非 GAAP 營益率 23% vs Dynatrace 29%；GAAP 營益率長期貼近損益兩平（SBC 約占營收 20%）</li>
+            <li>客戶集中：AI 巨鯨尾部風險（vs Dynatrace 分散的大型企業基礎）</li>
+            <li>估值：P/S ~21x vs Dynatrace ~6–7x、Elastic ~3–4x——容錯空間最小</li>
+            <li>定價觀感：「帳單暴衝」的抱怨與 OTel 談判籌碼，主要衝著用量制龍頭而來</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ AI／LLM Observability 轉型 ============ -->
+  <div id="panel-ai" class="panel">
+
+    <div class="lead">
+      <div class="card-title">產業轉型節點：AI 工作負載正在重寫「觀測什麼、怎麼收費」</div>
+      <p>
+        這是本賽道 2025–2026 唯一真正的<b>增量戰場</b>，也是把 Datadog 推上加速成長、同時埋下「客戶集中」地雷的同一件事。
+        它同時牽動三層：<b>觀測對象</b>（多了 GPU 機隊、LLM 呼叫、agent 行為）、<b>計價模型</b>（用量制在 AI 用量下爆量，但也可能一夕縮量）、
+        <b>競爭接縫</b>（資安廠帶著「AI 安全」敘事切入 AI 可觀測性）。
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">A. 新增的三類觀測對象</div>
+      <ul>
+        <li>
+          <b>訓練工作負載（training）。</b> Datadog 管理層自陳「直到 2026 年才真正把訓練當成一個市場」——過去訓練是少數研究團隊的「手工藝」，
+          現在是必須全天候可靠運作的生產工作負載（「訓練跑一次失敗，等於把一週拱手讓給對手」）。觀測需求：GPU 機隊使用率、
+          互連效能、散熱／功耗、checkpoint 失敗。Datadog 本季新簽「兩家全球最大科技公司 AI 研究部門」的七／八位數交易。
+        </li>
+        <li>
+          <b>推論服務（inference）。</b> 管理層判斷「長期推論會是主導工作負載」。觀測需求：每次呼叫的 token 數、延遲、成本歸因、
+          快取命中率、跨模型路由。這一層與傳統 APM 最接近，也最容易變現。
+        </li>
+        <li>
+          <b>Agent 行為。</b> AI agent 取代人力 SRE 做分診／調查，本身也需要被觀測：工具呼叫鏈、決策軌跡、幻覺、
+          權限與護欄。Datadog 揭露 MCP Server 工具呼叫季增 4 倍、LLM Observability 的 span 季增近 3 倍——衡量的是「AI 工具對 Datadog 的使用強度」。
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">B. 對「用量制」計價模型的雙面衝擊</div>
+      <p>
+        Datadog CEO 對「agent 時代要不要新計價模式」的回答是：「我們不在乎用量來自人還是 agent，因為模式本來就是用量制」。
+        這句話在 Q1 聽起來像護城河，Q2 就露出另一面：
+      </p>
+      <ul>
+        <li><b>上行：</b> AI 工作負載讓遙測資料量、span 數、custom metrics 數暴增，用量制自動把這些轉成營收——這是 2025–2026 超額成長的來源。</li>
+        <li><b>下行：</b> 用量制也意味著「客戶砍用量＝營收立刻縮」。最大客戶（九位數合約、17 個模組）續約但調降用量，直接讓 Q3 財測成長率從 36% 掉到 28–29%，股價一天跌約 19%。</li>
+      </ul>
+      <div class="note red">⚑ 獨創前瞻風險：AI 巨鯨客戶的用量，取決於他們自己的訓練排程、模型迭代節奏、以及「要不要自建觀測」的決策——這三者 Datadog 都無法預測也無法控制。當「頂層成長」佔比越高，財測的可預測性反而越低。這與「非 AI 業務連 5 季加速」的敘事並存，但方向相反。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">C. 競爭接縫：資安敘事切入 AI 可觀測性</div>
+      <ul>
+        <li><b>Palo Alto Networks 併 Chronosphere（$33.5 億）</b>——官方定調為「為 AI 時代打造的次世代可觀測性」，把 observability 資料與 XDR／SecOps 綁在一起。</li>
+        <li><b>Cisco</b> 用 Splunk 的資料平台整合 observability 與 SIEM。</li>
+        <li><b>Datadog</b> 反向從 observability 往資安擴（Cloud SIEM、Bits AI Security Analyst、AI Guard、Runtime Prioritization Engine）。</li>
+      </ul>
+      <p>
+        「AI 安全是 agent 進生產環境的主要障礙」這個敘事，讓資安預算與觀測預算的邊界模糊化。誰能同時給「看得見」與「守得住」，
+        誰就拿到 AI 工作負載的整包預算——這是未來 2–3 年份額重分配的關鍵接縫。
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">D. OpenTelemetry 在 AI 時代的角色放大</div>
+      <p>
+        AI 團隊大量用 OTel 埋點（因為工具鏈新、沒有歷史包袱），這讓「換觀測後端」的成本在 AI 客群裡特別低。
+        對 Datadog 是雙面：好處是 OTel 資料一樣照 custom metrics 收費（甚至更貴，因為 OTel 指標繞過原生整合直接進 custom bucket）；
+        壞處是 AI 巨鯨客戶握有「我隨時能搬走」的籌碼，這正是「最大客戶砍用量」談判結果的結構背景。
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ============ 財務與估值比較 ============ -->
+  <div id="panel-fin" class="panel">
+
+    <div class="chart-wrap">
+      <div class="cw-title">圖四：同業定位 —— 營收成長 vs 獲利能力（氣泡＝營收／ARR 規模）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">Observability 同業定位：成長 vs 獲利（氣泡＝營收／ARR 規模）</text><line x1="76" y1="458" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="76" y1="355" x2="860" y2="355" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">15</text><line x1="76" y1="252" x2="860" y2="252" stroke="#eeeeee" stroke-width="1"/><text x="66" y="256" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="76" y1="149" x2="860" y2="149" stroke="#eeeeee" stroke-width="1"/><text x="66" y="153" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">25</text><line x1="76" y1="46" x2="860" y2="46" stroke="#eeeeee" stroke-width="1"/><text x="66" y="50" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30</text><line x1="76" y1="46" x2="76" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="232.8" y1="46" x2="232.8" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="232.8" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="389.6" y1="46" x2="389.6" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="389.6" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="546.4" y1="46" x2="546.4" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="546.4" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">30</text><line x1="703.2" y1="46" x2="703.2" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="703.2" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="860" y1="46" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="860" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">營收／ARR 年增率 (%)</text><text x="18" y="252" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252)">自由現金流利潤率 (%)</text><line x1="326.88" y1="46" x2="326.88" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="330.88" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 16</text><line x1="76" y1="138.7" x2="860" y2="138.7" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="133.7" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 25.5</text><circle cx="640.48" cy="149" r="26" fill="#7c3aed" fill-opacity="0.55" stroke="#7c3aed" stroke-width="1.5"/><circle cx="342.56" cy="128.4" r="19.1" fill="#2563eb" fill-opacity="0.55" stroke="#2563eb" stroke-width="1.5"/><circle cx="311.2" cy="128.4" r="18" fill="#16a34a" fill-opacity="0.55" stroke="#16a34a" stroke-width="1.5"/><circle cx="123.04" cy="87.2" r="13.69" fill="#db2777" fill-opacity="0.55" stroke="#db2777" stroke-width="1.5"/><circle cx="154.4" cy="355" r="12.79" fill="#0891b2" fill-opacity="0.55" stroke="#0891b2" stroke-width="1.5"/><circle cx="828.64" cy="396.2" r="10.16" fill="#d97706" fill-opacity="0.55" stroke="#d97706" stroke-width="1.5"/><text x="640.48" y="118" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Datadog</text><text x="342.56" y="104.3" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Dynatrace</text><text x="311.2" y="105.4" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Elastic</text><text x="123.04" y="68.51" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Splunk｜Cisco（估）</text><text x="154.4" y="337.21" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">New Relic（估）</text><text x="828.64" y="381.04" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Grafana Labs（估）</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">橫軸＝最新季營收／ARR 年增率，縱軸＝FCF 利潤率，氣泡面積正比於營收／ARR。私有公司（Grafana、New Relic）與 Splunk-in-Cisco 之利潤率為區間估計、僅示意。虛線為各軸中位數；Rule of 40 見內文。資料：各公司 10-Q／8-K 與新聞稿（2026Q2 前後）。</div>
+</div>
+    </div>
+    <div class="note yellow">
+      ⚑ 人工解讀：橫軸為最新一季營收（或 ARR）年增率、縱軸為自由現金流利潤率、氣泡面積正比於營收／ARR 規模。
+      虛線為 <b>Rule of 40</b>（成長率＋利潤率＝40）參考線。三家上市公司都在線上：<b>Datadog（36＋25≈61）遙遙領先、
+      Dynatrace（17＋26≈43）靠獲利、Elastic（15＋26≈41）踩線</b>。Grafana、New Relic 為私有公司，利潤率以區間估計標示（信心度低）。
+      要點：Datadog 的估值溢價（P/S ~21x，是 Dynatrace 的 3 倍）建立在「成長顯著更快」上——一旦成長率往 Dynatrace 靠攏，
+      估值的向下重定價空間就很大（Q2 財報後單日 −19% 已是預演）。資料來源：各公司 10-Q/8-K、法說會（2026Q2 前後）；私有公司數字取自公開報導與新聞稿。
+    </div>
+
+    <div class="chart-wrap">
+      <div class="cw-title">圖五：Datadog 逐季營收與非 GAAP 營業利益率（近 8 季）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">Datadog 逐季營收與非 GAAP 營業利益率（Q3 FY24–Q2 FY26）</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">250</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">750</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,250</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20.8</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">21.6</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">22.4</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">23.2</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">24</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY24</text><line x1="182.86" y1="456" x2="182.86" y2="460" stroke="#999999" stroke-width="1"/><text x="182.86" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY24</text><line x1="289.71" y1="456" x2="289.71" y2="460" stroke="#999999" stroke-width="1"/><text x="289.71" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY25</text><line x1="396.57" y1="456" x2="396.57" y2="460" stroke="#999999" stroke-width="1"/><text x="396.57" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY25</text><line x1="503.43" y1="456" x2="503.43" y2="460" stroke="#999999" stroke-width="1"/><text x="503.43" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY25</text><line x1="610.29" y1="456" x2="610.29" y2="460" stroke="#999999" stroke-width="1"/><text x="610.29" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY25</text><line x1="717.14" y1="456" x2="717.14" y2="460" stroke="#999999" stroke-width="1"/><text x="717.14" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY26</text><polyline points="76,234.1 182.86,218.76 289.71,211.07 396.57,190.1 503.43,171.16 610.29,149.45 717.14,132.34 824,95.81" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="234.1" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="182.86" cy="218.76" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="289.71" cy="211.07" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="396.57" cy="190.1" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="503.43" cy="171.16" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="610.29" cy="149.45" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="717.14" cy="132.34" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><circle cx="824" cy="95.81" r="3.6" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/><polyline points="289.71,255 396.57,456 503.43,154.5 610.29,54 717.14,255 824,154.5" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="289.71" cy="255" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="396.57" cy="456" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="503.43" cy="154.5" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="610.29" cy="54" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="717.14" cy="255" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="824" cy="154.5" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><line x1="335.28" y1="40" x2="351.28" y2="40" stroke="#7c3aed" stroke-width="2.4"/><text x="357.28" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">季營收</text><line x1="413.78" y1="40" x2="429.78" y2="40" stroke="#dc2626" stroke-width="2.4" stroke-dasharray="5 3"/><text x="435.78" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Datadog 各季 8-K／EX-99.1 新聞稿與 10-Q。營收為 GAAP；非 GAAP 營業利益率自 FY2025 起揭露（前兩季留空）。查證日 2026-09。</div>
+</div>
+    </div>
+    <div class="note yellow">
+      ⚑ 人工解讀：營收（左軸，百萬美元）連 8 季創高、單季首破 10 億後續破 11 億；非 GAAP 營益率（右軸）穩定在 20–24% 區間，
+      沒有隨規模擴大而明顯上升——因為股權薪酬（SBC）約占營收 20%，GAAP 營益率因此長期貼近損益兩平。
+      這張圖與圖四對照著看：Datadog 是「成長機器」而非「利潤機器」，估值完全押在成長延續性上。
+      資料來源：Datadog Q2 FY24–Q2 FY26 各季 8-K／EX-99.1 新聞稿與 10-Q。
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">表一：獨立上市 Observability 平台 —— 財務與估值對照（最新一季／2026-09 前後）</div>
+      <table>
+        <tr><th>項目</th><th>Datadog (DDOG)</th><th>Dynatrace (DT)</th><th>Elastic (ESTC)</th></tr>
+        <tr><td>營收 / ARR（最新季）</td><td>營收 $1.12B（Q2 FY26）</td><td>ARR $2.14B（Q1 FY27）</td><td>營收 $478M（Q1 FY27）</td></tr>
+        <tr><td>年增率</td><td class="pos">+36%</td><td class="neu">+16–17%</td><td class="neu">+15%</td></tr>
+        <tr><td>TTM 營收（約）</td><td>~$4.0B</td><td>~$2.0B</td><td>~$1.9B</td></tr>
+        <tr><td>毛利率（非 GAAP）</td><td>~80%</td><td>~85%</td><td>~79%</td></tr>
+        <tr><td>非 GAAP 營業利益率</td><td>23%</td><td class="pos">29%（FY26 全年）</td><td>~16–18%</td></tr>
+        <tr><td>自由現金流利潤率</td><td>~25%</td><td>26%（FY26 全年）</td><td>~26%（調整後）</td></tr>
+        <tr><td>NRR / 淨擴張</td><td>低 120%s</td><td>淨新增 ARR +66% YoY（有機 +41%）</td><td>—（未揭露 NRR）</td></tr>
+        <tr><td>Rule of 40</td><td class="pos">~61</td><td class="pos">~43</td><td class="pos">~41</td></tr>
+        <tr><td>市值（約）</td><td>~$84B</td><td>~$14–15B</td><td>~$6.4B</td></tr>
+        <tr><td>EV / 營收（約）</td><td class="neg">~21x</td><td>~6–7x</td><td>~3–4x</td></tr>
+        <tr><td>現金＋有價證券</td><td>$5.0B</td><td>~$1B+</td><td>~$1B</td></tr>
+        <tr><td>股權薪酬 / 營收</td><td class="neg">~20%</td><td>~10–12%</td><td>~14%</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ Dynatrace 財年止於 3/31、Elastic 止於 4/30、Datadog 止於 12/31，季別無法完全對齊，年增率與利潤率取各自最新一季／最新全年。市值與倍數為 2026-09 前後概略值，隨股價變動。來源：三家公司 10-Q/8-K 與法說會；市值資料為次級市場數據。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">表二：非上市／被併購玩家 —— 規模與估值</div>
+      <table>
+        <tr><th>玩家</th><th>營收 / ARR</th><th>成長</th><th>估值 / 對價</th><th>狀態</th></tr>
+        <tr><td>Grafana Labs</td><td>ARR ~$605M（2026/8）</td><td class="pos">~+50%</td><td>~$90–125 億</td><td>已送 IPO S-1（2026）</td></tr>
+        <tr><td>New Relic</td><td>TTM 營收 ~$0.96B</td><td class="neg">個位數</td><td>$65 億（2023 收購對價）</td><td>Francisco Partners＋TPG 私有（2023/11）</td></tr>
+        <tr><td>Splunk（Cisco）</td><td>總 ARR ~$4.2B；observability 部分 ~$1.1B/年</td><td class="neg">observability 部分 ~持平</td><td>$280 億（2024 收購對價）</td><td>Cisco 旗下（2024/3 完成）</td></tr>
+        <tr><td>Chronosphere</td><td>ARR &gt;$160M（2025/9）</td><td class="pos">三位數</td><td>~$33.5 億（對價）</td><td>Palo Alto Networks 併購中（2026 宣布）</td></tr>
+        <tr><td>Sumo Logic</td><td>營收 ~$0.3B（私有化前）</td><td class="neg">低個位數</td><td>$17 億（2023 對價）</td><td>Francisco Partners 私有（2023）</td></tr>
+      </table>
+    </div>
+    <div class="note">⚑ 私有公司數字取自新聞稿、S-1 與媒體報導，未經公司逐項證實；Splunk observability 部分營收為 Cisco「Observability」產品類別的推估。來源：Grafana 官方部落格與 IPO 報導、Cisco 財報與法說會、Palo Alto／Chronosphere 併購新聞稿。</div>
+
+    <div class="card">
+      <div class="card-title">估值觀察：Datadog 的溢價是「成長稅」</div>
+      <p>
+        Datadog 以約 21 倍 EV/營收交易，是 Dynatrace（6–7 倍）的三倍、Elastic（3–4 倍）的五倍以上。這個差距幾乎<b>完全由成長率解釋</b>：
+        Datadog +36% vs Dynatrace +17% vs Elastic +15%。以隱含 P/S 反推，市場定價 Datadog「未來多年維持 25%+ 成長」；
+        Dynatrace／Elastic 則被定價成「成熟、雙位數、靠現金流」。
+      </p>
+      <p>
+        風險對稱性因此很不一樣：<b>Datadog 的容錯空間最小</b>。Q2 財報「beat＋raise」卻單日 −19%，就是市場對「成長率可能往 20% 靠攏」
+        的即時重定價。相對地，Dynatrace／Elastic 的估值已經反映低成長，下檔相對有底、上檔則需要重新加速（Dynatrace 有機淨新增 ARR 連 4 季改善是可追蹤的訊號）。
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ============ 結構性風險與追蹤清單 ============ -->
+  <div id="panel-risk" class="panel">
+
+    <div class="section-title">A. 產業結構性風險矩陣</div>
+
+    <div class="card">
+      <div class="risk-item">
+        <span class="risk-badge high">高</span>
+        <div class="risk-text">
+          <div class="risk-title">AI 巨鯨客戶集中度（Datadog 特有，2026Q2 已現形）</div>
+          Datadog 頂層成長高度依賴少數 AI 原生客戶（31 家 &gt;$1M、8 家 &gt;$10M），其中「最大客戶」大到單獨拉低全公司財測。
+          這些客戶的用量取決於自身訓練排程與「自建 vs 外購觀測」決策，Datadog 無法預測。Q2「最大客戶砍用量→Q3 成長率 36%→28–29%→單日 −19%」
+          是這個風險第一次量化現形，且結構未解除——頂層佔比越高，財測越不可測。
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-badge high">高</span>
+        <div class="risk-text">
+          <div class="risk-title">OpenTelemetry 商品化儀器層 → 專有計價長期承壓（全行業）</div>
+          OTel（CNCF 第二大專案、~41% 生產採用）讓「換觀測後端不必重埋點」，客戶談判籌碼上升。對用量制龍頭（Datadog、New Relic）
+          衝擊最大；「遙測管線／資料最佳化層」（Cribl、Chronosphere、Alloy、BindPlane）進一步切變現金額。淨效果：市場總量續增，
+          但每 GB 遙測資料的變現長期下行。
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">資安廠帶預算與通路進場（Cisco/Splunk、Palo Alto/Chronosphere）</div>
+          observability 與 SIEM／XDR 共用遙測資料，資安廠（更大的預算、更深的 CISO 關係、既有通路）正在收購 observability 資產，
+          用「看得見＋守得住」的整包敘事競爭 AI 工作負載預算。對純 observability 廠是中期擠壓，尤其在大型受監管企業。
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">雲端大廠原生工具「夠用就好」的下沉壓力</div>
+          AWS/Azure/GCP 原生監控隨帳單附送、持續補強。對單雲、成本敏感、非關鍵工作負載的客群構成天花板；
+          對 Datadog 也是「亦敵亦友」三向關係（主機商／競爭者／AI 訓練客戶）的不對稱風險——競爭升級會同時牽動它的成本結構與大客戶關係。
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-badge med">中</span>
+        <div class="risk-text">
+          <div class="risk-title">估值對成長率高度敏感（Datadog 特有）</div>
+          P/S ~21x 定價「多年 25%+ 成長」。任何讓市場相信「成長率往 15–20% 靠攏」的訊號（大客戶再縮、非 AI 業務停止加速、
+          OTel 導致單價下滑），都可能觸發向 Dynatrace／Elastic 倍數靠攏的重定價，下檔空間遠大於 Dynatrace／Elastic。
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-badge low">低</span>
+        <div class="risk-text">
+          <div class="risk-title">獲利品質：GAAP 長期貼近損益兩平（Datadog）</div>
+          SBC 約占營收 20%，使 GAAP 營益率長年在 ±5% 徘徊，非 GAAP 營益率也未隨規模明顯擴張。短期不致命（FCF 利潤率 25%、現金 50 億），
+          但若成長放緩、市場改用 GAAP 獲利與 FCF 檢視，估值支撐會變弱。
+        </div>
+      </div>
+      <div class="risk-item">
+        <span class="risk-badge low">低</span>
+        <div class="risk-text">
+          <div class="risk-title">市場定義混亂造成的「份額幻覺」</div>
+          Gartner 傘狀口徑（~$210 億）與狹義口徑（~$34 億）差 5 倍，媒體與賣方報告常混用。投資決策若建立在錯配口徑的「市占率」上，
+          會系統性高估或低估玩家地位。屬分析風險而非公司營運風險。
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">B. 產業催化劑與追蹤清單</div>
+    <ol class="tracklist">
+      <li>
+        <b>Datadog 最大客戶用量是否止穩（Q3 FY2026 財報，2026/11）。</b> 這是「AI 巨鯨集中度」風險的直接觀測點。
+        管理層稱已「把全年財測完全去風險化」——Q3 實際成長率若守住 28–29%、Q4 指引若回升，代表一次性；若再下修，代表結構性。
+      </li>
+      <li>
+        <b>非 AI 原生客戶成長率是否維持加速。</b> 已連 5 季加速（18%→20%中→接近30%）。這條線是 Datadog「底層健康度」的命脈，
+        一旦停止加速，市場會把它與「AI 頂層縮量」疊加解讀，估值壓力加倍。
+      </li>
+      <li>
+        <b>Grafana Labs IPO 定價與掛牌後表現（2026）。</b> S-1 已送、目標估值約 125 億。若成功掛牌且維持高倍數，
+        代表「開源＋消費制＋反鎖定」的商業模式被公開市場認可，對 Datadog 的定價敘事是實質挑戰。
+      </li>
+      <li>
+        <b>Palo Alto／Chronosphere 整合進度與 Cisco／Splunk 交叉銷售數據。</b> 觀測「資安預算收購 observability」這條路徑走不走得通——
+        Cisco 每季「Observability」產品類別成長率、Palo Alto 財報是否開始揭露 observability 貢獻。
+      </li>
+      <li>
+        <b>Dynatrace 有機淨新增 ARR 是否延續改善（連 4 季）。</b> 這是「靠獲利的成熟玩家能否重新加速」的訊號；
+        若 Dynatrace 成長回到 20%+ 而估值仍在 6–7x，會凸顯 Datadog 溢價的脆弱。
+      </li>
+      <li>
+        <b>OpenTelemetry 生產採用率與「遙測管線層」營收（Cribl 等）。</b> 41%→50%→60% 的曲線，
+        以及管線層廠商的成長速度，是「用量制單價長期承壓」這個判斷的檢核點。
+      </li>
+      <li>
+        <b>AI／LLM 可觀測性的獨立揭露。</b> 目前各家只給「使用強度倍數」（span 季增 3 倍之類），沒有金額。
+        誰先開始揭露 AI 可觀測性的 ARR 與客戶數，代表這個新戰場開始「可被定價」，也是份額重分配進入下半場的訊號。
+      </li>
+    </ol>
+
+    <div class="lead">
+      <div class="card-title">收斂：把整份分析壓成一句可轉移的判斷</div>
+      <p>
+        <b>在一個「贏家通吃、但護城河正在被標準化抽換」的賽道裡，規模與成長領先者（Datadog）拿到最高估值，
+        代價是把公司命運綁在少數無法預測的 AI 巨鯨用量曲線上——當超額成長來自頂層集中，財測的可預測性反而隨成長率一起上升到頂、再一起摔下來。</b>
+        對這類標的，該追蹤的不是「這一季 beat 了多少」，而是「底層（非 AI）成長有沒有停止加速」與「頂層（AI 巨鯨）集中度有沒有下降」——
+        兩條線同時惡化，才是估值敘事真正翻轉的時點。
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    本文為個人研究與產業結構分析筆記，非投資建議，作者不具證券投資顧問資格。<br>
+    資料來源：Datadog／Dynatrace／Elastic SEC 申報（10-Q、10-K、8-K/EX-99.1）與法說會逐字稿；Cisco 財報；
+    Gartner／IDC／Mordor Intelligence／Research&amp;Markets 市場報告（媒體轉引）；Grafana Labs、Palo Alto Networks、Francisco Partners 官方新聞稿；
+    公開產業報導。市值與估值倍數為 2026-09-01 前後概略值。所有數字以各公司正式申報為準。
+  </div>
+
+</div>
+
+<script>
+  function sw(id, tabEl) {
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
+    document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+    var panel = document.getElementById('panel-' + id);
+    if (panel) panel.classList.add('active');
+    if (tabEl) tabEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
