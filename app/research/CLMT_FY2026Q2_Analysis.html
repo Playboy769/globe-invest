@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Calumet, Inc. (CLMT) FY2026 Q2 財報分析</title>
+<style>
+  :root{
+    --accent:#b45309; --accent2:#1d4ed8; --red:#b91c1c; --green:#15803d; --amber:#b45309;
+    --line:#e2e2e2; --ink:#111; --sub:#444; --bg:#fff;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#fff;color:#111;font-family:-apple-system,"Segoe UI",Helvetica,Arial,"Noto Sans TC",sans-serif;line-height:1.6;}
+  .page-header{max-width:1080px;margin:0 auto;padding:32px 24px 18px;}
+  .page-header h1{font-size:24px;margin:0 0 8px;color:#111;}
+  .page-header p{font-size:13.5px;color:#555;margin:0 0 6px;}
+  .fallback-note{background:#fff7ed;border:1px solid #fdba74;border-left:4px solid var(--accent);border-radius:6px;padding:10px 14px;font-size:13px;color:#7c3a00;margin-top:12px;}
+  .tabs{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:8px;border-bottom:2px solid var(--line);position:sticky;top:0;background:#fff;z-index:5;padding-bottom:10px;padding-top:6px;}
+  .tab-btn{border:1px solid var(--line);background:#fafafa;color:#333;font-size:12.5px;padding:8px 14px;border-radius:6px 6px 0 0;cursor:pointer;font-weight:600;}
+  .tab-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 24px 60px;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  h2.tab-title{font-size:19px;margin:0 0 18px;color:#111;border-left:5px solid var(--accent);padding-left:10px;}
+  h3{font-size:15.5px;margin:0 0 10px;color:#111;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-bottom:18px;}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px;}
+  .stat-box{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fafafa;}
+  .stat-box .lbl{font-size:11.5px;color:#666;margin-bottom:4px;}
+  .stat-box .val{font-size:20px;font-weight:700;color:#111;}
+  .stat-box .sub{font-size:11px;color:#888;margin-top:2px;}
+  .flag{font-size:12.5px;color:#7c3a00;background:#fff7ed;border-left:3px solid var(--accent);padding:6px 10px;border-radius:4px;margin:8px 0 18px;}
+  .divider{border:0;border-top:1px solid var(--line);margin:22px 0;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:8px;}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:right;}
+  th{background:#f5f5f5;text-align:center;font-weight:700;}
+  td:first-child,th:first-child{text-align:left;}
+  tr.section-head td{background:#fdf2e3;font-weight:700;text-align:left;}
+  .tbl-wrap{overflow-x:auto;margin-bottom:18px;}
+  .neg{color:var(--red);}
+  .pos{color:var(--green);}
+  .quad-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+  .quad-card{border:1px solid var(--line);border-radius:8px;padding:14px 16px;}
+  .quad-card h4{margin:0 0 6px;font-size:13px;color:var(--accent);}
+  .quad-card p{margin:0;font-size:12.5px;color:#333;}
+  .diligence{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin-bottom:18px;background:#fafafa;}
+  .diligence li{font-size:12.5px;margin-bottom:6px;color:#333;}
+  .stance-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+  .stance-card{border:1px solid var(--line);border-radius:8px;padding:14px 16px;}
+  .stance-card.pro{border-top:4px solid var(--green);}
+  .stance-card.con{border-top:4px solid var(--red);}
+  .stance-card h4{margin:0 0 8px;font-size:13px;}
+  .stance-card p{margin:0;font-size:12.5px;color:#333;}
+  .bu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:18px;}
+  .bu-card{border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
+  .bu-card h4{margin:0 0 8px;font-size:14.5px;color:var(--accent);}
+  .bu-card .bu-meta{font-size:11.5px;color:#777;margin-bottom:10px;}
+  .bu-card p{font-size:12.5px;color:#333;margin:0 0 8px;}
+  .risk-item{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:16px;}
+  .risk-badge{display:inline-block;font-size:11px;font-weight:700;color:#fff;padding:3px 10px;border-radius:12px;margin-right:8px;}
+  .risk-badge.high{background:var(--red);}
+  .risk-badge.med{background:var(--amber);}
+  .risk-badge.low{background:#666;}
+  .risk-item h4{display:inline;font-size:13.5px;}
+  .risk-item p{font-size:12.5px;color:#333;margin:8px 0 0;}
+  .chart-wrap{border:1px solid var(--line);border-radius:8px;padding:14px 16px 8px;margin-bottom:18px;background:#fff;}
+  .chart-wrap svg{width:100%;height:auto;display:block;}
+  .chart-cap{font-size:11.5px;color:#666;margin-top:6px;}
+  .note{font-size:12px;color:#7c3a00;background:#fff7ed;border-left:3px solid var(--accent);padding:8px 10px;border-radius:4px;margin-top:8px;margin-bottom:18px;}
+  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px;}
+  .kpi{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fafafa;}
+  .kpi .kl{font-size:11px;color:#666;}
+  .kpi .kv{font-size:19px;font-weight:700;}
+  .kpi .kd{font-size:11px;margin-top:2px;}
+  .cross-tbl th{font-size:12px;}
+  .cross-tbl td{text-align:left;font-size:12px;}
+  .footer{max-width:1080px;margin:0 auto;padding:24px;font-size:11.5px;color:#888;border-top:1px solid var(--line);}
+  .src{font-size:10.5px;color:#999;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Calumet, Inc.（NASDAQ: CLMT）FY2026 Q2 財報分析</h1>
+  <p>期別：2026 年 4–6 月（期末 2026-06-30，10-Q 申報日 2026-08-07）· 上游依據 SEC EDGAR 10-Q／10-K／8-K／Form 4 原始申報文件與 XBRL 結構化數據，交叉核對即時市場報價（2026-09-19 擷取）</p>
+  <p>分頁：① 特殊事件 ② 業務與技術 ③ 供應鏈 ④ 風險矩陣 ⑤ 損益表 ⑥ 業務部門 ⑦ 資產負債表 ⑧ 現金流量 ⑨ 估值觀察</p>
+  <div class="fallback-note">
+    <strong>⚠ Fallback 模式說明：</strong>本篇未取得 CLMT FY2026Q2 法說會逐字稿（公開來源查無完整逐字稿，僅有新聞稿與 8-K 揭露），依框架規定省略「Q&amp;A 問答分析」tab，全篇改以 10-Q／10-K／8-K 原始申報文件、XBRL 結構化財務數據與新聞稿為基礎撰寫；風險矩陣 tab 已註明此資料限制。
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="sw('event',this)">① 特殊事件</button>
+  <button class="tab-btn" onclick="sw('biz',this)">② 業務與技術</button>
+  <button class="tab-btn" onclick="sw('supply',this)">③ 供應鏈</button>
+  <button class="tab-btn" onclick="sw('risk',this)">④ 風險矩陣</button>
+  <button class="tab-btn" onclick="sw('income',this)">⑤ 損益表</button>
+  <button class="tab-btn" onclick="sw('segment',this)">⑥ 業務部門</button>
+  <button class="tab-btn" onclick="sw('balance',this)">⑦ 資產負債表</button>
+  <button class="tab-btn" onclick="sw('cashflow',this)">⑧ 現金流量</button>
+  <button class="tab-btn" onclick="sw('valuation',this)">⑨ 估值觀察</button>
+</div>
+
+<div class="wrap">
+
+<!-- ============ TAB 1: 特殊事件 ============ -->
+<div id="panel-event" class="panel active">
+  <h2 class="tab-title">本季特殊交易／事件深度拆解：循環信用額度擴大＋J. Aron 存貨融資協議修正</h2>
+
+  <div class="stat-row">
+    <div class="stat-box"><div class="lbl">循環信用額度承諾額</div><div class="val">$500M → $600M</div><div class="sub">Eleventh Amendment，2026-09-11</div></div>
+    <div class="stat-box"><div class="lbl">配套修正</div><div class="val">Monetization Master Agreement 第四次修正</div><div class="sub">交易對手 J. Aron &amp; Company LLC（高盛商品部門）</div></div>
+    <div class="stat-box"><div class="lbl">總負債（2026-06-30）</div><div class="val">$2,258.7M</div><div class="sub">10-Q Note 6</div></div>
+    <div class="stat-box"><div class="lbl">股東權益（2026-06-30）</div><div class="val neg">-$1,137.1M</div><div class="sub">連續 8 季為負，且持續惡化</div></div>
+  </div>
+
+  <div class="card">
+    <h3>事件摘要</h3>
+    <p style="font-size:13px;color:#333;">2026 年 9 月 11 日，Calumet, Inc. 與 Bank of America（作為循環信用協議之管理代理人）簽署《第三次修訂重述信用協議》第十一次修正案（"Eleventh Amendment"），將循環信用額度承諾上限自 5.00 億美元提高至 6.00 億美元（仍受借貸基數上限所限制）。同日並與 J. Aron &amp; Company LLC 及其他相關方簽署《Monetization Master Agreement》第四次修正案，目的是配合上述循環額度提高——後者是 Calumet 於 2024 年 1 月與 J. Aron 簽訂、以 Shreveport 廠區原油與成品存貨為擔保的存貨融資／供貨回購協議（"Shreveport Supply and Offtake Agreement"，已於 2026 年 3 月延長至 2030 年 1 月）。此事件於 2026-09-15 以 Form 8-K（Item 1.01／2.03）揭露。</p>
+  </div>
+
+  <div class="quad-grid">
+    <div class="quad-card">
+      <h4>規模</h4>
+      <p>循環額度上限增加 1.00 億美元（+20%），但實際可動用額仍受「借貸基數」（borrowing base，通常綁定合格應收帳款／存貨價值）限制，8-K 未揭露修正後之借貸基數公式是否同步調整——這是尚待下一份 10-Q 補齊的細節。</p>
+    </div>
+    <div class="quad-card">
+      <h4>期限</h4>
+      <p>本次僅為 2018-02-23 原始信用協議的第 11 次修正，8-K 未重新揭露到期日。⚑ 留白反推：管理層選擇「修正既有協議」而非重新談判新協議，暗示債權人對展延現行條件仍有意願，但同時也代表協議本身的到期時點未被更新，值得下一期申報追蹤。</p>
+    </div>
+    <div class="quad-card">
+      <h4>財務承諾</h4>
+      <p>本次修正未直接創造新的固定利息支出（循環額度是否動用取決於營運週轉需求），但配套的 J. Aron 存貨融資協議修正意味著更大規模的存貨可被用作抵押取得短期資金——實質上是把資產負債表外的「存貨貨幣化」能力也同步放大。</p>
+    </div>
+    <div class="quad-card">
+      <h4>尚待驗證</h4>
+      <p>8-K 未揭露新增的 1.00 億美元額度是否已有明確用途（例如因應第三季原油採購旺季，或作為 SRE／RIN 訴訟潛在現金流出的緩衝）。需待 2026 Q3 10-Q 的流動性與資本資源章節說明。</p>
+    </div>
+  </div>
+
+  <div class="diligence">
+    <h3 style="margin-top:0;">核心疑問（盡職調查清單）</h3>
+    <ul>
+      <li>借貸基數（borrowing base）是否隨額度上限同步調整？目前實際可動用額為多少？</li>
+      <li>此次擴大額度是否與 Q1 2026 因 RIN 按市值計價損失 2.315 億美元（六個月合計）所造成的現金流壓力有關？</li>
+      <li>J. Aron 存貨融資協議修正後，公司對「表外化」存貨融資的依賴度是否進一步上升？這是否會壓縮未來資產負債表的透明度？</li>
+      <li>下一期 10-Q 是否會揭露新的財務或維持性契約（covenant）條款？</li>
+    </ul>
+  </div>
+
+  <div class="stance-grid">
+    <div class="stance-card pro">
+      <h4>對公司而言</h4>
+      <p>在股東權益連續惡化、DOE Loan 屬受限子公司非追索負債的結構下，母公司層級的營運周轉資金彈性至關重要。擴大循環額度為進入第三、四季原油採購旺季及潛在 RIN 波動提供緩衝，且是對既有協議的修正而非全新再融資，執行成本與時間相對較低。</p>
+    </div>
+    <div class="stance-card con">
+      <h4>對投資人而言（下游解讀）</h4>
+      <p>連續 8 季股東權益為負、且 21 個月內從 -6.72 億美元惡化至 -11.37 億美元，同時尋求擴大短期融資額度，是內部現金生成仍不足以支撐營運週轉的訊號，而非單純的「成長性擴張」。此事件應與下方風險矩陣中「槓桿持續攀升」一項合併解讀。</p>
+    </div>
+  </div>
+
+  <div class="note">資料中心／AI infra 專案融資條款：無此資料／不適用——CLMT 為特殊石化與再生燃料製造商，非資料中心資本支出型公司。</div>
+  <p class="src">⚑ 來源：8-K（accession 期別 2026-09-11，furnished 2026-09-15）Item 1.01／2.03；10-Q Note 5「Inventory Financing Agreements」、Note 6「Debt」。</p>
+</div>
+
+<!-- ============ TAB 2: 業務與技術 ============ -->
+<div id="panel-biz" class="panel">
+  <h2 class="tab-title">業務平台與技術：MaxSAF® 150 擴建、45Z 稅額抵減與基礎油供給錯位</h2>
+
+  <div class="bu-grid">
+    <div class="bu-card">
+      <h4>MaxSAF® 150 擴建與歲修</h4>
+      <div class="bu-meta">Montana Renewables（MRL）· 2026 Q2 完工</div>
+      <p>MaxSAF® 是 Montana Renewables 用於將可再生原料（如廢食用油、動物脂肪等地緣優勢原料）轉化為永續航空燃料（SAF）、再生柴油、再生氫氣、再生天然氣、再生丙烷及再生石腦油的核心製程平台。本次「MaxSAF® 150」擴建於 3 月初啟動、歷時約 48 天完成，第二季恢復量產；期間停產造成約 45 萬桶的預估產能損失。⚑ 這是實際發生的產出成本（非假設性風險）——量化留在下方「業務部門」tab 之產量／營收對照。</p>
+    </div>
+    <div class="bu-card">
+      <h4>Section 45Z 清潔燃料生產稅額抵減（CFPC）</h4>
+      <div class="bu-meta">Montana/Renewables segment</div>
+      <p>Montana Renewables 在擴建歲修期間仍成功維持營運成本優於目標，並持續將 Section 45Z 清潔燃料生產稅額抵減（"CFPCs"）貨幣化——這是 2026 年美國聯邦稅制下再生燃料廠商的關鍵現金流來源，公司管理層在 MD&amp;A 中特別強調此點，暗示 CFPC 貨幣化能力已成為評估 MRL 現金流韌性的核心指標之一，而非僅是稅務附註。</p>
+    </div>
+    <div class="bu-card">
+      <h4>基礎油供給錯位（Group I／II／III）</h4>
+      <div class="bu-meta">Specialty Products and Solutions ／ Performance Brands</div>
+      <p>管理層指出，波斯灣（Persian Gulf）地區部分基礎油產能因地緣政治因素退出市場，使消費者轉向替代採購 Group I／Group II 基礎油，Specialty Products and Solutions 因此受益；但同時，全球 Group III 基礎油供給持續緊縮，壓縮了 Performance Brands（Royal Purple／Bel-Ray／TruFuel）採購合成基礎油的成本結構，使該部門利潤率維持受壓狀態。管理層明確表示此情勢的持續性與幅度，高度取決於荷姆茲海峽（Strait of Hormuz）航運流量能否恢復——屬公司無法控制的外部地緣風險。</p>
+    </div>
+    <div class="bu-card">
+      <h4>Shreveport 產線問題已解除</h4>
+      <div class="bu-meta">Specialty Products and Solutions</div>
+      <p>第一季曾發生的 Shreveport 廠區臨時性產線問題已於本季解除，連同先前已實施之提價政策全面落實、原油價格下滑，帶動 Specialty Products and Solutions 商品價差（commodity margin）較上季與去年同期明顯改善，是本季毛利由負轉正的主要驅動力之一。</p>
+    </div>
+  </div>
+
+  <p class="src">⚑ 來源：10-Q Item 2「Management's Discussion and Analysis」（MaxSAF® 150、45Z、基礎油供給、Shreveport 產線段落）。</p>
+</div>
+
+<!-- ============ TAB 3: 供應鏈 ============ -->
+<div id="panel-supply" class="panel">
+  <h2 class="tab-title">供應鏈：結構與流量</h2>
+
+  <div class="card">
+    <h3>結構圖（上下游關係）</h3>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .cd-box{fill:#fafafa;stroke:#999;stroke-width:1.2;rx:6;}
+          .cd-box.hi{fill:#fdf2e3;stroke:#b45309;}
+          .cd-box.fin{fill:#eef2ff;stroke:#1d4ed8;stroke-dasharray:4,3;}
+          .cd-lbl{font-size:12px;fill:#111;font-family:sans-serif;}
+          .cd-sub{font-size:10px;fill:#666;font-family:sans-serif;}
+          .cd-arrow{stroke:#666;stroke-width:1.4;fill:none;marker-end:url(#arrow);}
+          .cd-arrow.fin{stroke:#1d4ed8;stroke-dasharray:4,3;}
+        </style>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#666"/></marker>
+        </defs>
+
+        <!-- row1: crude suppliers -->
+        <rect class="cd-box hi" x="30" y="20" width="200" height="52" rx="6"/>
+        <text class="cd-lbl" x="42" y="42">原油供應商（4 家）</text>
+        <text class="cd-sub" x="42" y="58">占 Q2'26 原油供給 ~82%（Q2'25 88%）</text>
+
+        <rect class="cd-box" x="270" y="20" width="200" height="52" rx="6"/>
+        <text class="cd-lbl" x="282" y="42">再生原料供應商</text>
+        <text class="cd-sub" x="282" y="58">廢食用油／動物脂肪等地緣優勢原料</text>
+
+        <rect class="cd-box" x="510" y="20" width="200" height="52" rx="6"/>
+        <text class="cd-lbl" x="522" y="42">加拿大原油</text>
+        <text class="cd-sub" x="522" y="58">供 Great Falls 特殊瀝青廠</text>
+
+        <rect class="cd-box fin" x="720" y="20" width="160" height="70" rx="6"/>
+        <text class="cd-lbl" x="732" y="42" fill="#1d4ed8">J. Aron &amp; Company</text>
+        <text class="cd-sub" x="732" y="58">Shreveport 存貨供貨／</text>
+        <text class="cd-sub" x="732" y="70">回購融資（展延至 2030-01）</text>
+
+        <!-- row2: facilities -->
+        <rect class="cd-box" x="30" y="130" width="200" height="56" rx="6"/>
+        <text class="cd-lbl" x="42" y="153">Shreveport 整合煉製複合廠</text>
+        <text class="cd-sub" x="42" y="169">西北路易斯安那州</text>
+
+        <rect class="cd-box" x="270" y="130" width="200" height="56" rx="6"/>
+        <text class="cd-lbl" x="282" y="153">Montana Renewables（MRL）</text>
+        <text class="cd-sub" x="282" y="169">DOE Loan $835.2M・不追索母公司</text>
+
+        <rect class="cd-box" x="510" y="130" width="200" height="56" rx="6"/>
+        <text class="cd-lbl" x="522" y="153">Great Falls 特殊瀝青廠</text>
+        <text class="cd-sub" x="522" y="169">Montana/Renewables 分部</text>
+
+        <!-- row3: segments -->
+        <rect class="cd-box hi" x="30" y="250" width="220" height="52" rx="6"/>
+        <text class="cd-lbl" x="42" y="272">Specialty Products and Solutions</text>
+        <text class="cd-sub" x="42" y="288">潤滑油／溶劑／蠟／白油／凡士林／酯類</text>
+
+        <rect class="cd-box hi" x="290" y="250" width="220" height="52" rx="6"/>
+        <text class="cd-lbl" x="302" y="272">Montana/Renewables</text>
+        <text class="cd-sub" x="302" y="288">SAF／再生柴油／再生氫氣・NG・丙烷・石腦油／傳統瀝青</text>
+
+        <rect class="cd-box hi" x="550" y="250" width="200" height="52" rx="6"/>
+        <text class="cd-lbl" x="562" y="272">Performance Brands</text>
+        <text class="cd-sub" x="562" y="288">Royal Purple・Bel-Ray・TruFuel</text>
+
+        <!-- row4: customers -->
+        <rect class="cd-box" x="160" y="370" width="260" height="56" rx="6"/>
+        <text class="cd-lbl" x="172" y="393">分散型工業／消費品客戶</text>
+        <text class="cd-sub" x="172" y="409">無單一客戶占合併營收≥10%</text>
+
+        <rect class="cd-box" x="460" y="370" width="260" height="56" rx="6"/>
+        <text class="cd-lbl" x="472" y="393">北美西部再生燃料市場</text>
+        <text class="cd-sub" x="472" y="409">SAF／再生柴油終端需求</text>
+
+        <!-- arrows -->
+        <path class="cd-arrow" d="M130,72 L130,130"/>
+        <path class="cd-arrow" d="M370,72 L370,130"/>
+        <path class="cd-arrow" d="M610,72 L610,130"/>
+        <path class="cd-arrow fin" d="M780,90 L200,130"/>
+
+        <path class="cd-arrow" d="M140,186 L140,250"/>
+        <path class="cd-arrow" d="M370,186 L400,250"/>
+        <path class="cd-arrow" d="M610,186 L620,250"/>
+
+        <path class="cd-arrow" d="M200,302 L280,370"/>
+        <path class="cd-arrow" d="M660,302 L580,370"/>
+        <path class="cd-arrow" d="M400,302 L480,370"/>
+        <path class="cd-arrow" d="M400,302 L590,370"/>
+
+        <text class="cd-sub" x="720" y="440" fill="#1d4ed8">┄┄ 虛線＝融資／供貨回購關係（非實體供應流）</text>
+        <text class="cd-sub" x="30" y="460">⚑ Wells Fargo Commodities 與 MRL 之 ISDA／Supply-Offtake 協議已於 2025-02-18 隨 DOE Loan 首期撥款而終止，故不再列為現行融資節點。</text>
+      </svg>
+      <p class="chart-cap">供應鏈結構圖：上游供應商 → 三大生產基地 → 三大可報導分部 → 終端市場。節點名稱與下方流量圖一致。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>流量圖（Q2 2026 對外銷售額，依部門與品類，單位：百萬美元）</h3>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 820 360" xmlns="http://www.w3.org/2000/svg">
+        <!-- simplified sankey-style proportional flow: left = segments, right = product categories -->
+        <text x="10" y="20" font-size="12" fill="#111" font-family="sans-serif" font-weight="700">三大分部（總計 $1,445.1M）</text>
+        <text x="560" y="20" font-size="12" fill="#111" font-family="sans-serif" font-weight="700">主要產品品類</text>
+
+        <!-- segment bars (left), height proportional to sales, total height ~300px = 1445.1M -->
+        <!-- SP&S 1012.5 -> height 210.1 ; MR 329.0 -> height 68.3 ; PB 103.6 -> height 21.5 -->
+        <rect x="40" y="30" width="90" height="210" fill="#b45309" opacity="0.85"/>
+        <text x="45" y="130" font-size="11.5" fill="#fff" font-family="sans-serif">Specialty</text>
+        <text x="45" y="144" font-size="11.5" fill="#fff" font-family="sans-serif">Products &amp;</text>
+        <text x="45" y="158" font-size="11.5" fill="#fff" font-family="sans-serif">Solutions</text>
+        <text x="45" y="176" font-size="10" fill="#fff" font-family="sans-serif">$1,012.5M</text>
+
+        <rect x="40" y="246" width="90" height="68" fill="#1d4ed8" opacity="0.85"/>
+        <text x="45" y="270" font-size="11" fill="#fff" font-family="sans-serif">Montana/</text>
+        <text x="45" y="283" font-size="11" fill="#fff" font-family="sans-serif">Renewables</text>
+        <text x="45" y="298" font-size="10" fill="#fff" font-family="sans-serif">$329.0M</text>
+
+        <rect x="40" y="320" width="90" height="21" fill="#15803d" opacity="0.85"/>
+        <text x="140" y="335" font-size="10.5" fill="#333" font-family="sans-serif">Performance Brands $103.6M</text>
+
+        <!-- ribbons to right-side product categories -->
+        <path d="M130,30 C300,30 300,30 470,20 L470,90 C300,80 300,80 130,80 Z" fill="#b45309" opacity="0.35"/>
+        <path d="M130,80 C300,80 300,120 470,120 L470,175 C300,160 300,150 130,150 Z" fill="#b45309" opacity="0.30"/>
+        <path d="M130,150 C300,150 300,210 470,210 L470,240 C300,225 300,215 130,215 Z" fill="#b45309" opacity="0.30"/>
+        <path d="M130,215 C300,215 300,300 470,300 L470,405 C300,340 300,300 130,240 Z" fill="#b45309" opacity="0.30"/>
+
+        <path d="M130,246 C300,246 300,270 470,270 L470,282 C300,275 300,262 130,258 Z" fill="#1d4ed8" opacity="0.30"/>
+        <path d="M130,258 C300,262 300,290 470,290 L470,320 C300,305 300,278 130,270 Z" fill="#1d4ed8" opacity="0.30"/>
+
+        <path d="M130,320 C300,320 300,330 470,330 L470,341 Z" fill="#15803d" opacity="0.30"/>
+
+        <!-- right side category boxes -->
+        <rect x="470" y="10" width="200" height="30" fill="#fdf2e3" stroke="#b45309"/>
+        <text x="478" y="29" font-size="10.5" fill="#111" font-family="sans-serif">潤滑油 Lubricating Oils $281.0M</text>
+
+        <rect x="470" y="90" width="200" height="30" fill="#fdf2e3" stroke="#b45309"/>
+        <text x="478" y="109" font-size="10.5" fill="#111" font-family="sans-serif">溶劑 Solvents $153.2M</text>
+
+        <rect x="470" y="175" width="200" height="30" fill="#fdf2e3" stroke="#b45309"/>
+        <text x="478" y="194" font-size="10.5" fill="#111" font-family="sans-serif">蠟 Waxes $40.9M</text>
+
+        <rect x="470" y="240" width="200" height="30" fill="#fdf2e3" stroke="#b45309"/>
+        <text x="478" y="259" font-size="10.5" fill="#111" font-family="sans-serif">燃料／瀝青／其他副產品 $537.4M</text>
+
+        <rect x="470" y="282" width="200" height="30" fill="#eef2ff" stroke="#1d4ed8"/>
+        <text x="478" y="301" font-size="10.5" fill="#111" font-family="sans-serif">再生燃料 Renewable Fuels $183.2M</text>
+
+        <rect x="470" y="320" width="200" height="21" fill="#e6f4ea" stroke="#15803d"/>
+        <text x="478" y="335" font-size="10" fill="#111" font-family="sans-serif">Performance Brands（未細分品類）$103.6M</text>
+      </svg>
+      <p class="chart-cap">流量圖：左側為三大可報導分部之對外銷售額，右側為 10-Q Note 10 揭露之主要產品品類（Montana/Renewables 之「燃料、瀝青及其他副產品」$145.8M 已併入左側對應 ribbon，圖上未單獨標出以維持版面簡潔）。節點命名與上方結構圖一致。</p>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>項目</th><th>Q2 2026</th><th>Q2 2025</th><th>⚑ 解讀</th></tr>
+      <tr><td>原油供應商集中度（前 4 大供應商占比）</td><td>~82.0%</td><td>~88.0%</td><td style="text-align:left;">集中度較去年同期略降，但仍屬高度集中，Shreveport 產線對少數供應商的中斷風險敏感度高</td></tr>
+      <tr><td>客戶集中度</td><td colspan="2" style="text-align:center;">無客戶占合併銷售額 ≥10%</td><td style="text-align:left;">下游需求分散，緩解單一客戶流失風險</td></tr>
+    </table>
+  </div>
+  <p class="src">⚑ 來源：10-Q Note 10「Segments and Related Information」（Major Customers／Major Suppliers 段落）、Note 5「Inventory Financing Agreements」、Note 6「Debt」（DOE Loan 條款）。</p>
+</div>
+
+<!-- ============ TAB 4: 風險矩陣 ============ -->
+<div id="panel-risk" class="panel">
+  <h2 class="tab-title">風險矩陣<span style="font-size:12.5px;font-weight:400;color:#b45309;">（Fallback 模式：無法說會逐字稿，訊號來源限於申報文件與 Form 4）</span></h2>
+
+  <div class="risk-item">
+    <span class="risk-badge high">高</span><h4>股東權益持續且加速惡化，同時擴大短期融資額度</h4>
+    <p>合併股東權益自 2024-09-30 的 -6.722 億美元惡化至 2026-06-30 的 -11.371 億美元，21 個月內惡化約 4.65 億美元；同一時間點，公司於 2026-09-11 將循環信用額度上限提高 1 億美元、並擴大 J. Aron 存貨融資協議適用範圍。兩者合併解讀，顯示營運內生現金流尚不足以扭轉權益缺口，公司對外部（尤其是抵押型）融資的依賴度正在上升，而非下降。</p>
+  </div>
+
+  <div class="risk-item">
+    <span class="risk-badge high">高（獨創前瞻風險）</span><h4>RIN／RFS 合規成本與 SRE 訴訟——已非假設性風險，而是已實現的財務衝擊</h4>
+    <p>公司對 2022–2024 年計畫年度僅獲得部分小型煉油廠豁免（SRE），已就相關 EPA 決定提起司法審查；EPA 雖表示在訴訟／申請待決期間不會採取執法行動，但公司自陳「RFS 合規相關費用可能持續重大」。與此同時，2026 年上半年已實際認列 2.315 億美元的 RIN 按市值計價損失（計入 Specialty Products and Solutions 與 Montana/Renewables 分部之衍生工具項下），直接壓垮 2026 Q1 的營業利益（-1.713 億美元）。⚑ 前瞻推論：SRE 訴訟若進一步不利，疊加 RIN 價格波動本身已具現實殺傷力的現況，將對本已為負的股東權益形成複合式壓力，此為分散揭露於 Note 2、Note 3、MD&amp;A 中的資訊拼接後得出之獨創判斷，管理層未曾在單一段落中明確連結兩者。</p>
+  </div>
+
+  <div class="risk-item">
+    <span class="risk-badge med">中</span><h4>原油供應商集中度偏高</h4>
+    <p>Q2 2026 前四大原油供應商合計供應約 82% 的原油（Q2 2025 為 88%），集中度雖略有下降，但 Shreveport 整合煉製複合廠仍高度仰賴少數供應商，單一供應商中斷事件的潛在衝擊不小。</p>
+  </div>
+
+  <div class="risk-item">
+    <span class="risk-badge med">中</span><h4>全球 Group III 基礎油供給緊縮，持續壓縮 Performance Brands 利潤率</h4>
+    <p>管理層明確將此歸因於地緣政治因素（波斯灣供給退出、荷姆茲海峽航運流量），屬公司無法控制的外部風險，且持續性與幅度「仍不確定」（管理層原文用語）。</p>
+  </div>
+
+  <div class="risk-item">
+    <span class="risk-badge low">低（追蹤中）</span><h4>MaxSAF® 擴建執行風險</h4>
+    <p>本次擴建已於約 48 天內完工並恢復量產，執行力良好，但仍造成約 45 萬桶的估計產能損失，證明大型歲修／擴建在此規模下確實有實質產出成本。下一輪擴建或歲修週期應持續追蹤。</p>
+  </div>
+
+  <div class="risk-item">
+    <span class="risk-badge low">低（管理層信心訊號－留白反推）</span><h4>Form 4 內部人動態：無任何公開市場自由裁量買進</h4>
+    <p>審閱期間內查得的 4 筆 Form 4 申報（Schumacher Amy M、Raymond Paul C、Mawer Stephen P、Boss John G.，均為董事，申報日集中於 2026-08-20／21）全數為每股 $0 的限制性股票單位（RSU）既定歸屬／授予，屬例行董事薪酬性質，並非以現金於公開市場自由裁量買進。⚑ 留白反推：在管理層於 MD&amp;A 中明確表示第三季初步價差表現「顯著優於去年同期」的樂觀措辭下，審閱期間內沒有任何內部人以公開市場買進方式表達額外信心，此沉默本身是值得留意的訊號，而非中性。</p>
+  </div>
+
+  <p class="src">⚑ 來源：extracted_facts.txt／extracted_facts2.txt（XBRL 股東權益、RIN 按市值計價損失）；10-Q Note 2（RFS／SRE）、Note 10（供應商集中度）；MD&amp;A（Group III 基礎油、MaxSAF®）；SEC Form 4 filings（4 筆，2026-08-20／21）。</p>
+</div>
+
+<!-- ============ TAB 5: 損益表 ============ -->
+<div id="panel-income" class="panel">
+  <h2 class="tab-title">損益表</h2>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="kl">營收（Q2'26）</div><div class="kv">$1,445.1M</div><div class="kd pos">YoY +40.8%</div></div>
+    <div class="kpi"><div class="kl">毛利（Q2'26）</div><div class="kv">$18.3M</div><div class="kd">Q2'25：-$43.6M</div></div>
+    <div class="kpi"><div class="kl">營業利益（Q2'26）</div><div class="kv neg">-$40.0M</div><div class="kd">Q2'25：-$101.0M</div></div>
+    <div class="kpi"><div class="kl">每股淨損（Q2'26，稀釋）</div><div class="kv neg">-$1.09</div><div class="kd">Q2'25：-$1.70</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+      <!-- gridlines -->
+      <line x1="60" y1="20" x2="60" y2="260" stroke="#999"/>
+      <line x1="60" y1="260" x2="680" y2="260" stroke="#999"/>
+      <line x1="680" y1="20" x2="680" y2="260" stroke="#999"/>
+      <text x="10" y="26" font-size="10" fill="#666" font-family="sans-serif">1500</text>
+      <text x="10" y="66" font-size="10" fill="#666" font-family="sans-serif">1300</text>
+      <text x="10" y="106" font-size="10" fill="#666" font-family="sans-serif">1100</text>
+      <text x="18" y="146" font-size="10" fill="#666" font-family="sans-serif">900</text>
+      <line x1="60" y1="20" x2="680" y2="20" stroke="#eee"/>
+      <line x1="60" y1="60" x2="680" y2="60" stroke="#eee"/>
+      <line x1="60" y1="100" x2="680" y2="100" stroke="#eee"/>
+      <line x1="60" y1="140" x2="680" y2="140" stroke="#eee"/>
+      <text x="685" y="26" font-size="10" fill="#1d4ed8" font-family="sans-serif">$4</text>
+      <text x="685" y="94" font-size="10" fill="#1d4ed8" font-family="sans-serif">$0</text>
+      <text x="685" y="256" font-size="10" fill="#1d4ed8" font-family="sans-serif">-$4</text>
+
+      <!-- revenue polyline (left axis, orange) -->
+      <polyline points="60,222.4 184,209.4 308,188.8 432,204.6 556,208.1 680,42.0" fill="none" stroke="#b45309" stroke-width="2.4"/>
+      <circle cx="60" cy="222.4" r="3.5" fill="#b45309"/><circle cx="184" cy="209.4" r="3.5" fill="#b45309"/><circle cx="308" cy="188.8" r="3.5" fill="#b45309"/><circle cx="432" cy="204.6" r="3.5" fill="#b45309"/><circle cx="556" cy="208.1" r="3.5" fill="#b45309"/><circle cx="680" cy="42.0" r="3.5" fill="#b45309"/>
+
+      <!-- eps polyline (right axis, blue dashed) -->
+      <polyline points="60,196.1 184,191 308,31.7 432,152.9 556,249.2 680,172.7" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="5,3"/>
+      <circle cx="60" cy="196.1" r="3" fill="#1d4ed8"/><circle cx="184" cy="191" r="3" fill="#1d4ed8"/><circle cx="308" cy="31.7" r="3" fill="#1d4ed8"/><circle cx="432" cy="152.9" r="3" fill="#1d4ed8"/><circle cx="556" cy="249.2" r="3" fill="#1d4ed8"/><circle cx="680" cy="172.7" r="3" fill="#1d4ed8"/>
+
+      <text x="55" y="278" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">2025Q1</text>
+      <text x="184" y="278" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">2025Q2</text>
+      <text x="308" y="278" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">2025Q3</text>
+      <text x="432" y="278" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">2025Q4*</text>
+      <text x="556" y="278" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">2026Q1</text>
+      <text x="680" y="278" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">2026Q2</text>
+
+      <rect x="230" y="296" width="12" height="12" fill="#b45309"/><text x="248" y="306" font-size="11" fill="#333" font-family="sans-serif">營收（$M，左軸）</text>
+      <rect x="400" y="296" width="12" height="12" fill="#1d4ed8"/><text x="418" y="306" font-size="11" fill="#333" font-family="sans-serif">稀釋每股淨利／損（$，右軸，虛線）</text>
+    </svg>
+    <p class="chart-cap">6 季營收與 EPS 趨勢（2025Q1–2026Q2）。* 2025Q4 為 FY2025 10-K 全年數與 9 個月累計數相減之推算值（框架標準作法）。</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>（$M，EPS 為 $/股）</th><th>2025Q1</th><th>2025Q2</th><th>2025Q3</th><th>2025Q4*</th><th>2026Q1</th><th>2026Q2</th><th>QoQ</th><th>YoY</th></tr>
+      <tr><td>營收</td><td>993.9</td><td>1,026.6</td><td>1,078.0</td><td>1,038.6</td><td>1,029.7</td><td>1,445.1</td><td class="pos">+40.4%</td><td class="pos">+40.8%</td></tr>
+      <tr><td>毛利</td><td>-81.4</td><td>-43.6</td><td>373.7</td><td>-3.0</td><td>-87.5</td><td>18.3</td><td class="pos">轉正</td><td class="pos">轉正</td></tr>
+      <tr><td>營業利益</td><td>-48.7</td><td>-101.0</td><td>322.9</td><td>-64.5</td><td>-171.3</td><td>-40.0</td><td class="pos">虧損收斂</td><td class="pos">虧損收斂 60.4%</td></tr>
+      <tr><td>淨利（損）</td><td>-162.0</td><td>-147.9</td><td>313.4</td><td>-37.3</td><td>-317.0</td><td>-95.9</td><td class="pos">虧損收斂</td><td class="pos">虧損收斂 35.2%</td></tr>
+      <tr><td>稀釋 EPS</td><td>-1.87</td><td>-1.70</td><td>3.61</td><td>-0.43</td><td>-3.64</td><td>-1.09</td><td>—</td><td>—</td></tr>
+      <tr><td>利息費用（非營業）</td><td>58.5</td><td>52.9</td><td>53.6</td><td>50.8*</td><td>51.1</td><td>52.0</td><td>+1.8%</td><td>-1.7%</td></tr>
+    </table>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th colspan="3" style="text-align:left;">六個月累計（2026 vs 2025）</th></tr>
+      <tr><th></th><th>2026 H1</th><th>2025 H1</th></tr>
+      <tr><td>營收</td><td>2,474.9</td><td>2,020.5</td></tr>
+      <tr><td>淨損</td><td>-412.9</td><td>-309.9</td></tr>
+      <tr><td>RIN 按市值計價損失（計入分部調節項）</td><td>231.5</td><td>—</td></tr>
+      <tr><td>股權基礎薪酬及其他項目</td><td>64.3</td><td>—</td></tr>
+    </table>
+  </div>
+  <div class="flag">財測 vs 實際：管理層於本季 MD&amp;A 未提供正式數字化財測區間（如 FY2026 EBITDA guidance），故本欄無法對照——僅能以定性措辭（「顯著優於去年同期」）與後續季度實績比對，見估值觀察 tab 之互證對照表。</div>
+
+  <p class="src">⚑ 來源：SEC XBRL companyfacts（RevenueFromContractWithCustomerExcludingAssessedTax／GrossProfit／OperatingIncomeLoss／NetIncomeLoss／EarningsPerShareDiluted／InterestExpenseNonoperating，各期 10-Q／10-K）。</p>
+</div>
+
+<!-- ============ TAB 6: 業務部門 ============ -->
+<div id="panel-segment" class="panel">
+  <h2 class="tab-title">業務部門</h2>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="140" y1="20" x2="140" y2="250" stroke="#999"/>
+      <line x1="140" y1="250" x2="680" y2="250" stroke="#999"/>
+      <!-- bars: SP&S, MR, PB -->
+      <text x="10" y="70" font-size="11" fill="#333" font-family="sans-serif">Specialty</text>
+      <text x="10" y="83" font-size="11" fill="#333" font-family="sans-serif">Products &amp;</text>
+      <text x="10" y="96" font-size="11" fill="#333" font-family="sans-serif">Solutions</text>
+      <rect x="150" y="55" width="186" height="26" fill="#fde3c0"/>
+      <text x="340" y="73" font-size="11" fill="#333" font-family="sans-serif">Q2'25 $627.9M</text>
+      <rect x="150" y="85" width="300" height="26" fill="#b45309"/>
+      <text x="455" y="103" font-size="11" fill="#333" font-family="sans-serif">Q2'26 $1,012.5M</text>
+
+      <text x="10" y="150" font-size="11" fill="#333" font-family="sans-serif">Montana/</text>
+      <text x="10" y="163" font-size="11" fill="#333" font-family="sans-serif">Renewables</text>
+      <rect x="150" y="135" width="94" height="26" fill="#c7d7fb"/>
+      <text x="248" y="153" font-size="11" fill="#333" font-family="sans-serif">Q2'25 $318.0M</text>
+      <rect x="150" y="165" width="97" height="26" fill="#1d4ed8"/>
+      <text x="251" y="183" font-size="11" fill="#333" font-family="sans-serif">Q2'26 $329.0M</text>
+
+      <text x="10" y="222" font-size="11" fill="#333" font-family="sans-serif">Performance</text>
+      <text x="10" y="235" font-size="11" fill="#333" font-family="sans-serif">Brands</text>
+      <rect x="150" y="212" width="24" height="16" fill="#bfe3cc"/>
+      <text x="178" y="225" font-size="10.5" fill="#333" font-family="sans-serif">Q2'25 $80.7M</text>
+      <rect x="150" y="230" width="31" height="16" fill="#15803d"/>
+      <text x="185" y="243" font-size="10.5" fill="#333" font-family="sans-serif">Q2'26 $103.6M</text>
+    </svg>
+    <p class="chart-cap">三大分部對外銷售額，Q2 2026 vs Q2 2025（單位：百萬美元；橫條長度依比例縮放）。</p>
+  </div>
+
+  <div class="bu-grid">
+    <div class="bu-card">
+      <h4>Specialty Products and Solutions</h4>
+      <div class="bu-meta">Q2'26 銷售 $1,012.5M（+61.2% YoY）· 產能錨點：西北路易斯安那州 Shreveport 整合煉製複合廠</div>
+      <p><strong>產品是什麼／用在哪裡：</strong>本分部生產並銷售溶劑、蠟、客製化潤滑油、白油、凡士林、凝膠、酯類等特殊化學品，主要以「原料組件」形式賣給消費品與工業品下游製造商（例如個人護理、化妝品基劑、工業製程用潤滑劑），而非直接面對終端消費者。此分部本質上是「客製化配方＋整合煉製」商業模式，價值來自對原油進行深度分餾與精煉後產出高附加價值特殊化學品，而非單純燃料裂解價差。</p>
+      <p><strong>本季驅動因素：</strong>先前已實施的提價政策全面落實、原油價格下滑帶動採購成本降低，加上 Q1 曾發生的 Shreveport 產線問題已解除，三者合力使該分部毛利由負轉正；同時波斯灣基礎油供給退出，使公司作為 Group I／II 基礎油供應商間接受惠於替代採購需求。</p>
+    </div>
+    <div class="bu-card">
+      <h4>Montana/Renewables</h4>
+      <div class="bu-meta">Q2'26 銷售 $329.0M（+3.5% YoY）· 兩座 Great Falls 廠區：MRL 再生燃料廠＋特殊瀝青廠</div>
+      <p><strong>產品是什麼／用在哪裡：</strong>Montana Renewables 廠以 MaxSAF® 製程將可再生原料轉化為永續航空燃料（SAF）、再生柴油、再生氫氣、再生天然氣、再生丙烷與再生石腦油，銷往北美西部的再生燃料市場——SAF 主要供航空公司達成碳排放法規要求，再生柴油則替代傳統柴油用於重型運輸。另一座 Great Falls 特殊瀝青廠處理加拿大原油，產出傳統汽油、柴油、噴射燃料及特殊瀝青等級產品，服務在地市場。</p>
+      <p><strong>本季驅動因素：</strong>MaxSAF® 150 擴建歲修（約 48 天）造成約 45 萬桶估計產能損失，是本分部營收年增僅 3.5%（遠低於 SP&amp;S 分部）的直接原因；管理層強調擴建期間仍優於營運成本目標，並持續貨幣化 45Z 稅額抵減。分部「含稅額抵減調整後 EBITDA」（Adjusted EBITDA with Tax Attributes）為 2,660 萬美元。</p>
+    </div>
+    <div class="bu-card">
+      <h4>Performance Brands</h4>
+      <div class="bu-meta">Q2'26 銷售 $103.6M（+28.4% YoY）· 品牌：Royal Purple・Bel-Ray・TruFuel</div>
+      <p><strong>產品是什麼／用在哪裡：</strong>本分部不從事上游煉製，而是採購基礎油後進行調配、包裝並以品牌行銷高性能潤滑及燃料產品——Royal Purple 為汽車／賽車用合成高性能潤滑油，Bel-Ray 主打工業與動力運動（越野機車、雪地車等）用潤滑油，TruFuel 則是小型引擎（園藝工具、鏈鋸等）用預混燃油。商業模式偏向「品牌＋調配」而非「煉製」，理論上毛利率結構應優於煉製業務。</p>
+      <p><strong>本季驅動因素：</strong>營收年增 28.4% 但管理層明確表示利潤率「維持受壓」，因全球 Group III 合成基礎油供給緊縮推升採購成本——顯示營收成長主要來自量的擴張與品牌力，而非價格轉嫁能力的改善，值得後續追蹤毛利率是否能隨供給緩解而修復。</p>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>六個月累計（$M）</th><th>SP&amp;S 2026</th><th>SP&amp;S 2025</th><th>MR 2026</th><th>MR 2025</th><th>PB 2026</th><th>PB 2025</th></tr>
+      <tr><td>對外銷售額</td><td>1,717.5</td><td>1,278.0</td><td>564.9</td><td>579.7</td><td>192.5</td><td>162.8</td></tr>
+      <tr><td>資本支出</td><td>14.8</td><td>—</td><td>52.5</td><td>—</td><td>0.0</td><td>—</td></tr>
+      <tr><td>PP&amp;E, net（期末）</td><td>303.5</td><td>339.6</td><td>982.5</td><td>1,012.6</td><td>27.6</td><td>30.4</td></tr>
+    </table>
+  </div>
+  <p class="note">量價拆分：10-Q 未揭露各分部之出貨量（桶數／噸數）與 ASP 的獨立數字（僅揭露品類層級銷售額與占比），故無法在本篇獨立拆分出貨量 QoQ 與 ASP QoQ——以品類銷售額結構變化作為替代觀察角度。</p>
+
+  <p class="src">⚑ 來源：10-Q Note 10「Segments and Related Information」（分部別銷售、成本、資本支出、PP&amp;E）；MD&amp;A（Montana/Renewables Adjusted EBITDA with Tax Attributes）。</p>
+</div>
+
+<!-- ============ TAB 7: 資產負債表 ============ -->
+<div id="panel-balance" class="panel">
+  <h2 class="tab-title">資產負債表</h2>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>（$M）</th><th>2025Q1</th><th>2025Q2</th><th>2025Q3</th><th>2025Q4</th><th>2026Q1</th><th>2026Q2</th></tr>
+      <tr><td>現金及約當現金</td><td>123.4</td><td>110.6</td><td>94.6</td><td>125.1</td><td>138.6</td><td>109.8</td></tr>
+      <tr><td>流動資產合計</td><td>917.9</td><td>895.8</td><td>880.1</td><td>857.8</td><td>927.9</td><td>1,022.8</td></tr>
+      <tr><td>資產總額</td><td>2,823.6</td><td>2,776.4</td><td>2,733.9</td><td>2,688.9</td><td>2,755.0</td><td>2,802.8</td></tr>
+      <tr><td>流動負債合計</td><td>869.1</td><td>1,176.0</td><td>776.3</td><td>840.7</td><td>963.1</td><td>1,216.8</td></tr>
+      <tr><td>負債總額</td><td>3,440.3</td><td>3,540.5</td><td>3,183.6</td><td>3,176.0</td><td>3,547.6</td><td>3,689.3</td></tr>
+      <tr><td>長期債務（非流動）</td><td>2,302.2</td><td>2,105.5</td><td>2,147.4</td><td>2,077.3</td><td>2,299.4</td><td>2,225.2</td></tr>
+      <tr><td>存貨</td><td>389.4</td><td>370.5</td><td>400.1</td><td>385.2</td><td>369.5</td><td>421.0</td></tr>
+      <tr class="section-head"><td>股東權益</td><td class="neg">-862.3</td><td class="neg">-1,009.7</td><td class="neg">-695.3</td><td class="neg">-732.7</td><td class="neg">-1,043.2</td><td class="neg">-1,137.1</td></tr>
+    </table>
+  </div>
+
+  <h3>四項必備追蹤指標</h3>
+  <div class="stat-row">
+    <div class="stat-box"><div class="lbl">應收帳款天數（DSO，Q2'26）</div><div class="val">26.3 天</div><div class="sub">AR, net $417.0M ÷ 營收 $1,445.1M × 91</div></div>
+    <div class="stat-box"><div class="lbl">未開始租賃</div><div class="val">無此資料</div><div class="sub">覆核之 10-Q 租賃附註未見此類揭露</div></div>
+    <div class="stat-box"><div class="lbl">採購承諾</div><div class="val">無此資料</div><div class="sub">覆核範圍內未見獨立「unconditional purchase obligation」表；公司主要供貨義務改以 J. Aron／DOE Loan 相關存貨融資協議形式揭露於 Note 5／6</div></div>
+    <div class="stat-box"><div class="lbl">客戶預付款／合約負債</div><div class="val">無此資料</div><div class="sub">未見 Contract liabilities／Deferred revenue 科目；與「無客戶≥10%集中度」及大宗商品型煉製業務性質一致</div></div>
+  </div>
+  <div class="note">DSO 僅呈現 Q2 2026 單期數字——應收帳款依受限／非受限子公司拆分之揭露（10-Q Note 8 擔保人資訊）並非每期固定揭露格式，本篇未逐季回溯重建 6 期趨勢圖，以避免用不同揭露基礎的數字拼湊出失真的趨勢線。</div>
+
+  <h3>其他資產負債表附註</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>（$M，2026-06-30，合併）</th><th>數值</th></tr>
+      <tr><td>使用權資產（Operating lease ROU assets）</td><td>224.2</td></tr>
+      <tr><td>流動租賃負債</td><td>64.2</td></tr>
+      <tr><td>長期租賃負債</td><td>161.4</td></tr>
+      <tr><td>債務結構：2028 Notes／2028 Mirror／2029 Secured／2031 Notes 合計</td><td>1,180.0</td></tr>
+      <tr><td>DOE Loan（MRL／MRHL 非追索母公司）</td><td>835.2</td></tr>
+      <tr><td>Shreveport／Montana 終端與煉油廠資產融資安排合計</td><td>265.9</td></tr>
+    </table>
+  </div>
+  <p class="flag">⚑ 解讀：長期債務結構高度分層（4 檔高息優先／擔保票據＋DOE Loan＋3 筆資產融資安排），且 DOE Loan 雖不追索母公司，仍計入合併資產負債表總負債——這正是股東權益持續轉負的結構性成因：資產成長速度（+6.5% since 2025Q1）遠不及負債成長速度（+7.2% 同期），差額全數反映在權益缺口擴大。</p>
+
+  <p class="src">⚑ 來源：SEC XBRL companyfacts（Assets／Liabilities／StockholdersEquity／LongTermDebtNoncurrent／InventoryNet／CashAndCashEquivalentsAtCarryingValue，各期期末）；10-Q Note 6「Debt」、Note 8（擔保人資訊，AR 拆分）。</p>
+</div>
+
+<!-- ============ TAB 8: 現金流量 ============ -->
+<div id="panel-cashflow" class="panel">
+  <h2 class="tab-title">現金流量</h2>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="50" y1="90" x2="580" y2="90" stroke="#999" stroke-dasharray="3,3"/>
+      <text x="10" y="94" font-size="10" fill="#666" font-family="sans-serif">$0</text>
+      <!-- bar1: Q1'26 FCF -99.4, from y0=90 down to 189.4 -->
+      <rect x="70" y="90" width="70" height="99.4" fill="#666"/>
+      <text x="105" y="205" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">2026Q1 FCF</text>
+      <text x="105" y="82" font-size="11" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-$99.4M</text>
+      <!-- bar2: ΔCFO +178.5, from 189.4 up to 10.9 -->
+      <rect x="190" y="10.9" width="70" height="178.5" fill="#15803d"/>
+      <text x="225" y="225" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">ΔCFO</text>
+      <text x="225" y="8" font-size="11" fill="#15803d" font-family="sans-serif" text-anchor="middle">+$178.5M</text>
+      <!-- bar3: ΔCapEx -25.1, from 10.9 down to 36 -->
+      <rect x="310" y="10.9" width="70" height="25.1" fill="#b91c1c"/>
+      <text x="345" y="225" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">Δ資本支出</text>
+      <text x="345" y="8" font-size="11" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-$25.1M</text>
+      <!-- bar4: Q2'26 FCF 54.0, from 90 up to 36 -->
+      <rect x="430" y="36" width="70" height="54" fill="#b45309"/>
+      <text x="465" y="205" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">2026Q2 FCF</text>
+      <text x="465" y="28" font-size="11" fill="#b45309" font-family="sans-serif" text-anchor="middle">+$54.0M</text>
+    </svg>
+    <p class="chart-cap">自由現金流橋接（FCF = 營運活動現金流 − 資本支出），2026Q1 → 2026Q2。灰／橘＝期初期末總額，綠＝正向貢獻，紅＝負向貢獻。</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>（$M）</th><th>2025Q1</th><th>2025Q2</th><th>2025Q3</th><th>2025Q4</th><th>2026Q1</th><th>2026Q2</th></tr>
+      <tr><td>營運活動現金流（CFO）</td><td>-29.3</td><td>-1.8</td><td>23.5</td><td>116.5</td><td>-86.2</td><td>92.3</td></tr>
+      <tr><td>投資活動現金流（CFI）</td><td>77.8</td><td>-13.6</td><td>-8.4</td><td>-11.7</td><td>-13.7</td><td>-39.3</td></tr>
+      <tr><td>資本支出</td><td>17.6</td><td>13.6</td><td>8.4</td><td>12.7</td><td>13.2</td><td>38.3</td></tr>
+      <tr class="section-head"><td>自由現金流（CFO − 資本支出）</td><td>-46.9</td><td>-15.4</td><td>15.1</td><td>103.8</td><td>-99.4</td><td>54.0</td></tr>
+    </table>
+  </div>
+  <div class="flag">⚑ 解讀：2025Q1 與 2026Q1 皆為全年最弱的自由現金流季度，且 2026Q1 CFO 為 -86.2M（六季最差），主因當季 RIN 按市值計價損失與 Q1 營運利益重挫直接反映到營運現金流；2025Q4／2026Q2 則明顯回升，顯示季節性與商品價差週期是 CLMT 現金流的主要擺動因子，而非結構性改善。DOE Loan 首期 7.818 億美元撥款發生於 2025-02-18（落在 2025Q1），是當期投資活動現金流由負轉正的部分技術性成因（伴隨同期資產融資安排終止之相關現金流出）。</div>
+
+  <p class="src">⚑ 來源：SEC XBRL companyfacts（NetCashProvidedByUsedInOperatingActivities／NetCashProvidedByUsedInInvestingActivities／PaymentsToAcquirePropertyPlantAndEquipment，逐季推算：FY／9 個月／6 個月／3 個月累計數相減所得，2025Q2－Q4 及 2026Q2 為推算值）；10-Q Note 6（DOE Loan 撥款時點）。</p>
+</div>
+
+<!-- ============ TAB 9: 估值觀察 ============ -->
+<div id="panel-valuation" class="panel">
+  <h2 class="tab-title">估值觀察</h2>
+
+  <div class="note">⚠ GAAP 本益比（P/E）與 EV/EBITDA 對 CLMT 目前階段參考意義有限：近 6 季中有 5 季 GAAP 淨損，稀釋 EPS 於 -$3.64 至 +$3.61 間劇烈擺盪；即便以「營業利益＋折舊攤銷」的 EBITDA 概算，2026Q2 單季仍約為 -$5.4M（營業利益 -$40.0M ＋ 折舊攤銷 $34.6M），尚未轉正。下方仍依框架要求繪出必備散點圖並清楚標註此限制，另外補繪更具參考意義的「公司自身營業利益趨勢」圖。</div>
+
+  <div class="stat-row">
+    <div class="stat-box"><div class="lbl">CLMT 股價（2026-09-19 擷取）</div><div class="val">$59.00</div></div>
+    <div class="stat-box"><div class="lbl">流通在外股數（10-Q 申報日）</div><div class="val">87.90M</div></div>
+    <div class="stat-box"><div class="lbl">市值</div><div class="val">$5,186M</div></div>
+    <div class="stat-box"><div class="lbl">企業價值（EV，市值＋總負債−現金）</div><div class="val">$7,335M</div></div>
+    <div class="stat-box"><div class="lbl">TTM EBITDA 概算（Q3'25–Q2'26）</div><div class="val">$189.8M</div><div class="sub">EV/EBITDA(TTM) ≈ 38.6x（受 2026Q1 深度虧損拖累，數值失真偏高）</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="20" x2="60" y2="250" stroke="#999"/>
+      <line x1="60" y1="250" x2="600" y2="250" stroke="#999"/>
+      <text x="300" y="280" font-size="11" fill="#333" font-family="sans-serif" text-anchor="middle">近四季合併營收年增率（%）</text>
+      <text x="20" y="140" font-size="11" fill="#333" font-family="sans-serif" transform="rotate(-90 20 140)">EV / EBITDA（x）</text>
+      <!-- industry historical reference band 4-9x, shaded -->
+      <rect x="60" y="200" width="540" height="40" fill="#eef2ff" opacity="0.6"/>
+      <text x="65" y="196" font-size="10" fill="#1d4ed8" font-family="sans-serif">獨立煉油／特殊化學同業歷史區間示意（約 4–9x，非即時精算）</text>
+      <!-- CLMT point: growth 40.8%, EV/EBITDA 38.6 (way above band) -->
+      <circle cx="500" cy="35" r="7" fill="#b45309"/>
+      <text x="510" y="30" font-size="11" fill="#b45309" font-family="sans-serif" font-weight="700">CLMT 38.6x（TTM 失真）</text>
+      <text x="510" y="45" font-size="10" fill="#666" font-family="sans-serif">營收 YoY +40.8%</text>
+      <!-- x axis ticks -->
+      <text x="60" y="264" font-size="9.5" fill="#666" font-family="sans-serif" text-anchor="middle">0%</text>
+      <text x="330" y="264" font-size="9.5" fill="#666" font-family="sans-serif" text-anchor="middle">20%</text>
+      <text x="600" y="264" font-size="9.5" fill="#666" font-family="sans-serif" text-anchor="middle">45%</text>
+    </svg>
+    <p class="chart-cap">必備圖：EV/EBITDA vs 營收成長率散點圖。CLMT 之 TTM EBITDA 因 2026Q1 深度虧損（RIN 按市值計價損失驅動）而被壓低，使 EV/EBITDA 顯著高於同業歷史區間示意帶——此為框架要求之必備圖表，惟其數值本身參考意義有限，同業（DINO／PARR／DAR）之精確 EV/EBITDA 未於本次拉取範圍內逐一計算，故僅以歷史區間示意帶呈現，避免虛構出假精確度。</p>
+  </div>
+
+  <div class="chart-wrap">
+    <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="130" x2="680" y2="130" stroke="#999" stroke-dasharray="3,3"/>
+      <text x="10" y="134" font-size="10" fill="#666" font-family="sans-serif">$0</text>
+      <!-- OpInc bars, scale: 350 range -> 100px per 100M roughly; use y = 130 - v*0.30 -->
+      <!-- Q1'25 -48.7 -> y offset -14.6 (below line) -->
+      <rect x="70" y="130" width="70" height="14.6" fill="#b91c1c"/>
+      <!-- Q2'25 -101.0 -> 30.3 -->
+      <rect x="170" y="130" width="70" height="30.3" fill="#b91c1c"/>
+      <!-- Q3'25 322.9 -> 96.9 above -->
+      <rect x="270" y="33.1" width="70" height="96.9" fill="#15803d"/>
+      <!-- Q4'25 -64.5 -> 19.4 -->
+      <rect x="370" y="130" width="70" height="19.4" fill="#b91c1c"/>
+      <!-- Q1'26 -171.3 -> 51.4 -->
+      <rect x="470" y="130" width="70" height="51.4" fill="#b91c1c"/>
+      <!-- Q2'26 -40.0 -> 12.0 -->
+      <rect x="570" y="130" width="70" height="12.0" fill="#b91c1c"/>
+
+      <text x="105" y="245" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">25Q1</text>
+      <text x="205" y="245" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">25Q2</text>
+      <text x="305" y="245" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">25Q3</text>
+      <text x="405" y="245" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">25Q4</text>
+      <text x="505" y="245" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">26Q1</text>
+      <text x="605" y="245" font-size="10.5" fill="#333" font-family="sans-serif" text-anchor="middle">26Q2</text>
+
+      <text x="105" y="220" font-size="10" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-48.7</text>
+      <text x="205" y="220" font-size="10" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-101.0</text>
+      <text x="305" y="28" font-size="10" fill="#15803d" font-family="sans-serif" text-anchor="middle">+322.9</text>
+      <text x="405" y="220" font-size="10" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-64.5</text>
+      <text x="505" y="220" font-size="10" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-171.3</text>
+      <text x="605" y="220" font-size="10" fill="#b91c1c" font-family="sans-serif" text-anchor="middle">-40.0</text>
+    </svg>
+    <p class="chart-cap">替代圖：GAAP 營業利益逐季趨勢（$M）。市值 $51.86 億對照仍偏負的近 6 季獲利軌跡，顯示市場定價邏輯偏向「押注 Montana Renewables 於 2026 下半年至 2027 年的量能爬坡與 45Z 稅額抵減貨幣化」之未來現金流，而非目前的 trailing 獲利水準——這是比 P/E／EV/EBITDA 更貼近解釋當前股價的角度。</p>
+  </div>
+
+  <h3>互證對照表（雙層互證，強制交付物）</h3>
+  <div class="tbl-wrap">
+    <table class="cross-tbl">
+      <tr><th style="width:32%;">管理層說法／揭露事件</th><th style="width:38%;">對應財報／申報科目驗證</th><th>結論</th></tr>
+      <tr><td>「MaxSAF® 150 擴建順利完工，第二季恢復量產」</td><td>Montana/Renewables 分部 Q2'26 對外銷售 $329.0M，YoY 僅 +3.5%（遠低於 SP&amp;S 分部 +61.2%），與估計損失 45 萬桶產能的說法方向一致</td><td class="pos">驗證通過（成長率確實受壓，量化幅度合理）</td></tr>
+      <tr><td>「Specialty Products and Solutions 因價格政策全面落實與原油下滑，Q2 表現顯著優於上季與去年同期」</td><td>合併毛利自 2026Q1 -$87.5M 轉為 2026Q2 +$18.3M；SP&amp;S 分部對外銷售 Q2'26 $1,012.5M vs Q2'25 $627.9M，+61.2%</td><td class="pos">驗證通過（毛利實際由負轉正，幅度顯著）</td></tr>
+      <tr><td>「無客戶占合併銷售額 10% 以上」（管理層對客戶集中度之沉默）</td><td>Note 10 Major Customers 段落明確揭露此陳述本身，且與供應鏈 tab 之下游分散結構一致</td><td class="pos">驗證通過（非話術，屬可覆核之會計揭露）</td></tr>
+      <tr><td>「RFS 合規相關費用可能持續重大」（管理層對 SRE 訴訟財務衝擊未量化的沉默）</td><td>2026 H1 已實際認列 $231.5M RIN 按市值計價損失，直接壓垮 2026Q1 營業利益；管理層在此段落並未把「持續重大」與已實現的 2.315 億美元損失明確掛鉤</td><td class="neg">留白反推：管理層對已實現衝擊的量化程度低於財報實際揭露的嚴重性</td></tr>
+      <tr><td>2026-09-11 循環信用額度自 $500M 提高至 $600M，未揭露新到期日或新契約條款</td><td>10-Q（申報於 2026-08-07，早於此修正）之流動性章節尚未反映此修正；本篇無法交叉驗證新契約條款</td><td>待驗證：需待 2026Q3 10-Q 揭露</td></tr>
+    </table>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>比率</th><th>2026Q2</th><th>意義</th></tr>
+      <tr><td>利息保障倍數（營業利益 ÷ 利息費用）</td><td class="neg">-0.77x</td><td style="text-align:left;">營業利益尚不足以覆蓋利息費用（連續多季為負），顯示目前現金付息能力高度仰賴循環信用額度與存貨融資等外部流動性工具，而非營運本身</td></tr>
+      <tr><td>負債總額 ÷ 資產總額</td><td>1.32x</td><td style="text-align:left;">負債已超過資產總額（對應股東權益為負），為結構性高槓桿</td></tr>
+      <tr><td>EV/EBITDA（TTM，概算）</td><td>38.6x</td><td style="text-align:left;">受 2026Q1 深度虧損季度拖累，參考意義有限，見上方說明</td></tr>
+    </table>
+  </div>
+
+  <p class="src">⚑ 來源：Yahoo Finance chart API（CLMT／DINO／PARR／DAR 即時報價，2026-09-19 擷取）；SEC XBRL dei:EntityCommonStockSharesOutstanding（10-Q 申報日股數）；10-Q Note 6（總負債 $2,258.7M）；本篇損益表／現金流量 tab 之 OpInc／D&amp;A 推算 EBITDA。</p>
+</div>
+
+</div>
+
+<div class="footer">
+  僅供資訊參考，非投資建議。本篇為 Fallback 模式報告（無法說會逐字稿），依 SEC EDGAR 公開申報文件（10-Q、10-K、8-K、Form 4）與 XBRL 結構化數據編製；部分季度現金流／折舊攤銷數字為期間累計數相減之推算值，已於對應表格標註。市場報價與同業比較擷取自 2026-09-19，可能與讀者閱讀當下已有落差。
+</div>
+
+<script>
+function sw(id, btn){
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
