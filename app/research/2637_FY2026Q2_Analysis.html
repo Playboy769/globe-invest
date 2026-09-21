@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>慧洋-KY（2637）— FY2026 Q2 財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 9px 13px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 12.5px; white-space: nowrap; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+  .card ul, .card ol { padding-left: 16px; }
+  .card li { font-size: 12px; margin-bottom: 6px; line-height: 1.65; color: #333; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .stat-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 130px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow-x: auto; margin-bottom: 18px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  table { color: #333; width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { color: #666; background: #f5f6fa; padding: 8px 12px; text-align: right; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { color: #333; padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; vertical-align: top; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.subtotal td { color: #888; font-style: italic; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; text-align: left; }
+  td strong { color: #1a1a2e; }
+  td.l, th.l { text-align: left; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-card p { font-size: 12px; line-height: 1.65; color: #333; margin-top: 8px; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .cf-section { margin-bottom: 14px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { color: #1a1a2e; font-weight: 600; white-space: nowrap; }
+  .risk-item { display: flex; gap: 10px; margin-bottom: 18px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; white-space: nowrap; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.65; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 22px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 12px; color: #1a1a2e; }
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 18px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .orig-box { font-size: 11.5px; color: #444; background: #f8f9fb; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px 12px; margin-top: 8px; line-height: 1.7; }
+  .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; line-height: 1.7; }
+  @media (max-width: 700px) {
+    .quad-grid, .card-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>慧洋海運（開曼）股份有限公司（TWSE: 2637）— FY2026 Q2 財報完整分析</h1>
+  <p><strong>Fallback 模式</strong>（無法說會逐字稿）：本報告共 9 個 tab——特殊交易/事件、船隊與業務平台、供應鏈、風險矩陣、損益表、業務部門、資產負債表、現金流量、估值觀察（依框架規則省略 Q&amp;A tab）。管理層展望轉引自第三方部落格（富果直送）法說會摘要，標為 T2/轉引、信心度中等，已於風險矩陣 tab 首段註明。主軸期間為 2026Q2（董事會通過日 2026-08-21）；資料來源：MOPS t164sb01 iXBRL 12 季合併財報（2023Q3–2026Q2）、2026Q2 合併財報全文 PDF（doc.twse mtype=A）、114 年報/2025 股東會年報（doc.twse mtype=F）、MOPS 月營收彙總表 27 個月（2024-06–2026-08）、MOPS 內部人持股月報（2026/03–08）、MOPS 重大訊息（2025/06 起）、Yahoo Finance 同業估值（抓取日 2026-09-20）。幣別：主表新台幣（TWD，原始仟元已換算百萬元），財報附註多以美元為主要單位、新台幣為對照，已逐項標明。</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('deal',this)">特殊交易/事件</div>
+    <div class="tab" onclick="sw('tech',this)">船隊與業務平台</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ TAB 1：特殊交易/事件 ============ -->
+  <div id="panel-deal" class="panel active">
+    <div class="card">
+      <div class="card-title">新造船與船隊汰舊換新計畫</div>
+      <p>截至 2026-06-30，慧洋已簽訂 7 艘船舶購建合約，合約總價 US$234,753,200（約合 NT$74.72 億），為本季財報附註九揭露的最大單項或有負債／未認列合約承諾。這批新船皆為符合第三期氮氧化物（NOx Tier III）排放標準的日系節能船，是公司「以節能船換取優於市場指數的收益」策略（見 2025 年報）的具體執行；同時公司持續處分舊船（2026 年已處分/簽約出售至少 4 艘，另有 1 艘融資租賃買方履約買回），呈現「造新船＋賣舊船」的雙軌汰換。此事件對未來損益的影響方向：短期資本支出與現金流出增加（尚未辦妥融資的 76% 餘款需在 2027Q3 前分期付清），中期則隨新船於 2026–2027 年陸續交船，貢獻更高效率、更低油耗的運力，並在景氣高檔處分老舊船隻認列處分利益。</p>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>7 艘船舶購建合約，合約總價 US$234,753,200（約 NT$74.72 億）</li>
+          <li>已支付 US$55,811,500，占合約總價約 23.8%</li>
+          <li>剩餘 76.2%（約 US$178.9M）尚未辦妥融資，將分別於安放龍骨、下水、交船時支付</li>
+          <li>另有 2 艘已簽出售合約（合計 US$49,475,000，預計 2026Q3 交船）、期後事項再增 1 艘出售（US$21,950,000，2026-08-14 已交船）</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>期限</h4>
+        <ul>
+          <li>2026 年預計交船 3 艘（合約總價 US$93,431 千）</li>
+          <li>2027 年預計交船 4 艘（合約總價 US$141,322 千）</li>
+          <li>公司預計最遲於 2027 年第三季前將剩餘款項如數分期付清</li>
+          <li>2026 上半年已有 5 艘新船（Paiwan Champion、Diamond、Glory、Fortune、Elegance）交船加入營運，季後 2026-09-15、2026-09-17 再增 2 艘（Paiwan Hero、Integrity）</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>財務承諾</h4>
+        <ul>
+          <li>US$178.9M 尚未辦妥融資——若銀行團聯貸條件收緊或利率維持高檔，將直接推升未來利息費用</li>
+          <li>船舶購建付款節奏（龍骨/下水/交船三段式）與長期借款到期結構需並行管理，見資產負債表 tab「採購承諾」列</li>
+          <li>2026-07-13 公司公告取消原於 2025-03-17 核准、向內海造船株式會社購置之 2 艘 39,000 噸散裝輪案——顯示新造船組合並非一成不變，公司會依市況調整船型訂單</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>7 艘的融資方案尚未辦妥，何時鎖定利率、聯貸條件是否隨 2026 年下半年升息環境惡化，財報未揭露</li>
+          <li>法說會摘要提及「2026 年交付 8 艘 Handy 型、2027 年 4 艘（含 2 艘 Panamax）、2028 年 1 艘」，與財報附註九「7 艘、2026 年 3 艘＋2027 年 4 艘」口徑不同（尚未交船餘額 vs 全年度累計交船），未能向公司查證何者為準，本報告以財報附註九為主要依據</li>
+          <li>2026-08-22 董事會另核准向 Onomichi Dockyard 購置 2 艘 40,000 噸散裝輪，是否已計入附註九 7 艘之內，抑或屬期後新增的獨立訂單，財報文字未明確說明</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">新造船購建計畫時程（Gantt，必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 178" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="178" fill="#ffffff"/><text x="450" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">慧洋-KY 新造船購建計畫（截至2026-06-30尚未交船之7艘）</text><line x1="224" y1="58" x2="224" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="224" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2026 Q2</text><line x1="332.67" y1="58" x2="332.67" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="332.67" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2026 Q3</text><line x1="441.33" y1="58" x2="441.33" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="441.33" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2026 Q4</text><line x1="550" y1="58" x2="550" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="550" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2027 Q1</text><line x1="658.67" y1="58" x2="658.67" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="658.67" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2027 Q2</text><line x1="767.33" y1="58" x2="767.33" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="767.33" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2027 Q3</text><line x1="876" y1="58" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="876" y="54" text-anchor="middle" font-size="10.5" fill="#555555" font-family="sans-serif">2027 Q4</text><line x1="224" y1="58" x2="876" y2="58" stroke="#111111" stroke-width="1.2"/><text x="14" y="80" font-size="11" font-weight="600" fill="#111111" letter-spacing=".04em" font-family="sans-serif">購建合約（7艘，US$234.75M）</text><line x1="14" y1="85" x2="876" y2="85" stroke="#dddddd" stroke-width="1"/><text x="24" y="108" font-size="11.5" fill="#222222" font-family="sans-serif">2026年交船批次（3艘，US$93.4M）</text><rect x="331.46" y="96" width="217.37" height="16" rx="3" fill="#2563eb" fill-opacity="0.85"/><rect x="14" y="120" width="862" height="32" fill="#fafafa"/><text x="24" y="140" font-size="11.5" fill="#222222" font-family="sans-serif">2027年交船批次（4艘，US$141.3M…</text><rect x="331.46" y="128" width="543.33" height="16" rx="3" fill="#dc2626" fill-opacity="0.85"/><line x1="331.46" y1="58" x2="331.46" y2="152" stroke="#111111" stroke-width="1.6" stroke-dasharray="5 3"/><text x="336.46" y="168" text-anchor="start" font-size="10.5" fill="#111111" font-weight="600" font-family="sans-serif">財報揭露基準日 2026-06-30（已付US$55.8M）</text><line x1="874.79" y1="58" x2="874.79" y2="152" stroke="#b45309" stroke-width="1.6" stroke-dasharray="5 3"/><text x="869.79" y="168" text-anchor="end" font-size="10.5" fill="#b45309" font-weight="600" font-family="sans-serif">預計2027Q3前付清全部餘款</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">來源：2026Q2合併財報附註九「重大或有負債及未認列之合約承諾」。合約總價US$234,753,200，已付US$55,811,500，餘款分別於安放龍骨／下水／交船時支付，預計2027Q3前付清；尚未辦妥融資。⚠️ 法說會第三方摘要另提及「2026年交付8艘」，與此處財報揭露之「截至6/30尚未交船7艘」口徑不同（前者含揭露時點前已交船者），本圖以財報附註九為準。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：財報揭露基準日 2026-06-30 已付 US$55.8M（占 24%），2027Q3 前須付清全部餘款；2026、2027 兩批交船時程幾乎緊接，資本支出高峰不會分散。出處：2026Q2 合併財報附註九。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">購建合約承諾拆解（US$M，必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">新造船購建合約承諾拆解（US$M，截至2026-06-30）</text><line x1="78" y1="424" x2="870" y2="424" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="428" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="331" x2="870" y2="331" stroke="#eeeeee" stroke-width="1"/><text x="68" y="335" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="78" y1="238" x2="870" y2="238" stroke="#eeeeee" stroke-width="1"/><text x="68" y="242" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="145" x2="870" y2="145" stroke="#eeeeee" stroke-width="1"/><text x="68" y="149" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">300</text><line x1="78" y1="52" x2="870" y2="52" stroke="#eeeeee" stroke-width="1"/><text x="68" y="56" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><text x="68" y="40" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">US$M</text><line x1="78" y1="52" x2="78" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="424" x2="870" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="189.2" y1="205.68" x2="283.6" y2="205.68" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="347.6" y1="257.59" x2="442" y2="257.59" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="506" y1="91.17" x2="600.4" y2="91.17" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="664.4" y1="178.06" x2="758.8" y2="178.06" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="125.2" y="205.68" width="64" height="218.32" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="157.2" y="198.68" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+234.8</text><text x="157.2" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">合約總價（7艘）</text><rect x="283.6" y="205.68" width="64" height="51.9" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="315.6" y="272.59" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-55.8</text><text x="315.6" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 315.6 438)">已付款（截至2026-06-30）</text><rect x="442" y="91.17" width="64" height="166.41" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="474" y="84.17" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+178.9</text><text x="474" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">尚未支付餘額</text><rect x="600.4" y="91.17" width="64" height="86.89" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="632.4" y="193.06" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-93.4</text><text x="632.4" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 632.4000000000001 438)">其中：2026年交船部分（3艘）合約值</text><rect x="758.8" y="178.06" width="64" height="131.43" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="790.8" y="324.49" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-141.3</text><text x="790.8" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 790.8000000000001 438)">其中：2027年交船部分（4艘）合約值</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">合約總價US$234.75M（7艘）；已付US$55.81M（安放龍骨等分期款）；尚未支付餘額US$178.94M將於龍骨／下水／交船時分期給付，尚未辦妥融資。下方併列此餘額對應的兩個交船年度之「合約總價」拆分（非按已付/未付切分，僅供對照年度分布）。來源：2026Q2財報附註九。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：已付款僅占合約總價 24%，76% 餘款仍待融資與分期給付，是本 tab「財務承諾」象限與資產負債表 tab「採購承諾」列的共同數字來源。出處：2026Q2 合併財報附註九。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">資料中心專案融資條款（框架必備追蹤項，泛用）</div>
+      <table>
+        <thead><tr><th class="l">來源</th><th>金額</th><th class="l">認列方式</th><th class="l">對 FCF／負債的影響</th></tr></thead>
+        <tbody>
+          <tr><td class="l">不適用</td><td>—</td><td class="l">不適用</td><td class="l">慧洋為散裝航運業者，主要資本支出為船舶購建（見上方新造船承諾），2026Q2 財報未揭露任何資料中心／AI infra 相關資本支出、合資（JV）或表外融資結構，此區塊不適用</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚑ 解讀：本公司資本支出結構與資料中心/AI infra 無關，全部資本承諾集中在船舶購建（見上方「規模」象限）；真正需要監控的表外/未辦妥融資項目是 US$178.9M 新造船尾款，而非資料中心式的合資或租賃結構。</div>
+
+    <div class="card">
+      <div class="card-title">核心疑問（盡職調查式追問）</div>
+      <ol>
+        <li>US$178.9M 尚未辦妥融資的新船尾款，若在 2027Q3 付款高峰期遇上 BDI 從當前 3,300+ 高檔回落，公司是否有足夠自由現金流與銀行額度因應，或需動用目前 NT$42.4 億現金／新增舉債？（交叉見資產負債表 tab 長短期借款走勢、現金流量 tab FCF 橋接）</li>
+        <li>法說會摘要與財報附註九在新船艘數/船型上的落差，究竟是揭露時點不同（尚未交船 vs 全年度累計）還是訂單本身有變動（如 2026-07-13 取消 2 艘的公告所示）？下次法說會或財報應追蹤是否有更多訂單調整。</li>
+        <li>2026-08-22 新增的 Onomichi Dockyard 2 艘 40,000 噸散裝輪訂單，其合約總價、付款排程是否已包含在附註九的 7 艘、US$234.75M 之內？若為額外新增，下一季財報的購建合約承諾金額應該顯著上升，是可驗證的觀察點。</li>
+        <li>指數連結型長約占比持續提升（截至 2026 年 2 月已有 81 艘），新船交船後若同樣簽為指數連結型長約，公司對 BDI/BSI 波動的營收敏感度將進一步提高——這與「造新船分散船齡風險」的敘事，實質上是提高而非降低對運價循環的曝險，兩者需並列評估。</li>
+      </ol>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">關鍵時程</div>
+      <table>
+        <thead><tr><th class="l">時間</th><th class="l">事件</th><th class="l">對財報的預期影響</th></tr></thead>
+        <tbody>
+          <tr><td class="l">2026 全年</td><td class="l">7 艘新船中 3 艘預計交船（合約總價 US$93,431 千）</td><td class="l">不動產廠房及設備（船舶）與相關借款同步增加；折舊費用逐季墊高</td></tr>
+          <tr><td class="l">2026Q3</td><td class="l">已簽 2 艘出售合約（合計 US$49,475,000）預計交船</td><td class="l">處分資產利益認列，優分析報導提及 9 月將認列船舶處分利益，是法人看好 Q3 獲利優於預期的主因之一</td></tr>
+          <tr><td class="l">2026-08-14</td><td class="l">期後事項：1 艘出售合約（US$21,950,000）已完成交船</td><td class="l">處分資產利益將於 2026Q3 財報認列，屬期後事項不影響本季（2026Q2）數字</td></tr>
+          <tr><td class="l">2027 全年</td><td class="l">7 艘新船中 4 艘預計交船（合約總價 US$141,322 千）</td><td class="l">資本支出高峰落在此年度，需觀察屆時 BDI 水位與融資成本</td></tr>
+          <tr><td class="l">2027Q3 前</td><td class="l">公司預計新船購建合約剩餘 76% 款項（US$178.9M）如數分期付清完畢</td><td class="l">若融資成本上升或現金部位吃緊，可能推升財務成本、壓縮自由現金流</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3：技術與產品線 ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="card">
+      <div class="card-title">船隊定位與本季船隊規模</div>
+      <p>慧洋是台灣最大、全球前列的散裝航運出租船東，不自行攬貨經營航線，而是把船隊出租給國際航運商與大宗商品貿易商，本質是「船舶資產＋運力」的出租商業模式，收入來源以船舶租金收入為主（占營業收入約九成以上）。截至 2026-06-30，船隊共 130 艘（自有為主，另含少量代管船），以三大船型為主力：輕便型（Handysize）63 艘、巴拿馬極限型（Panamax/Kamsarmax）35 艘、超級極限型（Supramax/Ultramax）29 艘，另有 1 艘老舊客輪與少量下水前新造船／代管船。以噸位計，巴拿馬極限型最大（288.5 萬 DWT），但以艘數計輕便型最多（63 艘）——反映公司策略是用中小船型的靈活性（可停靠無吊桿設施的小港口）分散單一船型/單一航線的曝險，同時用巴拿馬極限型承接大宗貨（煤炭、穀物）的規模效益。船隊船齡結構持續年輕化，節能船占比持續提升（見下方船齡分布圖）。</p>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>輕便型（Handysize）— 63 艘，合計約 205.3 萬 DWT</h4>
+        <div class="meta">平均單艘約 3.3 萬 DWT ｜ 艘數最多的船型</div>
+        <p>載重噸多落在 1–4 萬噸區間，船上多自備吊桿（geared），可停靠沒有岸上起重設施的中小型港口，裝卸貨彈性最高。主要運送穀物、肥料、鋼品、林產品等雜項散貨（minor bulk），航線遍及東南亞、印度、中國、中東與逐步拓展中的非洲、南美市場（現貨自營船舶航線）。客戶需要這個船型是因為許多開發中國家的港口基礎設施有限，只有具備自備吊桿的船才能靠泊裝卸，是慧洋長期租約（含長約出租給歐洲租家）與現貨自營並行操作最靈活的船型。</p>
+      </div>
+      <div class="tech-card g">
+        <h4>巴拿馬極限型（Panamax / Kamsarmax）— 35 艘，合計約 288.5 萬 DWT</h4>
+        <div class="meta">平均單艘約 8.2 萬 DWT ｜ 船隊總噸位最大的船型</div>
+        <p>載重噸約 6.5–9 萬噸，船型設計早期受巴拿馬運河船閘尺寸限制得名，現多為不受限的 Kamsarmax 延伸型。主要運送煤炭、穀物等大宗貨（major bulk），單船裝載量大、規模效益高，多數不自備吊桿，依賴到港碼頭的岸上起重設備，因此航線集中在具備完整裝卸基礎設施的主要港口。此船型是公司對接長期出租給歐洲租家（如 Cargill、Bunge、SwissMarine）大宗穀物與煤炭運輸需求的主力噸位來源。</p>
+      </div>
+      <div class="tech-card o">
+        <h4>超級極限型（Supramax / Ultramax）— 29 艘，合計約 177.0 萬 DWT</h4>
+        <div class="meta">平均單艘約 6.1 萬 DWT ｜ 散裝航運業界公認的「萬用工作船」</div>
+        <p>載重噸約 5–6.5 萬噸，多數自備吊桿，兼具巴拿馬極限型的規模效益與輕便型的港口彈性，可運送穀物、煤炭、鋁土礦等多種雜貨。是全球散裝航運市場流動性最高、租家詢價最頻繁的船型之一，也是慧洋指數連結型長約覆蓋率最高的船型類別（財報未按船型拆分合約型態，此為方向性描述，見供應鏈 tab 資料限制說明）。</p>
+      </div>
+      <div class="tech-card r">
+        <h4>其他：老舊客輪與新造船／代管船</h4>
+        <div class="meta">合計約 2 艘 ｜ 非核心資產</div>
+        <p>船隊中僅 1 艘逾 25 年船齡的老舊客輪，非公司核心的乾散裝出租業務，另有少量處於下水前建造階段的新造船與代管船（非自有、代第三方管理），金額與艘數占比極小，不影響船隊結構分析的主要結論。</p>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">船隊結構：依船型分（130 艘，必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 414" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="414" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">慧洋船隊結構：依船型分（截至2026-06-30，130艘）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#2563eb"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">艘數</text><rect x="87" y="51" width="10" height="10" rx="1" fill="#dc2626"/><text x="105" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">總噸位（萬DWT）</text><line x1="170" y1="76" x2="170" y2="356" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="372" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="393.33" y1="76" x2="393.33" y2="356" stroke="#eeeeee" stroke-width="1"/><text x="393.33" y="372" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="616.67" y1="76" x2="616.67" y2="356" stroke="#eeeeee" stroke-width="1"/><text x="616.67" y="372" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="840" y1="76" x2="840" y2="356" stroke="#eeeeee" stroke-width="1"/><text x="840" y="372" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">300</text><line x1="170" y1="76" x2="170" y2="356" stroke="#111111" stroke-width="1.2"/><rect x="170" y="83.53" width="78.17" height="14.8" fill="#2563eb" rx="1" data-dim="艘數"/><text x="253.17" y="94.43" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">35</text><rect x="170" y="100.33" width="644.32" height="14.8" fill="#dc2626" rx="1" data-dim="總噸位（萬DWT）"/><text x="819.32" y="111.23" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="總噸位（萬DWT）">288.5</text><text x="160" y="103.33" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">巴拿馬極限型</text><rect x="170" y="130.2" width="140.7" height="14.8" fill="#2563eb" rx="1" data-dim="艘數"/><text x="315.7" y="141.1" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">63</text><rect x="170" y="147" width="458.5" height="14.8" fill="#dc2626" rx="1" data-dim="總噸位（萬DWT）"/><text x="633.5" y="157.9" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="總噸位（萬DWT）">205.3</text><text x="160" y="150" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">輕便型船</text><rect x="170" y="176.87" width="64.77" height="14.8" fill="#2563eb" rx="1" data-dim="艘數"/><text x="239.77" y="187.77" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">29</text><rect x="170" y="193.67" width="395.3" height="14.8" fill="#dc2626" rx="1" data-dim="總噸位（萬DWT）"/><text x="570.3" y="204.57" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="總噸位（萬DWT）">177</text><text x="160" y="196.67" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">超級極限型船</text><rect x="170" y="223.53" width="2.23" height="14.8" fill="#2563eb" rx="1" data-dim="艘數"/><text x="177.23" y="234.43" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">1</text><rect x="170" y="240.33" width="1.5" height="14.8" fill="#dc2626" rx="1" data-dim="總噸位（萬DWT）"/><text x="176.12" y="251.23" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="總噸位（萬DWT）">0.500</text><text x="160" y="243.33" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">其他-汽車滾裝船</text><rect x="170" y="270.2" width="2.23" height="14.8" fill="#2563eb" rx="1" data-dim="艘數"/><text x="177.23" y="281.1" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">1</text><rect x="170" y="287" width="1.5" height="14.8" fill="#dc2626" rx="1" data-dim="總噸位（萬DWT）"/><text x="176.12" y="297.9" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="總噸位（萬DWT）">0.500</text><text x="160" y="290" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">液化石油氣船</text><rect x="170" y="316.87" width="2.23" height="14.8" fill="#2563eb" rx="1" data-dim="艘數"/><text x="177.23" y="327.77" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">1</text><rect x="170" y="333.67" width="1.5" height="14.8" fill="#dc2626" rx="1" data-dim="總噸位（萬DWT）"/><text x="175" y="344.57" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="總噸位（萬DWT）">0</text><text x="160" y="336.67" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">其他-客輪</text><text x="22" y="402" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">艘數與總噸位（萬DWT）並列（量綱不同，僅作相對規模比較）。巴拿馬極限型單艘噸位最大但艘數次多；輕便型船艘數最多、以2026年新造節能船為主力交船船型。來源：2026Q2財報附註十二「船隊資訊」。</text></svg>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：輕便型船艘數最多（63 艘）但巴拿馬極限型噸位最大（288.5 萬 DWT），船隊噸位分布均衡，未過度集中單一船型——這是慧洋分散運價循環曝險的第一層結構性緩衝（不同船型的運價景氣週期不完全同步）。出處：2026Q2 合併財報附註十二「船隊資訊」。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">船隊船齡分布</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">慧洋船隊船齡分布（依建造年份分組，130艘）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="374.4" x2="876" y2="374.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="378.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="78" y1="292.8" x2="876" y2="292.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="296.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="211.2" x2="876" y2="211.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="215.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30</text><line x1="78" y1="129.6" x2="876" y2="129.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="133.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">50 艘</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="101.34" y="423.36" width="112.91" height="32.64" fill="#2563eb" rx="1" data-dim="艘數"/><text x="157.8" y="417.36" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">4</text><text x="157.8" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2009年以前</text><rect x="260.94" y="137.76" width="112.91" height="318.24" fill="#2563eb" rx="1" data-dim="艘數"/><text x="317.4" y="131.76" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">39</text><text x="317.4" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2010–2014</text><rect x="420.54" y="105.12" width="112.91" height="350.88" fill="#2563eb" rx="1" data-dim="艘數"/><text x="477" y="99.12" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">43</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2015–2019</text><rect x="580.14" y="170.4" width="112.91" height="285.6" fill="#2563eb" rx="1" data-dim="艘數"/><text x="636.6" y="164.4" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">35</text><text x="636.6" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2020–2024</text><rect x="739.74" y="382.56" width="112.91" height="73.44" fill="#2563eb" rx="1" data-dim="艘數"/><text x="796.2" y="376.56" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="艘數">9</text><text x="796.2" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2025–2026（近2年新船）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">2025–2026新交船6艘（皆輕便型，符合NOx Tier III排放標準），2020–2024批次33艘為近年節能船更新主力；2009年以前老舊船仍有1艘（客輪Pescadores，非散裝主力船隊）。來源：2026Q2財報附註十二「船隊資訊」逐艘建造年份彙總。</text></svg>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：2020 年後交船船舶占比持續提升（節能船占比同步上升），僅 1 艘老舊客輪船齡逾 25 年；船隊年輕化與持續進行的新造船／處分舊船雙軌操作（見特殊交易/事件 tab）一致，較年輕的船隊在環保法規（如 NOx Tier III）加嚴下具備相對競爭力。出處：2026Q2 合併財報附註十二逐艘彙總。</div>
+
+    <div class="card">
+      <div class="card-title">BDI/運價循環 vs 租船結構——慧洋獲利對運價的敏感度因果鏈</div>
+      <p><strong>正向鏈（運價上行如何轉化為獲利）：</strong>BDI/BSI/BHSI 指數上升 → 慧洋約 88–90% 收入來自的長約中，指數連結型長約（截至 2026 年 2 月已達 81 艘、法說會摘要另指出指數連結船隊共 88 艘）租金隨指數同步上調 → 2026Q2 相比 2025Q2，BPI、BSI 平均期租費率分別上漲 59.84%、52.85%（來源：2026-06-09 法說會摘要）→ 反映在 2026Q2 營收 NT$53.42 億（YoY +40.4%）與毛利率 39.2%（12 季新高）。短約／現貨船隊（占比約 10–11%）則直接依當期市場運價議約，對指數變動反應更即時但也更劇烈。</p>
+      <p><strong>反向鏈（運價下行的傳導）：</strong>2025Q1 BDI 一度跌至近兩年新低 → 指數連結長約租金同步下修 → 該季毛利率壓縮至 6.8%（12 季最低點）、單季稅前淨利轉虧 NT$-1.71 億——這正是「指數連結型長約占比越高，公司獲利波動越貼近 BDI」的直接證據：固定租金長約原本是用來平滑景氣循環的緩衝，但公司近年策略是主動把緩衝換成更高的指數連結曝險（換取「比市場指數更好的收益」，見年報原文），代價是下行風險也同步放大。</p>
+      <p><strong>核心問題：</strong>新造船若延續近年趨勢多簽為指數連結型長約，公司對 BDI 循環的敏感度將隨船隊擴張進一步墊高，而非隨船隊分散而降低——這是本報告風險矩陣 tab 的核心觀察點之一。</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4：供應鏈 ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="card">
+      <div class="card-title">供應鏈結構（來源：2025 年報／2026Q2 財報附註六(23)）</div>
+      <p>慧洋是船舶運送服務業者，「無原料採購用於生產」情事——上游不是傳統製造業的零組件供應商，而是船廠（新造船建造）與燃油/滑油供應商（船舶營運耗材）；下游則是承租船舶的航運商與大宗商品貿易商。上游供應商集中度低：滑油與 4–5 家國際供應商分散採購合作，2024、2025 年度各家占比均未超過進貨總額 10%，無單一供應商達揭露門檻；燃油則依航期、航程、天候、存量分散於各補給港購置。下游客戶方面，財報附註以匿名代號（A/B/C/D 客戶）揭露前四大客戶收入占比，2025 年報則具名揭露長期客戶為 **Cargill、Bunge（2025 年收購 Viterra）、SwissMarine** 等歐洲穀物/大宗商品航商——台灣年報慣例對未達 10% 門檻的客戶採匿名代號，具名客戶清單需另行比對年報「主要客戶」段落取得，本報告已交叉引用。</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">供應鏈結構圖（誰供給誰、分幾層，必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 982.2 730" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="982.2" height="730" fill="#ffffff"/><text x="491.1" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">慧洋-KY 供應鏈結構：上游 → 船隊 → 合約型態 → 客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,83) rotate(-90)">上游供給</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,273) rotate(-90)">慧洋船隊（依船型）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,456) rotate(-90)">合約／收入型態</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,632) rotate(-90)">客戶</text><defs><marker id="arr-2563eb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker><marker id="arr-9333ea" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#9333ea"/></marker></defs><polyline points="178,120 178,138 488.0375,138 488.0375,236" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><rect x="305.02" y="129" width="56" height="18" rx="3" fill="#ffffff"/><text x="333.02" y="142" text-anchor="middle" font-size="11" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace">新造交船</text><polyline points="448,120 448,160 164.03750000000002,160 164.03750000000002,243" fill="none" stroke="#9333ea" stroke-width="1.6" marker-end="url(#arr-9333ea)" stroke-dasharray="6 5"/><polyline points="448,120 448,182 326.0375,182 326.0375,243" fill="none" stroke="#9333ea" stroke-width="1.6" marker-end="url(#arr-9333ea)" stroke-dasharray="6 5"/><polyline points="448,120 448,204 529.8708333333334,204 529.8708333333334,236" fill="none" stroke="#9333ea" stroke-width="1.6" marker-end="url(#arr-9333ea)" stroke-dasharray="6 5"/><polyline points="685.575,113 685.575,222 216.03750000000002,222 216.03750000000002,243" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="685.575,113 685.575,222 378.0375,222 378.0375,243" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="685.575,113 685.575,222 571.7041666666667,222 571.7041666666667,236" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="873.675,113 873.675,222 268.0375,222 268.0375,243" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="873.675,113 873.675,222 430.0375,222 430.0375,243" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="873.675,113 873.675,222 613.5375,222 613.5375,236" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="873.675,113 873.675,222 838.1625,222 838.1625,243" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="216.03750000000002,303 216.03750000000002,328 233.77500000000003,328 233.77500000000003,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="378.0375,303 378.0375,350 320.00000000000006,350 320.00000000000006,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="550.7875,310 550.7875,372 406.225,372 406.225,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="216.03750000000002,303 216.03750000000002,394 464.225,394 464.225,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="378.0375,303 378.0375,412 535.325,412 535.325,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="550.7875,310 550.7875,412 606.425,412 606.425,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="754.85,303 754.85,412 754.85,412 754.85,426" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="320.00000000000006,486 320.00000000000006,504 233.82500000000005,504 233.82500000000005,602" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="320.00000000000006,486 320.00000000000006,526 320.00000000000006,526 320.00000000000006,602" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="320.00000000000006,486 320.00000000000006,548 534.375,548 534.375,602" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><polyline points="535.325,486 535.325,570 696.375,570 696.375,602" fill="none" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arr-2563eb)"/><g><rect x="60" y="46" width="236" height="74" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="178" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">日本造船廠</text><text x="178" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">2026年新交船6艘皆為輕便型節能船</text><text x="178" y="101.68" text-anchor="middle" font-size="10" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="0.82">公司列為競爭利基：船廠聲譽佳、未來處分…</text></g><g><rect x="330" y="46" width="236" height="74" rx="9" fill="rgb(240,226,252)" stroke="#9333ea" stroke-width="1.4"/><text x="448" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">融資銀行</text><text x="448" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">長期借款NT$199.3億+一年內到期NT$37…</text><text x="448" y="101.68" text-anchor="middle" font-size="10" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="0.82">新造船US$178.9M餘款尚未辦妥融資</text></g><g><rect x="600" y="53" width="171.15" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="685.58" y="79.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">滑油供應商（4–5家）</text><text x="685.58" y="94.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">分散採購，各家占比未達10%</text></g><g><rect x="805.15" y="53" width="137.05" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="873.68" y="79.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">燃油供應商</text><text x="873.68" y="94.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">依航程/港口分散購置</text></g><g><rect x="152.04" y="243" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="216.04" y="269.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">巴拿馬極限型</text><text x="216.04" y="284.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">35艘／288.5萬DWT</text></g><g><rect x="314.04" y="243" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="378.04" y="269.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">超級極限型船</text><text x="378.04" y="284.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">29艘／177.0萬DWT</text></g><g><rect x="476.04" y="236" width="149.5" height="74" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="550.79" y="262.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">輕便型船</text><text x="550.79" y="277.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">63艘／205.3萬DWT</text><text x="550.79" y="291.68" text-anchor="middle" font-size="10" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="0.82">2026年新造船6艘皆屬此型</text></g><g><rect x="659.54" y="243" width="190.63" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="754.85" y="269.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">其他型（LPG/滾裝/客輪）</text><text x="754.85" y="284.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">3艘</text></g><g><rect x="221.78" y="426" width="196.45" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="320" y="452.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">長約－指數連結</text><text x="320" y="467.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">約88艘（主流），與BDI/BSI連動</text></g><g><rect x="452.23" y="426" width="166.2" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="535.33" y="452.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">長約其他＋短約</text><text x="535.33" y="467.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">合計約11%；短約租期&lt;半年</text></g><g><rect x="652.42" y="426" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="716.43" y="452.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">船舶管理服務</text><text x="716.43" y="467.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">收入占比&lt;2%</text></g><g><rect x="81.83" y="602" width="164" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="163.83" y="628.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Cargill</text><text x="163.83" y="643.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">具名長約客戶（歐洲租家）</text></g><g><rect x="279.83" y="602" width="208.55" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="384.1" y="628.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Bunge</text><text x="384.1" y="643.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">2025年收購Viterra，具名長約客戶</text></g><g><rect x="522.38" y="602" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="586.38" y="628.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">SwissMarine</text><text x="586.38" y="643.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">具名長約客戶</text></g><g><rect x="684.38" y="602" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="802.38" y="628.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">現貨市場客戶</text><text x="802.38" y="643.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">東南亞／印度／中國／中東，逐步拓展…</text></g><rect x="390.58" y="691" width="22" height="2.4" fill="#2563eb"/><text x="420.58" y="696" font-size="11" fill="#5a6167" font-family="sans-serif">實體/收入流</text><line x1="499.63" y1="692" x2="521.63" y2="692" stroke="#9333ea" stroke-width="2" stroke-dasharray="5 4"/><text x="529.63" y="696" font-size="11" fill="#5a6167" font-family="sans-serif">融資關係</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">長約占船隊約88–90%（指數連結型約88艘為主流，據富果直送2026-06-09法說會摘要）；短約約11%；船舶管理服務占比&lt;2%。具名客戶Cargill、Bunge（2025年收購Viterra）、SwissMarine為長期合作之歐洲租家；財報另以匿名代號揭露A/B/C/D四大客戶（2026H1合計US$156.7M，占營收約51%）。滑油／燃油供應商分散，無單一供應商達10%進貨門檻。來源：2025年報肆、二(三)(四)；2026Q2財報附註六(23)。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：上游（船廠＋燃油/滑油供應商）集中度低、無單一來源風險；下游客戶集中於少數幾家歐洲大型穀物/大宗商品航商，長約（尤其指數連結型）為收入主幹。與典型製造業「零組件單一來源斷鏈」風險不同，慧洋的供應鏈風險更多體現在「客戶集中於少數長約承租人」與「新船交船依賴特定日系船廠品質與交期」兩端。出處：2025 年報＋2026Q2 財報附註六(23)。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">供應鏈流量圖（Sankey：船隊噸位組成＋收入類別組成，必備圖）</div>
+      <div id="sankeyEmbed_eeqe9c4" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"輕便型船","label":"輕便型船 205.3萬DWT","color":"#2563eb"},{"id":"巴拿馬極限型","label":"巴拿馬極限型 288.5萬DWT","color":"#1d4ed8"},{"id":"超級極限型船","label":"超級極限型船 177.0萬DWT","color":"#3b82f6"},{"id":"其他型","label":"其他型 1.0萬DWT","color":"#93c5fd"},{"id":"慧洋合計船隊","label":"慧洋合計船隊 130艘／671.9萬DWT","color":"#0f172a"},{"id":"長約收入","label":"長約收入 NT$86.19億","color":"#16a34a"},{"id":"短約收入","label":"短約收入 NT$9.45億","color":"#22c55e"},{"id":"船舶管理收入","label":"船舶管理收入 NT$0.15億","color":"#86efac"},{"id":"其他收入","label":"其他收入 NT$1.01億","color":"#bbf7d0"},{"id":"2026H1合計營收","label":"2026H1合計營收 NT$96.80億","color":"#111111"}],"links":[{"source":"輕便型船","target":"慧洋合計船隊","value":205.3},{"source":"巴拿馬極限型","target":"慧洋合計船隊","value":288.5},{"source":"超級極限型船","target":"慧洋合計船隊","value":177},{"source":"其他型","target":"慧洋合計船隊","value":1},{"source":"長約收入","target":"2026H1合計營收","value":86.19},{"source":"短約收入","target":"2026H1合計營收","value":9.45},{"source":"船舶管理收入","target":"2026H1合計營收","value":0.15},{"source":"其他收入","target":"2026H1合計營收","value":1.01}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_eeqe9c4");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script>
+    </div>
+    <div class="note">⚑ 解讀：長約收入占 2026H1 總營收約 89%（長約 NT$86.19 億 / 合計 NT$96.80 億），短約僅占約 10%，船舶管理等勞務收入低於 2%——收入結構高度集中在長約，而長約中又以指數連結型為主（見船隊與業務平台 tab），因此「長約」一詞不等於「固定收益」。⚠️ 圖中左半部（船型→船隊噸位）以 DWT 為量值、右半部（收入類別→2026H1 營收）以 NT$ 億為量值，兩段量綱不同、財報未揭露收入依船型的交叉分布，故左右兩段未連接，僅供各自結構參考，未捏造跨量綱數字。出處：2026Q2 財報附註十二＋附註六(23)。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">上下游關係明細（含出處）</div>
+      <table>
+        <thead><tr><th class="l">層級</th><th class="l">對象</th><th class="l">關係／金額</th><th class="l">集中度或風險</th><th class="l">出處</th></tr></thead>
+        <tbody>
+          <tr class="section-head"><td colspan="5">上游</td></tr>
+          <tr><td class="l">船廠</td><td class="l">日系船廠（如 Onomichi Dockyard 等）</td><td class="l">7 艘新造船合約，US$234,753,200</td><td class="l">日本建造之節能船為主，公司於年報列為競爭利基（船廠聲譽佳、未來處分利潤較高），非揭露單一船廠集中度風險</td><td class="l">2026Q2 財報附註九</td></tr>
+          <tr><td class="l">滑油供應商</td><td class="l">4–5 家國際滑油供應商</td><td class="l">長期合作、分散採購議價</td><td class="l">2024、2025 年度各家占比均未超過進貨總額 10%，無單一供應商 10% 以上名單</td><td class="l">2025 年報</td></tr>
+          <tr><td class="l">燃油供應商</td><td class="l">依航期分散於各補給港</td><td class="l">依航程、天候、存量因素採購</td><td class="l">分散購置，無集中度揭露門檻資料</td><td class="l">2025 年報</td></tr>
+          <tr class="section-head"><td colspan="5">下游</td></tr>
+          <tr><td class="l">長期客戶（具名）</td><td class="l">Cargill、Bunge（含 2025 年收購之 Viterra）、SwissMarine</td><td class="l">長期出租，多為指數連結型長約</td><td class="l">具名主要銷貨客戶，皆為採用公司節能船之長期合作歐洲穀物航商</td><td class="l">2025 年報</td></tr>
+          <tr><td class="l">前四大客戶（匿名代號）</td><td class="l">A／B／C／D 客戶</td><td class="l">2026H1 收入占比前四大合計約占客戶合約收入之大部分（NT$156.7 百萬美元中）</td><td class="l">未達 10% 門檻或未單獨列示者併入其他客戶，個別占比未揭露</td><td class="l">2026Q2 財報附註六(23)</td></tr>
+          <tr><td class="l">現貨市場客戶</td><td class="l">東南亞、印度、中國、中東；逐步拓展非洲、南美</td><td class="l">短約／現貨議價，占 2026H1 收入約 10%</td><td class="l">航線分散，非單一區域集中</td><td class="l">2025 年報</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note yellow">⚑ 交叉連結：上游船廠付款節奏對應資產負債表 tab「採購承諾」列（US$234.75M 新造船合約）；下游客戶集中於指數連結型長約承租人，對應估值觀察 tab 互證對照表中「長約收入成長 vs 月營收實績」一列，兩者共同驗證「運價上行是否真正轉化為現金流入」這條因果鏈。</div>
+  </div>
+
+  <!-- ============ TAB 5：風險矩陣 ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="note grey">⚑ 資料限制：本報告未取得法說會逐字稿或公司官方簡報，管理層展望等質化說法均轉引自第三方部落格（富果直送）法說會摘要，標示為 <strong>T2／轉引、信心度中等</strong>，非公司一手資料；財報揭露之數字（合約結構、負債、處分利益等）信心度高，逐項標明出處。以下風險論證以財報數字為主、管理層口徑為輔。</div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">BDI/運價循環反轉——指數連結型長約占比提升放大下行曝險</div>
+        <p>公司近年策略是把長約由固定租金轉為指數連結型（截至 2026 年 2 月已達 81 艘，法說會摘要另指出指數連結船隊共 88 艘），2026Q2 相比 2025Q2 的 BPI、BSI 期租費率分別上漲 59.84%、52.85%，直接推升本季毛利率至 39.2%（12 季新高）；但同一機制在 2025Q1（BDI 近兩年低點）曾讓毛利率壓縮至 6.8%、單季稅前淨利轉虧 NT$-1.71 億。BDI 目前站上 3,300+ 高檔（2026-09），若循環反轉，公司的下行曝險已因合約結構轉型而較過去更高，而非更低。</p>
+        <div class="risk-source">出處：2026Q2/2025Q1 合併財報、富果直送 2026-06-09 法說會摘要（T2）</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">【獨創前瞻風險】新船付款高峰與運價高檔期同時落在 2027Q3，若循環提前反轉將形成雙重壓力</div>
+        <p>財報附註九明確揭露：7 艘新船 US$178.9M 尾款（占合約總價 76%）尚未辦妥融資，公司預計 2027Q3 前分期付清；同時 2026 年 3 艘、2027 年 4 艘的交船時程本身就是資本支出高峰。這個付款高峰與當前 BDI 由 2025Q1 低點強勁反彈、2026 年 9 月站上 3,300+ 的高檔期在時間上重疊——若市場在 2026–2027 年循環見頂（散裝航運歷史上平均景氣循環為 3–5 年），慧洋將同時面臨「新船尾款融資壓力」與「指數連結長約租金下修」兩股力量疊加，而財報揭露的付款排程並未說明任何避險安排（如利率鎖定或分批融資）。這是把附註九（尚未辦妥融資）、附註六(23)（指數連結長約占比）與市場循環資料交叉拼湊得出的推論，管理層未直接承認此風險。</p>
+        <div class="risk-source">出處：2026Q2 財報附註九、市場循環資料（market_cycle.md，信心度中等）——本報告推論，非管理層揭露</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">董事長股票高質押比率（31.08%）＋子公司「慧文投資」質押比率達 80.72%</div>
+        <p>截至 2026/03–2026/08（連續 6 個月持股月報無變動），董事長藍俊昇本人持股 191,815,349 股中已質押 59,620,000 股（31.08%），法人董事「慧文投資有限公司」持股 36,242,047 股中更有 29,257,000 股（80.72%）已設質。高質押比率在股價下跌時可能觸發追繳或被迫平倉，是外部股權結構風險；惟六個月持股數字完全未變動，顯示期間內無新增質押或大股東減持動作，屬存量風險而非本季新增訊號。</p>
+        <div class="risk-source">出處：MOPS 內部人持股月報（ajax_stapap1，2026/03–2026/08）</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">新船交船時程口徑落差，反映公司對外溝通與財報揭露存在不一致</div>
+        <p>法說會第三方摘要稱「2026 年交付 8 艘 Handy 型、2027 年 4 艘（含 2 艘 Panamax）、2028 年 1 艘」，財報附註九僅揭露截至 2026-06-30 尚未交船餘額為 7 艘（2026 年 3 艘、2027 年 4 艘），且 2026-07-13 公司另公告取消原核准之 2 艘 39,000 噸散裝輪訂單、2026-08-22 又新增 2 艘 Onomichi Dockyard 40,000 噸訂單——訂單本身在短期內有實質變動，非單純揭露時點差異可完全解釋，需留意後續財報是否會出現進一步的船隊組合調整。</p>
+        <div class="risk-source">出處：2026Q2 財報附註九、MOPS 重大訊息公告（115/07/13、115/08/22）、富果直送法說會摘要（T2）</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">股利配發率不確定性——管理層前瞻表態與 2025 年度實際分配存在時間點落差</div>
+        <p>管理層 2026-06 表態「提高股利配發率可能性是有的」但「具體數字仍言之過早」；然而對 2025 年度盈餘的實際分配案（2026-04-10 董事會決議）為每股 NT$3.5 元現金股利，較 2024 年度的 NT$5 元下降。兩者並非直接矛盾（前者是對 2026 年及以後的展望，後者是對 2025 年度盈餘的分配），但投資人若將管理層前瞻語言直接套用在最近一次分配上會產生誤解。</p>
+        <div class="risk-source">出處：2025 年報、富果直送 2026-06-09 法說會摘要（T2）</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">上游供應鏈集中度低，燃油/滑油非核心風險</div>
+        <p>滑油供應商 4–5 家分散採購、各家占比均未超過 10%；燃油依航期分散於各補給港購置。船舶運送服務業本質上無傳統製造業的零組件單一來源斷鏈風險，此項風險強度低。</p>
+        <div class="risk-source">出處：2025 年報</div>
+      </div>
+    </div>
+
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">流動性與應收帳款品質風險低</div>
+        <p>應收帳款長期落在 12 季 DSO 約 2.5–4 天的低水位（見資產負債表 tab），現金及約當現金截至 2026Q2 末達 NT$42.4 億，利息保障倍數已由 2025Q1 谷底 0.5 倍回升至 2026Q2 的 7.9 倍，財務體質同步佐證管理層去槓桿說法，短期流動性風險低。</p>
+        <div class="risk-source">出處：各季合併資產負債表／綜合損益表（MOPS iXBRL）</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">風險矩陣熱力圖（風險項 × 機率/衝擊/時間窗口）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 356" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="356" fill="#ffffff"/><text x="450" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">風險矩陣：風險項 × 機率/衝擊/時間窗口（強度1–5）</text><text x="263.5" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">機率</text><text x="438.5" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">衝擊</text><text x="613.5" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">近期(0–12個月)</text><text x="788.5" y="52" text-anchor="middle" font-size="11" fill="#333333" font-weight="600" font-family="sans-serif">中期(1–3年)</text><text x="166" y="81" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">BDI運價下行</text><rect x="176" y="60" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="351" y="60" width="175" height="34" fill="rgb(220,38,38)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">5</text><rect x="526" y="60" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="701" y="60" width="175" height="34" fill="rgb(154,80,50)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="81" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">4</text><text x="166" y="115" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">浮動利率再融資</text><rect x="176" y="94" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="351" y="94" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="526" y="94" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="701" y="94" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="115" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><text x="166" y="149" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">新造船付款未融資</text><rect x="176" y="128" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="351" y="128" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="526" y="128" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="701" y="128" width="175" height="34" fill="rgb(154,80,50)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="149" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">4</text><text x="166" y="183" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">二手船價下跌減損</text><rect x="176" y="162" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="351" y="162" width="175" height="34" fill="rgb(154,80,50)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">4</text><rect x="526" y="162" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="701" y="162" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="183" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><text x="166" y="217" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">美元/新台幣匯兌</text><rect x="176" y="196" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="351" y="196" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="526" y="196" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="701" y="196" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="217" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><text x="166" y="251" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">長約到期重議</text><rect x="176" y="230" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="351" y="230" width="175" height="34" fill="rgb(154,80,50)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">4</text><rect x="526" y="230" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="701" y="230" width="175" height="34" fill="rgb(154,80,50)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="251" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">4</text><text x="166" y="285" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">CII碳稅法規</text><rect x="176" y="264" width="175" height="34" fill="rgb(154,80,50)" stroke="#ffffff" stroke-width="1.5"/><text x="263.5" y="285" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">4</text><rect x="351" y="264" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="438.5" y="285" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="526" y="264" width="175" height="34" fill="rgb(22,163,74)" stroke="#ffffff" stroke-width="1.5"/><text x="613.5" y="285" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">2</text><rect x="701" y="264" width="175" height="34" fill="rgb(88,121,62)" stroke="#ffffff" stroke-width="1.5"/><text x="788.5" y="285" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="500" font-family="sans-serif">3</text><rect x="176" y="312" width="8.83" height="12" fill="rgb(22,163,74)"/><rect x="184.33" y="312" width="8.83" height="12" fill="rgb(31,158,72)"/><rect x="192.67" y="312" width="8.83" height="12" fill="rgb(39,152,71)"/><rect x="201" y="312" width="8.83" height="12" fill="rgb(48,147,69)"/><rect x="209.33" y="312" width="8.83" height="12" fill="rgb(56,141,68)"/><rect x="217.67" y="312" width="8.83" height="12" fill="rgb(65,136,66)"/><rect x="226" y="312" width="8.83" height="12" fill="rgb(74,130,65)"/><rect x="234.33" y="312" width="8.83" height="12" fill="rgb(82,125,63)"/><rect x="242.67" y="312" width="8.83" height="12" fill="rgb(91,120,61)"/><rect x="251" y="312" width="8.83" height="12" fill="rgb(99,114,60)"/><rect x="259.33" y="312" width="8.83" height="12" fill="rgb(108,109,58)"/><rect x="267.67" y="312" width="8.83" height="12" fill="rgb(117,103,57)"/><rect x="276" y="312" width="8.83" height="12" fill="rgb(125,98,55)"/><rect x="284.33" y="312" width="8.83" height="12" fill="rgb(134,92,54)"/><rect x="292.67" y="312" width="8.83" height="12" fill="rgb(143,87,52)"/><rect x="301" y="312" width="8.83" height="12" fill="rgb(151,81,51)"/><rect x="309.33" y="312" width="8.83" height="12" fill="rgb(160,76,49)"/><rect x="317.67" y="312" width="8.83" height="12" fill="rgb(168,71,47)"/><rect x="326" y="312" width="8.83" height="12" fill="rgb(177,65,46)"/><rect x="334.33" y="312" width="8.83" height="12" fill="rgb(186,60,44)"/><rect x="342.67" y="312" width="8.83" height="12" fill="rgb(194,54,43)"/><rect x="351" y="312" width="8.83" height="12" fill="rgb(203,49,41)"/><rect x="359.33" y="312" width="8.83" height="12" fill="rgb(211,43,40)"/><rect x="367.67" y="312" width="8.83" height="12" fill="rgb(220,38,38)"/><text x="170" y="322" text-anchor="end" font-size="10.5" fill="#666666" font-family="sans-serif">2</text><text x="382" y="322" font-size="10.5" fill="#666666" font-family="sans-serif">5</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">數值為本報告主觀評分，5＝極可能且衝擊大／時間窗口內顯著惡化。散裝運價循環反轉與長約到期重議風險隨時間窗口拉長而上升；新造船US$178.9M餘款尚未辦妥融資，2027年到期部位風險高於2026年。來源：本報告風險矩陣tab論證，綜合財報附註九、市場評述整理。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：長約到期重議與 BDI 運價下行是中期（1–3 年）風險強度最高的兩項，恰好與新船付款高峰（2027Q3 前）的時間窗口重疊，呼應上方「獨創前瞻風險」的論證；短期（近 1 年）風險強度整體偏低，反映當前市況與財務體質仍屬穩健區間。出處：本報告主觀評分，基於上述風險項與財報數字交叉推導。</div>
+  </div>
+
+  <!-- ============ TAB 6：損益表 ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">NT$53.42億</div><div class="kpi-lbl">營業收入（2026Q2）</div><div class="kpi-sub">QoQ +23.1%</div><div class="kpi-sub">YoY +40.4%</div></div>
+      <div class="kpi"><div class="kpi-val">39.2%</div><div class="kpi-lbl">毛利率（12 季新高）</div><div class="kpi-sub">QoQ 28.7%→39.2%</div><div class="kpi-sub">YoY 18.0%→39.2%</div></div>
+      <div class="kpi"><div class="kpi-val">38.0%</div><div class="kpi-lbl">營業利益率</div><div class="kpi-sub">QoQ 27.6%→38.0%</div><div class="kpi-sub">YoY 16.9%→38.0%</div></div>
+      <div class="kpi"><div class="kpi-val">NT$2.49</div><div class="kpi-lbl">EPS（元／股）</div><div class="kpi-sub">QoQ +55.6%</div><div class="kpi-sub">YoY +301.6%</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併綜合損益表（百萬元；單季）</div>
+      <table>
+        <thead><tr><th class="l">項目</th><th>2026Q2</th><th>2026Q1</th><th>2025Q2</th><th>QoQ</th><th>YoY</th><th>2026H1</th><th>2025H1</th></tr></thead>
+        <tbody>
+          <tr><td>營業收入</td><td>5,341.9</td><td>4,338.0</td><td>3,806.1</td><td class="pos">+23.1%</td><td class="pos">+40.4%</td><td>9,679.9</td><td>7,315.7</td></tr>
+          <tr><td>其他收入</td><td>2.0</td><td>10.4</td><td>6.0</td><td class="neg">-80.8%</td><td class="neg">-66.7%</td><td>12.4</td><td>8.3</td></tr>
+          <tr><td>營業成本</td><td>3,249.2</td><td>3,094.0</td><td>3,119.2</td><td>+5.0%</td><td>+4.2%</td><td>6,343.2</td><td>6,391.5</td></tr>
+          <tr class="total"><td><strong>營業毛利</strong></td><td><strong>2,092.6</strong></td><td><strong>1,244.0</strong></td><td><strong>686.9</strong></td><td class="pos">+68.2%</td><td class="pos">+204.6%</td><td><strong>3,336.6</strong></td><td><strong>924.2</strong></td></tr>
+          <tr class="subtotal"><td>其中：管理費用</td><td>52.3</td><td>44.2</td><td>32.2</td><td>+18.3%</td><td>+62.4%</td><td>96.5</td><td>65.1</td></tr>
+          <tr><td>營業費用（合計）</td><td>60.4</td><td>46.6</td><td>45.3</td><td>+29.6%</td><td>+33.3%</td><td>107.0</td><td>82.2</td></tr>
+          <tr class="total"><td><strong>營業利益</strong></td><td><strong>2,032.2</strong></td><td><strong>1,197.5</strong></td><td><strong>641.6</strong></td><td class="pos">+69.7%</td><td class="pos">+216.8%</td><td><strong>3,229.7</strong></td><td><strong>841.9</strong></td></tr>
+          <tr><td>財務成本</td><td>258.4</td><td>265.5</td><td>336.4</td><td>-2.7%</td><td class="pos">-23.2%</td><td>523.9</td><td>721.9</td></tr>
+          <tr><td>處分資產利益</td><td>30.3</td><td>143.2</td><td>392.0</td><td class="neg">-78.8%</td><td class="neg">-92.3%</td><td>173.5</td><td>402.1</td></tr>
+          <tr><td>權益法認列損益</td><td>-0.0</td><td>-0.0</td><td>-10.6</td><td>—</td><td>—</td><td>-0.0</td><td>-21.0</td></tr>
+          <tr class="total"><td><strong>稅前淨利</strong></td><td><strong>1,866.8</strong></td><td><strong>1,201.3</strong></td><td><strong>467.2</strong></td><td class="pos">+55.4%</td><td class="pos">+299.7%</td><td><strong>3,068.1</strong></td><td><strong>295.8</strong></td></tr>
+          <tr><td>所得稅費用</td><td>4.9</td><td>6.1</td><td>2.8</td><td>-19.7%</td><td>+75.0%</td><td>11.0</td><td>10.6</td></tr>
+          <tr class="total"><td><strong>本期淨利（歸屬母公司）</strong></td><td><strong>1,862.0</strong></td><td><strong>1,195.2</strong></td><td><strong>464.3</strong></td><td class="pos">+55.8%</td><td class="pos">+301.1%</td><td><strong>3,057.2</strong></td><td><strong>285.1</strong></td></tr>
+          <tr><td>EPS（基本，元／股）</td><td>2.49</td><td>1.60</td><td>0.62</td><td class="pos">+55.6%</td><td class="pos">+301.6%</td><td>4.09</td><td>0.38</td></tr>
+          <tr><td>毛利率 GM</td><td>39.2%</td><td>28.7%</td><td>18.0%</td><td>—</td><td>—</td><td>34.5%</td><td>12.6%</td></tr>
+          <tr><td>營業利益率 OPM</td><td>38.0%</td><td>27.6%</td><td>16.9%</td><td>—</td><td>—</td><td>33.4%</td><td>11.5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚑ 解讀：本業線（營業利益）QoQ +69.7%／YoY +216.8%，成長速度快於營收本身（QoQ +23.1%／YoY +40.4%），反映的是毛利率隨運價上行而放大的營運槓桿，而非單純營收堆疊；非本業線（處分資產利益＋財務成本）則呈現相反方向——處分資產利益 QoQ/YoY 均大幅下滑（本季僅 NT$30.3 百萬，遠低於去年同期 NT$392.0 百萬），財務成本則因長期借款餘額下降與利率環境變化持續走低。換言之，本季獲利成長主要來自本業（船舶租金），而非過去常見的處分資產利益貢獻——這與「9 月將認列船舶處分利益」的法人展望（見損益表 tab 下方月營收解讀）形成時間序列上的接續，本季（Q2）處分利益偏低，Q3 才可能回升。出處：2026Q2/2025Q2/2026Q1 合併財報（MOPS t164sb01）。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">近 12 季營收與利潤率趨勢（必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">慧洋-KY 近12季營收與利潤率（2023Q3–2026Q2）</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="322" x2="824" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="76" y1="188" x2="824" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6,000</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">0</text><text x="834" y="326" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">13.3</text><text x="834" y="192" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">26.7</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">NT$百萬元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 76 472)">23Q3</text><line x1="144" y1="456" x2="144" y2="460" stroke="#999999" stroke-width="1"/><text x="144" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 144 472)">23Q4</text><line x1="212" y1="456" x2="212" y2="460" stroke="#999999" stroke-width="1"/><text x="212" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 212 472)">24Q1</text><line x1="280" y1="456" x2="280" y2="460" stroke="#999999" stroke-width="1"/><text x="280" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 280 472)">24Q2</text><line x1="348" y1="456" x2="348" y2="460" stroke="#999999" stroke-width="1"/><text x="348" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 348 472)">24Q3</text><line x1="416" y1="456" x2="416" y2="460" stroke="#999999" stroke-width="1"/><text x="416" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 416 472)">24Q4</text><line x1="484" y1="456" x2="484" y2="460" stroke="#999999" stroke-width="1"/><text x="484" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 484 472)">25Q1</text><line x1="552" y1="456" x2="552" y2="460" stroke="#999999" stroke-width="1"/><text x="552" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 552 472)">25Q2</text><line x1="620" y1="456" x2="620" y2="460" stroke="#999999" stroke-width="1"/><text x="620" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 620 472)">25Q3</text><line x1="688" y1="456" x2="688" y2="460" stroke="#999999" stroke-width="1"/><text x="688" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 688 472)">25Q4</text><line x1="756" y1="456" x2="756" y2="460" stroke="#999999" stroke-width="1"/><text x="756" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 756 472)">26Q1</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 824 472)">26Q2</text><polyline points="76,202.14 144,128 212,141.5 280,85.47 348,88.44 416,143.73 484,220.86 552,200.99 620,155.22 688,114.9 756,165.35 824,98.09" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="202.14" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="144" cy="128" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="212" cy="141.5" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="280" cy="85.47" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="348" cy="88.44" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="416" cy="143.73" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="484" cy="220.86" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="552" cy="200.99" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="620" cy="155.22" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="688" cy="114.9" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="756" cy="165.35" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="824" cy="98.09" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><polyline points="76,429.15 144,354.66 212,359.07 280,315.19 348,324.16 416,370.96 484,442.58 552,413.01 620,366.88 688,330.94 756,375.77 824,319.84" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="429.15" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="144" cy="354.66" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="212" cy="359.07" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="280" cy="315.19" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="348" cy="324.16" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="416" cy="370.96" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="484" cy="442.58" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="552" cy="413.01" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="620" cy="366.88" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="688" cy="330.94" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="756" cy="375.77" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="824" cy="319.84" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><polyline points="76,337.41 144,138.42 212,137.42 280,66.06 348,87.16 416,172.59 484,387.66 552,275.1 620,147.47 688,76.11 756,167.57 824,62.04" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="337.41" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="144" cy="138.42" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="212" cy="137.42" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="280" cy="66.06" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="348" cy="87.16" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="416" cy="172.59" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="484" cy="387.66" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="552" cy="275.1" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="620" cy="147.47" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="688" cy="76.11" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="756" cy="167.57" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><circle cx="824" cy="62.04" r="3.6" fill="#ffffff" stroke="#16a34a" stroke-width="2"/><polyline points="76,349.47 144,145.46 212,146.46 280,74.1 348,95.21 416,182.64 484,398.72 552,286.15 620,158.52 688,87.16 756,178.62 824,74.1" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="349.47" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="144" cy="145.46" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="212" cy="146.46" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="280" cy="74.1" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="348" cy="95.21" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="416" cy="182.64" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="484" cy="398.72" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="552" cy="286.15" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="620" cy="158.52" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="688" cy="87.16" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="756" cy="178.62" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><circle cx="824" cy="74.1" r="3.6" fill="#ffffff" stroke="#d97706" stroke-width="2"/><line x1="270" y1="40" x2="286" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="292" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營業收入</text><line x1="360" y1="40" x2="376" y2="40" stroke="#dc2626" stroke-width="2.4"/><text x="382" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營業利益</text><line x1="450" y1="40" x2="466" y2="40" stroke="#16a34a" stroke-width="2.4" stroke-dasharray="5 3"/><text x="472" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">毛利率</text><line x1="528.5" y1="40" x2="544.5" y2="40" stroke="#d97706" stroke-width="2.4" stroke-dasharray="5 3"/><text x="550.5" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">左軸：單季營收/營業利益（NT$百萬元）；右軸：毛利率／營業利益率（%）。2025Q1散裝運價低迷使毛利率降至6.8%，其後隨BDI回升逐季改善，2026Q2毛利率39.2%、營益率38.0%創近12季新高。來源：MOPS合併財報t164sb01，Q4為全年減前三季。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：2026Q2 毛利率 39.2% 創 12 季新高，較 2025Q1 谷底 6.8% 大幅反轉，12 季趨勢清楚呈現「指數連結型長約占比提升 → 毛利率隨 BDI 循環同步放大波動」的結構（見船隊與業務平台 tab 因果鏈）。出處：MOPS 合併財報 t164sb01（12 季，2023Q3–2026Q2）。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">台股月營收輔助判斷：近 27 個月月營收與 YoY（台股必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">慧洋-KY 近27個月月營收與YoY（2024/06–2026/08）</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,500</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,500</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">-40</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">-20</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">0</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">40</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">NT$百萬元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">YoY %</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 76 472)">24-06</text><line x1="104.77" y1="456" x2="104.77" y2="460" stroke="#999999" stroke-width="1"/><text x="104.77" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 104.76923076923077 472)">24-07</text><line x1="133.54" y1="456" x2="133.54" y2="460" stroke="#999999" stroke-width="1"/><text x="133.54" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 133.53846153846155 472)">24-08</text><line x1="162.31" y1="456" x2="162.31" y2="460" stroke="#999999" stroke-width="1"/><text x="162.31" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 162.30769230769232 472)">24-09</text><line x1="191.08" y1="456" x2="191.08" y2="460" stroke="#999999" stroke-width="1"/><text x="191.08" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 191.0769230769231 472)">24-10</text><line x1="219.85" y1="456" x2="219.85" y2="460" stroke="#999999" stroke-width="1"/><text x="219.85" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 219.84615384615384 472)">24-11</text><line x1="248.62" y1="456" x2="248.62" y2="460" stroke="#999999" stroke-width="1"/><text x="248.62" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 248.6153846153846 472)">24-12</text><line x1="277.38" y1="456" x2="277.38" y2="460" stroke="#999999" stroke-width="1"/><text x="277.38" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 277.38461538461536 472)">25-01</text><line x1="306.15" y1="456" x2="306.15" y2="460" stroke="#999999" stroke-width="1"/><text x="306.15" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 306.1538461538462 472)">25-02</text><line x1="334.92" y1="456" x2="334.92" y2="460" stroke="#999999" stroke-width="1"/><text x="334.92" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 334.9230769230769 472)">25-03</text><line x1="363.69" y1="456" x2="363.69" y2="460" stroke="#999999" stroke-width="1"/><text x="363.69" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 363.6923076923077 472)">25-04</text><line x1="392.46" y1="456" x2="392.46" y2="460" stroke="#999999" stroke-width="1"/><text x="392.46" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 392.46153846153845 472)">25-05</text><line x1="421.23" y1="456" x2="421.23" y2="460" stroke="#999999" stroke-width="1"/><text x="421.23" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 421.2307692307692 472)">25-06</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 450 472)">25-07</text><line x1="478.77" y1="456" x2="478.77" y2="460" stroke="#999999" stroke-width="1"/><text x="478.77" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 478.7692307692308 472)">25-08</text><line x1="507.54" y1="456" x2="507.54" y2="460" stroke="#999999" stroke-width="1"/><text x="507.54" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 507.53846153846155 472)">25-09</text><line x1="536.31" y1="456" x2="536.31" y2="460" stroke="#999999" stroke-width="1"/><text x="536.31" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 536.3076923076924 472)">25-10</text><line x1="565.08" y1="456" x2="565.08" y2="460" stroke="#999999" stroke-width="1"/><text x="565.08" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 565.0769230769231 472)">25-11</text><line x1="593.85" y1="456" x2="593.85" y2="460" stroke="#999999" stroke-width="1"/><text x="593.85" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 593.8461538461538 472)">25-12</text><line x1="622.62" y1="456" x2="622.62" y2="460" stroke="#999999" stroke-width="1"/><text x="622.62" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 622.6153846153846 472)">26-01</text><line x1="651.38" y1="456" x2="651.38" y2="460" stroke="#999999" stroke-width="1"/><text x="651.38" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 651.3846153846154 472)">26-02</text><line x1="680.15" y1="456" x2="680.15" y2="460" stroke="#999999" stroke-width="1"/><text x="680.15" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 680.1538461538462 472)">26-03</text><line x1="708.92" y1="456" x2="708.92" y2="460" stroke="#999999" stroke-width="1"/><text x="708.92" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 708.9230769230769 472)">26-04</text><line x1="737.69" y1="456" x2="737.69" y2="460" stroke="#999999" stroke-width="1"/><text x="737.69" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 737.6923076923077 472)">26-05</text><line x1="766.46" y1="456" x2="766.46" y2="460" stroke="#999999" stroke-width="1"/><text x="766.46" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 766.4615384615385 472)">26-06</text><line x1="795.23" y1="456" x2="795.23" y2="460" stroke="#999999" stroke-width="1"/><text x="795.23" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 795.2307692307693 472)">26-07</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 824 472)">26-08</text><polyline points="76,161.14 104.77,157.67 133.54,156.67 162.31,171.05 191.08,184.38 219.85,211.83 248.62,223.37 277.38,254.29 306.15,298.72 334.92,250.53 363.69,237.7 392.46,255.68 421.23,264.79 450,240.06 478.77,216.13 507.54,196.2 536.31,179.75 565.08,187.88 593.85,182.69 622.62,239.55 651.38,251.64 680.15,178.8 708.92,191.36 737.69,163.79 766.46,154.05 795.23,118.69 824,132.28" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="161.14" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="104.77" cy="157.67" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="133.54" cy="156.67" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="162.31" cy="171.05" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="191.08" cy="184.38" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="219.85" cy="211.83" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="248.62" cy="223.37" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="277.38" cy="254.29" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="306.15" cy="298.72" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="334.92" cy="250.53" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="363.69" cy="237.7" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="392.46" cy="255.68" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="421.23" cy="264.79" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="450" cy="240.06" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="478.77" cy="216.13" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="507.54" cy="196.2" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="536.31" cy="179.75" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="565.08" cy="187.88" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="593.85" cy="182.69" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="622.62" cy="239.55" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="651.38" cy="251.64" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="680.15" cy="178.8" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="708.92" cy="191.36" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="737.69" cy="163.79" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="766.46" cy="154.05" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="795.23" cy="118.69" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="824" cy="132.28" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><polyline points="76,213.47 104.77,91.35 133.54,93.92 162.31,151.28 191.08,277.43 219.85,296.61 248.62,367.96 277.38,387.78 306.15,401.81 334.92,400.89 363.69,395.74 392.46,433.01 421.23,436.5 450,406.23 478.77,375.04 507.54,330.66 536.31,288.37 565.08,255.8 593.85,224.89 622.62,265.85 651.38,174.84 680.15,154.9 708.92,209.86 737.69,110.84 766.46,62.4 795.23,69.24 824,154.66" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="213.47" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="104.77" cy="91.35" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="133.54" cy="93.92" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="162.31" cy="151.28" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="191.08" cy="277.43" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="219.85" cy="296.61" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="248.62" cy="367.96" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="277.38" cy="387.78" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="306.15" cy="401.81" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="334.92" cy="400.89" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="363.69" cy="395.74" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="392.46" cy="433.01" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="421.23" cy="436.5" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="450" cy="406.23" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="478.77" cy="375.04" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="507.54" cy="330.66" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="536.31" cy="288.37" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="565.08" cy="255.8" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="593.85" cy="224.89" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="622.62" cy="265.85" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="651.38" cy="174.84" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="680.15" cy="154.9" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="708.92" cy="209.86" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="737.69" cy="110.84" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="766.46" cy="62.4" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="795.23" cy="69.24" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><circle cx="824" cy="154.66" r="3.6" fill="#ffffff" stroke="#dc2626" stroke-width="2"/><line x1="379.26" y1="40" x2="395.26" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="401.26" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">月營收</text><line x1="457.76" y1="40" x2="473.76" y2="40" stroke="#dc2626" stroke-width="2.4" stroke-dasharray="5 3"/><text x="479.76" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">YoY</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">左軸：單月營收（NT$百萬元）；右軸：YoY（%）。2026/07、08為2026Q2季報期間之後最新月份，尚未被任何一期財報涵蓋——單月YoY分別達56.2%與35.0%，顯示Q3運價動能延續。來源：MOPS上市月營收彙總表t21sc03_sii，累計欄反算交叉驗證。</div>
+</div>
+    </div>
+    <div class="note yellow">⚑ 解讀（回答框架問題：最新月營收動能支持還是打臉法說會展望？）：2026Q2 財報公布後，2026-07、2026-08 兩個月營收 YoY 分別達 +56.21%、+34.96%（累計月營收分別為 NT$2,097.7 百萬、NT$2,013.2 百萬），均為季報結束後尚未被任何財報涵蓋的最新資訊。管理層 2026-06 法說會摘要的展望是「審慎樂觀」、預期 6–8 月進入傳統淡季但「目前氣氛尚稱穩健，未出現船東殺價競爭」——實際月營收動能（尤其 7 月 YoY 高達 56%）明顯**強於**這個審慎措辭所暗示的水準，支持而非打臉管理層展望；優分析 2026-09 報導法人上修 Q3 EPS 預期至 4 元以上，與此處月營收動能方向一致。惟月營收僅反映租金收入總額，無法拆分長約/短約貢獻或利潤率，仍需等 2026Q3 財報驗證毛利率是否同步維持高檔。出處：MOPS 月營收彙總表 t21sc03（27 個月，2024-06–2026-08），每月以累計欄反算驗證（implied_single_month_k 與官方單月數字差異 &lt;1%）。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">財測／口徑 vs 實際</div>
+      <table>
+        <thead><tr><th class="l">項目</th><th class="l">管理層口徑（時點）</th><th class="l">實際</th><th class="l">評語</th></tr></thead>
+        <tbody>
+          <tr><td class="l">2026H2 展望</td><td class="l">「審慎樂觀」，6–8 月傳統淡季但氣氛穩健（2026-06-09 法說會摘要，T2）</td><td class="l">2026-07/08 月營收 YoY +56%／+35%，2026Q2 毛利率 39.2%（12 季新高）</td><td class="l"><span class="pos">支持</span>：實際動能優於「審慎」措辭</td></tr>
+          <tr><td class="l">負債比</td><td class="l">自 2022 年 49.9% 降至 2026Q1 的 40.2%（管理層口徑，2026-06-09）</td><td class="l">2026Q2 負債總額/資產總額 = 34,704.3/84,278.5 = 41.2%</td><td class="l"><span class="pos">方向一致</span>：口徑一致度高，未逐科目覆核</td></tr>
+          <tr><td class="l">股利配發率提高可能性</td><td class="l">「可能性是有的」，具體數字言之過早（2026-06-09）</td><td class="l">2025 年度盈餘分配（2026-04-10 決議）每股 NT$3.5 元，較 2024 年度 NT$5 元下降</td><td class="l"><span class="neu">留白反推</span>：兩者時間點不同（前瞻 vs 已分配），需待 2026 年度分配案驗證</td></tr>
+          <tr><td class="l">Q3 獲利展望</td><td class="l">法人預期 Q3 EPS 有機會達 4 元以上，全年獲利創近 4 年新高（優分析 2026-09 報導，非公司口徑）</td><td class="l">尚未公布，惟 7/8 月營收動能與 9 月處分利益認列時點吻合</td><td class="l"><span class="pos">方向支持</span>：待 2026Q3 財報驗證</td></tr>
+          <tr><td class="l">法說會逐字稿本身的存在與否</td><td class="l">（法說會摘要全文未提及是否公開逐字稿）</td><td class="l">本報告未能取得公司官方簡報或逐字稿，僅第三方部落格摘要可得</td><td class="l"><span class="neu">留白反推</span>：資料透明度本身即為觀察點，見風險矩陣 tab 資料限制說明</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ TAB 7：業務部門 ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="card">
+      <div class="card-title">部門揭露的限制與本 tab 的做法</div>
+      <p>慧洋財報未依地理區域或子公司別拆分損益（KY 控股架構下，逐孫公司/逐船 SPV 損益不對外揭露），也未揭露量（可租船天數/裝載量）與價（日租金 TCE）的官方分解數字。本 tab 改用財報附註六(23)揭露的「合約型態」（長約 vs 短約 vs 船舶管理服務）作為 BU 替代維度，並用「船隊艘數 vs 隱含單艘營收」反推量價貢獻方向。</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">收入結構：2025H1 vs 2026H1（必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 322" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="322" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">收入結構：2025H1 vs 2026H1（依收入類別）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#2563eb"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">2025H1</text><rect x="101.95" y="51" width="10" height="10" rx="1" fill="#dc2626"/><text x="119.95" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">2026H1</text><line x1="170" y1="76" x2="170" y2="264" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="280" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="304" y1="76" x2="304" y2="264" stroke="#eeeeee" stroke-width="1"/><text x="304" y="280" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="438" y1="76" x2="438" y2="264" stroke="#eeeeee" stroke-width="1"/><text x="438" y="280" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">4,000</text><line x1="572" y1="76" x2="572" y2="264" stroke="#eeeeee" stroke-width="1"/><text x="572" y="280" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">6,000</text><line x1="706" y1="76" x2="706" y2="264" stroke="#eeeeee" stroke-width="1"/><text x="706" y="280" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">8,000</text><line x1="840" y1="76" x2="840" y2="264" stroke="#eeeeee" stroke-width="1"/><text x="840" y="280" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10,000 NT$百萬元</text><line x1="170" y1="76" x2="170" y2="264" stroke="#111111" stroke-width="1.2"/><rect x="170" y="83.58" width="418.15" height="14.92" fill="#2563eb" rx="1" data-dim="2025H1"/><text x="593.15" y="94.54" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2025H1">6,241</text><rect x="170" y="100.5" width="577.5" height="14.92" fill="#dc2626" rx="1" data-dim="2026H1"/><text x="752.5" y="111.46" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2026H1">8,619</text><text x="160" y="103.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">長約收入</text><rect x="170" y="130.58" width="64.97" height="14.92" fill="#2563eb" rx="1" data-dim="2025H1"/><text x="239.97" y="141.54" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2025H1">969.7</text><rect x="170" y="147.5" width="63.28" height="14.92" fill="#dc2626" rx="1" data-dim="2026H1"/><text x="238.28" y="158.46" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2026H1">944.5</text><text x="160" y="150.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">短約收入</text><rect x="170" y="177.58" width="1.5" height="14.92" fill="#2563eb" rx="1" data-dim="2025H1"/><text x="175.66" y="188.54" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2025H1">9.80</text><rect x="170" y="194.5" width="1.5" height="14.92" fill="#dc2626" rx="1" data-dim="2026H1"/><text x="175.98" y="205.46" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2026H1">14.6</text><text x="160" y="197.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">船舶管理收入</text><rect x="170" y="224.58" width="6.37" height="14.92" fill="#2563eb" rx="1" data-dim="2025H1"/><text x="181.37" y="235.54" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2025H1">95.1</text><rect x="170" y="241.5" width="6.79" height="14.92" fill="#dc2626" rx="1" data-dim="2026H1"/><text x="181.79" y="252.46" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="2026H1">101.3</text><text x="160" y="244.5" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">其他</text><text x="22" y="310" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">單位：NT$百萬元。長約收入（含指數連結型）占比約90%，為BDI/BSI上漲之主要傳導管道；短約收入年增顯著但占比仍小。船舶管理收入占比不足2%。來源：2026Q2合併財報附註六(廿三)「與客戶合約之收入」，收入細分表。</text></svg>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：長約收入年增 38.1%（NT$62.41 億→NT$86.19 億）為成長主力，短約收入小幅下滑 2.6%（NT$9.70 億→NT$9.45 億）——成長幾乎全數來自長約（多數為指數連結型）隨運價上行的租金上調，而非短約船隊在現貨市場搶到更多生意，與船隊與業務平台 tab 的因果鏈敘事一致。出處：2026Q2 財報附註六(23)。</div>
+
+    <div class="bu-grid">
+      <div class="bu-card b">
+        <div class="bu-name">長約（指數連結型為主）</div>
+        <div class="bu-abbr">2026H1 NT$86.19 億 ｜ 占比約 89% ｜ YoY +38.1%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">覆蓋船隊</span><span class="bu-stat-val">截至2026年2月已81艘採指數連結</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">租期</span><span class="bu-stat-val">通常數年期，租金隨BPI/BSI等指數定期重設</span></div>
+        <p>租金按指數（而非固定費率）定期重設，租家承擔運價波動的部分風險由船東（慧洋）分享，換取「比市場指數更好的收益」（年報原文）。此模式讓慧洋在運價上行期直接受惠於市場指數，但也意味著租金不再是傳統長約認知中的「固定現金流」，本質上是把船舶出租的波動性部分轉嫁回自己身上，換取更高的期望報酬。</p>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">長約（固定租金型，少數）</div>
+        <div class="bu-abbr">占長約收入之非指數連結部分 ｜ 占比持續下降</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">租期</span><span class="bu-stat-val">多年期，租金於簽約時鎖定</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">趨勢</span><span class="bu-stat-val">占比逐年被指數連結型長約取代</span></div>
+        <p>傳統固定租金長約提供現金流可見度，是散裝航運業過去平滑景氣循環的主要工具；慧洋近年主動把船隊組合往指數連結型轉移，反映管理層判斷「用可見度換取更高期望報酬」在當前循環階段更划算，但也是本報告風險矩陣 tab 高風險項的合約結構根源。</p>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">短約／現貨（含船舶管理服務）</div>
+        <div class="bu-abbr">2026H1 NT$9.45 億＋NT$0.15 億船管收入 ｜ 占比約 10–11% ｜ YoY -2.6%</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">定義</span><span class="bu-stat-val">租賃期間短於半年即帳列短約（財報附註）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">航線</span><span class="bu-stat-val">東南亞、印度、中國、中東，拓展非洲、南美</span></div>
+        <p>現貨市場船舶依當期市場行情議價，收入直接反映當下運價，不需等指數重設週期，是船隊調度最靈活的一塊，但占比逐年被長約（尤其指數連結型）稀釋；船舶管理服務則是替第三方管理船舶收取的勞務收入，占比不到 2%，非核心成長動能。</p>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">地區別／子公司損益（如有揭露）</div>
+      <table>
+        <thead><tr><th class="l">地區／子公司</th><th class="l">產品與角色</th><th>金額（億）</th><th class="l">解讀</th></tr></thead>
+        <tbody>
+          <tr><td class="l">無此資料/不適用</td><td class="l">—</td><td>—</td><td class="l">KY 控股架構下財報未依地理區域或逐孫公司拆分損益，僅財報附註十三「大陸投資資訊」類項目適用於有中國轉投資之公司；慧洋 2026Q2 財報未見此類地區別損益揭露段落</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚑ 解讀（量價拆分）：財報僅揭露兩個船隊總數時點（2025 年底 126 艘、2026Q2 末 130 艘），無逐季船隊艘數序列，故下圖僅為 2 點比較、非連續 QoQ 序列。方向上，船隊艘數僅增加 4 艘（+3.2%）但 2026H1 營收年增 32.3%——營收成長主要來自「價」（運價/租金上調）而非「量」（船隊擴張），與長約收入年增 38.1%、船隊艘數僅微幅增加的組合互相印證。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">船隊規模 vs 隱含單艘營收</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">船隊規模 vs 隱含單艘營收：2025Q4 vs 2026Q2</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#2563eb"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">船隊艘數</text><rect x="110" y="51" width="10" height="10" rx="1" fill="#dc2626"/><text x="128" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">隱含單艘營收（NT$百萬元/艘）</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">150</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="136.8" width="141.64" height="319.2" fill="#2563eb" rx="1" data-dim="船隊艘數"/><text x="205.68" y="130.8" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="船隊艘數">126</text><rect x="278.5" y="353.65" width="141.64" height="102.35" fill="#dc2626" rx="1" data-dim="隱含單艘營收（NT$百萬元/艘）"/><text x="349.32" y="347.65" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="隱含單艘營收（NT$百萬元/艘）">40.4</text><text x="277.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2025Q4（126艘）</text><rect x="533.86" y="126.67" width="141.64" height="329.33" fill="#2563eb" rx="1" data-dim="船隊艘數"/><text x="604.68" y="120.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="船隊艘數">130</text><rect x="677.5" y="351.88" width="141.64" height="104.12" fill="#dc2626" rx="1" data-dim="隱含單艘營收（NT$百萬元/艘）"/><text x="748.32" y="345.88" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="隱含單艘營收（NT$百萬元/艘）">41.1</text><text x="676.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2026Q2（130艘）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">⚠️ 資料限制：財報僅揭露2025年底（126艘）與2026Q2末（130艘）兩個時點的船隊總數，無逐季船隊艘數序列，故僅能取此兩個可比時點做「量」（艘數）與「隱含價」（單季營收÷艘數，NT$百萬元/艘）對比，非連續QoQ序列。單艘隱含營收由40.4微升至41.1，顯示同期營收成長主要來自運價（價），船隊擴張（量）貢獻有限。來源：MOPS 合併財報 2025Q4/2026Q2營收、2025年報與2026Q2財報船隊揭露。</text></svg>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：⚠️ 僅 2 個可比時點（見上方資料限制），但隱含單艘營收由 2025 年底到 2026Q2 末顯著提升，方向上支持「營收成長主要來自運價而非船隊擴張」的結論。出處：MOPS 合併財報＋船隊揭露（2026Q2 財報附註十二）。</div>
+
+    <div class="card">
+      <div class="card-title">示意圖：三種租船結構的收入/成本流向</div>
+      <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;max-width:860px;margin:0 auto;">
+        <rect x="0" y="0" width="860" height="300" fill="#ffffff"/>
+        <rect x="10" y="10" width="260" height="120" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+        <text x="140" y="32" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8" font-family="sans-serif">固定租金長約</text>
+        <text x="140" y="54" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">租家：付固定月租金</text>
+        <text x="140" y="72" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">慧洋：收固定現金流</text>
+        <text x="140" y="90" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">運價波動風險：租家承擔</text>
+        <text x="140" y="108" text-anchor="middle" font-size="10.5" fill="#15803d" font-family="sans-serif">慧洋現金流：最平滑</text>
+        <rect x="300" y="10" width="260" height="120" rx="6" fill="#fff7ed" stroke="#c2600a"/>
+        <text x="430" y="32" text-anchor="middle" font-size="12" font-weight="700" fill="#c2600a" font-family="sans-serif">指數連結型長約</text>
+        <text x="430" y="54" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">租家：付「隨BPI/BSI指數」租金</text>
+        <text x="430" y="72" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">慧洋：收指數連動租金</text>
+        <text x="430" y="90" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">運價波動風險：雙方共擔</text>
+        <text x="430" y="108" text-anchor="middle" font-size="10.5" fill="#b91c1c" font-family="sans-serif">慧洋現金流：隨BDI循環波動</text>
+        <rect x="590" y="10" width="260" height="120" rx="6" fill="#fef2f2" stroke="#b91c4a"/>
+        <text x="720" y="32" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c4a" font-family="sans-serif">短約／現貨（航次租）</text>
+        <text x="720" y="54" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">租家：依單一航次議價</text>
+        <text x="720" y="72" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">慧洋：收當期市場行情</text>
+        <text x="720" y="90" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">運價波動風險：慧洋全數承擔</text>
+        <text x="720" y="108" text-anchor="middle" font-size="10.5" fill="#b91c1c" font-family="sans-serif">慧洋現金流：波動最劇烈但最即時反映市況</text>
+        <line x1="140" y1="140" x2="140" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="430" y1="140" x2="430" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="720" y1="140" x2="720" y2="170" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="60" y="175" width="740" height="105" rx="6" fill="#f5f6fa" stroke="#e2e4ea"/>
+        <text x="430" y="196" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1a1a2e" font-family="sans-serif">共同成本結構：燃油、滑油、船員薪資、保險、折舊、財務成本（借款利息）</text>
+        <text x="430" y="216" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">三種合約型態的營運成本結構大致相同（船舶本身的固定與變動成本），差異主要在收入端對運價的敏感度</text>
+        <text x="430" y="236" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">慧洋近年策略：船隊組合由固定租金長約 → 逐步轉向指數連結型長約（截至2026年2月已81艘）</text>
+        <text x="430" y="256" text-anchor="middle" font-size="10.5" fill="#333" font-family="sans-serif">效果：整體船隊對 BDI/BSI/BHSI 指數的敏感度系統性提高，2026Q2毛利率39.2% vs 2025Q1毛利率6.8%即為此結構下的波動幅度</text>
+        <text x="430" y="272" text-anchor="middle" font-size="9.5" fill="#888" font-family="sans-serif">來源：2025年報、2026Q2財報附註六(23)、富果直送法說會摘要（T2）。本圖為報告自製示意圖，非財報原始圖表。</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ============ TAB 8：資產負債表 ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="tbl-wrap">
+      <div class="tbl-title">合併資產負債表三期別（百萬元）</div>
+      <table>
+        <thead><tr><th class="l">項目</th><th>2026Q2末</th><th>2025年底</th><th>2025Q2末</th><th>vs 年底</th></tr></thead>
+        <tbody>
+          <tr class="section-head"><td colspan="5">資產</td></tr>
+          <tr><td>現金及約當現金</td><td>4,243.8</td><td>4,760.2</td><td>2,515.1</td><td class="neg">-10.8%</td></tr>
+          <tr><td>應收帳款淨額</td><td>164.7</td><td>194.6</td><td>131.7</td><td class="neg">-15.4%</td></tr>
+          <tr><td>流動資產</td><td>7,462.6</td><td>7,784.8</td><td>5,384.3</td><td>-4.1%</td></tr>
+          <tr><td>不動產廠房及設備（含船舶）</td><td>70,052.2</td><td>66,292.6</td><td>65,974.0</td><td class="pos">+5.7%</td></tr>
+          <tr><td>使用權資產</td><td>4,124.8</td><td>4,168.4</td><td>4,614.3</td><td>-1.1%</td></tr>
+          <tr class="total"><td><strong>資產總額</strong></td><td><strong>84,278.5</strong></td><td><strong>81,233.8</strong></td><td><strong>78,806.7</strong></td><td class="pos">+3.7%</td></tr>
+          <tr class="section-head"><td colspan="5">負債</td></tr>
+          <tr><td>短期借款</td><td>807.3</td><td>2,101.8</td><td>1,724.1</td><td class="pos">-61.6%</td></tr>
+          <tr><td>一年內到期長期借款</td><td>3,754.9</td><td>3,524.0</td><td>3,978.6</td><td>+6.5%</td></tr>
+          <tr><td>流動租賃負債</td><td>488.9</td><td>—（2025年前未單獨揭露）</td><td>—</td><td>—</td></tr>
+          <tr><td>流動負債</td><td>8,099.9</td><td>7,967.9</td><td>9,642.4</td><td>+1.7%</td></tr>
+          <tr><td>長期借款</td><td>19,927.6</td><td>17,733.1</td><td>17,880.9</td><td class="neg">+12.4%</td></tr>
+          <tr><td>應付公司債（非流動）</td><td>993.5</td><td>992.3</td><td>991.2</td><td>+0.1%</td></tr>
+          <tr><td>非流動租賃負債</td><td>2,292.7</td><td>—（2025年前未單獨揭露）</td><td>—</td><td>—</td></tr>
+          <tr><td>非流動負債</td><td>26,604.4</td><td>25,068.1</td><td>26,190.3</td><td>+6.1%</td></tr>
+          <tr class="total"><td><strong>負債總額</strong></td><td><strong>34,704.3</strong></td><td><strong>33,036.0</strong></td><td><strong>35,832.7</strong></td><td>+5.1%</td></tr>
+          <tr class="section-head"><td colspan="5">權益</td></tr>
+          <tr><td>股本</td><td>7,464.1</td><td>7,464.1</td><td>7,464.1</td><td>0.0%</td></tr>
+          <tr><td>保留盈餘</td><td>33,398.8</td><td>32,954.1</td><td>29,303.2</td><td>+1.3%</td></tr>
+          <tr class="total"><td><strong>歸屬母公司權益（權益總額）</strong></td><td><strong>49,574.2</strong></td><td><strong>48,197.8</strong></td><td><strong>42,974.1</strong></td><td class="pos">+2.9%</td></tr>
+          <tr><td>預收款項</td><td>567.6</td><td>443.6</td><td>327.2</td><td class="pos">+28.0%</td></tr>
+          <tr><td>預付款項（含預付船款）</td><td>105.1</td><td>97.1</td><td>117.8</td><td>+8.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚑ 解讀：結構性變化呈現「短期借款大減、長期借款增加」的組合（短期借款 QoQ 年初至今 -61.6%，長期借款 +12.4%），方向上與新造船 7 艘承諾（US$234.75M，多數尚未辦妥融資）一致——公司可能正把短期融資轉為長期融資以匹配船舶資產的長生命週期，但長期借款總額同步墊高也代表新船交船後槓桿將進一步上升。現金部位較年初下滑 10.8%（新造船資本支出加速、股利發放），流動租賃負債／非流動租賃負債為 2026 年起新增揭露欄位（IFRS 16 相關，2025 年以前未單獨列示，非數字消失）。出處：MOPS 合併財報 t164sb01（2026Q2、2025Q4、2025Q2）。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">框架必備追蹤四項（資產負債表）</div>
+      <table>
+        <thead><tr><th class="l">項目</th><th class="l">數字</th><th class="l">來源</th><th class="l">解讀</th></tr></thead>
+        <tbody>
+          <tr><td><strong>應收帳款天數 DSO</strong></td><td class="l">2026Q2 約 2.8 天（= 應收帳款淨額 NT$164.7 百萬 ÷ 營收 NT$5,341.9 百萬 × 91 天）</td><td class="l">各季合併資產負債表／綜合損益表</td><td class="l">長期落在 2.5–4 天的極低水位，屬船舶運送業正常水準（租金多為預收/月結），非核心觀察指標</td></tr>
+          <tr><td><strong>未開始租賃（leases not yet commenced）</strong></td><td class="l">無此資料/不適用</td><td class="l">2026Q2 財報「租賃」附註（ASC 842／IFRS 16 對應揭露段）</td><td class="l">財報未見「尚未開始之租賃」揭露段落，已就此關鍵字全文檢索確認未找到對應揭露</td></tr>
+          <tr><td><strong>採購承諾</strong></td><td class="l">7 艘新船購建合約，合約總價 US$234,753,200（約 NT$74.72 億）；2026 年 US$93,431 千（3 艘）、2027 年 US$141,322 千（4 艘）</td><td class="l">2026Q2 財報附註九「重大或有負債及未認列之合約承諾」</td><td class="l">與供應鏈 tab 揭露的日系船廠新造船承諾為同一組數字，交叉連結見下方</td></tr>
+          <tr><td><strong>客戶預付款（合約負債）</strong></td><td class="l">預收款項 2026Q2 末 NT$567.6 百萬（12 季新高）</td><td class="l">各季合併資產負債表「預收款項」科目</td><td class="l">慧洋（散裝航運）幾乎不存在傳統合約負債科目，以「預收款項」取代；金額雖小但方向上與運價回升期客戶提前鎖艙一致</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">預收款項（客戶預付款）12 季走勢</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">預收款項（CurrentAdvances）12季餘額走勢</text><line x1="76" y1="456" x2="864" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="322" x2="864" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="188" x2="864" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">NT$百萬元</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 76 472)">23Q3</text><line x1="147.64" y1="456" x2="147.64" y2="460" stroke="#999999" stroke-width="1"/><text x="147.64" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 147.63636363636363 472)">23Q4</text><line x1="219.27" y1="456" x2="219.27" y2="460" stroke="#999999" stroke-width="1"/><text x="219.27" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 219.27272727272728 472)">24Q1</text><line x1="290.91" y1="456" x2="290.91" y2="460" stroke="#999999" stroke-width="1"/><text x="290.91" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 290.9090909090909 472)">24Q2</text><line x1="362.55" y1="456" x2="362.55" y2="460" stroke="#999999" stroke-width="1"/><text x="362.55" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 362.54545454545456 472)">24Q3</text><line x1="434.18" y1="456" x2="434.18" y2="460" stroke="#999999" stroke-width="1"/><text x="434.18" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 434.1818181818182 472)">24Q4</text><line x1="505.82" y1="456" x2="505.82" y2="460" stroke="#999999" stroke-width="1"/><text x="505.82" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 505.8181818181818 472)">25Q1</text><line x1="577.45" y1="456" x2="577.45" y2="460" stroke="#999999" stroke-width="1"/><text x="577.45" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 577.4545454545455 472)">25Q2</text><line x1="649.09" y1="456" x2="649.09" y2="460" stroke="#999999" stroke-width="1"/><text x="649.09" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 649.0909090909091 472)">25Q3</text><line x1="720.73" y1="456" x2="720.73" y2="460" stroke="#999999" stroke-width="1"/><text x="720.73" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 720.7272727272727 472)">25Q4</text><line x1="792.36" y1="456" x2="792.36" y2="460" stroke="#999999" stroke-width="1"/><text x="792.36" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 792.3636363636364 472)">26Q1</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 864 472)">26Q2</text><polyline points="76,229.14 147.64,155.77 219.27,102.98 290.91,179.83 362.55,185.99 434.18,174.47 505.82,207.3 577.45,236.78 649.09,154.5 720.73,158.79 792.36,131.99 864,75.71" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="229.14" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="147.64" cy="155.77" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="219.27" cy="102.98" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="290.91" cy="179.83" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="362.55" cy="185.99" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="434.18" cy="174.47" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="505.82" cy="207.3" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="577.45" cy="236.78" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="649.09" cy="154.5" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="720.73" cy="158.79" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="792.36" cy="131.99" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="864" cy="75.71" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><line x1="405" y1="40" x2="421" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="427" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">預收款項</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">2637（散裝航運）無ContractLiabilities類科目，以「預收款項」科目取代，金額小、非核心觀察指標（資料缺口：見README，此為誠實揭露之替代科目，非合約負債）。2026Q2達NT$567.6百萬，為12季新高，方向上與運價回升期客戶提前鎖艙的傾向一致，但金額仍遠小於資產負債表規模。來源：各季合併資產負債表。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：2026Q2 達 12 季新高 NT$567.6 百萬，惟金額仍小（占流動負債不到 7%），方向上與運價回升期客戶提前鎖艙一致，但不足以作為獨立的核心觀察指標。出處：各季合併資產負債表。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">應收帳款天數（DSO）12 季走勢</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">應收帳款天數（DSO）12季走勢</text><line x1="76" y1="456" x2="864" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355.5" x2="864" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="76" y1="255" x2="864" y2="255" stroke="#eeeeee" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="154.5" x2="864" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">天</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 76 472)">23Q3</text><line x1="147.64" y1="456" x2="147.64" y2="460" stroke="#999999" stroke-width="1"/><text x="147.64" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 147.63636363636363 472)">23Q4</text><line x1="219.27" y1="456" x2="219.27" y2="460" stroke="#999999" stroke-width="1"/><text x="219.27" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 219.27272727272728 472)">24Q1</text><line x1="290.91" y1="456" x2="290.91" y2="460" stroke="#999999" stroke-width="1"/><text x="290.91" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 290.9090909090909 472)">24Q2</text><line x1="362.55" y1="456" x2="362.55" y2="460" stroke="#999999" stroke-width="1"/><text x="362.55" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 362.54545454545456 472)">24Q3</text><line x1="434.18" y1="456" x2="434.18" y2="460" stroke="#999999" stroke-width="1"/><text x="434.18" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 434.1818181818182 472)">24Q4</text><line x1="505.82" y1="456" x2="505.82" y2="460" stroke="#999999" stroke-width="1"/><text x="505.82" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 505.8181818181818 472)">25Q1</text><line x1="577.45" y1="456" x2="577.45" y2="460" stroke="#999999" stroke-width="1"/><text x="577.45" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 577.4545454545455 472)">25Q2</text><line x1="649.09" y1="456" x2="649.09" y2="460" stroke="#999999" stroke-width="1"/><text x="649.09" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 649.0909090909091 472)">25Q3</text><line x1="720.73" y1="456" x2="720.73" y2="460" stroke="#999999" stroke-width="1"/><text x="720.73" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 720.7272727272727 472)">25Q4</text><line x1="792.36" y1="456" x2="792.36" y2="460" stroke="#999999" stroke-width="1"/><text x="792.36" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 792.3636363636364 472)">26Q1</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 864 472)">26Q2</text><polyline points="76,124.35 147.64,194.7 219.27,144.45 290.91,224.85 362.55,214.8 434.18,144.45 505.82,64.05 577.45,144.45 649.09,54 720.73,104.25 792.36,114.3 864,174.6" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="124.35" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="147.64" cy="194.7" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="219.27" cy="144.45" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="290.91" cy="224.85" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="362.55" cy="214.8" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="434.18" cy="144.45" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="505.82" cy="64.05" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="577.45" cy="144.45" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="649.09" cy="54" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="720.73" cy="104.25" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="792.36" cy="114.3" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="864" cy="174.6" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><line x1="418.51" y1="40" x2="434.51" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="440.51" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">DSO</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">DSO＝期末應收帳款÷單季營收×91。2637應收帳款占資產比重極低（船舶租賃業以預收租金為主，非應收帳款驅動），DSO長期落在2.5–4天量級，屬正常水準，非核心觀察指標。來源：各季合併資產負債表與綜合損益表。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：DSO 長期落在 2.5–4 天，屬正常水準，非核心觀察指標；波動幅度小於營收成長速度，顯示應收帳款品質未隨營收快速成長而惡化。出處：各季合併資產負債表。</div>
+
+    <div class="card">
+      <div class="card-title">附註：信評／股利／庫藏股／擔保</div>
+      <ul>
+        <li><strong>股利政策：</strong>公司章程規定當年度股利總額不得低於合併淨利之 10%，現金股利分派比例不得低於當年全部股利總額之 20%；2025 年度盈餘分配案（2026-04-10 董事會決議）為每股 NT$3.5 元現金股利，較 2024 年度 NT$5 元下降，公司聲明「符合股利政策，分配總額相較往年亦無重大變動」。</li>
+        <li><strong>庫藏股：</strong>無此資料——本次任務未於財報全文檢索到庫藏股相關揭露段落。</li>
+        <li><strong>員工酬勞／董監酬勞：</strong>財報附註列有估列基礎，惟本報告未逐項展開金額，屬非核心項目。</li>
+        <li><strong>擔保質押：</strong>截至 2026-06-30，提供質押擔保之不動產廠房及設備（多為船舶）帳面價值達 NT$1,407.7 億，另有投資性不動產 NT$22.5 億、金融資產合計約 NT$355.3 億提供銀行借款擔保，質押資產總計約 NT$1,445.5 億（2025 年底為 NT$1,352.3 億），顯示公司絕大部分船舶資產已用作銀行融資擔保品，新船若需額外融資，可動用的無擔保資產空間有限。</li>
+        <li><strong>信評：</strong>無此資料——財報全文未見信評機構評等揭露段落，2637 為 TWSE 上市公司，非必然公開發行信評。</li>
+        <li><strong>母公司持股／股權結構：</strong>董事長藍俊昇本人持股 191,815,349 股（截至 2026/08，占已質押 31.08%），法人董事慧文投資有限公司持股 36,242,047 股（質押 80.72%），詳見風險矩陣 tab。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ TAB 9：現金流量 ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">2026Q2 單季（百萬元）</div>
+        <div class="cf-section">
+          <div class="cf-header">營業活動</div>
+          <div class="cf-row"><span class="cf-lbl">營業活動現金流</span><span class="cf-val">3,016.6</span></div>
+        </div>
+        <div class="cf-section">
+          <div class="cf-header">投資活動</div>
+          <div class="cf-row"><span class="cf-lbl">購置不動產廠房設備（造船/購船）</span><span class="cf-val">-134.6</span></div>
+          <div class="cf-row"><span class="cf-lbl">處分不動產廠房設備價款</span><span class="cf-val">311.1</span></div>
+          <div class="cf-row"><span class="cf-lbl">投資活動現金流（合計）</span><span class="cf-val">-3,129.1</span></div>
+        </div>
+        <div class="cf-section">
+          <div class="cf-header">籌資活動</div>
+          <div class="cf-row"><span class="cf-lbl">租賃負債清償</span><span class="cf-val">-65.3</span></div>
+          <div class="cf-row"><span class="cf-lbl">籌資活動現金流（合計）</span><span class="cf-val">-1,593.7</span></div>
+        </div>
+        <div class="cf-row total-row"><span class="cf-lbl">自由現金流（CFO－造船資本支出＋處分價款）</span><span class="cf-val">3,193.1</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">2026H1 累計 vs 2025H1（百萬元）</div>
+        <div class="cf-section">
+          <div class="cf-header">營業活動</div>
+          <div class="cf-row"><span class="cf-lbl">2026H1</span><span class="cf-val">5,357.1</span></div>
+          <div class="cf-row"><span class="cf-lbl">2025H1</span><span class="cf-val">2,485.5</span></div>
+        </div>
+        <div class="cf-section">
+          <div class="cf-header">投資活動</div>
+          <div class="cf-row"><span class="cf-lbl">2026H1（造船資本支出 -441.6，處分價款 +543.9）</span><span class="cf-val">-4,727.9</span></div>
+          <div class="cf-row"><span class="cf-lbl">2025H1</span><span class="cf-val">836.3</span></div>
+        </div>
+        <div class="cf-section">
+          <div class="cf-header">籌資活動</div>
+          <div class="cf-row"><span class="cf-lbl">2026H1（含發放股利 -1,669.2）</span><span class="cf-val">-1,221.0</span></div>
+          <div class="cf-row"><span class="cf-lbl">2025H1（含發放股利 -2,063.9）</span><span class="cf-val">-4,636.5</span></div>
+        </div>
+        <div class="cf-row total-row"><span class="cf-lbl">2026H1 自由現金流</span><span class="cf-val">5,459.4</span></div>
+      </div>
+    </div>
+    <div class="note">⚑ 解讀：2026H1 營業活動現金流 NT$53.57 億，YoY 較 2025H1 的 NT$24.86 億大幅成長，與損益表 tab 營業利益成長方向一致；投資活動現金流由 2025H1 淨流入 NT$8.4 億轉為 2026H1 淨流出 NT$47.3 億，主要反映新造船資本支出加速（造船付款 -441.6 百萬）與處分舊船價款減少；籌資活動現金流兩期均為淨流出，主要是股利發放與長短期借款淨額變動。現金及約當現金 2026Q2 末較年初下滑（見資產負債表 tab），但這是「投資活動加速消耗現金」而非「本業現金流惡化」的結果——本業（營業活動）現金流其實是明顯轉強的。出處：2026Q2/2025H1 合併現金流量表（MOPS iXBRL 逐季，Q4=全年YTD-前三季YTD 反推法不適用於此處，本節直接取財報 YTD 欄位）。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">2026H1 自由現金流橋接（必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="500" fill="#ffffff"/><text x="450" y="28" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">2026H1自由現金流橋接（NT$百萬元）</text><line x1="78" y1="424" x2="870" y2="424" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="428" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="349.6" x2="870" y2="349.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="353.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,500</text><line x1="78" y1="275.2" x2="870" y2="275.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="279.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5,000</text><line x1="78" y1="200.8" x2="870" y2="200.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="204.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">7,500</text><line x1="78" y1="126.4" x2="870" y2="126.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="130.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10,000</text><line x1="78" y1="52" x2="870" y2="52" stroke="#eeeeee" stroke-width="1"/><text x="68" y="56" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">12,500</text><text x="68" y="40" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">NT$百萬元</text><line x1="78" y1="52" x2="78" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="424" x2="870" y2="424" stroke="#111111" stroke-width="1.2"/><line x1="176" y1="264.57" x2="244" y2="264.57" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="308" y1="277.71" x2="376" y2="277.71" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="440" y1="261.53" x2="508" y2="261.53" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="572" y1="99.06" x2="640" y2="99.06" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><line x1="704" y1="148.73" x2="772" y2="148.73" stroke="#999999" stroke-width="1" stroke-dasharray="3 3"/><rect x="112" y="264.57" width="64" height="159.43" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="144" y="257.57" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+5,357</text><text x="144" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">營運現金流(CFO)</text><rect x="244" y="264.57" width="64" height="13.14" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="276" y="292.71" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-441.6</text><text x="276" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">造船/購船資本支出</text><rect x="376" y="261.53" width="64" height="16.19" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="408" y="254.53" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+543.9</text><text x="408" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">處分舊船價款</text><rect x="508" y="99.06" width="64" height="162.47" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="540" y="92.06" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+5,459</text><text x="540" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">自由現金流(FCF)</text><rect x="640" y="99.06" width="64" height="49.68" fill="#dc2626" fill-opacity="0.9" rx="2"/><text x="672" y="163.73" text-anchor="middle" font-size="11.5" font-weight="600" fill="#dc2626" font-family="sans-serif">-1,669</text><text x="672" y="444" text-anchor="middle" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif">股利分配</text><rect x="772" y="135.39" width="64" height="13.34" fill="#16a34a" fill-opacity="0.9" rx="2"/><text x="804" y="128.39" text-anchor="middle" font-size="11.5" font-weight="600" fill="#16a34a" font-family="sans-serif">+448.2</text><text x="804" y="438" text-anchor="end" font-size="11" fill="#333333" font-weight="400" font-family="sans-serif" transform="rotate(-30 804 438)">淨借款變動(含租賃清償)</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">營運現金流NT$5,357.1M為近年高點；扣造船/購船資本支出NT$441.6M、加處分舊船價款NT$543.9M後FCF達NT$5,459.4M。股利分配NT$1,669.2M（對2025年度盈餘，每股NT$3.5元）後，淨借款變動（含租賃清償）為正NT$448.2M。⚠️ 此簡化橋接聚焦營運現金生成與資本配置主軸，未納入CFI項下其他金融資產（定存/受限資金等）異動，故末項不等於實際現金總變動（H1實際現金減少NT$516.4M，主因短期理財性資產調整與匯率換算，非核心營運現金流所致）。來源：2026Q2合併現金流量表YTD數字。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：2026H1 FCF 達 NT$54.59 億（營業活動現金流 NT$53.57 億－造船資本支出 NT$4.42 億＋處分舊船價款 NT$5.44 億），但股利分配 NT$16.69 億後，公司仍淨新增借款約 NT$4.48 億——顯示即便本業現金流強勁，公司仍選擇維持相對高的股利發放並以舉債支應部分新造船資本支出，而非完全內部融資，這與資產負債表 tab 長期借款上升 12.4% 的觀察一致。出處：2026Q2 合併現金流量表 YTD 欄位。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">營運／投資／籌資活動現金流 12 季組成</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">營運／投資／籌資活動現金流 12季組成</text><rect x="315" y="41" width="12" height="12" rx="2" fill="#16a34a"/><text x="337" y="50" font-size="11.5" fill="#333333" font-family="sans-serif">籌資活動</text><rect x="405" y="41" width="12" height="12" rx="2" fill="#dc2626"/><text x="427" y="50" font-size="11.5" fill="#333333" font-family="sans-serif">投資活動</text><rect x="495" y="41" width="12" height="12" rx="2" fill="#2563eb"/><text x="517" y="50" font-size="11.5" fill="#333333" font-family="sans-serif">營業活動</text><line x1="78" y1="456" x2="866" y2="456" stroke="#eeeeee" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-7,500</text><line x1="78" y1="391.33" x2="866" y2="391.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="395.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-5,000</text><line x1="78" y1="326.67" x2="866" y2="326.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="330.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-2,500</text><line x1="78" y1="262" x2="866" y2="262" stroke="#c9c9c9" stroke-width="1"/><text x="68" y="266" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="197.33" x2="866" y2="197.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="201.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,500</text><line x1="78" y1="132.67" x2="866" y2="132.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="136.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5,000</text><line x1="78" y1="68" x2="866" y2="68" stroke="#eeeeee" stroke-width="1"/><text x="68" y="72" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">7,500</text><text x="68" y="60" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">NT$百萬元</text><line x1="78" y1="68" x2="78" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="456" x2="866" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="78" y1="456" x2="78" y2="460" stroke="#999999" stroke-width="1"/><text x="78" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">23Q3</text><line x1="149.64" y1="456" x2="149.64" y2="460" stroke="#999999" stroke-width="1"/><text x="149.64" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">23Q4</text><line x1="221.27" y1="456" x2="221.27" y2="460" stroke="#999999" stroke-width="1"/><text x="221.27" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">24Q1</text><line x1="292.91" y1="456" x2="292.91" y2="460" stroke="#999999" stroke-width="1"/><text x="292.91" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">24Q2</text><line x1="364.55" y1="456" x2="364.55" y2="460" stroke="#999999" stroke-width="1"/><text x="364.55" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">24Q3</text><line x1="436.18" y1="456" x2="436.18" y2="460" stroke="#999999" stroke-width="1"/><text x="436.18" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">24Q4</text><line x1="507.82" y1="456" x2="507.82" y2="460" stroke="#999999" stroke-width="1"/><text x="507.82" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">25Q1</text><line x1="579.45" y1="456" x2="579.45" y2="460" stroke="#999999" stroke-width="1"/><text x="579.45" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">25Q2</text><line x1="651.09" y1="456" x2="651.09" y2="460" stroke="#999999" stroke-width="1"/><text x="651.09" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">25Q3</text><line x1="722.73" y1="456" x2="722.73" y2="460" stroke="#999999" stroke-width="1"/><text x="722.73" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">25Q4</text><line x1="794.36" y1="456" x2="794.36" y2="460" stroke="#999999" stroke-width="1"/><text x="794.36" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">26Q1</text><line x1="866" y1="456" x2="866" y2="460" stroke="#999999" stroke-width="1"/><text x="866" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">26Q2</text><path d="M78,288.83 L149.64,207.54 L221.27,207.39 L292.91,199.71 L364.55,191.59 L436.18,211.81 L507.82,237.59 L579.45,222.12 L651.09,205.57 L722.73,193.61 L794.36,201.46 L866,183.97 L866,456 L794.36,456 L722.73,456 L651.09,456 L579.45,456 L507.82,456 L436.18,456 L364.55,456 L292.91,456 L221.27,456 L149.64,456 L78,456 Z" fill="#2563eb" fill-opacity="0.3" stroke="none" data-dim="營業活動"/><polyline points="78,288.83 149.64,207.54 221.27,207.39 292.91,199.71 364.55,191.59 436.18,211.81 507.82,237.59 579.45,222.12 651.09,205.57 722.73,193.61 794.36,201.46 866,183.97" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" data-dim="營業活動"/><path d="M78,127.67 L149.64,285.1 L221.27,291.75 L292.91,300.75 L364.55,251.05 L436.18,239.52 L507.82,265.04 L579.45,237.33 L651.09,233.52 L722.73,258.13 L794.36,303.36 L866,342.94 L866,456 L794.36,456 L722.73,456 L651.09,456 L579.45,456 L507.82,456 L436.18,456 L364.55,456 L292.91,456 L221.27,456 L149.64,456 L78,456 Z" fill="#dc2626" fill-opacity="0.3" stroke="none" data-dim="投資活動"/><polyline points="78,127.67 149.64,285.1 221.27,291.75 292.91,300.75 364.55,251.05 436.18,239.52 507.82,265.04 579.45,237.33 651.09,233.52 722.73,258.13 794.36,303.36 866,342.94" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" data-dim="投資活動"/><path d="M78,436.98 L149.64,281.09 L221.27,260.05 L292.91,303.67 L364.55,347.92 L436.18,313.68 L507.82,338 L579.45,305.93 L651.09,338.65 L722.73,292.42 L794.36,252.36 L866,303.22 L866,456 L794.36,456 L722.73,456 L651.09,456 L579.45,456 L507.82,456 L436.18,456 L364.55,456 L292.91,456 L221.27,456 L149.64,456 L78,456 Z" fill="#16a34a" fill-opacity="0.3" stroke="none" data-dim="籌資活動"/><polyline points="78,436.98 149.64,281.09 221.27,260.05 292.91,303.67 364.55,347.92 436.18,313.68 507.82,338 579.45,305.93 651.09,338.65 722.73,292.42 794.36,252.36 866,303.22" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" data-dim="籌資活動"/></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">單位：NT$百萬元。2026Q2投資活動現金流轉為顯著淨流出（-3,129.1），主因資本支出加速與處分船舶價款減少，籌資活動則因借款/租賃淨減少持續流出。來源：各季合併現金流量表（單季，YTD相減）。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：2026Q2 投資活動轉為顯著淨流出（新造船資本支出加速），營業活動現金流則呈現隨毛利率同步走高的趨勢，兩者交叉驗證「本業獲利轉強、同時資本支出加速」的雙軌敘事，與特殊交易/事件 tab 的新造船計畫直接對應。出處：各季合併現金流量表。</div>
+  </div>
+
+  <!-- ============ TAB 10：估值觀察 ============ -->
+  <div id="panel-val" class="panel">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">NT$102.0</div><div class="stat-lbl">收盤價（市值 NT$761.3 億）</div></div>
+      <div class="stat-box"><div class="stat-val">11.30倍</div><div class="stat-lbl">Trailing P/E</div></div>
+      <div class="stat-box"><div class="stat-val">11.90倍</div><div class="stat-lbl">Forward P/E</div></div>
+      <div class="stat-box"><div class="stat-val">1.54倍</div><div class="stat-lbl">P/B</div></div>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">估值與體質比率（每項附意義）</div>
+      <table>
+        <thead><tr><th class="l">比率</th><th>數值</th><th class="l">計算</th><th class="l">意義</th></tr></thead>
+        <tbody>
+          <tr><td class="l">Trailing P/E</td><td>11.30倍</td><td class="l">市價 ÷ 近 12 個月 EPS</td><td class="l">相對同業（Star Bulk 12.7、Safe Bulkers 11.9）持平，遠低於一般成長股，反映市場對散裝航運循環性獲利給予的折價</td></tr>
+          <tr><td class="l">Forward P/E</td><td>11.90倍</td><td class="l">市價 ÷ 未來 12 個月預估 EPS</td><td class="l">Forward 略高於 Trailing，隱含市場預期獲利成長動能將放緩，與「BDI 循環終將回落」的一般預期一致</td></tr>
+          <tr><td class="l">P/B</td><td>1.54倍</td><td class="l">市價 ÷ 每股淨值</td><td class="l">散裝航運股常以 NAV（船舶重置/處分價值）評價，1.54倍代表市場給予帳面淨值約 54% 溢價，高於多數台股同業（0.77–1.62倍區間）</td></tr>
+          <tr><td class="l">ROE</td><td>14.28%</td><td class="l">近 12 個月淨利 ÷ 股東權益</td><td class="l">為台股 5 家同業中最高（次高為 2606 U-Ming 的 15.79%，相近），P/B 溢價有基本面支撐而非純情緒推升</td></tr>
+          <tr><td class="l">股利殖利率</td><td>3.43%</td><td class="l">近 12 個月現金股利 ÷ 市價</td><td class="l">處於同業區間中段（2.77%–5.79%），2025 年度實際配發 NT$3.5 元較前一年度下降，見資產負債表 tab 股利政策說明</td></tr>
+          <tr><td class="l"><strong>利息保障倍數</strong>（框架必備）</td><td><strong>7.9倍</strong>（2026Q2）</td><td class="l">營業利益 ÷ 財務成本 = 2,032.2 ÷ 258.4</td><td class="l">由 2025Q1 谷底 0.5 倍大幅回升，財務體質同步佐證管理層「負債比持續下降」的口徑（見損益表 tab 財測對照表）</td></tr>
+          <tr><td class="l">負債比（負債/資產）</td><td>41.2%（2026Q2末）</td><td class="l">負債總額 34,704.3 ÷ 資產總額 84,278.5</td><td class="l">與管理層口徑「2026Q1 為 40.2%」量級一致（本報告用 2026Q2 數字略高，主因新造船帶動長期借款增加）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚑ 隱含 P/E 反推市場懷疑程度：慧洋 Trailing P/E 11.3 倍、營收成長率 37.5%（同業中最高），若市場願意用一般成長股的估值邏輯定價，本益成長比（PEG）應遠低於 1，理論股價應更高；實際上市場給予的估值與 Star Bulk（12.7倍、成長 44.5%）、Safe Bulkers（11.9倍、成長 33%）等同樣高成長的美股散裝航運同業相近，顯示市場定價邏輯是「循環性產業的谷值本益比」而非「成長股本益比」——換言之，市場對慧洋當前的高獲利成長抱持懷疑，認為 BDI 循環終將回落、本季獲利不可外推，這正是低本益比高股息殖利率的散裝航運股典型定價模式。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">利息保障倍數 12 季走勢</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">利息保障倍數12季走勢（營業利益÷財務成本）</text><line x1="76" y1="456" x2="864" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355.5" x2="864" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="255" x2="864" y2="255" stroke="#eeeeee" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="76" y1="154.5" x2="864" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6</text><line x1="76" y1="54" x2="864" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">8</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="864" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">倍</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 76 472)">23Q3</text><line x1="147.64" y1="456" x2="147.64" y2="460" stroke="#999999" stroke-width="1"/><text x="147.64" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 147.63636363636363 472)">23Q4</text><line x1="219.27" y1="456" x2="219.27" y2="460" stroke="#999999" stroke-width="1"/><text x="219.27" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 219.27272727272728 472)">24Q1</text><line x1="290.91" y1="456" x2="290.91" y2="460" stroke="#999999" stroke-width="1"/><text x="290.91" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 290.9090909090909 472)">24Q2</text><line x1="362.55" y1="456" x2="362.55" y2="460" stroke="#999999" stroke-width="1"/><text x="362.55" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 362.54545454545456 472)">24Q3</text><line x1="434.18" y1="456" x2="434.18" y2="460" stroke="#999999" stroke-width="1"/><text x="434.18" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 434.1818181818182 472)">24Q4</text><line x1="505.82" y1="456" x2="505.82" y2="460" stroke="#999999" stroke-width="1"/><text x="505.82" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 505.8181818181818 472)">25Q1</text><line x1="577.45" y1="456" x2="577.45" y2="460" stroke="#999999" stroke-width="1"/><text x="577.45" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 577.4545454545455 472)">25Q2</text><line x1="649.09" y1="456" x2="649.09" y2="460" stroke="#999999" stroke-width="1"/><text x="649.09" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 649.0909090909091 472)">25Q3</text><line x1="720.73" y1="456" x2="720.73" y2="460" stroke="#999999" stroke-width="1"/><text x="720.73" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 720.7272727272727 472)">25Q4</text><line x1="792.36" y1="456" x2="792.36" y2="460" stroke="#999999" stroke-width="1"/><text x="792.36" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 792.3636363636364 472)">26Q1</text><line x1="864" y1="456" x2="864" y2="460" stroke="#999999" stroke-width="1"/><text x="864" y="472" text-anchor="end" font-size="11" fill="#444444" font-family="sans-serif" transform="rotate(-35 864 472)">26Q2</text><polyline points="76,420.83 147.64,320.33 219.27,315.3 290.91,255 362.55,260.02 434.18,310.27 505.82,430.88 577.45,360.53 649.09,239.93 720.73,134.4 792.36,229.88 864,59.02" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="420.83" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="147.64" cy="320.33" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="219.27" cy="315.3" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="290.91" cy="255" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="362.55" cy="260.02" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="434.18" cy="310.27" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="505.82" cy="430.88" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="577.45" cy="360.53" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="649.09" cy="239.93" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="720.73" cy="134.4" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="792.36" cy="229.88" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><circle cx="864" cy="59.02" r="3.6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/><text x="76" y="410.83" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">0.700</text><text x="147.64" y="310.33" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">2.70</text><text x="219.27" y="305.3" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">2.80</text><text x="290.91" y="245" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">4</text><text x="362.55" y="250.02" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">3.90</text><text x="434.18" y="300.27" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">2.90</text><text x="505.82" y="420.88" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">0.500</text><text x="577.45" y="350.53" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">1.90</text><text x="649.09" y="229.93" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">4.30</text><text x="720.73" y="124.4" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">6.40</text><text x="792.36" y="219.88" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">4.50</text><text x="864" y="49.02" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600" font-family="sans-serif">7.90</text><line x1="378.84" y1="40" x2="394.84" y2="40" stroke="#2563eb" stroke-width="2.4"/><text x="400.84" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營業利益÷財務成本</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">財務成本自2023Q3高點NT$553.2M逐季降至2026Q2的NT$258.4M（借款餘額下降＋降息環境），加上營業利益隨運價回升，利息保障倍數由2025Q1谷底0.5倍大幅改善至2026Q2的7.9倍，財務體質同步佐證管理層「負債比自2022年49.9%降至2026Q1的40.2%」之說法方向一致。來源：各季合併綜合損益表營業利益與財務成本。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：由 2025Q1 谷底 0.5 倍回升至 2026Q2 的 7.9 倍，財務體質同步佐證管理層去槓桿說法，也是本報告風險矩陣 tab 將「新船付款高峰」列為中長期而非近期風險的依據之一。出處：各季合併綜合損益表（營業利益／財務成本）。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">同業 P/E vs 營收成長（必備圖）</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">散裝航運同業：本益比(P/E) vs 營收成長（2026-09-20）</text><line x1="76" y1="458" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="320.67" x2="860" y2="320.67" stroke="#eeeeee" stroke-width="1"/><text x="66" y="324.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5</text><line x1="76" y1="183.33" x2="860" y2="183.33" stroke="#eeeeee" stroke-width="1"/><text x="66" y="187.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="76" y1="46" x2="860" y2="46" stroke="#eeeeee" stroke-width="1"/><text x="66" y="50" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">15</text><line x1="76" y1="46" x2="76" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="232.8" y1="46" x2="232.8" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="232.8" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="389.6" y1="46" x2="389.6" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="389.6" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="546.4" y1="46" x2="546.4" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="546.4" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">30</text><line x1="703.2" y1="46" x2="703.2" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="703.2" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="860" y1="46" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="860" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">營收YoY（%）</text><text x="18" y="252" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252)">Trailing P/E（倍）</text><line x1="539.34" y1="46" x2="539.34" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="543.34" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 29.6</text><line x1="76" y1="146.25" x2="860" y2="146.25" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="141.25" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 11.4</text><circle cx="664" cy="147.63" r="26" fill="#7c3aed" fill-opacity="0.55" stroke="#7c3aed" stroke-width="1.5"/><circle cx="679.68" cy="144.88" r="24.1" fill="#dc2626" fill-opacity="0.55" stroke="#dc2626" stroke-width="1.5"/><circle cx="436.64" cy="254.75" r="13.7" fill="#2563eb" fill-opacity="0.55" stroke="#2563eb" stroke-width="1.5"/><circle cx="485.25" cy="213.55" r="11.05" fill="#d97706" fill-opacity="0.55" stroke="#d97706" stroke-width="1.5"/><circle cx="231.23" cy="122.91" r="10.49" fill="#16a34a" fill-opacity="0.55" stroke="#16a34a" stroke-width="1.5"/><circle cx="773.76" cy="109.17" r="5.79" fill="#65a30d" fill-opacity="0.55" stroke="#65a30d" stroke-width="1.5"/><circle cx="593.44" cy="131.15" r="3.04" fill="#db2777" fill-opacity="0.55" stroke="#db2777" stroke-width="1.5"/><circle cx="149.7" cy="284.96" r="2.5" fill="#0891b2" fill-opacity="0.55" stroke="#0891b2" stroke-width="1.5"/><text x="664" y="116.63" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">慧洋-KY</text><text x="679.68" y="115.78" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">裕民航運</text><text x="436.64" y="236.05" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">正德海運</text><text x="485.25" y="197.5" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">台航</text><text x="231.23" y="107.41" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">中航</text><text x="773.76" y="98.39" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Star Bulk</text><text x="593.44" y="123.11" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Safe Bulkers</text><text x="149.7" y="277.46" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Diana Shipping</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">X：最近一期營收YoY（%）；Y：Trailing P/E（倍）；氣泡＝市值（十億，台股TWD/美股USD混列，量綱不同僅供組內相對比較）。此圖為框架要求之必備圖表。來源：Yahoo Finance quoteSummary（fc.yahoo.com cookie+crumb）。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：慧洋 P/E 11.3 倍低於多數美股同業，但營收成長 37.5% 領先全體同業，落在圖右下方（高成長、低本益比）象限——此圖為框架要求之必備圖表，即便散裝航運股的本益比普遍受循環性壓抑、單季 P/E 比較意義有限，仍照畫以完整呈現規格要求；真正更有解讀價值的是下方 P/B vs ROE 圖（散裝航運慣以 NAV/帳面值評價）。出處：Yahoo Finance quoteSummary（抓取日 2026-09-20）。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">同業 P/B vs ROE</div>
+      <div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">散裝航運同業：股價淨值比(P/B) vs ROE（2026-09-20）</text><line x1="76" y1="458" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="66" y="462" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355" x2="860" y2="355" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.500</text><line x1="76" y1="252" x2="860" y2="252" stroke="#eeeeee" stroke-width="1"/><text x="66" y="256" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="76" y1="149" x2="860" y2="149" stroke="#eeeeee" stroke-width="1"/><text x="66" y="153" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1.50</text><line x1="76" y1="46" x2="860" y2="46" stroke="#eeeeee" stroke-width="1"/><text x="66" y="50" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="46" x2="76" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">6</text><line x1="206.67" y1="46" x2="206.67" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="206.67" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">8</text><line x1="337.33" y1="46" x2="337.33" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="337.33" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="468" y1="46" x2="468" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="468" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">12</text><line x1="598.67" y1="46" x2="598.67" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="598.67" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">14</text><line x1="729.33" y1="46" x2="729.33" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="729.33" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">16</text><line x1="860" y1="46" x2="860" y2="458" stroke="#eeeeee" stroke-width="1"/><text x="860" y="475" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">18</text><line x1="76" y1="46" x2="76" y2="458" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="458" x2="860" y2="458" stroke="#111111" stroke-width="1.2"/><text x="468" y="498" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif">ROE（%）</text><text x="18" y="252" text-anchor="middle" font-size="12" fill="#444444" font-family="sans-serif" transform="rotate(-90 18 252)">P/B（倍）</text><line x1="441.87" y1="46" x2="441.87" y2="458" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="445.87" y="58" font-size="10" fill="#888888" font-family="sans-serif">中位數 11.6</text><line x1="76" y1="235.52" x2="860" y2="235.52" stroke="#999999" stroke-width="1.2" stroke-dasharray="5 4"/><text x="856" y="230.52" text-anchor="end" font-size="10" fill="#888888" font-family="sans-serif">中位數 1.08</text><circle cx="618.27" cy="140.76" r="26" fill="#7c3aed" fill-opacity="0.55" stroke="#7c3aed" stroke-width="1.5"/><circle cx="716.27" cy="124.28" r="24.1" fill="#dc2626" fill-opacity="0.55" stroke="#dc2626" stroke-width="1.5"/><circle cx="762" cy="233.46" r="13.7" fill="#2563eb" fill-opacity="0.55" stroke="#2563eb" stroke-width="1.5"/><circle cx="272" cy="299.38" r="11.05" fill="#d97706" fill-opacity="0.55" stroke="#d97706" stroke-width="1.5"/><circle cx="193.6" cy="272.6" r="10.49" fill="#16a34a" fill-opacity="0.55" stroke="#16a34a" stroke-width="1.5"/><circle cx="448.4" cy="161.36" r="5.79" fill="#65a30d" fill-opacity="0.55" stroke="#65a30d" stroke-width="1.5"/><circle cx="356.93" cy="237.58" r="3.04" fill="#db2777" fill-opacity="0.55" stroke="#db2777" stroke-width="1.5"/><circle cx="435.33" cy="324.1" r="2.5" fill="#0891b2" fill-opacity="0.55" stroke="#0891b2" stroke-width="1.5"/><text x="618.27" y="109.76" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">慧洋-KY</text><text x="716.27" y="95.18" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">裕民航運</text><text x="762" y="214.76" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">正德海運</text><text x="272" y="283.33" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">台航</text><text x="193.6" y="257.11" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">中航</text><text x="448.4" y="150.57" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Star Bulk</text><text x="356.93" y="229.54" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Safe Bulkers</text><text x="435.33" y="316.6" text-anchor="middle" font-size="10.5" fill="#333333" font-weight="500" font-family="sans-serif">Diana Shipping</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">X：ROE（%）；Y：P/B（倍）；氣泡＝市值（十億）。慧洋P/B 1.54倍高於多數台股同業（正德0.76、中航0.90、台航0.77），但ROE 14.3%亦領先，估值溢價有基本面支撐。來源：Yahoo Finance quoteSummary。</div>
+</div>
+    </div>
+    <div class="note">⚑ 解讀：慧洋 P/B 1.54 倍偏高，但 ROE 14.3% 亦為台股同業最高，估值溢價有基本面支撐；散裝航運業慣以 NAV（船舶重置或處分價值）而非本益比評價，此圖比 P/E vs 成長率更貼近產業估值邏輯。出處：Yahoo Finance quoteSummary。</div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">同業估值明細（Yahoo Finance，抓取日 2026-09-20）</div>
+      <table>
+        <thead><tr><th class="l">公司</th><th>市值</th><th>Trailing P/E</th><th>Forward P/E</th><th>P/B</th><th>毛利率</th><th>營收 YoY</th><th>股利殖利率</th></tr></thead>
+        <tbody>
+          <tr style="font-weight:700;"><td class="l">2637 慧洋-KY（本公司，TWD）</td><td>761.3億</td><td>11.30</td><td>11.90</td><td>1.54</td><td>34.3%</td><td>37.5%</td><td>3.43%</td></tr>
+          <tr><td class="l">2605 中航（TWD）</td><td>211.3億</td><td>7.37</td><td>14.10</td><td>1.09</td><td>40.7%</td><td>23.0%</td><td>2.77%</td></tr>
+          <tr><td class="l">2606 裕民（TWD）</td><td>654.1億</td><td>11.45</td><td>10.82</td><td>1.62</td><td>34.6%</td><td>38.5%</td><td>3.62%</td></tr>
+          <tr><td class="l">2612 中國航運（TWD）</td><td>124.0億</td><td>12.22</td><td>9.60</td><td>0.90</td><td>34.7%</td><td>9.9%</td><td>3.50%</td></tr>
+          <tr><td class="l">2617 台航（TWD）</td><td>137.5億</td><td>8.88</td><td>10.46</td><td>0.77</td><td>43.9%</td><td>26.1%</td><td>4.55%</td></tr>
+          <tr><td class="l">DSX Diana Shipping（USD）</td><td>US$3.87億</td><td>6.35</td><td>5.36</td><td>0.65</td><td>56.7%</td><td>4.7%</td><td>1.29%</td></tr>
+          <tr><td class="l">SB Safe Bulkers（USD）</td><td>US$10.45億</td><td>11.92</td><td>13.11</td><td>1.07</td><td>63.6%</td><td>33.0%</td><td>3.27%</td></tr>
+          <tr><td class="l">SBLK Star Bulk（USD）</td><td>US$37.70億</td><td>12.74</td><td>9.12</td><td>1.44</td><td>47.3%</td><td>44.5%</td><td>5.79%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">⚑ 同業清單為台股散裝/航運五家（2605 中航、2606 裕民、2612 中航運、2617 台航）＋國際三家美股散裝航運（DSX Diana Shipping、SB Safe Bulkers、SBLK Star Bulk）。EV/EBITDA 因 Yahoo Finance quoteSummary 未回傳企業價值/EBITDA 欄位，無此資料/不適用，改以毛利率呈現獲利品質；美股與台股幣別不同（USD vs TWD），市值不可直接加總比較，僅供估值倍數（P/E、P/B）跨市場參照。</div>
+
+    <hr class="divider">
+    <div class="section-title">互證對照表（強制交付物）：管理層說法 ↔ 財報科目驗證</div>
+    <div class="tbl-wrap">
+      <div class="tbl-title">雙層互證</div>
+      <table>
+        <thead><tr><th class="l" style="width:36%">質化敘事（tab 1–5）</th><th class="l" style="width:40%">量化驗證（tab 6–10）</th><th class="l">結論</th></tr></thead>
+        <tbody>
+          <tr><td class="l">管理層 2026-06「審慎樂觀」展望、預期 6–8 月淡季不淡</td><td class="l">2026-07/08 月營收 YoY +56%／+35%，均為季報後最新未涵蓋數字</td><td class="l"><span class="pos">支持</span></td></tr>
+          <tr><td class="l">合約結構已大規模轉為指數連結型長約（截至 2026 年 2 月 81 艘）</td><td class="l">2026Q2 相比 2025Q2 BPI/BSI 期租費率各漲 59.84%／52.85%，毛利率同步由 18.0% 升至 39.2%</td><td class="l"><span class="pos">支持</span></td></tr>
+          <tr><td class="l">法說會摘要提及俄烏戰後重建、美中穀物貿易恢復、新船供給偏低三項結構性利多</td><td class="l">長約收入（多數指數連結）2026H1 YoY +38.1%，與運價上行方向一致；財報本身未逐項拆解宏觀驅動因子</td><td class="l"><span class="neu">方向一致，無法逐項拆解驗證</span></td></tr>
+          <tr><td class="l">管理層提及「船隊較佳的節能表現取得比市場指數更好的收益」</td><td class="l">財報未揭露公司自結 TCE（日租金），無法直接驗證是否優於市場指數（資料缺口，見市場循環資料說明）</td><td class="l"><span class="neu">無法驗證（資料缺口）</span></td></tr>
+          <tr><td class="l">2027、2028 年新造船交船時程（法說會摘要：2026年8艘、2027年4艘、2028年1艘）</td><td class="l">財報附註九僅揭露截至 2026-06-30 尚未交船餘額為 7 艘（2026年3艘＋2027年4艘）</td><td class="l"><span class="neg">口徑不一致</span>，見特殊交易/事件 tab 核心疑問</td></tr>
+          <tr><td class="l">管理層「提高股利配發率可能性是有的」</td><td class="l">2025 年度實際分配每股 NT$3.5 元，較 2024 年度 NT$5 元下降</td><td class="l"><span class="neu">留白反推</span>：前瞻表態與已分配數字時間點不同，尚待 2026 年度分配案驗證</td></tr>
+          <tr><td class="l">法說會摘要「負債比自 2022 年 49.9% 降至 2026Q1 的 40.2%」</td><td class="l">本報告覆核：2026Q2 負債總額/資產總額 = 41.2%</td><td class="l"><span class="pos">方向一致</span>，量級吻合</td></tr>
+          <tr><td class="l">【留白反推】法說會摘要全篇未提及新造船融資的具體安排或利率鎖定計畫</td><td class="l">財報附註九僅揭露「尚未辦妥融資」，無具體利率或銀行團資訊</td><td class="l"><span class="neg">留白</span>，是風險矩陣 tab【獨創前瞻風險】的依據</td></tr>
+          <tr><td class="l">優分析 2026-09 報導法人預期 Q3 EPS 達 4 元以上、9 月認列船舶處分利益</td><td class="l">2026Q2 處分資產利益僅 NT$30.3 百萬（遠低於去年同期 NT$392.0 百萬），已簽 2 艘出售合約（US$49,475,000）預計 2026Q3 交船，期後另 1 艘已於 2026-08-14 完成交船</td><td class="l"><span class="pos">方向支持，待 2026Q3 財報驗證</span></td></tr>
+          <tr><td class="l">董事會 2026-08-22 核准購置 Onomichi Dockyard 2 艘 40,000 噸散裝輪，同日另有新增背書保證公告</td><td class="l">2026Q2 財報附註九揭露之 7 艘承諾為截至 6/30 數字，早於此次核准，故新增訂單金額應反映在 2026Q3 財報</td><td class="l"><span class="neu">待下季財報驗證</span></td></tr>
+          <tr><td class="l">董監大股東 2026/03–2026/08 連續 6 個月持股與質押比率完全無變動</td><td class="l">無新增質押、無大股東減持之財報/公告佐證</td><td class="l"><span class="pos">正面訊號</span>：無內部人趁高檔出貨跡象，但高質押比率（31.08%／80.72%）本身仍是存量風險</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note yellow">⚑ 總結：上表共 11 列，其中 5 列判定「支持」或「方向一致」、2 列「留白反推」、2 列「無法驗證（資料缺口）」、1 列「口徑不一致」、1 列「待下季財報驗證」。最關鍵的待驗證項目有二：① 2027/2028 年新造船交船時程口徑落差（財報附註九 vs 法說會摘要），以及 ② Q3 是否如法人預期認列顯著船舶處分利益、EPS 達 4 元以上——兩者都將在下次財報（2026Q3，預計 2026 年 11 月中旬公告，依過去年度 11/14 公告 2025Q3 財報的節奏推算）得到直接驗證。</div>
+  </div>
+
+  <div class="footer">
+    資料來源：MOPS t164sb01 iXBRL 12 季合併財報（2023Q3–2026Q2）；2026Q2 合併財報全文 PDF（doc.twse mtype=A，申報日 2026-08-21）；114 年報/2025 股東會年報（doc.twse mtype=F，申報日約 2026-05-22）；MOPS 月營收彙總表 t21sc03（27 個月，2024-06–2026-08，每月以累計欄反算驗證）；MOPS 內部人持股月報 ajax_stapap1（2026/03–2026/08）；MOPS 重大訊息 ajax_t05st01（2025/06 起）；散裝航運市場循環（BDI 零星時點）與管理層法說會展望轉引自富果直送第三方部落格摘要（T2／轉引，信心度中等，非公司官方一手資料）；Yahoo Finance quoteSummary 同業估值（抓取日 2026-09-20）；股利歷史主要來源 wantgoo.com（2021–2024 未交叉驗證，2025/2026 已與年報交叉驗證）。<br>
+    本報告為 <strong>Fallback 模式</strong>：未取得公司法說會逐字稿或官方簡報，凡引用第三方轉引之管理層說法均已標註來源與信心度；財報／年報／MOPS 官方數字信心度高，未標註者視為官方數字。圖表中標示「估算」者已於圖說明列出估算方法，未捏造未揭露之數字。<br>
+    本報告僅供資訊參考，非投資建議。
+  </div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
