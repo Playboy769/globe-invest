@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FNV — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .sankey-flow { display: flex; flex-direction: column; gap: 5px; }
+  .sankey-row { display: flex; align-items: center; gap: 8px; }
+  .sankey-src { width: 190px; font-size: 11px; color: #333; text-align: right; flex-shrink: 0; line-height: 1.3; }
+  .sankey-bar-wrap { flex: 1; background: #f5f6fa; border-radius: 3px; height: 18px; position: relative; }
+  .sankey-bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg,#93c5fd,#2563eb); }
+  .sankey-val { width: 80px; font-size: 11px; font-weight: 600; color: #1a1a2e; flex-shrink: 0; }
+  .sankey-dest { width: 70px; font-size: 11px; font-weight: 700; color: #2563eb; flex-shrink: 0; text-align: center; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+    .sankey-src { width: 110px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Franco-Nevada Corporation (FNV) — FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／Cobre Panamá 復工與 Karma 訴訟拆解／權利金合約類型與業務區隔／權利金・串流資產組合結構／風險矩陣／損益表／業務部門／資產負債表／現金流量／估值觀察（共 10 個分頁）
+  &nbsp;·&nbsp; 法說會日期：2026 年 8 月 12 日（涵蓋截至 2026 年 6 月 30 日止之第二季）
+  &nbsp;·&nbsp; 交叉比對 SEC EDGAR：Form 6-K（2026/8/12 申報，Q2 FY2026）、FY2025 Form 40-F（2026/3/19 申報）、6-K（2026/6/17，Karma 訴訟）
+  &nbsp;·&nbsp; FNV 為加拿大籍權利金／串流公司（Foreign Private Issuer），依 IFRS 編製、以 40-F／6-K 申報，並無 10-Q／10-K 或美股 Form 4，本報告已就此逐項標註資料來源類型（SEC 申報 vs 新聞稿／IR vs 第三方彙整）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">特殊事件拆解</div>
+    <div class="tab" onclick="sw('tech',this)">業務區隔與合約類型</div>
+    <div class="tab" onclick="sw('chain',this)">權利金／串流組合結構</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('inc',this)">損益表</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    <div class="tab" onclick="sw('bs',this)">資產負債表</div>
+    <div class="tab" onclick="sw('cf',this)">現金流量</div>
+    <div class="tab" onclick="sw('val',this)">估值觀察</div>
+  </div>
+
+  <!-- ============ TAB 1: Q&A ============ -->
+  <div id="panel-qa" class="panel active">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">分析師提問</div></div>
+      <div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">核心問題（含追問）</div></div>
+      <div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">邏輯缺口／留白訊號</div></div>
+    </div>
+    <div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。每一則卡片底部附逐字稿原文引用框（未經節錄的原始交換），解讀與缺口判斷一律寫在紅框內，供讀者自行覆核。
+    全場最關鍵的一個結構性事實先講在前面：整場法說會＋Q&amp;A，<b>沒有任何一位分析師、也沒有管理層自己，主動提到 Karma（布吉納法索）權利金訴訟</b>——即使 FNV 自己在 2026/6/17 才剛發布一份 6-K 說明瓦加杜古商業法庭已判決 FNV／Sandstorm 敗訴、須支付約 US$930 萬。這是本場最大的沉默訊號，見特殊事件拆解分頁與風險矩陣分頁的討論。</div>
+
+    <div class="qa-item open">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Cosmos Chiu（CIBC）</div><div class="qa-topic">Hemlo／Musselwhite NPI 波動性、Palmarejo 區外探勘、EBITDA margin 91.2%</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Hemlo NPI 環比下滑、Musselwhite NPI 環比上升，這兩筆淨利潤權利金（NPI）的波動性下季度該怎麼看？Coeur Mining 持續在 Palmarejo 的 FNV 權利金覆蓋範圍之外探勘，是否構成近憂？調整後 EBITDA margin 已連續四季由 87.6%→90.6%→91%→91.2% 一路上升，管理層滿意這個水準嗎？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sandip Rana：Hemlo 因 Interlake 土地本季產量較前幾季低，NPI 受影響，但預期下半年產量回升（不確定能否回到 Q1 水準，但會高於 Q2）；Musselwhite 本季認列一筆 2025 年度的「catch-up」最終結算，是一次性因素，但因金價高，預期 2026 全年 NPI 仍會強勁。Palmarejo 目前絕大部分產量仍在 FNV 的串流土地上，「right now we do not have any concern」。EBITDA margin：核心驅動是本季新交易多為權利金（royalty）而非串流（stream），權利金幾乎沒有對應成本，是「portfolio 整體槓桿」的展現，未正面回答「是否滿意 91.2%」這個評價性提問，只解釋了成因。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 1 ─ Hemlo NPI「該怎麼看下季」被回答成「應該會比 Q2 好」，卻迴避了與礦山營運商自己下修財測的矛盾</div>
+          <div class="q-text">Cosmos 的追問其實點出了一個關鍵背景：Hemlo 的礦山營運商已在法說會前一晚公開<b>將正式產量財測從 2026 年遞延到 2027 年</b>——這是實質的財測下修訊號。Sandip 的回應停留在「我們對 Interlake 未來幾年持續開採有信心」的定性保證，沒有正面處理「營運商自己都延後財測」這件事對 FNV 分得的 NPI 節奏意味著什麼，也沒有給出任何量化區間。這是典型的「以信心喊話取代數字」模式。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Cosmos Chiu:</b> "Thanks, Paul and Sandip, for taking my questions. Maybe my first question is on the NPIs. I noticed that Hemlo was down quarter-over-quarter, whereas the Musselwhite NPI was up quarter-over-quarter. I guess it is always volatile in terms of these NPIs, but how should we look at it based on what we know in Q1 and Q2, on what we should expect in Q3 and Q4?"<br><br>
+          <b>Sandip Rana:</b> "...they are volatile and for us a lot of it is based on visibility. At Hemlo, in Q2, Hemlo Mining produced less on our Interlake lands than previous quarters, which impacted the NPI. I think for the second half of the year, from what we gather, production should increase. Does it hit what was achieved in Q1? I don't know, but it should be higher than Q2... At Musselwhite, we did have strong performance in Q2. A large component of that was a catch-up entry for 2025... considering where commodity prices are right now, I would expect a very strong NPI for Musselwhite for 2026."<br><br>
+          <b>Cosmos Chiu (follow-up):</b> "...Last night, I guess they reported earnings and they are deferring formal production guidance from sometime in 2026 into 2027... Any concerns in terms of that deferral of guidance? It seems like things are kind of ramping up potentially slower than expected."<br><br>
+          <b>Sandip Rana:</b> "I think the team is doing a very good job there. They just took over the asset last year. From our perspective, we are pretty confident that mining on Interlake will continue for the next number of years. Obviously, it will be volatile just depending upon how development is going, but we are pretty confident that the NPI will be there for the foreseeable future."<br><br>
+          <b>Cosmos Chiu (Palmarejo follow-up):</b> "...the management team continues to remind us that exploration continues beyond the Franco-Nevada area of influence... Is there any kind of near-term concerns to Franco-Nevada?"<br><br>
+          <b>Sandip Rana:</b> "They have had very good exploration results, both on stream ground and off stream ground, on our ground, specifically Hidalgo... right now, we do not have any concern."<br><br>
+          <b>Cosmos Chiu (margin follow-up):</b> "...I noticed that it's increased 87.6 four quarters ago to 90.6, 91 now to 91.2%... Is that a percentage that you track yourself? Are you happy with a 91.2% right now?"<br><br>
+          <b>Sandip Rana:</b> "Yeah, no, we are a very high margin business... it's just the leverage of the portfolio overall."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Lawson Winder（Bank of America Securities）</div><div class="qa-topic">財測算術對不上、交易管線規模、特別股利可能性</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">用財測中值 540K GEO＋Cobre Panamá 27.5K GEO＋更高油價，理論上應遠超財測上緣，那「追蹤到財測區間上半」的定位到底是保守還是暗示扣除 Cobre／能源後的本業其實低於中值？本季完成的交易金額偏小（約 $84M），$4.3B 可用資金下，管線裡有沒有更大型交易？是否考慮特別股利？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sandip Rana：確認中值 540K＋Cobre 9-10K＋能源加成，但 South Arturo 上半年強、下半年會轉弱抵銷部分增量，故仍落在「財測上緣」而非「超出財測」，強調「還在年中，有可能超出但需要很多事情同時發生」。Eaun Gray（CIO）：本季交易規模step down 不代表管線轉弱，看到不少 project finance 機會；整體流動性充足，「有信心能在需要用其他資本配置方式之前部署掉相當大一部分資本」；交易規模範圍很寬，大型交易存在但時程「lumpier」、難以精確預測時點，估計下半年至明年會回溫。對特別股利問題，Eaun 完全沒有正面回應，整段答覆只談交易管線本身。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 2 ─ Lawson 的算術質疑本質上沒有被拆解回應，只用「還在年中」帶過</div>
+          <div class="q-text">Lawson 的問題結構是一道明確的算術題：中值＋Cobre＋能源加成 = 應該顯著超過財測區間，那為何官方定位只到「上緣」？Sandip 只是重申了會落在「higher end」，並未拆出「南阿圖羅下半年走弱要抵銷多少」的具體數字，讀者無法自行覆核這道算術是否真的被抵銷平衡，還是管理層刻意用「還在年中」的模糊語言迴避給出更新後的精確財測區間。</div>
+        </div>
+        <div class="flag-box obs">
+          <div class="q-label">◇ 留白反推：特別股利問題被完全跳過，未獲一個字的正面回應</div>
+          <div class="q-text">Lawson 明確問「是否考慮特別股利」，Eaun Gray 的整段回覆只談交易管線的規模與時程，隻字未提股利政策——這種「被問到 A、只回答 B」的模式，在管理層不想給出承諾或否認時很典型，暗示特別股利目前確實不在檯面上考慮之列，但公司選擇不直接說「不」。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Lawson Winder:</b> "...If you just take the midpoint of the GEO volume guidance range of 540 and then add Cobre Panama, which is about 27.5 GEOs, then you assume higher oil prices, I think you could comfortably get above the range... Could you maybe just clear up what would be the right way to think about that?"<br><br>
+          <b>Sandip Rana:</b> "...Cobre is 9-10. Energy prices will add some additional GEOs... We're expecting weaker performance from the South Arturo, which was more focused on the first half of the year. So as we've said, it's going to be tracking at the higher end of the overall range... There is the possibility that you could surpass the range, but a lot of things have to happen for that to occur."<br><br>
+          <b>Lawson Winder (follow-up):</b> "...a number of the transactions you did in the quarter, while they were relatively numerous, were relatively small. Total value in the $84 million... Could you just speak to what you are seeing in the pipeline in terms of substantially large transactions?... is there a thought to perhaps considering a special dividend?"<br><br>
+          <b>Eaun Gray:</b> "...we are active across a range of development phases and deal sizes... I don't think that is reflective of the pipeline going forward necessarily, though. What I do see at the moment is a number of opportunities in project finance... I do feel comfortable at this stage that we are going to be able to deploy quite a bit of our capital before we have to think about any other ways to return it."<br><br>
+          <b>Lawson Winder (size follow-up):</b> "...can you help sort of narrow that down to a bit of a size range? Are we talking like $100 million size range, or are there potential like billion-dollar transactions in the pipeline?"<br><br>
+          <b>Eaun Gray:</b> "It's a wide range, as I highlighted. There are some significantly larger transactions which are required to deploy the kind of capital that we've accumulated..."<br><br>
+          <b>Lawson Winder (urgency follow-up):</b> "...how would you describe the urgency of the deals within the pipeline?..."<br><br>
+          <b>Eaun Gray:</b> "...the larger transactions tend to be a little bit lumpier. The timeline can be longer for those... I'd see the cadence perhaps... picking up later in the year and into next year."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Daniel Major（UBS）</div><div class="qa-topic">Cobre Panamá 財政條款談判、能源產量落後、New Prosperity、Candelaria 串流降階時點</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">First Quantum 是否已與巴拿馬政府就財政條款展開談判？FNV 是否有介入？鑽井數上升是否會轉化為能源產量／單位銷量成長，何時反映？New Prosperity 專案有無新進展催化劑？Lundin 提到 Candelaria 串流年底降階，確切在哪一季？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Paul Brink：First Quantum 是營運商，會主動與政府談，目前「尚無正式談判」，FNV「不在談判桌上」，也沒有任何關於串流經濟條件可能被調整的討論。能源：美國頁岩業者改變鑽井計畫需要至少 6 個月，Q2 都還太早看到效果，預期今年底至明年初才會看到更高鑽井率轉化為單位產量成長。New Prosperity：原住民（First Nations）與卑詩省政府仍在土地使用規劃過程中，沒有時間表，取決於原住民自身決定。Sandip Rana：Candelaria 串流降階目前估計在 2027 上半年，但視 2026 下半年 Candelaria 生產狀況，也可能提前到今年稍晚發生。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 3 ─ 「不在談判桌上」是事實陳述，卻沒有回答分析師真正關心的「Panama 政府會不會回頭要求調整 FNV 的串流經濟條件」</div>
+          <div class="q-text">Daniel 問的核心風險是：如果 First Quantum 與巴拿馬政府協商復工的財政條件，FNV 的串流合約經濟性是否可能被牽連調整？Paul Brink 的回答只確認了「FNV 不是談判當事人」這個程序性事實，並未評估或排除巴拿馬政府未來可能透過修改採礦特許或環境合規要求，間接影響 First Quantum 復工後的營運成本、進而影響 FNV 實際能拿到的串流交割量與時程——這正是 Cobre Panamá 這筆資產最大的不確定性來源，管理層選擇只回答字面問題、不展開情境分析。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Daniel Major:</b> "...First Quantum has started or is imminently starting negotiations with the government on the fiscal terms to facilitate a restart. Have you had any engagement with the Panamanian government? Has there been any discussions around any potential changes to the economics of the stream?"<br><br>
+          <b>Paul Brink:</b> "...No. First Quantum is the operator there, so they are the party that will engage with the government here. As you know, no formal negotiations yet. But we're not at that table."<br><br>
+          <b>Daniel Major (follow-up):</b> "There's no discussion at this point of any potential changes to the fiscal terms as part of any negotiation or any settlement to start the mine?"<br><br>
+          <b>Paul Brink:</b> "No, there isn't."<br><br>
+          <b>Daniel Major (energy follow-up):</b> "...Would you also expect to see any pickup in sales volumes, not on a GEO basis, but on a unit basis in the second half and potentially following through into 2027?"<br><br>
+          <b>Paul Brink:</b> "...you need at least six months for people to change their drill programs. So Q2 is still too early... I only expect back end of this year... beginning of next year, that you'll see those higher drill rates translating into production."<br><br>
+          <b>Daniel Major (New Prosperity follow-up):</b> "...Can you give us an update on the catalysts we should be looking for there?"<br><br>
+          <b>Paul Brink:</b> "...there's potential that if the First Nations decides to go ahead with the mining operation, that they would have 20% ownership of that. So there is a land use planning process... There's no timeline to that. It's at their determination."<br><br>
+          <b>Daniel Major (Candelaria follow-up):</b> "...What quarter, or can you give us any sort of clear guidance on when you expect that to come through?"<br><br>
+          <b>Sandip Rana:</b> "Our estimate is first half of 2027. Obviously, depending upon how production goes at Candelaria for the remainder of 2026, it could happen later this year, but for now, we are estimating first half of 2027."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Tanya Jakusconek（Scotiabank）</div><div class="qa-topic">能源收入低於預期、鐵礦石估計、Côté NPI 回購對股利政策的意涵、精貴金屬與非精貴金屬交易結構</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">能源與鐵礦石營收都低於預期，是估計偏差還是時點遞延？如果 IAMGOLD 決定買回 Côté Gold NPI 一半（約 $5 億現金流入），這筆錢會被配置到股利嗎？非精貴金屬交易規模區間（$200M-500M）是否改變？精貴金屬側的串流＋股權＋債務混合結構是否有變化？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Sandip Rana：能源端差異主因是實際生產數據有延遲（5、6 月的數據要幾個月後才拿到最終值），公司刻意採保守估計；如果 IAMGOLD 真的買回 Côté NPI 一半，這筆現金會計入資產負債表評估，「不會是那種性質的特別股利」，而是反映在未來股利調升幅度上，語氣上排除了特別股利、傾向常態股利調升。Matt Begeman（VP BD）：鐵礦石差異主因是海運費率估計偏差（受荷姆茲海峽情勢影響），下半年若無海運費率變動應會較平穩；PGM／Sudbury 方面 Magna Mining 表現良好，主要是 Stillwater、Sabodala 資產產量低於預期。Eaun Gray：非精貴金屬交易規模 $200-500M 區間不變；精貴金屬側交易結構不變，仍是串流＋股權＋債務三者混合，重點主題轉向 project finance（財務金主角色）,「across the capital structure」但核心仍是權利金與串流。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 4 ─ IAMGOLD 買回情境的股利承諾語言其實相當弱，卻被包裝成明確方向</div>
+          <div class="q-text">Sandip 說「it would not be any sort of special dividend of that nature」「it would just be looking at what is on our balance sheet... and increasing the dividend at a higher percentage than we have in possibly previous years」——這句話用的是條件式（if they do the buyback）＋「possibly」這類保留詞，並非對股利政策的具體承諾，而是一個假設性情境下的方向性猜測。這件事本身尚未發生（IAMGOLD 是否買回仍不確定），管理層卻願意花相當篇幅描述這個假設情境的資本配置邏輯，暗示這筆潛在的 $5 億現金流入在管理層心中是一個真實在評估的情境，值得在風險矩陣／估值觀察中列為潛在正面催化劑追蹤。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Tanya Jakusconek:</b> "...I was a bit light on the oil and gas on the energy side. I am just wondering on the energy side, was there a little bit of a delay in sort of the pricing of oil...?"<br><br>
+          <b>Sandip Rana:</b> "...There is a delay in receiving actual production data for the wells that is on our land. We do make an estimate, but in our nature, we do try to make sure that we are as accurate as possible. We will not lean more towards the conservative side..."<br><br>
+          <b>Tanya Jakusconek (iron ore follow-up):</b> "...on the Vale side, how should I be thinking about the second half? On Sudbury, on the PGM, how should I be thinking about that?"<br><br>
+          <b>Matt Begeman:</b> "...that is impacted in part by our estimate on the shipping rates... the largest variance there is our estimation to the read-through of the higher shipping rates caused by the Strait of Hormuz closure."<br><br>
+          <b>Tanya Jakusconek (Côté NPI buyback follow-up):</b> "...should IAMGOLD decide to purchase back half the Côté Gold NPI, it would be $500 million coming in for you guys. Would I be thinking as that as something you would allocate to the dividend if something like that was to occur?"<br><br>
+          <b>Sandip Rana:</b> "...if they do the buyback, obviously that would be an influx of cash for us... if we did come to that conclusion, it would not be any sort of special dividend of that nature. It would just be looking at what is on our balance sheet in terms of cash and increasing the dividend at a higher percentage than we have in possibly previous years."<br><br>
+          <b>Tanya Jakusconek (deal structure follow-up):</b> "...in the non-precious metal side. You had talked about deals in the $200 million-$500 million range. Has that changed at all from Q1...?"<br><br>
+          <b>Eaun Gray:</b> "Yes, Tanya, good question. I think that remains unchanged... The key theme, however, that I see emerging... is project finance... The team has got the backing they need to get a project built. We will continue to work across the capital structure with the core, however, continuing to be royalties and streams."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-header" onclick="toggleQA(this)">
+        <div><div class="qa-analyst">Brian MacArthur（Raymond James Financial）</div><div class="qa-topic">Karma 訴訟帳面價值、Lomiko Metals／Tintina Mines 少數股權投資的策略意圖</div></div>
+        <div class="qa-arrow">▼</div>
+      </div>
+      <div class="qa-body">
+        <div class="q-block">
+          <div class="q-label q">問題核心</div>
+          <div class="q-text">Karma 訴訟有無進展？若最終無法挽回，帳面價值是否本來就很低（意味損失有限）？Lomiko Metals（Tintina Mines）交易與 G Mining Ventures 是否完全獨立？FNV 真正想從這類交易得到什麼，未來會多做嗎？</div>
+        </div>
+        <div class="q-block">
+          <div class="q-label a">管理層回應</div>
+          <div class="q-text">Lloyd Hong（法務長）：自新聞稿發布後沒有實質新進展，FNV 依協議中的安大略省法律管轄條款持續尋求救濟，認為布吉納法索的判決不具效力，正尋求撤銷該判決；帳面上沒有為這筆資產計提任何帳面價值（book value）。Paul Brink：Tintina Mines 交易與 G Mining Ventures 團隊的既有信任關係有關（曾出資協助其興建 Tocantinzinho 金礦），目的是讓該團隊得以投資 Tintina（智利銅金項目）而不必變現其 G Mining Ventures 持股；FNV 沒有因此取得對未來串流／權利金的優先權或選擇權義務，純粹是關係投資，「希望這能鞏固合作關係並讓我們處於有利位置」，若該項目成功，FNV「希望屆時會有串流機會」。</div>
+        </div>
+        <div class="flag-box">
+          <div class="q-label flag">⚑ 邏輯缺口 5 ─「帳面價值為零」被當成安慰性答案，但沒有回答訴訟本身的財務風險是否已充分反映</div>
+          <div class="q-text">Lloyd Hong 澄清 Karma 資產本身在 FNV 帳上「沒有帳面價值」，這解釋了為何 Karma 資產減損風險有限，但完全沒有觸及另一個問題：布吉納法索法院判決要求 FNV／Sandstorm 支付約 CFA 52 億（約 US$930 萬）現金賠償——這是一筆<b>現金流出風險</b>，與「資產帳面價值」是兩回事，管理層用資產減損的角度回答了一個關於訴訟賠償現金流出的提問，範疇本身就答非所問，且全場沒有任何人追問這筆潛在現金賠償是否已提列準備金。</div>
+        </div>
+        <div class="orig-box">
+          <div class="orig-label">逐字稿原文</div>
+          <div class="orig-text"><b>Brian MacArthur:</b> "...can I just ask on Karma whether there's any update? Secondly, if that doesn't work out, I assume the book value, that's pretty low."<br><br>
+          <b>Lloyd Hong:</b> "...There's no real update since we put out our press release. We are continuing to pursue our remedies under the agreement, which is governed by Ontario law. We do believe that the Burkinabè judgment is not valid and are continuing to seek to have that vacated. In terms of book value, we are not carrying any book value for that asset."<br><br>
+          <b>Brian MacArthur (Lomiko follow-up):</b> "...This Lomiko Metals deal, is that totally separate from G Mining Ventures, and what are you actually trying to do with that...?"<br><br>
+          <b>Paul Brink:</b> "...we've got a very strong relationship with the Gignac. Backed them in the build of Tocantinzinho. One of their next ventures here is with Tintina Mines... Their objective was that they could invest in that without having to liquidate any of their shares in the G Mining Ventures. We have backed them in doing that... we're hopeful that there will also be a stream opportunity on that asset in due course."<br><br>
+          <b>Brian MacArthur (option follow-up):</b> "...Do you, by doing this, get a first right of refusal or an option on a stream or a royalty if they go forward?..."<br><br>
+          <b>Paul Brink:</b> "There's no obligation there, Brian. We've got a very strong relationship, and we hope this helps build the relationship and that positions us well."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: 特殊事件拆解 ============ -->
+  <div id="panel-deal" class="panel">
+    <div class="card">
+      <div class="card-title">主要特殊事件一：Cobre Panamá 復工進程</div>
+      <p>Cobre Panamá（First Quantum 為營運商，FNV 持有其銅產出所連結的黃金／白銀串流）自 2023 年 11 月因全國性抗議停產、進入「保存與安全管理」（P&amp;SM）狀態以來，是 FNV 最大的單一不確定性來源。2026 年上半年出現階段性進展，但截至本季法說會，<b>尚未有全面復工的最終政府決定</b>。</p>
+    </div>
+
+    <div class="quad-grid">
+      <div class="quad-box blue">
+        <h4>規模</h4>
+        <ul>
+          <li>2026 H2 預期交割：約 23,100 盎司黃金 ＋ 265,000 盎司白銀（FNV 串流權益）</li>
+          <li>First Quantum 2026 全年庫存礦處理指引：3–4 萬噸銅</li>
+          <li>Q2 2026 已處理庫存礦 210 萬噸，產出銅 3,216 噸</li>
+        </ul>
+      </div>
+      <div class="quad-box orange">
+        <h4>時程</h4>
+        <ul>
+          <li>2025/5/30：巴拿馬政府核准並指示執行 P&amp;SM 計畫</li>
+          <li>2026/4/7：巴拿馬授權移除、處理並出口庫存礦</li>
+          <li>2026/6/19：獨立環境稽核完成，370 項承諾中 361 項達成（約 87.7%–88%）</li>
+          <li>全面復工正式談判預期最快 2026 年底至 2027 年初才展開</li>
+        </ul>
+      </div>
+      <div class="quad-box green">
+        <h4>財務承諾／FNV 曝險</h4>
+        <ul>
+          <li>Q2 2026 Cobre Panamá 貢獻營收 <b>$0</b>（尚未計入本季 by-asset 表，僅庫存礦處理階段）</li>
+          <li>FY2025 全年 Cobre Panamá 貢獻 $38.3M（保存期殘值階段）</li>
+          <li>FY2023 淨損 $(466.4)M，極可能與 Cobre Panamá 減損有關（確切金額本次研究未能自 40-F 逐項驗證，見待辦事項）</li>
+        </ul>
+      </div>
+      <div class="quad-box red">
+        <h4>尚待驗證</h4>
+        <ul>
+          <li>巴拿馬政府與 First Quantum 尚未展開正式財政條款談判——FNV 明確表示「不在談判桌上」</li>
+          <li>環境稽核雖通過近 88%，但外部媒體（Mining Weekly, MINING.COM）指出在生物多樣性、生態復育、尾礦設施酸性排水等項目仍有缺失待補</li>
+          <li>巴拿馬總統 Mulino 原承諾 2026/6 前做出永久關閉或重啟決定，目前尚未見到最終決定的公開消息</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問（盡職調查式追問清單）</h4>
+      <ol>
+        <li>若巴拿馬政府最終要求以修訂後的特許權／財政條件作為全面復工的前提，FNV 現有串流合約的經濟條件（黃金／白銀交割比例、售價折扣）是否有被連帶重新談判的合約風險？管理層目前的回答（「不在談判桌上」）並未排除這種間接曝險。</li>
+        <li>環境稽核揭露的「生物多樣性、生態復育、尾礦設施酸性排水」缺失項目，是否有具體整改期限與預算？若整改成本由 First Quantum 承擔且規模龐大，是否可能延後其展開正式復工談判的時間表？</li>
+        <li>FY2023 淨損 $(466.4)M 的減損金額若已大部分沖銷完畢，是否代表即使 Cobre Panamá 長期無法全面復工，下檔財務風險已相對有限？（需要 FY2023 40-F 原文驗證，本報告目前僅能標示為推測）</li>
+        <li>2026 H2 指引的 23,100 盎司黃金／265,000 盎司白銀，是否已反映在本季法說會重申的「FY2026 GEO 財測追蹤上緣」中，或屬於財測之外的額外上檔？</li>
+      </ol>
+    </div>
+
+    <hr class="divider">
+
+    <div class="card">
+      <div class="card-title">次要特殊事件：Karma（布吉納法索）權利金訴訟</div>
+      <p>⚑ <b>資料來源提醒</b>：以下內容主要整理自新聞媒體報導（Ecofin Agency、TipRanks、The Globe and Mail、Ghana Business News 等）交叉比對 FNV 於 2026/6/17 申報的 6-K（Acc. 0001104659-26-074937，Exhibit 99.1），細節尚未逐字比對 FNV 完整訟訴揭露原文（Exhibit 99.3 附註），標註信心度為「中」。</p>
+      <p>Karma 金礦（布吉納法索 Yaadga 地區）的黃金採購／串流協議最早於 2014/8/11 由礦山前業主 True Gold（後被 Endeavour Mining 併購）簽署，FNV 與 Sandstorm Gold 共同持有該串流。2022/3 礦山轉售予布吉納法索籍公司 Néré Mining SA（現以 Riverstone Karma 名義營運），該公司繼承了 2014 年的串流義務。</p>
+      <p><b>2026/6/10</b>，瓦加杜古商業法庭判決 FNV／Sandstorm 敗訴，<b>宣告 2014 年黃金採購協議無效</b>，並命令支付 CFA 52 億（約 <b>US$930 萬</b>）加訴訟費用。FNV 主張該協議依合約條款受<b>安大略省法律管轄</b>，認為布吉納法索判決無效，正尋求撤銷，並在安大略省及其他司法管轄地對 Riverstone Karma、Néré Mining 及其關係企業另行追索。</p>
+    </div>
+
+    <div class="diligence-box">
+      <h4>核心疑問</h4>
+      <ol>
+        <li>約 US$930 萬的判決金額是否已在財報中提列或有相應的或有負債揭露？本次研究未能在 Q2 2026 MD&amp;A 摘要中找到此訴訟的直接財務揭露段落（見資料缺口）。</li>
+        <li>此案於 Q2 2026 法說會逐字稿中<b>完全未被提及</b>——無論是管理層正式稿或任何分析師提問——這與 FNV 6/17 才自行發布訴訟進展新聞稿的時間點形成對比，是否代表管理層認為此事對財務影響輕微而不主動更新，或單純是分析師沒有追問？（見風險矩陣分頁的「留白反推」討論）</li>
+        <li>安大略法院程序的時間表與勝訴機率評估為何？是否有先例判決可供參考安大略法院是否會受理並撤銷外國商業法庭的判決？</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: 業務區隔與合約類型 ============ -->
+  <div id="panel-tech" class="panel">
+    <div class="card">
+      <div class="card-title">業務區隔：貴金屬（Precious Metal）vs 多元化商品（Diversified）</div>
+      <p>FNV 沒有傳統製造業式的「事業部」——依官方揭露口徑，投資組合分為兩大資產類別：<b>貴金屬</b>（金、銀、鉑族金屬 PGM）與<b>多元化商品</b>（石油、天然氣、NGL、鐵礦石）。兩者的差異不只在商品別，也在合約結構與現金流特性：貴金屬部位多為串流（stream）與權利金（royalty），與礦山生產深度綁定；多元化商品部位絕大多數是能源權利金，收入直接隨油氣現貨價格波動，且產量認列存在數月延遲（見 Q&amp;A 分頁 Tanya Jakusconek 提問）。</p>
+    </div>
+
+    <div style="overflow-x:auto; margin-bottom:14px;">
+      <svg viewBox="0 0 640 220" style="width:100%; max-width:640px; height:auto; font-family:inherit;">
+        <text x="10" y="18" font-size="11" font-weight="700" fill="#2563eb">Q2 FY2026 營收與 GEO 貢獻拆分（貴金屬 vs 多元化）</text>
+        <!-- Revenue bars -->
+        <text x="10" y="55" font-size="11" fill="#666">營收 $580.9M</text>
+        <rect x="90" y="42" width="342.9" height="20" fill="#2563eb"></rect>
+        <text x="95" y="57" font-size="10" fill="#fff" font-weight="700">貴金屬 $498.7M（85.8%）</text>
+        <rect x="432.9" y="42" width="56.4" height="20" fill="#c2600a"></rect>
+        <text x="580" y="57" font-size="10" fill="#c2600a" font-weight="700">$82.2M</text>
+        <!-- GEO bars -->
+        <text x="10" y="95" font-size="11" fill="#666">GEO 132,405</text>
+        <rect x="90" y="82" width="330.9" height="20" fill="#2563eb"></rect>
+        <text x="95" y="97" font-size="10" fill="#fff" font-weight="700">貴金屬 114,111（86.2%）</text>
+        <rect x="420.9" y="82" width="52.9" height="20" fill="#c2600a"></rect>
+        <text x="580" y="97" font-size="10" fill="#c2600a" font-weight="700">18,294</text>
+        <!-- FY2025 comp -->
+        <text x="10" y="135" font-size="11" fill="#666">FY25 營收 $1,822.8M</text>
+        <rect x="150" y="122" width="330.6" height="20" fill="#93c5fd"></rect>
+        <text x="155" y="137" font-size="10" fill="#1a1a2e" font-weight="700">貴金屬 $1,548.7M（85%）</text>
+        <rect x="480.6" y="122" width="55.4" height="20" fill="#fbbf7a"></rect>
+        <text x="590" y="137" font-size="10" fill="#c2600a" font-weight="700">$259.9M</text>
+        <text x="10" y="175" font-size="10" fill="#999">⚑ 資料來源：FNV Q2 2026 6-K（Acc. 0001104659-26-094181, Ex.99.1/99.2）、FY2025 40-F（Acc. 0001104659-26-032133）。存取日期 2026-09-23。長條寬度依比例縮放（非精確像素單位，僅供方向性判讀）。</text>
+      </svg>
+    </div>
+
+    <div class="section-title">五種權利金／串流合約類型與 FNV 實例</div>
+    <div class="bu-grid">
+      <div class="bu-card b">
+        <div class="bu-name">串流（Stream）</div>
+        <div class="bu-abbr">以約定折扣價買下礦山特定金屬產出的固定比例</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">代表資產</span><span class="bu-stat-val">Candelaria（68% 銅礦副產金銀）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$59.2M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">現金流特性</span><span class="bu-stat-val">部分依金價比例支付固定成本</span></div>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">串流（銀）</div>
+        <div class="bu-abbr">同串流結構，標的為副產白銀</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">代表資產</span><span class="bu-stat-val">Antamina（22.5% 銀）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$57.4M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">本季驅動</span><span class="bu-stat-val">交割量與銀價同步走高</span></div>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">淨利潤權利金（NPI）</div>
+        <div class="bu-abbr">依礦山淨利潤的約定百分比分潤，波動性最高的合約型態</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">代表資產</span><span class="bu-stat-val">Hemlo（50%）／Musselwhite（5%）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$8.1M ／ $19.3M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">現金流特性</span><span class="bu-stat-val">依賴礦山成本結構，能見度低、常有跨年度追溯結算</span></div>
+      </div>
+      <div class="bu-card b">
+        <div class="bu-name">淨冶煉權利金（NSR）</div>
+        <div class="bu-abbr">依礦山總營收（扣除冶煉／運輸費後）的固定百分比抽成，不受礦山成本影響</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">代表資產</span><span class="bu-stat-val">Porcupine（4.25%）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$12.8M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">現金流特性</span><span class="bu-stat-val">幾乎零成本、現金流最穩定可預測</span></div>
+      </div>
+      <div class="bu-card g">
+        <div class="bu-name">總量權利金（GMR）</div>
+        <div class="bu-abbr">依礦山總產量（而非收入）的固定百分比計收，Côté Gold 常用型態</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">代表資產</span><span class="bu-stat-val">Côté Gold（7.5%，IAMGOLD）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$22.0M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">潛在催化劑</span><span class="bu-stat-val">IAMGOLD 可能買回一半 NPI（見特殊事件分頁）</span></div>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">產量權利金（GR）</div>
+        <div class="bu-abbr">依產量級距分段適用不同百分比，隨開採階段調整</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">代表資產</span><span class="bu-stat-val">South Arturo（4–9%）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$13.6M</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">本季驅動</span><span class="bu-stat-val">Phase I 露天礦帶動上半年高峰，管理層預期下半年轉弱</span></div>
+      </div>
+    </div>
+
+    <div class="note grey">⚑ 上述合約類型分類與百分比引自研究資料夾 FNV_SEC_Cross_Reference_Notes.md §1「Q2 2026 revenue by asset」表，源自 FNV Q2 2026 6-K MD&amp;A（Exhibit 99.2）。能源（多元化）資產因非個別具名合約揭露，本表未逐一列出合約型態，見下一分頁的資產組合結構圖。</div>
+  </div>
+
+  <!-- ============ TAB 4: 權利金／串流組合結構 ============ -->
+  <div id="panel-chain" class="panel">
+    <div class="card">
+      <div class="card-title">為何這裡不是傳統「供應鏈」</div>
+      <p>FNV 是權利金／串流金融公司，沒有實體供應鏈——它不生產、不採購原物料，也沒有下游客戶通路。本分頁改為呈現其真正的資產結構：<b>上游＝FNV 對其簽有權利金／串流協議的礦山營運商</b>（如 Lundin Mining、First Quantum、Coeur Mining、IAMGOLD 等），<b>下游＝FNV 本身收取 GEO 或現金流</b>，串流型合約需支付少量固定成本，權利金型合約幾乎零成本。以下同時提供「結構圖」（誰對 FNV 供給哪一類合約）與「流量圖」（本季各資產貢獻的營收金額），兩圖節點命名一致。</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">結構圖：礦山營運商 → 合約類型 → FNV</div>
+      <div class="flow-box">
+        <div class="flow-chain">
+          <span class="node">Lundin Mining（Candelaria）</span><span class="arrow">→ 68% 串流 →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Glencore/BHP/Teck（Antamina）</span><span class="arrow">→ 22.5% 銀串流 →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Glencore（Antapaccay）</span><span class="arrow">→ 串流 →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Coeur Mining（Guadalupe-Palmarejo）</span><span class="arrow">→ 50% 串流 →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">IAMGOLD（Côté Gold）</span><span class="arrow">→ 7.5% GMR →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Newmont（Porcupine）</span><span class="arrow">→ 4.25% NSR →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Nevada Gold Mines JV（South Arturo）</span><span class="arrow">→ 4–9% GR →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Hemlo Mining（Hemlo）</span><span class="arrow">→ 50% NPI →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">礦山營運商（Musselwhite）</span><span class="arrow">→ 5% NPI →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">Calibre Mining（Valentine）</span><span class="arrow">→ 串流 →</span><span class="node" style="background:#dbe8fd;">FNV</span><br>
+          <span class="node">First Quantum（Cobre Panamá）</span><span class="arrow" style="color:#b91c1c;">→ 串流（P&amp;SM 期間受限）→</span><span class="node" style="background:#fee2e2;">FNV</span><br>
+          <span class="node">美國頁岩業者群</span><span class="arrow">→ 能源權利金 →</span><span class="node" style="background:#fff0dc;">FNV（多元化）</span><br>
+          <span class="node">Whitecap Resources（Weyburn, 加拿大）</span><span class="arrow">→ 能源權利金 →</span><span class="node" style="background:#fff0dc;">FNV（多元化）</span>
+        </div>
+      </div>
+      <div class="note grey">⚑ 部分礦山營運商名稱（如 South Arturo 的 Nevada Gold Mines JV、Porcupine 的 Newmont）依公開產業知識標註，未逐一於本季研究資料中重新核對最新股權結構，信心度中；紅色節點標示 Cobre Panamá 目前處於庫存礦處理階段、非完整營運狀態。</div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">流量圖：Q2 FY2026 各資產營收貢獻（簡化 Sankey，長條寬度按金額比例縮放）</div>
+      <div class="sankey-flow">
+        <div class="sankey-row"><div class="sankey-src">Candelaria</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:63%"></div></div><div class="sankey-val">$59.2M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Antamina</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:61%"></div></div><div class="sankey-val">$57.4M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Antapaccay</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:51%"></div></div><div class="sankey-val">$47.7M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">能源—美國</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:49%"></div></div><div class="sankey-val">$46.2M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Guadalupe-Palmarejo</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:46%"></div></div><div class="sankey-val">$43.4M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">其他未逐項揭露資產（推算差額）</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:100%; background:linear-gradient(90deg,#e5e7eb,#9ca3af);"></div></div><div class="sankey-val">$204.2M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">能源—加拿大（Weyburn）</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:26%"></div></div><div class="sankey-val">$24.2M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Côté Gold</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:23%"></div></div><div class="sankey-val">$22.0M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Musselwhite（NPI）</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:21%"></div></div><div class="sankey-val">$19.3M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Detour Lake</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:19%"></div></div><div class="sankey-val">$18.2M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">South Arturo</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:15%"></div></div><div class="sankey-val">$13.6M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Porcupine（NSR）</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:14%"></div></div><div class="sankey-val">$12.8M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Hemlo（NPI）</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:9%"></div></div><div class="sankey-val">$8.1M</div><div class="sankey-dest">→ FNV</div></div>
+        <div class="sankey-row"><div class="sankey-src">Valentine</div><div class="sankey-bar-wrap"><div class="sankey-bar" style="width:5%"></div></div><div class="sankey-val">$4.6M</div><div class="sankey-dest">→ FNV</div></div>
+      </div>
+      <div class="note grey">⚑ 個別資產金額合計 $376.7M，低於本季總營收 $580.9M，差額 $204.2M 為研究資料未逐項揭露的其餘資產（灰色列，屬推算補項，非虛構數字），來源：FNV_SEC_Cross_Reference_Notes.md §1 by-asset 表（源自 Q2 2026 6-K Exhibit 99.2 MD&amp;A 摘要）。存取日期 2026-09-23。由於原始 MD&amp;A 為 137 列 XBRL 表格，本研究僅擷取摘要段落列出的資產，未做逐列窮舉。</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 5: 風險矩陣 ============ -->
+  <div id="panel-risk" class="panel">
+    <div class="risk-item">
+      <div class="risk-badge high">高</div>
+      <div class="risk-text">
+        <div class="risk-title">Cobre Panamá 全面復工的政治與財政不確定性</div>
+        環境稽核雖已通過約 88%，庫存礦處理也已授權並在進行，但截至法說會，巴拿馬政府與 First Quantum 之間<b>尚未展開正式財政條款談判</b>，FNV 明確表示「不在談判桌上」。若最終談判結果導致 First Quantum 營運成本結構改變，存在間接影響 FNV 串流合約實際交割經濟性的風險，目前無法排除。FY2023 淨損 $(466.4)M 已顯示此資產過去曾造成重大財務衝擊。
+        <div class="risk-source">來源：FNV Q2 2026 MD&amp;A（6-K, Ex.99.2）＋ Mining Weekly／MINING.COM 2026/6/22 報導，交叉引用於研究筆記 §6。</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Karma（布吉納法索）權利金訴訟——現金賠償曝險與沉默訊號</div>
+        瓦加杜古商業法庭 2026/6/10 判決 FNV／Sandstorm 敗訴，須支付約 US$930 萬。FNV 主張安大略法律管轄、尋求撤銷判決，但截至本季法說會逐字稿，<b>管理層未在正式稿中主動更新此案進度，也沒有任何分析師在 Q&amp;A 中追問</b>——這種沉默本身值得留意：可能代表管理層認為財務影響輕微（帳面價值為零，見特殊事件分頁），但也可能代表尚未有足夠進展可供對外溝通。⚑ 本項細節主要源自媒體報導交叉比對，尚未逐字核對 FNV 自身 SEC 揭露文字，信心度中等。
+        <div class="risk-source">來源：FNV 6-K（2026/6/17，Acc. 0001104659-26-074937）＋ Ecofin Agency／The Globe and Mail／Ghana Business News 等媒體報導，交叉引用於研究筆記 §7。</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge med">中</div>
+      <div class="risk-text">
+        <div class="risk-title">Candelaria 串流降階時點提前的可能性</div>
+        管理層目前估計 Candelaria 串流降階發生於 2027 上半年，但明確表示視 2026 下半年生產狀況，<b>也可能提前到 2026 年稍晚發生</b>——這代表 FNV 最大單一貢獻資產（Q2'26 營收 $59.2M，佔比逾 10%）存在提前降階、壓縮 2026 下半年至 2027 年營收動能的時程風險。
+        <div class="risk-source">來源：Q2 FY2026 法說會逐字稿（Sandip Rana 回覆 Daniel Major），交叉引用研究筆記 §1 by-asset 表。</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">中低</div>
+      <div class="risk-text">
+        <div class="risk-title">Hemlo NPI 波動性與營運商財測遞延的原創前瞻風險</div>
+        ⚑ 此項為本報告依框架要求，從分散揭露中自行綜合推導的<b>原創前瞻風險</b>，非管理層直接承認：Hemlo 礦山營運商已將正式產量財測從 2026 年遞延至 2027 年（法說會前一晚公告），而 FNV 對此僅回應「對 Interlake 未來幾年持續開採有信心」；同時 Musselwhite NPI 本季認列的強勁表現，有相當比例來自「2025 年度追溯結算」的一次性因素，而非本季經常性動能。將這兩個分散線索（營運商財測遞延 ＋ NPI 一次性追溯結算佔比）合併看，2026 下半年至 2027 年，FNV 來自這兩筆 NPI 資產的認列時點與金額，存在比管理層口頭保證更高的波動與遞延風險，且 NPI 型合約本身天生對 FNV 揭露透明度最低（見業務區隔分頁）。
+        <div class="risk-source">來源：Q2 FY2026 法說會逐字稿（Cosmos Chiu 提問段落）綜合推導，非單一原始揭露。</div>
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="risk-badge low">低</div>
+      <div class="risk-text">
+        <div class="risk-title">「調整後淨利」定義本季變更，影響前後期可比性</div>
+        管理層本季將「Adjusted Net Income」的定義修改為<b>不再對合約買回（contractual buy-back）產生的利得做調整</b>。這是一項方法論層面的變更，可能使本季與去年同期的調整後淨利數字在計算基礎上不完全一致，建議讀者在比較 YoY 數字時留意此定義變更的footnote。
+        <div class="risk-source">來源：研究筆記 §1 ⚑ 附註，源自 Q2 2026 6-K 非 GAAP 調節表（Exhibit 99.2）。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 6: 損益表 ============ -->
+  <div id="panel-inc" class="panel">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$580.9M</div><div class="kpi-lbl">Q2'26 總營收</div><div class="kpi-sub">YoY 對比缺 Q2'25 總營收原始數字（見下方缺口說明）</div></div>
+      <div class="kpi"><div class="kpi-val">$529.7M</div><div class="kpi-lbl">Adj. EBITDA</div><div class="kpi-sub">+45% YoY（vs $365.7M）</div></div>
+      <div class="kpi"><div class="kpi-val">$349.2M</div><div class="kpi-lbl">Adj. 淨利（$1.81/股）</div><div class="kpi-sub">+46% YoY（vs $238.5M）</div></div>
+      <div class="kpi"><div class="kpi-val">132,405</div><div class="kpi-lbl">GEO 銷售量</div><div class="kpi-sub">+18% YoY</div></div>
+    </div>
+
+    <div class="note yellow">⚑ <b>資料一致性提醒</b>：研究筆記中出現兩組不同的 Q2 2025 Adjusted EBITDA 數字——本季法說會新聞稿用於 YoY 比較的權威數字為 <b>$365.7M</b>（Q2'26 $529.7M 對比 +45% 的基礎），但另一份 6-K 摘要文字曾出現 $687.6M 字樣（疑似與 H1 2025 累計數或不同期間口徑混淆）。本報告採用 <b>$365.7M</b> 作為 Q2'25 EBITDA 的權威值，因其直接對應 FNV 自己新聞稿揭露的 YoY 百分比，並在此明確標註此項差異以避免誤用。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">季度營收與 Adjusted EBITDA margin 趨勢（可用資料點）</div>
+      <svg viewBox="0 0 640 260" style="width:100%; max-width:640px; height:auto;">
+        <!-- axes -->
+        <line x1="50" y1="20" x2="50" y2="200" stroke="#ccc"></line>
+        <line x1="50" y1="200" x2="600" y2="200" stroke="#ccc"></line>
+        <text x="10" y="24" font-size="10" fill="#666">$M</text>
+        <text x="605" y="204" font-size="10" fill="#666">季度</text>
+        <!-- gridlines / y labels -->
+        <text x="10" y="204" font-size="9" fill="#999">0</text>
+        <text x="10" y="114" font-size="9" fill="#999">350</text>
+        <text x="10" y="24" font-size="9" fill="#999">700</text>
+        <line x1="50" y1="114" x2="600" y2="114" stroke="#f0f0f0"></line>
+        <!-- Revenue bars: Q1'25 368.4, [Q2'25 gap], [Q3'25 gap], Q4'25 597.3, Q1'26 650.7, Q2'26 580.9 -->
+        <rect x="80" y="94.8" width="50" height="105.2" fill="#93c5fd"></rect>
+        <text x="85" y="90" font-size="9" fill="#1a1a2e">$368.4M</text>
+        <text x="85" y="215" font-size="9" fill="#666">Q1'25</text>
+
+        <text x="205" y="195" font-size="9" fill="#b91c1c">缺營收數字</text>
+        <text x="200" y="215" font-size="9" fill="#666">Q2'25</text>
+
+        <text x="325" y="195" font-size="9" fill="#b91c1c">整季缺</text>
+        <text x="320" y="215" font-size="9" fill="#666">Q3'25</text>
+
+        <rect x="380" y="29.2" width="50" height="170.8" fill="#93c5fd"></rect>
+        <text x="382" y="24" font-size="9" fill="#1a1a2e">$597.3M</text>
+        <text x="385" y="215" font-size="9" fill="#666">Q4'25</text>
+
+        <rect x="450" y="14.2" width="50" height="185.8" fill="#2563eb"></rect>
+        <text x="452" y="10" font-size="9" fill="#1a1a2e">$650.7M</text>
+        <text x="452" y="215" font-size="9" fill="#666">Q1'26</text>
+
+        <rect x="520" y="53.8" width="50" height="146.2" fill="#2563eb"></rect>
+        <text x="522" y="49" font-size="9" fill="#1a1a2e">$580.9M</text>
+        <text x="522" y="215" font-size="9" fill="#666">Q2'26</text>
+
+        <!-- EBITDA margin line points where available: Q1'25 87.4%, Q4'25 90.6%, Q2'26 91.2% -->
+        <circle cx="105" cy="185" r="3" fill="#15803d"></circle>
+        <circle cx="405" cy="182" r="3" fill="#15803d"></circle>
+        <circle cx="545" cy="181" r="3" fill="#15803d"></circle>
+        <line x1="105" y1="185" x2="405" y2="182" stroke="#15803d" stroke-dasharray="3,3"></line>
+        <line x1="405" y1="182" x2="545" y2="181" stroke="#15803d"></line>
+        <text x="100" y="240" font-size="9" fill="#15803d">● EBITDA margin：Q1'25 87.4% ---(缺Q2/Q3'25、Q1'26)--- Q4'25 90.6% — Q2'26 91.2%</text>
+        <text x="52" y="255" font-size="9" fill="#999">⚑ 藍色長條＝營收（深藍為 2026 年）；虛線段代表資料缺口，非內插填補。來源：研究筆記 §2，源自各季 6-K Ex.99.1。存取日期 2026-09-23。</text>
+      </svg>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">FY 損益比較</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th>指標</th><th>FY2025</th><th>FY2024</th><th>FY2023</th></tr>
+          <tr><td>總營收</td><td>$1,822.8M（+64%）</td><td>$1,113.6M</td><td>$1,219.0M</td></tr>
+          <tr><td>Adjusted EBITDA</td><td>$1,656.1M（+74%）</td><td>$951.6M</td><td>$1,014.7M</td></tr>
+          <tr><td>Adjusted EBITDA/股</td><td>$8.59</td><td>$4.95</td><td>$5.28</td></tr>
+          <tr><td>Adjusted 淨利</td><td>$1,075.2M（+74%）</td><td>$618.1M</td><td>$683.1M</td></tr>
+          <tr><td>Adjusted EPS</td><td>$5.58</td><td>$3.21</td><td>$3.56</td></tr>
+          <tr class="total"><td>IFRS 淨利／（淨損）</td><td>$1,112.1M（+101%）</td><td>$552.1M</td><td class="neg">$(466.4)M</td></tr>
+          <tr><td>總 GEO 銷售量</td><td>519,106（+12%）</td><td>463,334</td><td>無此資料</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="note red">⚑ <b>FY2023 淨損 $(466.4)M</b> 極可能與 Cobre Panamá 減損有關（2023/11 停產），但確切減損金額本次研究未能自 FY2023 40-F 原文逐項驗證，屬待辦事項，見特殊事件分頁與研究筆記 §2/§9。</div>
+
+    <div class="note grey">⚑ Q3 2025 完整營收與 EBITDA/GEO 明細、Q1 2026 Adjusted EBITDA 與 Adjusted 淨利數字，本次研究未能取得完整 MD&amp;A 表格（僅取得新聞稿摘要片段），已在研究筆記 §2 標示待補來源連結。本報告依框架規則明確標示「無此資料」而非以插值虛構填補。</div>
+  </div>
+
+  <!-- ============ TAB 7: 業務部門 ============ -->
+  <div id="panel-bu" class="panel">
+    <div class="card">
+      <div class="card-title">業務部門：貴金屬 vs 多元化商品</div>
+      <p>FNV 沒有製造業式的產品線，兩大資產類別的財務表現差異主要來自：貴金屬受惠於本季金銀價格同步走高（金價 YoY +38%、銀價 YoY +118%），且多數為近乎零成本的權利金與高毛利串流；多元化商品（能源）則直接暴露在油價與地緣政治風險下（本季受中東衝突推動 WTI 站上 $80/桶之上），且產量認列存在數月延遲，波動性與能見度都低於貴金屬部位。</p>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Q2 FY2026 vs Q2 FY2025：貴金屬與多元化商品 GEO 貢獻對比</div>
+      <div class="bar-row">
+        <div class="bar-lbl">貴金屬 GEO — Q2'26</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:100%; background:#2563eb;">114,111</div></div>
+        <div class="bar-num">+23% YoY</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">多元化 GEO — Q2'26</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:16%; background:#c2600a;">18,294</div></div>
+        <div class="bar-num">Q2'25: 19,644</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">貴金屬營收 — Q2'26</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:100%; background:#2563eb;">$498.7M</div></div>
+        <div class="bar-num">佔營收 85.8%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">多元化營收 — Q2'26</div>
+        <div class="bar-wrap"><div class="bar-fill" style="width:16.5%; background:#c2600a;">$82.2M</div></div>
+        <div class="bar-num">+31% YoY</div>
+      </div>
+      <div class="note grey">⚑ 多元化商品 GEO 較去年同期<b>下降</b>（18,209/18,294 vs 19,644）而營收卻上升 31%——原因是 GEO 換算採用固定金價 $4,500/oz，油價上漲推升營收但换算為 GEO 單位時被高金價基期壓低，屬換算口徑效應非實質量縮，見研究筆記 §1。來源：Q2 2026 6-K（Ex.99.1）。存取日期 2026-09-23。</div>
+    </div>
+
+    <div class="bu-grid">
+      <div class="bu-card b">
+        <div class="bu-name">貴金屬（Precious Metal）</div>
+        <div class="bu-abbr">金、銀、鉑族金屬串流與權利金</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 GEO</span><span class="bu-stat-val">114,111（+23% YoY）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$498.7M（85.8%）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2025 營收</span><span class="bu-stat-val">$1,548.7M</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:91%; background:#2563eb;"></div></div>
+      </div>
+      <div class="bu-card o">
+        <div class="bu-name">多元化商品（Diversified）</div>
+        <div class="bu-abbr">油、氣、NGL、鐵礦石權利金</div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 GEO</span><span class="bu-stat-val">18,294（下降）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">Q2'26 營收</span><span class="bu-stat-val">$82.2M（+31% YoY）</span></div>
+        <div class="bu-stat"><span class="bu-stat-lbl">FY2025 營收</span><span class="bu-stat-val">$259.9M</span></div>
+        <div class="margin-bar-wrap"><div class="margin-bar" style="width:60%; background:#c2600a;"></div></div>
+      </div>
+    </div>
+
+    <div class="note grey">產業結構觀察：管理層在正式稿中指出，美國頁岩業者鑽井數已由三個月前的 420 台回升至 450 台，再投資率亦由 51% 升至 55%，這兩個先行指標若持續改善，將在<b>約 6 個月的傳導延遲後</b>（即 2026 年底至 2027 年初）反映在多元化商品單位銷量的成長上，屬於一項尚未體現在本季財務數字中的前瞻性正面訊號。</div>
+  </div>
+
+  <!-- ============ TAB 8: 資產負債表 ============ -->
+  <div id="panel-bs" class="panel">
+    <div class="tbl-wrap">
+      <div class="tbl-title">資產負債表重點（FY2025 40-F，2025/12/31）</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th>項目</th><th>2025/12/31</th><th>2024/12/31</th></tr>
+          <tr><td>現金及約當現金</td><td>$670.9M</td><td>$1,451.3M</td></tr>
+          <tr><td>投資（權益持股）</td><td>$1,141.3M</td><td>$325.5M</td></tr>
+          <tr class="total"><td>可用資金</td><td>$2,840.1M（年後隨額度擴增升至約 $3.1B）</td><td>無此資料</td></tr>
+          <tr><td>總資產</td><td>$8,241.4M</td><td>無此資料</td></tr>
+          <tr><td>股東權益</td><td>$7,635.3M</td><td>無此資料</td></tr>
+          <tr class="total"><td>總負債</td><td class="pos">$0（無提領循環信貸額度）</td><td>$0</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val">$4.3B</div><div class="kpi-lbl">Q2'26 可用資金總額</div><div class="kpi-sub">$1.0B 現金＋$2.25B 信貸額度（含 accordion）＋$1.2B 流動有價證券</div></div>
+      <div class="kpi"><div class="kpi-val">$0</div><div class="kpi-lbl">總負債</div><div class="kpi-sub">連續維持零負債資產負債表</div></div>
+      <div class="kpi"><div class="kpi-val">$1,014.2M</div><div class="kpi-lbl">現金（2026/6/30）</div><div class="kpi-sub">較 FY2025 底 $670.9M 上升</div></div>
+      <div class="kpi"><div class="kpi-val">$36.5M</div><div class="kpi-lbl">剩餘承諾出資</div><div class="kpi-sub">Continental Resources 權利金收購基金</div></div>
+    </div>
+
+    <div class="note grey">⚑ FNV 為權利金／串流公司，資產負債表結構天生輕資產，「應收帳款天數」「未開始租賃」「採購承諾」「客戶預付款」等一般製造業必備追蹤指標對此商業模式不適用，改以<b>可用資金／資產負債表韌性</b>作為對等的財務體質指標。CRA（加拿大稅務局）就一項轉讓訂價爭議已於 2025/9/11 和解，年後收回 $30.0M 現金保證金，屬已解決事項。</div>
+
+    <div class="note yellow">⚑ 利息保障倍數：因 FNV 目前<b>零負債</b>，此指標不適用（N/A）——不同於一般公司借款產生利息費用需要 EBIT 覆蓋，FNV 沒有應付利息，此為財務體質極佳的直接體現，而非資料缺漏。</div>
+  </div>
+
+  <!-- ============ TAB 9: 現金流量 ============ -->
+  <div id="panel-cf" class="panel">
+    <div class="note yellow">⚑ 本研究未能取得 FNV Q2 2026 完整現金流量表（營業／投資／籌資三大類逐項數字），僅取得損益表層級的成本結構。以下改用一個<b>簡化橋接圖</b>，呈現「Adjusted EBITDA → 扣除銷貨成本與折耗攤銷 → Adjusted 淨利」的路徑，這不是完整的現金流量表橋接（缺營運資金變動、投資活動、籌資活動），特此明確標示，避免誤讀為官方 FCF bridge。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">簡化獲利橋接：Adjusted EBITDA → Adjusted 淨利（Q2 FY2026，$M）</div>
+      <svg viewBox="0 0 640 220" style="width:100%; max-width:640px; height:auto;">
+        <line x1="40" y1="190" x2="600" y2="190" stroke="#ccc"></line>
+        <!-- EBITDA bar -->
+        <rect x="40" y="40" width="80" height="150" fill="#2563eb"></rect>
+        <text x="45" y="35" font-size="10" fill="#1a1a2e" font-weight="700">$529.7M</text>
+        <text x="50" y="205" font-size="10" fill="#666">Adj. EBITDA</text>
+        <!-- minus cost of sales -->
+        <rect x="140" y="40" width="80" height="24" fill="#f0aaaa"></rect>
+        <text x="145" y="35" font-size="10" fill="#b91c1c">-$45.9M</text>
+        <text x="145" y="205" font-size="10" fill="#666">銷貨成本</text>
+        <!-- minus depletion -->
+        <rect x="240" y="64" width="80" height="44" fill="#f0aaaa"></rect>
+        <text x="245" y="59" font-size="10" fill="#b91c1c">-$84.0M</text>
+        <text x="240" y="205" font-size="10" fill="#666">折耗攤銷</text>
+        <!-- minus other (tax, DD&A adj, minority etc, plug) -->
+        <rect x="340" y="108" width="80" height="42" fill="#f0d090"></rect>
+        <text x="330" y="103" font-size="10" fill="#92400e">-$50.6M</text>
+        <text x="330" y="205" font-size="9" fill="#666">稅項及其他調整</text>
+        <!-- result: Adjusted NI -->
+        <rect x="440" y="40" width="80" height="150" fill="#15803d"></rect>
+        <text x="445" y="35" font-size="10" fill="#1a1a2e" font-weight="700">$349.2M</text>
+        <text x="450" y="205" font-size="10" fill="#666">Adj. 淨利</text>
+        <text x="40" y="215" font-size="9" fill="#999">⚑ 「稅項及其他調整」為推算差額（EBITDA − 銷貨成本 − 折耗攤銷 − 稅項及其他 = Adj. 淨利），非官方逐項揭露科目。來源：Q2 2026 6-K（Ex.99.1/99.2），研究筆記 §1。</text>
+      </svg>
+    </div>
+
+    <div class="cf-section">
+      <div class="cf-header">股利與資本回饋</div>
+      <div class="cf-row"><div class="cf-lbl">Q2 2026 季度股利宣告</div><div class="cf-val">US$0.44／股</div></div>
+      <div class="cf-row"><div class="cf-lbl">H1 2026 股利發放</div><div class="cf-val">$161.1M</div></div>
+      <div class="cf-row"><div class="cf-lbl">FY2025 股利發放總額</div><div class="cf-val">$293.8M（現金 $275.1M＋DRIP $18.7M）</div></div>
+      <div class="cf-row total-row"><div class="cf-lbl">股利連續調升紀錄</div><div class="cf-val">2026 年為連續第 19 年調升</div></div>
+    </div>
+
+    <div class="note grey">⚑ 特別股利：本季法說會被分析師兩度提及（Lawson Winder 直接提問、Tanya Jakusconek 就 IAMGOLD 潛在買回情境提問），管理層兩次都<b>未正面承諾也未明確排除</b>，傾向表態如有大筆現金流入將反映在「較高幅度的常態股利調升」而非特別股利，見 Q&amp;A 分頁與特殊事件分頁。</div>
+  </div>
+
+  <!-- ============ TAB 10: 估值觀察 ============ -->
+  <div id="panel-val" class="panel">
+    <div class="note yellow">⚑ 以下同業估值倍數與成長率均為<b>第三方彙整資料</b>（stockanalysis.com、GuruFocus、koalagains.com/TradingKey），<b>並非取自 SEC 申報文件的逐項數字</b>，且非同一資料源、同一時間點同步擷取（存取日期 2026-09-23），使用前建議重新核對當日最新數字。FNV 本身 NYSE／TSX 兩地掛牌的本益比存在明顯落差（58.59 vs 30.09），本報告採用 NYSE 報價以與 WPM/RGLD 的掛牌地保持一致基準，TSX 數字予以保留但不作為主要比較基礎。</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">同業估值散布圖：本益比（P/E）vs 近期營收成長率</div>
+      <svg viewBox="0 0 640 320" style="width:100%; max-width:640px; height:auto;">
+        <line x1="60" y1="20" x2="60" y2="270" stroke="#ccc"></line>
+        <line x1="60" y1="270" x2="600" y2="270" stroke="#ccc"></line>
+        <text x="10" y="150" font-size="10" fill="#666" transform="rotate(-90 10,150)">本益比（P/E）</text>
+        <text x="300" y="300" font-size="10" fill="#666">近期營收成長率（%）</text>
+        <!-- y axis ticks 0/20/40/60/80 -->
+        <text x="35" y="274" font-size="9" fill="#999">0</text>
+        <text x="35" y="212" font-size="9" fill="#999">20</text>
+        <text x="35" y="150" font-size="9" fill="#999">40</text>
+        <text x="35" y="88" font-size="9" fill="#999">60</text>
+        <text x="35" y="26" font-size="9" fill="#999">80</text>
+        <!-- x axis ticks 0/20/40/60/80 growth% -->
+        <text x="60" y="285" font-size="9" fill="#999">0%</text>
+        <text x="195" y="285" font-size="9" fill="#999">20%</text>
+        <text x="330" y="285" font-size="9" fill="#999">40%</text>
+        <text x="465" y="285" font-size="9" fill="#999">60%</text>
+        <text x="590" y="285" font-size="9" fill="#999">80%</text>
+        <!-- median lines -->
+        <line x1="60" y1="150" x2="600" y2="150" stroke="#f0f0f0" stroke-dasharray="4,4"></line>
+        <line x1="330" y1="20" x2="330" y2="270" stroke="#f0f0f0" stroke-dasharray="4,4"></line>
+        <!-- points: x = 60 + growth%*6.7, y = 270 - PE*3.1 -->
+        <!-- FNV: growth 64%, PE 58.59 -->
+        <circle cx="489" cy="88" r="7" fill="#2563eb"></circle>
+        <text x="497" y="85" font-size="10" fill="#2563eb" font-weight="700">FNV (NYSE) 58.6 / +64%</text>
+        <!-- WPM: growth unknown, plot at approx 25% (no clean figure — flagged) PE 66.65 -->
+        <circle cx="228" cy="63" r="7" fill="#c2600a"></circle>
+        <text x="236" y="60" font-size="10" fill="#c2600a" font-weight="700">WPM 66.7 / 成長率無此資料</text>
+        <!-- RGLD: growth ~17.2% fwd consensus, PE 27.7 -->
+        <circle cx="175" cy="184" r="7" fill="#15803d"></circle>
+        <text x="183" y="181" font-size="10" fill="#15803d" font-weight="700">RGLD 27.7 / +17.2%（遠期共識）</text>
+        <!-- OR: growth 61.9% qoq yoy, PE 23.7 -->
+        <circle cx="474" cy="196" r="7" fill="#b91c4a"></circle>
+        <text x="482" y="193" font-size="10" fill="#b91c4a" font-weight="700">OR 23.7 / +61.9%</text>
+        <text x="60" y="315" font-size="9" fill="#999">⚑ WPM 未取得可比的單一營收成長率數字（研究筆記 §4 標示無清楚一致口徑），圖上以概略位置呈現並註記；來源：stockanalysis.com／GuruFocus／koalagains.com，存取日期 2026-09-23。</text>
+      </svg>
+    </div>
+
+    <div class="tbl-wrap">
+      <div class="tbl-title">同業估值倍數彙總</div>
+      <div class="tbl-scroll">
+        <table>
+          <tr><th>公司</th><th>股票代號</th><th>Trailing P/E</th><th>Fwd P/E</th><th>EV/EBITDA</th><th>近期營收成長</th></tr>
+          <tr><td><strong>Franco-Nevada</strong></td><td>FNV (NYSE)</td><td>58.59</td><td>34.06</td><td>26.66</td><td>FY2025 +64% YoY</td></tr>
+          <tr><td>Franco-Nevada</td><td>FNV (TSX)</td><td>30.09</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>Wheaton Precious Metals</td><td>WPM (NYSE)</td><td>66.65</td><td>28.88</td><td>44.77</td><td>無此資料</td></tr>
+          <tr><td>Royal Gold</td><td>RGLD (NASDAQ)</td><td>27.70</td><td>—</td><td>17.40</td><td>+17.2% 遠期共識</td></tr>
+          <tr><td>Osisko Gold Royalties</td><td>OR (TSX)</td><td>23.70</td><td>—</td><td>無此資料</td><td>+61.9% 最近季 YoY</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="note grey">⚑ 利息保障倍數：FNV 零負債，不適用（N/A），見資產負債表分頁。P/NAV（權利金業慣用的更標準估值指標）本次研究未能取得，列為待補項目。</div>
+
+    <hr class="divider">
+    <div class="section-title">互證對照表（管理層敘事 ↔ 財報／逐字稿量化證據）</div>
+    <div class="tbl-wrap">
+      <div class="tbl-scroll">
+        <table class="wide">
+          <tr><th style="text-align:left;">管理層說法</th><th style="text-align:left;">對應量化證據</th></tr>
+          <tr><td class="wrap">GEO 銷售量 YoY +18%，追蹤財測 510K-570K 上緣</td><td class="wrap">H1 2026 實際 268,758 GEO；FY2025 全年 519,106 GEO 作為基期參考，方向一致，但財測是否會被超越取決於下半年 Candelaria／Côté／Valentine 表現，管理層本身承認「還在年中」</td></tr>
+          <tr><td class="wrap">「創紀錄的上半年財務表現」</td><td class="wrap">Q2 2026 Adj. EBITDA $529.7M vs Q2 2025 $365.7M（+45%），H1 2026 Adj. 淨利 $807.5M；方向確認一致</td></tr>
+          <tr><td class="wrap">「零負債、$4.3B 可用資金，積極的交易管線」</td><td class="wrap">資產負債表分頁確認總負債 $0；但本季實際完成交易金額僅約 $84M，管理層自己也承認規模「step down」，管線是否能如期轉化為大型交易仍待驗證</td></tr>
+          <tr><td class="wrap">環境稽核「無重大缺失，合規率 87.7%」</td><td class="wrap">外部媒體報導同一份稽核結果時，額外指出在生物多樣性、生態復育、尾礦酸性排水等項目仍有缺失待補——管理層的措辭（「no major findings」）與外部報導的細節（「deficiencies」）在強調重點上有落差，非直接矛盾，但選詞方向明顯更正面</td></tr>
+          <tr><td class="wrap">整場法說會與正式稿<b>完全未提及</b> Karma 訴訟</td><td class="wrap">FNV 自己在 6/17（法說會前近兩個月）才發布 6-K 說明此案敗訴並賠償約 US$930 萬——這是本場最明顯的「留白反推」訊號：管理層選擇不在法說會上主動更新一項自己才公開揭露過的訴訟進展，也沒有分析師追問，是沉默訊號還是財務影響確實輕微（帳面價值為零），讀者需自行評估，見風險矩陣分頁</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="stance-grid">
+      <div class="stance-col">
+        <h4>看多論點</h4>
+        <ul>
+          <li>零負債＋$4.3B 可用資金的資產負債表韌性，在高金銀價環境下具備充足的併購彈性</li>
+          <li>Adjusted EBITDA margin 連續四季走高至 91.2%，反映近期交易組合更偏向近乎零成本的權利金型態</li>
+          <li>連續 19 年調升股利，資本配置紀律清晰</li>
+          <li>Cobre Panamá 環境稽核已通過近 88%、庫存礦處理已在進行，若後續談判順利，存在顯著的額外上檔（FY2023 曾因此資產貢獻超過 10% 營收）</li>
+        </ul>
+        <div class="pro">核心邏輯：輕資產、高槓桿的權利金組合 + 資產負債表最大彈性</div>
+      </div>
+      <div class="stance-col">
+        <h4>看空／觀察論點</h4>
+        <ul>
+          <li>Cobre Panamá 全面復工的政府決策時程仍不明朗，且 FNV 明確表示不在談判桌上，曝險方向難以自行掌控</li>
+          <li>Karma 訴訟的沉默處理與潛在現金賠償曝險（約 US$930 萬），加上帳面價值為零並不等於現金流出風險為零</li>
+          <li>NPI 型合約（Hemlo、Musselwhite）能見度低、常有跨期追溯結算，波動性高於串流／權利金型資產，且營運商自身財測已出現遞延訊號</li>
+          <li>本益比（NYSE 58.59）處於同業區間中高位，本季完成的實際交易規模（約 $84M）遠低於 $4.3B 可用資金所暗示的部署能力，管線轉化為實際交易的執行風險仍待觀察</li>
+        </ul>
+        <div class="con">核心邏輯：估值已隱含高成長預期，但關鍵催化劑（Cobre Panamá、Karma、大型交易）時程均不在公司完全掌控之中</div>
+      </div>
+    </div>
+
+    <div class="foot-note">本報告僅供資訊參考，不構成投資建議。所有財務數字取自 SEC EDGAR 公開申報文件（Form 40-F／6-K）與 Franco-Nevada 2026 年 8 月 12 日法說會逐字稿，交叉覆核方法與資料來源詳見同資料夾內 <em>FNV_SEC_Cross_Reference_Notes.md</em>。第三方彙整之同業估值數據已另行標註來源與存取日期。</div>
+  </div>
+</div>
+
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
