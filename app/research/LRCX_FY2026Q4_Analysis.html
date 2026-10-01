@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lam Research — FY2026 Q4 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Lam Research（LRCX）— FY2026 Q4（2026 年 4–6 月）法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／NAND 升級與 WFE 展望／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 7 月 29 日（FQ4 於 6/28 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q4 8-K Ex.99.1（7/29）、FY2026 10-K（8/7）、前三季 8-K、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">NAND 升級與 WFE 展望</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">13</div><div class="stat-lbl">分析師（UBS、Cantor、JPMorgan、Citi、Goldman、RBC、BofA、Deutsche、Bernstein、TD Cowen、Jefferies、Mizuho、Morgan Stanley）</div></div><div class="stat-box"><div class="stat-val">26</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/7/29 法說會（Investing.com 完整逐字稿頁、Yahoo Finance 與 Motley Fool 逐字稿頁）、同日 8-K 新聞稿、FY2026 10-K（8/7）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附來源連結）。全場最關鍵的結構性事實：<b>13 位分析師沒有人追問客戶集中度</b>——10-K 顯示 FY26 四大客戶占營收 16%、15%、12%、12%（合計 55%），應收帳款五大客戶占 72%（20%、16%、15%、11%、10%）；也沒有人問採購義務 <b>$14.8 億（其中 FY27 就占 $10.6 億）</b>與 Jun 季存貨 $42.8 億。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Timothy Arcuri（UBS）</div><div class="qa-topic">服務營收與毛利率目標</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">客戶支援營收強勁，對 Sep 季毛利率的含意？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CFO Doug Bettinger：服務成長持續——NAND 帶動的升級、高稼動率帶動的備品、先進服務（cobots、Equipment Intelligence）；Sep 季結構與 Jun 季相似。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">何時達到毛利率中 50% 區間？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：「未來幾年」，靠規模、新產品與「得到與價值相符的報酬」；每年擴張但需要數年。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 中 50% 毛利率的路徑沒有時間表，Sep 季指引毛利率仍是 52%</div><div class="q-text">Jun 季 GAAP 毛利率 51.7%、Sep 季指引 52%±1pp；長期框架改為毛利率「中 50%」、營業利益率「中 40%」。從 52% 到 55% 以上需要「數年」，等於每年約 +1pp——與「價格與價值」並列為手段的措辭，比數字更具體。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">C.J. Muse（Cantor Fitzgerald）</div><div class="qa-topic">客戶支援成長、新進者與美國邏輯客戶</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">客戶支援業務 2026 年後的成長與組成？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：投資人日框架預期成長快於先前指引，因先進服務；高產業稼動率帶動備品與服務；Reliant 與成熟製程投資和中國情況相關。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">新進者與更大的邏輯支出能見度？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：正與「美國的一家新邏輯客戶」對話；CEO Tim Archer：新進者不背負舊的技術路線，是以 Akara 導體蝕刻等差異化工具爭取份額的機會。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Harlan Sur（JPMorgan）</div><div class="qa-topic">毛利率來源、先進封裝</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">毛利率改善來自馬來西亞製造槓桿還是產品組合與定價？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：製造據點多元（奧勒岡、加州、俄亥俄、馬來西亞、台灣、韓國、奧地利）；Bettinger：營運效率、貼近客戶、「每年推出新產品」與定價紀律。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">先進封裝成長是 HBM／2.5D／3.5D 拉貨還是真實需求轉折？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：「全部」——HBM、邏輯的 2.5D／3.5D、面板級封裝都在加速；510×515mm 面板系統已出貨進研發，2026 年將有首台 310×310mm 面板設備。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Atif Malik（Citi）</div><div class="qa-topic">NAND 供給過剩風險、台灣代工份額</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">NAND 營收翻倍的可持續性與過剩風險？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：客戶在 200 層以上升級中、綠地新廠稍後；「Lam 的故事遠大於 NAND」；2027 年成長順序：<b>DRAM 最快、晶圓代工邏輯第二、NAND 第三</b>。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">台灣代工 2nm／3nm 份額？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：在環繞閘極（GAA）的應用靠高深寬比蝕刻、RC 性能（低介電間隔層）與圖案化取勝；新平台 Akara 與 ALD 工具跨所有領先客戶。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ NAND 本季翻倍，但被管理層自己排在 2027 年成長的第三位</div><div class="q-text">Jun 季 NAND 營收季增一倍（系統營收約 33%），而 2027 年成長順序 NAND 排第三；也就是說<b>本季的 NAND 成長率是階段性高點</b>。新聞稿與法說會沒有給 NAND 2027 年的量化預期，市場需要自己推算。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">James Schneider（Goldman Sachs）</div><div class="qa-topic">2027 年 WFE、定價</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">2027 年 WFE 成長相對 2026？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：不給數字；產業「明顯供不應求」，無塵室陸續上線帶來增量；2027 是「相當不錯的一年」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">定價驅動與近期調價？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：定價一直是毛利率擴張的一部分，同時有營運效率與貼近客戶；重點是「得到與價值相符的報酬」，透過解決複雜問題的新產品。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Srini Pajjuri（RBC）</div><div class="qa-topic">WFE 約 $1,500 億與供應鏈、中國</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">WFE $1,500 億的指引與供應鏈對上行的準備？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：先前 $1,400 億（含上行偏向）已變成目前的 $1,500 億；交期「具挑戰」；客戶在解決瓶頸工具並榨出更多產能；再有驚喜上行很難，因客戶正在<b>拉貨</b>；對 2027 年以後新廠設備的能見度持續延伸。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">毛利率對中國下滑的韌性與中國復甦預期？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：中國整體 WFE「持平到小幅上升」，季度間有起伏；Jun 季全球跨國公司在中國成長、本土客戶下降，趨勢預期延續。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「客戶在拉貨」是對 2027 年需求被借用的間接承認</div><div class="q-text">Archer 同時說：2026 年 WFE 由 $1,400 億上修到低 $1,500 億、再上行很難、因客戶正在拉貨。拉貨意味著部分原定 2027 年的訂單提前到 2026，Sep 季指引營收 $81 億（+20% QoQ）可能含有這部分。與 Rasgon 追問的 2027 年「無塵室不受限」情境相對照，管理層刻意避免給 2027 數字。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vivek Arya（Bank of America）</div><div class="qa-topic">NAND $400 億升級、DRAM 份額</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">$400 億的 NAND 升級機會如何實現？層數 200→300→500+ 的 SAM？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：$400 億中大部分可能在 2027 年底前發生，之後以更大的安裝基礎再循環；SAM 隨層數增加，「從 200+ 層到 500+ 層每片晶圓的 SAM 將加倍」（製程時間更長、設備更複雜）。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">DRAM 份額成長集中在 HBM 還是傳統 DRAM？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：傳統 DRAM 也有勝利，來自低介電、EUV 採用；擴散阻障與蝕刻停止層創新；圖案化領先使 DRAM 與先進邏輯複雜度趨同。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Melissa Weathers（Deutsche Bank）</div><div class="qa-topic">AI 支出放緩下的 WFE 韌性、供應鏈能見度</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">AI 支出若放緩，WFE 的韌性框架？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：資料中心資本支出每 $1,000 億對應 WFE 的比例由 $80 億上調 $10–20 億；超大規模投資向 WFE 傳導仍是主要驅動；產業供不應求延續到 2027。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">供應鏈能見度與供應商產能？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：能見度一路分享到供應鏈「甚至兩層以下」；供應鏈團隊管理加急；避免成為瓶頸。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Stacy Rasgon（Bernstein）</div><div class="qa-topic">無塵室不受限的 2027、逐季成長</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">若無塵室不受限，2027 年成長潛力？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：「太早」，不量化；8–9–10 座新廠將陸續上線。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">2027 年逐季成長的可行性？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：對每一個後續季度「逐步感覺更好」，不提供逐季指引；新廠是「一點一點」而非集中。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Krish Sankar（TD Cowen）</div><div class="qa-topic">存貨、毛利率基準</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">存貨累積是否足夠？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：每季存貨增加約 $3 億，周轉 3.0 倍（約五年最佳）；在支持成長與現金效率間平衡；供應鏈產能限制累積速度。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">目前量能下的基準毛利率？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：目前量能下 50%+ 毛利率可達，近期維持 51–52%。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 存貨周轉 3.0 倍的同時，Jun 季存貨仍高達 $42.8 億</div><div class="q-text">Jun 季存貨 $42.76 億（Mar 季 $40.00 億、上年同期 $43.08 億），在營收 +30% YoY 下，存貨幾乎與一年前持平，但<b>未來 12 個月的採購義務 $10.6 億</b>與 Sep 季營收 +20% QoQ 的指引，說明存貨與義務正同時為放量做準備；管理層沒有被追問這些義務若 2027 年訂單延後會如何處理。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Blayne Curtis（Jefferies）</div><div class="qa-topic">定價、後段資本支出</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">產業與 Lam 的定價動態？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：不提供同類比較，強調「得到與價值相符的報酬」涵蓋定價、營運效率與組合。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">$3,000 億 WCG 討論下後段產能的資本支出？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：資本支出維持占營收 4–5%，著重實驗室基礎建設與「廠區密集化」；Archer：蝕刻與沉積密集度驅動新產品開發以擴大 SAM。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vijay Rakesh（Mizuho）</div><div class="qa-topic">HBM4／HBM4E 資本密集度、SAM 橋接</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">HBM4／HBM4E 的每片晶圓機會？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：不量化；更高的堆疊需要更長製程時間、更多設備，TSV／電鍍機會擴大。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">SAM 從約 20% 到 30%+ 目標的橋接時點？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：公司目前「可能趨向」高 30%（約 36–36.5%），相較投資人日的低 30% 目標；承認與客戶支援營收部分可能造成混淆，可會後釐清。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ SAM 口徑已經模糊到需要「會後釐清」</div><div class="q-text">Rakesh 問的是約 20% 到 30%+，Bettinger 回答是 36–36.5% 對照「低 30%」——兩個數字的分子與分母不同，且管理層自己承認「與客戶支援營收部分可能造成混淆」。SAM 占 WFE 比例是長期成長論述的核心，卻沒有統一口徑。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Shane Brett（Morgan Stanley）</div><div class="qa-topic">清洗業務、DRAM 營收翻倍與 2027</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">清洗（cleaning）業務的定位？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Archer：清洗對本季成長有顯著貢獻；目標是在關鍵清洗領先，但未經詳細分析不做市占排名。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">DRAM 營收翻倍、2027 領先與份額成長幅度？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Bettinger：2027 年百分比「太早」；成長驅動依序 DRAM（最快）、晶圓代工邏輯、NAND；Sep 季三者皆擴張。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-lam-research-posts-record-q4-2026-results-stock-rebounds-93CH-4821978" target="_blank" rel="noopener">Investing.com：Lam Research Q4 2026 逐字稿頁</a>；<a href="https://finance.yahoo.com/markets/stocks/articles/lam-research-lrcx-q4-2026-235847716.html" target="_blank" rel="noopener">Yahoo Finance：Lam Research Q4 2026 Earnings Call Transcript</a>；<a href="https://www.fool.com/earnings/call-transcripts/2026/08/07/lam-research-lrcx-q4-2026-earnings-call-transcript/" target="_blank" rel="noopener">Motley Fool：Lam Research Q4 2026 逐字稿</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li>Jun 2026 季 NAND 營收<b>季增一倍</b>（客戶向 256 層以上轉換）</li><li>$400 億 NAND 升級機會：<b>大部分預期在 2027 年底前</b>發生</li><li>2026 年 WFE 由 $1,400 億上修至<b>低 $1,500 億</b>；2027 年 8–10 座新廠上線、管理層稱「非凡」</li><li>資料中心每 $1,000 億資本支出對應 WFE 由約 $80 億上調 $10–20 億</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>NAND 升級：2027 年底前大部分；之後以更大安裝基礎再循環</li><li>2027 年成長順序：DRAM＞晶圓代工邏輯＞NAND</li><li>客戶「拉貨」使 2026 年再上行困難</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>Sep 季指引：營收 $81 億±4 億（+20% QoQ）、毛利率 52%±1pp、營業利益率 39.5%±1pp、EPS $2.15±0.15</li><li>長期框架：毛利率中 50%、營業利益率中 40%（需數年）</li><li>不可取消採購義務 $14.8 億（FY27 $10.6 億）；存貨 $42.8 億；資本支出約占營收 4–5%</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>NAND 營收翻倍後 2027 年實際成長（排第三）</li><li>「拉貨」對 2027 年訂單的借用幅度</li><li>NAND 層數升級的 $400 億 SAM 是否包含 Lam 以外的設備商份額</li><li>客戶集中：四大客戶 55% 的 NAND／DRAM／邏輯別</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">Jun 2026 季系統營收依市場與長期框架</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>Foundry logic（占系統營收）</td><td>44%（約 $18.7 億）</td><td class="wrap">2nm／3nm 與 GAA 應用</td></tr><tr><td>DRAM</td><td>23%（約 $9.8 億）</td><td class="wrap">1-alpha／beta／gamma 節點</td></tr><tr><td>NAND（推算）</td><td>約 33%（約 $14.0 億）</td><td class="wrap">營收季增一倍</td></tr><tr><td>先進封裝</td><td>預計 YoY 逾 70%</td><td class="wrap">HBM、2.5D／3.5D、面板級</td></tr><tr><td>SAM／WFE</td><td>約 36–36.5%（高 30% 趨勢）</td><td class="wrap">投資人日目標低 30%</td></tr><tr><td>中國占營收</td><td>26%（上季 34%）</td><td class="wrap">跨國公司成長、本土客戶下降</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>NAND 翻倍是結構性升級還是拉貨？</b>管理層兩種說法同時成立：升級週期是多年期（$400 億、2027 年底前大部分），但客戶正在「拉貨」、且 NAND 在 2027 年成長排第三。Jun 季 NAND 系統營收約 $14 億（占 33%）若是 Mar 季的兩倍，Mar 季約 $7 億；Sep 季指引營收 $81 億（+$13.8 億），其中多少是 NAND 沒有揭露。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Lam 為設備商，<b>無資料中心專案融資</b>。資金來源為營運現金流（現金 $56.0 億、Jun 季資本支出與無形資產 $1.89 億、股利 $3.25 億）與債務（長期債務 $37.3 億）。客戶端有 $24.3 億遞延收入（不含日本客戶）作為預收款項。<b>無此資料／不適用。</b>來源：新聞稿財報表。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>NAND 2027 年預期營收相對 2026 年的變化？</li><li>「拉貨」金額與 Sep 季 $81 億的關係？</li><li>不可取消義務 $10.6 億（FY27）中，有多少是對單一來源供應商的最低採購？</li><li>SAM／WFE 的統一定義與可驗證的歷史序列？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>Akara 導體蝕刻與 GAA 應用</h4><div class="meta">2nm／3nm 領先客戶</div><p>高深寬比蝕刻、低介電間隔層（RC 性能）與圖案化是 GAA 的關鍵步驟；公司稱 Akara 與 ALD 工具跨所有領先邏輯客戶。</p></div><div class="tech-card g"><h4>NAND 層數升級（200→300→500+）</h4><div class="meta">256 層以上轉換中</div><p>層數愈高，蝕刻時間愈長、設備密集度愈高；公司稱 SAM 隨層數「從 200+ 到 500+ 層每片晶圓加倍」。</p></div><div class="tech-card o"><h4>DRAM：低介電、EUV 採用、擴散阻障</h4><div class="meta">傳統 DRAM 與 HBM 皆有貢獻</div><p>圖案化領先使 DRAM 與先進邏輯複雜度趨同；DRAM 占系統營收 23%。</p></div><div class="tech-card "><h4>先進封裝與面板級</h4><div class="meta">YoY 預期逾 70%</div><p>HBM、2.5D／3.5D 與面板級封裝；510×515mm 面板系統已出貨至研發，2026 年首台 310×310mm 面板設備。</p></div></div><div class="note grey">⚑ 技術論述來自法說會；各產品的營收與份額未揭露，SAM 口徑見 Q&A（Rakesh）。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 955.1750000000002 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="955.18" height="702" fill="#ffffff"/><text x="477.59" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Lam Research 供應鏈結構：供應商 → 製造 → 營收類型 → 市場與客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">供應商與外包</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">製造據點</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">營收類型（Jun 2026 季）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">市場與客戶</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="394.9125000000001,106 394.9125000000001,124 381.5875000000001,124 381.5875000000001,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="619.5875000000001,106 619.5875000000001,146 593.5875000000001,146 593.5875000000001,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="487.5875000000001,282 487.5875000000001,300 436.3375000000001,300 436.3375000000001,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="487.5875000000001,282 487.5875000000001,322 494.3375000000001,322 494.3375000000001,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="352.5875000000001,458 352.5875000000001,476 72,476 72,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="352.5875000000001,458 352.5875000000001,498 300.80000000000007,498 300.80000000000007,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="352.5875000000001,458 352.5875000000001,520 522.45,520 522.45,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="600.3375000000001,458 600.3375000000001,542 464.45000000000005,542 464.45000000000005,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="600.3375000000001,458 600.3375000000001,560 242.80000000000004,560 242.80000000000004,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="600.3375000000001,458 600.3375000000001,560 651.2750000000001,560 651.2750000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="254.80000000000004,604 697.2750000000001,604" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="476.45000000000005,604 697.2750000000001,604" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="279.91" y="46" width="230" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="394.91" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">零組件與子組件供應商</text><text x="394.91" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">部分為單一來源；供應鏈能見度延伸兩層</text></g><g><rect x="543.91" y="46" width="151.35" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="619.59" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">外包製造</text><text x="619.59" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">含於 $14.8 億採購義務</text></g><g><rect x="369.59" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="487.59" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">全球製造據點</text><text x="487.59" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">奧勒岡、加州、俄亥俄、馬來西亞、台…</text></g><g><rect x="256.84" y="398" width="191.5" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="352.59" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Systems 系統</text><text x="352.59" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$4,250M（63%）：沉積、蝕刻等</text></g><g><rect x="482.34" y="398" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="600.34" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer support 客戶支援</text><text x="600.34" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$2,472M（37%）：服務、備品、升級、…</text></g><g><rect x="60" y="574" width="194.8" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="157.4" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">晶圓代工與邏輯</text><text x="157.4" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 54%；Jun 季系統營收 44%</text></g><g><rect x="288.8" y="574" width="187.65" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="382.63" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">記憶體（NAND、DRAM）</text><text x="382.63" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 39%；NAND 營收季增一倍</text></g><g><rect x="510.45" y="574" width="152.82" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="586.86" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Logic／IDM 與其他</text><text x="586.86" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 7%</text></g><g><rect x="697.28" y="574" width="217.9" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="806.23" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">四大客戶</text><text x="806.23" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 合計 55%（16／15／12／12%）</text></g><line x1="332.51" y1="664" x2="354.51" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="362.51" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">單一來源依賴</text><rect x="446.51" y="663" width="22" height="2.4" fill="#182456"/><text x="476.51" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI 記憶體／先進製程路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2026 10-K（2026/8/7）Item 1／1A、Note 17／19；法說會。部分零組件僅能向單一供應商取得；四大客戶占 FY26 營收 16%、15%、12%、12%</div>
+</div></div></div></div><div class="note">⚑ 10-K：部分零組件與子組件僅能向單一供應商取得；公司在尋求第二來源並以庫存緩衝。製造據點與供應鏈能見度（延伸兩層）來自法說會。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Jun 2026 季，十億美元）</div><div id="sankeyEmbed_f0k90rx" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"l","label":"Lam Jun 2026 季營收 $67.2 億","color":"#182456"},{"id":"sys","label":"Systems 系統","color":"#8f1f1f"},{"id":"csbg","label":"Customer support 客戶支援","color":"#0f6f8a"}],"links":[{"source":"l","target":"sys","value":4.25},{"source":"l","target":"csbg","value":2.472}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_f0k90rx");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 系統與客戶支援為新聞稿數字；兩張圖節點名稱一致。市場別（Foundry／Memory／Logic）僅有 FY26 全年百分比，不拆分到季。</div></div><div class="chart-wrap"><div class="chart-title">營收地區分布</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 432" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="432" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Jun 2026 季營收依地區（占比）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="170" y1="48" x2="170" y2="374" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="390" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="393.33" y1="48" x2="393.33" y2="374" stroke="#eeeeee" stroke-width="1"/><text x="393.33" y="390" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="616.67" y1="48" x2="616.67" y2="374" stroke="#eeeeee" stroke-width="1"/><text x="616.67" y="390" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="840" y1="48" x2="840" y2="374" stroke="#eeeeee" stroke-width="1"/><text x="840" y="390" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">30 %</text><line x1="170" y1="48" x2="170" y2="374" stroke="#111111" stroke-width="1.2"/><rect x="170" y="55.52" width="603" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="778" y="74.79" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">27</text><text x="160" y="75.29" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">台灣</text><rect x="170" y="102.09" width="580.67" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="755.67" y="121.36" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">26</text><text x="160" y="121.86" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">中國</text><rect x="170" y="148.66" width="446.67" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="621.67" y="167.93" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">20</text><text x="160" y="168.43" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">韓國</text><rect x="170" y="195.23" width="201" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="376" y="214.5" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">9</text><text x="160" y="215" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">日本</text><rect x="170" y="241.81" width="201" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="376" y="261.07" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">9</text><text x="160" y="261.57" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">美國</text><rect x="170" y="288.38" width="111.67" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="286.67" y="307.64" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">5</text><text x="160" y="308.14" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">東南亞</text><rect x="170" y="334.95" width="89.33" height="31.53" fill="#0f6f8a" rx="1" data-dim="Jun 2026"/><text x="264.33" y="354.21" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">4</text><text x="160" y="354.71" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">歐洲</text><text x="22" y="420" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：新聞稿 Revenue 地區表（台灣、中國、韓國、日本、美國、東南亞、歐洲）</text></svg>
+</div><div class="note">⚑ 中國占 26%（FY26 全年 34%、FY25 34%、FY24 42%）；台灣創 27% 新高。資料來源：新聞稿；10-K。</div></div><div class="chart-wrap"><div class="chart-title">採購義務</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">不可取消採購義務（依年度）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="374.4" x2="876" y2="374.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="378.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.250</text><line x1="78" y1="292.8" x2="876" y2="292.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="296.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.500</text><line x1="78" y1="211.2" x2="876" y2="211.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="215.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.750</text><line x1="78" y1="129.6" x2="876" y2="129.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="133.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1.25 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="97.62" y="111" width="93.76" height="345" fill="#0f6f8a" rx="1" data-dim="義務"/><text x="144.5" y="105" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="義務">1.06</text><text x="144.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY27</text><rect x="230.62" y="399.21" width="93.76" height="56.79" fill="#0f6f8a" rx="1" data-dim="義務"/><text x="277.5" y="393.21" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="義務">0.174</text><text x="277.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY28</text><rect x="363.62" y="432.5" width="93.76" height="23.5" fill="#0f6f8a" rx="1" data-dim="義務"/><text x="410.5" y="426.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="義務">0.072</text><text x="410.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY29</text><rect x="496.62" y="436.09" width="93.76" height="19.91" fill="#0f6f8a" rx="1" data-dim="義務"/><text x="543.5" y="430.09" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="義務">0.061</text><text x="543.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY30</text><rect x="629.62" y="443.92" width="93.76" height="12.08" fill="#0f6f8a" rx="1" data-dim="義務"/><text x="676.5" y="437.92" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="義務">0.037</text><text x="676.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY31</text><rect x="762.62" y="429.89" width="93.76" height="26.11" fill="#0f6f8a" rx="1" data-dim="義務"/><text x="809.5" y="423.89" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="義務">0.080</text><text x="809.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">之後</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：FY2026 10-K Note 17（2026/6/28，合計 $14.81 億；含外包製造義務）</text></svg>
+</div><div class="note">⚑ 不可取消義務 $14.81 億，其中 FY27 占 71%（$10.57 億）；外包製造義務包含其中。資料來源：FY2026 10-K Note 17。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>客戶集中（營收）</td><td class="wrap">FY26 四大客戶 16%、15%、12%、12%（合計 55%）；FY25 兩家 17%、15%；FY24 一家 17%</td><td>FY2026 10-K Note 19</td></tr><tr><td>客戶集中（應收）</td><td class="wrap">2026/6/28 五大客戶占應收 20%、16%、15%、11%、10%（合計 72%）</td><td>10-K</td></tr><tr><td>市場別（FY26）</td><td class="wrap">Foundry 54%、Memory 39%、Logic／IDM 7%</td><td>10-K Note 19</td></tr><tr><td>中國</td><td class="wrap">FY26 34%（FY25 34%、FY24 42%）；Jun 季 26%</td><td>10-K；新聞稿</td></tr><tr><td>單一來源</td><td class="wrap">部分零組件僅能向單一供應商取得，正在合格化替代來源</td><td>10-K Item 1</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">客戶與應收集中</div>FY26 四大客戶合計 55% 營收、五大客戶占應收 72%；本季無人提問。<div class="risk-source">來源：FY2026 10-K</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：2026 拉貨與 2027 成長排序的錯位</div>把分散訊息拼起來：① 客戶「拉貨」使 2026 年 WFE 上修至低 $1,500 億；② 2027 年成長排序中 NAND 排第三，而本季 NAND 才剛翻倍；③ 不可取消義務 FY27 $10.6 億與存貨 $42.8 億正為 Sep 季 $81 億備貨。若 2027 年新廠設備訂單提前消化，下半年訂單能見度可能先高後低。<div class="risk-source">來源：Q&A（Pajjuri、Malik、Sankar）；10-K</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">中國曝險與出口管制</div>中國 26%（FY26 34%）；本土客戶下降、跨國公司成長；管理層預期中國 WFE「持平到小幅上升」。<div class="risk-source">來源：Q&A（Pajjuri）；10-K</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">SAM 口徑不統一</div>管理層自己稱「可能造成混淆」；SAM 占 WFE 比例為長期成長主軸。<div class="risk-source">來源：Q&A（Rakesh）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">單一來源零組件與供應鏈</div>部分零組件單一來源；供應鏈能見度延伸兩層、加急管理。<div class="risk-source">來源：10-K；Q&A（Weathers）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出</div>Form 4：2026/6/1 起 Director Eric Brandt 公開市場賣出約 <b>$3,910 萬</b>、CEO Tim Archer 約 <b>$3,030 萬</b>、Seshasayee Varadarajan 約 $1,740 萬、Abhijit Talwalkar 約 $610 萬等；價格約 $310–364（6 月）。是否為 10b5-1 計畫未逐筆核對。<div class="risk-source">來源：SEC EDGAR Form 4（2026/6/1–10/1）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">流動性</div>現金 $56.0 億、長期債務 $37.3 億；Jun 季營運現金流使現金較 Mar 季增 $8.3 億；股利 $3.25 億／季。<div class="risk-source">來源：新聞稿</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">NAND 營收季增一倍</td><td class="wrap">Systems $42.5 億（+13.9% QoQ）；NAND 占約 33%（推算）</td><td class="wrap">新聞稿；Q&A</td><td class="wrap">△ 無 NAND 單獨營收</td></tr><tr><td class="wrap">2026 年 WFE 低 $1,500 億</td><td class="wrap">Sep 季指引 $81 億（+20% QoQ）；FY26 營收 $232 億</td><td class="wrap">法說會；新聞稿</td><td class="wrap">✓ 方向一致</td></tr><tr><td class="wrap">毛利率目標中 50%</td><td class="wrap">Jun 季 GAAP 51.7%、Sep 指引 52%；基準 51–52%</td><td class="wrap">新聞稿；Q&A</td><td class="wrap">△ 需數年</td></tr><tr><td class="wrap">存貨周轉 3.0 倍</td><td class="wrap">存貨 $42.8 億；以 Jun 季年化銷貨成本約 $129.8 億計算，周轉約 3.0 倍</td><td class="wrap">新聞稿財報表</td><td class="wrap">✓ 吻合</td></tr><tr><td class="wrap">中國「持平到小幅上升」</td><td class="wrap">Jun 季中國占營收 26%（上季 34%）；FY26 34%</td><td class="wrap">新聞稿；10-K</td><td class="wrap">△ 季度走弱、全年預期持平</td></tr><tr><td class="wrap">（沉默）客戶集中與採購義務</td><td class="wrap">四大客戶 55%；義務 $14.8 億（FY27 $10.6 億）</td><td class="wrap">10-K</td><td class="wrap">✗ 13 位分析師無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$67.2 億</div><div class="kpi-lbl">Jun 2026 季營收</div><div class="kpi-sub">+15.1% QoQ／+30% YoY</div></div><div class="kpi"><div class="kpi-val">52.0%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub">前季 49.9%（+210bps）；GAAP 51.7%</div></div><div class="kpi"><div class="kpi-val">$1.82</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP $1.81；前季 $1.47</div></div><div class="kpi"><div class="kpi-val">$81 億</div><div class="kpi-lbl">Sep 季營收指引中位</div><div class="kpi-sub">+20% QoQ</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Systems 系統</div><div class="bu-abbr">新型沉積、蝕刻與其他晶圓製造設備</div><div class="bu-stat"><span class="bu-stat-lbl">Jun 季營收</span><span class="bu-stat-val">$4,250M（63%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+13.9%／+23.6%</span></div><div class="bu-stat"><span class="bu-stat-lbl">市場（系統營收）</span><span class="bu-stat-val">邏輯 44%、DRAM 23%、NAND 約 33%</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:63%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">Customer support 客戶支援</div><div class="bu-abbr">服務、備品、升級、Reliant</div><div class="bu-stat"><span class="bu-stat-lbl">Jun 季營收</span><span class="bu-stat-val">$2,472M（37%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+17.1%／+42.6%</span></div><div class="bu-stat"><span class="bu-stat-lbl">驅動</span><span class="bu-stat-val">NAND 升級、備品、先進服務</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:37%;background:#0f6f8a"></div></div></div></div><div class="chart-wrap"><div class="chart-title">系統與客戶支援營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">系統與客戶支援營收：Mar 2026 vs Jun 2026 季</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Mar 2026 季</text><rect x="132.43" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="150.43" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Jun 2026 季</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="380" x2="876" y2="380" stroke="#eeeeee" stroke-width="1"/><text x="68" y="384" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="78" y1="304" x2="876" y2="304" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="78" y1="228" x2="876" y2="228" stroke="#eeeeee" stroke-width="1"/><text x="68" y="232" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3</text><line x1="78" y1="152" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="68" y="156" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="172.44" width="141.64" height="283.56" fill="#57a0cf" rx="1" data-dim="Mar 2026 季"/><text x="205.68" y="166.44" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Mar 2026 季">3.73</text><rect x="278.5" y="133" width="141.64" height="323" fill="#182456" rx="1" data-dim="Jun 2026 季"/><text x="349.32" y="127" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026 季">4.25</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Systems</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">系統</text><rect x="533.86" y="295.56" width="141.64" height="160.44" fill="#57a0cf" rx="1" data-dim="Mar 2026 季"/><text x="604.68" y="289.56" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Mar 2026 季">2.11</text><rect x="677.5" y="268.13" width="141.64" height="187.87" fill="#182456" rx="1" data-dim="Jun 2026 季"/><text x="748.32" y="262.13" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026 季">2.47</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer support</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">客戶支援</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Lam Research 2026/7/29 新聞稿（8-K Ex.99.1）Systems revenue／Customer support-related revenue</text></svg>
+</div><div class="note">⚑ 客戶支援年增 42.6%，快於系統的 23.6%；服務營收占比由 33.5%（Jun 2025 季）升到 36.8%。資料來源：Lam 新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與毛利率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季系統、客戶支援營收與 GAAP 毛利率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">49.5</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">50</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">50.5</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">51</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">51.5</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">52</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">十億美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Jun 2025</text><line x1="263" y1="456" x2="263" y2="460" stroke="#999999" stroke-width="1"/><text x="263" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Sep 2025</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Dec 2025</text><line x1="637" y1="456" x2="637" y2="460" stroke="#999999" stroke-width="1"/><text x="637" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Mar 2026</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Jun 2026</text><polyline points="76,179.58 263,170.74 450,186.1 637,156.03 824,114.3" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="179.58" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="263" cy="170.74" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="450" cy="186.1" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="637" cy="156.03" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="114.3" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,316.59 263,313.13 450,296.25 637,286.28 824,257.25" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="316.59" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="263" cy="313.13" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="450" cy="296.25" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="637" cy="286.28" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="257.25" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,359.52 263,311.28 450,439.92 637,407.76 824,102.24" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="359.52" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="263" cy="311.28" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="450" cy="439.92" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="637" cy="407.76" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="102.24" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><line x1="278.2" y1="40" x2="294.2" y2="40" stroke="#182456" stroke-width="2.4"/><text x="300.2" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Systems</text><line x1="366.48" y1="40" x2="382.48" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="388.48" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Customer support</text><line x1="511.68" y1="40" x2="527.68" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="533.68" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">GAAP 毛利率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Lam Research Sep 2025／Dec 2025／Mar 2026／Jun 2026 季新聞稿；毛利率為 GAAP</div>
+</div><div class="note">⚑ 營收連續創高；GAAP 毛利率 49.6%→51.7%。Systems 在 Dec 2025 季回落（$33.6 億）後兩季反彈。</div></div><div class="chart-wrap"><div class="chart-title">系統營收依市場</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Jun 2026 季系統營收依市場（十億美元）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="354" x2="876" y2="354" stroke="#eeeeee" stroke-width="1"/><text x="68" y="358" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.500</text><line x1="78" y1="252" x2="876" y2="252" stroke="#eeeeee" stroke-width="1"/><text x="68" y="256" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="78" y1="150" x2="876" y2="150" stroke="#eeeeee" stroke-width="1"/><text x="68" y="154" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1.50</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="74.52" width="189.52" height="381.48" fill="#182456" rx="1" data-dim="Jun 2026"/><text x="211" y="68.52" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">1.87</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Foundry</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">logic（44%）</text><rect x="382.24" y="169.79" width="189.52" height="286.21" fill="#182456" rx="1" data-dim="Jun 2026"/><text x="477" y="163.79" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">1.40</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">NAND（約</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">33%，推算）</text><rect x="648.24" y="256.69" width="189.52" height="199.31" fill="#182456" rx="1" data-dim="Jun 2026"/><text x="743" y="250.69" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Jun 2026">0.977</text><text x="743" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">DRAM（23%）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：法說會（Foundry logic 44%、DRAM 23% 占系統營收）；NAND 以餘數推算約 33%（法說會稱 NAND 營收季增一倍）。系統營收 $42.5 億</text></svg>
+</div><div class="note">⚑ 晶圓代工邏輯占系統營收 44%，高於記憶體單一市場；NAND 為餘數推算約 33%。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季營收（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Jun 2025</th><th>Sep 2025</th><th>Dec 2025</th><th>Mar 2026</th><th>Jun 2026</th></tr></thead><tbody><tr><td>總營收</td><td>5,171</td><td>5,324</td><td>5,345</td><td>5,841</td><td>6,722</td></tr><tr><td>Systems</td><td>3,438</td><td>3,548</td><td>3,357</td><td>3,731</td><td>4,250</td></tr><tr><td>Customer support 及其他</td><td>1,734</td><td>1,777</td><td>1,987</td><td>2,111</td><td>2,472</td></tr><tr><td>GAAP 毛利率</td><td>50.1%</td><td>50.4%</td><td>49.6%</td><td>49.8%</td><td>51.7%</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：蝕刻與沉積是什麼、為何晶圓廠一定要買</div><p><b>蝕刻（etch）</b>：用電漿把晶圓上不要的材料挖掉，做出電晶體與記憶體孔洞。NAND 層數愈高，要蝕刻的孔愈深，蝕刻時間愈長、需要的設備愈多——這是 NAND 升級帶動設備需求的原因。GAA 電晶體則需要極精準的橫向蝕刻。</p><p><b>沉積（deposition）</b>：一層一層把薄膜（絕緣、導體）鍍上晶圓；DRAM 的電容與先進邏輯的金屬層都靠 ALD 與 CVD。HBM 的矽穿孔（TSV）需要電鍍填充。</p><p><b>客戶支援（CSBG）</b>：既有機台的備品、維修、升級與 Reliant（成熟製程設備）；機台稼動率愈高、安裝基礎愈大，這塊愈強，營收較系統穩定。</p><p>⚑ 以上為產業一般知識與公司說法；Lam 為單一報導部門，未揭露各產品線營收與客戶別營收（FY26 僅揭露四大客戶占比）。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

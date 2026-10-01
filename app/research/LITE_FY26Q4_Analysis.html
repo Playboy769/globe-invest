@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumentum — FY2026 Q4 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Lumentum（LITE）— FY2026 Q4 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／NVIDIA 優先股與可轉債股權化／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 11 日（FQ4 於 6/27 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q4 8-K Ex.99.1（8/11）、FY2026 10-K（8/17）、前三季 8-K、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">NVIDIA 優先股與可轉債</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">分析師（JPMorgan、Raymond James、Rosenblatt、Citi、Susquehanna、Mizuho、Wolfe、Barclays、Stifel）</div></div><div class="stat-box"><div class="stat-val">17</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/11 法說會（Investing.com 完整逐字稿頁、Yahoo Finance／Seeking Alpha 逐字稿頁）、同日 8-K 新聞稿、FY2026 10-K（8/17）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附來源連結）。全場最關鍵的結構性事實：<b>沒有任何分析師追問客戶集中度（Customer A 26.6%、Customer B 15.0%，合計 41.6%）、$78 億的非現金債務清償損失與 NVIDIA $20 億可轉優先股</b>。另一個與公司財報無關、但值得對照的事實：本公司在法說會上談到與 AXT 簽的基板供給——research 資料夾的 AXTI 報告可作互證。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Joseph Cardoso（J.P. Morgan）</div><div class="qa-topic">新財務目標、NPO 細節</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">考量需求、組合與新機會（ELS、NPO、OCS），下一階段財務目標？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Michael Hurlston：新目標「大概在下次 OFC」宣布，公司「幾乎所有指標都遙遙領先」；CFO Wajid Ali：指引增加近 $2.5 億，「令人印象深刻」，未來幾季還有機會。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">NPO 的時程、架構與相對 CPO 的內容機會？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：NPO 時程與 CPO 客戶「大致與先前說法一致」（FY27 下半年出貨、2028 部署）；早期 NPO 機會是「同樣的高功率外部光源雷射」，之後是整合式中功率變體。Wupen Yuen：NPO 光學引擎需要高度整合與功率密度，公司把「400 毫瓦設計原則」擴展到 150–200 毫瓦 NPO 區間。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 目標模型「提早一個季度以上」達成，新目標卻延到明年 OFC</div><div class="q-text">Q1 營收指引中位 $12.5 億，公司稱「提前一個多季度」達到先前的 $12.5 億目標模型，且季度營收 $20 億、營業利益率 38–42% 的框架仍待更新。管理層同時說「幾乎所有指標領先」，卻<b>不提前給出新的季度營收或利潤率目標</b>——投資人只能先用 $20 億／季、營業利益率 42%「中位數、區間可能上移 100–200bps」（Ali 對 Rakesh 的說法）推演。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Simon Leopold（Raymond James）</div><div class="qa-topic">回溯定價與毛利率、中國 InP 產能</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">對積壓訂單重新定價的程度，對毛利率的影響？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：「確實調了一點」，多數 LTA 是向前定價；毛利率主要受益於組合（高組合元件出貨），定價仍有空間。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">中國 InP 晶圓廠進入市場的看法？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：到目前沒有看到對營收的影響，也不預期；EML、高／中功率雷射、CW 雷射有差異化，客戶看到「遠較好的良率」；中國廠商尚未在市場上交貨，客戶沒有追索。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 毛利率 +250bps 的主因是「組合」，不是定價——但定價仍被說成有空間</div><div class="q-text">Q4 非 GAAP 毛利率 50.4%（+250bps QoQ）；Hurlston 說主要驅動是高組合元件，只「調了一點」價。同時又稱價格「仍有空間」。這與 Sandisk、WDC 以價格為主的成長不同：<b>Lumentum 的毛利率擴張更像是產品組合改善（EML 200G、CW、高功率雷射），可持續性取決於供給缺口持續</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Mike Genovese（Rosenblatt）</div><div class="qa-topic">OCS 三位數季度、Greensboro 轉換</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">Q1 指引是否含首次三位數百萬美元的 OCS 營收？超高功率 CW 雷射何時三位數？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：確認，Q1 指引含「首次 OCS 三位數季營收」，預期「明顯高於」三位數；超高功率雷射年底約「$5,000 萬」、FQ3 才有第一個三位數季。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">Greensboro 轉換時程？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：進展「超級順利」，接手的是「完整運作的晶圓廠」；GaAs 轉 InP 正在進行；首批營收 2028 年初、2028 年逐步爬升、2028 年底與 2029 年到達完整產能。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ Greensboro 的 2028 年才有營收，而缺口是現在</div><div class="q-text">超高功率雷射短缺在 FY27 就存在，但新產能要等 2028 年初才有營收；也就是說 FY27 的成長完全由現有產能與基板供給決定。管理層同時說「正在與客戶談 Greensboro 產能的 LTA」，意味 2028 年產能可能已被預先賣出，而價格與擔保條件未揭露。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Papa Silla（Citi）</div><div class="qa-topic">OCS 全年指引、供需缺口</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">OCS 2H 2026 的 $4 億以上指引是否超前？與主要 OCS 客戶的自製關係？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：「確實在追蹤 $4 億」，但並未領先；早期供應鏈問題已解決；對一家客戶自有來源，公司將「吸收絕大部分」，預期 2027 年初成為其「第一大供應商」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">供需缺口更新？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：EML 的缺口（「30% 以上」）沒有改善也沒有惡化；高功率雷射「遠遠落後」；Yuen：是因為需求加速，而不是執行落後。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ OCS「$4 億」只是追蹤、未超前；而客戶自製是公開風險</div><div class="q-text">OCS 的敘事是「由 Q3 到 Q4 翻倍、Q1 首次三位數」，但全年目標只是「追蹤中」；同時承認有一家 OCS 客戶有自己的內部來源，Lumentum 預期成為「第一大供應商」是 2027 年初的預期，不是現況。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Christopher Rolland（Susquehanna）</div><div class="qa-topic">EML 模組、CW 與 EML 的經濟性</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">EML 模組機會與相對於僅賣雷射的經濟性？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：收到公司第一筆 EML 模組訂單，ASP「明顯更高」；營收影響初期「很小」，預計 2027 年中到下半年出貨；毛利率「高於公司平均」但不如單賣雷射，是「用一點毛利率換營收」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">1.6T 矽光（SiPho）與 CW 加速速度？CW 與 EML 的經濟性差異？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：EML 需求「沒有放緩」，供需失衡仍顯著；1.6T 的 SiPho 方案用掉「相當部分」CW 雷射；3.2T 時矽光優勢縮小，EML 會明顯回來；CW 晶粒縮小使毛利差距「大幅縮小」。Yuen：800G 的 200G/lane 以 EML 為主，1.6T 更多 CW；這也是供需因素。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vijay Rakesh（Mizuho）</div><div class="qa-topic">200G EML、CW 毛利、營業槓桿</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">200G EML 與 CW 雷射是否增益毛利率？1.6T 何時交叉？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：兩者都「高於公司平均」；200G EML 預期 2027 年中成為多數出貨（目前約 25%、預期 50%+）；EML 與 CW 的毛利差距「大幅縮小」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">FY27 營業槓桿？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Ali：在遠低的營收水準就已達到 $20 億季營收框架的中位（38–42%）；毛利率向 $20 億營收靠近時營業利益率相應改善；<b>「42% 更像中位數，區間可能比 OFC 展示的上移 100–200bps」</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">George Notter（Wolfe Research）</div><div class="qa-topic">AXT 基板供給協議、Greensboro 產能 LTA</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">為何與 AXT 簽基板供給？InP 基板長期需求？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：超高功率雷射需求「讓我們驚訝」，涉及多家客戶；為應對「相當大的需求激增」，與 AXT 合作取得更多基板；目前「相當自在」（日本供應商＋AXT），但需求持續可能需要更多供應商。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">是否會為 Greensboro 簽更多 LTA？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：「正在尋求」，Yuen 正與多家客戶洽談，預期未來幾季有新安排可說。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 基板供給只有「日本供應商＋AXT」兩個來源</div><div class="q-text">InP 基板是 EML、CW 與超高功率雷射的共同上游；管理層承認需求激增使基板供給需要「追加」，且「可能需要更多供應商」。結合 research 資料夾的 AXTI 報告（InP 基板、客戶集中度與中國曝險），<b>Lumentum 的供給缺口與 AXT 的產能與出口許可高度連動</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Thomas O'Malley（Barclays）</div><div class="qa-topic">NPO 能否改裝既有 XPU、in-tray OCS</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">NPO 能否改裝在現有 XPU 世代？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：現有出貨的 TPU／XPU／GPU 的 SerDes 速度不夠快；新矽（2027 年中到 2028 年初）才與 NPO／CPO 一致；Yuen：不是改裝，而是朝 2028 年 NPO／CPO 放量的動能；光學 scale-up 是「2028 事件」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">in-tray OCS 是否與標準 OCS 競爭動態相似？是否擴大 TAM？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：in-tray OCS 是「加成」，為 2028 年部署的「全新機會」，需要大量重新設計；公司是「唯一出貨」的 OCS 商規供應商，對每個機會有「第一眼」。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ruben Roy（Stifel）</div><div class="qa-topic">泵浦雷射、NPO 標準 vs 客製</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">泵浦雷射的產能進度與長期供給協議？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston：泵浦雷射「被低估」，市占約 <b>70%–80%</b>；為抵銷 Rose Orchard 擴產與泰國封測的龐大資本支出，與網路設備商簽了「一系列安排」，多為<b>三年期、含定價機制、多為 take-or-pay</b>；預期 FY27 泵浦雷射成長約四倍。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">NPO 是標準還是客製？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Hurlston／Yuen：兩者並行；標準（如 OCI）打開交換機機會；客製將主導首波 NPO；光學上是標準、外型尺寸各客戶專有。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 泵浦雷射的 take-or-pay 是 LITE 唯一被說明的長約結構，卻沒有任何金額</div><div class="q-text">Roy 問的是長約結構；Hurlston 回答「三年期、含定價、多為 take-or-pay」，但沒有給 RPO、預付款、保證金或擔保。與 Sandisk 揭露 RPO $911 億、財務擔保 $165 億相比，<b>Lumentum 的長約可驗證性很低</b>。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-lumentum-tops-q4-2026-forecasts-as-ai-demand-lifts-outlook-93CH-4852933" target="_blank" rel="noopener">Investing.com：Lumentum Q4 2026 逐字稿頁</a>；<a href="https://finance.yahoo.com/markets/stocks/articles/lumentum-lite-q4-2026-earnings-224414481.html" target="_blank" rel="noopener">Yahoo Finance：Lumentum Q4 2026 Earnings Call Transcript</a>；<a href="https://seekingalpha.com/article/4935071-lumentum-holdings-inc-lite-q4-2026-earnings-call-transcript" target="_blank" rel="noopener">Seeking Alpha：Lumentum Q4 2026 Earnings Call Transcript</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li><b>NVIDIA 策略投資：</b>2026/3/2 以每股 $695.31 認購約 <b>290 萬股</b> Series A 可轉換優先股，<b>$20 億</b>現金；一對一轉換為普通股</li><li><b>可轉債「股權化」：</b>Q4 主動將約 <b>$11 億</b>（約 35% 流通可轉債）轉成股權；GAAP 認列約 <b>$78 億</b>非現金債務清償損失</li><li>Q4 GAAP 淨損 <b>$72 億</b>（每股 −$84.65）vs 非 GAAP 淨利 $3.263 億（每股 $3.23）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>優先股轉換須待反壟斷（HSR）等待期屆滿後才可行使</li><li>Greensboro InP 轉換：首批營收 2028 年初；CPO 超高功率雷射營收 2027 年下半年起、2028 部署</li><li>泵浦雷射 LTA 多為三年期</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>現金與短期投資 $27.4 億（較 Q3 減少 $4.34 億）</li><li>資本支出 Q4 $1.67 億；存貨 +$5,900 萬</li><li>Q1 FY27 指引：營收 $12.25–12.75 億、非 GAAP 營業利益率 39.5%–40.5%、EPS $4.05–4.35</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>NVIDIA 優先股的商業條件（供應、優先分配）10-K 取得的段落只描述轉換條款</li><li>可轉債剩餘本金與轉換條件；未股權化部分如何處理</li><li>$20 億優先股以 $695.31 計，目前股價約 $945（Form 4：9/28–9/29），NVIDIA 帳面收益約 36%</li><li>Customer A 26.6% 是否即 NVIDIA 或其供應鏈客戶（只是推測，10-K 未具名）</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">資本事件彙整</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>NVIDIA Series A 優先股</td><td>$20 億；$695.31／股；約 290 萬股</td><td class="wrap">2026/3/2 完成；一對一轉換</td></tr><tr><td>可轉債股權化</td><td>約 $11 億本金（約 35%）</td><td class="wrap">Q4 完成</td></tr><tr><td>債務清償損失（非現金）</td><td>約 $78 億</td><td class="wrap">GAAP 淨損 $72 億的主因</td></tr><tr><td>現金與短期投資</td><td>$27.4 億</td><td class="wrap">較 Q3 減少 $4.34 億；較 FY25 末增 $19 億</td></tr><tr><td>Q4 資本支出</td><td>$1.67 億</td><td class="wrap">製造擴產</td></tr><tr><td>FY26 非 GAAP EPS</td><td>$8.67（FY25 $2.06）</td><td class="wrap">GAAP 每股 −$92.96</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>為何 GAAP 虧損 $72 億卻是好消息？</b>股權化使公司以股票取代債務，債務負擔下降；但<b>代價是稀釋</b>——可轉債轉換價遠低於現股價，等同以約 $945 的股價「送出」股份，會計上把這部分價值差額列為損失。非 GAAP EPS 的股數（約 101M）已反映部分稀釋，但優先股轉換後還會增加約 290 萬股。資料來源：新聞稿；10-K Note。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Lumentum 為零組件與系統製造商，<b>無資料中心專案融資</b>；擴產（泰國封測、Greensboro 晶圓廠、San Jose 資產出售後的產能配置）由自有現金、可轉債與 NVIDIA 優先股資金支應，並與網路設備商簽三年期 take-or-pay 安排「抵銷資本支出」（法說會）；<b>沒有揭露預付款或擔保金額</b>。來源：10-K；法說會。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>NVIDIA $20 億優先股是否附帶供應優先、採購承諾或最低量條款？</li><li>三年期 take-or-pay 的總金額、預付款與違約救濟？</li><li>Greensboro 2028 年產能是否已被客戶預訂？擔保形式？</li><li>Customer A（26.6%）的身分與合約條件？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>EML 與 CW 雷射</h4><div class="meta">200G EML 占 EML 營收逾 25%</div><p>EML（電吸收調變雷射）把雷射與調變整合在一顆晶片，是 800G 光模組的光源；1.6T 的矽光方案改用 CW（連續波）雷射；3.2T 時 EML 預期回歸。供需缺口 30%+。</p></div><div class="tech-card g"><h4>超高功率雷射（ELS）與 NPO／CPO</h4><div class="meta">FQ3 FY27 首個三位數季</div><p>近封裝光學（NPO）與共封裝光學（CPO）需要高功率外部光源雷射；公司稱 CPO 客戶需求自上次更新後增加，營收 2027 下半年起、2028 部署。年底超高功率雷射約 $5,000 萬。</p></div><div class="tech-card o"><h4>光路交換（OCS）</h4><div class="meta">Q3→Q4 翻倍；Q1 首次三位數</div><p>OCS 用鏡面或光學元件在光路層面直接切換，不需光電轉換；Lumentum 為唯一出貨的商規供應商；2H 2026 目標 $4 億以上，in-tray OCS 為 2028 年新機會。</p></div><div class="tech-card "><h4>泵浦雷射</h4><div class="meta">市占 70%–80%；FY27 預期成長約四倍</div><p>用於光纖放大器與長距離傳輸；三年期、多為 take-or-pay 的 NEM 長約；擴產由客戶長約資金支持。</p></div></div><div class="note grey">⚑ 技術數字與時程為法說會說法。NPO 無法改裝在現有 XPU（SerDes 速度不足），是 2028 年的新世代事件。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1132.875 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1132.88" height="702" fill="#ffffff"/><text x="566.44" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Lumentum 供應鏈結構：基板與製造 → 產品 → 營收類型 → 客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">基板與製造</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">產品線</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">營收類型（Q4 FY26）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">客戶</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="306.4375,106 306.4375,124 72,124 72,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="576.4375,106 576.4375,146 284,146 284,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="576.4375,106 576.4375,168 543.0500000000001,168 543.0500000000001,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="846.4375,106 846.4375,190 871.0500000000001,190 871.0500000000001,224" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="846.4375,106 846.4375,208 813.0500000000001,208 813.0500000000001,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="178,282 178,300 437.1,300 437.1,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="442.52500000000003,282 442.52500000000003,322 553.775,322 553.775,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="707.0500000000001,282 707.0500000000001,344 611.775,344 611.775,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="975.9625000000001,280 975.9625000000001,366 715.775,366 715.775,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="495.4375,458 495.4375,476 325.88750000000005,476 325.88750000000005,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="495.4375,458 495.4375,498 495.4375,498 495.4375,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="495.4375,458 495.4375,520 656.9875,520 656.9875,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="663.775,458 663.775,542 433.4375,542 433.4375,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="663.775,458 663.775,560 826.9875,560 826.9875,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="188.44" y="46" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="306.44" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">InP 基板（日本供應商＋AXT）</text><text x="306.44" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">法說會：因超高功率雷射需求追加基板…</text></g><g><rect x="458.44" y="46" width="236" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="576.44" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">自有晶圓廠與 Greensboro</text><text x="576.44" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Greensboro 由 GaAs 轉 InP；2028 …</text></g><g><rect x="728.44" y="46" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="846.44" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">自有組裝與合約製造</text><text x="846.44" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">泰國、中國、英國、斯洛維尼亞、日本…</text></g><g><rect x="60" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="178" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">EML／CW／超高功率雷射</text><text x="178" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">200G EML 占 EML 營收逾 25%；缺口 …</text></g><g><rect x="330" y="222" width="225.05" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="442.53" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">泵浦雷射</text><text x="442.53" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">市占約 70–80%；3 年期 take-or-pay</text></g><g><rect x="589.05" y="222" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="707.05" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">光路交換（OCS）</text><text x="707.05" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Q3→Q4 翻倍；Q1 首次三位數（百萬美元…</text></g><g><rect x="859.05" y="224" width="233.83" height="56" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="975.96" y="256.18" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">800G／1.6T 收發模組、工業雷射</text></g><g><rect x="425.1" y="398" width="140.67" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="495.44" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Components 元件</text><text x="495.44" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$649.4M（64.5%）</text></g><g><rect x="599.78" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="663.78" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Systems 系統</text><text x="663.78" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$356.9M（35.5%）</text></g><g><rect x="313.89" y="574" width="131.55" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="379.66" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer A</text><text x="379.66" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 占營收 26.6%</text></g><g><rect x="479.44" y="574" width="131.55" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="545.21" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer B</text><text x="545.21" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 占營收 15.0%</text></g><g><rect x="644.99" y="574" width="194" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="741.99" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">網路設備商與超大規模客戶</text><text x="741.99" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">NVIDIA 持有 $20 億可轉優先股</text></g><line x1="432.36" y1="664" x2="454.36" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="462.36" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">供給受限／單一來源</text><rect x="579.36" y="663" width="22" height="2.4" fill="#182456"/><text x="609.36" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI 光互連路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2026 10-K（2026/8/17）Item 1／1A、法說會。基板來自日本供應商與 AXT；Greensboro 晶圓廠由 GaAs 轉 InP，預計 2028 年初首次貢獻營收</div>
+</div></div></div></div><div class="note">⚑ 10-K：製造據點與合約製造夥伴；法說會：InP 基板來自日本供應商與 AXT；NVIDIA 為優先股投資人。圖中 Customer A／B 為 10-K 匿名揭露。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q4 FY26，百萬美元）</div><div id="sankeyEmbed_5zy3cqx" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"l","label":"Lumentum Q4 FY26 營收 $1,006.3M","color":"#182456"},{"id":"comp","label":"Components 元件","color":"#8f1f1f"},{"id":"sys","label":"Systems 系統","color":"#0f6f8a"}],"links":[{"source":"l","target":"comp","value":649.4},{"source":"l","target":"sys","value":356.9}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_5zy3cqx");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 產品類型為新聞稿數字；客戶別 10-K 僅揭露 Customer A、B 的全年占比，故不往下拆分。兩張圖節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">客戶集中度</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">單一終端客戶占營收（FY25 vs FY26）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">FY25</text><rect x="89.3" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="107.3" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">FY26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30 %</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="260.93" width="141.64" height="195.07" fill="#57a0cf" rx="1" data-dim="FY25"/><text x="205.68" y="254.93" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY25">15.4</text><rect x="278.5" y="119.07" width="141.64" height="336.93" fill="#182456" rx="1" data-dim="FY26"/><text x="349.32" y="113.07" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY26">26.6</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">A</text><rect x="533.86" y="253.33" width="141.64" height="202.67" fill="#57a0cf" rx="1" data-dim="FY25"/><text x="604.68" y="247.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY25">16</text><rect x="677.5" y="266" width="141.64" height="190" fill="#182456" rx="1" data-dim="FY26"/><text x="748.32" y="260" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY26">15</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">B</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：FY2026 10-K Item 1（單一終端客戶占營收 10% 以上）</text></svg>
+</div><div class="note">⚑ Customer A 由 15.4% 升至 26.6%；Customer B 15.0%；兩者合計 41.6%。資料來源：FY2026 10-K。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>客戶集中</td><td class="wrap">FY26 Customer A 26.6%、Customer B 15.0%（FY25：15.4%、16.0%；FY24：18.9%、11.4%）；多數客戶無長期採購承諾</td><td>FY2026 10-K</td></tr><tr><td>製造據點</td><td class="wrap">自有：美國、泰國、中國、英國、斯洛維尼亞、日本；FY26 取得 Greensboro 晶圓廠；合約製造：泰國、台灣、馬來西亞、菲律賓</td><td>10-K Item 1</td></tr><tr><td>原料</td><td class="wrap">原則上至少兩個來源；InP 基板來自日本供應商與 AXT</td><td>10-K；法說會</td></tr><tr><td>NVIDIA</td><td class="wrap">Series A 優先股 $20 億，$695.31／股</td><td>10-K 股本附註</td></tr><tr><td>海外占比</td><td class="wrap">FY26 非美國營收 79.2%（FY25 81.0%）</td><td>10-K</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾：無量化資料</b>——本次取得的 10-K 段落未列出不可取消採購承諾總額；與泵浦雷射 NEM 的三年期 take-or-pay（客戶承諾）金額也未揭露。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">客戶集中度與缺乏長約約束</div>Customer A 26.6%、B 15.0%；10-K 稱多數客戶無長期採購承諾；Customer A 比重一年內由 15.4% 升至 26.6%。<div class="risk-source">來源：FY2026 10-K</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：基板與 Greensboro 的時間差</div>把分散訊息拼起來：① EML 缺口 30%+、高功率雷射「遠遠落後」；② InP 基板只靠日本供應商與 AXT；③ Greensboro 要到 2028 年初才有營收，公司同時正與客戶談 Greensboro 的 LTA。FY27 的成長上限由基板供給與現有產能決定，若基板取得延遲，營收與毛利率都會被卡住，而 2028 年的新產能可能已被預先賣出。<div class="risk-source">來源：Q&A（Notter、Genovese、Silla）；法說會</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">稀釋與 GAAP 虧損</div>可轉債股權化 $11 億、$78 億非現金損失、NVIDIA 優先股約 290 萬股；GAAP 每股 −$84.65。<div class="risk-source">來源：新聞稿；10-K</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">OCS 客戶自製與時程</div>OCS 全年 $4 億只是追蹤；一家客戶有內部來源；in-tray OCS 為 2028 年新機會。<div class="risk-source">來源：Q&A（Silla、O'Malley）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">中國 InP 產能</div>管理層稱目前沒有影響、客戶無追索，但「中國廠商上線」仍是風險。<div class="risk-source">來源：Q&A（Leopold）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出</div>Form 4：2026/6/1 起 Vincent Retort 公開市場賣出約 <b>$3,790 萬</b>、Wupen Yuen 約 <b>$1,330 萬</b>、Jae Kim 約 $1,300 萬、Isaac Harris 約 $490 萬、CEO Michael Hurlston 約 $53 萬；9/28–9/29 價格約 $945–949。是否為 10b5-1 計畫未逐筆核對。<div class="risk-source">來源：SEC EDGAR Form 4</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">流動性</div>現金與短期投資 $27.4 億；Q4 營運現金流與資本支出 $1.67 億；債務大幅降低。<div class="risk-source">來源：新聞稿</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">毛利率提升主要來自組合</td><td class="wrap">非 GAAP 毛利率 47.9%→50.4%；元件占營收 64.5%（Q3 66.0%）</td><td class="wrap">新聞稿</td><td class="wrap">△ 元件占比反而下降，組合說明不完整</td></tr><tr><td class="wrap">OCS 追蹤 $4 億（2H 2026）</td><td class="wrap">Systems 營收 $356.9M（+29.7% QoQ）；OCS 金額未揭露</td><td class="wrap">新聞稿；Q&A</td><td class="wrap">△ 無法驗證</td></tr><tr><td class="wrap">200G EML 2027 年中成多數出貨</td><td class="wrap">目前約 25%（EML 營收）</td><td class="wrap">Q&A（Rakesh）</td><td class="wrap">△ 前瞻</td></tr><tr><td class="wrap">泵浦雷射三年期 take-or-pay</td><td class="wrap">10-K 取得段落無金額；NEM 名稱未揭露</td><td class="wrap">Q&A（Roy）</td><td class="wrap">△ 無金額驗證</td></tr><tr><td class="wrap">與 AXT 簽基板供給</td><td class="wrap">AXTI research 報告：InP 基板為 AXTI 核心產品之一</td><td class="wrap">Q&A（Notter）；research/axti-analysis-2026q2</td><td class="wrap">✓ 與 AXTI 報告互證</td></tr><tr><td class="wrap">（沉默）客戶集中、債務清償損失、NVIDIA 優先股</td><td class="wrap">Customer A 26.6%、B 15.0%；$78 億損失；$20 億優先股</td><td class="wrap">10-K；新聞稿</td><td class="wrap">✗ 無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$10.06 億</div><div class="kpi-lbl">Q4 FY26 營收</div><div class="kpi-sub">+24.5% QoQ／+109.3% YoY</div></div><div class="kpi"><div class="kpi-val">50.4%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub">前季 47.9%（+250bps）</div></div><div class="kpi"><div class="kpi-val">$3.23</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP −$84.65（債務清償損失）</div></div><div class="kpi"><div class="kpi-val">$12.5 億</div><div class="kpi-lbl">Q1 營收指引中位</div><div class="kpi-sub">+24% QoQ／+130% YoY</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Components 元件</div><div class="bu-abbr">雷射晶片、組件、泵浦雷射</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$649.4M（64.5%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+21.8%／+102.7%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$2,005.6M（+79.7%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">亮點</span><span class="bu-stat-val">窄線寬雷射 +130% YoY；泵浦 +80%</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:65%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">Systems 系統</div><div class="bu-abbr">收發模組、OCS、工業雷射</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$356.9M（35.5%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+29.7%／+122.6%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$1,008.4M（+90.7%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">亮點</span><span class="bu-stat-val">OCS 翻倍；800G 創新高</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:36%;background:#0f6f8a"></div></div></div></div><div class="chart-wrap"><div class="chart-title">Components 與 Systems 營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Components 與 Systems 營收：Q3 FY26 vs Q4 FY26</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q3 FY26</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q4 FY26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="361" x2="876" y2="361" stroke="#eeeeee" stroke-width="1"/><text x="68" y="365" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="266" x2="876" y2="266" stroke="#eeeeee" stroke-width="1"/><text x="68" y="270" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="78" y1="171" x2="876" y2="171" stroke="#eeeeee" stroke-width="1"/><text x="68" y="175" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="202.68" width="141.64" height="253.32" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="205.68" y="196.68" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">533.3</text><rect x="278.5" y="147.54" width="141.64" height="308.46" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="349.32" y="141.54" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">649.4</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Components</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">元件</text><rect x="533.86" y="325.33" width="141.64" height="130.67" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="604.68" y="319.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">275.1</text><rect x="677.5" y="286.47" width="141.64" height="169.53" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="748.32" y="280.47" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">356.9</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Systems</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">系統</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Lumentum Q4 FY26 新聞稿 Net Revenue by Product Type（8-K Ex.99.1，2026/8/11）</text></svg>
+</div><div class="note">⚑ Systems 季增 29.7% 快於 Components 的 21.8%；元件占比由 66.0% 降到 64.5%。資料來源：Lumentum 新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與利潤率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季產品別營收與非 GAAP 利潤率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355.5" x2="824" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="255" x2="824" y2="255" stroke="#eeeeee" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="76" y1="154.5" x2="824" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">10</text><text x="834" y="359.5" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">22.5</text><text x="834" y="259" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">35</text><text x="834" y="158.5" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">47.5</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY25</text><line x1="263" y1="456" x2="263" y2="460" stroke="#999999" stroke-width="1"/><text x="263" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY26</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY26</text><line x1="637" y1="456" x2="637" y2="460" stroke="#999999" stroke-width="1"/><text x="637" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY26</text><polyline points="76,295 263,265.45 450,233.04 637,188.02 824,129.68" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="295" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="263" cy="265.45" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="450" cy="233.04" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="637" cy="188.02" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="129.68" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,375.45 263,378.31 450,344.55 637,317.76 824,276.66" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="375.45" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="263" cy="378.31" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="450" cy="344.55" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="637" cy="317.76" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="276.66" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,232.49 263,219.62 450,194.7 637,151.28 824,131.18" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="232.49" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="263" cy="219.62" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="450" cy="194.7" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="637" cy="151.28" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="131.18" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="76,415.8 263,386.05 450,333.79 637,277.51 824,242.14" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="415.8" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="263" cy="386.05" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="450" cy="333.79" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="637" cy="277.51" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="242.14" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><line x1="212.79" y1="40" x2="228.79" y2="40" stroke="#182456" stroke-width="2.4"/><text x="234.79" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Components</text><line x1="320.04" y1="40" x2="336.04" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="342.04" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Systems</text><line x1="408.31" y1="40" x2="424.31" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="430.31" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 毛利率</text><line x1="536.26" y1="40" x2="552.26" y2="40" stroke="#b3760f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="558.26" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Lumentum Q4 FY25～Q4 FY26 各季新聞稿</div>
+</div><div class="note">⚑ 營收五季由 $4.81 億到 $10.06 億（+109%）；非 GAAP 毛利率由 37.8% 升到 50.4%；營業利益率由 15.0% 升到 36.6%，Q1 指引 39.5%–40.5%。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q4 FY25</th><th>Q1 FY26</th><th>Q2 FY26</th><th>Q3 FY26</th><th>Q4 FY26</th></tr></thead><tbody><tr><td>總營收</td><td>480.7</td><td>533.8</td><td>665.5</td><td>808.4</td><td>1,006.3</td></tr><tr><td>Components</td><td>320.4</td><td>379.2</td><td>443.7</td><td>533.3</td><td>649.4</td></tr><tr><td>Systems</td><td>160.3</td><td>154.6</td><td>221.8</td><td>275.1</td><td>356.9</td></tr><tr><td>非 GAAP 毛利率</td><td>37.8%</td><td>39.4%</td><td>42.5%</td><td>47.9%</td><td>50.4%</td></tr><tr><td>非 GAAP 營業利益率</td><td>15.0%</td><td>18.7%</td><td>25.2%</td><td>32.2%</td><td>36.6%</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：光學元件是什麼、為何 AI 客戶一定要買</div><p><b>雷射晶片（EML／CW／超高功率）</b>：資料中心內的光訊號從雷射開始；EML 把雷射與調變整合，是 800G 模組的核心；CW 雷射提供連續光源，配合矽光調變器用在 1.6T；超高功率雷射則給 NPO／CPO 當外部光源。每一代速度提高，需要的雷射數量與規格都上升，所以供不應求。</p><p><b>泵浦雷射</b>：長距離光纖傳輸中放大訊號的光源；與網路設備商簽三年期 take-or-pay。</p><p><b>光路交換（OCS）</b>：在光路層面直接切換連線，省去光電轉換，降低 AI 叢集的功耗與延遲；Lumentum 是唯一出貨的商規供應商。</p><p><b>800G／1.6T 收發模組</b>：直接賣給資料中心客戶的光模組；工業雷射則用在 PCB 鑽孔等。</p><p>⚑ 以上為產業一般知識與公司說法；Lumentum 未揭露各產品線營收與客戶別營收（10-K 僅匿名揭露兩個客戶占比）。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

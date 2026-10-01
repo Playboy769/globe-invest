@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arm Holdings — FY2027 Q1 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Arm Holdings（ARM）— FY2027 Q1（2026 年 4–6 月）法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／AGI CPU 自有矽／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 7 月 29 日&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q1 FY27 6-K（7/29）、Q2／Q3／Q4 FY26 6-K、FY2026 20-F（5/26）、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">AGI CPU 自有矽</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">分析師（Wells Fargo、William Blair、StoneX、Barclays、BofA、Mizuho、Needham、TD Cowen、Rothschild）</div></div><div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/7/29 法說會（Investing.com 完整逐字稿頁與摘要）、同日 6-K 股東信（Ex.99.1／99.2）、FY2026 20-F（2026/5/26）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附來源連結）。全場最關鍵的結構性事實：<b>沒有任何分析師追問股東信腳註的一個變動</b>——自本季起 Arm「不再揭露剩餘履約義務（RPO）與 Total／Flexible Access 授權數」，理由是這些指標「與成長較不相關」；而 RPO 已連續下滑（Q4 FY25 $2,226M→Q4 FY26 $2,071M）。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Joe Quatrochi（Wells Fargo）</div><div class="qa-topic">AGI CPU 供給信心、毛利率結構</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">對 AGI CPU 超過 $10 億上行的信心提升，是否因晶圓與記憶體供給改善？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Rene Haas：各面向都在改善。90 天前是「已取得 $10 億供給、$20 億需求管道」；現在需求<b>超過 $20 億</b>，且對取得所需供給（晶圓、基板、測試產能、記憶體）的信心提高。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">超過 $10 億的部分，毛利率結構是否不同？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CFO Jason Child：目前沒有改變——第一代產品 FY27 Q4 與 FY28 仍預期<b>高 30% 區間、可能低 40%</b>；要達 50% 需要「把更多工作移到內部」，約需數年；供應鏈漲價對定價的影響將在下季更新。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 需求 $20 億、已確保供給只有 $10 億——差額被一句「信心提高」帶過</div><div class="q-text">股東信寫「需求已超出原先預期，FY27 與 FY28 合計超過 $20 億」，同時說「已取得支持 $10 億所需的製造產能」。<b>未被供給覆蓋的約 $10 億</b>沒有時程、也沒有金額承諾；管理層只說「過去 90 天信心提高」。另外 Child 提到「正在處理價格上漲的影響」，等於承認 AGI 的成本（晶圓、記憶體）還在漲，高 30%–低 40% 的毛利率目標可能受壓。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Sebastien Naji（William Blair）</div><div class="qa-topic">智慧型手機市場、記憶體成本與權利金</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">記憶體與 BOM 成本上升、OEM 漲價，對今年手機單位、組合與權利金的影響？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：絕大多數客戶已轉向 v9／CSS，所以預期手機市場下滑雙位數時，Arm 手機權利金仍有雙位數成長。Child：減速範圍比年初預期更廣——原本只有低階，現在「中高階也受影響」；先前指引年成長約 20%，現在「接近高十幾％」；<b>下一季權利金「會小幅下降」，Q2 指引為低到中十幾％成長</b>；雲端 AI 的超預期持續抵銷手機疲弱。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ Q1 權利金 +22%，Q2 指引 +13%，環比卻是下滑</div><div class="q-text">Q1 權利金 $715M（+22% YoY）；Q2 指引約低十幾％年增，以去年同期 $620M 推算 Q2 約 $700M，<b>環比 −2%</b>。股東信對這個轉折沒有任何文字說明，只有 Q&A 中 CFO 的口頭交代。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Gary Mobley（StoneX）</div><div class="qa-topic">FY2029–FY2031 需求管道、TAM</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">$150 億的 2031 年 AGI 營收是否已考慮供給限制？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：3 月提出的 $1,000 億 CPU TAM（先前 $500–600 億）可能「偏保守」，同業現在談到最高 $2,000 億；不更改現有數字。Child：外部估計 TAM 現在 $2,200 億以上；FY27／FY28 供應鏈緊，之後 2028–2029 會擴張很多（晶圓與記憶體產能預估增加 70%–100%）；內部目標更高，但對外只談明年的 $20 億。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ TAM 被反覆上調，但 Arm 自己的營收目標沒有跟著改</div><div class="q-text">TAM 由 $500–600 億→$1,000 億→$2,200 億以上，而 Arm 對外的 AGI 數字仍是「FY27–FY28 超過 $20 億」與 2031 年 $150 億（分析師引述）。管理層說「內部有更高目標」卻不公布；投資人拿不到可驗證的市佔假設。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Thomas O'Malley（Barclays）</div><div class="qa-topic">AGI CPU 在 TAM 三個桶中的位置</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">AGI CPU 屬於傳統 CPU、head node、代理式應用哪一塊？早期客戶？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Child：三塊都適用。Arm Everywhere 活動簽下的客戶：Cerebras 與 OpenAI（head node）、Meta 與 Cloudflare（代理式＋通用伺服器），另有 OCI；雲端代理式工作負載是重點。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vivek Arya（BofA Securities）</div><div class="qa-topic">供給確保、與專有加速器共存</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">為何 $10 億的供給難以取得（市場 $500 億、多家晶圓廠可用）？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：市場很緊——記憶體、測試設備、基板、TSMC 晶圓都緊；連有自家晶圓廠的 CPU 對手都吃緊；比 90 天前樂觀。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">NVIDIA、亞馬遜、Google 的專有加速器會限制 Arm 的 CPU 商機嗎？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：已有證據顯示可共存——Google 用 Axion 作為 TPU 的主機 CPU；NVLink Fusion 是「很有意思的平台」，今天沒有宣布，但 Arm 可透過自家或 NVLink Fusion 連接客製加速器。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ NVLink Fusion 的「路徑」沒有任何合作宣告</div><div class="q-text">Haas 把 NVLink Fusion 描述成可行路徑，卻明確說「今天沒有宣布」。Arm 與 NVIDIA 的關係同時是客戶（Vera 為 Arm 架構）與潛在競爭者（AGI CPU 與 Vera 同為資料中心 CPU），這個利益交叉未被問到。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vijay Rakesh（Mizuho）</div><div class="qa-topic">核心數與矽營收揭露</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">AGI CPU 是否 128 核？何時有 192／256 核？矽營收何時獨立列示？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：現為 128 核；有更多核數的趨勢；沒有具體路線圖。Child：年底開始出貨；矽營收達總營收 10% 後獨立列為第三條（<b>FY2028</b>）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Charles Shi（Needham）</div><div class="qa-topic">權利金成長是否降至高十幾％</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">權利金成長從 20% 掉到「高十幾」，授權是否能抵銷？FY29（CY2028）仍是 20%+？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Child：Q2 指引權利金 +13%（比前兩季低）；授權指引上調；「合計仍優於預期」；FY28–FY29 的「權利金成長 20%+ 仍然完好」，手機疲弱只是短期，夥伴預期下半年復甦；雲端 AI 可能有上行。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ Q2 指引低十幾％與「20%+ 完好」並存，沒有給出中間路徑</div><div class="q-text">FY27 權利金成長由 ~20% 降到「接近高十幾」，Q2 為 +13%，FY28 又要回到 20%+。管理層把原因全歸給手機（市場雙位數下滑），並稱「下半年復甦」。但 Q2 權利金環比下滑已是事實，<b>下半年每季需約 $820M 以上才能拉回高十幾％</b>（以全年 +17%～+18% 推算，對照 Q1 $715M、Q2 指引約 $700M）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Steven（代 Krish Sankar，TD Cowen）</div><div class="qa-topic">低成本與開源 AI 模型的影響</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">低成本（開源、中國）AI 模型對 AGI CPU 與 IP 業務是正面還是負面？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：對 Arm「中性到正面」；不論封閉或開源，所有模型都需要 CPU、IP 與客製晶片；開源模型更小、更能在邊緣裝置執行，對 Arm 有利。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Tim Schulze-Malander（Rothschild）</div><div class="qa-topic">營業費用節奏、AGI 訂單轉換風險</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">R&D 季節性與入帳節奏？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Child：人員費用符合預期，差異來自工具（模擬、雲端）使用；Q1 非 GAAP 營業費用 $733M，低於指引約 $27M；Q2 約 $780M；整體環比約中個位數％。Haas：預期變異會縮小。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">AGI CPU 由客戶接觸轉為正式訂單，會有「少一顆螺絲」的風險嗎？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Haas：沒有單點失效，對夥伴能力與上行空間「非常有信心」。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 營業費用低估被當成節省，但 GAAP 營業利益率反而下降</div><div class="q-text">非 GAAP 營業利益率 41.2%（+2.1pp），GAAP 營業利益率卻由 10.8% 降到 7.1%：GAAP 營業費用 $1,162M（+28%），股票薪酬 $343M（去年同期 $241M，+42%）。非 GAAP 的「費用低於指引」忽略了稅務與股票薪酬這一大塊。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-arm-posts-record-q1-2026-revenue-as-ai-demand-surges-93CH-4821945" target="_blank" rel="noopener">Investing.com：Arm Q1 FY2027 逐字稿頁</a>；<a href="https://seekingalpha.com/article/4927310-arm-holdings-plc-arm-q1-2027-earnings-call-transcript" target="_blank" rel="noopener">Seeking Alpha：Arm Q1 2027 Earnings Call Transcript</a>；<a href="https://www.sec.gov/Archives/edgar/data/0001973239/000197323926000113/exhibit992fye27q130-junx26.htm" target="_blank" rel="noopener">Arm 投資人關係：Q1 FY27 股東信（6-K Ex.99.2）</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li>AGI CPU 需求：FY27＋FY28 合計<b>超過 $20 億</b>（3 月為 $10 億管道）；已取得支持 <b>$10 億</b>的製造產能</li><li>客戶：Cerebras、OpenAI、Meta、Cloudflare、OCI；新增美國與中國客戶</li><li>CPU TAM 說法：$1,000 億（3 月）→ 同業 $2,000 億 → 外部估計 $2,200 億以上</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>初期產品已交付多家客戶；<b>2026 年底開始出貨</b></li><li>矽營收獨立列示：預計 <b>FY2028</b>（超過總營收 10% 時）</li><li>供應鏈 FY27–FY28 緊；2028–2029 擴張（晶圓與記憶體產能預估 +70%–100%）</li></ul></div><div class="quad-box orange"><h4>財務</h4><ul><li>毛利率：FY27–FY28 <b>高 30%～低 40%</b>（對照公司整體非 GAAP 98.1%）；50% 需要「內部化」數年</li><li>Q1 資本支出（購買 PP&amp;E）$197M（+28% YoY）；PP&amp;E $923M（3/31 為 $772M）</li><li>Q1 其他流動負債 $696M（3/31 為 $447M）；GAAP R&amp;D $838M（+29%）</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>未被供給覆蓋的 ~$10 億需求，何時、以什麼價格能被滿足？</li><li>與 NVIDIA 的關係：Vera 同為資料中心 CPU，NVLink Fusion 路徑未宣布</li><li>Arm 對 TSMC 的晶圓採購承諾金額（6-K 未揭露；20-F 風險因素僅稱有「重大資本承諾」）</li><li>毛利率在記憶體與晶圓漲價下是否仍能維持高 30%</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">AGI CPU 與資料中心數字（Q1 FY27 股東信與法說會）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>需求（FY27＋FY28）</td><td>&gt;$20 億</td><td class="wrap">3 月為 $10 億管道；對外只談這個數</td></tr><tr><td>已確保供給</td><td>$10 億</td><td class="wrap">晶圓、基板、測試、記憶體</td></tr><tr><td>Neoverse 出貨</td><td>&gt;15 億核</td><td class="wrap">最近 5 億核僅用 9 個月（前 10 億核用了 6 年）</td></tr><tr><td>資料中心權利金</td><td>YoY 逾 2 倍</td><td class="wrap">金額未揭露</td></tr><tr><td>AGI CPU 預期毛利率</td><td>高 30%～低 40%</td><td class="wrap">FY27 Q4 與 FY28；公司整體 98.1%</td></tr><tr><td>矽營收獨立列示</td><td>FY2028</td><td class="wrap">超過 10% 營收時</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>用算術看毛利率稀釋</b>（假設性推算，非公司指引）：若 FY28 營收中有 $15 億為 AGI CPU（毛利率 40%），其餘 $50 億為授權與權利金（毛利率 98%），合併毛利率約 84.6%，較現在的 98% 低約 13 個百分點；毛利額則增加。Arm 的投資故事由「近乎 100% 毛利的 IP」變成「混合模式」，估值框架需要同步調整。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Arm 的自有矽採夥伴製造（晶圓、封測、基板、記憶體、ODM 系統），<b>6-K 與法說會均未揭露專案融資、SPV 或表外租賃</b>。Q1 現金流量：營運現金流 $902M、非 GAAP 自由現金流 $665M（受應收帳款回收與稅款時點助益）、購買 PP&amp;E $197M、現金與短期投資 $3.89B。供應鏈採購承諾金額在 6-K 未列示。<b>無此資料／不適用。</b></p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>$20 億需求與 $10 億供給之間的差額，是否有夥伴已簽 capacity 承諾？承諾的付款條件？</li><li>AGI CPU 對 TSMC、記憶體夥伴的預付款或最低採購承諾金額？</li><li>客戶（OpenAI、Meta、Cloudflare、Cerebras、OCI）的採購合約是否為 take-or-pay？</li><li>停止揭露 RPO 與授權數，是否意味著 RPO 持續下滑（Q4 FY26 $2,071M）已不利於敘事？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>Arm AGI CPU（自有矽）</h4><div class="meta">128 核；2026 年底出貨</div><p>公司首次銷售量產晶片：初期產品已交付多家客戶；需求超出預期；晶圓、基板、測試與記憶體由夥伴提供。核心數將持續增加（Graviton5 已有 192 核實例）。</p></div><div class="tech-card g"><h4>Neoverse 與資料中心採用</h4><div class="meta">累計出貨逾 15 億核</div><p>NVIDIA Vera 已進入量產（公司稱 CPU 效能最高 +50%、能效 2 倍於 x86，為 NVIDIA 說法）；Google Axion 為 TPU 主機 CPU；AWS 部署「數千萬核」Graviton5；Microsoft Cobalt 200；Qualcomm 公布 Dragonfly C1000。</p></div><div class="tech-card o"><h4>CSS 與 Armv9</h4><div class="meta">提高每顆權利金率</div><p>Armv9 與 CSS 滲透手機、平板與消費電子，抵銷手機單位下滑；NVIDIA RTX Spark 為首款建構在 Arm CSS 的代理式 PC。</p></div><div class="tech-card "><h4>實體 AI 與軟體生態</h4><div class="meta">22 百萬開發者</div><p>車用、機器人、工業；NVIDIA Jetson Thor 結合 Arm CPU 與 Blackwell GPU；Performix 開發工具，Arm MCP Server 逾 10,000 次 Docker 下載。</p></div></div><div class="note grey">⚑ 效能數字（+50%、2 倍能效）、IDC 支出數據（Arm 加速伺服器平台支出近 2 年內翻倍並超過 x86）皆為公司或第三方引述的說法；Arm 未揭露 AGI CPU 的規格細節與定價。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈與客戶結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 954.825 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="954.83" height="702" fill="#ffffff"/><text x="477.41" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Arm 供應鏈與客戶結構：夥伴 → 平台 → 收入類型 → 客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">矽與系統夥伴（AGI CPU）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">Arm 平台</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">收入類型（Q1 FY27）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">客戶類型</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="227.95,106 227.95,124 613.8,124 613.8,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="440.4125,106 440.4125,146 711.025,146 711.025,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="699.875,106 699.875,168 808.25,168 808.25,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="236.72500000000002,282 236.72500000000002,300 203.81250000000006,300 203.81250000000006,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="236.72500000000002,282 236.72500000000002,322 370.46250000000003,322 370.46250000000003,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="460.3375,282 460.3375,344 312.46250000000003,344 312.46250000000003,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="460.3375,282 460.3375,366 505.3625,366 505.3625,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="711.025,282 711.025,384 711.025,384 711.025,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="437.9125,458 437.9125,476 200.825,476 200.825,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="437.9125,458 437.9125,498 362.825,498 362.825,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="258.13750000000005,458 258.13750000000005,520 420.825,520 420.825,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="667.1875,458 667.1875,542 690.825,542 690.825,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><g><rect x="156.95" y="46" width="142" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="227.95" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">TSMC</text><text x="227.95" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">點名之矽夥伴（晶圓）</text></g><g><rect x="332.95" y="46" width="214.93" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="440.41" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Samsung／SK hynix／Micron</text><text x="440.41" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">記憶體夥伴</text></g><g><rect x="581.88" y="46" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="699.88" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">系統 ODM</text><text x="699.88" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Supermicro、Lenovo、Quanta、ASRoc…</text></g><g><rect x="154.58" y="222" width="164.3" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="236.73" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Armv9／Neoverse IP</text><text x="236.73" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">授權＋每顆晶片權利金</text></g><g><rect x="352.88" y="222" width="214.93" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="460.34" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Compute Subsystems（CSS）</text><text x="460.34" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">提高每顆權利金率</text></g><g><rect x="601.8" y="222" width="218.45" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="711.03" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Arm AGI CPU</text><text x="711.03" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">自有矽；128 核；2026 年底開始出貨</text></g><g><rect x="191.81" y="398" width="132.65" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="258.14" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Royalty 權利金</text><text x="258.14" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$715M（+22% YoY）</text></g><g><rect x="358.46" y="398" width="158.9" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="437.91" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">License 授權及其…</text><text x="437.91" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$574M（+23% YoY）</text></g><g><rect x="551.36" y="398" width="231.65" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="667.19" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">矽營收（尚未單獨列示）</text><text x="667.19" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">預計 FY2028 超過 10% 營收時獨立列示</text></g><g><rect x="60" y="574" width="152.82" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="136.41" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">SoftBank 技術授權</text><text x="136.41" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">本季貢獻 $193M</text></g><g><rect x="246.83" y="574" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="310.83" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">其他授權客戶</text><text x="310.83" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">約 $381M（推算）</text></g><g><rect x="408.83" y="574" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="526.83" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">資料中心與手機晶片客戶</text><text x="526.83" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">AWS、Google、Microsoft、NVIDIA、Q…</text></g><g><rect x="678.83" y="574" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="796.83" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">AGI CPU 客戶</text><text x="796.83" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">OpenAI、Meta、Cloudflare、Cerebra…</text></g><line x1="372.21" y1="664" x2="394.21" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="402.21" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">供給依賴</text><rect x="464.21" y="663" width="22" height="2.4" fill="#182456"/><text x="494.21" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AGI CPU 路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Q1 FY27 股東信、FY2026 20-F（Arm China 16%、前五大客戶 57%）、Q4 FY26 6-K（點名之矽夥伴與 ODM）。Arm 本身不製造晶片；AGI CPU 為自有矽，晶圓與封測由夥伴承擔</div>
+</div></div></div></div><div class="note">⚑ Arm 為 IP 公司，AGI CPU 的製造由夥伴承擔；TSMC、記憶體夥伴與 ODM 名稱來自 Q4 FY26 6-K。矽營收尚未單獨列示，圖中以虛線分支表示。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q1 FY27，百萬美元）</div><div id="sankeyEmbed_30d5wr0" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"a","label":"Arm Q1 FY27 營收 $1,289M","color":"#182456"},{"id":"roy","label":"Royalty 權利金","color":"#0f6f8a"},{"id":"lic","label":"License 授權及其他","color":"#8f1f1f"},{"id":"sb","label":"SoftBank 技術授權","color":"#b3760f"},{"id":"oth","label":"其他授權客戶","color":"#57a0cf"}],"links":[{"source":"a","target":"roy","value":715},{"source":"a","target":"lic","value":574},{"source":"lic","target":"sb","value":193},{"source":"lic","target":"oth","value":381}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_30d5wr0");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 授權中的 SoftBank 技術授權 $193M 為股東信揭露；『其他授權客戶 $381M』為推算（574−193）。兩張圖的節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">關聯方 vs 外部客戶</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Q1 營收：關聯方 vs 外部客戶</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1 FY26</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1 FY27</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="380" x2="876" y2="380" stroke="#eeeeee" stroke-width="1"/><text x="68" y="384" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="304" x2="876" y2="304" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="78" y1="228" x2="876" y2="228" stroke="#eeeeee" stroke-width="1"/><text x="68" y="232" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="78" y1="152" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="68" y="156" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="180.5" width="141.64" height="275.5" fill="#57a0cf" rx="1" data-dim="Q1 FY26"/><text x="205.68" y="174.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY26">725</text><rect x="278.5" y="113.62" width="141.64" height="342.38" fill="#182456" rx="1" data-dim="Q1 FY27"/><text x="349.32" y="107.62" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY27">901</text><text x="277.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">外部客戶</text><rect x="533.86" y="331.36" width="141.64" height="124.64" fill="#57a0cf" rx="1" data-dim="Q1 FY26"/><text x="604.68" y="325.36" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY26">328</text><rect x="677.5" y="308.56" width="141.64" height="147.44" fill="#182456" rx="1" data-dim="Q1 FY27"/><text x="748.32" y="302.56" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY27">388</text><text x="676.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">關聯方</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q1 FY27 6-K 損益表（Revenue from related parties／external customers）；關聯方含 SoftBank 集團與 Arm China</text></svg>
+</div><div class="note">⚑ 關聯方營收 $388M（占 30%，Q1 FY26 $328M／31%）；這部分含 SoftBank 集團與 Arm China。FY2026 Arm China 占營收 16%、前五大客戶合計 57%（20-F）。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>客戶集中</td><td class="wrap">FY2026 前五大客戶（含 Arm China、SoftBank 集團）占營收 57%（FY25 56%、FY24 54%）；Arm China 單獨 16%（FY25 17%、FY24 21%）</td><td>FY2026 20-F</td></tr><tr><td>SoftBank 授權</td><td class="wrap">本季貢獻 $193M（Q4 FY26 $200M）；管理層預期此後約每季 $200M</td><td>Q1 FY27 股東信／法說會</td></tr><tr><td>中國曝險</td><td class="wrap">PRC 營收占 18%（FY25 19%、FY24 22%）</td><td>FY2026 20-F</td></tr><tr><td>矽夥伴</td><td class="wrap">TSMC、Samsung、SK hynix、Micron；ODM：Supermicro、Lenovo、Quanta、ASRock</td><td>Q4 FY26 6-K／Q4 notes</td></tr><tr><td>採購承諾</td><td class="wrap">6-K 未揭露金額；20-F 風險因素稱晶圓、封裝、測試有「重大資本承諾與採購義務」</td><td>FY2026 20-F</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾：無此資料</b>——Arm 的 6-K 不含承諾附註，20-F 風險因素未量化金額。這是本報告最大的資料缺口之一：AGI CPU 的供給已「取得」$10 億，但付款與承諾條件不明。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">停止揭露 RPO 與授權數</div>自 Q1 FY27 起不再揭露 RPO、Arm Total Access 與 Flexible Access 授權數；RPO 已由 Q4 FY25 $2,226M 降到 Q4 FY26 $2,071M，ACV 則年增 13%（較去年同期 28% 明顯放緩）。沒有任何分析師追問。<div class="risk-source">來源：Q1 FY27 股東信腳註(3)；Q&A 缺席</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：權利金放緩與 AGI 放量在同一年相遇</div>把分散訊息拼起來：① 權利金 Q1 +22%→Q2 指引 +13%（環比下降），全年由 ~20% 降到近高十幾％；② AGI CPU 只確保了 $10 億供給，卻要在 FY27 Q4 才開始以高 30%～低 40% 毛利率貢獻營收；③ 同時 RPO 不再揭露。核心高毛利授權／權利金放緩，而新的低毛利矽營收尚未接棒，FY27 下半年是整體毛利率與成長敘事最脆弱的階段。<div class="risk-source">來源：Q&A（Naji、Shi、Quatrochi）；股東信；Q4 FY26 key data</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">關聯方集中（SoftBank、Arm China）</div>關聯方營收占 30%；SoftBank 每季約 $200M 授權；Arm China 16%。若 SoftBank 合約屆期或條件改變，授權營收將顯著波動。<div class="risk-source">來源：6-K 損益表；20-F</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">供給與成本：晶圓、記憶體、測試</div>管理層承認「正在處理價格上漲的影響」，毛利率目標高 30%～低 40% 未必維持。<div class="risk-source">來源：Q&A（Quatrochi、Arya）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">與 NVIDIA 的客戶／競爭雙重關係</div>Vera（Arm 架構）與 AGI CPU 同屬資料中心 CPU；NVLink Fusion 路徑未宣布。<div class="risk-source">來源：Q&A（Arya）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出</div>Form 4：2026/6/5 起 CFO Jason Child 於 8/27（10,400 股＠$255.33）與 9/21（10,400 股＠$300.00）賣出，合計約 <b>$578 萬</b>；CAO Laura Bartels 8/17 稅務扣繳；無公開市場買進。股價自 6/3 約 $415 回到 $255–300（−28%～−39%）。是否為 10b5-1 計畫未逐筆核對。<div class="risk-source">來源：SEC EDGAR Form 4（2026/6/5–10/1）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">GAAP 獲利品質</div>GAAP 淨利 $270M 中，權益投資收益 $128M；GAAP 營業利益僅 $91M；非 GAAP 營業利益 $531M。<div class="risk-source">來源：Q1 FY27 6-K</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">AGI CPU 需求超過 $20 億</td><td class="wrap">供給已取得 $10 億；客戶名單 5 家；採購承諾未揭露</td><td class="wrap">股東信；Q&A</td><td class="wrap">△ 需求為管道、供給為部分確保</td></tr><tr><td class="wrap">權利金 FY28–29 20%+ 完好</td><td class="wrap">Q1 +22%→Q2 指引 +13%；FY27 降到「接近高十幾％」</td><td class="wrap">Q&A（Shi、Naji）</td><td class="wrap">△ 短期放緩，長期為說法</td></tr><tr><td class="wrap">營業費用低於指引</td><td class="wrap">非 GAAP $733M vs 指引 ~$760M；GAAP 營業費用 +28%、股票薪酬 +42%</td><td class="wrap">股東信</td><td class="wrap">✓ 非 GAAP 成立，GAAP 相反</td></tr><tr><td class="wrap">自由現金流強勁</td><td class="wrap">Q1 非 GAAP FCF $665M，受應收帳款回收（+$181M）與稅款時點助益</td><td class="wrap">6-K 現金流量表</td><td class="wrap">△ 品質含時點因素</td></tr><tr><td class="wrap">ACV 年增 13%「高於長期預期」</td><td class="wrap">ACV $1,732M；去年同期 +28%（Q3 FY26）</td><td class="wrap">股東信</td><td class="wrap">△ 成長放緩</td></tr><tr><td class="wrap">（沉默）停止揭露 RPO 與授權數</td><td class="wrap">RPO 已連降三季至 $2,071M</td><td class="wrap">Q1 股東信腳註</td><td class="wrap">✗ 無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$12.89 億</div><div class="kpi-lbl">Q1 FY27 營收</div><div class="kpi-sub">+22% YoY；前季 $14.90 億</div></div><div class="kpi"><div class="kpi-val">98.1%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub">前年同期 97.9%</div></div><div class="kpi"><div class="kpi-val">$0.45</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP $0.25（前年 $0.12）</div></div><div class="kpi"><div class="kpi-val">$6.65 億</div><div class="kpi-lbl">非 GAAP 自由現金流</div><div class="kpi-sub">TTM $13.97 億</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Royalty 權利金</div><div class="bu-abbr">每顆晶片 × 權利金率</div><div class="bu-stat"><span class="bu-stat-lbl">Q1 FY27</span><span class="bu-stat-val">$715M（+22% YoY）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ</span><span class="bu-stat-val">+6.6%</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">55%</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q2 指引</span><span class="bu-stat-val">約 +13% YoY</span></div></div><div class="bu-card g"><div class="bu-name">License 授權及其他</div><div class="bu-abbr">IP 授權、CSS、軟體與服務</div><div class="bu-stat"><span class="bu-stat-lbl">Q1 FY27</span><span class="bu-stat-val">$574M（+23% YoY）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ</span><span class="bu-stat-val">−29.9%</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">45%</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q2 指引</span><span class="bu-stat-val">約 +30% YoY</span></div></div><div class="bu-card o"><div class="bu-name">矽（AGI CPU）</div><div class="bu-abbr">自有矽，2026 年底出貨</div><div class="bu-stat"><span class="bu-stat-lbl">營收</span><span class="bu-stat-val">尚未單獨列示</span></div><div class="bu-stat"><span class="bu-stat-lbl">毛利率</span><span class="bu-stat-val">高 30%～低 40%</span></div><div class="bu-stat"><span class="bu-stat-lbl">需求</span><span class="bu-stat-val">&gt;$20 億（FY27–28）</span></div></div></div><div class="chart-wrap"><div class="chart-title">權利金與授權營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">權利金與授權營收：Q1 FY26／Q4 FY26／Q1 FY27</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1 FY26</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#0f6f8a"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q4 FY26</text><rect x="194.55" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="212.55" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1 FY27</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="380" x2="876" y2="380" stroke="#eeeeee" stroke-width="1"/><text x="68" y="384" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="304" x2="876" y2="304" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="78" y1="228" x2="876" y2="228" stroke="#eeeeee" stroke-width="1"/><text x="68" y="232" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="78" y1="152" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="68" y="156" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="233.7" width="93.76" height="222.3" fill="#57a0cf" rx="1" data-dim="Q1 FY26"/><text x="181.74" y="227.7" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY26">585</text><rect x="230.62" y="201.02" width="93.76" height="254.98" fill="#0f6f8a" rx="1" data-dim="Q4 FY26"/><text x="277.5" y="195.02" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">671</text><rect x="326.38" y="184.3" width="93.76" height="271.7" fill="#182456" rx="1" data-dim="Q1 FY27"/><text x="373.26" y="178.3" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY27">715</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Royalty</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">權利金</text><rect x="533.86" y="278.16" width="93.76" height="177.84" fill="#57a0cf" rx="1" data-dim="Q1 FY26"/><text x="580.74" y="272.16" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY26">468</text><rect x="629.62" y="144.78" width="93.76" height="311.22" fill="#0f6f8a" rx="1" data-dim="Q4 FY26"/><text x="676.5" y="138.78" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">819</text><rect x="725.38" y="237.88" width="93.76" height="218.12" fill="#182456" rx="1" data-dim="Q1 FY27"/><text x="772.26" y="231.88" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 FY27">574</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">License</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">授權及其他</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Arm 各季 6-K 股東信（Ex.99.2）；Q1 FY27 = 2026 年 4–6 月</text></svg>
+</div><div class="note">⚑ Q1 FY27 授權營收較 Q4 FY26 少 $245M，主因是 Q4 的高價值授權簽約時點；SoftBank 授權貢獻 $193M，扣除後授權約 $381M。權利金創新高 $715M。資料來源：Arm 6-K。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與營業利益率</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季權利金、授權營收與非 GAAP 營業利益率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">38</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">40.4</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">42.8</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">45.2</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">47.6</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY26</text><line x1="263" y1="456" x2="263" y2="460" stroke="#999999" stroke-width="1"/><text x="263" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY26</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY26</text><line x1="637" y1="456" x2="637" y2="460" stroke="#999999" stroke-width="1"/><text x="637" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY27</text><polyline points="76,220.83 263,206.76 450,159.73 637,186.26 824,168.57" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="220.83" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="263" cy="206.76" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="450" cy="159.73" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="637" cy="186.26" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="168.57" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,267.86 263,248.97 450,252.99 637,126.76 824,225.25" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="267.86" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="263" cy="248.97" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="450" cy="252.99" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="637" cy="126.76" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="225.25" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="76,419.15 263,352.15 450,365.55 637,84.15 824,348.8" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="419.15" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="263" cy="352.15" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="450" cy="365.55" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="637" cy="84.15" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="348.8" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><line x1="265.84" y1="40" x2="281.84" y2="40" stroke="#182456" stroke-width="2.4"/><text x="287.84" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Royalty</text><line x1="354.11" y1="40" x2="370.11" y2="40" stroke="#8f1f1f" stroke-width="2.4"/><text x="376.11" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">License 及其他</text><line x1="483.21" y1="40" x2="499.21" y2="40" stroke="#b3760f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="505.21" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Arm Q2 FY26／Q3 FY26／Q4 FY26／Q1 FY27 6-K；FY26 全年營收 $4,920M（與四季加總一致）</div>
+</div><div class="note">⚑ 非 GAAP 營業利益率在 Q4 FY26 達 49.1% 後回到 41.2%；授權營收的「時點與規模」造成季度波動，權利金則較平穩。Q2 FY26／Q3 FY26 拆分取自各季 6-K（加總與 FY26 $4,920M 一致）。</div></div><div class="chart-wrap"><div class="chart-title">ACV 與 RPO</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">ACV 與 RPO（Q1 FY27 起停止揭露 RPO）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">ACV</text><rect x="82.98" y="51" width="10" height="10" rx="1" fill="#8f1f1f"/><text x="100.98" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">RPO</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="380" x2="876" y2="380" stroke="#eeeeee" stroke-width="1"/><text x="68" y="384" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500</text><line x1="78" y1="304" x2="876" y2="304" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="78" y1="228" x2="876" y2="228" stroke="#eeeeee" stroke-width="1"/><text x="68" y="232" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,500</text><line x1="78" y1="152" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="68" y="156" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,500 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="101.34" y="248.52" width="55.46" height="207.48" fill="#182456" rx="1" data-dim="ACV"/><text x="129.07" y="242.52" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="ACV">1,365</text><rect x="158.8" y="117.65" width="55.46" height="338.35" fill="#8f1f1f" rx="1" data-dim="RPO"/><text x="186.53" y="111.65" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="RPO">2,226</text><text x="157.8" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4</text><text x="157.8" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY25</text><rect x="260.94" y="212.8" width="55.46" height="243.2" fill="#182456" rx="1" data-dim="ACV"/><text x="288.67" y="206.8" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="ACV">1,600</text><rect x="318.4" y="114.61" width="55.46" height="341.39" fill="#8f1f1f" rx="1" data-dim="RPO"/><text x="346.13" y="108.61" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="RPO">2,246</text><text x="317.4" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2</text><text x="317.4" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><rect x="420.54" y="209.76" width="55.46" height="246.24" fill="#182456" rx="1" data-dim="ACV"/><text x="448.27" y="203.76" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="ACV">1,620</text><rect x="478" y="129.5" width="55.46" height="326.5" fill="#8f1f1f" rx="1" data-dim="RPO"/><text x="505.73" y="123.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="RPO">2,148</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><rect x="580.14" y="203.68" width="55.46" height="252.32" fill="#182456" rx="1" data-dim="ACV"/><text x="607.87" y="197.68" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="ACV">1,660</text><rect x="637.6" y="141.21" width="55.46" height="314.79" fill="#8f1f1f" rx="1" data-dim="RPO"/><text x="665.33" y="135.21" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="RPO">2,071</text><text x="636.6" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4</text><text x="636.6" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><rect x="739.74" y="192.74" width="55.46" height="263.26" fill="#182456" rx="1" data-dim="ACV"/><text x="767.47" y="186.74" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="ACV">1,732</text><text x="796.2" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1</text><text x="796.2" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY27</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Arm 各季 6-K。ACV＝年化合約價值；RPO＝剩餘履約義務。Q1 FY27 股東信註明『不再揭露 RPO 與 Arm Total／Flexible Access 授權數』，故 Q1 FY27 的 RPO 留白</text></svg>
+</div><div class="note">⚑ ACV 年增 13%（前年同期為 28%），RPO 已連降三季，並在 Q1 FY27 停止揭露——公司說明是這些指標「與成長較不相關」。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q1 FY26</th><th>Q2 FY26</th><th>Q3 FY26</th><th>Q4 FY26</th><th>Q1 FY27</th></tr></thead><tbody><tr><td>總營收</td><td>1,053</td><td>1,135</td><td>1,242</td><td>1,490</td><td>1,289</td></tr><tr><td>Royalty</td><td>585</td><td>620</td><td>737</td><td>671</td><td>715</td></tr><tr><td>License 及其他</td><td>468</td><td>515</td><td>505</td><td>819</td><td>574</td></tr><tr><td>非 GAAP 營業利益率</td><td>39.1%</td><td>41.1%</td><td>40.7%</td><td>49.1%</td><td>41.2%</td></tr><tr><td>ACV</td><td>1,528</td><td>1,600</td><td>1,620</td><td>1,660</td><td>1,732</td></tr><tr><td>RPO</td><td>—</td><td>2,246</td><td>2,148</td><td>2,071</td><td>停止揭露</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：IP 與晶片是什麼、客戶為何需要</div><p><b>Royalty（權利金）</b>：客戶用 Arm 的指令集與 Neoverse／Cortex 核心設計晶片，每出貨一顆就付權利金。v9 架構與 CSS（Compute Subsystems，整合好的運算子系統）讓每顆權利金率提高，所以即使手機單位下滑，權利金仍成長。資料中心權利金本季年增逾 2 倍，是最快的來源。</p><p><b>License（授權及其他）</b>：客戶簽約取得 IP 使用權（Total Access／Flexible Access 等），收入依合約與交付時點認列，波動大；本季含 SoftBank 技術授權 $193M。</p><p><b>AGI CPU（自有矽）</b>：Arm 首次賣晶片：為代理式 AI 的主機 CPU 設計（128 核），客戶不必自己做晶片；Arm 承擔晶圓與記憶體採購，因此毛利率只有高 30%～低 40%，但毛利額更大。</p><p>⚑ 以上為公司說明與產業一般知識；Arm 未揭露各客戶別營收（除 Arm China、SoftBank）、各產品權利金率與 AGI CPU 的定價。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

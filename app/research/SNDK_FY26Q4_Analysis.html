@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandisk — FY2026 Q4 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Sandisk（SNDK）— FY2026 Q4 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／NBM 長約結構／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 5 日（FQ4 於 7/3 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q4 8-K Ex.99.1（8/5）、FY2026 10-K（8/17）、Q1–Q3 FY26 8-K、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">NBM 長約結構</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">分析師（Melius、Bernstein、MST、Goldman、Cantor、Morgan Stanley、BNP、Wells Fargo、Jefferies、BofA、Citi、Mizuho）</div></div><div class="stat-box"><div class="stat-val">13</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/5 法說會（Investing.com 完整逐字稿頁、Yahoo Finance 逐字稿頁）、同日 8-K 新聞稿、FY2026 10-K（8/17）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附原文來源連結）。全場最關鍵的結構性事實：<b>沒有人問 Flash Ventures／Kioxia 依賴、$165 億客戶財務擔保的可執行性（對照已入帳保證金與合約負債僅約 $27 億）、以及 CEO 大額賣股</b>——Form 4 顯示 CEO David Goeckeler 自 6 月起賣出約 <b>$1.05 億</b>，同期公司 Q4 回購 $45 億。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ben Reitzes（Melius Research）</div><div class="qa-topic">NBM 毛利率是否維持約 80%、回購節奏</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">NBM 的毛利率是否仍在先前提到的約 80%？回購相對市值的節奏？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO David Goeckeler：回購與近期 $60 億授權與新增 $140 億一致。CFO Luis Visoso：NBM 毛利率「約 80%」，若價格上升有上行空間。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ NBM 約 80% 低於公司整體 84.6%，而 NBM 已占未來多數位元</div><div class="q-text">公司整體 Q4 非 GAAP 毛利率 84.6%；NBM 約 80%；FY27 位元超過 50% 已簽 NBM、FY28 約 67%。假設非 NBM 位元仍賺 88–90%，混合後毛利率約落在 83–85%（與 Q1 指引 83–85% 一致）——也就是說，<b>指引的「下降」不是保守，而是 NBM 占比提高的算術結果</b>。管理層用「審慎假設」帶過。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Mark Newman（Bernstein）</div><div class="qa-topic">Q4 量價拆分、Q1 指引為何偏淡</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Q4 位元與價格各貢獻多少？Q1 指引是否偏淡？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Visoso：Q4 季增中約 1/3 來自位元、2/3 來自價格；Q1 位元與「溫和漲價」都會成長；股價下跌沒有單一原因。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 量價拆分顯示成長主要是價格：位元僅約 +15%</div><div class="q-text">營收 +51% 中以 1/3：2/3 拆分，推算位元約 +15%、價格約 +32%；而 FY27 位元成長指引只有「十幾％中高段」且庫存天數偏高。<b>營收成長仍然是價格主導</b>；若 FY27 價格漲幅趨緩，營收成長會比位元成長更快放緩。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">David Gibson（MST）</div><div class="qa-topic">NVIDIA CMX／Storage NEXT 與 HBF 時程</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">NVIDIA CMX 標準與 Storage NEXT 的機會？高頻寬快閃（HBF）樣品時程？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：推論記憶體架構有多項創新，強調與客戶共同合作而非供應商主導規格；HBF 約一年半前宣布，與客戶有深入討論，細節留給 Analyst Day，不給出貨時程。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Jim Schneider（Goldman Sachs）</div><div class="qa-topic">NBM 客戶組成、資本配置</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">未來 NBM 簽約的客戶組成（超大規模、邊緣、資料中心）？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Visoso：選擇標準是「真正重視我們產品的策略客戶」、期望五年、有成長、財務條件具吸引力；Goeckeler：<b>FY27 逾 50% 供給已承諾、FY28 約三分之二</b>；客戶一季內就回頭要求更多。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">股利還是回購？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Visoso：先投資、再維持現金、債務已清（10-K：債務為 0），之後回購；認為回購較節稅，現階段不發股利。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「客戶回頭要更多」與「供給已承諾過半」同時存在</div><div class="q-text">FY27 逾 50%、FY28 約 67% 的位元已承諾，代表剩餘可議價位元占比持續縮小；在價格仍在上漲的環境下，被 NBM 鎖定的位元占比愈高，現貨價上漲的受益就愈有限（NBM 為 floor／ceiling 結構）。管理層把它描述為「去除榮枯」，但上行空間同時被壓縮。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">CJ Muse（Cantor Fitzgerald）</div><div class="qa-topic">毛利率指引為何下降、NBM 的耐久性</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">價格上漲下毛利率指引為何降低？對 NBM 耐久性的信心來源？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：「中 80% 毛利率是合理報酬」，目標是提高能見度與耐久性、把「榮枯」去掉；客戶層級已拉到 CFO、CEO；財務擔保合計 <b>$165 億</b>；需求能見度「超過四年」。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 「合理報酬」等於公開設定毛利率天花板</div><div class="q-text">CEO 直接說 85% 左右是「合理報酬」，意味著即使現貨價續漲，公司也不打算把毛利率推得更高。這對採取 NBM 的客戶是一個價格保證，對股東是上行封頂；這句話比任何財測都更能說明公司的商業模式選擇。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Joe Moore（Morgan Stanley）</div><div class="qa-topic">資本支出增加、市佔</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">BiCS8／BiCS10 轉換下資本支出增加、能否維持市佔？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Visoso：資本支出增加反映節點轉換依序從「最容易／最便宜」到較貴，仍維持十幾％中高段位元成長；兩位主管都說要「守住細分市佔」。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Karl Ackerman（BNP Paribas）</div><div class="qa-topic">Consumer 下滑與 NBM 範圍</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Consumer 下滑是配置限制還是需求疲弱？NBM 對 Consumer 的能見度？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：消費市場節奏與交易型市場不同，很難隨企業市場同步拉升；Visoso：NBM 僅涵蓋資料中心與邊緣，不含 Consumer。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ Consumer 營收 −32% QoQ 卻被歸因「市場節奏」</div><div class="q-text">Consumer 從 $820M 降到 $556M，同期總營收 +51%；管理層把原因說成「市場不同」，不承認把有限供給配置給資料中心與邊緣（NBM 客戶優先）。與 NBM 覆蓋過半位元的事實合起來看，<b>Consumer 是被排擠的出貨</b>，不是單純需求疲弱。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Aaron Rakers／Mike Wells（Wells Fargo）</div><div class="qa-topic">供需何時匯合</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">產業供需何時趨於平衡？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：改述為「客戶與供應商之間的配對」；已走了兩大步，能見度由單季延伸到「四年以上」。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Blayne Curtis（Jefferies）</div><div class="qa-topic">毛利率指引下降的因素</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">價格上漲下毛利率指引為何下降？除 NBM 外還有何因素？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Visoso：過去五季毛利率由 22.7%（Q3 FY25）升到 84.6%（Q4 FY26，非 GAAP）；Q1 指引 83–85% 反映「對零組件成本與其他項目的審慎假設」，與 NBM 無關。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 答案否認 NBM 壓力，與 Reitzes 問題的答案相反</div><div class="q-text">同一場會議內，CFO 對 Reitzes 說 NBM 毛利率約 80%（低於整體），對 Curtis 卻說指引下降「與 NBM 無關」。兩個答案可以同時為真，但沒有說明 83–85% 中 NBM 占比提高與零組件成本各貢獻多少。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Wamsi Mohan（Bank of America）</div><div class="qa-topic">$3,000 億→$5,000 億是否假設價格正常化</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">NAND 市場由 2026 年 $3,000 億成長到 2027 年近 $5,000 億，是否假設價格正常化？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：目標是「與市場同步成長」並維持領先獲利；轉向更可預測的、有價格與期限的模式；客戶需求訊號延伸到本十年末。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Asiya Merchant（Citi）</div><div class="qa-topic">KV cache 與代理式 AI</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">KV cache 機會的演進？代理式 AI 是否改變策略？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：KV cache 討論持續成熟、依用例而定；代理式 AI 是 NAND 需求的「大乘數」；靠近客戶有助架構演進。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vijay Rakesh（Mizuho）</div><div class="qa-topic">BiCS10 與 HBF 價格溢價、成長來源</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">BiCS10、HBF 相對傳統 NAND 的價格溢價？成長來自哪裡？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Goeckeler：定價「太早談」，留給 Analyst Day；公司靠節點轉換成長，技術生產力高，可高於市場成長。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-sandisk-beats-q4-2026-forecasts-shares-slide-93CH-4839552" target="_blank" rel="noopener">Investing.com：SanDisk Q4 2026 逐字稿頁</a>；<a href="https://finance.yahoo.com/quote/SNDK/earnings/SNDK-Q4-2026-earnings_call-658567.html" target="_blank" rel="noopener">Yahoo Finance：Sandisk Q4 FY2026 earnings call transcript</a>；<a href="https://seekingalpha.com/article/4931257-sandisk-corporation-sndk-q4-2026-earnings-call-transcript" target="_blank" rel="noopener">Seeking Alpha：Sandisk Q4 2026 Earnings Call Transcript</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li>NBM 合計 <b>10 份、8 家策略客戶</b>（4 月法說會時為 5 份；本季再簽 5 份：3 份新客戶、2 份為擴大既有）</li><li>最低營收（floor 定價）<b>$939 億</b>；RPO <b>$911 億</b>（含財季後簽約）</li><li>FY27 位元 <b>&gt;50%</b>、FY28 位元約 <b>67%</b> 已由 NBM 涵蓋</li><li>NBM 毛利率「約 80%」（整體 Q4 84.6%）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>多為五年期、含成長</li><li>管理層稱需求能見度「超過四年」</li><li>客戶「一季內回頭要求更多」</li></ul></div><div class="quad-box orange"><h4>財務承諾與認列</h4><ul><li>客戶財務擔保合計 <b>$165 億</b>（10-K：用於抵銷客戶違約造成的部分營收損失，但未必能完全抵銷）</li><li>已入帳：合約負債 <b>$12.42 億</b>（客戶預付）、退還保證金（refund liabilities）<b>$15.00 億</b>（2026/7/3）</li><li>NBM 僅涵蓋資料中心與邊緣，不含 Consumer</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>$165 億擔保中 現金保證金、信用狀、母公司擔保各占多少？可執行性？</li><li>違約時 RPO 如何轉換？10-K 稱擔保「可能無法完全抵銷」</li><li>floor 與 ceiling 的具體區間；是否為共同價格帶</li><li>NBM 與現貨價格上漲的關係：客戶是否被鎖在較低價位</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">NBM 相關科目與承諾</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>金額</th><th>說明</th></tr></thead><tbody><tr><td>最低營收（floor）</td><td>$939 億</td><td class="wrap">10 份 NBM 在 floor 定價下的最低總營收</td></tr><tr><td>RPO</td><td>$911 億</td><td class="wrap">含財季後簽約</td></tr><tr><td>客戶財務擔保</td><td>$165 億</td><td class="wrap">保護 Sandisk 免於客戶違約</td></tr><tr><td>合約負債（2026/7/3）</td><td>$12.42 億</td><td class="wrap">客戶預付，主要對應長約的 RPO</td></tr><tr><td>退還保證金（refund liabilities）</td><td>$15.00 億</td><td class="wrap">客戶須維持的保證金；最終需返還</td></tr><tr><td>債務</td><td>$0</td><td class="wrap">上年同期定期貸款 $19 億已全數清償</td></tr><tr><td>Q4 回購</td><td>$45 億（2,836,000 股）</td><td class="wrap">平均約 $1,587／股；新增授權 $140 億，剩餘 $155 億</td></tr></tbody></table></div></div><div class="note yellow">⚑ 保證金與預付合計約 $27 億，對照 $165 億財務擔保與 $911 億 RPO，<b>比例極低</b>；擔保是否為信用狀、母公司擔保或其他形式，決定了 take-or-pay 的實際可執行性。這與 Micron 的 SCA 結構（$320 億承諾、已入帳 $129 億）有相同的盲點。資料來源：FY2026 10-K Liquidity 與 Revenue 附註；法說會。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Sandisk 不自建晶圓廠，產能經由 Flash Ventures（與 Kioxia 合資）取得：10-K 揭露對 Flash Ventures 的建築折舊<b>預付款餘額 $8.4 億</b>（日後抵減晶圓採購）、<b>未來承諾預付 $4.02 億</b>（FY27 $1.18 億、FY28 $1.72 億、FY29 $0.62 億、之後 $0.50 億）；另有對 Flash Ventures 設備租賃義務的擔保（風險因素：「可能影響財務狀況」）。資金來源：營運現金流 Q4 $71.3 億、自由現金流 $50.4 億、債務為零。<b>無 SPV／專案融資；Flash Ventures 的擔保屬或有負債。</b>來源：10-K。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>$165 億財務擔保的形式與可執行性？</li><li>floor 與 ceiling 價格帶下的實際毛利率區間（管理層只給 NBM 約 80%）？</li><li>FY27 位元已承諾逾 50%：剩餘現貨位元的價格敏感度？</li><li>CEO 賣股（約 $1.05 億）是否為 10b5-1 計畫？期間與回購 $45 億的時序？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>BiCS8 與 BiCS10</h4><div class="meta">FY27 資本支出約占營收 6%</div><p>BiCS8 與 BiCS10 轉換是 FY27 資本支出增加的原因；NAND 位元成長為十幾％中高段（略低於歷史，因庫存偏高）。BiCS10 已宣布，價格溢價與時程留待 Analyst Day。</p></div><div class="tech-card g"><h4>高頻寬快閃（HBF）</h4><div class="meta">樣品時程未揭露</div><p>約一年半前宣布，與客戶深入討論；公司未給出貨時程。與 NVIDIA CMX／Storage NEXT 等推論記憶體架構互補，為 KV cache 與大容量近記憶體儲存的候選。</p></div><div class="tech-card o"><h4>資料中心 SSD 與 KV cache</h4><div class="meta">Datacenter $29.8 億（+103% QoQ）</div><p>AI 推論的 KV cache 與模型資料使 NAND 成為「記憶體階層」一部分；代理式 AI 被稱為需求的「大乘數」。</p></div><div class="tech-card "><h4>NAND 市場規模</h4><div class="meta">2026 約 $3,000 億；2027 近 $5,000 億（管理層）</div><p>公司預期產業 2026 年超過 $3,000 億、2027 年接近 $5,000 億，為管理層說法；未揭露價格假設。</p></div></div><div class="note grey">⚑ 技術與市場規模數字皆為法說會說法；Sandisk 未揭露各製程節點占比與 SSD 容量結構。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 848 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="848" height="702" fill="#ffffff"/><text x="424" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Sandisk 供應鏈結構：晶圓與零組件 → 製造 → 終端市場 → 客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">晶圓與零組件來源</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">製造與封測</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">終端市場（Q4 FY26）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">客戶類型</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="178,106 178,124 328,124 328,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="434,106 434,146 434,146 434,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="690,106 690,168 540,168 540,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="434,282 434,300 324,300 324,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="434,282 434,322 434,322 434,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="434,282 434,344 544,344 544,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="272,458 272,476 108.17499999999995,476 108.17499999999995,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="434,458 434,498 315.825,498 315.825,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="434,458 434,520 373.825,520 373.825,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="272,458 272,542 585.825,542 585.825,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="596,458 596,560 643.825,560 643.825,576" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="60" y="46" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="178" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Flash Ventures（與 Kioxia …</text><text x="178" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">日本 8 座廠：四日市 6、北上 2；晶圓…</text></g><g><rect x="330" y="46" width="208" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="434" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">控制器與韌體</text><text x="434" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">自行設計；第三方晶圓廠製造或外購</text></g><g><rect x="572" y="46" width="236" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="690" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">DRAM 與其他零組件</text><text x="690" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">企業級 SSD 含 DRAM；部分為單一／少…</text></g><g><rect x="316" y="222" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="434" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">自有組裝與測試＋合約製造</text><text x="434" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K：自有組裝測試廠，策略上使用合…</text></g><g><rect x="208" y="398" width="128" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="272" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Datacenter</text><text x="272" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$2,977M（33%）</text></g><g><rect x="370" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="434" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Edge</text><text x="434" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$5,432M（61%）</text></g><g><rect x="532" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="596" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Consumer</text><text x="596" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$556M（6%）</text></g><g><rect x="96.17" y="574" width="231.65" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="212" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">NBM 策略客戶（8 家）</text><text x="212" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10 份長約；FY27 位元超過 50% 已承諾</text></g><g><rect x="361.83" y="574" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="479.83" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">OEM、雲端、通路客戶</text><text x="479.83" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">前十大占 FY26 營收 44%；無客戶逾 1…</text></g><g><rect x="631.83" y="576" width="140" height="56" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="701.83" y="608.18" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">零售與消費者通路</text></g><line x1="308.9" y1="664" x2="330.9" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="338.9" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">單一來源依賴</text><rect x="422.9" y="663" width="22" height="2.4" fill="#182456"/><text x="452.9" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">NBM 長約路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2026 10-K（2026/8/17）Item 1／1A、Q4 FY26 法說會。全部快閃記憶體晶圓來自與 Kioxia 的合資公司（Flash Ventures）；控制器多為自行設計、由第三方晶圓廠製造</div>
+</div></div></div></div><div class="note">⚑ 來源：FY2026 10-K Item 1：所有快閃晶圓來自與 Kioxia 的合資（Flash Ventures，日本 8 座廠）；控制器自行設計、第三方晶圓廠製造或外購；部分零組件為單一或少數來源；組裝測試為自有廠，策略上使用合約製造。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q4 FY26，十億美元）</div><div id="sankeyEmbed_kamhbry" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"s","label":"Sandisk Q4 FY26 營收 $89.7 億","color":"#182456"},{"id":"dc","label":"Datacenter","color":"#8f1f1f"},{"id":"ed","label":"Edge","color":"#0f6f8a"},{"id":"cn","label":"Consumer","color":"#b3760f"}],"links":[{"source":"s","target":"dc","value":2.977},{"source":"s","target":"ed","value":5.432},{"source":"s","target":"cn","value":0.556}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_kamhbry");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 終端市場為新聞稿數字；兩張圖的終端市場節點名稱一致。10-K：FY26 無客戶占營收逾 10%、前十大客戶 44%（FY25 40%）。</div></div><div class="chart-wrap"><div class="chart-title">NBM 長約金額與已入帳項目</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="340" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">NBM 長約相關金額（十億美元）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="170" y1="48" x2="170" y2="282" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="304" y1="48" x2="304" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="304" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="438" y1="48" x2="438" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="438" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="572" y1="48" x2="572" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="572" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="706" y1="48" x2="706" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="706" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">80</text><line x1="840" y1="48" x2="840" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="840" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">100 十億美元</text><line x1="170" y1="48" x2="170" y2="282" stroke="#111111" stroke-width="1.2"/><rect x="170" y="55.55" width="629.13" height="31.7" fill="#0f6f8a" rx="1" data-dim="金額"/><text x="804.13" y="74.9" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="金額">93.9</text><text x="160" y="75.4" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">最低營收（floor）</text><rect x="170" y="102.35" width="610.37" height="31.7" fill="#0f6f8a" rx="1" data-dim="金額"/><text x="785.37" y="121.7" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="金額">91.1</text><text x="160" y="122.2" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">RPO（含財季後）</text><rect x="170" y="149.15" width="110.55" height="31.7" fill="#0f6f8a" rx="1" data-dim="金額"/><text x="285.55" y="168.5" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="金額">16.5</text><text x="160" y="169" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">客戶財務擔保</text><rect x="170" y="195.95" width="10.05" height="31.7" fill="#0f6f8a" rx="1" data-dim="金額"/><text x="185.05" y="215.3" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="金額">1.50</text><text x="160" y="215.8" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">已入帳保證金</text><rect x="170" y="242.75" width="8.31" height="31.7" fill="#0f6f8a" rx="1" data-dim="金額"/><text x="183.31" y="262.1" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="金額">1.24</text><text x="160" y="262.6" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">已入帳合約負債</text><text x="22" y="328" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q4 FY26 法說會與 10-K（2026/8/17）：最低營收（floor 定價）$93.9B、RPO $91.1B（含財季後簽約）、財務擔保 $16.5B、合約負債 $1.24B、退還保證金 $1.50B</text></svg>
+</div><div class="note">⚑ 最低營收 $939 億與 RPO $911 億是合約最低承諾；已入帳保證金與預付僅 $27 億，財務擔保 $165 億。資料來源：法說會、10-K。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>晶圓來源</td><td class="wrap">全部快閃晶圓來自與 Kioxia 的 Flash Ventures（Flash Partners／Alliance／Forward），8 座日本工廠</td><td>FY2026 10-K Item 1</td></tr><tr><td>JV 預付款</td><td class="wrap">建築折舊預付款餘額 $8.4 億；未來承諾預付 $4.02 億（至 FY2035）</td><td>10-K</td></tr><tr><td>客戶集中</td><td class="wrap">無客戶逾 10%；前十大 44%（FY25 40%、FY24 41%）</td><td>10-K</td></tr><tr><td>DRAM</td><td class="wrap">企業級 SSD 含 DRAM，為商品化元件，供給曾受影響</td><td>10-K Item 1A</td></tr><tr><td>採購承諾</td><td class="wrap">未於本次抽取中取得總額；與 Flash Ventures 相關之承諾預付 $4.02 億見上；單一／少數來源元件風險</td><td>10-K</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">Flash Ventures／Kioxia 單一晶圓來源</div>10-K：全部快閃晶圓來自 Flash Ventures；合資擔保與預付款屬 Sandisk 的或有負債與長期資產；Kioxia 的決策與投資節奏同時決定 Sandisk 的供給。本季無人提問。<div class="risk-source">來源：FY2026 10-K；Q&A 缺席</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：NBM 鎖價與現貨價續漲的剪刀差</div>把分散訊息拼起來：① FY27 逾 50%、FY28 約 67% 位元已簽 NBM（floor／ceiling）；② NBM 毛利率約 80%、CEO 稱中 80% 為「合理報酬」；③ 本季營收成長 2/3 來自價格、位元僅約 +15%。若現貨價續漲，NBM 客戶不分享上漲；若現貨價回落，NBM floor 只能靠 $165 億擔保與 $27 億保證金撐住——兩邊的風險都被鎖在合約條款的可執行性上。<div class="risk-source">來源：Q&A（Reitzes、Muse、Newman）；10-K</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">客戶財務擔保的可執行性</div>擔保 $165 億 vs 已入帳保證金與預付約 $27 億；10-K 明講擔保「可能無法完全抵銷」違約造成的營收損失。<div class="risk-source">來源：10-K 風險因素；Q&A（Muse）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">Consumer 被排擠</div>Consumer 營收 −32% QoQ；NBM 僅涵蓋資料中心與邊緣。<div class="risk-source">來源：Q&A（Ackerman）；新聞稿</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出 vs 公司回購</div>Form 4：2026/6/1 起 CEO David Goeckeler 公開市場賣出約 <b>$1.05 億</b>、CTO Alper Ilkbahar 約 $1,140 萬、Bernard Shek 約 $800 萬、CFO Luis Visoso 約 $157 萬；同期公司 Q4 回購 $45 億（平均約 $1,587）。9/20 價格約 $1,792。是否為 10b5-1 計畫未逐筆核對。<div class="risk-source">來源：SEC EDGAR Form 4；新聞稿</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">毛利率封頂</div>Q1 指引 83–85%、CEO 稱中 80% 為合理報酬；未來獲利成長主要靠位元與組合。<div class="risk-source">來源：Q&A（Muse、Curtis）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">債務與流動性</div>債務為 0；Q4 營運現金流 $71.3 億、自由現金流 $50.4 億；回購授權剩餘 $155 億。<div class="risk-source">來源：10-K；新聞稿</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">NBM 毛利率約 80%</td><td class="wrap">整體 Q4 84.6%、Q1 指引 83–85%</td><td class="wrap">Q&A；新聞稿</td><td class="wrap">✓ 方向相容（NBM 占比提高壓低整體）</td></tr><tr><td class="wrap">Q4 成長 1/3 位元、2/3 價格</td><td class="wrap">營收 +51% → 位元約 +15%、價格約 +32%（推算）</td><td class="wrap">Q&A</td><td class="wrap">✓ 與營收數字相容</td></tr><tr><td class="wrap">需求能見度超過四年</td><td class="wrap">FY27 逾 50%、FY28 約 67% 位元已承諾；$911 億 RPO</td><td class="wrap">法說會</td><td class="wrap">△ 是承諾，未必是需求</td></tr><tr><td class="wrap">財務擔保合計 $165 億</td><td class="wrap">已入帳保證金 $15.0 億、合約負債 $12.4 億</td><td class="wrap">10-K</td><td class="wrap">△ 可執行性無拆解</td></tr><tr><td class="wrap">債務已清</td><td class="wrap">10-K：債務 $0（上年同期 $19 億）</td><td class="wrap">10-K</td><td class="wrap">✓ 成立</td></tr><tr><td class="wrap">（沉默）CEO 賣股 $1.05 億與 Kioxia 依賴</td><td class="wrap">Form 4；10-K Item 1</td><td class="wrap">—</td><td class="wrap">✗ 無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$89.65 億</div><div class="kpi-lbl">Q4 FY26 營收</div><div class="kpi-sub">+51% QoQ／+372% YoY</div></div><div class="kpi"><div class="kpi-val">84.6%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub">前季 78.4%（+6.2pp）</div></div><div class="kpi"><div class="kpi-val">$39.25</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">前季 $23.41；GAAP $43.97</div></div><div class="kpi"><div class="kpi-val">$50.4 億</div><div class="kpi-lbl">調整後自由現金流</div><div class="kpi-sub">營運現金流 $71.3 億</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Datacenter</div><div class="bu-abbr">企業級 SSD、AI 資料中心</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$2,977M</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+103%／（Q4 FY25 $213M）</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">33%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$5,153M（+437%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:33%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">Edge</div><div class="bu-abbr">手機、PC、車用與邊緣裝置</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$5,432M</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+48%／+392%</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">61%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$12,160M（+195%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:61%;background:#0f6f8a"></div></div></div><div class="bu-card o"><div class="bu-name">Consumer</div><div class="bu-abbr">零售記憶卡、隨身碟、外接 SSD</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$556M</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">−32%／−5%</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">6%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$2,935M（+29%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:6%;background:#b3760f"></div></div></div></div><div class="chart-wrap"><div class="chart-title">各終端市場營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">各終端市場營收 Q3 FY26 vs Q4 FY26</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q3 FY26</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q4 FY26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="363.09" width="93.76" height="92.91" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="163.12" y="357.09" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">1.47</text><rect x="212" y="267.46" width="93.76" height="188.54" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="258.88" y="261.46" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">2.98</text><text x="211" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Datacenter</text><rect x="382.24" y="224.01" width="93.76" height="231.99" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="429.12" y="218.01" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">3.66</text><rect x="478" y="111.97" width="93.76" height="344.03" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="524.88" y="105.97" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">5.43</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Edge</text><rect x="648.24" y="404.07" width="93.76" height="51.93" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="695.12" y="398.07" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">0.820</text><rect x="744" y="420.79" width="93.76" height="35.21" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="790.88" y="414.79" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">0.556</text><text x="743" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Consumer</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Sandisk Q4 FY26 新聞稿 End Market Summary（8-K Ex.99.1，2026/8/5）</text></svg>
+</div><div class="note">⚑ Edge 單季增量 $17.7 億、Datacenter $15.1 億、Consumer −$2.6 億；Datacenter 占比由 25% 升到 33%。資料來源：Sandisk 新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與毛利率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季終端市場營收與非 GAAP 毛利率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="322" x2="824" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="188" x2="824" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><text x="834" y="326" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">46.7</text><text x="834" y="192" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">73.3</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">十億美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY25</text><line x1="263" y1="456" x2="263" y2="460" stroke="#999999" stroke-width="1"/><text x="263" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY26</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY26</text><line x1="637" y1="456" x2="637" y2="460" stroke="#999999" stroke-width="1"/><text x="637" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY26</text><polyline points="76,441.73 263,437.98 450,426.52 637,357.71 824,256.54" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="441.73" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="263" cy="437.98" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="450" cy="426.52" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="637" cy="357.71" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="256.54" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,382.1 263,363.07 450,343.57 637,210.58 824,92.06" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="382.1" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="263" cy="363.07" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="450" cy="343.57" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="637" cy="210.58" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="92.06" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,416.81 263,412.32 450,395.23 637,401.06 824,418.75" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="416.81" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="263" cy="412.32" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="450" cy="395.23" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="637" cy="401.06" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="418.75" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><polyline points="263,406.25 450,299.72 637,162.54 824,131.39" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="263" cy="406.25" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="450" cy="299.72" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="637" cy="162.54" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="131.39" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><line x1="250.45" y1="40" x2="266.45" y2="40" stroke="#182456" stroke-width="2.4"/><text x="272.45" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Datacenter</text><line x1="357.7" y1="40" x2="373.7" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="379.7" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Edge</text><line x1="427" y1="40" x2="443" y2="40" stroke="#b3760f" stroke-width="2.4"/><text x="449" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Consumer</text><line x1="521.6" y1="40" x2="537.6" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="543.6" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 毛利率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Sandisk Q1–Q4 FY26 各季新聞稿；Q4 FY25 毛利率本報告未取得，留白</div>
+</div><div class="note">⚑ Datacenter 五季由 $2.1 億到 $29.8 億；非 GAAP 毛利率由 29.9% 升到 84.6%（Q1 指引 83–85%，趨平）。資料來源：Sandisk 各季新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">量價拆分（推算）</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Q4 FY26 營收成長拆分：位元 vs 價格（推算）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="320" x2="876" y2="320" stroke="#eeeeee" stroke-width="1"/><text x="68" y="324" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="184" x2="876" y2="184" stroke="#eeeeee" stroke-width="1"/><text x="68" y="188" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60 %</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="109.2" width="189.52" height="346.8" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="211" y="103.2" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">51</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">營收</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">QoQ</text><rect x="382.24" y="354" width="189.52" height="102" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="477" y="348" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">15</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">位元</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">QoQ（推算）</text><rect x="648.24" y="238.4" width="189.52" height="217.6" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="743" y="232.4" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">32</text><text x="743" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">價格</text><text x="743" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">QoQ（推算）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：CFO 說明（Q4 季增 51% 中約 1/3 來自位元、2/3 來自價格）；以對數比例推算位元約 +15%、價格約 +32%，為近似值</text></svg>
+</div><div class="note">⚑ 營收 +51% 中位元約 +15%、價格約 +32%；Q1 指引營收 $103–108 億（中位 +18%）已預告成長放緩。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q4 FY25</th><th>Q1 FY26</th><th>Q2 FY26</th><th>Q3 FY26</th><th>Q4 FY26</th></tr></thead><tbody><tr><td>總營收</td><td>1,901</td><td>2,308</td><td>3,025</td><td>5,950</td><td>8,965</td></tr><tr><td>Datacenter</td><td>213</td><td>269</td><td>440</td><td>1,467</td><td>2,977</td></tr><tr><td>Edge</td><td>1,103</td><td>1,387</td><td>1,678</td><td>3,663</td><td>5,432</td></tr><tr><td>Consumer</td><td>585</td><td>652</td><td>907</td><td>820</td><td>556</td></tr><tr><td>非 GAAP 毛利率</td><td>—</td><td>29.9%</td><td>51.1%</td><td>78.4%</td><td>84.6%</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：NAND 是什麼、為何客戶一定要買</div><p><b>Datacenter</b>：資料中心的固態硬碟（SSD）以快閃記憶體取代硬碟，用於 AI 訓練資料、模型權重與推論時的 KV cache；密度愈高、每 TB 功耗愈低，客戶愈需要簽長約確保供給。</p><p><b>Edge</b>：手機的嵌入式儲存、PC 與筆電 SSD、車用與邊緣裝置。端側 AI 使每台裝置所需容量上升，但整機漲價可能壓抑單位數。</p><p><b>Consumer</b>：零售通路的記憶卡、隨身碟與外接 SSD；價格敏感、節奏慢，本季被配置給 NBM 客戶的供給擠壓。</p><p>⚑ 以上為產業一般知識與公司說法；Sandisk 未揭露各市場的位元占比與 ASP。FY2026 10-K 已於 8/17 申報，客戶集中度與承諾資訊見供應鏈分頁。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

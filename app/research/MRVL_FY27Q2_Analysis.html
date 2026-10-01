@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marvell Technology — FY2027 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Marvell Technology（MRVL）— FY2027 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／Google 認股權證與稀釋／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 27 日（FQ2 於 8/1 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：FQ2'27 8-K Ex.99.1、FQ2'27／FQ1'27 Form 10-Q、Google 認股權證 8-K（8/19）、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">Google 認股權證與稀釋</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">分析師（Barclays、JPMorgan、BofA、Wells Fargo、Morgan Stanley、Melius、Cantor、Goldman、Needham）</div></div><div class="stat-box"><div class="stat-val">11</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/27 法說會（Yahoo Finance 逐字稿與摘要頁）、同日 8-K 新聞稿、Google 認股權證 8-K（2026/8/19）、FQ2'27 10-Q（8/28）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附原文來源連結）。全場最關鍵的結構性事實：<b>管理層與三位分析師都把 Google 協議當成「約 $1,200 億／6.5 年」的營收機會</b>，但 8-K 寫明認股權證的歸屬是「<b>由 Google 自行決定的採購</b>」每 $5 億客製產品營收歸屬一批（共 240 批）——這是歸屬<b>上限</b>，不是 Google 的購買承諾；另外，沒有人問認股權證的會計處理（是否列為營收減項）與稀釋（約 6.4%）。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Tom O'Malley（Barclays）</div><div class="qa-topic">Google 協議的產品組合</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Google 協議的貢獻中，推論加速器與 XPU attach 產品各占多少？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Matt Murphy：協議「非常廣泛」，涵蓋推論加速器、儲存控制器、網路卡、記憶體控制器與近記憶體運算；XPU attach 機會愈來愈大；不拆分各產品，投資人日（10/6）再說明。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 產品別占比刻意延到 10 月 6 日投資人日</div><div class="q-text">管理層同時把 Google 營收納入 FY2028 指引，卻拒絕說明構成。投資人只能在 10/6 之後才能驗證 FY28 $180 億中客製矽的比重——這是指引上調 $15 億的核心依據。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Harlan Sur（JPMorgan）</div><div class="qa-topic">Google 數學、FY29 客製營收目標</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">$1,200 億／6.5 年約 $185 億／年，為何不在 FY28 顯現？FY29 的客製目標（先前 $100–110 億）改為多少？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：大部分已涵蓋在明年（FY28）指引中，因為專案已進行；「大影響在 FY29 之後」；客製營收明年將「超過一倍」；先前 FY29 $100 億以上的目標「不是新數字」（2025 年 6 月提出）；認股權證「大幅增加客製營收機會」，部分可能從 FY29 起；詳細區間投資人日公布。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ FY28 指引已含 Google，卻說 Google 的大影響在 FY29 以後</div><div class="q-text">兩句話同時成立的唯一方式，是 FY28 只含 Google 已進行中的專案（8-K：歸屬從 FQ3 FY27 起算、每 $5 億一批）。這意味著 $1,200 億是 <b>FY27–FY33 累計、每批以實際營收達成才歸屬</b>；若 Google 的實際採購低於上限，認股權證只會部分歸屬——對 Marvell 是自然的保險，但<b>也不構成採購保證</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Vivek Arya（BofA Securities）</div><div class="qa-topic">「另一個大型 XPU 專案」</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">明年將開始的另一個大型 XPU 專案（市場假設 $6–7 億）進度？能否變得很大？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：對明年客製「非常鼓舞」；設計執行與供應商務每季都有進展。FY28 上調的 $15 億中，客製有一部分，但<b>最大部分來自 scale-up 光互連與交換</b>；該專案仍是公司最大的營收機會之一。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ FY28 上調 $15 億的大頭其實不是客製矽</div><div class="q-text">Arya 問的是 XPU，Murphy 的答案是「最大部分是 scale-up 光學與交換」，連同 $1.5B 中 $1.5 億明確歸因於 scale-up 光與交換。也就是說，本季股價敘事的核心（Google／客製）對 FY28 指引的實際貢獻低於敘事強度。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Aaron Rakers（Wells Fargo）</div><div class="qa-topic">CXL 與 scale-up 光學進度</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">CXL（Structera）採用進度；scale-up 光學（含 Celestial AI）相對原目標？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：CXL 投資是「全壘打」，在多家超大規模客戶以極高量使用；記憶體稀缺使部署增加；近幾季取得更多設計導入。scale-up 光學先前的 CPO（Celestial）約 $1.5 億、整體約 $3 億（含 NPO）的 FY28 目標，現在「加速得更多」，是 $15 億上調的重要來源；NPO 與 CPO 是「and」不是「or」。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 目標被「加速超越」卻不給新數字</div><div class="q-text">FY28 scale-up 光學由 $1.5 億／$3 億上修，但管理層只說「顯著加速」，且 FY28 上調 $15 億中有 $1.5 億明確屬 scale-up 光與交換。Celestial AI 的或有對價公允價值本季又增加 $1.02 億（GAAP 費用），這代表市場價值上升，但營收端沒有獨立的量化。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Joseph Moore（Morgan Stanley）</div><div class="qa-topic">銅線 scale-up 到光學的延伸</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">三種協定下銅線 scale-up 的進展，如何轉化為光學？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：Teralynx（Innovium 2021 年收購）以乙太網路為基礎，客戶與量都已驗證；UAL 獲積極投資；客戶需要「可信的光學路線」（NPO 與 CPO 完整整合）；「點解決方案做不到，必須端到端」；光學附加「幾乎讓交換的 SAM 加倍」。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ben Reitzes（Melius）</div><div class="qa-topic">Google 協議的 FY29–30 步升與毛利率</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">$1,200 億／6.5 年等於每年約 $180 億，相當於再加一個 FY28 的 Marvell。FY29–30 大幅跳升？毛利率相當嗎？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：「你的算術沒錯」；因大部分已納入 FY28 指引，大影響在 FY29 之後；客製將「遠大於任何人現在的建模」；毛利率與現有客製財務模型「一致」；FY29 以後客製數字「肯定更高」，區間投資人日公布。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 管理層確認了一個與 8-K 不完全相同的算術</div><div class="q-text">「$1,200 億」＝240 批 × 每批 $5 億的歸屬上限（8-K）。把它當成年均 $180 億的營收，等於假設 Google 的客製採購達到最大歸屬；8-K 寫的是「由 Google 自行決定的採購」。管理層對「你的算術沒錯」沒有加註「這是上限」。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">CJ Muse（Cantor Fitzgerald）</div><div class="qa-topic">NVIDIA 的可替代性論述與 Marvell 廣度</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">在成本受限的 AI 部署下，Marvell 在運算、網路、記憶體三面的廣度如何支撐設計導入？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：同意 NVIDIA 的框架；能快速執行客製、因應架構變化是優勢；客製化橫跨網路各跳，不只加速器；CXL、推論加速器是趨勢；不只客製營收，還有網路、儲存、記憶體、運算。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Jim Schneider（Goldman Sachs）</div><div class="qa-topic">連線（connectivity）成長與 $15 億上調來源</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">連線成長率相對先前展望如何？$15 億上調多少來自連線子領域？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：連線是重要驅動，含 scale-up 光學（NPO／CPO／SiGe）、scale-out 光學 DSP、交換（今年與明年都「偏高」）；三個子類加客製「全部上調」；連線大概是 $15 億上調的最大驅動（scale-out＋scale-up＋交換合計）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Quinn Bolton（Needham）</div><div class="qa-topic">FQ3 毛利率下降與組合</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">FQ3 資料中心指引季增逾 20%、毛利率中位下降約 90bps，是什麼組合效果？客製是否最快？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Murphy：FQ3 指引偏強，意味 FQ4 更強；客製下半年大幅放量。CFO Daniel Durn：<b>組合是主要原因</b>；FQ4 毛利率在與 FQ3 相同範圍；FY28 毛利率在相似範圍；營業利益率將在今年底進入 38%–40% 長期模型，FY28 達高端。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 毛利率不再擴張，營業利益率才是成長故事</div><div class="q-text">非 GAAP 毛利率 FQ2 58.9%（持平於 FQ1）、FQ3 指引 57.5–58.5%、FQ4 與 FQ3 同範圍、FY28 相似——客製放量使毛利率停在 58% 附近，營業利益率改善靠營業費用槓桿（FY27 約 $25.5 億、成長慢於營收）。若客製營收再占比提高，毛利率可能低於 58%。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://finance.yahoo.com/markets/stocks/articles/marvell-mrvl-q2-2027-earnings-132154654.html" target="_blank" rel="noopener">Yahoo Finance：Marvell Q2 FY2027 Earnings Call Transcript</a>；<a href="https://seekingalpha.com/article/4941035-marvell-technology-inc-mrvl-q2-2027-earnings-call-transcript" target="_blank" rel="noopener">Seeking Alpha：Marvell Q2 2027 Earnings Call Transcript</a>；<a href="https://www.sec.gov/Archives/edgar/data/0001835632/000183563226000022/q227_8kx812026ex-991.htm" target="_blank" rel="noopener">SEC 8-K Ex.99.1：Marvell Q2 FY27 新聞稿</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li>Google 認股權證：<b>58,970,907 股</b>、履約價 <b>$206.58</b>（約為 FQ3 稀釋股數 9.21 億的 <b>6.4%</b>）</li><li>歸屬上限：每 $5 億客製產品營收歸屬 1 批，共 240 批＝<b>$1,200 億</b></li><li>NVIDIA Series A 可轉換優先股 <b>$20 億</b>（2026/3/31），轉換價約 $91.84，推算約 2,178 萬股</li><li>Celestial AI（$35 億）與 XConn（$4.69 億）收購已於 2026/2 完成</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>Google 商業協議簽於 2026/7/29，認股權證 2026/8/18 發行，可行使至 <b>2033/8/18</b></li><li>歸屬期：FQ3 FY27 至 FY2033 年底（約 6.5 年）</li><li>時間型部分 1,360,867 股：協議後第一年每季等額歸屬</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>FY27 營收指引 ~$120 億、FY28 ~$180 億（各上調 $5 億、$15 億）</li><li>10-Q（8/1）早於認股權證發行日，<b>認股權證的會計處理與費用尚未入帳</b></li><li>若全部行使，Google 付 <b>約 $121.8 億</b>（58.97M × $206.58）；與每批 $5 億營收對應的是一筆價內期權</li><li>GAAP 淨利 $308M vs 非 GAAP $866M：SBC $326M、收購攤銷 $215M、或有對價公允價值 +$102M</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>Google 實際採購金額是否達最大歸屬？8-K 說明是「自行決定的採購」</li><li>認股權證公允價值是否列為營收減項（如同其他客戶認股權證）？對毛利率的影響？</li><li>NVIDIA 優先股轉換後的稀釋與 NVLink Fusion／光學合作的商業條件</li><li>Celestial AI 或有對價（earn-out）未來還會增加多少 GAAP 費用</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">稀釋與資本事件彙整</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>Google 認股權證</td><td>58,970,907 股 @ $206.58</td><td class="wrap">時間型 1,360,867 股；其餘 240 批依營收歸屬</td></tr><tr><td>NVIDIA Series A 優先股</td><td>$20 億；轉換價約 $91.84</td><td class="wrap">自 2026/3/31 起；分紅以普通股轉換後基礎計</td></tr><tr><td>FQ3 預期稀釋股數</td><td>921 百萬股</td><td class="wrap">新聞稿指引</td></tr><tr><td>Celestial AI 或有對價公允價值變動</td><td>FQ2 +$101.9M；上半年 +$433.7M</td><td class="wrap">10-Q 現金流量表（非現金）</td></tr><tr><td>商譽</td><td>$13,874M（1/31：$11,062M）</td><td class="wrap">上半年收購增加 $28.1 億</td></tr><tr><td>預計股票回購</td><td>$200M（FQ2）</td><td class="wrap">管理稀釋</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>為何這個結構對 Marvell 較有利，但對投資人並非中性</b>：認股權證的歸屬與客戶實際採購連動，Google 買得愈多歸屬愈多——客戶以「買 $5 億產品換取一批可用 $206.58 買進的股票」。對 Marvell，這是把部分價格讓利轉成股權稀釋、換取多年期客製專案；對投資人，需要同時追蹤營收（歸屬進度）與稀釋（約 6.4% 加上 NVIDIA 優先股約 2.4%）。資料來源：8-K（2026/8/19）；FQ2'27 10-Q。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Marvell 為無晶圓廠公司，<b>無資料中心專案融資結構</b>；10-Q 揭露三類承諾：晶圓代工與測試封裝夥伴不可取消承諾 <b>$85.2 億</b>（FY27 剩餘 $18.3 億，FY28–FY30 各約 $21–22 億）、技術服務與授權費 $6.7 億、資本支出承諾 $3.5 億；FY27 計畫<b>約 $10 億產能預留預付款</b>。資金來源為自有營運現金流（FQ2 $606M）與債務（長期債務 $49.6 億，1/31 為 $39.7 億＋短期債務 $5.0 億已償還）。<b>無 SPV／表外租賃揭露。</b>來源：FQ2'27 10-Q Note 9、法說會。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>Google 認股權證是否列為營收減項？FQ3 起每批 $5 億營收對應多少費用？</li><li>$1,200 億的歸屬上限，實際 FY27–FY29 預期歸屬多少批？</li><li>NVIDIA 優先股的轉換與贖回條款，是否與 NVLink Fusion／光學合作的採購量掛鉤？</li><li>約 $10 億產能預留預付款，是專案專用還是通用？取消時是否損失預付金？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>客製矽（XPU）與 attach</h4><div class="meta">Google TPU 生態系</div><p>推論加速器、儲存控制器、網路卡、記憶體控制器與近記憶體運算；客製營收 FY28 預期「超過一倍」；先前 FY29 目標 $100 億以上，細節 10/6 投資人日公布。</p></div><div class="tech-card g"><h4>光互連（scale-out 與 scale-up）</h4><div class="meta">800G 強勁、1.6T 快速放量；NPO、CPO</div><p>光學 DSP 800G／1.6T、寬頻類比 TIA／driver；Celestial AI 的 Photonic Fabric 用於 CPO；scale-up 光學（NPO＋CPO＋SiGe）顯著加速。</p></div><div class="tech-card o"><h4>交換（Teralynx）與 scale-up 協定</h4><div class="meta">51.2T FY27 翻倍以上；UAL、ESUN、NVLink Fusion</div><p>三種 scale-up 協定皆支援；交換偏高成長；管理層稱光學附加使交換 SAM 近乎加倍。</p></div><div class="tech-card "><h4>CXL（Structera）</h4><div class="meta">多家超大規模客戶、極高量</div><p>記憶體稀缺使 CXL 記憶體擴充與推論用量增加；近兩季新增設計導入。</p></div></div><div class="note grey">⚑ 技術論述來自法說會；各產品線營收金額（光學、交換、客製、CXL）管理層只給成長方向，不給金額。10/6 投資人日預計提供客製區間與長期財務模型。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈與客戶結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1100.4 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1100.4" height="702" fill="#ffffff"/><text x="550.2" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Marvell 供應鏈結構：製造夥伴 → 產品 → 終端市場 → 通路與客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">代工與後段夥伴</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">產品線</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">終端市場（FQ2'27）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">通路與客戶</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="425.2,106 425.2,124 72,124 72,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="425.2,106 425.2,146 342,146 342,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="425.2,106 425.2,168 612,168 612,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="425.2,106 425.2,190 882,190 882,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="671.85,106 671.85,208 554,208 554,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="671.85,106 671.85,208 284,208 284,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="178,282 178,300 386.09999999999997,300 386.09999999999997,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="448,282 448,322 438.09999999999997,322 438.09999999999997,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="718,282 718,344 490.09999999999997,344 490.09999999999997,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="965.2,282 965.2,366 734.3,366 734.3,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="438.09999999999997,458 438.09999999999997,476 253.925,476 253.925,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="438.09999999999997,458 438.09999999999997,498 438.09999999999997,498 438.09999999999997,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="438.09999999999997,458 438.09999999999997,520 654.475,520 654.475,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="641.1999999999999,458 641.1999999999999,542 375.225,542 375.225,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="330.55" y="46" width="189.3" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="425.2" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">晶圓代工夥伴</text><text x="425.2" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">未點名；$85.2 億不可取消承諾</text></g><g><rect x="553.85" y="46" width="236" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="671.85" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">測試與封裝夥伴</text><text x="671.85" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">含產能預留付款（FY27 計畫預付約 $10…</text></g><g><rect x="60" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="178" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">客製矽（XPU／XPU attach）</text><text x="178" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Google TPU 生態系：推論加速器、儲…</text></g><g><rect x="330" y="222" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="448" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">光互連</text><text x="448" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">光學 DSP（800G／1.6T）、TIA／driv…</text></g><g><rect x="600" y="222" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="718" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">交換與 CXL</text><text x="718" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Teralynx 51.2T、UAL／ESUN／NVLink…</text></g><g><rect x="870" y="222" width="190.4" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="965.2" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">企業網路與電信基礎設施</text><text x="965.2" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">車用乙太網路已於 2025/8 出售</text></g><g><rect x="374.1" y="398" width="128" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="438.1" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Data center</text><text x="438.1" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$2,171.5M（79%）</text></g><g><rect x="536.1" y="398" width="210.2" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="641.2" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Communications and other</text><text x="641.2" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$567.8M（21%）</text></g><g><rect x="241.93" y="574" width="145.3" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="314.58" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Distributor A</text><text x="314.58" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">占營收 44%（6 個月）</text></g><g><rect x="421.23" y="574" width="187.25" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="514.85" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer A（直接客戶）</text><text x="514.85" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">占營收 16%</text></g><g><rect x="642.48" y="574" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="760.48" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Google（客製矽夥伴）</text><text x="760.48" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">認股權證 58,970,907 股，履約價 $20…</text></g><line x1="421.63" y1="664" x2="443.63" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="451.63" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">供給與客戶依賴</text><rect x="546.63" y="663" width="22" height="2.4" fill="#182456"/><text x="576.63" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI 資料中心路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FQ2&#39;27 10-Q（Concentrations、Commitments）、新聞稿（end market 分類）、8-K（Google 商業協議）。晶圓代工夥伴 10-Q 未點名；Marvell 為無晶圓廠</div>
+</div></div></div></div><div class="note">⚑ 10-Q 不點名晶圓代工夥伴，故圖中以「晶圓代工夥伴」表示；通路集中：Distributor A 占營收 44%（上半年 45%）。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（FQ2'27，十億美元）</div><div id="sankeyEmbed_q7y3sbu" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"m","label":"Marvell FQ2'27 營收 $27.39 億","color":"#182456"},{"id":"dc","label":"Data center","color":"#8f1f1f"},{"id":"cm","label":"Communications and other","color":"#0f6f8a"}],"links":[{"source":"m","target":"dc","value":2.1715},{"source":"m","target":"cm","value":0.5678}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_q7y3sbu");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 終端市場為新聞稿數字；Distributor A（占營收 44%）與 Customer A（16%）的終端市場別 10-Q 未揭露，故不往下拆分。與上圖終端市場節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">採購承諾（依年度）</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">不可取消採購承諾：晶圓代工、測試與封裝夥伴</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="374.4" x2="876" y2="374.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="378.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.500</text><line x1="78" y1="292.8" x2="876" y2="292.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="296.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="78" y1="211.2" x2="876" y2="211.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="215.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1.50</text><line x1="78" y1="129.6" x2="876" y2="129.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="133.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2.50 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="97.62" y="157.34" width="93.76" height="298.66" fill="#0f6f8a" rx="1" data-dim="代工與測試封裝"/><text x="144.5" y="151.34" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="代工與測試封裝">1.83</text><text x="144.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FY27</text><text x="144.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">剩餘</text><rect x="230.62" y="108.38" width="93.76" height="347.62" fill="#0f6f8a" rx="1" data-dim="代工與測試封裝"/><text x="277.5" y="102.38" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="代工與測試封裝">2.13</text><text x="277.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY28</text><rect x="363.62" y="100.22" width="93.76" height="355.78" fill="#0f6f8a" rx="1" data-dim="代工與測試封裝"/><text x="410.5" y="94.22" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="代工與測試封裝">2.18</text><text x="410.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY29</text><rect x="496.62" y="96.96" width="93.76" height="359.04" fill="#0f6f8a" rx="1" data-dim="代工與測試封裝"/><text x="543.5" y="90.96" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="代工與測試封裝">2.20</text><text x="543.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY30</text><rect x="629.62" y="444.58" width="93.76" height="11.42" fill="#0f6f8a" rx="1" data-dim="代工與測試封裝"/><text x="676.5" y="438.58" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="代工與測試封裝">0.070</text><text x="676.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">FY31</text><rect x="762.62" y="436.42" width="93.76" height="19.58" fill="#0f6f8a" rx="1" data-dim="代工與測試封裝"/><text x="809.5" y="430.42" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="代工與測試封裝">0.120</text><text x="809.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">之後</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Marvell FQ2'27 10-Q Note 9（截至 2026/8/1，合計 $85.2 億；另有技術服務與授權費 $6.7 億、資本支出承諾 $3.5 億）</text></svg>
+</div><div class="note">⚑ 不可取消承諾 $85.2 億集中在 FY27–FY30；FY28 以後每年約 $21–22 億，意味 Marvell 已把未來四年的晶圓與測試產能預先鎖定。資料來源：FQ2'27 10-Q Note 9。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>通路集中</td><td class="wrap">Distributor A 占營收 44%（FQ2'26 為 34%）；Customer A 16%（連續兩年）</td><td>FQ2'27 10-Q</td></tr><tr><td>承諾</td><td class="wrap">晶圓代工與測試封裝 $85.2 億；技術服務／授權費 $6.7 億；資本支出 $3.5 億</td><td>10-Q Note 9</td></tr><tr><td>預付款</td><td class="wrap">FY27 計畫約 $10 億產能預留預付款</td><td>法說會（CFO）</td></tr><tr><td>資產</td><td class="wrap">存貨 $13.6 億（1/31：$13.9 億）；商譽 $138.7 億</td><td>10-Q 資產負債表</td></tr><tr><td>出售</td><td class="wrap">車用乙太網路業務已於 2025/8/14 出售</td><td>新聞稿 end-market 註記</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">Google 認股權證是「歸屬上限」而非「採購承諾」</div>8-K 寫明歸屬依 Google 自行決定的採購、每 $5 億客製營收歸屬 1 批；管理層與三位分析師把 $1,200 億視為營收機會；若實際採購遠低於上限，營收與稀釋同時小於敘事。<div class="risk-source">來源：8-K（2026/8/19）；Q&A（Sur、Reitzes）</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：稀釋與 GAAP 費用同時在 FQ3 起進帳</div>把分散訊息拼起來：① 10-Q 早於 8/18 認股權證發行，FQ3 起才會有 Google 認股權證的公允價值費用；② NVIDIA 優先股本季已加入稀釋股數（推算約 2,178 萬股）；③ Celestial AI 或有對價仍在逐季增加費用（FQ2 +$102M）。三者疊加使 GAAP 與非 GAAP 的差距（FQ2：$308M vs $866M）在 FQ3 可能繼續擴大，而管理層的指引（GAAP EPS $0.53 vs 非 GAAP $1.10）已預告這個差距。<div class="risk-source">來源：8-K；10-Q；FQ3 指引</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">毛利率不再擴張</div>非 GAAP 毛利率 58.9%→FQ3 指引 57.5–58.5%、FQ4 同範圍、FY28 相似；客製占比提高使毛利率可能下探。<div class="risk-source">來源：Q&A（Bolton）；新聞稿</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">通路與客戶集中</div>Distributor A 占營收 44%、Customer A 16%；Distributor A 的終端客戶未揭露。<div class="risk-source">來源：FQ2'27 10-Q</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">承諾與預付款</div>不可取消承諾 $85.2 億 ＋ FY27 約 $10 億預付；若 AI 需求放緩，需付全部已發生成本且可能損失預付款與優先權。<div class="risk-source">來源：10-Q Note 9</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出</div>Form 4：2026/6/1 起 President &amp; COO Chris Koopmans 公開市場賣出約 <b>$871 萬</b>（9/1 10,000 股＠$203.27）、Chairman &amp; CEO Matt Murphy 約 <b>$726 萬</b>（含 8/17、9/15 各 7,500 股）、Sandeep Bharathi 約 $246 萬、CFO Daniel Durn 約 $63 萬；價格約 $203–236。是否為 10b5-1 計畫未逐筆核對。<div class="risk-source">來源：SEC EDGAR Form 4（2026/6/1–10/1）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">債務與流動性</div>長期債務 $49.6 億、現金 $39.3 億；淨債務／EBITDA 0.27 倍；FQ2 營運現金流 $606M（預付款較高）。<div class="risk-source">來源：10-Q；CFO 說明</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">Google 協議約 $1,200 億／6.5 年</td><td class="wrap">8-K：240 批 × $5 億的歸屬上限，採購由 Google 自行決定</td><td class="wrap">8-K 2026/8/19</td><td class="wrap">△ 上限而非承諾</td></tr><tr><td class="wrap">FY28 指引已含 Google 專案</td><td class="wrap">歸屬從 FQ3 FY27 起算；FY29 起大影響</td><td class="wrap">Q&A（Sur）</td><td class="wrap">✓ 與 8-K 時程相容</td></tr><tr><td class="wrap">連線是 $15 億上調的最大驅動</td><td class="wrap">FY28 上調中 $1.5 億明確屬 scale-up 光與交換；其餘未拆分</td><td class="wrap">法說會</td><td class="wrap">△ 無拆分數字</td></tr><tr><td class="wrap">營業利益率 FQ4 進入 38–40%</td><td class="wrap">FQ2 36.6%；FQ3 指引：營業費用 ~$655M／毛利率 ~58%／營收 $31.5 億 → 約 37%</td><td class="wrap">新聞稿指引推算</td><td class="wrap">✓ 方向吻合</td></tr><tr><td class="wrap">晶圓代工預付款 FY27 約 $10 億</td><td class="wrap">不可取消承諾 $85.2 億；FQ2 營運現金流受預付款拖累</td><td class="wrap">10-Q；CFO</td><td class="wrap">✓ 一致</td></tr><tr><td class="wrap">（沉默）認股權證會計與稀釋</td><td class="wrap">約 6.4% 稀釋；FQ3 起費用；NVIDIA 優先股約 2.4%</td><td class="wrap">8-K；10-Q</td><td class="wrap">✗ 9 位分析師無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$27.39 億</div><div class="kpi-lbl">FQ2'27 營收</div><div class="kpi-sub">+13% QoQ／+37% YoY</div></div><div class="kpi"><div class="kpi-val">58.9%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub">與前季持平</div></div><div class="kpi"><div class="kpi-val">$0.94</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP $0.33</div></div><div class="kpi"><div class="kpi-val">$31.5 億</div><div class="kpi-lbl">FQ3 營收指引中位</div><div class="kpi-sub">+15% QoQ／+50%+ YoY</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Data center</div><div class="bu-abbr">客製矽、光互連、交換、CXL</div><div class="bu-stat"><span class="bu-stat-lbl">FQ2'27 營收</span><span class="bu-stat-val">$2,171.5M</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+18%／+46%</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">79%（FQ1 76%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY27 預期</span><span class="bu-stat-val">成長約 60%</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:79%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">Communications and other</div><div class="bu-abbr">企業網路、電信基礎設施、其他</div><div class="bu-stat"><span class="bu-stat-lbl">FQ2'27 營收</span><span class="bu-stat-val">$567.8M</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">−3%／+10%</span></div><div class="bu-stat"><span class="bu-stat-lbl">占比</span><span class="bu-stat-val">21%</span></div><div class="bu-stat"><span class="bu-stat-lbl">備註</span><span class="bu-stat-val">車用乙太網路已出售</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:21%;background:#0f6f8a"></div></div></div></div><div class="chart-wrap"><div class="chart-title">終端市場營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">終端市場營收 FQ1'27 vs FQ2'27</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">FQ1'27</text><rect x="101.95" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="119.95" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">FQ2'27</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="380" x2="876" y2="380" stroke="#eeeeee" stroke-width="1"/><text x="68" y="384" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.500</text><line x1="78" y1="304" x2="876" y2="304" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="78" y1="228" x2="876" y2="228" stroke="#eeeeee" stroke-width="1"/><text x="68" y="232" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1.50</text><line x1="78" y1="152" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="68" y="156" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2.50 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="177.38" width="141.64" height="278.62" fill="#57a0cf" rx="1" data-dim="FQ1'27"/><text x="205.68" y="171.38" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FQ1'27">1.83</text><rect x="278.5" y="125.86" width="141.64" height="330.14" fill="#182456" rx="1" data-dim="FQ2'27"/><text x="349.32" y="119.86" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FQ2'27">2.17</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Data</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">center</text><rect x="533.86" y="367.08" width="141.64" height="88.92" fill="#57a0cf" rx="1" data-dim="FQ1'27"/><text x="604.68" y="361.08" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FQ1'27">0.585</text><rect x="677.5" y="369.66" width="141.64" height="86.34" fill="#182456" rx="1" data-dim="FQ2'27"/><text x="748.32" y="363.66" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FQ2'27">0.568</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Communications and</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">other</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Marvell FQ2'27 新聞稿 Revenue by End Market（8-K Ex.99.1，2026/8/27）</text></svg>
+</div><div class="note">⚑ Data center 單季增量 $3.39 億，占整體增量 $3.21 億的 105%（Communications and other 小幅下降）。資料來源：Marvell 新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與毛利率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季終端市場營收與非 GAAP 毛利率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0.500</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1.50</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2.50</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">58.9</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">59</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">59.1</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">59.2</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">59.3</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">59.4</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">十億美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FQ2'26</text><line x1="263" y1="456" x2="263" y2="460" stroke="#999999" stroke-width="1"/><text x="263" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FQ3'26</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FQ4'26</text><line x1="637" y1="456" x2="637" y2="460" stroke="#999999" stroke-width="1"/><text x="637" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FQ1'27</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">FQ2'27</text><polyline points="76,216.25 263,211.91 450,190.52 637,161.25 824,106.74" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="216.25" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="263" cy="211.91" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="450" cy="190.52" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="637" cy="161.25" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="106.74" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,373.03 263,366.43 450,364.83 637,361.93 824,364.67" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="373.03" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="263" cy="366.43" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="450" cy="364.83" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="637" cy="361.93" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="364.67" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="637,456 824,456" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="54" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="637" cy="456" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="456" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><line x1="231.34" y1="40" x2="247.34" y2="40" stroke="#182456" stroke-width="2.4"/><text x="253.34" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Data center</text><line x1="344.91" y1="40" x2="360.91" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="366.91" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Communications and other</text><line x1="540.71" y1="40" x2="556.71" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="562.71" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 毛利率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Marvell FQ2&#39;26～FQ2&#39;27 各季新聞稿；毛利率僅取得 FQ2&#39;26／FQ1&#39;27／FQ2&#39;27，其餘留白（不補 0）</div>
+</div><div class="note">⚑ Data center 五季由 $14.9 億到 $21.7 億（+46%）；Communications and other 在 $5.2–5.9 億間窄幅波動。非 GAAP 毛利率 59.4%→58.9%→58.9%，FQ3 指引 57.5–58.5%。</div></div><div class="chart-wrap"><div class="chart-title">新增稀釋來源</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">新增稀釋來源（百萬股）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="320" x2="876" y2="320" stroke="#eeeeee" stroke-width="1"/><text x="68" y="324" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="184" x2="876" y2="184" stroke="#eeeeee" stroke-width="1"/><text x="68" y="188" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60 百萬股</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="55" width="285.28" height="401" fill="#8f1f1f" rx="1" data-dim="股數"/><text x="277.5" y="49" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="股數">59.0</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Google</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">認股權證</text><rect x="533.86" y="307.9" width="285.28" height="148.1" fill="#8f1f1f" rx="1" data-dim="股數"/><text x="676.5" y="301.9" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="股數">21.8</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">NVIDIA</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">優先股（推算）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Google 認股權證 8-K（2026/8/19）：58,970,907 股，履約價 $206.58；NVIDIA Series A 優先股 $20 億，轉換價約 $91.84（推算約 2,178 萬股）；對照 FQ3 指引稀釋股數 9.21 億股</text></svg>
+</div><div class="note">⚑ Google 認股權證（約 5,897 萬股）與 NVIDIA 優先股（推算約 2,178 萬股）合計約 8,075 萬股，約占 FQ3 稀釋股數 9.21 億股的 8.8%（尚未含 Celestial AI／XConn 相關股票發行）。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>FQ2'26</th><th>FQ3'26</th><th>FQ4'26</th><th>FQ1'27</th><th>FQ2'27</th></tr></thead><tbody><tr><td>總營收</td><td>2,006.1</td><td>2,074.5</td><td>2,218.7</td><td>2,417.8</td><td>2,739.3</td></tr><tr><td>Data center</td><td>1,490.5</td><td>1,517.9</td><td>1,651.3</td><td>1,832.7</td><td>2,171.5</td></tr><tr><td>Communications and other</td><td>515.6</td><td>556.6</td><td>567.4</td><td>585.1</td><td>567.8</td></tr><tr><td>Data center 占比</td><td>74%</td><td>73%</td><td>74%</td><td>76%</td><td>79%</td></tr><tr><td>非 GAAP 營業利益</td><td>698.8</td><td>—</td><td>—</td><td>846.9</td><td>1,003.2</td></tr><tr><td>非 GAAP 營業利益率</td><td>34.8%</td><td>—</td><td>—</td><td>35.0%</td><td>36.6%</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：晶片是什麼、為何客戶一定要買</div><p><b>光互連（光學 DSP、TIA／driver）</b>：資料中心內與機櫃之間用光纖傳輸；光學 DSP 把電訊號整形後交給光模組，800G→1.6T 每升一代都需要新的 DSP；TIA 與 driver 負責光電轉換。AI 叢集愈大，光連線愈多。</p><p><b>交換（Teralynx）與 scale-up</b>：把大量加速器連成單一運算單位的交換晶片；NVLink Fusion、UAL、ESUN 是不同的連接協定，Marvell 同時支援三種。</p><p><b>客製矽（XPU 與 attach）</b>：與雲端客戶共同設計專用加速器或其周邊晶片（網路卡、儲存／記憶體控制器、近記憶體運算）；客戶得到差異化與成本優勢，Marvell 得到多年期設計導入。</p><p><b>CXL（Structera）</b>：讓伺服器透過 CXL 擴充與共享記憶體，記憶體稀缺時增加使用。</p><p>⚑ 以上為產業一般知識與公司說法；Marvell 未揭露各產品線營收與客戶別營收。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

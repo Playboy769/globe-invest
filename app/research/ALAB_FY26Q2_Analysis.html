@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Astera Labs — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Astera Labs（ALAB）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／客戶認股權證與收購／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 4 日&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2'26 8-K Ex.99.1（8/4）、Q2'26／Q1'26 Form 10-Q、FY2025 10-K（2/20）、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">客戶認股權證與收購</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">分析師（JPMorgan、Jefferies、Morgan Stanley、Stifel、UBS、TD Cowen、Citi、Barclays、Loop、Roth、Raymond James、BNP）</div></div><div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">核心問題</div></div><div class="stat-box"><div class="stat-val">5</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/4 法說會（Investing.com 完整逐字稿頁、Yahoo Finance 逐字稿與摘要頁）、同日 8-K Ex.99.1、Q2'26 10-Q（8/5）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附原文來源連結）。全場最關鍵的結構性事實：<b>12 位分析師沒有任何人問客戶認股權證、aiXscale 收購、以及應收帳款與存貨暴增</b>——Q2 10-Q 顯示應收帳款由 $83.2M（12/31）增至 $192.5M（+131%）、存貨由 $59.0M 增至 $113.8M（+93%），同期營收僅 +45%。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Harlan Sur（J.P. Morgan）</div><div class="qa-topic">Scorpio X 放量廣度與營收時點</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Scorpio X 有多少客戶、營收何時放量？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：多個客戶處於預生產，<b>首位客戶 Q3 放量到高量</b>，Q3 的 Scorpio X 營收將超過 Scorpio P。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「首位客戶」＝集中度的下一個來源</div><div class="q-text">Q3 營收指引 $540–560M（中位 +40% QoQ）。增量約 $157.6M，大部分來自一個產品（Scorpio X）與「首位客戶」的放量；10-Q 顯示 Q2 已有 Customer A 29%、Customer B 25%，前四大合計 82%。Q3 的成長很可能<b>提高而非降低</b>單一客戶集中度。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Blayne Curtis（Jefferies）</div><div class="qa-topic">Aries 驅動因素</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Aries 本季紀錄營收的來源？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：PCIe 5.0 在推論應用持續強勁、加上 PCIe 6.0 在新平台採用；Gen 7 平台出現後預期持續成長。整體 <b>PCIe 6.0 占營收逾 50%</b>（Q1 約三分之一）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Joseph Moore（Morgan Stanley）</div><div class="qa-topic">UALink 與 PCIe 轉換</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">UALink 是否取代 PCIe？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：銅線與光學並存；UALink 在吞吐與延遲上有吸引力；遷移過程中每顆 XPU 的內容金額會上升。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Tore Svanberg（Stifel）</div><div class="qa-topic">Scorpio X 軟體能力</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">軟體如何建立客戶黏性？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：硬體加速的 HyperCast 與網內運算（COSMOS 平台）使集體通訊效能「最高提升 2 倍」。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「最高 2 倍」沒有基準與條件</div><div class="q-text">效能提升以「up to」表示，未說明對照的是哪個替代方案與工作負載；黏性論述（軟體鎖定）缺少客戶端驗證數據。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Natalia Winkler（UBS）</div><div class="qa-topic">CXL 機會</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">CXL 的市場範圍？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：三個用途——記憶體成本／可得性替代、GPU 掛載做 KV cache 加速、通用運算；預期數十億美元級增量，<b>2027 年放量</b>。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ CXL 營收到 2027 年才開始，卻已列入「多十億美元」機會</div><div class="q-text">Leo 對兩家美系超大規模客戶的量產出貨在 2027 年；本季沒有 Leo 營收數字。把尚未開始出貨的產品寫進「數十億美元」機會，是管理層的前瞻說法而非財報可驗證事實。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Sean O'Loughlin（TD Cowen）</div><div class="qa-topic">光學策略</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Taurus 的光學路徑？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Gajendra：銅與光學並存；近封裝光學（NPO）2027 年、共封裝光學（CPO）2028 年之後，TAM 增加「數十億美元」（法說會稱總機會逾 $200 億）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Papa Sila（Citigroup）</div><div class="qa-topic">每顆加速器的內容金額</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">每顆 XPU 的內容金額走向？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：Scorpio X 單獨就超過每顆 $1,000，之後可加光學與信號調理，長期「數千美元」。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Trip Chowdhry（Barclays）</div><div class="qa-topic">Scorpio 放量下的毛利率</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">毛利率趨勢？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CFO：Scorpio 毛利率大致與公司平均相當、依使用情境範圍很寬；長期目標 <b>70% 毛利率</b>。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 毛利率正在朝長期目標 70% 靠攏，且客戶認股權證是一個隱形項</div><div class="q-text">非 GAAP 毛利率：Q1'26 76.4% → Q2'26 73.7% → Q3 指引約 72%。公司的長期目標 70% 比現況低 2–4pp；此外 10-Q 顯示<b>客戶認股權證本季使營收減少 $10.2M（Q2'25 為 $1.8M）</b>，約占認股權前營收的 2.5%——這項成本是否包含在 72% 指引中沒有被說明。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ananda Baruah（Loop Capital）</div><div class="qa-topic">中國貢獻</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">中國營收貢獻？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：PCIe 在中國受歡迎、中國營收絕對值成長，但<b>占比維持個位數</b>。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 「個位數」與 10-Q 的計費地區數字相差近 40 個百分點</div><div class="q-text">Q2 10-Q 依客戶計費地址：<b>中國 $152.7M，占營收 39%</b>（去年同期 $59.1M／31%）。10-Q 同時說明客戶多為代客採購的製造夥伴，計費地不等於終端需求所在地——也就是說「個位數」可能是終端客戶口徑、39% 是計費口徑，但管理層沒有解釋這兩種口徑為何差距這麼大，也沒有人追問。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Suji Desilva（Roth Capital）</div><div class="qa-topic">軟體與協同處理器功能</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">軟體是否演進為協同處理器？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：XPU 與交換器協同調度工作負載，提升 GPU 使用率、降低延遲，是未來升級的差異化。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Jeff Koche（Raymond James）</div><div class="qa-topic">客戶集中度趨勢</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">客戶集中度如何變化？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層：組合廣泛，Q2 Aries 最大、Q3 Scorpio 成為最大，Taurus 與 Leo 的貢獻會降低集中風險。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 以產品分散回答客戶集中問題</div><div class="q-text">問題問客戶，答案講產品。FY2025 10-K 揭露單一終端客戶占營收逾 70%、前三大終端客戶約 86%；Q2 10-Q 計費客戶前四大合計 82%。<b>Scorpio X 的放量客戶很可能就是現有的大客戶</b>，產品多樣化不必然降低客戶集中。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Karl Ackerman（BNP Paribas）</div><div class="qa-topic">Scorpio X 客戶廣度與冷卻形式</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Scorpio X 的客戶廣度、液冷與氣冷？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Gajendra：兩者皆支援；neo cloud 採用擴大，推論導向的附加卡部署增加。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-astera-labs-tops-q2-2026-eps-forecast-shares-swing-93CH-4836051" target="_blank" rel="noopener">Investing.com：Astera Labs Q2 2026 逐字稿頁</a>；<a href="https://finance.yahoo.com/quote/ALAB/earnings/ALAB-Q2-2026-earnings_call-660931.html" target="_blank" rel="noopener">Yahoo Finance：ALAB Q2 FY2026 earnings call transcript</a>；<a href="https://ca.finance.yahoo.com/news/astera-labs-inc-alab-q2-050348738.html" target="_blank" rel="noopener">Yahoo Finance：ALAB Q2 2026 Earnings Call Highlights</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li>客戶認股權證：2022/10、2023/10 與 <b>2026/2</b> 三批；2026/2 一批最高 <b>3,262,299 股</b>、履約價 $142.82（授予日公允價值每股 $85.83，最高約 $2.8 億，依 Q1 key data）</li><li>已歸屬且可行使股數：<b>1,663,042</b>（2025/12/31 為 1,165,513；Q1 為 1,331,902）</li><li>aiXscale Photonics 收購：商譽由 $19.0M 增至 $91.6M；現金支付 $69.2M（淨）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>認股權證可依採購量歸屬至 <b>2033/1/2</b></li><li>Q2 10-Q：截至 6/30 沒有認股權證被行使</li><li>光學產品路線：NPO 2027、CPO 2028+</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>認股權證攤銷作為<b>營收減項</b>：Q2 $10.2M（Q2'25 $1.8M）、上半年 $12.3M（$2.1M）</li><li>剩餘公允價值（極可能歸屬部分）將依相關產品銷售比例持續認列為營收減項</li><li>Q3 指引 GAAP 毛利率 ~72%、GAAP 營業費用 $232–236M（非 GAAP $156–160M）；GAAP／非 GAAP 營業費用差 $76M，主要為股票薪酬</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>認股權證持有人未具名；是否為 Customer A（Q2 占 29%）只是推測</li><li>股價 8–9 月約 $275，遠高於履約價 $142.82，未歸屬部分的稀釋成本取決於採購量達成</li><li>aiXscale 對營收的貢獻與整合成本未揭露</li><li>營收減項是否已完整反映在 72% 毛利率指引</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">客戶認股權證與收購相關數字</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q2'26</th><th>比較</th><th>說明</th></tr></thead><tbody><tr><td>認股權營收減項（單季）</td><td>$10.2M</td><td>Q2'25 $1.8M</td><td class="wrap">減項前營收 $402.6M 的 2.5%</td></tr><tr><td>認股權營收減項（上半年）</td><td>$12.3M</td><td>H1'25 $2.1M</td><td class="wrap">—</td></tr><tr><td>已歸屬股數</td><td>1,663,042</td><td>Q1 1,331,902</td><td class="wrap">單季新增約 331,000 股</td></tr><tr><td>商譽</td><td>$91.6M</td><td>12/31 $19.0M</td><td class="wrap">aiXscale 收購後增加 $72.5M</td></tr><tr><td>收購現金支付（淨）</td><td>$69.2M</td><td>—</td><td class="wrap">上半年投資活動</td></tr></tbody></table></div></div><div class="note yellow">⚑ Q1 法說會 CFO 曾點出「某客戶最近執行的認股權證協議」對 Q2 毛利率約 200 個基點的非現金影響；本季 12 位分析師完全沒問。認股權證與採購量掛鉤，意味著<b>營收成長與稀釋／毛利率拖累是機械式連動</b>：該客戶買得越多，兩者一起成長越多。資料來源：Q2'26 10-Q Note 9（Warrants）、Q1 FY2026 key data。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Astera Labs 為無晶圓廠 IC 設計公司，<b>無資料中心專案融資</b>；上半年資本支出 $28.1M、無債務（總負債 $205.8M 均為營運負債）。資金來源為自有現金與有價證券 $1.25B。<b>無此資料／不適用。</b>來源：Q2'26 10-Q 資產負債表與現金流量表。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>認股權證持有人是否為 Customer A？未歸屬部分的採購里程碑金額？</li><li>72% 毛利率指引是否已包含全部認股權證減項？</li><li>應收帳款 +131%、存貨 +93% 是否對應 Q3 Scorpio X 放量備貨與客戶付款條件改變？</li><li>中國計費 39% 與管理層「個位數」的口徑差，如何對帳？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>Scorpio X-Series（320 lane 智慧交換器）</h4><div class="meta">Q3 量產放量</div><p>AI 機櫃內 XPU 之間（scale-up）的交換器；首位客戶 Q3 放量到高量、超過 Scorpio P；已有 10+ 客戶投入。單顆 XPU 內容金額超過 $1,000，長期「數千美元」。</p></div><div class="tech-card g"><h4>Aries 信號調理（PCIe 5／6）</h4><div class="meta">Q2 最大產品線、紀錄營收</div><p>重定時器與智慧纜線模組，補償高速訊號在機櫃內的衰減；PCIe 6.0 已占營收逾 50%。</p></div><div class="tech-card o"><h4>Taurus（100G/lane，3.2T 重定時器）</h4><div class="meta">乙太網路 800G 部署</div><p>新品含 3.2T Smart Retimer 與 Smart Redriver（224G 乙太網路、UALink）；OCP 標準尺寸相容，支援 Smart Swap。</p></div><div class="tech-card "><h4>Leo CXL 與光學路線</h4><div class="meta">Leo 2027；NPO 2027、CPO 2028+</div><p>Leo 於 2027 年對兩家美系超大規模客戶出貨；aiXscale 提供光子 IC 與光學封裝能力，管理層稱光學機會逾 $200 億。</p></div></div><div class="note grey">⚑ 規格、TAM 與時程為公司法說會／新聞稿說法。產品線營收占比（Aries、Taurus、Leo、Scorpio）公司只用「最大」「成長」描述，未揭露金額。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1066.225 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1066.22" height="702" fill="#ffffff"/><text x="533.11" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Astera Labs 供應鏈結構：代工封測 → 產品 → 計費客戶 → 終端平台</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">代工與後段</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">產品線</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">計費客戶（製造夥伴）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">終端平台</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="442.7375,106 442.7375,124 72,124 72,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="442.7375,106 442.7375,146 442.7375,146 442.7375,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="442.7375,106 442.7375,168 612,168 612,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="442.7375,106 442.7375,190 810.975,190 810.975,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="624.1125,106 624.1125,208 284,208 284,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="624.1125,106 624.1125,208 752.975,208 752.975,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="178,282 178,300 222.6125,300 222.6125,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="178,282 178,322 384.6125,322 384.6125,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="448,282 448,344 558.6125,344 558.6125,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="448,282 448,366 500.6125,366 500.6125,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="682.4875,282 682.4875,384 326.6125,384 326.6125,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="912.6,282 912.6,384 863.6125,384 863.6125,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="274.6125,458 274.6125,476 309.23749999999995,476 309.23749999999995,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="442.6125,458 442.6125,498 408.1125,498 408.1125,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="610.6125,458 610.6125,520 506.98750000000007,520 506.98750000000007,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="792.1125,458 792.1125,542 564.9875000000001,542 564.9875000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="610.6125,458 610.6125,560 776.9875000000001,560 776.9875000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="378.74" y="46" width="128" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="442.74" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">TSMC</text><text x="442.74" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">唯一晶圓代工</text></g><g><rect x="540.74" y="46" width="166.75" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="624.11" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">後段封測與模組夥伴</text><text x="624.11" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K 提及 ASE、Amkor 等</text></g><g><rect x="60" y="222" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="178" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Aries 信號調理</text><text x="178" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">PCIe 5／6 重定時器、纜線模組；Q2 …</text></g><g><rect x="330" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="448" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Scorpio 智慧交換器</text><text x="448" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">X-Series 320 lane；Q3 預計成為最…</text></g><g><rect x="600" y="222" width="164.98" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="682.49" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Taurus 乙太網路模組</text><text x="682.49" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">100G/lane、800G 部署</text></g><g><rect x="798.98" y="222" width="227.25" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="912.6" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Leo CXL 控制器</text><text x="912.6" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">2027 年起對兩家美系超大規模客戶出貨</text></g><g><rect x="210.61" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="274.61" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">計費地區：中國</text><text x="274.61" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$152.7M（39%）</text></g><g><rect x="372.61" y="398" width="140" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="442.61" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">計費地區：新加坡</text><text x="442.61" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$113.7M（29%）</text></g><g><rect x="546.61" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="610.61" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">計費地區：台灣</text><text x="610.61" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$105.8M（27%）</text></g><g><rect x="708.61" y="398" width="167" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="792.11" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">計費地區：美國與其他</text><text x="792.11" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$20.2M（5%）</text></g><g><rect x="297.24" y="574" width="221.75" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="408.11" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">超大規模雲端與 neo cloud</text><text x="408.11" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">管理層：客戶 10+ 家投入 Scorpio X</text></g><g><rect x="552.99" y="574" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="670.99" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">企業與其他 AI 機櫃</text><text x="670.99" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">含 AMD Instinct、NVIDIA MGX 參考…</text></g><line x1="421.04" y1="664" x2="443.04" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="451.04" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">單一依賴風險</text><rect x="535.04" y="663" width="22" height="2.4" fill="#182456"/><text x="565.04" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI 機櫃路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2025 10-K（TSMC 為唯一晶圓代工）、Q2&#39;26 10-Q Note（Concentrations／Geographic／Commitments）。客戶多為代客採購的製造夥伴，終端客戶名稱未揭露</div>
+</div></div></div></div><div class="note">⚑ 圖中計費客戶＝製造夥伴／經銷商，10-Q 稱它們代客戶採購；計費地區比重為 Q2'26 數字。TSMC 為唯一晶圓代工（FY2025 10-K）。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q2'26，百萬美元）</div><div id="sankeyEmbed_vxl953x" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"a","label":"Astera Labs Q2'26 營收 $392.4M","color":"#182456"},{"id":"cn","label":"計費地區：中國","color":"#8f1f1f"},{"id":"sg","label":"計費地區：新加坡","color":"#0f6f8a"},{"id":"tw","label":"計費地區：台灣","color":"#b3760f"},{"id":"ot","label":"計費地區：美國與其他","color":"#57a0cf"}],"links":[{"source":"a","target":"cn","value":152.7},{"source":"a","target":"sg","value":113.7},{"source":"a","target":"tw","value":105.8},{"source":"a","target":"ot","value":20.2}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_vxl953x");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 營收依客戶計費地區拆分（中國 39%、新加坡 29%、台灣 27%、美國與其他 5%）；與上圖計費地區節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">客戶集中度</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">單一客戶占營收比重：Q2'25 vs Q2'26</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2'25</text><rect x="95.63" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="113.63" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2'26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30 %</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="106.93" y="114" width="69.82" height="342" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="141.84" y="108" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">27</text><rect x="178.75" y="88.67" width="69.82" height="367.33" fill="#182456" rx="1" data-dim="Q2'26"/><text x="213.66" y="82.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">29</text><text x="177.75" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="177.75" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">A</text><rect x="378.25" y="139.33" width="69.82" height="316.67" fill="#182456" rx="1" data-dim="Q2'26"/><text x="413.16" y="133.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">25</text><text x="377.25" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="377.25" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">B</text><rect x="505.93" y="291.33" width="69.82" height="164.67" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="540.84" y="285.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">13</text><rect x="577.75" y="266" width="69.82" height="190" fill="#182456" rx="1" data-dim="Q2'26"/><text x="612.66" y="260" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">15</text><text x="576.75" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="576.75" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">C</text><rect x="705.43" y="152" width="69.82" height="304" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="740.34" y="146" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">24</text><rect x="777.25" y="291.33" width="69.82" height="164.67" fill="#182456" rx="1" data-dim="Q2'26"/><text x="812.16" y="285.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">13</text><text x="776.25" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="776.25" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">D</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q2'26 10-Q Note（Concentrations）。Customer A–D 為計費客戶，多為代客採購的製造夥伴；『＜10%』以留白表示。Q2'25 的 Customer B 低於 10%</text></svg>
+</div><div class="note">⚑ Q2'26 前四大計費客戶合計 82%；Customer D 占比由 24% 降到 13%，Customer B 由 &lt;10% 升到 25%——排名變動而非集中度下降，與「終端客戶可在製造夥伴間調整產量」的 10-Q 說明一致。</div></div><div class="chart-wrap"><div class="chart-title">計費地區分布</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="340" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Q2'26 營收：依客戶計費地區</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="170" y1="48" x2="170" y2="282" stroke="#bbbbbb" stroke-width="1"/><text x="170" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="337.5" y1="48" x2="337.5" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="337.5" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="505" y1="48" x2="505" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="505" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="672.5" y1="48" x2="672.5" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="672.5" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">150</text><line x1="840" y1="48" x2="840" y2="282" stroke="#eeeeee" stroke-width="1"/><text x="840" y="298" text-anchor="middle" font-size="11" fill="#555555" font-family="sans-serif">200 百萬美元</text><line x1="170" y1="48" x2="170" y2="282" stroke="#111111" stroke-width="1.2"/><rect x="170" y="55.55" width="511.54" height="31.7" fill="#182456" rx="1" data-dim="Q2'26"/><text x="686.55" y="74.9" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">152.7</text><text x="160" y="75.4" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">中國</text><rect x="170" y="102.35" width="380.9" height="31.7" fill="#182456" rx="1" data-dim="Q2'26"/><text x="555.9" y="121.7" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">113.7</text><text x="160" y="122.2" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">新加坡</text><rect x="170" y="149.15" width="354.43" height="31.7" fill="#182456" rx="1" data-dim="Q2'26"/><text x="529.43" y="168.5" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">105.8</text><text x="160" y="169" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">台灣</text><rect x="170" y="195.95" width="49.25" height="31.7" fill="#182456" rx="1" data-dim="Q2'26"/><text x="224.25" y="215.3" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">14.7</text><text x="160" y="215.8" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">其他</text><rect x="170" y="242.75" width="18.43" height="31.7" fill="#182456" rx="1" data-dim="Q2'26"/><text x="193.43" y="262.1" text-anchor="start" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">5.50</text><text x="160" y="262.6" text-anchor="end" font-size="11.5" fill="#333333" font-family="sans-serif">美國</text><text x="22" y="328" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q2'26 10-Q Note（Geographic）。計費地區含製造夥伴與經銷商，不等於終端需求所在地</text></svg>
+</div><div class="note">⚑ 中國計費 $152.7M，與管理層「中國占比個位數」的說法相差 30 個百分點以上，見 Q&A Baruah 卡片。</div></div><div class="chart-wrap"><div class="chart-title">採購承諾（不可取消）</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">不可取消採購承諾（依年度）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="354" x2="876" y2="354" stroke="#eeeeee" stroke-width="1"/><text x="68" y="358" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="252" x2="876" y2="252" stroke="#eeeeee" stroke-width="1"/><text x="68" y="256" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="78" y1="150" x2="876" y2="150" stroke="#eeeeee" stroke-width="1"/><text x="68" y="154" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">80 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="101.34" y="330.03" width="112.91" height="125.97" fill="#0f6f8a" rx="1" data-dim="承諾"/><text x="157.8" y="324.03" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="承諾">24.7</text><text x="157.8" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">2026</text><text x="157.8" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">下半年</text><rect x="260.94" y="118.38" width="112.91" height="337.62" fill="#0f6f8a" rx="1" data-dim="承諾"/><text x="317.4" y="112.38" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="承諾">66.2</text><text x="317.4" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2027</text><rect x="420.54" y="224.97" width="112.91" height="231.03" fill="#0f6f8a" rx="1" data-dim="承諾"/><text x="477" y="218.97" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="承諾">45.3</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2028</text><rect x="580.14" y="300.96" width="112.91" height="155.04" fill="#0f6f8a" rx="1" data-dim="承諾"/><text x="636.6" y="294.96" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="承諾">30.4</text><text x="636.6" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2029</text><rect x="739.74" y="379.5" width="112.91" height="76.5" fill="#0f6f8a" rx="1" data-dim="承諾"/><text x="796.2" y="373.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="承諾">15</text><text x="796.2" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">2030</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q2'26 10-Q Note 8（Purchase Commitments，合計 $181.7M）</text></svg>
+</div><div class="note">⚑ 合計 $181.7M；2027 年最高（$66.2M），占 36%。承諾包含晶圓、其他存貨零件、軟體授權與雲端服務的固定付款；代工訂單可取消但需付已發生費用。資料來源：Q2'26 10-Q Note 8。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>晶圓代工</td><td class="wrap">TSMC 為唯一晶圓代工；10-K 稱仰賴 TSMC 與少數封測夥伴</td><td>FY2025 10-K Item 1</td></tr><tr><td>終端客戶集中</td><td class="wrap">FY2025 單一終端客戶占營收逾 70%、前三大約 86%</td><td>FY2025 10-K</td></tr><tr><td>計費客戶集中</td><td class="wrap">Q2'26：Customer A 29%、B 25%、C 15%、D 13%；應收帳款：A 30%、B 17%、D 12%、E 10%</td><td>Q2'26 10-Q Note</td></tr><tr><td>資產地理</td><td class="wrap">固定資產 67% 在台灣、26% 在美國</td><td>Q2'26 10-Q</td></tr><tr><td>中國曝險</td><td class="wrap">營收依計費地：中國 39%；管理層稱終端占比個位數</td><td>10-Q vs 法說會</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">客戶集中度與 Scorpio X 首位客戶</div>計費客戶前四大 82%、A＋B＝54%；Q3 增量主要來自 Scorpio X 單一產品與「首位客戶」。10-K 的終端口徑集中度更高（單一客戶逾 70%）。<div class="risk-source">來源：Q2'26 10-Q；FY2025 10-K；Q&A（Sur、Koche）</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：Q3 的「三重擠壓」</div>把分散訊息拼起來：① Q3 營收 +40% QoQ（主要靠 Scorpio X），應收帳款已從 $83M 暴增到 $192M（DSO 由約 28 天升到約 44 天）、存貨 +93%——放量前的備貨與信用寬鬆；② 毛利率 76.4%→73.7%→指引 72%，朝長期目標 70% 滑落；③ 認股權證營收減項隨採購量同步放大。三者同時發生在同一個產品週期。<div class="risk-source">來源：Q2'26 10-Q 資產負債表、新聞稿指引、Warrants Note</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">客戶認股權證的稀釋與透明度</div>最多 3,262,299 股、履約價 $142.82；已歸屬 1,663,042 股；持有人未具名；股價約 $275。<div class="risk-source">來源：Q2'26 10-Q；Q1 key data</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">中國計費占比與出口風險</div>計費地中國 39%；若 PCIe 在中國的需求受出口管制或製造夥伴調整影響，計費地占比會快速變動。<div class="risk-source">來源：10-Q Geographic</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">TSMC 單一來源</div>唯一晶圓代工；資產 67% 在台灣。<div class="risk-source">來源：FY2025 10-K；10-Q</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出</div>Form 4：2026/6/1 起 Manuel Alba 公開市場賣出約 <b>$1.32 億</b>、Sanjay Gajendra 約 $3,080 萬、CEO Jitendra Mohan 約 $3,080 萬、Stefan Dyckerhoff 約 $1,750 萬（9/2 多筆）、Jack Lazar 約 $360 萬、Philip Mazzara 約 $230 萬；價格約 $274–276。是否為 10b5-1 計畫未逐筆核對。<div class="risk-source">來源：SEC EDGAR Form 4（2026/6/1–10/1）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">流動性</div>現金與有價證券 $1.25B、無債務；上半年營運現金流 $162.3M、資本支出 $28.1M。<div class="risk-source">來源：Q2'26 10-Q</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">Scorpio 成為最大產品線（Q3）</td><td class="wrap">Q3 指引中位 $550M（+40% QoQ）；沒有產品線營收金額</td><td class="wrap">新聞稿 Outlook</td><td class="wrap">△ 方向可信，無金額驗證</td></tr><tr><td class="wrap">中國占比個位數</td><td class="wrap">計費地中國 $152.7M（39%）</td><td class="wrap">10-Q Geographic</td><td class="wrap">✗ 口徑相差 30pp 以上，無解釋</td></tr><tr><td class="wrap">客戶組合廣泛、集中度會降低</td><td class="wrap">前四大計費客戶 82%；10-K 單一終端客戶逾 70%</td><td class="wrap">10-Q／10-K</td><td class="wrap">✗ 與揭露不符</td></tr><tr><td class="wrap">長期毛利率目標 70%</td><td class="wrap">非 GAAP 毛利率 76.4%→73.7%→指引 72%</td><td class="wrap">新聞稿</td><td class="wrap">✓ 方向吻合</td></tr><tr><td class="wrap">（沉默）認股權證與收購</td><td class="wrap">營收減項 $10.2M；商譽 +$72.5M；已歸屬 1,663,042 股</td><td class="wrap">10-Q</td><td class="wrap">✗ 12 位分析師無人提問</td></tr><tr><td class="wrap">（沉默）應收帳款與存貨</td><td class="wrap">AR $83.2M→$192.5M（+131%）；存貨 $59.0M→$113.8M（+93%）</td><td class="wrap">10-Q 資產負債表</td><td class="wrap">✗ 無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$392.4M</div><div class="kpi-lbl">Q2'26 營收</div><div class="kpi-sub">+27% QoQ／+104% YoY</div></div><div class="kpi"><div class="kpi-val">73.7%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub neg">前季 76.4%（−2.7pp）</div></div><div class="kpi"><div class="kpi-val">$0.80</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP $0.83（高於非 GAAP）</div></div><div class="kpi"><div class="kpi-val">$550M</div><div class="kpi-lbl">Q3 營收指引中位</div><div class="kpi-sub">+40% QoQ</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Aries 信號調理</div><div class="bu-abbr">PCIe 5／6 重定時器與纜線模組</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 狀態</span><span class="bu-stat-val">最大產品線、紀錄營收</span></div><div class="bu-stat"><span class="bu-stat-lbl">PCIe 6.0</span><span class="bu-stat-val">占整體營收 &gt;50%</span></div><div class="bu-stat"><span class="bu-stat-lbl">營收金額</span><span class="bu-stat-val">未揭露</span></div></div><div class="bu-card g"><div class="bu-name">Scorpio 智慧交換器</div><div class="bu-abbr">P-Series／X-Series</div><div class="bu-stat"><span class="bu-stat-lbl">Q3 預期</span><span class="bu-stat-val">成為最大產品線</span></div><div class="bu-stat"><span class="bu-stat-lbl">內容金額</span><span class="bu-stat-val">&gt;$1,000／XPU</span></div><div class="bu-stat"><span class="bu-stat-lbl">客戶</span><span class="bu-stat-val">10+ 家投入 X</span></div></div><div class="bu-card o"><div class="bu-name">Taurus 乙太網路模組</div><div class="bu-abbr">100G/lane、800G</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 狀態</span><span class="bu-stat-val">成長強勁</span></div><div class="bu-stat"><span class="bu-stat-lbl">新品</span><span class="bu-stat-val">3.2T Smart Retimer</span></div><div class="bu-stat"><span class="bu-stat-lbl">營收金額</span><span class="bu-stat-val">未揭露</span></div></div><div class="bu-card b"><div class="bu-name">Leo CXL 控制器</div><div class="bu-abbr">記憶體擴充與分層</div><div class="bu-stat"><span class="bu-stat-lbl">量產</span><span class="bu-stat-val">2027（兩家美系超大規模客戶）</span></div><div class="bu-stat"><span class="bu-stat-lbl">機會</span><span class="bu-stat-val">數十億美元（管理層）</span></div><div class="bu-stat"><span class="bu-stat-lbl">營收金額</span><span class="bu-stat-val">未揭露</span></div></div></div><div class="chart-wrap"><div class="chart-title">逐季營收與毛利率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季營收與非 GAAP 毛利率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355.5" x2="824" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="76" y1="255" x2="824" y2="255" stroke="#eeeeee" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="154.5" x2="824" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">300</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">73</text><text x="834" y="359.5" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">74</text><text x="834" y="259" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">75</text><text x="834" y="158.5" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">76</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">77</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'25</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'25</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3'25</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4'25</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'26</text><polyline points="76,295.8 225.6,263.14 375.2,224.25 524.8,184.05 674.4,146.06 824,61.64" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="295.8" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="225.6" cy="263.14" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="375.2" cy="224.25" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="524.8" cy="184.05" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="674.4" cy="146.06" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="61.64" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><text x="76" y="285.8" text-anchor="middle" font-size="10" fill="#182456" font-weight="600" font-family="sans-serif">159.4</text><text x="225.6" y="253.14" text-anchor="middle" font-size="10" fill="#182456" font-weight="600" font-family="sans-serif">191.9</text><text x="375.2" y="214.25" text-anchor="middle" font-size="10" fill="#182456" font-weight="600" font-family="sans-serif">230.6</text><text x="524.8" y="174.05" text-anchor="middle" font-size="10" fill="#182456" font-weight="600" font-family="sans-serif">270.6</text><text x="674.4" y="136.06" text-anchor="middle" font-size="10" fill="#182456" font-weight="600" font-family="sans-serif">308.4</text><text x="824" y="51.64" text-anchor="middle" font-size="10" fill="#182456" font-weight="600" font-family="sans-serif">392.4</text><polyline points="524.8,184.65 674.4,114.3 824,385.65" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="225.6" cy="154.5" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="524.8" cy="184.65" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="674.4" cy="114.3" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="385.65" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><text x="225.6" y="144.5" text-anchor="middle" font-size="10" fill="#8f1f1f" font-weight="600" font-family="sans-serif">76</text><text x="524.8" y="174.65" text-anchor="middle" font-size="10" fill="#8f1f1f" font-weight="600" font-family="sans-serif">75.7</text><text x="674.4" y="104.3" text-anchor="middle" font-size="10" fill="#8f1f1f" font-weight="600" font-family="sans-serif">76.4</text><text x="824" y="375.65" text-anchor="middle" font-size="10" fill="#8f1f1f" font-weight="600" font-family="sans-serif">73.7</text><line x1="352.53" y1="40" x2="368.53" y2="40" stroke="#182456" stroke-width="2.4"/><text x="374.53" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營收</text><line x1="419.53" y1="40" x2="435.53" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="441.53" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 毛利率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Astera Labs 各季 8-K Ex.99.1（Q4&#39;25、Q1&#39;26、Q2&#39;26）與 Q2&#39;26 10-Q；Q1&#39;25／Q3&#39;25 毛利率本報告未取得，留白（不補 0）</div>
+</div><div class="note">⚑ 營收五季由 $191.9M 到 $392.4M（2.04 倍），Q2 單季 +27% QoQ；毛利率由 76.0% 降到 73.7%，Q3 指引再降至約 72%。Q1'25／Q3'25 毛利率本報告未取得，圖中留白。</div></div><div class="tbl-wrap"><div class="tbl-title">損益與資產負債表摘要（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q2'26</th><th>Q1'26</th><th>Q2'25</th></tr></thead><tbody><tr><td>營收</td><td>392.4</td><td>308.4</td><td>191.9</td></tr><tr><td>非 GAAP 毛利</td><td>289.3</td><td>235.6</td><td>145.9</td></tr><tr><td>非 GAAP 毛利率</td><td>73.7%</td><td>76.4%</td><td>76.0%</td></tr><tr><td>研發費用（GAAP）</td><td>135.9</td><td>—</td><td>66.7</td></tr><tr><td>非 GAAP 營業利益</td><td>153.5</td><td>111.7</td><td>—</td></tr><tr><td>非 GAAP 營業利益率</td><td>39.1%</td><td>36.2%</td><td>—</td></tr><tr><td>GAAP 淨利</td><td>153.1</td><td>—</td><td>—</td></tr><tr><td>現金＋有價證券</td><td>1,252.96</td><td>—</td><td>—</td></tr><tr><td>應收帳款</td><td>192.5</td><td>（12/31）83.2</td><td>—</td></tr><tr><td>存貨</td><td>113.8</td><td>（12/31）59.0</td><td>—</td></tr></tbody></table></div></div><div class="card"><div class="card-title">產品背後：這些晶片是什麼、為何客戶一定要買</div><p><b>Aries（重定時器）</b>：AI 伺服器內 CPU／GPU 與其他晶片之間的高速訊號（PCIe 5／6）傳過主機板與纜線會衰減，Aries 在途中重新整形與放大。速度每升一代，沒有它就無法穩定傳輸，所以是機櫃設計的必備品。</p><p><b>Scorpio（交換器）</b>：把多顆 XPU 連成一個運算單位的交換晶片（scale-up）。單顆 XPU 內容金額可達 $1,000 以上，並可附帶軟體（COSMOS）做網內運算與診斷，這也是公司說的「黏性」來源。</p><p><b>Taurus（乙太網路模組）</b>：把交換器與伺服器之間的高速乙太網路（400G／800G）訊號調理成可用的線纜模組，面向資料中心橫向擴充（scale-out）。</p><p><b>Leo（CXL）</b>：讓伺服器能透過 CXL 擴充與共享記憶體，用於記憶體容量不足、成本高、或 KV cache 的分層。</p><p>⚑ 以上為產業一般知識與公司說法；各產品線營收與客戶別營收公司未揭露。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

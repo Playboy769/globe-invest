@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STMicroelectronics — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>STMicroelectronics（STM）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／AWS 認股權證與資本事件／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 7 月 23 日（Q2 於 6/27 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2'26 6-K（7/23、7/30）、Q1'26／Q4'25 6-K、FY2025 20-F</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">AWS 認股權證與資本事件</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">7</div><div class="stat-lbl">分析師（Jefferies、TD Cowen、BNP Paribas、JPMorgan、Equita、Oddo BHF、UBS）</div></div><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">6</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/7/23 法說會（Investing.com 完整逐字稿頁、Yahoo Finance 與 Motley Fool 逐字稿頁）、同日 6-K 新聞稿、FY2025 20-F（Apple 集中度、AWS 認股權證）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附來源連結）。全場最關鍵的結構性事實：<b>沒有任何分析師問 AWS 認股權證（最多 2,480 萬股、行權價 $28.38，現股價約 $57）、Apple 17.7% 的集中度，以及 P&D 部門 $9,900 萬營業虧損（營業利益率 −21.4%，較去年同期 −12.5% 惡化）</b>。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Janardan Menon（Jefferies）</div><div class="qa-topic">Q4 毛利率走勢</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">營收強勁下 Q4 毛利率如何進展？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CFO Lorenzo Grandi：方向上改善，但閒置產能費用與製造轉移成本仍在；匯率中性（Q2 為正面）。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 毛利率已被指引「高度依賴製造整併完成」</div><div class="q-text">Q2 GAAP 毛利率 34.8%（含約 60bps 製造重整成本）、Q3 指引約 37.0%（含約 70bps 閒置產能費）；管理層重申在營收 $40 億時的 40%+ 長期毛利率目標，需要製造重整計畫「2027 年底」完成。即：<b>營收已在 2026 Q4 到 $40 億，毛利率目標卻要等到 2027 年底</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Joshua Buchalter（TD Cowen）</div><div class="qa-topic">2027 年資料中心上行</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">2027 年資料中心的上行空間？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Rémy Wazzan：800G／1.6T 光模組採用推動微控制器、電子 IC 與矽光；目前產能並不限制營收取得。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 資料中心目標一季內上調，但單一客戶結構未揭露</div><div class="q-text">資料中心營收預期：2026 年「高於 $10 億」、2027 年「遠高於 $20 億」（先前較低）。目前對外可驗證的 AI 資料中心客戶只有 AWS（以認股權證綁定），而 AWS 認股權證最多 2,480 萬股、行權價 $28.38——<b>目標上調與 AWS 的採購連動</b>，卻沒有人問兩者的關係。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Jakob Bluestone（BNP Paribas）</div><div class="qa-topic">定價與資料中心指引上調的來源</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">定價動態？資料中心上調來自需求還是供給？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Grandi：投入成本上升以「選擇性漲價」抵銷，兩者大致相抵。Chery：資料中心上調來自更強需求與更大供給能力；2026 年訂單 100% 已覆蓋，2027 年的客戶洽談已涵蓋預期。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「選擇性漲價大致抵銷成本」意味著毛利率擴張不靠價格</div><div class="q-text">與 Sandisk、WDC 以價格主導不同，STM 的毛利率改善來自閒置產能費下降與組合；同時管理層說「分銷庫存已低於標準目標」「若干產品緊缺」，卻沒有把緊缺轉成價格。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Sandeep Deshpande（J.P. Morgan）</div><div class="qa-topic">各終端市場成長</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">各市場的成長細節？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Jean-Marc Chery：通訊設備與電腦周邊（CECP）Q3 約年增 60%、Q4 約 90%；工業 Q4 約年增 40%；汽車低雙位數；個人電子下半年約中個位數衰退，但全年低到中個位數正成長。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ Q4 營收「高於 $40 億」幾乎全靠 CECP 與 LEO</div><div class="q-text">Q3 營收 $37.0 億（+6.2% QoQ）、Q4 「高於 $40 億」。CECP 年增 60%→90%，其餘市場成長僅低雙位數或衰退；<b>成長高度集中在 AI 資料中心與 LEO 衛星</b>，與管理層「各終端市場訂單強勁」的敘事比起來，結構更窄。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Domenico Ghilotti（Equita）</div><div class="qa-topic">營收 $40 億時 40% 毛利率目標</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">營收 $40 億時毛利率 40% 的目標？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Grandi：重申，前提是製造重整計畫於 2027 年底前完成；目前處於轉換中，額外的驗證與光罩成本暫時壓低毛利率。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Stéphane Houri（Oddo BHF）</div><div class="qa-topic">LEO 衛星機會</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">低軌（LEO）衛星機會的規模與毛利率貢獻？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Rémy Wazzan：2026–2028 年累計「遠高於 $30 億」；受運載火箭時程影響；2026–2027 展望強。Grandi：LEO 對毛利率有正貢獻。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ LEO 累計「遠高於 $30 億」的客戶只有一家被 20-F 間接點名</div><div class="q-text">20-F 的主要客戶名單含 SpaceX，但公司不直接說明；$30 億以上的累計營收取決於運載火箭時程與單一大客戶的採購，卻沒有任何說明客戶別占比。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">François Bouvignies（UBS）</div><div class="qa-topic">2–3 年產能是否足夠</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">未來 2–3 年產能是否足夠？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Chery：光學與微控制器的強度由 Crolles 承接；通用微控制器緊缺可藉 Agrate 擴產與中國 40nm 合格化（「China for China」）解決；傳統類比短期供給緊張。</div></div><div class="q-block"><div class="q-label a">SiC 補充回答</div><div class="q-text">Marco Cassis（補充 SiC）：Q2 年增約低十幾％、季增約中 30%；訂單出貨比「遠高於 1」；2026 年雙位數成長；6 吋轉 8 吋造成部分供給緊張。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 同時存在閒置產能費與供給吃緊</div><div class="q-text">Q3 指引含約 70bps 閒置產能費（傳統類比利用率不足），同時通用 MCU 與部分類比產品緊缺——產能結構錯位：緊缺的產品需要 Agrate／Crolles 新產能，閒置的是傳統節點。毛利率改善因此需要<b>重新配置製造</b>而不是單純需求回升。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-stmicroelectronics-beats-q2-2026-estimates-shares-fall-premarket-93CH-4807829" target="_blank" rel="noopener">Investing.com：STMicroelectronics Q2 2026 逐字稿頁</a>；<a href="https://finance.yahoo.com/quote/STM/earnings/STM-Q2-2026-earnings_call-546380.html" target="_blank" rel="noopener">Yahoo Finance：STM Q2 FY2026 earnings call transcript</a>；<a href="https://www.fool.com/earnings/call-transcripts/2026/07/23/stmicroelectronics-stm-q2-2026-earnings-call-transcript/" target="_blank" rel="noopener">Motley Fool：STMicroelectronics Q2 2026 逐字稿</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li>AWS 認股權證：最多 <b>2,480 萬股</b> ST 普通股、行權價 <b>$28.38</b>、發行日 2026/2/6、7 年內可行使（20-F）；若全數歸屬行使約占流通股 2–3%</li><li>NXP MEMS 感測器業務：2026/2/2 完成，現金 $8.95 億；Q1 貢獻約 $4,000 萬營收、Q2 PPA 影響 $2,400 萬</li><li>新發行 <b>$15 億</b>雙檔可轉債（2031、2033 各 $7.5 億），並提前贖回 $7.5 億 2027 年到期可轉債</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>資料中心營收目標：2026 年高於 $10 億；2027 年遠高於 $20 億</li><li>Q4 營收預期高於 $40 億；2028 年營收目標 $180 億（管理層重申，$200 億暫不談）</li><li>製造重整計畫：2027 年底完成</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>Q2 非 GAAP 營業利益率 7.7%；Q3 毛利率指引約 37.0%（含約 70bps 閒置產能費）</li><li>淨資本支出預期落在 $20–22 億區間高端；Q2 自由現金流 +$7,500 萬</li><li>淨財務部位 $20.1 億；流動性 $60.3 億、財務債務 $40.2 億</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>AWS 認股權證歸屬條件（綁定 ST 對 AWS 的出貨金額）具體門檻 20-F 未量化</li><li>資料中心 $20 億以上營收中，AWS 占多少、其他雲端業者是否存在</li><li>NXP MEMS 的後續貢獻與整併成本</li><li>可轉債轉換價與稀釋</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">AWS 認股權證與資本事件</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>AWS 認股權證</td><td>最多 24.8M 股；行權價 $28.38；7 年</td><td class="wrap">歸屬與 AWS 對 ST 產品付款掛鉤；全數行使約占流通股 2–3%</td></tr><tr><td>現股價（法說會後）</td><td>約 $57（盤前 −13%）</td><td class="wrap">認股權證內含價值約每股 $29，上限約 $7.1 億（全數歸屬）</td></tr><tr><td>NXP MEMS 收購</td><td>現金 $8.95 億</td><td class="wrap">2/2 完成；Q2 PPA $2,400 萬</td></tr><tr><td>新可轉債</td><td>$15 億（2031／2033 各 $7.5 億）</td><td class="wrap">同時贖回 $7.5 億 2027 年到期</td></tr><tr><td>資料中心營收</td><td>2026 年 &gt;$10 億；2027 年 &gt;&gt;$20 億</td><td class="wrap">管理層預期，非保證</td></tr></tbody></table></div></div><div class="note yellow">⚑ AWS 認股權證是「買越多、拿到越多折價股權」的結構：AWS 向 ST 採購愈多，愈多股份歸屬，行權價 $28.38 對現股價約 $57，歸屬部分幾乎全為價內。對 ST，等同把約一半的價格讓利轉為股權；對投資人，資料中心營收成長與稀釋是機械式連動。資料來源：FY2025 20-F；Q1 FY2026 分析；法說會。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>STM 為 IDM（自有晶圓廠），擴產由自有現金流、歐盟與各國政府補助（Crolles 最高 €29 億法國補助、Catania SiC 義大利 €20 億直接補助）與債務（新 $15 億可轉債）支應。<b>無 SPV／專案融資；與 AWS 的結構是客戶認股權證，不是融資。</b>來源：20-F；新聞稿。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>AWS 認股權證各歸屬批次的 ST 營收門檻？</li><li>2027 年資料中心「遠高於 $20 億」中，AWS 是否過半？</li><li>P&D 虧損 $9,900 萬與製造重整成本何時結束？</li><li>新可轉債的轉換價與稀釋？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>矽光與光互連（RFOC）</h4><div class="meta">800G／1.6T 光模組</div><p>ST 的矽光（silicon photonics）與 RF 晶片用於資料中心光收發模組；RFOC 營收年增 32%，管理層稱採用 800G 與 1.6T 速度加速，是資料中心營收目標上調的主因。</p></div><div class="tech-card g"><h4>通用 MCU 與 EMP</h4><div class="meta">供給吃緊</div><p>通用微控制器用於工業與光模組控制；EMP 年增 35.5%；Crolles 目標 1.5 萬片／週；Agrate 300mm 預計 2028 年前接近完整建置；中國 40nm 合格化（China for China）。</p></div><div class="tech-card o"><h4>SiC（碳化矽）</h4><div class="meta">6 吋轉 8 吋</div><p>SiC 功率元件 2026 年預期雙位數成長，Q2 年增低十幾％、季增中 30%；訂單出貨比遠高於 1；轉換 8 吋造成部分供給緊張；但 P&D 部門仍虧損。</p></div><div class="tech-card "><h4>LEO 衛星與成像／MEMS</h4><div class="meta">LEO 2026–2028 累計逾 $30 億</div><p>LEO 通訊用 RF 與功率晶片；AM&S 年增 26% 主要來自成像與 MEMS（含 NXP MEMS）。</p></div></div><div class="note grey">⚑ 技術論述為法說會說法；ST 未揭露各產品線營收（除四個部門外）。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈與客戶結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 980.2750000000001 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="980.28" height="702" fill="#ffffff"/><text x="490.14" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">STMicroelectronics 供應鏈結構：製造 → 部門 → 終端市場 → 客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">製造與外包</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">部門（Q2'26 營收）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">終端市場</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">客戶</text><defs><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker></defs><polyline points="230.13750000000005,106 230.13750000000005,124 520.975,124 520.975,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="230.13750000000005,106 230.13750000000005,146 776.725,146 776.725,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="500.13750000000005,106 500.13750000000005,168 718.725,168 718.725,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="500.13750000000005,106 500.13750000000005,190 299.325,190 299.325,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="770.1375,106 770.1375,208 241.325,208 241.325,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="770.1375,106 770.1375,208 462.975,208 462.975,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="156.6625,282 156.6625,300 147.57500000000005,300 147.57500000000005,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="156.6625,282 156.6625,322 696.2,322 696.2,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="381.15,282 381.15,344 251.57500000000005,344 251.57500000000005,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="381.15,282 381.15,366 309.57500000000005,366 309.57500000000005,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="619.85,282 619.85,384 413.57500000000005,384 413.57500000000005,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="619.85,282 619.85,384 471.57500000000005,384 471.57500000000005,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="852.5,282 852.5,384 638.2,384 638.2,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="774.45,458 774.45,476 313.7875000000001,476 313.7875000000001,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="554.8875,458 554.8875,498 554.8875,498 554.8875,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="199.57500000000005,458 199.57500000000005,520 641.7875000000001,520 641.7875000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="361.57500000000005,458 361.57500000000005,542 853.7875000000001,542 853.7875000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="112.14" y="46" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="230.14" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Crolles 300mm（與 GlobalFo…</text><text x="230.14" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">目標 1.5 萬片／週</text></g><g><rect x="382.14" y="46" width="236" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="500.14" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Agrate 300mm 與 Catania SiC</text><text x="500.14" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Agrate 2028 前接近滿載；SiC 6→8 …</text></g><g><rect x="652.14" y="46" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="770.14" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">外部晶圓廠與後段外包商</text><text x="770.14" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">20-F 未點名；take-or-pay 向晶圓廠…</text></g><g><rect x="60" y="222" width="193.33" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="156.66" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">AM&amp;S 類比／MEMS／感測器</text><text x="156.66" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$1,426M（41%）；含 NXP MEMS</text></g><g><rect x="287.33" y="222" width="187.65" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="381.15" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">P&amp;D 功率與離散</text><text x="381.15" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$464M（13%）；營業虧損 $99M</text></g><g><rect x="508.98" y="222" width="221.75" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="619.85" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">EMP 嵌入式處理</text><text x="619.85" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$1,147M（33%）；通用 MCU 供給吃緊</text></g><g><rect x="764.73" y="222" width="175.55" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="852.5" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">RFOC 射頻與光通訊</text><text x="852.5" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$445M（13%）；光互連、LEO</text></g><g><rect x="135.58" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="199.58" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Automotive</text><text x="199.58" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">QoQ +14%</text></g><g><rect x="297.58" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="361.58" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Industrial</text><text x="361.58" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">QoQ +20%</text></g><g><rect x="459.58" y="398" width="190.63" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="554.89" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">CECP 通訊設備與電腦周邊</text><text x="554.89" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">YoY +50%；Q4 預計 YoY ~90%</text></g><g><rect x="684.2" y="398" width="180.5" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="774.45" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Personal Electronics</text><text x="774.45" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">QoQ +3%</text></g><g><rect x="134.49" y="574" width="191.3" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="230.14" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Apple（FY25 占 17.7%）</text><text x="230.14" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">單一最大客戶</text></g><g><rect x="359.79" y="574" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="477.79" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">AWS（認股權證 2,480 萬股，$…</text><text x="477.79" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">AI 資料中心</text></g><g><rect x="629.79" y="574" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="747.79" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">車廠與工業客戶</text><text x="747.79" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Bosch、Continental、Denso、Mobile…</text></g><line x1="343.96" y1="664" x2="365.96" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="373.96" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">供給或客戶依賴</text><rect x="468.96" y="663" width="22" height="2.4" fill="#182456"/><text x="498.96" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI 資料中心／LEO 路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2025 20-F（Apple 17.7%、主要客戶名單、Crolles 與 Catania）、Q2&#39;26 新聞稿與法說會；外部晶圓廠與後段外包商 20-F 未點名</div>
+</div></div></div></div><div class="note">⚑ 製造據點與 JV 來自 FY2025 20-F；外部晶圓廠與後段外包商 20-F 未點名。客戶名單為 20-F 按字母列示的主要客戶（Apple、Bosch、Continental、Denso、HP、Mobileye、Samsung、SpaceX、Tesla、Vitesco）。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q2'26，百萬美元）</div><div id="sankeyEmbed_8esvkpf" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"s","label":"STM Q2'26 營收 $3,487M","color":"#182456"},{"id":"ams","label":"AM&S 類比／MEMS／感測器","color":"#0f6f8a"},{"id":"pd","label":"P&D 功率與離散","color":"#8f1f1f"},{"id":"emp","label":"EMP 嵌入式處理","color":"#b3760f"},{"id":"rfoc","label":"RFOC 射頻與光通訊","color":"#57a0cf"}],"links":[{"source":"s","target":"ams","value":1426},{"source":"s","target":"pd","value":464},{"source":"s","target":"emp","value":1147},{"source":"s","target":"rfoc","value":445}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_8esvkpf");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 部門營收為新聞稿數字；終端市場營收金額未揭露（只揭露成長率），故不往下拆分。兩張圖節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">營收軌跡與指引</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">營收軌跡與指引（十億美元）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="354" x2="876" y2="354" stroke="#eeeeee" stroke-width="1"/><text x="68" y="358" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1</text><line x1="78" y1="252" x2="876" y2="252" stroke="#eeeeee" stroke-width="1"/><text x="68" y="256" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="78" y1="150" x2="876" y2="150" stroke="#eeeeee" stroke-width="1"/><text x="68" y="154" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="106.93" y="140.31" width="141.64" height="315.69" fill="#182456" rx="1" data-dim="營收"/><text x="177.75" y="134.31" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="營收">3.10</text><text x="177.75" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Q1'26</text><rect x="306.43" y="100.33" width="141.64" height="355.67" fill="#182456" rx="1" data-dim="營收"/><text x="377.25" y="94.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="營收">3.49</text><text x="377.25" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Q2'26</text><rect x="505.93" y="78.6" width="141.64" height="377.4" fill="#182456" rx="1" data-dim="營收"/><text x="576.75" y="72.6" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="營收">3.70</text><text x="576.75" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3'26</text><text x="576.75" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">指引</text><rect x="705.43" y="48" width="141.64" height="408" fill="#182456" rx="1" data-dim="營收"/><text x="776.25" y="42" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="營收">4</text><text x="776.25" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Q4'26（下限）</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q1'26／Q2'26 實績、Q3'26 指引中位 $37.0 億、Q4 管理層「高於 $40 億」（下限）</text></svg>
+</div><div class="note">⚑ Q3 指引中位 $37.0 億（+6.2% QoQ）；Q4 管理層稱高於 $40 億，為「H2 對 H1 高於一般 15% 季節性」的基礎。資料來源：新聞稿；法說會。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>客戶集中</td><td class="wrap">Apple 占營收 17.7%（2025）、14.5%（2024）、12.3%（2023）；公司稱服務逾 20 萬客戶且不依賴單一客戶</td><td>FY2025 20-F</td></tr><tr><td>製造</td><td class="wrap">Crolles 300mm（與 GlobalFoundries 合資，預計成本 €75 億，法國補助最高 €29 億）；Catania SiC 基板廠（義大利 €20 億直接補助、€50 億投資）；與 Tower 共用 Fab 3；Sanan 合資（中國 SiC）</td><td>FY2025 20-F</td></tr><tr><td>外包</td><td class="wrap">部分製造使用外部晶圓廠與後段外包商；take-or-pay 向晶圓廠外包</td><td>20-F；Q2 6-K</td></tr><tr><td>庫存</td><td class="wrap">存貨 $31.9 億；庫存天數 126 天（前季 140 天）；分銷庫存已低於標準目標</td><td>新聞稿</td></tr><tr><td>採購承諾</td><td class="wrap">6-K 只有定性描述（材料、設備、軟體授權與 take-or-pay 外包），總額未取得</td><td>Q2 6-K</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾：無量化資料</b>——ST 半年度 6-K 僅有定性說明；20-F 數字未在本次取得。庫存天數由 140 天降到 126 天，而 Q3 指引營收 +6.2%，補庫存將使存貨與承諾同步上升。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">AWS 認股權證與資料中心目標連動</div>資料中心營收目標（2026 年 &gt;$10 億、2027 年 &gt;&gt;$20 億）與 AWS 認股權證（最多 2,480 萬股、行權價 $28.38）同源；未被提問。<div class="risk-source">來源：20-F；法說會</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：2026 Q4 營收轉折與 2027 年底毛利率的時間差</div>把分散訊息拼起來：① Q4 營收「高於 $40 億」、毛利率目標 40%+ 需製造重整於 2027 年底完成；② 增量幾乎全來自 CECP（年增 60%→90%）與 LEO；③ 同時有閒置產能費（70bps）與 P&D 虧損（−21.4% 營業利益率）。營收衝上去的 2026 Q4，毛利率可能仍在 37% 附近，需要全年 2027 才收斂。<div class="risk-source">來源：Q&A（Menon、Deshpande、Ghilotti）；新聞稿</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">P&D 部門持續虧損</div>P&D 營收 $4.64 億（+3.7% YoY）、營業虧損 $9,900 萬，營業利益率 −21.4%（去年同期 −12.5%）；SiC 6→8 吋轉換仍在進行。<div class="risk-source">來源：Q2'26 新聞稿</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">Apple 集中度</div>Apple 占 2025 年營收 17.7%（2024 14.5%、2023 12.3%），逐年上升。<div class="risk-source">來源：FY2025 20-F</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">股東集體訴訟</div>2024/8/23 起之集體訴訟（指稱對 2024 營收預期過度樂觀）；法院於 2025/9/15 駁回撤銷動議，公司稱將積極抗辯。<div class="risk-source">來源：Q2 6-K F-30</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">可轉債與再融資</div>新發行 $15 億可轉債；提前贖回 $7.5 億 2027 年到期可轉債；財務債務 $40.2 億。<div class="risk-source">來源：新聞稿</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">內部人交易</div>ST 為外國發行人，不適用 Form 4；SEC 6-K 每週揭露庫藏股買回。（本報告未取得內部人買賣資料。）<div class="risk-source">來源：EDGAR 檢索</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">資料中心 2026 年 &gt;$10 億</td><td class="wrap">Q2 CECP 年增 50%；RFOC 年增 32%；金額未揭露</td><td class="wrap">新聞稿；Q&A</td><td class="wrap">△ 方向可信，無金額驗證</td></tr><tr><td class="wrap">Q4 營收 &gt;$40 億</td><td class="wrap">Q3 指引 $37.0 億；Q2 $34.9 億</td><td class="wrap">新聞稿</td><td class="wrap">✓ 與 H2 加速說法相容</td></tr><tr><td class="wrap">毛利率於 $40 億時達 40%+</td><td class="wrap">Q2 34.8%（GAAP）、Q3 指引 37.0%；需 2027 年底重整完成</td><td class="wrap">新聞稿；Q&A</td><td class="wrap">△ 時程與營收錯位</td></tr><tr><td class="wrap">分銷庫存低於標準目標</td><td class="wrap">ST 庫存天數 126 天（前季 140 天）；存貨 $31.9 億</td><td class="wrap">新聞稿</td><td class="wrap">✓ 吻合</td></tr><tr><td class="wrap">2026 年資料中心訂單 100% 覆蓋</td><td class="wrap">無 RPO／backlog 數字</td><td class="wrap">Q&A（Bluestone）</td><td class="wrap">△ 無法驗證</td></tr><tr><td class="wrap">（沉默）AWS 認股權證、Apple 17.7%、P&D 虧損</td><td class="wrap">20-F；Q2 新聞稿</td><td class="wrap">—</td><td class="wrap">✗ 7 位分析師無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$34.87 億</div><div class="kpi-lbl">Q2'26 營收</div><div class="kpi-sub">+12.7% QoQ／+26.0% YoY</div></div><div class="kpi"><div class="kpi-val">34.8%</div><div class="kpi-lbl">GAAP 毛利率</div><div class="kpi-sub">非 GAAP 35.2%；前季 33.8%</div></div><div class="kpi"><div class="kpi-val">$0.31</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP $0.24；去年同期 −$0.11</div></div><div class="kpi"><div class="kpi-val">$37.0 億</div><div class="kpi-lbl">Q3 營收指引中位</div><div class="kpi-sub">+6.2% QoQ／+16.2% YoY</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">AM&S</div><div class="bu-abbr">類比、MEMS 與感測器</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$1,426M（41%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+8.2%／+26.0%</span></div><div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val">10.1%（去年 7.5%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:10%;background:#182456"></div></div></div><div class="bu-card o"><div class="bu-name">P&D</div><div class="bu-abbr">功率與離散（含 SiC）</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$464M（13%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+19.2%／+3.7%</span></div><div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val">−21.4%（去年 −12.5%）</span></div></div><div class="bu-card g"><div class="bu-name">EMP</div><div class="bu-abbr">嵌入式處理（MCU 等）</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$1,147M（33%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+17.7%／+35.5%</span></div><div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val">19.7%（去年 13.5%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:20%;background:#0f6f8a"></div></div></div><div class="bu-card b"><div class="bu-name">RFOC</div><div class="bu-abbr">射頻與光通訊</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$445M（13%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+8.6%／+32.0%</span></div><div class="bu-stat"><span class="bu-stat-lbl">營業利益率</span><span class="bu-stat-val">21.2%（去年 17.9%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:21%;background:#b3760f"></div></div></div></div><div class="chart-wrap"><div class="chart-title">各部門營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">各部門營收 Q1'26 vs Q2'26</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1'26</text><rect x="95.63" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="113.63" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2'26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,500 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="106.93" y="122.11" width="69.82" height="333.89" fill="#57a0cf" rx="1" data-dim="Q1'26"/><text x="141.84" y="116.11" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1'26">1,318</text><rect x="178.75" y="94.75" width="69.82" height="361.25" fill="#182456" rx="1" data-dim="Q2'26"/><text x="213.66" y="88.75" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">1,426</text><text x="177.75" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">AM&amp;S</text><text x="177.75" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">類比／MEMS／感測器</text><rect x="306.43" y="357.45" width="69.82" height="98.55" fill="#57a0cf" rx="1" data-dim="Q1'26"/><text x="341.34" y="351.45" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1'26">389</text><rect x="378.25" y="338.45" width="69.82" height="117.55" fill="#182456" rx="1" data-dim="Q2'26"/><text x="413.16" y="332.45" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">464</text><text x="377.25" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">P&amp;D</text><text x="377.25" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">功率與離散</text><rect x="505.93" y="209" width="69.82" height="247" fill="#57a0cf" rx="1" data-dim="Q1'26"/><text x="540.84" y="203" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1'26">975</text><rect x="577.75" y="165.43" width="69.82" height="290.57" fill="#182456" rx="1" data-dim="Q2'26"/><text x="612.66" y="159.43" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">1,147</text><text x="576.75" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">EMP</text><text x="576.75" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">嵌入式處理</text><rect x="705.43" y="352.39" width="69.82" height="103.61" fill="#57a0cf" rx="1" data-dim="Q1'26"/><text x="740.34" y="346.39" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1'26">409</text><rect x="777.25" y="343.27" width="69.82" height="112.73" fill="#182456" rx="1" data-dim="Q2'26"/><text x="812.16" y="337.27" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">445</text><text x="776.25" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">RFOC</text><text x="776.25" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">射頻與光通訊</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：STMicroelectronics Q2'26 新聞稿（6-K，2026/7/23）Net Revenues by Reportable Segment</text></svg>
+</div><div class="note">⚑ EMP 單季增量 $1.72 億最大，AM&S $1.08 億，P&D $0.75 億（自 Q1 的低點回升）。資料來源：STM 新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與毛利率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季各部門營收與 GAAP 毛利率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="322" x2="824" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500</text><line x1="76" y1="188" x2="824" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,500</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">33.5</text><text x="834" y="326" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">34.2</text><text x="834" y="192" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">34.8</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">35.5</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'25</text><line x1="263" y1="456" x2="263" y2="460" stroke="#999999" stroke-width="1"/><text x="263" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3'25</text><line x1="450" y1="456" x2="450" y2="460" stroke="#999999" stroke-width="1"/><text x="450" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4'25</text><line x1="637" y1="456" x2="637" y2="460" stroke="#999999" stroke-width="1"/><text x="637" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'26</text><polyline points="76,152.36 263,71.69 450,67.67 637,102.78 824,73.83" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="152.36" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="263" cy="71.69" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="450" cy="67.67" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="637" cy="102.78" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="73.83" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,336.2 263,341.03 450,345.58 637,351.75 824,331.65" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="336.2" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="263" cy="341.03" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="450" cy="345.58" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="637" cy="351.75" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="331.65" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="76,229 263,194.43 450,183.98 637,194.7 824,148.6" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="229" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="263" cy="194.43" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="450" cy="183.98" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="637" cy="194.7" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="148.6" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,365.95 263,363.54 450,335.67 637,346.39 824,336.74" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="365.95" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="263" cy="363.54" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="450" cy="335.67" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="637" cy="346.39" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="336.74" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><polyline points="450,114.3 637,395.7 824,194.7" fill="none" stroke="#b1408a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="456" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="450" cy="114.3" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="637" cy="395.7" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="824" cy="194.7" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><line x1="262.66" y1="40" x2="278.66" y2="40" stroke="#182456" stroke-width="2.4"/><text x="284.66" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">AM&amp;S</text><line x1="331.96" y1="40" x2="347.96" y2="40" stroke="#8f1f1f" stroke-width="2.4"/><text x="353.96" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">P&amp;D</text><line x1="394.94" y1="40" x2="410.94" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="416.94" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">EMP</text><line x1="457.91" y1="40" x2="473.91" y2="40" stroke="#b3760f" stroke-width="2.4"/><text x="479.91" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">RFOC</text><line x1="527.21" y1="40" x2="543.21" y2="40" stroke="#b1408a" stroke-width="2.4" stroke-dasharray="5 3"/><text x="549.21" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">GAAP 毛利率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：STM Q4&#39;25／Q1&#39;26／Q2&#39;26 新聞稿（Q3&#39;25、Q2&#39;25 取自同表的比較欄）；Q3&#39;25 毛利率本報告未取得，留白</div>
+</div><div class="note">⚑ AM&S 與 EMP 為主要成長來源；RFOC 在 Q4'25 跳升後持平；P&D 低於去年同期的 Q4'24（$6.02 億）。</div></div><div class="chart-wrap"><div class="chart-title">各部門營業利益率</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">各部門營業利益率：Q2'25 vs Q2'26</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2'25</text><rect x="95.63" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="113.63" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2'26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#eeeeee" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-30</text><line x1="78" y1="392.67" x2="876" y2="392.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="396.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-20</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-10</text><line x1="78" y1="266" x2="876" y2="266" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="270" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="78" y1="139.33" x2="876" y2="139.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="143.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">30 %</text><line x1="78" y1="266" x2="876" y2="266" stroke="#111111" stroke-width="1.2"/><rect x="106.93" y="218.5" width="69.82" height="47.5" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="141.84" y="212.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">7.50</text><rect x="178.75" y="202.03" width="69.82" height="63.97" fill="#182456" rx="1" data-dim="Q2'26"/><text x="213.66" y="196.03" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">10.1</text><text x="177.75" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">AM&amp;S</text><rect x="306.43" y="266" width="69.82" height="79.17" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="341.34" y="357.17" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">-12.5</text><rect x="378.25" y="266" width="69.82" height="135.53" fill="#182456" rx="1" data-dim="Q2'26"/><text x="413.16" y="413.53" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">-21.4</text><text x="377.25" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">P&amp;D</text><rect x="505.93" y="180.5" width="69.82" height="85.5" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="540.84" y="174.5" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">13.5</text><rect x="577.75" y="141.23" width="69.82" height="124.77" fill="#182456" rx="1" data-dim="Q2'26"/><text x="612.66" y="135.23" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">19.7</text><text x="576.75" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">EMP</text><rect x="705.43" y="152.63" width="69.82" height="113.37" fill="#57a0cf" rx="1" data-dim="Q2'25"/><text x="740.34" y="146.63" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'25">17.9</text><rect x="777.25" y="131.73" width="69.82" height="134.27" fill="#182456" rx="1" data-dim="Q2'26"/><text x="812.16" y="125.73" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2'26">21.2</text><text x="776.25" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">RFOC</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Q2'26 新聞稿 segment 說明（AM&amp;S 10.1% vs 7.5%；P&amp;D −21.4% vs −12.5%；EMP 19.7% vs 13.5%；RFOC 21.2% vs 17.9%）</text></svg>
+</div><div class="note">⚑ 三個部門營業利益率較去年同期改善，但 P&D 惡化 8.9 個百分點，是公司層級利潤率被拖累的核心。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季各部門營收（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>部門</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>Q1'26</th><th>Q2'26</th></tr></thead><tbody><tr><td>AM&S</td><td>1,133</td><td>1,434</td><td>1,449</td><td>1,318</td><td>1,426</td></tr><tr><td>P&D</td><td>447</td><td>429</td><td>412</td><td>389</td><td>464</td></tr><tr><td>EMP</td><td>847</td><td>976</td><td>1,015</td><td>975</td><td>1,147</td></tr><tr><td>RFOC</td><td>336</td><td>345</td><td>449</td><td>409</td><td>445</td></tr><tr><td>總營收</td><td>2,766</td><td>3,187</td><td>3,329</td><td>3,095</td><td>3,487</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：晶片是什麼、為何客戶一定要買</div><p><b>AM&S（類比、MEMS 與感測器）</b>：手機與車用的影像感測器、加速度計與陀螺儀（MEMS）、類比電源與訊號晶片；NXP MEMS 加入後補強車用加速度計。需求取決於手機與車輛出貨與單車含量。</p><p><b>P&D（功率與離散）</b>：功率 MOSFET、IGBT 與 SiC 功率元件，用於電動車逆變器、工業與電源；SiC 轉換 8 吋、價格競爭使本部門虧損。</p><p><b>EMP（嵌入式處理）</b>：通用微控制器（STM32 系列）、客製處理與連網安全晶片；通用 MCU 同時受益於工業復甦與光收發模組控制用量，供給因此吃緊。</p><p><b>RFOC（射頻與光通訊）</b>：用於 LEO 衛星與資料中心光收發模組的 RF 與矽光晶片。</p><p>⚑ 以上為產業一般知識與公司說法；ST 只揭露四個部門營收，未揭露終端市場金額與客戶別營收（除 Apple 比例）。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
