@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palo Alto Networks — FY2026 Q4 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Palo Alto Networks（PANW）— FY2026 Q4 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／併購整合與可轉債／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 9 月 1 日（FQ4 於 7/31 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q4 8-K Ex.99.1（9/1）、FY2026 10-K（9/10）、前四季 8-K、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">併購整合與可轉債</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">分析師（Piper Sandler、JPMorgan、Barclays、Citi、RBC、Wells Fargo、BTIG、Morgan Stanley、Deutsche Bank）</div></div><div class="stat-box"><div class="stat-val">13</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/9/1 法說會（Motley Fool 逐字稿頁、Investing.com 逐字稿頁，兩份交叉比對；Benzinga、Yahoo、roic.ai 因擋爬無法讀取）、同日 8-K 新聞稿、FY2026 10-K（9/10）。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附來源連結）。全場最關鍵的結構性事實：<b>九位分析師沒有人追問「併購貢獻 vs 有機成長」的拆分</b>——Q3 新聞稿曾列出 CyberArk＋Chronosphere 貢獻（營收 $3.88 億、NGS ARR $16 億、RPO $18 億），本季新聞稿不再列出；10-K 只給整個 FY26 的併購貢獻營收 $9.3 億與營業損失 $7.97 億；FY27 起公司改以 Network &amp; AI Security／Cortex／Idira 三平台指引。也沒有人問 GAAP 淨損 $2.82 億裡的 $5.24 億可轉債公允價值損失，以及 10-K 的 $76.9 億雲端採購承諾。<b>兩份來源在三處數字不一致</b>（平台化淨增數、SASE 取代金額、CyberArk 毛利率改善期間），已在對應卡片標明。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Rob Owens（Piper Sandler）</div><div class="qa-topic">併購策略、「轉型級」機會</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">市場變化很快，併購策略怎麼想？什麼會是轉型級的標的？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Nikesh Arora：併購不是策略，是產品開發的結果；公司追蹤約 40–50 家有募資的資安新創，等市場驗證某個技術方向（LLM → agentic → 開放權重模型）正確後才出手，目的是比自研更快補上客戶需要的能力，尤其是保護 AI agent 與開放權重模型。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「併購是結果不是策略」vs FY26 實際動作</div><div class="q-text">本報告依 10-K 加總：CyberArk $210.6 億、Chronosphere $29.5 億、Koi $2.31 億、Portkey $1.17 億，加上 7 月簽約的 Embrace $3.25 億與 Console $5 億（均為現金），<b>六筆合計約 $251.8 億</b>（本報告推算）。這個頻率（FY26 Q2 起每季至少一筆）很難讀成「偶發的產品結果」；而公司同時說明剩餘回購額度只有 $10 億、將於 2026/12/31 到期。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Brian Essex（JPMorgan）</div><div class="qa-topic">CyberArk 在既有客戶的滲透、營收協同</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">CyberArk 只從 PANW 既有客戶拿到約 200 個新 logo，交易規模多大？滲透空間？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：200 多個來自 PANW 客戶基礎的新 logo；成本協同已讓 CyberArk 業務利潤率改善約 1,000bp（<b>兩份摘要對期間說法不同：一說約 9 個月、一說約兩季</b>）；新負責人 Sonny Singh 上任；推出 Modern PAM 擴大可服務範圍；把 Idira 定位在機器身分與 AI agent 身分，認為這塊「尚無明確領導者」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">營收協同 vs 成本協同的比重？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora 的回答集中在成本協同與新產品；Investing.com 摘要另記錄 5M 美元以上 TCV 交易年增約 50%、約 400 個共享商機（摘要層級數字）。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 問營收協同、答成本協同</div><div class="q-text">分析師問的是營收協同的規模，答覆以利潤率改善（成本面）與新品定位為主；Idira 唯一的營收數字是 <b>pro forma $12.6 億、年增 21%</b>（含收購前期間），GAAP 口徑只能從 10-K 的「CyberArk＋Chronosphere 合計貢獻 FY26 營收 $9.3 億」推得，兩者無法直接比較。200 個新 logo 沒有對應金額。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Saket Kalia（Barclays）</div><div class="qa-topic">Mythos 事件後的購買行為</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">AI 威脅升高（Mythos 時刻）如何轉成客戶購買行為？更多平台化？管線？定價權？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：Mythos 做到了公司過去做不到的事——讓 CEO 主動談資安；客戶務實，認為這是新常態，要的是現代化資安資產、平台化與 AI 驅動的 SOC，偏向整合平台而非零散點方案；開放權重模型很快會追上 Mythos 能力，所以處理技術債的窗口很短。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 敘事強、量化缺</div><div class="q-text">兩份摘要都沒有記錄對「定價權」與「管線金額」的直接回答。管理層把需求描述成「大順風」，但同一天的指引是 FY27 NGS ARR 年增 22–23%（FY26 為 +63%，其中大部分是併購進帳）；<b>敘事熱度與保守指引之間的落差，與上季「不要預期意外爆發」的口風一致</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Fatima Boolani（Citi）</div><div class="qa-topic">OT 場景與 Frontier AI 關鍵防禦計畫</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">在營運技術（OT）與 Frontier AI Critical Defense 計畫上，錢包份額的限制因素是什麼？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：公司已能在約 4 小時內為 OT 漏洞產生並部署簽章（業界通常約 55 天）；限制因素是客戶的評估與 POC 時程，不是產品；這不是「coding agent 式」的 ARR 暴衝，而是長期順風，季度間會有超額表現。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「4 小時 vs 55 天」是單方比較</div><div class="q-text">55 天的業界基準沒有出處，也沒有該計畫的客戶數、ARR 或 pipeline 金額；「長期順風、季度有超額」同時承認短期不會明顯加速。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Matt Hedberg（RBC）</div><div class="qa-topic">可觀測性（Chronosphere）定位與價格</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">可觀測性相對傳統領導者的功能位置？是搶份額還是擴大市場？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：Chronosphere 為 AI 時代設計，價格比領先的既有廠商便宜 30–40%；起步客戶是 AI 原生公司（含前沿實驗室）；Embrace 與 synthetics 的加入讓功能向企業級對手看齊，預期未來約六個月會有可競爭的產品；目前銷售仍限縮在 AI 原生客戶，之後才擴及企業市場，並預期 ARR 會「在接下來幾季持續變大」。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 折扣幅度從「約一半」變成「便宜 30–40%」；單一客戶仍是成長關鍵</div><div class="q-text">上季（Q3）同一位管理層說 Chronosphere 約為業界價格的一半（見前期報告），本季摘要記錄為便宜 30–40%——<b>價格優勢的說法縮水</b>。可觀測性 ARR 本季「超過 $5 億」（上季為 $3 億以上），摘要同時記錄 Q4 淨增 ARR 中有九位數（至少約 $1 億）來自一家大型 LLM 客戶遷移；指引假設亦說該遷移的影響會延續到 Q1。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Michael Turrin（Wells Fargo）</div><div class="qa-topic">FY27 指引的編製方式</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">考慮到 AI 的轉折點，FY27 指引的基本假設與上檔來源是什麼？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：以各事業單位的計畫衡量能否超越共識，表示樂見可望超越共識；CFO Dipak Golechha：流程五、六年來未變，包含管線趨勢、新產品牽引力、資源需求與區域規劃，並已把多個轉折點放進預測。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 沒有共識數字、沒有拆分假設</div><div class="q-text">兩份摘要都沒有記錄任何具體共識數字或假設拆分（有機 vs 併購、Chronosphere 單一客戶、硬體漲價）。新聞稿的 FY27 營收指引 $141–142 億，中位年增約 23.3%（本報告推算）；<b>股價在財報後下跌約 5%（Investing.com 摘要）</b>，顯示市場並未照「超越共識」的語氣接受。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Gray Powell（BTIG；Motley Fool 逐字稿標示發言者為 Gregg Moskowitz，兩者對不上）</div><div class="qa-topic">SASE 取代既有廠商的加速</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">SASE 取代案金額從 Q3 的約 $2 億（累計）跳到全年更大的數字，是什麼推動加速？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：早期 SASE 以網際網路存取為主；疫情後轉向私有加網際網路存取；PANW 在私有存取領先，如今網際網路存取也追平；加上 SD-WAN 整合、跨硬體／軟體／SASE 的一致平台與單一主控台，既有客戶傾向統一平台，公司「包圍」了 SASE 既有廠商。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 數字不一致：$4 億還是 $4.5 億</div><div class="q-text">準備稿記錄為「近 100 個帳戶、TCV 逾 $4 億、近去年兩倍」（Fool 兩次摘要皆同）；分析師問題中引用的是 $4.5 億（Investing.com 摘要）。<b>以公司準備稿的 $4 億以上為準，$4.5 億無法在兩份來源間確認</b>。SASE 預訂年增 40% 是兩份一致的數字。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Meta Marshall（Morgan Stanley）</div><div class="qa-topic">$1 兆「資安技術債」如何加速償還</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">能否透過專業服務或其他機制，幫客戶更快償還技術債？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：可提供彈性付款模式、分期合約與「先部署、再汰換舊產品」；真正限制是客戶的優先順序（AI 轉型同時在搶資源）；典型部署期是一到三年，採「爬行、行走、奔跑」，而不是一個季度；客戶有向大型、產品同等或更強的供應商標準化的趨勢。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 彈性付款對現金流的含意沒被追問</div><div class="q-text">「分期合約、先部署」會把帳單與收款往後推。FY26 調整後自由現金流利潤率為 38.4%，<b>FY27 指引為 38.0%（較低）</b>，而公司同時重申 FY28 達 40%——這條路徑需要 FY28 提升約 200bp。資產負債表上財務應收款（短＋長）為 $15.4 億（去年 $17.2 億），未見擴張，但本季是否已使用這些彈性條款無從驗證。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Brad Zelnick（Deutsche Bank）</div><div class="qa-topic">為什麼買 Console？五年願景</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">為何是 Console？五年後如果非常成功，客戶會停止自己做哪些事？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Arora：Console 支撐「自主化資安營運」；北極星是降低偵測、預防、修復中的人為介入；五年內希望 agent 能理解客戶環境、在一週內「替換」某個產品；目標是跨約十萬個部署學習，讓每次新部署都比上一次更聰明，並轉成「資料優先、AI 優先」的資安公司（每日處理約 19 PB 資料，來自 Fool 摘要）。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ $5 億現金買進，沒給任何營收／ARR／客戶數</div><div class="q-text">10-K 揭露 Console 總對價為 $5 億現金、9/1 完成，將於 Q1 FY27 列為企業合併；法說會與新聞稿都沒有 Console 的營收、ARR 或客戶規模，指引說它對 FY27 影響不大（Fool 摘要）。<b>連同 Embrace $3.25 億，Q1 FY27 的併購現金支出約 $8.25 億</b>（10-K）。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.fool.com/earnings/call-transcripts/2026/09/08/palo-alto-networks-panw-q4-2026-earnings-call-transcript/" target="_blank" rel="noopener">Motley Fool：Palo Alto Networks (PANW) Q4 2026 Earnings Call Transcript</a>；<a href="https://ca.investing.com/news/stock-market-news/earnings-call-transcript-palo-alto-networks-beats-q4-2026-estimates-shares-fall-93CH-4824618" target="_blank" rel="noopener">Investing.com：Palo Alto Networks beats Q4 2026 estimates, shares fall（逐字稿頁）</a>；<a href="https://ng.investing.com/news/stock-market-news/earnings-call-transcript-palo-alto-networks-beats-q4-2026-estimates-shares-fall-93CH-2681744" target="_blank" rel="noopener">Investing.com（另一版本頁面）</a>；<a href="https://www.sec.gov/Archives/edgar/data/1327567/000132756726000019/ex991q426earningsrelease.htm" target="_blank" rel="noopener">SEC EDGAR：Q4 FY2026 8-K Ex.99.1 新聞稿</a>；<a href="https://www.sec.gov/Archives/edgar/data/1327567/000132756726000023/panw-20260731.htm" target="_blank" rel="noopener">SEC EDGAR：FY2026 Form 10-K（2026/9/10）</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li><b>CyberArk：</b>總對價 <b>$210.6 億</b>（現金 $23.1 億＋普通股 1.12 億股 $184.9 億＋替換獎酬 $2.65 億），2026/2/11 完成；商譽 $148 億、可辨認無形資產 $62.8 億</li><li><b>Chronosphere：</b>$29.5 億（現金 $28.4 億），2026/1/29 完成；商譽 $23.6 億</li><li>Koi $2.31 億（4/14）、Portkey $1.17 億（5/29）；Embrace $3.25 億（8/27）、Console $5 億（9/1），後兩者皆現金、Q1 FY27 認列</li><li>FY26 併購合計貢獻營收 <b>$9.3 億</b>、營業損失 <b>$7.97 億</b>（10-K）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>CyberArk 協同「提前 3–6 個月」（Q3 說法，本季重申進度超前）；CyberArk 業務利潤率改善約 1,000bp</li><li>2030 年可轉債（CyberArk 承接）2030/6/15 到期；FY26 有 $1.53 億本金被轉換、以 $1.6 億現金結清</li><li>FY27：Idira 營收指引約 $15 億（pro forma 年增高十位數至 20%）</li><li>回購額度剩 $10 億，2026/12/31 到期</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>Q4 GAAP 淨損 <b>$2.82 億</b>（每股 −$0.35）vs 非 GAAP 淨利 $8.53 億（每股 $1.02）</li><li>差額主因：可轉債與 capped call 公允價值變動 <b>$5.24 億</b>、併購無形資產攤銷 $2.81 億（去年同期 $0.37 億）、SBC 相關 $4.87 億</li><li>商譽 $220.1 億（去年 $45.7 億）、無形資產 $70.2 億（去年 $7.6 億）；現金與投資 $79.1 億（去年 $84.6 億）</li><li>FY26 調整後 FCF $44.1 億（利潤率 38.4%）</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>Q3 之後不再公布併購貢獻，有機成長無法獨立驗證（僅有 10-K 全年 $9.3 億）</li><li>Idira 只有 pro forma 營收 $12.6 億，GAAP 與 pro forma 口徑無法對帳</li><li>Chronosphere 九位數遷移的延續性（指引假設「影響延續到 Q1」）</li><li>Console／Embrace 的營收與 ARR 貢獻（無揭露）</li><li>未償可轉債本金 $11 億，帳面公允價值 $17.7 億（約本金 161%），隨股價與信用利差波動</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">併購與資本事件彙整（FY26 至今）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>標的</th><th>完成日</th><th>總對價</th><th>作用／說明</th></tr></thead><tbody><tr><td>Chronosphere</td><td class="wrap">2026/1/29</td><td class="wrap">$2,951M（現金 $2,842M）</td><td class="wrap">可觀測性平台；ARR 本季逾 $5 億（法說會）</td></tr><tr><td>CyberArk（Idira）</td><td class="wrap">2026/2/11</td><td class="wrap">$21,061M（現金 $2,308M＋股票 $18,488M＋替換獎酬 $265M）</td><td class="wrap">身分安全平台；承接 $12.5 億 2030 年到期零息可轉債</td></tr><tr><td>Koi</td><td class="wrap">2026/4/14</td><td class="wrap">$231M（幾乎全為現金）</td><td class="wrap">agentic 端點安全；法說會稱 logo 逾 100、較整合前 2.5 倍</td></tr><tr><td>Portkey</td><td class="wrap">2026/5/29</td><td class="wrap">$117M（幾乎全為現金）</td><td class="wrap">AI Gateway，併入 Prisma AIRS Gateway（7/16 GA）</td></tr><tr><td>Embrace</td><td class="wrap">2026/8/27（Q1 FY27 認列）</td><td class="wrap">$325M 現金</td><td class="wrap">真實使用者監控（RUM），補可觀測性</td></tr><tr><td>Console</td><td class="wrap">2026/9/1（Q1 FY27 認列）</td><td class="wrap">$500M 現金</td><td class="wrap">AI 原生 agentic 工作流平台，強化 Cortex</td></tr><tr><td>2030 年可轉債</td><td class="wrap">—</td><td class="wrap">原本金 $12.5 億；剩 $11 億</td><td class="wrap">FY26 被轉換 $1.53 億，以 $1.6 億現金結清；帳面公允價值 $17.74 億</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>為何 GAAP 虧損 $2.82 億、非 GAAP 卻賺 $8.53 億？</b>三個項目：① 承接自 CyberArk 的 2030 年可轉債採公允價值選擇權，股價上漲使其公允價值上升，Q4 認列 $5.24 億損失（FY26 全年 $5.62 億，含 capped call 抵銷）；② 併購無形資產攤銷 $2.81 億；③ SBC 相關費用 $4.87 億（占營收 14.3%，本報告推算）。這三項都被非 GAAP 排除，但<b>①的現金面影響是真實的</b>——轉換時須以現金結清本金，FY26 已付 $1.6 億。資料來源：Q4 新聞稿調節表；10-K Note（Debt／Acquisitions）。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Palo Alto Networks 為資安軟體與硬體公司，<b>無資料中心專案融資</b>（無合資、SPV 或租賃式資料中心）。最接近的是雲端託管：10-K Note 13 揭露不可取消的雲端採購承諾 <b>$76.86 億</b>（FY27 $1.43 億、FY28 $12.18 億、FY29 $13.29 億、FY30 $13.98 億、FY31 $17.25 億、FY32 起 $18.73 億），以及另一項 $8,100 萬、至 2027/9 的最低購買承諾。資金面方面：未提取的 $4 億循環信貸額度，未動用。來源：FY2026 10-K Note 13、Item 7。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>Q4 起不再拆分併購貢獻後，FY27 NGS ARR 年增 22–23% 中有機成長是多少？</li><li>Chronosphere 九位數單一客戶遷移的「尾巴」在 Q1 FY27 之後是否歸零？</li><li>$76.9 億雲端承諾中，約 98% 排在 FY28 之後；是否與 FY27 之後的 NGS ARR 成長軌跡匹配？</li><li>Idira 的 pro forma 年增 21% 是否包含收購前的客戶移轉與價格調整？</li><li>Console、Embrace 完成後 Q1 FY27 的併購現金 $8.25 億與回購、可轉債結清的資金優先順序？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>Network & AI Security</h4><div class="meta">FY26 營收約 $83.5 億（+17%）</div><p>涵蓋硬體與軟體次世代防火牆（NGFW）、SASE（Prisma Access＋SD-WAN）、Prisma AIRS（AI 資安）。法說會數字：SASE 預訂年增 40%、取代近 100 個既有 SASE 帳戶（TCV 逾 $4 億）、軟體防火牆 ARR Q4 成長 29%、Prisma AIRS ARR 逾 $1 億（四季內，800+ 客戶，Fool 摘要）。硬體約占營收 10%，記憶體與儲存成本壓力持續、公司採選擇性漲價。</p></div><div class="tech-card g"><h4>Cortex（SOC／XSIAM／可觀測性）</h4><div class="meta">FY26 營收約 $19.2 億（+25%）</div><p>XSIAM ARR 約 $7 億以上、年增 70%，突破 1,000 家客戶（兩份摘要一致）；Chronosphere 可觀測性 ARR 逾 $5 億；法說會的產品敘事是「資料優先、AI 優先」，每日處理約 19 PB（Fool 摘要）。本季以 $5 億收購 Console 補 agentic 工作流。</p></div><div class="tech-card o"><h4>Idira（CyberArk 身分安全）</h4><div class="meta">pro forma 營收約 $12.6 億（+21%）</div><p>以特權存取管理（PAM）起家，擴張到機器身分與 AI agent 身分；Q4 推出 Modern PAM。法說會稱 PANW 既有客戶新增 200 多個 logo、5M 美元以上 TCV 交易年增約 50%（摘要層級）。10-K 說明產品營收含來自 CyberArk 的軟體授權。</p></div><div class="tech-card "><h4>AI agent 與端點安全</h4><div class="meta">Koi／Portkey／Prisma AIRS Gateway</div><p>Koi 做 agentic 端點（vibe coding 工具、MCP server 生態）；Portkey 的 AI Gateway 併入 Prisma AIRS Gateway（2026/7/16 GA，10-K）；Console 做 agent 驅動的自動化營運。這條線目前都只有 logo 數與 ARR 門檻式揭露，沒有營收。</p></div></div><div class="note grey">⚑ 以上平台營收與 ARR 為法說會口述（兩份第三方摘要互相一致才採用）；FY26 三平台數字加總約 $115.3 億，與 GAAP 營收 $114.8 億差 $5,000 萬，主要因 Idira 為含收購前期間的 pro forma，<b>不能當成營收拆分</b>。FY27 指引：Network &amp; AI Security 低雙位數成長、Cortex 約 30%、Idira 約 $15 億；三者依中位推算合計約 $132–133 億，與總營收指引 $141–142 億差約 $8–9 億，推測為未單獨列示的可觀測性等項目，<b>此為本報告推算，公司未說明</b>。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 834 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="834" height="702" fill="#ffffff"/><text x="417" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Palo Alto Networks 供應鏈結構：供應與製造 → 平台 → 營收類型 → 通路</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">供應與製造</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">平台</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">營收類型（FY26）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">通路</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker></defs><polyline points="178,106 178,124 115.00000000000006,124 115.00000000000006,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="448,106 448,146 199.30000000000004,146 199.30000000000004,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="697,106 697,168 283.6,168 283.6,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="697,106 697,190 510.20000000000005,190 510.20000000000005,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="697,106 697,208 697,208 697,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="199.30000000000004,282 199.30000000000004,300 240,300 240,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="199.30000000000004,282 199.30000000000004,322 402,322 402,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="425.9,282 425.9,344 508,344 508,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="653.6,282 653.6,366 614,366 614,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="653.6,282 653.6,384 344,384 344,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="292,458 292,476 138.60000000000002,476 138.60000000000002,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="292,458 292,498 350.4,498 350.4,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="292,458 292,520 562.1999999999999,520 562.1999999999999,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="508,458 508,542 292.4,542 292.4,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="508,458 508,560 504.19999999999993,560 504.19999999999993,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="508,458 508,560 715.4,560 715.4,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><g><rect x="60" y="46" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="178" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Flex（EMS 代工）</text><text x="178" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K：EMS provider；所有硬體在美國…</text></g><g><rect x="330" y="46" width="236" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="448" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">單一來源零組件</text><text x="448" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K：部分零組件為 sole source；記…</text></g><g><rect x="600" y="46" width="194" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="697" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">雲端託管服務商（未具名）</text><text x="697" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K 雲端採購承諾 $76.9 億</text></g><g><rect x="103" y="222" width="192.6" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="199.3" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Network &amp; AI Security</text><text x="199.3" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 營收 $83.5 億（法說會）</text></g><g><rect x="329.6" y="222" width="192.6" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="425.9" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Cortex</text><text x="425.9" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">FY26 營收 $19.2 億（法說會）</text></g><g><rect x="556.2" y="222" width="194.8" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="653.6" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Idira（CyberArk）</text><text x="653.6" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">pro forma $12.6 億（法說會）</text></g><g><rect x="228" y="398" width="128" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="292" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Product 產品</text><text x="292" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$2,280M（19.9%）</text></g><g><rect x="390" y="398" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="508" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Subscription &amp; support 訂…</text><text x="508" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$9,200M（80.1%）</text></g><g><rect x="126.6" y="574" width="177.8" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="215.5" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Distributor A（15%）</text><text x="215.5" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K：占 FY26 營收 15%</text></g><g><rect x="338.4" y="574" width="177.8" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="427.3" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Distributor B（15%）</text><text x="427.3" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">10-K：占 FY26 營收 15%</text></g><g><rect x="550.2" y="574" width="177.2" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="638.8" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">其他通路與直銷（70%）</text><text x="638.8" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">無單一終端客戶占營收逾 10%</text></g><line x1="263.4" y1="664" x2="285.4" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="293.4" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">單一來源／集中度風險</text><rect x="421.4" y="663" width="22" height="2.4" fill="#182456"/><text x="451.4" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">雲端與 AI 平台路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2026 10-K Item 1（Manufacturing）、Item 1A、Note 2／13；法說會。雲端託管商 10-K 未具名；Flex 為 10-K 明載的 EMS provider</div>
+</div></div></div></div><div class="note">⚑ 10-K Item 1／1A／Note 2、13；法說會。圖中雲端託管商 10-K 未具名；三個平台的營收為法說會口述。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（FY2026，百萬美元）</div><div id="sankeyEmbed_bz0mkxa" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"da","label":"Distributor A（15%）","color":"#8f1f1f"},{"id":"db","label":"Distributor B（15%）","color":"#b3760f"},{"id":"oth","label":"其他通路與直銷（70%）","color":"#57a0cf"},{"id":"tot","label":"Palo Alto Networks FY2026 營收 $11,480M","color":"#182456"},{"id":"prod","label":"Product 產品","color":"#0f6f8a"},{"id":"sub","label":"Subscription & support 訂閱與支援","color":"#b1408a"}],"links":[{"source":"da","target":"tot","value":1722},{"source":"db","target":"tot","value":1722},{"source":"oth","target":"tot","value":8036},{"source":"tot","target":"prod","value":2280},{"source":"tot","target":"sub","value":9200}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_bz0mkxa");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 流量全為 10-K 已揭露：兩家經銷商各占營收 15%（本報告以 $11,480M×15% 估算金額）、Product $2,280M／Subscription &amp; support $9,200M。10-K 未提供各通路對應的產品類型，故通路與營收類型之間不另拆分。兩張圖節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">地區別營收</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">FY2026 營收地區別（Americas／EMEA／APAC）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">FY25</text><rect x="89.3" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="107.3" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">FY26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="361" x2="876" y2="361" stroke="#eeeeee" stroke-width="1"/><text x="68" y="365" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="78" y1="266" x2="876" y2="266" stroke="#eeeeee" stroke-width="1"/><text x="68" y="270" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,000</text><line x1="78" y1="171" x2="876" y2="171" stroke="#eeeeee" stroke-width="1"/><text x="68" y="175" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6,000</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">8,000 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="161.26" width="93.76" height="294.74" fill="#57a0cf" rx="1" data-dim="FY25"/><text x="163.12" y="155.26" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY25">6,205</text><rect x="212" y="91.25" width="93.76" height="364.75" fill="#182456" rx="1" data-dim="FY26"/><text x="258.88" y="85.25" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY26">7,679</text><text x="211" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Americas</text><rect x="382.24" y="364.94" width="93.76" height="91.06" fill="#57a0cf" rx="1" data-dim="FY25"/><text x="429.12" y="358.94" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY25">1,917</text><rect x="478" y="340.67" width="93.76" height="115.33" fill="#182456" rx="1" data-dim="FY26"/><text x="524.88" y="334.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY26">2,428</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">EMEA</text><rect x="648.24" y="403.8" width="93.76" height="52.2" fill="#57a0cf" rx="1" data-dim="FY25"/><text x="695.12" y="397.8" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY25">1,099</text><rect x="744" y="390.78" width="93.76" height="65.22" fill="#182456" rx="1" data-dim="FY26"/><text x="790.88" y="384.78" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="FY26">1,373</text><text x="743" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">APAC</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：FY2026 10-K MD&amp;A「Revenue by Geographic Theater」</text></svg>
+</div><div class="note">⚑ Americas 占 66.9%（+24%）、EMEA 21.1%（+27%）、APAC 12.0%（+25%）。資料來源：FY2026 10-K MD&amp;A。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>通路集中</td><td class="wrap">兩家經銷商各占 FY26 營收 15%（合計 30%）；截至 7/31，一家經銷商占應收帳款總額 19%</td><td>FY2026 10-K Item 1A／Note 1</td></tr><tr><td>終端客戶</td><td class="wrap">FY24～FY26 無單一終端客戶占營收逾 10%</td><td>10-K Item 1</td></tr><tr><td>製造</td><td class="wrap">硬體由 EMS provider Flextronics（Flex）與原廠設計製造商組裝，所有硬體在美國組裝；部分零組件為 sole source，無量產採購合約</td><td>10-K Item 1 Manufacturing／Item 1A</td></tr><tr><td>雲端託管</td><td class="wrap">不可取消的雲端採購承諾 $76.86 億；訂閱與支援營業成本 FY26 +39%，主因雲端託管成本</td><td>10-K Note 13；MD&amp;A</td></tr><tr><td>財務應收款</td><td class="wrap">短期 $5.92 億＋長期 $9.44 億＝$15.36 億（去年 $17.17 億）</td><td>10-K 資產負債表（新聞稿）</td></tr><tr><td>併購承接資產</td><td class="wrap">FY26 併購合計營收 $9.3 億、營業損失 $7.97 億；pro forma FY26 營收 $123.12 億（含 CyberArk 至 2026/6/30）</td><td>10-K Note 8</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾（10-K Note 13，單位百萬美元，截至 2026/7/31）：</b>雲端 $7,686（FY27 143／FY28 1,218／FY29 1,329／FY30 1,398／FY31 1,725／FY32 起 1,873）、製造 $370（全數 FY27）、其他 $186（FY27 129／FY28 34／FY29 13／FY30 10），<b>合計 $8,242</b>，另有 $81 的最低購買承諾（至 2027/9，無指定時程）。雲端承諾占 93%、且 FY27 僅 $143，自 FY28 起每年逾 $12 億；製造承諾 $370 與供應商採購依需求預測、需對超額承諾提列負債（10-K 會計政策）。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">有機成長與併購貢獻無法獨立驗證</div>Q3 新聞稿曾列「CyberArk＋Chronosphere 貢獻營收 $3.88 億、NGS ARR $16 億、RPO $18 億」，Q4 新聞稿沒有同口徑揭露；10-K 只給全年貢獻營收 $9.3 億、營業損失 $7.97 億。FY27 NGS ARR 指引年增 22–23%，主因是「疊加併購」落幕後的基期效應，但有機部分不可得。<div class="risk-source">來源：Q3／Q4 新聞稿；10-K Note 8</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：Q1 FY27 的 ARR 淨增斷崖 × Chronosphere 一次性尾巴 × 雲端承諾爬坡</div>把分散訊息拼起來：① Q4 NGS ARR 淨增約 $9.7 億（$91.0 億−$81.3 億；Q3 數字取自上季法說會），其中至少約 $1 億（九位數）來自一家 LLM 客戶的遷移；② Q1 FY27 指引 NGS ARR $95.4–95.6 億，<b>隱含淨增僅約 $4.5 億</b>，FY27 全年指引隱含淨增約 $19.8–20.8 億（兩者皆本報告推算），遠低於 FY26 的約 $35 億（含併購）；③ 指引假設該 LLM 遷移的影響延續到 Q1；④ 同時管理層說雲端託管成本將比營收成長更快、記憶體成本壓力持續，而 10-K 的雲端承諾自 FY28 起每年逾 $12 億。FY27 非 GAAP 營業利益率指引 29.5%（Q4 為 29.6%）要靠這三件事同時不出錯，才能維持 FY28 FCF 利潤率 40% 的路徑（FY27 指引 38.0%，低於 FY26 的 38.4%）。<div class="risk-source">來源：Q4 新聞稿指引；10-K Note 13；Investing.com 摘要（指引假設）</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">GAAP 與非 GAAP 差距、可轉債公允價值</div>Q4 GAAP 營業利益率僅 5.0%（營業利益 $1.72 億）、淨損 $2.82 億；可轉債與 capped call 公允價值損失 Q4 $5.24 億。帳面公允價值 $17.74 億對本金 $11 億（約 161%），股價續漲則 GAAP 損失續增；轉換以現金結清本金。<div class="risk-source">來源：新聞稿調節表；10-K Note（Debt）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">通路與硬體供應集中</div>兩家經銷商合計占營收 30%、一家占應收款 19%；Flex 為唯一 EMS，部分零組件為 sole source、無量產合約；管理層稱硬體約占營收 10%、記憶體儲存成本壓力持續、採選擇性漲價。<div class="risk-source">來源：10-K Item 1／1A；法說會</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">毛利率結構性下移</div>GAAP 毛利率 Q4 67.6%，去年同期 73.2%（FY26 全年 70.4%）；Product 毛利率 76.3%→73.3%、Subscription &amp; support 72.3%→66.0%（本報告依新聞稿計算）。10-K 歸因於併購無形資產攤銷與雲端託管成本。<div class="risk-source">來源：新聞稿；10-K MD&amp;A</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出</div>Form 4（2026/6/3 起，公開市場代碼 S）：共 6 位內部人賣出合計約 <b>$3,106 萬</b>（約 9.04 萬股，本報告依各筆價量加總）——董事 James Goetz 約 $1,313 萬（16 筆，6/12 與 9/17）、CFO Dipak Golechha 約 $1,222 萬（14 筆，6/23 與 9/24，其中 9/24 約 $1,077 萬為法說會後）、董事 John Key 約 $303 萬、董事 Aparna Bawa 約 $147 萬、CAO Josh Paul 約 $97 萬、董事 Helle Thorning-Schmidt 約 $24 萬。以 9/1 法說會為界：之前約 $1,081 萬、之後約 $2,024 萬。期間無買進；CEO Nikesh Arora 無賣出申報。是否為 10b5-1 計畫未逐筆核對，不作判斷。<div class="risk-source">來源：SEC EDGAR Form 4（form4.py 彙整）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">流動性</div>現金與投資 $79.1 億（現金及約當 $25.1 億、短期投資 $5.6 億、長期投資 $48.4 億）；$4 億循環信貸未動用；FY26 營運現金流 $45.5 億。Q1 FY27 併購現金約 $8.25 億可由現金吸收。<div class="risk-source">來源：新聞稿資產負債表；10-K</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">Q4 淨增 NGS ARR 近 $10 億</td><td class="wrap">NGS ARR $91.0 億 vs Q3 $81.3 億，淨增約 $9.7 億；高於 Q3 指引區間 $89.0–89.5 億</td><td class="wrap">Q4／Q3 新聞稿；上季法說會</td><td class="wrap">✓ 互證（含單一客戶九位數遷移）</td></tr><tr><td class="wrap">超越全部指引（營收、EPS、ARR、RPO）</td><td class="wrap">營收 $34.1 億 vs 指引 $33.45–33.55 億；非 GAAP EPS $1.02 vs $0.96–0.98；RPO $212 億 vs $209–210 億</td><td class="wrap">Q4／Q3 新聞稿</td><td class="wrap">✓ 互證</td></tr><tr><td class="wrap">CyberArk 協同提前、利潤率回升約 1,000bp</td><td class="wrap">併購合計 FY26 營業損失 $7.97 億；Q4 GAAP 營業利益率 5.0%、非 GAAP 29.6%；Idira 單獨利潤率無揭露</td><td class="wrap">10-K Note 8；新聞稿</td><td class="wrap">△ 無法在公開文件驗證</td></tr><tr><td class="wrap">雲端託管成本將比營收成長更快</td><td class="wrap">FY26 訂閱與支援營業成本 +39%、同類營收 +24%；雲端承諾 $76.9 億、FY28 起每年逾 $12 億</td><td class="wrap">10-K MD&amp;A、Note 13</td><td class="wrap">✓ 互證（方向一致）</td></tr><tr><td class="wrap">硬體約占營收 10%、記憶體成本持續上升</td><td class="wrap">Product 營收 FY26 $22.8 億＝19.9%（含軟體授權），硬體單獨金額無揭露；Product 毛利率年降約 3 個百分點</td><td class="wrap">10-K MD&amp;A；新聞稿</td><td class="wrap">△ 硬體占比無法驗證</td></tr><tr><td class="wrap">SASE 取代近 100 帳戶、TCV 逾 $4 億（近翻倍）</td><td class="wrap">10-K 與新聞稿無此指標；分析師問題引用 $4.5 億，兩份摘要不一致</td><td class="wrap">Fool／Investing.com 摘要</td><td class="wrap">△ 單一來源，數字有衝突</td></tr><tr><td class="wrap">FY28 FCF 利潤率達 40%</td><td class="wrap">FY26 調整後 FCF 38.4%；FY27 指引 38.0%</td><td class="wrap">Q4 新聞稿</td><td class="wrap">△ FY27 指引低於 FY26，須 FY28 提升約 200bp</td></tr><tr><td class="wrap">可觀測性 ARR 逾 $5 億、較 Q2 收購時倍增</td><td class="wrap">Q3 法說會為 $3 億以上；Q4 新聞稿與 10-K 無 Chronosphere 單獨 ARR；摘要記錄九位數單一客戶遷移</td><td class="wrap">Fool／Investing.com 摘要</td><td class="wrap">△ 增量的集中度未量化</td></tr><tr><td class="wrap">（沉默）可轉債公允價值損失、併購貢獻、雲端承諾</td><td class="wrap">$5.24 億損失、全年貢獻營收 $9.3 億、雲端承諾 $76.9 億；九位分析師皆未追問</td><td class="wrap">新聞稿調節表；10-K</td><td class="wrap">✗ 無人提問</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$34.1 億</div><div class="kpi-lbl">Q4 FY26 營收</div><div class="kpi-sub">+34.4% YoY／+13.6% QoQ</div></div><div class="kpi"><div class="kpi-val">$91.0 億</div><div class="kpi-lbl">NGS ARR</div><div class="kpi-sub">+63% YoY（含併購）</div></div><div class="kpi"><div class="kpi-val">$212 億</div><div class="kpi-lbl">RPO</div><div class="kpi-sub">+34% YoY；cRPO $93 億</div></div><div class="kpi"><div class="kpi-val">$141–142 億</div><div class="kpi-lbl">FY27 營收指引</div><div class="kpi-sub">+23–24%；Q1 指引 $33.0–33.1 億</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Product 產品</div><div class="bu-abbr">硬體 NGFW＋軟體授權</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$738M（21.6%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+24.2%／+28.6%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$2,280M（+27%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">毛利率</span><span class="bu-stat-val">73.3%（Q3 71.9%；去年同期 76.3%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:22%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">Subscription &amp; support 訂閱與支援</div><div class="bu-abbr">雲端訂閱＋支援</div><div class="bu-stat"><span class="bu-stat-lbl">Q4 營收</span><span class="bu-stat-val">$2,672M（78.4%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+11.0%／+36.2%</span></div><div class="bu-stat"><span class="bu-stat-lbl">FY26</span><span class="bu-stat-val">$9,200M（+24%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">毛利率</span><span class="bu-stat-val">66.0%（Q3 66.5%；去年同期 72.3%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:78%;background:#0f6f8a"></div></div></div></div><div class="chart-wrap"><div class="chart-title">Product 與 Subscription &amp; support 營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Product 與 Subscription &amp; support 營收：Q3 FY26 vs Q4 FY26</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q3 FY26</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q4 FY26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3,000 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="380.76" width="141.64" height="75.24" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="205.68" y="374.76" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">594</text><rect x="278.5" y="362.52" width="141.64" height="93.48" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="349.32" y="356.52" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">738</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Product</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">產品</text><rect x="533.86" y="150.99" width="141.64" height="305.01" fill="#57a0cf" rx="1" data-dim="Q3 FY26"/><text x="604.68" y="144.99" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q3 FY26">2,408</text><rect x="677.5" y="117.55" width="141.64" height="338.45" fill="#182456" rx="1" data-dim="Q4 FY26"/><text x="748.32" y="111.55" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q4 FY26">2,672</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Subscription &amp; support</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">訂閱與支援</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Palo Alto Networks Q4 FY26 新聞稿損益表（8-K Ex.99.1，2026/9/1）；Q3 FY26 新聞稿（2026/6/2）</text></svg>
+</div><div class="note">⚑ Product 季增 24.2% 快於訂閱與支援的 11.0%；10-K 說明 FY26 Product 成長來自軟體授權（含 CyberArk）與新世代硬體需求。資料來源：Q3／Q4 新聞稿。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收類型與利潤率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季營收類型與利潤率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="322" x2="824" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="76" y1="188" x2="824" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3,000</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><text x="834" y="326" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">40</text><text x="834" y="192" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">60</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">80</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY25</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY25</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 FY26</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 FY26</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 FY26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 FY26</text><polyline points="76,395.3 225.6,379.1 375.2,397.84 524.8,387.12 674.4,376.4 824,357.11" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="395.3" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="225.6" cy="379.1" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="375.2" cy="397.84" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="524.8" cy="387.12" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="674.4" cy="376.4" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="357.11" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,209.98 225.6,193.04 375.2,182.64 524.8,177.28 674.4,133.33 824,97.95" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="209.98" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="225.6" cy="193.04" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="375.2" cy="182.64" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="524.8" cy="177.28" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="674.4" cy="133.33" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="97.95" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,100.9 225.6,99.56 375.2,92.86 524.8,96.88 674.4,137.08 824,137.08" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="100.9" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="225.6" cy="99.56" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="375.2" cy="92.86" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="524.8" cy="96.88" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="674.4" cy="137.08" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="137.08" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="76,406.42 225.6,386.99 375.2,387.66 524.8,386.99 674.4,408.43 824,391.68" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="406.42" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="225.6" cy="386.99" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="375.2" cy="387.66" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="524.8" cy="386.99" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="674.4" cy="408.43" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="391.68" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><line x1="183.75" y1="40" x2="199.75" y2="40" stroke="#182456" stroke-width="2.4"/><text x="205.75" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Product</text><line x1="272.02" y1="40" x2="288.02" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="294.02" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Subscription &amp; support</text><line x1="455.18" y1="40" x2="471.18" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="477.18" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">GAAP 毛利率</text><line x1="565.3" y1="40" x2="581.3" y2="40" stroke="#b3760f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="587.3" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Palo Alto Networks Q3 FY25～Q4 FY26 各季新聞稿；GAAP 毛利率與非 GAAP 營業利益率為本報告依新聞稿數字計算</div>
+</div><div class="note">⚑ 營收六季由 $22.9 億到 $34.1 億；GAAP 毛利率自 Q2 的 73.6% 降到 Q3、Q4 的 67.6%（併購攤銷與雲端成本）；非 GAAP 營業利益率 Q3 27.1%→Q4 29.6%。</div></div><div class="chart-wrap"><div class="chart-title">NGS ARR 逐季</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">Next-Generation Security ARR（逐季期末）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="374.4" x2="876" y2="374.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="378.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2</text><line x1="78" y1="292.8" x2="876" y2="292.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="296.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4</text><line x1="78" y1="211.2" x2="876" y2="211.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="215.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">6</text><line x1="78" y1="129.6" x2="876" y2="129.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="133.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">8</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10 十億美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="101.34" y="227.52" width="112.91" height="228.48" fill="#182456" rx="1" data-dim="NGS ARR"/><text x="157.8" y="221.52" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="NGS ARR">5.60</text><text x="157.8" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4</text><text x="157.8" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY25</text><rect x="260.94" y="215.28" width="112.91" height="240.72" fill="#182456" rx="1" data-dim="NGS ARR"/><text x="317.4" y="209.28" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="NGS ARR">5.90</text><text x="317.4" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1</text><text x="317.4" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><rect x="420.54" y="198.96" width="112.91" height="257.04" fill="#182456" rx="1" data-dim="NGS ARR"/><text x="477" y="192.96" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="NGS ARR">6.30</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><rect x="580.14" y="125.52" width="112.91" height="330.48" fill="#182456" rx="1" data-dim="NGS ARR"/><text x="636.6" y="119.52" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="NGS ARR">8.10</text><text x="636.6" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3</text><text x="636.6" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><rect x="739.74" y="84.72" width="112.91" height="371.28" fill="#182456" rx="1" data-dim="NGS ARR"/><text x="796.2" y="78.72" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="NGS ARR">9.10</text><text x="796.2" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4</text><text x="796.2" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">FY26</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：各季新聞稿（Q4 FY25 $5.6B、Q1 $5.9B、Q2 $6.3B、Q3 $8.1B、Q4 $9.10B）；Q3 起含 CyberArk 與 Chronosphere</text></svg>
+</div><div class="note">⚑ Q2→Q3 由 $6.3B→$8.1B 含 CyberArk 與 Chronosphere 的 $16 億；Q4 淨增約 $9.7 億（本報告推算）。FY27 Q1 指引 $9.54–9.56B。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q3 FY25</th><th>Q4 FY25</th><th>Q1 FY26</th><th>Q2 FY26</th><th>Q3 FY26</th><th>Q4 FY26</th></tr></thead><tbody><tr><td>總營收</td><td>2,289</td><td>2,536.3</td><td>2,474</td><td>2,594</td><td>3,002</td><td>3,410</td></tr><tr><td>Product</td><td>453</td><td>573.9</td><td>434</td><td>514</td><td>594</td><td>738</td></tr><tr><td>Subscription &amp; support</td><td>1,836</td><td>1,962.4</td><td>2,040</td><td>2,080</td><td>2,408</td><td>2,672</td></tr><tr><td>GAAP 毛利率</td><td>73.0%</td><td>73.2%</td><td>74.2%</td><td>73.6%</td><td>67.6%</td><td>67.6%</td></tr><tr><td>Product 毛利率</td><td>77.7%</td><td>76.3%</td><td>79.5%</td><td>77.6%</td><td>71.9%</td><td>73.3%</td></tr><tr><td>Subscription &amp; support 毛利率</td><td>71.8%</td><td>72.3%</td><td>73.1%</td><td>72.6%</td><td>66.5%</td><td>66.0%</td></tr><tr><td>非 GAAP 營業利益</td><td>627</td><td>768</td><td>746</td><td>785</td><td>814</td><td>1,011</td></tr><tr><td>非 GAAP 營業利益率</td><td>27.4%</td><td>30.3%</td><td>30.2%</td><td>30.3%</td><td>27.1%</td><td>29.6%</td></tr></tbody></table></div></div><div class="note grey">⚑ 資料來源：各季 8-K Ex.99.1 損益表；毛利率與營業利益率為本報告計算。<b>量價拆分無法做</b>：公司不揭露硬體出貨量或 ASP；法說會僅說硬體約占營收 10%、採選擇性漲價。Q3 FY26 起含 CyberArk（2/11）與 Chronosphere（1/29）的合併貢獻。</div><div class="card"><div class="card-title">營收背後的產品：Product 與訂閱／支援各是什麼</div><p><b>Product 產品</b>：包含實體防火牆硬體（NGFW 設備）與軟體授權（含 CyberArk 的授權銷售）。硬體負責把流量檢測放在網路進出口，AI 資料中心的建置與流量成長會推升檢測需求；零組件（記憶體、儲存）成本上升時，公司以選擇性漲價回應（法說會）。Product 毛利率 Q4 73.3%，低於去年同期 76.3%。</p><p><b>Subscription &amp; support 訂閱與支援</b>：雲端交付的安全服務（威脅防護、URL 過濾等）、SASE（Prisma Access）、Cortex（XSIAM、XSOAR）、Chronosphere 可觀測性訂閱，加上硬體的支援合約；合約期多為一到五年，營收隨服務期間認列，所以 RPO（$212 億，其中未來 12 個月約 $93 億）比當季營收更能反映能見度。FY26 訂閱 $62.4 億（本報告由 $9,200M−$2,961M 推算）、支援 $29.6 億（+21%）。</p><p><b>為何客戶需要</b>：管理層的論述是 AI 讓攻擊速度加快、客戶要把分散的點方案換成平台；Next-Generation Security ARR 是公司自訂的指標（排除硬體與舊的附加訂閱、支援與專業服務），FY30 目標 $200 億。⚑ 以上為產品一般說明與公司口述；公司未揭露各產品線營收（僅有法說會的三平台口述數字）。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

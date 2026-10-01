@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Datadog — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Datadog（DDOG）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／最大客戶續約與用量下修／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 6 日（Q2 於 6/30 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2 8-K Ex.99.1（8/6）、Q2 10-Q（8/6）、FY2025 10-K、前五季 8-K、2026 年 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">最大客戶續約與用量下修</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">13</div><div class="stat-lbl">分析師（Morgan Stanley、Barclays、Goldman Sachs、Needham、Wolfe、KeyBanc、BofA、JPMorgan、Guggenheim、TD Cowen、Stifel、Oppenheimer、BNP Paribas）</div></div><div class="stat-box"><div class="stat-val">21</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/6 法說會（Motley Fool、Investing.com、Globe and Mail、Equibles 四處第三方逐字稿頁；Seeking Alpha 需登入未能讀取）、同日 8-K 新聞稿、Q2 2026 10-Q（8/6 提交）、FY2025 10-K。<b>下列問答為大意轉述，非逐字引用</b>（逐字稿屬第三方著作權內容，卡片底部附來源連結）。全場最關鍵、卻<b>沒有任何分析師提出</b>的一件事：<b>RPO 在 Q2 為 $34.71 億，比 Q1 的 $34.84 億還少 $1,300 萬（−0.4%），而管理層同時宣布簽下 9 位數續約</b>（10-Q 附註；Q1 10-Q）。分析師的火力幾乎全集中在「最大客戶用量下降」，卻沒人把它和 RPO 對起來。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Sanjit Singh（Morgan Stanley）</div><div class="qa-topic">最大客戶續約條件與用量下降；企業 AI 應用週期</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">最大客戶的續約年限、價格是否有讓步？用量下降是流失還是降級？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Olivier Pomel：不想多談單一客戶，因為公司對單一客戶的決定沒有控制力；這是長期、多產品的客戶，已完成續約，能分享的有限；公司選擇把它完全從財測中「去風險」，是不想讓這件事蓋過其他地方的加速；排除這位客戶後，其餘業務的成長率與整體相近，且已連續五季加速。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">企業 AI 應用開發週期的趨勢？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：企業轉型、上雲與工作負載增加都在發生，非 AI 客戶持續加速；AI 原生介面（代理與 LLM 量測、MCP 端點呼叫）在近兩季急遽放大。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 「已續約」與「用量下降」同時成立，但續約條件完全沒給</div><div class="q-text">管理層同一段話裡同時說「已完成續約」「已在財測去風險」「用量從 Q3 起降低」，卻不給年限、承諾金額、價格或是否降級。10-Q 只寫「自 Q3 起觀察到最大客戶用量減少，可能使營收成長放緩」。續約的實際商業條件，是這場法說會<b>被問了三次（Singh、Zukin、Reback）卻始終沒有答案</b>的核心。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Raimo Lenschow（Barclays）</div><div class="qa-topic">推論（inference）觀測需求；財測方法論是否改變</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">推論成為主流後，向量資料庫、護欄、容器監控帶來多少增量觀測需求？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：推論堆疊「每一層」都有機會，GPU 監控與代理監控產品使用量明顯成長，AI 實驗室客戶採用；客戶關注點從一年前的「驗證正確性」，轉到近 3–6 個月的「成本最佳化」。CFO David Obstler 補充：多筆大型企業交易含 AI 產品。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">財測中對最大客戶的處理，與過去方法是否不同？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Obstler：方法論沒變，仍以承諾量與用量等輸入為基礎再加保守度；這次選擇把最大客戶完全去風險，以便與其他業務的訊號隔開。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「方法論沒變」但這次改成「完全去風險」</div><div class="q-text">上一季（Q1）管理層說的是對最大客戶「額外加一層保守」；本季則是「完全去風險」並已實際看到用量下降。兩句都說方法論未變，但<b>保守度從折扣升級為把該客戶視為零成長貢獻</b>，等於承認 Q1 的折扣不足以涵蓋實際發生的下降。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Gabriela Borges（Goldman Sachs）</div><div class="qa-topic">CFO 層級預算對話、Infinite Cardinality</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">客戶 CFO 抱怨 Datadog 帳單，預算從哪來？Infinite Cardinality 是否回應成本疑慮？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：買軟體只有兩個理由：賺更多錢或省錢；AI 成本控制是 CFO 最在意的；Infinite Cardinality Metrics 解決長久以來「標籤變多、帳單難預測」的困擾，新的計價把標籤量與成本脫鉤，對 AI 應用送出更細資料特別有意義；早期回饋正面。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 回答談的是產品，不是預算結構</div><div class="q-text">Borges 問的是 CFO 對話與預算來源。Pomel 的回答重申價值主張並介紹新計價，沒有提到客戶是否把 Datadog 預算從其他項目轉來、續約時的價格壓力，或「成本最佳化」在 AI 客戶身上的幅度。同一天他對 Lenschow 說客戶關注點已轉向成本，兩段合讀，<b>成本最佳化正是最大客戶用量下降的合理背景，但沒有被明說</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Mike Cikos（Needham）</div><div class="qa-topic">AI 實驗室新客戶與新客戶貢獻</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">兩筆 7 位數的 AI 實驗室新客戶，與先前提到的超大規模雲端自有 AI 實驗室是同一群嗎？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：不同客戶；7 位數新客戶是近年才成立的新創「neo-lab」，在模型訓練階段就導入；超大規模業者的 AI 實驗室則是用 Datadog 取代自建觀測技術；工作負載同為模型訓練。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">新客戶爬升更快，是 AI 能力帶動還是平台拉動？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Obstler：新客戶對年增營收的貢獻由 Q1 的 25% 升到 Q2 的 30%，不只是新客戶數增加，也包含過去一年新增客戶的加速爬升，有複利效果。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Alex Zukin（Wolfe Research）</div><div class="qa-topic">AI 安全、最大客戶黏著度</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">AI 攻擊與「守護模型」下，安全產品的版圖如何擴大？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：安全產品的運作方式要整個改變，不能再等人類審核（過去要匯總 12–15 個產品的訊號給人看）；Datadog 把可觀測性資料直接餵給安全代理，在基礎設施與應用旁邊先自動處理，目標是預防而非事後偵測。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">最大客戶的黏著度跡象：年限、折扣、產品綑綁？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Obstler：大型企業典型為「年度以上承諾＋依量計價」，這次續約屬同一模式；Pomel：續約有很高的連續性。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 第二次被問條件，仍只給「標準模式」</div><div class="q-text">Obstler 的回答是「標準企業結構」，不是這筆合約的具體條件。把「9 位數」「17 項產品」「標準年度承諾＋依量計價」放在一起，只能推出：<b>承諾部分可能是固定年費、用量部分才會下降</b>——這正是 RPO 沒有因續約增加的可能解釋之一（本報告推論，管理層未證實）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">KeyBanc Capital Markets（逐字稿頁姓名標示不一：Eric Heath／Tracy Prachef）</div><div class="qa-topic">Q3 財測低於歷史季增；模型多元化</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">Q3 財測的季增低於歷史水準，背後的假設？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Obstler：方法論不變，以看到的趨勢加保守；最大客戶用量相較前一季已下降，並已全部計入。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">AI 模型多元化對客戶技術堆疊的影響？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：多元化有利，會增加複雜度與機會；開源模型讓客戶自己做訓練；預期 AI 生態像雲一樣由多家不同規模供應商組成，而非集中在一兩家。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ Q3 財測的季增只有約 1.7%</div><div class="q-text">Q3 財測中位 $11.40 億，相對 Q2 的 $11.21 億只增約 1.7%（本報告推算），Q2 本身是 +11.4% 的創紀錄單季增量（+$1.15 億）。管理層沒有拆解 Q3 的季增裡有多少是最大客戶下降的影響、多少是一般保守度，這個拆分是判斷「去風險」是否已足夠的關鍵。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Koji Ikeda（Bank of America）</div><div class="qa-topic">Bits AI 自動化會不會減少觀測用量</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">自動化修復會不會減少觀測資料的使用量？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：提供更多價值就能賣更多；觀測的未來不只是看，而是修；客戶用了 Bits AI 後，儀表板、警示與使用者反而變多，不是零和遊戲。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Samik Chatterjee（JPMorgan）</div><div class="qa-topic">非 AI 加速是否可持續、FedRAMP</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">非 AI 客戶加速來自新客戶還是既有客戶？CFO 預算敏感度？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：主要來自既有客戶（占多數），包括用量增加與產品整併；目前成長率遠低於 2021 年水準，仍在可持續區間；客戶整併時看財務投資報酬。Obstler：配額產能與地理擴張的銷售投資正在產生回報。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">FedRAMP High 進度？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：對政府業務有重大投資、管線在建立；交易週期長，認證是以 SaaS 提供給政府的基礎，後續還有更多認證。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Howard Ma（Guggenheim）</div><div class="qa-topic">Bits AI 採用、$3,000 萬以上媒體交易</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Bits AI 的採用與過去功能擴張相比如何？為何一家線上媒體公司此時簽下 $3,000 萬以上的多年期交易？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：Bits AI 的接觸面變廣（對話、調查、監控、寫程式、測試），新增 AI credits 的計價；一般新客戶以 2 項以上產品落地，整併 12 項以上產品的大單較大但屬後期整併，不是多數交易。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 大單敘事占比未量化</div><div class="q-text">法說會舉了 $3,000 萬以上媒體、7 位數南美銀行（11 項產品）、7 位數健康保險公司（19 項產品）等整併案例，但同時說這不是多數交易。沒有給出「整併型大單占新增 ARR 多少」，無法判斷它能否抵銷單一最大客戶的下降。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Andrew Sherman（TD Cowen）</div><div class="qa-topic">CPU 復興與代理式 AI 對基礎設施監控</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">代理式 AI 帶動 CPU 需求，能否成為基礎設施監控的增量？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：基礎設施產品整體在加速；AI 代理大量時間花在工具呼叫（常跑在 CPU 的既有應用），所以監控需求同步上升。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Brad Reback（Stifel）</div><div class="qa-topic">排除最大客戶後核心財測應高多少</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">若最大客戶本季對成長中性，是否意味核心業務財測應高 300–400 bps？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：無法臆測，但整體業務在排除該客戶後成長率相同、持續加速。Obstler：非 AI 加速，AI（排除最大客戶）仍強。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 沒有量化「最大客戶」占營收</div><div class="q-text">Reback 用 300–400 bps 做假設性量化，兩位主管都沒有回到數字。10-Q 的唯一量化是：AI 原生客群（含最大客戶）貢獻了 Q2 年增 36% 中的「高個位數百分點」（Q4 FY25 10-K 為約 7 個百分點）。<b>最大客戶本身占營收多少、其降幅有多大，整份申報與法說會都沒有數字</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ittai Kidron（Oppenheimer）</div><div class="qa-topic">新增客戶數偏弱；AI SOC 自動化</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">近期新增客戶數是歷來偏弱的一季，DASH 活動的影響？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Obstler：總新增客戶仍強、符合趨勢；變動主要在免費與付費的交界處，對營收影響極小；高門檻客群（$100k 以上、$100 萬以上）趨勢良好。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">Bits Security Analyst 會擴展成更廣的 AI SOC 自動化嗎？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：正朝此方向；先做 SIEM，再把代理放進去，現在把代理獨立出來可搭配非 Datadog SIEM；代理表現強，市場比只做 SIEM 換平台更大。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 新增客戶數「變弱」的客觀數字</div><div class="q-text">新聞稿的 $100k+ 客戶淨增：Q1 +240 → Q2 +170（本報告推算，3,850→4,720 年增 +23% 仍高於 Q1 的 +21%）。管理層用「免費與付費交界」解釋總客戶數，但對 $100k+ 客戶淨增的放緩沒有直接說明。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Andrew DeGasperi（BNP Paribas）</div><div class="qa-topic">非 AI 客戶採用 AI 監控工具</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">非 AI 原生企業是否因開源 AI 工具部署而增加 AI 監控需求？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Pomel：一年前 LLM 監控量很小，2025 下半年開始成長，近兩季是「爆發」，傳統企業與 AI 原生公司都有；仍非常早期，預期產品、用量模式與計價都會變。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.fool.com/earnings/call-transcripts/2026/08/13/datadog-ddog-q2-2026-earnings-call-transcript/" target="_blank" rel="noopener">Motley Fool：Datadog Q2 2026 Earnings Call Transcript（2026/8/13 頁）</a>；<a href="https://www.investing.com/news/transcripts/earnings-call-transcript-datadog-beats-q2-2026-estimates-but-shares-fall-156-93CH-4842560" target="_blank" rel="noopener">Investing.com：Datadog beats Q2 2026 estimates but shares fall 15.6%（逐字稿頁）</a>；<a href="https://www.theglobeandmail.com/investing/markets/stocks/DDOG/pressreleases/3829705/datadog-ddog-q2-2026-earnings-call-transcript/" target="_blank" rel="noopener">The Globe and Mail：Datadog Q2 2026 Earnings Call Transcript</a>；<a href="https://equibles.com/stocks/ddog/calls/2026-q2" target="_blank" rel="noopener">Equibles：Datadog Q2 2026 Earnings Call</a>；<a href="https://seekingalpha.com/article/4931887-datadog-inc-ddog-q2-2026-earnings-call-transcript" target="_blank" rel="noopener">Seeking Alpha：Datadog Q2 2026 Earnings Call Transcript（需登入）</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li><b>最大客戶（未具名）：</b>9 位數（至少 $1 億等級，未給確切金額）續約，使用 17 項 Datadog 產品；管理層稱為「領先的 AI 公司」（法說會）</li><li>10-Q：AI 原生客群（含最大客戶）貢獻 Q2 年增營收的<b>高個位數百分點</b>（10-K：Q4 FY25 約 7 個百分點）</li><li>AI 原生客戶 750+ 家；年支出逾 $100 萬 31 家（Q1：22 家）、逾 $1,000 萬 8 家（Q1：5 家）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li><b>用量自 2026 年第三季起降低</b>（10-Q MD&A 與風險因素）</li><li>續約年限、價格、承諾金額<b>均未揭露</b>（Singh、Zukin 兩度追問）</li><li>Q3 財測營收 $11.35–11.45 億（年增 28–29%）、FY 財測 $44.5–44.7 億（年增約 30%）已含此降幅</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>Q2 營收 $11.21 億，超過原財測高標 $10.80 億約 $4,150 萬（本報告推算 3.8%）</li><li>FY 財測中位 $43.2 億→$44.6 億（+$1.4 億，+3.2%）；Q3 中位 $11.40 億僅較 Q2 +1.7%；FY 隱含 Q4 約 $11.92 億（本報告推算，較 Q3 +4.6%、年增 25.1%）</li><li>非 GAAP 營業利益率 Q2 22.9%；Q3 財測 23–24%、FY 約 23%</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>最大客戶的承諾金額與續約期限；降幅占其原用量多少</li><li>RPO 自 Dec 25 起幾乎沒有增加（$34.61 億→Mar $34.84 億→Jun $34.71 億），與「9 位數續約已簽」是否矛盾</li><li>AI 原生客群其餘客戶（31 家 $100 萬以上）是否也有類似的「爬升後最佳化」模式</li><li>Q4 隱含季增 4.6% 是否足夠保守</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">客戶集中與成長結構：Q1 vs Q2（FY2026）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q1 FY26</th><th>Q2 FY26</th><th>出處</th></tr></thead><tbody><tr><td class="wrap">營收（年增）</td><td>$10.06 億（+32%）</td><td>$11.21 億（+36%）</td><td class="wrap">新聞稿</td></tr><tr><td class="wrap">$100k+ ARR 客戶</td><td>約 4,550 家</td><td>約 4,720 家（占 ARR 約 91%）</td><td class="wrap">新聞稿；Q2 10-Q</td></tr><tr><td class="wrap">AI 原生客戶年支出 >$100 萬／>$1,000 萬</td><td>22 家／5 家</td><td>31 家／8 家</td><td class="wrap">Q1 報告；Q2 法說會</td></tr><tr><td class="wrap">新客戶對年增營收的貢獻</td><td>約 25%</td><td>約 30%（10-Q：既有約 70%、新客戶約 30%）</td><td class="wrap">法說會；Q2 10-Q</td></tr><tr><td class="wrap">非 AI 客戶年增</td><td>中 20% 區間</td><td>高 20% 區間</td><td class="wrap">法說會（Q1 報告對照）</td></tr><tr><td class="wrap">RPO</td><td>$34.84 億</td><td>$34.71 億（法說會稱年增 43%）</td><td class="wrap">Q1、Q2 10-Q 附註</td></tr><tr><td class="wrap">非 GAAP 毛利率</td><td>80.2%</td><td>79.6%</td><td class="wrap">新聞稿（本報告計算）</td></tr><tr><td class="wrap">FY 營收財測</td><td>$43.0–43.4 億</td><td>$44.5–44.7 億</td><td class="wrap">新聞稿</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>為何「最大客戶」是本季的主題：</b>Q1 管理層對它說的是「額外保守」；Q2 變成「已看到用量下降並完全去風險」。從 10-Q 看，這是一個「用量型」關係：RPO 附註提到 drawdown（依用量領取）合約的營收時點存在不確定性，未來營收可能與過去有很大差異。<b>續約簽了、承諾仍在，但實際用量往下</b>，是 Datadog 這類消耗模式特有的風險，不是單純的流失。資料來源：Q2 10-Q（MD&A、RPO 附註）；法說會。</div><div class="tbl-wrap"><div class="tbl-title">併購（Acquisitions）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>2026 上半年併購</td><td class="wrap">3 筆，總價 $191.5M</td><td class="wrap">現金（扣除取得現金）$98.5M；遞延款 $14.3M；發行 796,509 股限制股（Q2 10-Q 附註 6）</td></tr><tr><td>商譽與無形資產</td><td class="wrap">商譽 $178.7M；無形資產 $11.5M</td><td class="wrap">初步分攤；資產負債表商譽 $5.31 億→$7.07 億</td></tr><tr><td>Adaptive ML</td><td class="wrap">10-Q 未單獨列示價款</td><td class="wrap">新聞稿：用於強化 Datadog AI Research 的世界模型與代理式 LLM 後訓練；是否為上述三筆之一，10-Q 未逐筆標示</td></tr></tbody></table></div></div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p><b>不適用／無此資料。</b>Datadog 為 SaaS 平台，不自建資料中心；基礎設施由第三方雲端供應商託管（10-K／10-Q 未點名）。與此最接近的是不可取消採購承諾：FY2025 年底 <b>$14 億</b>（主要為雲端託管與軟體服務，多數於未來五年內到期）；Q2 10-Q 稱 2026 上半年除營業租賃外「無重大變動」。融資面僅有 $10 億 2029 年到期 0% 可轉換債（帳面 $9.855 億）。來源：FY2025 10-K 附註 9；Q2 10-Q。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>最大客戶的承諾金額、年限、續約價格與用量下限條款是什麼？</li><li>用量降幅占該客戶原用量多少？是一次性重設，還是持續下滑？</li><li>9 位數續約已簽，RPO 為何沒有增加（$34.84 億→$34.71 億）？</li><li>排除最大客戶後的「其餘業務」年增究竟是多少（Reback 的 300–400 bps 假設是否合理）？</li><li>AI 原生客群其他大戶是否出現同樣的「爬升後最佳化」？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>基礎設施監控、APM 與日誌</h4><div class="meta">核心可觀測性平台</div><p>把主機、容器、應用追蹤與日誌放在同一平台，客戶以「依量計價＋年度承諾」購買。Pomel 說基礎設施產品整體在加速（代理程式大量呼叫跑在 CPU 的工具）；日誌新增 Bring Your Own Cloud（BYOC）：資料留在客戶自己的雲端環境，一家線上媒體公司以此簽下 $3,000 萬以上多年期合約（法說會）。</p></div><div class="tech-card g"><h4>AI 可觀測性（LLM／GPU／代理）</h4><div class="meta">近兩季用量「爆發」</div><p>監控 LLM 應用、GPU 利用率與 AI 代理的行為與成本；AI 實驗室客戶使用 GPU Monitoring 與代理監控產品。Pomel 說 MCP（模型上下文協定）呼叫量為 Q1 的 4 倍、Q4 FY25 的 22 倍（單一來源的法說會說法，未見於申報文件）。客戶關注點由「正確性驗證」轉向「成本最佳化」。</p></div><div class="tech-card o"><h4>Bits AI 與 AI 代理</h4><div class="meta">Bits Code、Bits Chat、Bits Agent Builder 已 GA</div><p>從「告警調查」擴大為對話、調查、監控管理、寫程式、測試與 DevOps 修復循環；新增 AI credits 計價。管理層論點：自動化越多，客戶用越多（更多儀表板與警示），不是零和（Ikeda 問答）。</p></div><div class="tech-card r"><h4>安全產品與 AI Guard</h4><div class="meta">Bits Security Analyst 可搭配非 Datadog SIEM</div><p>AI Guard 保護 AI 代理免於提示注入與投毒；Bits Security Analyst 原本綁在自家 SIEM，現已獨立，可用於其他廠商的 SIEM，市場更大。Runtime Prioritization Engine 稱可降低弱點雜訊 95%（法說會，未驗證）。</p></div><div class="tech-card "><h4>Infinite Cardinality Metrics</h4><div class="meta">新計價／新技術</div><p>標籤（維度）變多會使指標量暴增、帳單難以預測；此功能把標籤量與成本脫鉤，對 AI 應用送出更細資料的客戶特別有吸引力（Borges 問答）。</p></div><div class="tech-card g"><h4>多產品整併</h4><div class="meta">4+／6+／10+ 產品採用率</div><p>58% 客戶用 4 項以上產品（上年 52%）、37% 用 6 項以上（29%）、13% 用 10 項以上（7%）。整併是 Datadog 對抗單點工具的主要護城河，也是成本敏感客戶選擇它的原因（Chatterjee 問答）。</p></div></div><div class="note grey">⚑ 產品與採用數字為法說會準備稿與 Q&A 說法（多處第三方逐字稿頁一致）；Datadog 申報文件不拆分產品別營收，因此各產品的營收貢獻無法驗證。新聞稿僅確認 Bits Code、Bits Chat、Bits Agent Builder 已 GA、DASH 2026 發布逾 100 項功能，以及收購 Adaptive ML。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">結構圖：基礎設施與研發 → 產品線 → 營收地區 → 客戶族群</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1071.975 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1071.97" height="702" fill="#ffffff"/><text x="535.99" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Datadog 結構：基礎設施與研發 → 產品線 → 營收地區 → 客戶族群</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">基礎設施與研發</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">產品線</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">營收地區（Q2 2026）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">客戶族群</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="410.9875,106 410.9875,124 169.9875,124 169.9875,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="410.9875,106 410.9875,146 439.9875,146 439.9875,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="410.9875,106 410.9875,168 709.9875,168 709.9875,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="680.9875,106 680.9875,190 381.9875,190 381.9875,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="680.9875,106 680.9875,208 651.9875,208 651.9875,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="680.9875,106 680.9875,208 921.9875,208 921.9875,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="275.9875,282 275.9875,300 412.9875,300 412.9875,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="275.9875,282 275.9875,322 574.9875,322 574.9875,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="545.9875,282 545.9875,344 464.9875,344 464.9875,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="545.9875,282 545.9875,366 626.9875,366 626.9875,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="815.9875,282 815.9875,384 516.9875,384 516.9875,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="815.9875,282 815.9875,384 678.9875,384 678.9875,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="464.9875,458 464.9875,476 72,476 72,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="464.9875,458 464.9875,498 331.725,498 331.725,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="626.9875,458 626.9875,520 273.725,520 273.725,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="626.9875,458 626.9875,542 543.725,542 543.725,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="464.9875,458 464.9875,560 601.725,560 601.725,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="626.9875,458 626.9875,560 813.725,560 813.725,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="464.9875,458 464.9875,560 871.725,560 871.725,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="626.9875,458 626.9875,560 1019.975,560 1019.975,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><g><rect x="292.99" y="46" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="410.99" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">第三方雲端託管（未具名）</text><text x="410.99" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Q2 託管成本年增 $64.1M；採購承諾 $…</text></g><g><rect x="562.99" y="46" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="680.99" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">自研與併購</text><text x="680.99" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Q2 研發費用 $478.0M；1H26 三筆收購…</text></g><g><rect x="157.99" y="222" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="275.99" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">基礎設施監控／APM／日誌</text><text x="275.99" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">核心可觀測性平台；58% 客戶用 4 項以…</text></g><g><rect x="427.99" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="545.99" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">AI 可觀測性與 Bits AI</text><text x="545.99" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">LLM／GPU／代理監控；Bits Code、Cha…</text></g><g><rect x="697.99" y="222" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="815.99" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">安全產品</text><text x="815.99" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">AI Guard、Bits Security Analyst（…</text></g><g><rect x="400.99" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="464.99" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">北美</text><text x="464.99" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$824.7M（73.5%）</text></g><g><rect x="562.99" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="626.99" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">國際</text><text x="626.99" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$296.8M（26.5%）</text></g><g><rect x="60" y="574" width="225.73" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="172.86" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">$100k+ ARR 客戶（4,720 家）</text><text x="172.86" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">占 ARR 約 91%</text></g><g><rect x="319.73" y="574" width="236" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="437.73" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">未達 $100k 客戶（約 28,680 …</text><text x="437.73" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">本報告推算：33,400 − 4,720</text></g><g><rect x="589.73" y="574" width="236" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="707.73" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">AI 原生客群（750+ 家）</text><text x="707.73" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">31 家年支出逾 $100 萬、8 家逾 $1,0…</text></g><g><rect x="859.73" y="574" width="172.25" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="945.85" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">最大客戶（未具名）</text><text x="945.85" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">9 位數續約；Q3 起降低用量</text></g><line x1="412.91" y1="664" x2="434.91" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="442.91" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">集中度／依賴風險</text><rect x="548.91" y="663" width="22" height="2.4" fill="#182456"/><text x="578.91" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI 相關路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Q2 2026 10-Q、FY2025 10-K、新聞稿、法說會。Datadog 為 SaaS 平台，無零組件供應鏈；上游是第三方雲端託管（10-K／10-Q 未點名供應商）與自有研發</div>
+</div></div></div></div><div class="note">⚑ Datadog 為單一報告分部的 SaaS 公司，沒有硬體供應鏈。上游是第三方雲端託管（10-K／10-Q 未點名、未量化單一供應商）與自有研發；下游以客戶族群呈現。圖中「營收地區」與「客戶族群」兩層之間不代表分地區的客戶拆分（申報文件未提供）。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q2 2026，百萬美元）</div><div id="sankeyEmbed_pieqlyf" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"d","label":"Datadog Q2 2026 營收 $1,121.5M","color":"#182456"},{"id":"na","label":"北美","color":"#8f1f1f"},{"id":"intl","label":"國際","color":"#0f6f8a"},{"id":"us","label":"美國","color":"#b3760f"},{"id":"onam","label":"加拿大及其他北美","color":"#57a0cf"}],"links":[{"source":"d","target":"na","value":824.7},{"source":"d","target":"intl","value":296.8},{"source":"na","target":"us","value":790.1},{"source":"na","target":"onam","value":34.6}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_pieqlyf");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 地區營收為 Q2 2026 10-Q 附註 11（依客戶帳單地址）：北美 $824.7M、國際 $296.8M；其中美國 $790.1M，「加拿大及其他北美」$34.6M 為本報告以差額推算。產品別與客戶族群別營收未揭露，故不往下拆分（不以猜測數字作圖）。兩張圖節點名稱一致（北美、國際）。</div></div><div class="chart-wrap"><div class="chart-title">$100k+ 客戶數（逐季）</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">ARR 逾 $100k 的客戶數（逐季）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="374.4" x2="876" y2="374.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="378.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="78" y1="292.8" x2="876" y2="292.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="296.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">2,000</text><line x1="78" y1="211.2" x2="876" y2="211.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="215.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3,000</text><line x1="78" y1="129.6" x2="876" y2="129.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="133.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,000</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5,000 家</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="97.62" y="148.37" width="93.76" height="307.63" fill="#182456" rx="1" data-dim="$100k+ ARR 客戶"/><text x="144.5" y="142.37" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="$100k+ ARR 客戶">3,770</text><text x="144.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1</text><text x="144.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">25</text><rect x="230.62" y="141.84" width="93.76" height="314.16" fill="#182456" rx="1" data-dim="$100k+ ARR 客戶"/><text x="277.5" y="135.84" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="$100k+ ARR 客戶">3,850</text><text x="277.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2</text><text x="277.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">25</text><rect x="363.62" y="124.7" width="93.76" height="331.3" fill="#182456" rx="1" data-dim="$100k+ ARR 客戶"/><text x="410.5" y="118.7" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="$100k+ ARR 客戶">4,060</text><text x="410.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3</text><text x="410.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">25</text><rect x="496.62" y="104.3" width="93.76" height="351.7" fill="#182456" rx="1" data-dim="$100k+ ARR 客戶"/><text x="543.5" y="98.3" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="$100k+ ARR 客戶">4,310</text><text x="543.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4</text><text x="543.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">25</text><rect x="629.62" y="84.72" width="93.76" height="371.28" fill="#182456" rx="1" data-dim="$100k+ ARR 客戶"/><text x="676.5" y="78.72" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="$100k+ ARR 客戶">4,550</text><text x="676.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1</text><text x="676.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">26</text><rect x="762.62" y="70.85" width="93.76" height="385.15" fill="#182456" rx="1" data-dim="$100k+ ARR 客戶"/><text x="809.5" y="64.85" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="$100k+ ARR 客戶">4,720</text><text x="809.5" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2</text><text x="809.5" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">26</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Datadog 各季新聞稿 Business Highlights（約數）</text></svg>
+</div><div class="note">⚑ 新聞稿各季約數：Q1 25 3,770 → Q2 26 4,720；淨增 +80（Q2 25）、+210、+250、+240、+170（Q2 26），為本報告以相鄰季差額推算。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>雲端基礎設施（上游）</td><td class="wrap">第三方雲端託管成本：Q2 年增 $64.1M，為 Q2 營業成本增加 $74.1M 的主因；毛利率下降主因是向雲端供應商的支出增加；應付帳款中雲端託管與基礎設施款項 $1.915 億（Dec 25：$1.227 億）；<b>未點名供應商</b></td><td class="wrap">Q2 10-Q MD&A 與附註 7</td></tr><tr><td>競爭對手</td><td class="wrap">Cloud monitoring：AWS、Microsoft Azure、Google Cloud 的原生方案；Log：Cisco、Elastic；另有自建與開源方案</td><td class="wrap">FY2025 10-K Item 1</td></tr><tr><td>客戶集中</td><td class="wrap">$100k+ ARR 客戶 4,720 家占 ARR 91%（Q2 25：3,850 家、89%）；總客戶約 33,400 家（31,400）；<b>最大客戶占營收比重未揭露</b>，無單一客戶占比 10% 的揭露</td><td class="wrap">Q2 10-Q；FY2025 10-K</td></tr><tr><td>AI 原生客群</td><td class="wrap">貢獻 Q2 年增營收高個位數百分點，客群包含最大客戶；10-K：Q4 FY25 約 7 個百分點；750+ 家客戶、31 家逾 $100 萬、8 家逾 $1,000 萬</td><td class="wrap">Q2 10-Q 風險因素；FY2025 10-K；法說會</td></tr><tr><td>地區</td><td class="wrap">北美 73.5%、國際 26.5%（1H26 國際占 27%，1H25 29%）；美國 $790.1M</td><td class="wrap">Q2 10-Q 附註 11</td></tr><tr><td>淨留存與毛留存</td><td class="wrap">12 個月滾動 NRR「低 120%」（Q2 25：約 120%）；毛留存「中至高 90%」；10-Q 稱 NRR 上升來自既有客戶用量成長，同時註記最大客戶自 Q3 起降低用量</td><td class="wrap">Q2 10-Q；法說會</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾（purchase commitments）：</b>FY2025 年底不可取消採購承諾 <b>$14 億</b>（主要為雲端託管與軟體服務，多數於未來五年到期）、營業租賃 $3.752 億（FY2025 10-K 附註 9）；Q2 10-Q 附註 9 稱 2026 上半年除租賃外承諾無重大變動。<b>未提供依年度到期分層、也未點名承諾對象</b>。同期 RPO（客戶給 Datadog 的承諾）為 $34.71 億，約為採購承諾的 2.5 倍（本報告推算）。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">單一最大客戶用量下降且未量化</div>10-Q 明文：自 2026 Q3 起最大客戶降低用量，「可能使營收成長放緩」；管理層已全部計入財測但拒絕提供客戶占比、降幅與續約條件。Q3 財測季增僅約 1.7%（Q2 為 +11.4%）。<div class="risk-source">來源：Q2 10-Q；法說會（Singh、Zukin、Reback 問答）</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：RPO 沒有因 9 位數續約而增加</div>把分散的訊息拼起來：① 法說會稱簽下 9 位數續約；② RPO 由 Q1 $34.84 億降到 Q2 $34.71 億（−$1,300 萬），且與 Dec 25 的 $34.61 億幾乎相同（兩季持平）；③ 法說會同時稱 RPO 年增 43%（Q1 為 51%），年增率一季降 8 個百分點；④ 10-Q RPO 附註提到 drawdown（依用量領取）合約的營收時點存在不確定性。若續約承諾金額實質較前一期為低、或續約主要以用量而非固定承諾計價，<b>未來 24 個月可認列的合約基礎並未增加，而最大客戶用量又在下降</b>。這是本報告由 10-Q 與法說會拼出的推論，管理層未證實。<div class="risk-source">來源：Q1／Q2 10-Q RPO 附註；法說會；本報告推論</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">毛利率連兩季下滑</div>非 GAAP 毛利率 Q4 25 81.4% → Q1 26 80.2% → Q2 26 79.6%；營業成本 Q2 年增 45%（營收年增 36%），其中第三方雲端託管成本年增 $64.1M，占增量約 86%（本報告推算）。管理層稱仍在歷史約 80% 區間。<div class="risk-source">來源：新聞稿；Q2 10-Q MD&A</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">AI 原生客群的用量最佳化循環</div>10-Q 風險因素直接寫出：AI 原生客群「迅速增加用量，未來可能最佳化用量或不續約」；最大客戶已發生。客戶關注點由驗證轉向成本（Pomel 對 Lenschow）。31 家逾 $100 萬客戶（Q1：22）的結構也可能出現同樣路徑。<div class="risk-source">來源：Q2 10-Q；法說會</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">新增 $100k+ 客戶放緩</div>$100k+ 客戶淨增 Q1 +240 → Q2 +170（本報告推算）；Kidron 問及新增客戶數偏弱，管理層以免費／付費交界解釋。<div class="risk-source">來源：新聞稿；法說會</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出（Form 4）</div>2026/5/7–9/23 的 Form 4 中，14 位內部人（含董事）的公開市場賣出約 <b>$5.86 億</b>：CEO Olivier Pomel 約 $2.17 億、CTO Alexis Le-Quoc 約 $1.16 億、董事 Amit Agarwal 約 $5,300 萬、CFO David Obstler 約 $4,400 萬。其中法說會前（至 8/5）約 $4.30 億、8/6 起約 $1.56 億。<b>8/5（法說會前一日）Pomel 賣出約 $3,650 萬，成交價 $283–292；8/6 當日成交價降至 $229–242</b>（Investing.com 稱盤前跌 15.6%，前收 $283.17）。賣出多集中在特定日期；Form 4 是否屬 10b5-1 計畫，本報告未逐筆核對、不作判斷。<div class="risk-source">來源：SEC EDGAR Form 4（本報告加總，交易代碼 S）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">流動性與財務</div>現金與有價證券 $50 億；Q2 營運現金流 $3.16 億、自由現金流 $2.79 億（利潤率 24.9%）；2029 年到期 $10 億 0% 可轉債。<div class="risk-source">來源：新聞稿；Q2 10-Q</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">排除最大客戶，其餘業務成長率與整體相同、持續加速</td><td class="wrap">10-Q：AI 原生客群（含最大客戶）貢獻 Q2 年增高個位數百分點；非 AI 客戶年增高 20% 區間；整體 +35.6%。最大客戶本身占比無數字</td><td class="wrap">Q2 10-Q；法說會</td><td class="wrap">△ 方向一致，但無法量化驗證</td></tr><tr><td class="wrap">9 位數續約已簽、已完全去風險</td><td class="wrap">RPO $34.84 億→$34.71 億（−0.4%）；Dec 25 $34.61 億</td><td class="wrap">Q1／Q2 10-Q</td><td class="wrap">✗ RPO 未反映續約（原因未揭露）</td></tr><tr><td class="wrap">財測方法論沒變</td><td class="wrap">Q1：最大客戶「額外保守」；Q2：「已看到用量下降並完全去風險」，Q3 財測季增 1.7%</td><td class="wrap">Q1 報告；Q2 法說會；新聞稿</td><td class="wrap">△ 方法相同但保守度升級</td></tr><tr><td class="wrap">新客戶貢獻由 25% 升到 30%</td><td class="wrap">10-Q：Q2 增量約 70% 來自既有客戶、30% 來自新客戶（1H26：75%／25%）</td><td class="wrap">Q2 10-Q MD&A</td><td class="wrap">✓</td></tr><tr><td class="wrap">毛利率仍在約 80% 的歷史區間</td><td class="wrap">非 GAAP 毛利率 79.6%（Q1 80.2%、Q2 25 80.9%）；雲端託管成本年增 $64.1M</td><td class="wrap">新聞稿；Q2 10-Q</td><td class="wrap">△ 貼近下緣、連兩季下降</td></tr><tr><td class="wrap">總新增客戶仍強、變動在免費／付費交界</td><td class="wrap">$100k+ 客戶淨增 +240→+170；總客戶 31,400→33,400（+2,000）</td><td class="wrap">新聞稿；Q2 10-Q</td><td class="wrap">△ 高門檻客戶新增放緩，管理層未直接回應</td></tr><tr><td class="wrap">（沉默）RPO 與續約的關係、最大客戶占比、AI 原生客群占營收比重</td><td class="wrap">RPO 持平；占比無揭露；僅 10-Q 提到「高個位數百分點」成長貢獻</td><td class="wrap">Q2 10-Q；法說會</td><td class="wrap">✗ 無人提問、管理層未主動說明</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$11.21 億</div><div class="kpi-lbl">Q2 營收</div><div class="kpi-sub">+35.6% YoY／+11.4% QoQ（單季增 $1.15 億）</div></div><div class="kpi"><div class="kpi-val">22.9%</div><div class="kpi-lbl">非 GAAP 營業利益率</div><div class="kpi-sub">Q1 22.2%；Q2 25 19.8%</div></div><div class="kpi"><div class="kpi-val">4,720</div><div class="kpi-lbl">$100k+ ARR 客戶</div><div class="kpi-sub">+23% YoY；占 ARR 約 91%</div></div><div class="kpi"><div class="kpi-val">$11.4 億</div><div class="kpi-lbl">Q3 財測中位</div><div class="kpi-sub neg">年增約 28.7%；較 Q2 僅 +1.7%</div></div></div><div class="note grey">⚑ Datadog 只有<b>單一報告分部</b>，不揭露產品別營收；本分頁以「客戶族群」與產品採用度取代傳統部門拆解。資料來源：Q2 10-Q 附註 11、MD&A；新聞稿；法說會。</div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">$100k+ ARR 客戶</div><div class="bu-abbr">大型客戶</div><div class="bu-stat"><span class="bu-stat-lbl">客戶數</span><span class="bu-stat-val">4,720 家（Q1 4,550）</span></div><div class="bu-stat"><span class="bu-stat-lbl">YoY／QoQ 淨增</span><span class="bu-stat-val">+23%／+170 家</span></div><div class="bu-stat"><span class="bu-stat-lbl">占 ARR</span><span class="bu-stat-val">約 91%（Q2 25：89%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">產品採用</span><span class="bu-stat-val">58% 用 4 項以上產品</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:91%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">非 AI 客群</div><div class="bu-abbr">傳統企業與雲端原生</div><div class="bu-stat"><span class="bu-stat-lbl">營收年增</span><span class="bu-stat-val">高 20% 區間（Q1 中 20%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">NRR</span><span class="bu-stat-val">整體低 120%（上年約 120%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">增長來源</span><span class="bu-stat-val">多為既有客戶用量與產品整併</span></div><div class="bu-stat"><span class="bu-stat-lbl">備註</span><span class="bu-stat-val">法說會；沒有金額揭露</span></div></div><div class="bu-card o"><div class="bu-name">AI 原生客群（含最大客戶）</div><div class="bu-abbr">訓練與推論</div><div class="bu-stat"><span class="bu-stat-lbl">客戶數</span><span class="bu-stat-val">750+ 家；>$100 萬 31 家；>$1,000 萬 8 家</span></div><div class="bu-stat"><span class="bu-stat-lbl">對年增貢獻</span><span class="bu-stat-val">高個位數百分點（10-Q）</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q1 對照</span><span class="bu-stat-val">22 家／5 家</span></div><div class="bu-stat"><span class="bu-stat-lbl">風險</span><span class="bu-stat-val">最大客戶 Q3 起降低用量</span></div></div><div class="bu-card b"><div class="bu-name">新客戶</div><div class="bu-abbr">新 logo 與爬升</div><div class="bu-stat"><span class="bu-stat-lbl">貢獻增量比重</span><span class="bu-stat-val">約 30%（Q1 約 25%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">企業新 logo 年化簽約額</span><span class="bu-stat-val">年增超過 2 倍（法說會）</span></div><div class="bu-stat"><span class="bu-stat-lbl">總客戶數</span><span class="bu-stat-val">約 33,400 家（+2,000）</span></div><div class="bu-stat"><span class="bu-stat-lbl">備註</span><span class="bu-stat-val">含新創 AI 實驗室「neo-lab」</span></div></div></div><div class="chart-wrap"><div class="chart-title">多產品採用率：整併是主要護城河</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">多產品採用率：Q2 25 vs Q2 26（占客戶比例）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 25</text><rect x="95.63" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="113.63" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 26</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">40</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">60 %</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="126.67" width="93.76" height="329.33" fill="#57a0cf" rx="1" data-dim="Q2 25"/><text x="163.12" y="120.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 25">52</text><rect x="212" y="88.67" width="93.76" height="367.33" fill="#182456" rx="1" data-dim="Q2 26"/><text x="258.88" y="82.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 26">58</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">使用 4</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">項以上產品</text><rect x="382.24" y="272.33" width="93.76" height="183.67" fill="#57a0cf" rx="1" data-dim="Q2 25"/><text x="429.12" y="266.33" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 25">29</text><rect x="478" y="221.67" width="93.76" height="234.33" fill="#182456" rx="1" data-dim="Q2 26"/><text x="524.88" y="215.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 26">37</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">使用 6</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">項以上產品</text><rect x="648.24" y="411.67" width="93.76" height="44.33" fill="#57a0cf" rx="1" data-dim="Q2 25"/><text x="695.12" y="405.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 25">7</text><rect x="744" y="373.67" width="93.76" height="82.33" fill="#182456" rx="1" data-dim="Q2 26"/><text x="790.88" y="367.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 26">13</text><text x="743" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">使用 10</text><text x="743" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">項以上產品</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Datadog Q2 2026 法說會準備稿（第三方逐字稿頁：Motley Fool、Globe and Mail、Equibles 三處一致）</text></svg>
+</div><div class="note">⚑ 採用 4 項以上產品的客戶比例由 52% 升至 58%、6 項以上由 29% 升至 37%、10 項以上由 7% 升至 13%（法說會準備稿）。申報文件不揭露產品別營收，無法驗證各產品貢獻。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與利潤率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季營收與非 GAAP 利潤率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">250</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">750</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,000</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">1,250</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">0</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">40</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">60</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">80</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 25</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 25</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 25</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 25</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 26</text><polyline points="76,211.07 225.6,190.1 375.2,171.16 524.8,149.45 674.4,132.34 824,95.33" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="211.07" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="225.6" cy="190.1" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="375.2" cy="171.16" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="524.8" cy="149.45" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="674.4" cy="132.34" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="95.33" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,133.19 225.6,130.78 375.2,129.58 524.8,128.77 674.4,133.6 824,136.01" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="133.19" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="225.6" cy="130.78" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="375.2" cy="129.58" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="524.8" cy="128.77" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="674.4" cy="133.6" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="136.01" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="76,367.96 225.6,376.4 375.2,361.93 524.8,359.12 674.4,366.76 824,363.94" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="367.96" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="225.6" cy="376.4" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="375.2" cy="361.93" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="524.8" cy="359.12" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="674.4" cy="366.76" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="363.94" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><line x1="277.05" y1="40" x2="293.05" y2="40" stroke="#182456" stroke-width="2.4"/><text x="299.05" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營收</text><line x1="344.05" y1="40" x2="360.05" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="366.05" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 毛利率</text><line x1="472" y1="40" x2="488" y2="40" stroke="#b3760f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="494" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Datadog Q1 25～Q2 26 各季新聞稿（8-K Ex.99.1）；利潤率為本報告以新聞稿非 GAAP 毛利與營業利益除以營收計算</div>
+</div><div class="note">⚑ 營收六季由 $7.62 億到 $11.21 億（+47%）；Q2 季增 +11.4% 為六季最高（先前：+8.6%、+7.1%、+7.6%、+5.6%）。非 GAAP 毛利率由 81.4%（Q4 25）降到 79.6%；營業利益率 22.9%。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元；本報告以新聞稿數字計算）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q1 25</th><th>Q2 25</th><th>Q3 25</th><th>Q4 25</th><th>Q1 26</th><th>Q2 26</th></tr></thead><tbody><tr><td>營收</td><td>761.6</td><td>826.8</td><td>885.7</td><td>953.2</td><td>1,006.4</td><td>1,121.5</td></tr><tr><td>營收年增</td><td>25%</td><td>28%</td><td>28%</td><td>29%</td><td>32%</td><td>36%</td></tr><tr><td>非 GAAP 毛利</td><td>611.7</td><td>669.2</td><td>718.9</td><td>776.3</td><td>807.2</td><td>892.3</td></tr><tr><td>非 GAAP 毛利率</td><td>80.3%</td><td>80.9%</td><td>81.2%</td><td>81.4%</td><td>80.2%</td><td>79.6%</td></tr><tr><td>非 GAAP 營業利益</td><td>166.5</td><td>164.1</td><td>207.4</td><td>230.1</td><td>223.5</td><td>257.0</td></tr><tr><td>非 GAAP 營業利益率</td><td>21.9%</td><td>19.8%</td><td>23.4%</td><td>24.1%</td><td>22.2%</td><td>22.9%</td></tr><tr><td>$100k+ ARR 客戶</td><td>3,770</td><td>3,850</td><td>4,060</td><td>4,310</td><td>4,550</td><td>4,720</td></tr></tbody></table></div></div><div class="card"><div class="card-title">營收背後的產品：可觀測性平台是什麼、為何 AI 時代用量更大</div><p><b>基礎設施監控與 APM</b>：持續收集雲端主機、容器、資料庫與應用的指標、追蹤與日誌，回答「哪裡慢、哪裡壞」。客戶部署越多雲端與微服務，需要收集與關聯的資料點越多，所以依量計價的營收隨客戶的雲端規模成長。</p><p><b>日誌與資料管理</b>：把大量日誌集中、搜尋與長期保存；BYOC（Bring Your Own Cloud）讓資料留在客戶自己的雲帳戶，降低資料搬移與合規顧慮，也是大型媒體公司這類 PB 級客戶的導入條件。</p><p><b>AI 可觀測性</b>：LLM 應用不只要看「有沒有當機」，還要看回答品質、成本、GPU 利用率與代理呼叫了哪些工具；AI 原生客戶（訓練階段就導入）因此單位工作負載的資料量更大，這是 AI 原生客群貢獻高個位數百分點成長的原因，也是風險所在：用量能快速爬升，也能快速最佳化降低。</p><p><b>安全與 Bits AI</b>：把可觀測性資料餵給安全與維運代理，從「顯示問題」走向「自動修復」；管理層認為自動化不會減少用量，因為客戶會部署更多儀表板與警示，但目前沒有可量化的證據（法說會說法）。</p><p>⚑ 以上為產業一般知識與公司說法；Datadog 申報文件不揭露產品別營收，也不揭露最大客戶占營收比重。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

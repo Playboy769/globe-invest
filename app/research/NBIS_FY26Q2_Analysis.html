@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Nebius Group（NBIS）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／大額合約與融資堆疊／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 12 日（Q2 於 6/30 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2 6-K（Ex.99.1 新聞稿、Ex.99.2 股東信與財報、MD&amp;A）、Q1／Q4／Q3 6-K、7/17 與 8/19–24 6-K、2026 年 Form 4（外國私人發行人，無 10-Q）</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">大額合約與融資堆疊</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl">具名分析師（Morgan Stanley、Goldman Sachs、Wolfe、Citi、Water Tower、Baird、Cantor、BNP Paribas）</div></div><div class="stat-box"><div class="stat-val">15</div><div class="stat-lbl">核心問題區塊（含 2 位分析師的追問與 5 則未具名／線上提問）</div></div><div class="stat-box"><div class="stat-val">10</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/12 法說會（Motley Fool、Investing.com、Yahoo Finance 三份逐字稿頁，三者內容相互一致）、同日 6-K（新聞稿、股東信、財報）、Q1 法說會前季報告。<b>下列問答為大意轉述，非逐字引用</b>。注意：提問者名稱取自第三方逐字稿，Citi 分析師在 Investing.com 轉寫為『Roddy』，在 Motley Fool 與 Yahoo 為『Radke』，本報告採後者；另有數則提問在逐字稿中未具名（疑為線上或主持人轉述）。全場最關鍵的結構性事實：<b>沒有人追問三家客戶占營收 59%、耐用年限由 4 年延至 5 年使 Q2 折舊少 $43.0M、或 8/12 之後馬上發生的 $50 億可轉債</b>。公司在 Q1 說 Q2 利潤率『稍微低一些』，實際 AI cloud 利潤率由 44.7% 升到 49.7%，也沒有人問這個落差。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ryan Lantz（Morgan Stanley）</div><div class="qa-topic">Vineland 站點、2027 年如何框架</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">Vineland（紐澤西）聽證休會、未表決，對產能爬坡的影響？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Tom Blackwell：改用 Bloom 燃料電池需修訂場址配置，聽證屬正常程序，配置符合各級法規、公司有信心；Andrey Korolenko：建築今夏完工、內部裝修順利，Bloom 部署很快、不會顯著影響時程，迄今所有合約批次均已交付。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">管理層說『現在就能賣光 2027 年全部產能』——投資人該如何看 2027 的容量、價格與營收？何時給正式財測？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">財務長 Dado Alonso：Q2 的 $20–25M／MW、回收期不到兩年的合約，將在 Q4 後期起上線，可作為明年初的定價基準；公司本可賣光規劃中的 2027 產能卻選擇不賣，反映對未來價格的信心；2027 部署容量將『顯著多於』2026；正式 2027 展望會在今年稍後提供。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 『所有批次已交付』是迄今的敘述，不是剩餘批次的場址狀態</div><div class="q-text">Q1 法說會 Morgan Stanley 就已追問 Vineland 延遲報導，本季同一券商再問，仍由管理層以『迄今已交付』作答。股東信稱已交付 Microsoft 『所有容量批次』，但 Q1 說法是交付排程到年底；<b>剩餘批次數、日期與場址對應都沒有揭露</b>，而場址配置修訂是公司自己改用 Bloom 後新增的核准步驟。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 2027 的『可賣光』沒有任何可驗證數字</div><div class="q-text">Alonso 沒有給 2027 容量 MW、已售比例或價格區間；『回收期不到兩年』即股東信的 1 年 10 個月預估，註腳寫明含尚未建成的容量與預測成本。『可以賣光卻選擇不賣』是不可證偽的陳述。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Alex Duval（Goldman Sachs）</div><div class="qa-topic">吉瓦級建置的信心與時程</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">市場對吉瓦級資料中心建置情緒趨於審慎，Nebius 對產能爬坡有何信心？開發時程更新？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Andrey Korolenko：合約電力提早超過年初預期，年底目標上修至 5 GW；幾乎全部電力會在未來約 3 到 3.5 年上線，結合電網與自備發電，已取得數百 MW 的自備發電管道，Bloom 合作可加速場址；多數合約是雲端合約、交付地點有彈性；『超額佈建場址與容量』是最高優先。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 5 GW 是『合約電力』，不是『會變成營收的容量』</div><div class="q-text">5 GW 若在 3–3.5 年上線，每年約 1.4–1.7 GW（本報告推算），與『2027 起每年逾 1 GW』一致；但年底 connected 目標僅 0.8–1 GW。管理層自己說要『超額佈建』，等於合約電力本身包含冗餘。FY2025 20-F 揭露去年底實際運轉容量僅約 170 MW，與 5 GW 差約 30 倍。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Arsenije Matovic（Wolfe Research）</div><div class="qa-topic">債市波動下的資金來源</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">債市波動、整體成本上升，公司仍偏向舉債嗎？會更依賴 ATM 或可轉債嗎？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Alonso：以資產配對融資工具，優先顧及資金成本、稀釋與資產負債表；第一順位是客戶預付款（2026 逾 $90 億）與營運現金流；7 月完成約 $7.75 億資產擔保融資（SOFR＋2.50%，以已部署 GPU 與投資等級客戶合約現金流為擔保），$400 億承諾的待履行合約使此模式可複製；『企業層級債務目前很少』，股權或股權連結（ATM、可轉債）是其他選項，公司同時評估各類管道。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 7 天後的 $50 億可轉債</div><div class="q-text">答覆把可轉債描述成『可評估的選項之一』；8/19（法說會後第 7 天）公司就宣布並定價 $50 億可轉債（由 $45 億上調），並以約 1,580 萬股換掉 $8 億舊券。<b>發行時程必然已在籌備中</b>，但分析師問『是否更依賴 ATM 或可轉債』時，答覆沒有指向任何已排定的交易。另，『企業層級債務很少』若不含可轉債，與帳面 $85.0 億可轉債並不矛盾，但容易被讀成債務很輕。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Tyler Radke（Citi）</div><div class="qa-topic">2027 容量在短期與多年期合約之間的配置</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">2027 年容量如何在短期與多年期合約間分配？長期合約需要達到什麼 ACV／MW 門檻？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">營收長 Marc Boroditsky：中期合約（1–3 年）是核心業務；短期溢價合約（含拍賣）另成一類；公司用客戶類型、價格、付款結構、期限與規模綜合判斷，順序是既有客戶、新客戶、再看條款；刻意縮短預售期、在較接近交付時銷售以提升價格；並刻意保留容量給近端需求，因為『目前看到最高的綜合實現價值』。</div></div><div class="flag-box"><div class="q-label flag">⚑ 邏輯缺口 ─ 問題問的是『門檻』，答覆沒有給數字</div><div class="q-text">Radke 要的是長期合約的 ACV／MW 底線；答覆是多變數優化框架，沒有任何門檻。同時『縮短預售期』與『RPO 36% 於 24 個月內認列』的長期能見度是取捨——短約多、預售期短，未來營收的合約覆蓋率會下降，而 Q2 RPO 僅季增 11.6%（$39.1 億）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">James Kisner（Water Tower Research）</div><div class="qa-topic">xAI 以溢價賣算力的訊號</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">xAI 以溢價轉售算力，說明市場容量定價與續約強度如何？對 Nebius 有何含意？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">執行長 Arkady Volozh：不改變策略；Nebius 與三大超大規模雲在同一市場，AI 雲市場由數千億美元每年成長到約一兆美元或更多；超大規模雲『不可能全部建完』，Nebius 要建的就是其餘部分，每年建一個 GW 而市場每年成長數十 GW；新進者是驗證而不是改變市場。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 沒有回答續約的價格</div><div class="q-text">Kisner 同時問到『新約與續約的強度』；Volozh 以市場規模作答，沒有任何續約價格資料。股東信僅說新約中『舊世代 GPU 價格比 Q1 高逾 30%』，未提既有合約到期重訂價的比例或幅度；<b>RPO 在 24 個月內認列 36%，代表仍有大量營收鎖在舊定價合約內</b>（本報告判讀）。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Rob Oliver（Baird）</div><div class="qa-topic">開放權重模型定位、asset-light 夥伴模式</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">開放權重模型定位是否推升客戶的推論用量？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Roman Chernin：公司從一開始就押注開放生態，客戶獲得彈性、資料與模型控制；規模化後 token 成本成為問題，產業走向特化、調校過的模型（『資料是護城河』）；Token Factory 當天支援新模型，GLM-5.2 的實作獲得獨立基準的完整品質分數與領先速度。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">asset-light 模式早期的客戶反應與相對核心業務的經濟性？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Volozh：公司仍是新創、無法同時進入所有市場；公布後收到數十家夥伴詢問，這些夥伴有容量與資本但不知如何建與賣；模式仍很早期但『早期跡象令人鼓舞』。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ asset-light 的經濟性完全沒有數字</div><div class="q-text">『高毛利、最小資本支出』是股東信用語，但沒有分成比例、認列方式（總額或淨額）、合約期限或首批夥伴。『數十家詢問』是意向，不是簽約。這一題也是本場最直接問到新模式經濟性的一題，卻只得到定性答覆。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Brett Knoblauch（Cantor）</div><div class="qa-topic">年底 connected power 目標</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">年底 connected power 0.8–1 GW 的目標是否維持？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Korolenko：維持；Vineland 屬 2026 年容量。從 connected power 到產生營收要經過資料中心驗收、網路與叢集建置、平台部署與客戶上線，約需數個月，也受 GPU 世代切換影響；connected 容量會在 2027 上半年陸續轉成營收。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Stefan Slowinski（BNP Paribas）</div><div class="qa-topic">Q3 約 $40M／MW 與 Vera Rubin 時程</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題</div><div class="q-text">Q3 約 $40M／MW 的短期成交價，是否反映 Vera Rubin 的初期定價？Vera Rubin 何時放量？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Korolenko：Vera Rubin 在實驗室測試已有一段時間、結果符合預期；從 Grace Blackwell 到 Vera Rubin 的技術步驟較上一次切換容易；預期 2026 年底或 2027 年初開始部署、貫穿 2027 全年。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 短期價格與 Vera Rubin 的連結未被回答</div><div class="q-text">分析師問 $40M／MW 是否是 Vera Rubin 價格；答覆只談時程。股東信則寫 Q3 短期合約『大於 $40M／MW』且容量 Q4 上線，這批容量屬於哪一世代 GPU 並未說明。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">未具名／線上與主持人轉述提問（5 則）</div><div class="qa-topic">大單成因、策略演進、拍賣與短約、1 GW 資金、推論與代理</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">提問 1</div><div class="q-text">四筆大單是怎樣的競標？客戶為何選 Nebius？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Boroditsky：四筆都是競爭性贏單；差異化是規模、效能、可靠度與長期夥伴關係；有客戶明講看重『回應度、透明度與一對一支援』與美國部署／未來主權需求；客戶多半原本有供應商（含超大規模雲），經多輪概念驗證；已在談後訓練、推論與下一代晶片；pipeline 仍有多筆逾 $10 億機會。</div></div><div class="q-block"><div class="q-label q">提問 2</div><div class="q-text">快速變化的市場中，新倡議如何融入長期策略？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Volozh：市場演進比預期快；公司先建產能但不預售，才能把容量分配給較高毛利的短約，也才有容量辦拍賣；通用平台可跑第三方容量，使 asset-light 可行。</div></div><div class="q-block"><div class="q-label q">提問 3</div><div class="q-text">新的銷售動作（拍賣、短期大型訓練合約）策略與定價意涵？是否仍為 take-or-pay？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Boroditsky：短約對象是需要 3–6 個月專用 GB300 叢集的客戶（限時大型訓練、強化學習衝刺）；拍賣是價格發現工具，成交價比過去最高 Blackwell 價高 15%、比 pipeline 高 20%；只用公司『小部分』容量；兩者交付週期都更短。</div></div><div class="q-block"><div class="q-label q">提問 4</div><div class="q-text">2027 起每年逾 1 GW 的資金安排與資金來源優先順序？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Alonso：營運現金流為第一順位，其次是預付款（Q2 新約約覆蓋 50–60% capex，目標再提高），再來是以約 $400 億承諾為基礎的資產擔保融資（已於 Q2 開始動用），另有未大量動用的企業層級債務與股權連結工具；GPU 作為獨立資產類別的融資也在出現；『對資產負債表很放心』。</div></div><div class="q-block"><div class="q-label q">提問 5</div><div class="q-text">『token maxing』與 Token Factory、Tavily 的採用？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Chernin：AI 進入生產、長流程代理工作負載擴及金融、電商、醫療與行銷自動化；Token Factory 提供高效推論與後訓練，Tavily 提供資料接地（開發者逾 250 萬）；強化學習 rollout、評估與合成資料也消耗大量推論；GPU 之外增加 ARM 與 CPU 部署。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 3 提問沒有回答『是否 take-or-pay』</div><div class="q-text">提問 3 明確問到短約是否仍為 take-or-pay，答覆講的是價格、時間與用途，<b>沒有說明違約條款或預付款比例</b>；對 3–6 個月的專用叢集而言，預付款與不可取消性才是風險移轉的關鍵。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 『$400 億承諾』的口徑</div><div class="q-text">提問 4 的答覆以『$400 億承諾』作為資產擔保融資的基礎；Q2 6-K 的 RPO 是 $374.9 億（且不含一年以內的履約義務）。兩個數字都不是未來現金，而是合約價值；7 月 ABS 僅 $7.75 億，約為前者的 1.9%（本報告推算）。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.fool.com/earnings/call-transcripts/2026/08/19/nebius-nbis-q2-2026-earnings-call-transcript/" target="_blank" rel="noopener">Motley Fool：Nebius (NBIS) Q2 2026 Earnings Call Transcript</a>；<a href="https://www.investing.com/news/transcripts/earnings-call-transcript-nebius-beats-q2-2026-forecasts-shares-jump-165-93CH-4855076" target="_blank" rel="noopener">Investing.com：Nebius beats Q2 2026 forecasts 逐字稿頁</a>；<a href="https://finance.yahoo.com/markets/stocks/articles/nebius-nbis-q2-2026-earnings-165907370.html" target="_blank" rel="noopener">Yahoo Finance：Nebius (NBIS) Q2 2026 Earnings Call Transcript</a>；<a href="https://www.sec.gov/Archives/edgar/data/1513845/000110465926094568/tm2622968d1_ex99-1.htm" target="_blank" rel="noopener">SEC EDGAR：Nebius 6-K（2026/8/12，Ex.99.1 新聞稿／Ex.99.2 股東信）</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li><b>Q2 新簽四筆大單：</b>平均總合約價值（TCV）逾 <b>$10 億</b>，年度合約價值約 <b>$20–25M／MW</b>；客戶含 Reflection、Cohere、另一家美國 neolab、一家美國量化交易公司</li><li><b>Q2 TCV 較 Q1 成長近 4 倍</b>（新客戶 TCV 逾 9 倍）；約 70% 的新約含客戶預付款，涵蓋 50–60% 的相關資本支出</li><li><b>RPO $374.9 億</b>（Q1：$335.9 億，+$39.1 億／+11.6%）；遞延收入 $59.75 億（年初 $15.78 億）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>中期合約（核心業務）平均 1–3 年；新增<b>短期容量合約 3–6 個月</b>（溢價，Q3 已簽首筆）；與投資等級客戶的長期合約用於資產擔保融資</li><li>多數 Q2 新約對應 2026 年底上線的容量，<b>主要貢獻 2027 年營收</b>（股東信）</li><li>RPO 中 36% 預計於 2028/6/30 前認列、40% 於第 25–48 個月、其餘更晚（6-K Note）</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>Q2 資本支出 <b>$56.6 億</b>（上半年 $81.3 億；全年指引 $200–250 億）</li><li>Q2 營運現金流 +$22.5 億，其中應收帳款回收 +$11.9 億、遞延收入 +$12.0 億（本報告推算：扣除這兩項為 −$1.4 億）</li><li>現金 $80.4 億（另有受限現金 $10.6 億）；可轉債帳面 $85.0 億；7 月再取得 ABS $7.75 億；8 月再發 $50 億可轉債</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>四筆大單的個別 TCV、期限與對手方信用均未揭露；『每筆平均逾 $10 億』無法與 RPO 增額逐筆對帳</li><li>『$400 億客戶承諾』與 6-K 的 RPO $374.9 億口徑不同，差額未說明</li><li>回收期『1 年 10 個月』為預測，含尚未建成的容量（股東信註腳）</li><li>Vineland 站點因改用 Bloom 燃料電池需修訂場址配置核准，聽證已休會（提問前提，未獲管理層否認）</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">Q2 新約經濟性：與歷史比較</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>指標</th><th>數字</th><th>說明／出處</th></tr></thead><tbody><tr><td>年度合約價值／MW（ACV per MW）</td><td class="wrap">2026 基準約 $12M → Q2 新約逾 $20M → Q3 短期容量逾 $40M</td><td class="wrap">股東信圖表；ACV 為收入認列口徑、不含預付款（註腳 2）</td></tr><tr><td>四筆大單 ACV／MW</td><td class="wrap">$20–25M</td><td class="wrap">股東信、法說會</td></tr><tr><td>舊世代 GPU 新約價格</td><td class="wrap">較 Q1 高出逾 30%</td><td class="wrap">股東信</td></tr><tr><td>預估投資回收期（Q2 新約）</td><td class="wrap">1 年 10 個月（歷史 2–3 年）</td><td class="wrap">含預測成本與尚未建成容量（註腳 3）</td></tr><tr><td>容量拍賣</td><td class="wrap">得標價較過去最高 Blackwell 價格高 15%、較 pipeline 高 20%</td><td class="wrap">法說會（Boroditsky）</td></tr><tr><td>短期容量（3–6 個月）</td><td class="wrap">約 $40–50M／MW</td><td class="wrap">法說會</td></tr><tr><td>預付款覆蓋率</td><td class="wrap">約 70% 的 Q2 新約含預付款，涵蓋 50–60% 相關 capex</td><td class="wrap">股東信</td></tr></tbody></table></div></div><div class="tbl-wrap"><div class="tbl-title">融資堆疊時間序（2025/6 – 2026/8）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>時點</th><th>工具</th><th>金額</th><th>關鍵條件</th></tr></thead><tbody><tr><td>2025/6、9</td><td class="wrap">可轉債（4 檔）</td><td class="wrap">原始面額約 $41.6 億</td><td class="wrap">2029／2030／2031／2032 到期；票面 1.00–3.00%（6-K Note 12）</td></tr><tr><td>2026/3/11</td><td class="wrap">NVIDIA 預先出資認股權證</td><td class="wrap">$20.0 億；21,065,936 股；行權價 $0.0001</td><td class="wrap">行使受 HSR 等待期限制（6-K Note 14）；隱含約 $94.9／股（本報告推算）</td></tr><tr><td>2026/3/20</td><td class="wrap">可轉債（2 檔）</td><td class="wrap">原始面額 $43.4 億</td><td class="wrap">1.25% 2031（轉換價約 $183.22）、2.625% 2033（約 $180.31）；到期償付 120%</td></tr><tr><td>2026/5–6</td><td class="wrap">ATM 增資</td><td class="wrap">12,729,493 股 @ $223.60；毛額約 $28.5 億</td><td class="wrap">自庫藏股交付；剩餘額度 12,270,507 股（6-K Note 14）</td></tr><tr><td>2026/7/10</td><td class="wrap">資產擔保貸款（首筆）</td><td class="wrap">約 $7.75 億</td><td class="wrap">Term SOFR＋2.50%；2030/10/31 到期；MUFG 主辦（6-K，7/17）</td></tr><tr><td>2026/8/19–24</td><td class="wrap">可轉債（2 檔，upsized）</td><td class="wrap">$50.0 億（另有最多 $7.5 億超額配售權）</td><td class="wrap">0.50% 2030 $30 億、4.50% 2034 $20 億；轉換價 $313.46／$324.65；同時以約 1,580 萬股換掉 2029／2031 舊券各 $4 億（6-K，8/20）</td></tr><tr><td>持續</td><td class="wrap">客戶預付款</td><td class="wrap">遞延收入 $59.75 億（6/30）；2026 全年預期逾 $90 億</td><td class="wrap">股東信；現金流量表：上半年遞延收入 +$43.95 億</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>讀法：</b>Nebius 的『大合約』不是靠獲利撐，而是靠『預付款＋有擔保債＋可轉債＋增資』四條資金管道同時滾動。可轉債公允價值 $208.2 億，是帳面 $85.0 億的約 2.45 倍（6-K Note 12，Level 3，本報告推算），表示舊券已深度價內；8 月的換股以約 1,580 萬股（以 8/19 收盤價 $223.90 計約 $35 億）換掉 $8 億原始面額（本報告推算），等於把債轉成股、並增加約 5.8% 股數（以 6/30 流通股 2.7186 億股計）。資料來源：Q2 6-K Ex.99.1／99.2；2026/8/19–20 6-K。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p><b>適用，且本季有新增。</b>① <b>首筆資產擔保貸款（7/10 簽署，Q2 6-K 列為期後事項）：</b>借款人為兩家間接全資子公司（Nebius Compute II LLC／Nebius Compute II Oy），MUFG London 為主辦與簿記行；約 $7.75 億，Term SOFR（下限 0）＋2.50%，2030/10/31 到期；擔保品為已部署的 GPU 設備與一家投資等級客戶合約的現金流，並質押借款人幾乎全部資產與股權；財務條款含債務償付覆蓋率 1.15 倍與最低流動性；母公司提供針對『特定不當行為』的無追索保證，以及對管理協議與共置協議義務的履約保證。借款主體為合併子公司，故屬<b>合併報表內的有擔保債務</b>（本報告判讀）。② <b>客戶預付款：</b>遞延收入 $59.75 億，其中流動 $9.79 億、非流動 $49.96 億，預計於 1–5 年內認列。③ <b>租賃：</b>已簽未開始的租賃未來未折現給付 <b>$120.54 億</b>（Q1：$99.05 億），已預付 $6.12 億，預計 2026–2027 開始、期限最長 12 年；已入帳營業租賃負債 $16.25 億。④ <b>自建／委建：</b>在建資產（assets not yet in use）$78.36 億，占不動產設備毛額 55%（去年底 39%）。⑤ <b>期後：</b>8 月 $50 億無擔保可轉債（用途含資料中心建置與 GPU 採購）。⑥ <b>表外：</b>未見 VIE 或表外專案融資揭露；Bloom 燃料電池夥伴關係與 asset-light 夥伴模式（夥伴自行出資、Nebius 提供平台與客戶）尚無金額揭露。來源：2026/7/17 6-K；Q2 6-K Ex.99.2 Note 8、11、12、14、16。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>四筆大單各自的 TCV、期限、預付款比例與對手方信用？其中 Reflection、Cohere 類新創的付款能力如何支撐『平均逾 $10 億』？</li><li>『$400 億客戶承諾』與 RPO $374.9 億之間的差額是什麼（尚未生效？期限一年以內？）？</li><li>ABS 以『一家投資等級客戶』合約為擔保——是 Microsoft 還是 Meta？後續更多 ABS 會把多少未來現金流抵押出去？</li><li>asset-light 夥伴模式的收入分成、認列方式（總額或淨額）與資本報酬是什麼？</li><li>全年 $200–250 億 capex、下半年隱含 $119–169 億，其資金缺口在 8 月 $50 億可轉債之後還剩多少？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>GPU 雲核心與新世代平台</h4><div class="meta">GB300 為主；已收到首批 Vera Rubin NVL72</div><p>公司已拿到首批 Vera Rubin NVL72 系統，用來驗證運算、網路與編排整合；Vera Rubin 預期 2026 年底或 2027 年初開始部署、貫穿 2027；另在 GPU 車隊旁加入通用 CPU（含 NVIDIA Vera CPU），用於代理式 AI 的工具呼叫與記憶體工作負載。</p></div><div class="tech-card g"><h4>Token Factory（推論平台）</h4><div class="meta">Q2 正式推論工作負載成長逾 3 倍</div><p>託管式開放權重模型推論：當日支援 Kimi K3、GLM-5.2、Nemotron 3 Ultra、DeepSeek V4 Flash、MiniMax 3；Artificial Analysis 的 Endpoint Accuracy Index 顯示 GLM-5.2 達準確度對等、輸出速度居前。Eigen AI（推論最佳化）與 Clarifai 團隊併入；Tavily 開發者由 2 月 100 萬增至逾 250 萬。</p></div><div class="tech-card o"><h4>Aether 3.6 雲平台</h4><div class="meta">2026 Q2 發布</div><p>新增 Nebius Echo（以自然語言管理資源的代理，跑在 Token Factory 的開放模型上）、客戶自管金鑰（KMS）、Workload Identity Federation、預算管控、自帶映像；物件儲存讀取速度 +30%、共享檔案系統小檔案操作 3 倍。</p></div><div class="tech-card "><h4>電力與產能模式</h4><div class="meta">合約電力目標 5 GW；年底 connected 0.8–1 GW</div><p>合約電力由 4 GW 再上修至 5 GW（年底口徑）；2027 年起每年部署逾 1 GW。與 Bloom Energy 合作 behind-the-meter 燃料電池（法說會稱已取得數百 MW 的自備發電管道）；新增 asset-light 夥伴模式（夥伴出資建場，Nebius 提供平台與銷售）。</p></div><div class="tech-card g"><h4>定價與銷售創新</h4><div class="meta">容量拍賣＋3–6 個月短期容量</div><p>首次容量拍賣得標價創公司 Blackwell 最高紀錄；短期合約（專用 GB300 叢集、限時大型訓練或強化學習衝刺）以約 $40–50M／MW 溢價成交。公司刻意縮短預售期、保留部分 2027 產能供近端需求，稱『目前就能賣光 2027 全部產能』。</p></div><div class="tech-card o"><h4>Avride 與 TripleTen（非核心）</h4><div class="meta">合計約占營收 2%</div><p>Avride：自駕車隊近三倍成長至逾 200 輛、今年逾 100 萬自駕英里，於 Uber（達拉斯）完成逾 6 萬趟商業載客，送貨機器人累計逾 60 萬單；TripleTen：新增 AI 系統工程課程，美國學生量下滑、拉丁美洲 B2C 成長。</p></div></div><div class="note grey">⚑ 技術與時程為股東信與法說會說法，Nebius 未揭露各產品線營收（僅分 AI cloud／TripleTen／Avride 三個分部），因此 Token Factory 的『3 倍』無法換算成金額。資料來源：Q2 股東信（Ex.99.2）；法說會（Chernin、Korolenko 答覆）。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 849.2 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="849.2" height="702" fill="#ffffff"/><text x="424.6" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Nebius 供應鏈結構：資源與資金 → 營運平台 → 營收分部 → 客戶</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">資源與資金</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">營運平台</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">營收分部（Q2 2026）</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">客戶</text><defs><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker></defs><polyline points="147.225,106 147.225,124 261.75,124 261.75,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="147.225,106 147.225,146 449.3,146 449.3,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="339.45,106 339.45,168 304.93333333333334,168 304.93333333333334,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="526.175,106 526.175,190 348.1166666666667,190 348.1166666666667,222" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="725.55,106 725.55,208 391.3,208 391.3,222" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="326.525,282 326.525,300 212.78750000000002,300 212.78750000000002,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="528.375,282 528.375,322 332.1625,322 332.1625,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="528.375,282 528.375,344 494.1625,344 494.1625,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="528.375,282 528.375,366 552.1625,366 552.1625,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="272.475,458 272.475,476 225.875,476 225.875,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="272.475,458 272.475,498 283.875,498 283.875,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="272.475,458 272.475,520 445.875,520 445.875,574" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="272.475,458 272.475,542 607.875,542 607.875,574" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><g><rect x="60" y="46" width="174.45" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="147.23" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">NVIDIA</text><text x="147.23" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">GPU 供應商兼 $20 億投資人</text></g><g><rect x="268.45" y="46" width="142" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="339.45" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">三家集中供應商</text><text x="339.45" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">資本支出口徑；未具名</text></g><g><rect x="444.45" y="46" width="163.45" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="526.17" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">電力與場址</text><text x="526.17" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Bloom、共置、綠地；5 GW</text></g><g><rect x="641.9" y="46" width="167.3" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="725.55" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">資金來源</text><text x="725.55" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">預付款、ABS、可轉債、ATM</text></g><g><rect x="249.75" y="222" width="153.55" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="326.52" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">自有與共置資料中心</text><text x="326.52" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Finland 自有；NJ 委建</text></g><g><rect x="437.3" y="222" width="182.15" height="60" rx="9" fill="rgb(223,224,231)" stroke="#182456" stroke-width="1.4"/><text x="528.38" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">全端 AI 雲平台</text><text x="528.38" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Aether 3.6；Token Factory</text></g><g><rect x="200.79" y="398" width="143.37" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="272.48" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Nebius AI cloud</text><text x="272.48" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$574.9M（約 98%）</text></g><g><rect x="378.16" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="442.16" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">TripleTen</text><text x="442.16" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$10.0M</text></g><g><rect x="540.16" y="398" width="128.25" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="604.29" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Avride</text><text x="604.29" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$1.0M；自駕與送貨</text></g><g><rect x="109.88" y="574" width="128" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="173.88" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer C</text><text x="173.88" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">占 Q2 營收 24%</text></g><g><rect x="271.88" y="574" width="128" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="335.88" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer D</text><text x="335.88" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">占 Q2 營收 21%</text></g><g><rect x="433.88" y="574" width="128" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="497.88" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Customer E</text><text x="497.88" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">占 Q2 營收 14%</text></g><g><rect x="595.88" y="574" width="163.45" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="677.6" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">其他客戶</text><text x="677.6" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">含 Q2 四筆 $10 億級新約</text></g><line x1="288.88" y1="664" x2="310.88" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="318.88" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">集中度／單一依賴</text><rect x="424.88" y="663" width="22" height="2.4" fill="#182456"/><text x="454.88" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI cloud 主路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Q2 2026 6-K（Ex.99.1／99.2）、FY2025 20-F、2026/7/17 與 8/19–24 6-K；Customer C/D/E 為 6-K 匿名揭露，身分未知；供應商僅揭露『三家集中度供應商』未具名</div>
+</div></div></div></div><div class="note">⚑ 來源：Q2 2026 6-K、FY2025 20-F。Nebius 沒有傳統 BOM，『供應鏈』＝GPU、電力場址與資金；客戶 C/D/E 匿名；與下方 Sankey 使用同一組節點名稱（AI cloud、TripleTen、Avride、Customer C/D/E、其他客戶）。</div></div><div class="chart-wrap"><div class="chart-title">營收流量（Q2 2026，百萬美元）</div><div id="sankeyEmbed_6fs15cd" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"g","label":"Nebius 分部營收合計 $585.9M","color":"#182456"},{"id":"ai","label":"Nebius AI cloud","color":"#8f1f1f"},{"id":"tt","label":"TripleTen","color":"#0f6f8a"},{"id":"av","label":"Avride","color":"#b3760f"},{"id":"cc","label":"Customer C","color":"#b1408a"},{"id":"cd","label":"Customer D","color":"#57a0cf"},{"id":"ce","label":"Customer E","color":"#6b7280"},{"id":"oth","label":"其他客戶","color":"#9ca3af"}],"links":[{"source":"g","target":"ai","value":574.9},{"source":"g","target":"tt","value":10},{"source":"g","target":"av","value":1},{"source":"ai","target":"cc","value":139.8},{"source":"ai","target":"cd","value":122.3},{"source":"ai","target":"ce","value":81.5},{"source":"ai","target":"oth","value":231.3}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_6fs15cd");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 分部營收為 6-K MD&A 揭露；右側客戶金額＝6-K 揭露的『占營收比例』×總營收 $582.3M（C 24%＝139.8、D 21%＝122.3、E 14%＝81.5），並假設這三家全部屬於 AI cloud；『其他客戶』＝AI cloud 營收扣除三者的餘額（本報告推算）。分部合計 $585.9M，扣除內部抵銷 $3.6M 後為集團營收 $582.3M。</div></div><div class="chart-wrap"><div class="chart-title">客戶集中度</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">單一客戶占營收（Q2 2026，10% 以上者）</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="374.4" x2="876" y2="374.4" stroke="#eeeeee" stroke-width="1"/><text x="68" y="378.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">5</text><line x1="78" y1="292.8" x2="876" y2="292.8" stroke="#eeeeee" stroke-width="1"/><text x="68" y="296.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">10</text><line x1="78" y1="211.2" x2="876" y2="211.2" stroke="#eeeeee" stroke-width="1"/><text x="68" y="215.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">15</text><line x1="78" y1="129.6" x2="876" y2="129.6" stroke="#eeeeee" stroke-width="1"/><text x="68" y="133.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">20</text><line x1="78" y1="48" x2="876" y2="48" stroke="#eeeeee" stroke-width="1"/><text x="68" y="52" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">25 %</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="64.32" width="189.52" height="391.68" fill="#182456" rx="1" data-dim="Q2 2026 占營收"/><text x="211" y="58.32" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026 占營收">24</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">C</text><rect x="382.24" y="113.28" width="189.52" height="342.72" fill="#182456" rx="1" data-dim="Q2 2026 占營收"/><text x="477" y="107.28" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026 占營收">21</text><text x="477" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="477" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">D</text><rect x="648.24" y="227.52" width="189.52" height="228.48" fill="#182456" rx="1" data-dim="Q2 2026 占營收"/><text x="743" y="221.52" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026 占營收">14</text><text x="743" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Customer</text><text x="743" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">E</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Nebius 6-K（2026/8/12）Ex.99.2「Significant Customers」；客戶 A、B 在 Q2 2025 分別占 39%、15%，Q2 2026 低於 10%</text></svg>
+</div><div class="note">⚑ 三家 10% 以上客戶合計占 Q2 營收 59%（上半年：C 26%、D 21%）。去年同期的 10% 以上客戶是 A（39%）與 B（15%），本季已低於 10%。應收帳款：Customer D 占 16%、Customer E 占 29%（6/30）。⚠ Q2 6-K 稱 Customer C 占去年底應收帳款 83%，而 FY2025 20-F 對同一筆 83% 標示的是 Customer D——代號在不同申報文件之間重新編排，無法跨文件追蹤同一客戶。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>客戶集中</td><td class="wrap">Q2：Customer C 24%、D 21%、E 14%（合計 59%）；上半年：C 26%、D 21%；去年同期 A 39%、B 15%</td><td class="wrap">Q2 6-K Ex.99.2『Significant Customers』</td></tr><tr><td>供應商集中</td><td class="wrap">以資本支出計，6/30 為『三家供應商』（去年底：兩家）；未揭露名稱與比例</td><td class="wrap">Q2 6-K Ex.99.2『Supplier Concentration』</td></tr><tr><td>GPU 依賴</td><td class="wrap">公司『目前依賴 NVIDIA 供應 GPU』；NVIDIA 同時是 $20 億預先出資認股權證投資人</td><td class="wrap">FY2025 20-F Item 3.D；Q2 6-K Note 14</td></tr><tr><td>資料中心</td><td class="wrap">Finland 自有；Vineland（NJ）為委建；Missouri、Alabama 等綠地；Q2 新增英國、愛沙尼亞、芬蘭站點；賓州 1.2 GW 自有站點（Q1 宣布）</td><td class="wrap">FY2025 20-F Item 4；Q2 股東信</td></tr><tr><td>電力</td><td class="wrap">Bloom Energy behind-the-meter 燃料電池（5 月宣布）；合約電力年底目標 5 GW</td><td class="wrap">Q2 股東信；法說會</td></tr><tr><td>主要客戶合約</td><td class="wrap">Microsoft：已交付『迄今』所有容量批次（近一個月交付兩批）；Meta 第二份協議容量預計 2027 初上線</td><td class="wrap">Q2 股東信（金額沿用前季報告：Microsoft 約 $174–194 億、Meta $270 億，Q2 6-K 未重述）</td></tr><tr><td>策略夥伴</td><td class="wrap">Palantir 於 9/8 指定 Nebius 為『偏好的主權 AI 基礎設施夥伴』（未揭露金額）</td><td class="wrap">6-K（2026/9/8）Ex.99.1</td></tr><tr><td>併購</td><td class="wrap">Tavily、Clarifai、Eigen AI；商譽合計 $6.06 億；上半年併購現金支出 $2.52 億</td><td class="wrap">Q2 6-K Note 3、9</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾（Q2 6-K Note 11、8）：</b>① 能源與電力供應等『固定或最低保證』承諾：2026 下半年 $0.82 億、2027 $5.42 億、2028 $5.42 億、2029 $5.41 億、2030 $5.36 億、2030 年後 $30.82 億，合計約 $53.24 億（本報告推算）；② 已簽未開始的租賃未來給付 $120.54 億（2026–2027 開始、最長 12 年）；③ GPU 採購承諾金額在附註中<b>無揭露</b>（僅見應付設備款 $9.73 億）。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">客戶集中度與匿名代號重排</div>Q2 三家客戶占營收 59%（24%／21%／14%），應收帳款 Customer E 占 29%。更需留意：同一筆『去年底應收帳款 83%』在 20-F 標為 Customer D、在 Q2 6-K 標為 Customer C，代號在文件之間被重新編排，外界無法跨期追蹤單一客戶的占比變化。<div class="risk-source">來源：Q2 6-K Ex.99.2；FY2025 20-F</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：2027 年多重義務同時啟動</div>把分散資訊拼起來：① 管理層 8/12 說公司『企業層級債務很少』、股權連結工具只是選項之一；7 天後（8/19）就定價 $50 億可轉債並以約 1,580 萬股換掉 $8 億舊券；② 可轉債首次付息 2027/2/15（新券）；③ 已簽未開始租賃 $120.5 億於 2026–2027 開始；④ 電力承諾自 2027 起每年約 $5.4 億；⑤ Meta 第二份協議容量 2027 初上線、公司計畫 2027 起每年部署逾 1 GW；⑥ 遞延收入 $59.75 億（1–5 年內認列）代表要提供服務、而非收回現金。2027 年上半年同時出現資本支出、利息、租賃與交付義務高峰，而收入認列要等 Q2 新約的容量上線。這是本報告自行推算的時間重疊，管理層未如此陳述。<div class="risk-source">來源：法說會（Alonso 答 Matovic）；8/19–24 6-K；Q2 6-K Note 8、11、12</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">資金依賴：營運現金流由預付款與應收回收撐起</div>Q2 營運現金流 +$22.46 億；其中應收帳款變動 +$11.87 億、遞延收入 +$11.97 億，扣除這兩項後為 −$1.38 億（本報告推算）。上半年資本支出 $81.3 億，全年 $200–250 億指引隱含下半年 $119–169 億；2026 預付款預期逾 $90 億，上半年遞延收入僅增 $43.95 億，下半年需再收逾 $46 億（本報告推算）。<div class="risk-source">來源：Q2 6-K 現金流量表；股東信</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">會計估計變動美化虧損</div>2026/1/1 起伺服器與網路設備耐用年限由 4 年延至 5 年：Q2 折舊減少 $43.0M、上半年減少 $86.1M；Q2 淨損因此少 $34.1M。調整後 EBITDA 不受影響，但 Q2 調整後淨損 $33.2M 若維持原年限約為 $67.3M（本報告推算）。<div class="risk-source">來源：Q2 6-K Ex.99.2 Note 2</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">稀釋累積</div>6/30 流通股 2.7186 億股；ATM 已售 1,273 萬股（4.7%）、NVIDIA 認股權證 2,107 萬股（7.7%，以 EPS 視為流通）、8 月換股約 1,580 萬股（5.8%）。三項合計約 4,960 萬股、約 18.2%（本報告推算，各項以 6/30 流通股為分母，可能有重疊）；ATM 另有 1,227 萬股額度未用。<div class="risk-source">來源：Q2 6-K Note 14；8/19 6-K</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">場址核准與地方反對</div>Vineland 因改用 Bloom 燃料電池需修訂場址配置、聽證休會未表決；管理層稱建築已完工、不影響時程，並稱『迄今所有合約批次已交付』，但未證明後續批次的場址狀態。FY2025 20-F 風險因子亦列出社區反對。<div class="risk-source">來源：法說會（Lantz 提問）；20-F Item 3.D</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出（Form 4）</div>Nebius 為外國私人發行人（申報 20-F／6-K），但董事與高階主管仍有提交 Form 4。自 5/13 起至 9/21 申報的 Form 4（交易日至 9/15），S 類（公開市場賣出）合計約 <b>$1.62 億</b>、無公開市場買進。① 5/13 法說會當日：Korolenko 行使並賣出 500,000 股（@$203.24，約 $1.016 億）、董事 Bunina 賣出 10,894 股（約 $225 萬）。② 5/14–8/11：Volozh 46,627 股（7/1，約 $1,098 萬）、Boroditsky 42,162 股（約 $949 萬，7/15 賣出後持股為 0）、Korolenko 33,871 股（約 $797 萬）、Shtan 32,615 股（約 $773 萬）、董事 Boynton 12,770 股（約 $284 萬）、法務長 Tal 5,100 股（約 $102 萬）、財務長 Alonso 1,509 股（約 $42 萬），小計約 $4,045 萬。③ Q2 財報後 8/12–9/15：董事 Charles Ryan 50,000 股（8/14，約 $1,328 萬）、Boynton 11,660 股（約 $277 萬）、Boroditsky 7,000 股（9/14，約 $146 萬，先行使同量）、財務長 470 股，小計約 $1,761 萬。另有 9/1 對 8 位內部人的 1,352 股授予（價格 0）與 7/22 法務長 Almog 取得 7,793 股（交易碼 A）。是否屬 10b5-1 計畫本報告未核對，不作判斷。<div class="risk-source">來源：SEC EDGAR Form 4（以交易價×股數加總，本報告推算）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">非核心業務拖累</div>Avride 調整後 EBITDA −$40.1M（Q1：−$34.1M）、TripleTen −$9.4M；TripleTen 營收年減 19%。兩者合計拖累集團 EBITDA $49.5M，但占比已小於 AI cloud 的 $285.7M。<div class="risk-source">來源：Q2 6-K Note 15</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">帳上流動性（期後已補強）</div>現金 $80.4 億＋受限現金 $10.6 億；8 月 $50 億可轉債（淨額約 $49.4 億）與 7 月 ABS $7.75 億尚未計入 6/30 數字。<div class="risk-source">來源：Q2 6-K；8/19 新聞稿</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">Q2 利潤率會『稍微低一些』（5/13 法說會）</td><td class="wrap">Q2 AI cloud 調整後 EBITDA 利潤率 49.7%（Q1 44.7%）；集團 40.6%（Q1 32.5%）</td><td class="wrap">Q1 法說會；Q2 6-K Note 15</td><td class="wrap">✗ 實際優於前季說法（前季指引偏保守）</td></tr><tr><td class="wrap">全年集團調整後 EBITDA 利潤率約 40%</td><td class="wrap">上半年 37.3%（$365.7M／$981.3M）；Q2 40.6%</td><td class="wrap">Q2 6-K</td><td class="wrap">✓ 目前軌跡吻合</td></tr><tr><td class="wrap">全年營收 $30–34 億、年底 ARR $70–90 億（維持）</td><td class="wrap">上半年營收 $9.81 億；下半年需 $20.2–24.2 億（均季約 Q2 的 1.7–2.1 倍）；ARR $30 億</td><td class="wrap">Q2 6-K；股東信</td><td class="wrap">△ 取決於下半年容量上線時程</td></tr><tr><td class="wrap">預付款覆蓋 50–60% 資本支出；2026 預付款逾 $90 億</td><td class="wrap">上半年遞延收入 +$43.95 億；6/30 遞延收入 $59.75 億</td><td class="wrap">Q2 6-K 現金流量表、Note 4</td><td class="wrap">△ 上半年僅完成約一半</td></tr><tr><td class="wrap">『$400 億客戶承諾』</td><td class="wrap">RPO $374.9 億（Q1 $335.9 億）</td><td class="wrap">法說會；Q2 6-K Note</td><td class="wrap">△ 口徑不同，差額未說明</td></tr><tr><td class="wrap">『企業層級債務目前很少』（Alonso）</td><td class="wrap">可轉債帳面 $85.0 億（公允價值 $208.2 億）；8 月再發 $50 億</td><td class="wrap">Q2 6-K Note 12；8/19 6-K</td><td class="wrap">△ 『債務』可能僅指一般債、不含可轉債，且一週後即發新券</td></tr><tr><td class="wrap">Microsoft『迄今已交付所有容量批次』</td><td class="wrap">Q1 法說會稱交付排程延至年底；Q2 未揭露剩餘批次數與日期</td><td class="wrap">股東信；Q1 法說會</td><td class="wrap">△ 無法驗證後續批次</td></tr><tr><td class="wrap">『目前就能賣光 2027 全部容量』</td><td class="wrap">未揭露 2027 容量、已售比例或價格；Q2 RPO 36% 於 2028/6/30 前認列</td><td class="wrap">法說會（Alonso）；Q2 6-K</td><td class="wrap">△ 無數字可驗證</td></tr><tr><td class="wrap">（沉默）客戶集中與折舊年限變更</td><td class="wrap">三家客戶占營收 59%；折舊年限延長使 Q2 折舊少 $43.0M</td><td class="wrap">Q2 6-K Note 2、客戶附註</td><td class="wrap">✗ 無人提問、管理層也未提及</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$5.82 億</div><div class="kpi-lbl">Q2 集團營收</div><div class="kpi-sub">+45.9% QoQ／+454% YoY</div></div><div class="kpi"><div class="kpi-val">$2.36 億</div><div class="kpi-lbl">調整後 EBITDA</div><div class="kpi-sub">利潤率 40.6%（Q1 32.5%）</div></div><div class="kpi"><div class="kpi-val">$30 億</div><div class="kpi-lbl">AI cloud 年化營收（ARR）</div><div class="kpi-sub">6 月營收×12；Q1 $19 億</div></div><div class="kpi"><div class="kpi-val">$374.9 億</div><div class="kpi-lbl">RPO</div><div class="kpi-sub">季增 $39.1 億（+11.6%）</div></div></div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">Nebius AI cloud</div><div class="bu-abbr">GPU 雲、儲存、網路與軟體服務</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$574.9M（約 98%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+47.5%／+514%</span></div><div class="bu-stat"><span class="bu-stat-lbl">調整後 EBITDA</span><span class="bu-stat-val">$285.7M（49.7%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q1 EBITDA 利潤率</span><span class="bu-stat-val">44.7%</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:50%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">Avride</div><div class="bu-abbr">自駕車與送貨機器人</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$1.0M</span></div><div class="bu-stat"><span class="bu-stat-lbl">調整後 EBITDA</span><span class="bu-stat-val">−$40.1M</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q1 EBITDA</span><span class="bu-stat-val">−$34.1M</span></div><div class="bu-stat"><span class="bu-stat-lbl">營運指標</span><span class="bu-stat-val">車隊逾 200 輛</span></div></div><div class="bu-card o"><div class="bu-name">TripleTen</div><div class="bu-abbr">教育科技（轉職訓練營）</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$10.0M（−19% YoY）</span></div><div class="bu-stat"><span class="bu-stat-lbl">調整後 EBITDA</span><span class="bu-stat-val">−$9.4M</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q1 營收</span><span class="bu-stat-val">$11.6M</span></div><div class="bu-stat"><span class="bu-stat-lbl">趨勢</span><span class="bu-stat-val">美國學生量下滑</span></div></div></div><div class="chart-wrap"><div class="chart-title">各分部營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">各分部營收：Q2 2025、Q1 2026、Q2 2026</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2025</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#b3760f"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1 2026</text><rect x="194.55" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="212.55" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2026</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="329.33" x2="876" y2="329.33" stroke="#eeeeee" stroke-width="1"/><text x="68" y="333.33" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="202.67" x2="876" y2="202.67" stroke="#eeeeee" stroke-width="1"/><text x="68" y="206.67" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="396.66" width="61.84" height="59.34" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="147.16" y="390.66" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">93.7</text><rect x="180.08" y="209.19" width="61.84" height="246.81" fill="#b3760f" rx="1" data-dim="Q1 2026"/><text x="211" y="203.19" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 2026">389.7</text><rect x="243.92" y="91.9" width="61.84" height="364.1" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="274.84" y="85.9" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">574.9</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Nebius AI</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">cloud</text><rect x="382.24" y="448.21" width="61.84" height="7.79" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="413.16" y="442.21" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">12.3</text><rect x="446.08" y="448.65" width="61.84" height="7.35" fill="#b3760f" rx="1" data-dim="Q1 2026"/><text x="477" y="442.65" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 2026">11.6</text><rect x="509.92" y="449.67" width="61.84" height="6.33" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="540.84" y="443.67" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">10</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">TripleTen</text><rect x="648.24" y="455.87" width="61.84" height="1.5" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="679.16" y="449.87" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">0.200</text><rect x="712.08" y="455.43" width="61.84" height="1.5" fill="#b3760f" rx="1" data-dim="Q1 2026"/><text x="743" y="449.43" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 2026">0.900</text><rect x="775.92" y="455.37" width="61.84" height="1.5" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="806.84" y="449.37" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">1</text><text x="743" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Avride</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Nebius 6-K（2026/8/12）Ex.99.1 MD&amp;A 分部營收表、Q1 2026 6-K（2026/5/20）MD&amp;A</text></svg>
+</div><div class="note">⚑ AI cloud 較 Q1 增加 $185.2M（+47.5%），TripleTen 反向下滑；Avride 營收微不足道。資料來源：Q2 與 Q1 6-K MD&A。</div></div><div class="chart-wrap"><div class="chart-title">各分部調整後 EBITDA</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">各分部調整後 EBITDA：Q1 2026 vs Q2 2026</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#b3760f"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q1 2026</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2026</text><line x1="78" y1="456" x2="876" y2="456" stroke="#eeeeee" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">-100</text><line x1="78" y1="361" x2="876" y2="361" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="365" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="266" x2="876" y2="266" stroke="#eeeeee" stroke-width="1"/><text x="68" y="270" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="78" y1="171" x2="876" y2="171" stroke="#eeeeee" stroke-width="1"/><text x="68" y="175" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">300 百萬美元</text><line x1="78" y1="361" x2="876" y2="361" stroke="#111111" stroke-width="1.2"/><rect x="116.24" y="195.7" width="93.76" height="165.3" fill="#b3760f" rx="1" data-dim="Q1 2026"/><text x="163.12" y="189.7" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 2026">174</text><rect x="212" y="89.59" width="93.76" height="271.41" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="258.88" y="83.59" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">285.7</text><text x="211" y="472" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Nebius AI</text><text x="211" y="485" text-anchor="middle" font-size="10" fill="#9a9a9a" font-family="sans-serif">cloud</text><rect x="382.24" y="361" width="93.76" height="9.88" fill="#b3760f" rx="1" data-dim="Q1 2026"/><text x="429.12" y="382.88" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 2026">-10.4</text><rect x="478" y="361" width="93.76" height="8.93" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="524.88" y="381.93" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">-9.40</text><text x="477" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">TripleTen</text><rect x="648.24" y="361" width="93.76" height="32.39" fill="#b3760f" rx="1" data-dim="Q1 2026"/><text x="695.12" y="405.4" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q1 2026">-34.1</text><rect x="744" y="361" width="93.76" height="38.1" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="790.88" y="411.1" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">-40.1</text><text x="743" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">Avride</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Nebius 6-K（2026/8/12）Ex.99.2 Note 15；Q1 值＝上半年減 Q2（本報告推算，加總對得上集團 $129.5M）</text></svg>
+</div><div class="note">⚑ AI cloud 賺 $285.7M，被 Avride（−$40.1M）與 TripleTen（−$9.4M）扣掉後集團為 $236.2M。Q1 數字為上半年減 Q2 的推算值。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與利潤率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季營收與調整後 EBITDA 利潤率（Q1 2025～Q2 2026）</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="322" x2="824" y2="322" stroke="#eeeeee" stroke-width="1"/><text x="66" y="326" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="188" x2="824" y2="188" stroke="#eeeeee" stroke-width="1"/><text x="66" y="192" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">-75</text><text x="834" y="326" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">-33.3</text><text x="834" y="192" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">8.33</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">50</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 2025</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 2025</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3 2025</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4 2025</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1 2026</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2 2026</text><polyline points="76,428.26 225.6,393.22 375.2,368.16 524.8,312.49 674.4,194.9 824,70.82" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="428.26" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="225.6" cy="393.22" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="375.2" cy="368.16" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="524.8" cy="312.49" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="674.4" cy="194.9" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="70.82" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,421.9 225.6,385.58 375.2,358.11 524.8,303.44 674.4,188.67 824,65.86" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="421.9" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="225.6" cy="385.58" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="375.2" cy="358.11" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="524.8" cy="303.44" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="674.4" cy="188.67" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="65.86" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,427.7 225.6,182.32 375.2,153.37 524.8,136.97 674.4,71.04 824,54.96" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="427.7" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="225.6" cy="182.32" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="375.2" cy="153.37" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="524.8" cy="136.97" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="674.4" cy="71.04" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="54.96" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="375.2,226.38 524.8,193.57 674.4,110.28 824,84.23" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="375.2" cy="226.38" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="524.8" cy="193.57" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="674.4" cy="110.28" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="84.23" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><line x1="117.34" y1="40" x2="133.34" y2="40" stroke="#182456" stroke-width="2.4"/><text x="139.34" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">Nebius AI cloud 營收</text><line x1="285.54" y1="40" x2="301.54" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="307.54" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">集團營收</text><line x1="375.54" y1="40" x2="391.54" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="397.54" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">AI cloud 調整後 EBITDA 利潤率</text><line x1="596.06" y1="40" x2="612.06" y2="40" stroke="#b3760f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="618.06" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">集團調整後 EBITDA 利潤率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Nebius 各季 6-K（MD&amp;A、Q4 2025 與 Q2 2026 股東信）；集團利潤率 Q1 2025／Q2 2025 為負值過大，圖中省略</div>
+</div><div class="note">⚑ AI cloud 營收六季由 $41.4M 增至 $574.9M（13.9 倍）；調整後 EBITDA 利潤率由 −66% 升至 49.7%。Q4 2025 與 Q2 2026 數字取自各季股東信與 6-K；集團利潤率前兩季為 −105%、−20%，為避免壓縮圖面省略。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與利潤（百萬美元）</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q1 2025</th><th>Q2 2025</th><th>Q3 2025</th><th>Q4 2025</th><th>Q1 2026</th><th>Q2 2026</th></tr></thead><tbody><tr><td>集團營收</td><td>50.9</td><td>105.1</td><td>146.1</td><td>227.7</td><td>399.0</td><td>582.3</td></tr><tr><td>Nebius AI cloud 營收</td><td>41.4</td><td>93.7</td><td>131.1</td><td>214.2</td><td>389.7</td><td>574.9</td></tr><tr><td>AI cloud 調整後 EBITDA</td><td>(27.4)</td><td>9.5</td><td>25.1</td><td>51.8</td><td>174.0</td><td>285.7</td></tr><tr><td>AI cloud EBITDA 利潤率</td><td>−66.2%</td><td>10.1%</td><td>19.1%</td><td>24.2%</td><td>44.7%</td><td>49.7%</td></tr><tr><td>集團調整後 EBITDA</td><td>(53.7)</td><td>(21.0)</td><td>(5.2)</td><td>15.0</td><td>129.5</td><td>236.2</td></tr><tr><td>集團營收 QoQ</td><td>—</td><td>+106%</td><td>+39%</td><td>+56%</td><td>+75%</td><td>+46%</td></tr></tbody></table></div></div><div class="note grey">⚑ 表中 Q1 2025、Q2 2025 的 AI cloud EBITDA 與營收取自 Q2 2026 6-K 上半年數字（上半年減 Q2）；Q3 2025 取自 Q3 6-K；Q4 2025 取自 Q4 股東信（$214.2M、$51.8M）。<b>量價拆分：</b>公司不揭露 MW 數、GPU 數或出貨量；價格僅有 ACV／MW 與『舊世代 GPU 新約價格 +30%』等新簽合約指標，無法拆成已認列營收的量與價。</div><div class="card"><div class="card-title">營收背後的產品：GPU 雲是什麼、AI 客戶為什麼要買</div><p><b>Nebius AI cloud（占營收約 98%）</b>：向客戶出租裸機 GPU 叢集（主力為 NVIDIA GB300，新一代為 Vera Rubin）、搭配儲存、高速網路與軟體。客戶用它做三件事：<b>預訓練與後訓練</b>（需要連續、大規模、低延遲互連的叢集——法說會形容客戶要的是『大規模連續 GB300 叢集』）、<b>強化學習與評估</b>、<b>推論</b>（Token Factory 託管開放權重模型，按用量計價）。例子：Basecamp Research 在 Nebius 上以 9.7 兆 tokens 訓練 280 億參數的 EDEN 生物基礎模型；Higgsfield 使用量較首份合約增加逾 20 倍。客戶之所以需要，是因為 GPU、電力與場址同時稀缺，自建資料中心時程與資本負擔高；Q2 管理層強調預付款已成為『在供給受限環境下確保容量的市場標準』。</p><p><b>Avride</b>：自駕車（已與 Uber 在達拉斯營運，逾 6 萬趟商業載客）與校園／街區送貨機器人（Uber Eats、Chartwells 校園餐飲）；技術堆疊的資料與模型訓練仰賴 Nebius 的算力。<b>TripleTen</b>：線上轉職訓練營，向個人學員收費；美國學生量下降、拉丁美洲成長。</p><p>⚑ 以上為公司說法與一般產業知識；Nebius 未揭露 GPU 數量、利用率、各產品線營收或客戶別金額（僅匿名揭露占比）。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>

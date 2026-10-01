@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloudflare — FY2026 Q2 — 法說會＋財報完整分析</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; background: #fff; color: #1a1a2e; font-size: 13px; }
+
+  .page-header { padding: 20px 24px 0; }
+  .page-header h1 { font-size: 18px; font-weight: 700; color: #1a1a2e; }
+  .page-header p { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.6; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 16px 24px 40px; }
+
+  .tabs { display: flex; border-bottom: 2px solid #e2e4ea; margin-bottom: 20px; gap: 0; flex-wrap: wrap; }
+  .tab { padding: 10px 14px; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; font-weight: 500; color: #888; transition: all 0.2s; font-size: 13px; }
+  .tab.active { border-bottom-color: #2563eb; color: #2563eb; }
+  .tab:hover:not(.active) { color: #1a1a2e; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(20,20,40,0.04); }
+  .card-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; margin-bottom: 8px; }
+  .card p { line-height: 1.7; color: #333; }
+  .card p + p { margin-top: 8px; }
+
+  .qa-item { border: 1px solid #e2e4ea; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; }
+  .qa-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fafbfd; gap: 10px; }
+  .qa-header:hover { background: #eff2f8; }
+  .qa-analyst { font-weight: 600; font-size: 12px; color: #1a1a2e; }
+  .qa-topic { font-size: 12px; color: #666; margin-top: 2px; }
+  .qa-arrow { font-size: 10px; color: #999; transition: transform 0.2s; flex-shrink: 0; }
+  .qa-item.open .qa-arrow { transform: rotate(180deg); }
+  .qa-body { display: none; padding: 14px; border-top: 1px solid #e2e4ea; background: #fff; }
+  .qa-item.open .qa-body { display: block; }
+
+  .q-block { margin-bottom: 10px; }
+  .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .q-label.q { color: #b45309; }
+  .q-label.a { color: #15803d; }
+  .q-label.flag { color: #dc2626; }
+  .q-text { line-height: 1.7; color: #333; }
+  .flag-box { background: #fff; border: 1px solid #f0aab8; border-left: 4px solid #dc2626; border-radius: 6px; padding: 10px; margin-top: 8px; }
+  .flag-box .q-label { color: #dc2626; }
+  .flag-box.obs { border-color: #a9c9f5; border-left-color: #1d4ed8; }
+  .flag-box.obs .q-label { color: #1d4ed8; }
+
+  .orig-box { background: #f8f9fb; border-left: 3px solid #94a3b8; border-radius: 6px; padding: 10px 12px; margin-top: 8px; }
+  .orig-box .orig-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; margin-bottom: 6px; }
+  .orig-box .orig-text { font-size: 12px; line-height: 1.8; color: #475569; font-style: italic; }
+  .orig-box .orig-text b { font-style: normal; color: #334155; }
+
+  .quad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .quad-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-left: 4px solid; }
+  .quad-box.blue { border-left-color: #2563eb; }
+  .quad-box.green { border-left-color: #15803d; }
+  .quad-box.orange { border-left-color: #c2600a; }
+  .quad-box.red { border-left-color: #b91c4a; }
+  .quad-box h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .quad-box.blue h4 { color: #1d4ed8; }
+  .quad-box.green h4 { color: #15803d; }
+  .quad-box.orange h4 { color: #c2600a; }
+  .quad-box.red h4 { color: #b91c4a; }
+  .quad-box ul { padding-left: 15px; }
+  .quad-box li { margin-bottom: 5px; line-height: 1.6; color: #333; }
+
+  .diligence-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .diligence-box h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .diligence-box ol { padding-left: 18px; }
+  .diligence-box li { margin-bottom: 8px; line-height: 1.7; color: #333; }
+
+  .band-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .band-track { position: relative; height: 40px; background: #f0f1f5; border-radius: 6px; margin: 30px 0 12px; }
+  .band-fill { position: absolute; top: 0; bottom: 0; background: #dbe8fd; border-radius: 6px; }
+  .band-marker { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; font-size: 11px; color: #444; white-space: nowrap; }
+  .band-marker .dot { width: 10px; height: 10px; border-radius: 50%; margin: 2px auto 0; }
+  .band-marker.floor .dot { background: #94a3b8; }
+  .band-marker.target .dot { background: #2563eb; }
+  .band-marker.actual .dot { background: #15803d; }
+  .band-legend { display: flex; gap: 16px; font-size: 11px; color: #666; margin-top: 4px; flex-wrap: wrap; }
+  .band-legend span { display: flex; align-items: center; gap: 4px; }
+  .band-legend .sw { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .stance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .stance-col { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; }
+  .stance-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: #1a1a2e; }
+  .stance-col .pro { color: #15803d; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col .con { color: #b91c1c; font-weight: 600; font-size: 11px; margin-top: 6px; }
+  .stance-col ul { padding-left: 15px; margin-bottom: 4px; }
+  .stance-col li { font-size: 12px; margin-bottom: 4px; line-height: 1.6; color: #333; }
+
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tech-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; border-top: 3px solid #2563eb; }
+  .tech-card.g { border-top-color: #15803d; }
+  .tech-card.o { border-top-color: #c2600a; }
+  .tech-card.r { border-top-color: #b91c4a; }
+  .tech-card h4 { font-size: 12px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .tech-card .meta { font-size: 11px; color: #666; margin-bottom: 6px; }
+  .tech-card p { font-size: 12px; line-height: 1.6; color: #333; }
+
+  .flow-box { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .flow-chain { font-size: 12px; line-height: 2.4; color: #333; }
+  .flow-chain .node { display: inline-block; background: #f5f6fa; border: 1px solid #dde1ea; border-radius: 14px; padding: 3px 10px; margin: 2px; font-weight: 600; color: #1a1a2e; }
+  .flow-chain .arrow { color: #94a3b8; margin: 0 2px; }
+
+  .risk-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .risk-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; border: 1px solid; }
+  .risk-badge.high { background: #fff; color: #b91c1c; border-color: #f0aaaa; }
+  .risk-badge.med { background: #fff; color: #92400e; border-color: #f0d090; }
+  .risk-badge.low { background: #fff; color: #15803d; border-color: #a3dab1; }
+  .risk-text { font-size: 12px; line-height: 1.7; color: #333; }
+  .risk-title { font-weight: 700; margin-bottom: 3px; color: #1a1a2e; }
+  .risk-source { font-size: 11px; color: #888; margin-top: 4px; }
+
+  .divider { border: none; border-top: 1px solid #e2e4ea; margin: 16px 0; }
+  .section-title { font-size: 13px; font-weight: 700; margin: 4px 0 10px; color: #1a1a2e; }
+
+  .stat-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 140px; background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+
+  .foot-note { font-size: 11px; color: #999; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 12px; text-align: center; }
+  .kpi-val { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .kpi-lbl { font-size: 11px; color: #666; margin-top: 3px; }
+  .kpi-sub { font-size: 11px; color: #15803d; margin-top: 2px; }
+  .kpi-sub.neg { color: #b91c1c; }
+
+  .tbl-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .tbl-title { padding: 10px 14px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #2563eb; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; }
+  .tbl-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 520px; }
+  th { padding: 8px 12px; text-align: right; color: #666; font-weight: 600; background: #f5f6fa; border-bottom: 1px solid #e2e4ea; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eee; color: #333; }
+  td:first-child { text-align: left; color: #1a1a2e; }
+  td strong { color: #1a1a2e; }
+  tr:last-child td { border-bottom: none; }
+  tr.subtotal td { color: #666; font-style: italic; }
+  tr.total td { font-weight: 700; color: #1a1a2e; background: #f5f6fa; border-top: 1px solid #ccc; }
+  tr.section-head td { background: #f5f6fa; color: #2563eb; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px 12px; }
+  .pos { color: #15803d; }
+  .neg { color: #b91c1c; }
+  .neu { color: #92400e; }
+  table.wide { min-width: 640px; }
+  table td.wrap { white-space: normal; line-height: 1.6; }
+
+  .bu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .bu-card { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; border-top: 3px solid; }
+  .bu-card.b { border-top-color: #2563eb; }
+  .bu-card.g { border-top-color: #15803d; }
+  .bu-card.o { border-top-color: #c2600a; }
+  .bu-name { font-weight: 700; font-size: 12px; color: #1a1a2e; margin-bottom: 2px; }
+  .bu-abbr { font-size: 11px; color: #666; margin-bottom: 10px; }
+  .bu-stat { display: flex; justify-content: space-between; margin-bottom: 6px; gap: 6px; }
+  .bu-stat-lbl { font-size: 12px; color: #666; }
+  .bu-stat-val { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .margin-bar-wrap { background: #eef0f5; border-radius: 4px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .margin-bar { height: 100%; border-radius: 4px; }
+  .bu-delta { font-size: 11px; color: #15803d; margin-left: 6px; }
+  .bu-delta.neg { color: #b91c1c; }
+
+  .bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 8px; }
+  .bar-lbl { width: 240px; font-size: 12px; color: #333; flex-shrink: 0; line-height: 1.4; }
+  .bar-wrap { flex: 1; background: #eef0f5; border-radius: 3px; height: 22px; position: relative; overflow: hidden; min-width: 60px; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+  .bar-num { width: 96px; font-size: 12px; font-weight: 600; color: #1a1a2e; text-align: right; flex-shrink: 0; }
+
+  .cf-section { margin-bottom: 12px; }
+  .cf-header { font-size: 12px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 6px 12px; background: #f5f6fa; border-radius: 6px; }
+  .cf-row { display: flex; justify-content: space-between; padding: 5px 12px; font-size: 12px; border-bottom: 1px solid #eee; gap: 10px; }
+  .cf-row:last-child { border-bottom: none; }
+  .cf-row.total-row { font-weight: 700; background: #f5f6fa; border-radius: 4px; margin-top: 4px; padding: 7px 12px; }
+  .cf-lbl { color: #333; }
+  .cf-val { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+
+  .note { font-size: 11px; color: #444; margin-top: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff; border: 1px solid #e2e4ea; border-radius: 6px; border-left: 3px solid #2563eb; line-height: 1.7; }
+  .note.yellow { border-left-color: #c2600a; }
+  .note.red { border-left-color: #b91c1c; }
+  .note.grey { border-left-color: #94a3b8; }
+
+  .chart-wrap { background: #fff; border: 1px solid #e2e4ea; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chart-title { font-weight: 700; font-size: 12px; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .pie-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .pie-legend { flex: 1; min-width: 180px; }
+  .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; color: #333; }
+  .pie-legend-item .sw { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  @media (max-width: 700px) {
+    .quad-grid, .stance-grid, .tech-grid { grid-template-columns: 1fr; }
+    .bu-grid { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .bar-lbl { width: 130px; }
+    .pie-wrap { flex-direction: column; align-items: flex-start; }
+  }
+  /* 視覺鐵則：區塊級元件 margin-bottom 18px、divider 22px（框架規定 16–22px） */
+  .card, .tbl-wrap, .chart-wrap, .bu-grid, .tech-grid, .quad-grid, .pie-row, .stat-row, .kpi-row, .diligence-box, .flow-box, .band-card, .stance-grid { margin-bottom: 18px; }
+  .note { margin-top: 10px; margin-bottom: 18px; }
+  .risk-item { margin-bottom: 18px; }
+  .divider { margin: 22px 0; }
+  .qa-item { margin-bottom: 16px; }
+  .chain-scroll { overflow-x: auto; }
+  .orig-box .orig-toggle { cursor: pointer; user-select: none; margin-bottom: 0; }
+  .orig-box .orig-body { display: none; margin-top: 10px; }
+  .orig-box.open .orig-body { display: block; }
+  .orig-box .orig-body p { font-size: 12px; line-height: 1.8; color: #475569; margin-bottom: 8px; }
+  .orig-box .orig-body b { color: #334155; }
+  .orig-box .orig-body .ts { color: #94a3b8; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>Cloudflare（NET）— FY2026 Q2 法說會＋財報完整分析</h1>
+  <p>Q&amp;A 問答分析／重組與 2031 可轉債再融資／技術與產品線／供應鏈／風險矩陣／業務部門（共 6 個分頁）&nbsp;·&nbsp; 法說會日期：2026 年 8 月 6 日（Q2 於 6/30 結帳）&nbsp;·&nbsp; 交叉比對 SEC EDGAR：Q2 8-K Ex.99.1（8/6）、Q2 10-Q（8/6）、8/13 的 8-K、FY2025 10-K、2026/5/8 起 Form 4</p>
+</div>
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="sw('qa',this)">Q&amp;A 問答分析</div>
+    <div class="tab" onclick="sw('deal',this)">重組與 2031 可轉債</div>
+    <div class="tab" onclick="sw('tech',this)">技術與產品線</div>
+    <div class="tab" onclick="sw('chain',this)">供應鏈</div>
+    <div class="tab" onclick="sw('risk',this)">風險矩陣</div>
+    <div class="tab" onclick="sw('bu',this)">業務部門</div>
+    </div>
+
+  <div id="panel-qa" class="panel active">
+<div class="stat-row"><div class="stat-box"><div class="stat-val">9</div><div class="stat-lbl">分析師（Barclays、RBC、Morgan Stanley、Goldman Sachs、Citi、William Blair、Stifel、Wells Fargo、Scotiabank）</div></div><div class="stat-box"><div class="stat-val">14</div><div class="stat-lbl">核心問題（含追問）</div></div><div class="stat-box"><div class="stat-val">8</div><div class="stat-lbl">邏輯缺口／觀察</div></div></div><div class="note grey">本分頁的本質是<b>話術偵測</b>，不是摘要。資料來源：2026/8/6 法說會（Investing.com、Equibles、Yahoo Finance 三個第三方稿頁交叉核對）、同日 8-K 新聞稿與 10-Q、8/13 的 8-K。<b>下列問答為大意轉述，非逐字引用</b>（第三方逐字稿屬著作權內容，卡片底部附來源連結）。兩個稿頁在分析師名單與主要答覆上一致；有兩處不一致，已在內文標註（Ryan McWilliams 的所屬公司、Jonathan Ho 一問由誰回答）。全場最關鍵、卻<b>沒有任何分析師問到的事</b>：8/15 到期、本金約 $12.9 億的 2026 年可轉債要怎麼處理——10-Q 已揭露公司選擇「本金付現、超額部分發股」，而法說會後第四天（8/10）公司就推出 $21.75 億（後來擴到 $25 億）的 2031 年可轉債。另外，<b>沒有人問重組省下多少成本</b>，但 Q3 指引的非 GAAP 營業利益率（約 17.6%）比 Q2（13.8%）高出約 3.8 個百分點。</div><div class="qa-item open"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Saket Kalia（Barclays）</div><div class="qa-topic">非人類流量帶來新客戶還是老客戶加購？毛利率能否穩定</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">非人類（AI agent）流量成為主流後，是帶動新客戶，還是現有客戶買更多？大客戶與小客戶哪邊受益較多？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CEO Matthew Prince：非人類流量超過人類流量的時點一路被提前（去年 11 月預估 2027 下半年，後來改 2027 上半年，實際在 2026 年 5 月就發生）；惡意流量照舊免費擋掉，有益的 AI 流量則要靠新的付費／微支付機制變現；並稱前段 AI 公司中逾 80% 是客戶。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">毛利率何時穩定、單位經濟如何看？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">CFO Thomas Seifert：應該看「整體單位經濟」而不是單看毛利率，因為各產品毛利差異大；有信心今年單位經濟改善，毛利率會「穩定在目前水準」附近。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「單位經濟改善」沒有任何數字，而成本增速遠高於營收</div><div class="q-text">10-Q：Q2 營業成本年增 53%、營收年增 36%；成本增加的 $67.9M 中，<b>第三方技術服務 +$30.1M（約 44%）</b>、頻寬與機房 +$20.9M、折舊 +$10.1M。非 GAAP 毛利率 73.1%，較去年同期下滑 320bps，只比 Q1（72.8%）高 30bps。管理層以「單位經濟」取代毛利率，卻沒說明分子與分母，這個說法無法用申報文件驗證。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Matt Hedberg（RBC Capital Markets）</div><div class="qa-topic">Workers 吸引開發者的原因、Cloudflare OS</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">Workers 對開發者最重要的特性是什麼？開源／開放權重模型下為何選 Workers？Cloudflare OS 如何把機會擴到開發者之外？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：Workers 輕量、只在實際執行時計費、可極快啟動與關閉，適合 agent 工作負載；單季新增開發者比去年全年還多（不同稿頁寫法：約 200 萬 vs 去年新增 150 萬；平台總數約 740 萬）；許多非工程人員透過 vibe coding 工具寫程式再部署到 Cloudflare；Cloudflare OS（已開源）讓企業在有稽核與權限控管下使用 AI 工具。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 開發者人數是採用度，不是營收</div><div class="q-text">開發者數字（約 740 萬、Q2 新增近 200 萬）沒有對應任何付費或營收數字；公司未揭露 Workers 營收。10-Q 的成本說明顯示第三方技術服務成本快速增加，但 10-Q 沒說明它與哪些產品相關。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Sanjit Singh（Morgan Stanley）</div><div class="qa-topic">agent 安全機會、pool-of-funds 續約</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">何時會出現「保護 agent 本身」的資安機會？agent 協調層的安全長什麼樣？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：「大企業打電話來的第一件事」就是要安全地導入 AI；舉例他數週前在倫敦拜訪一個英國政府機關，對方取消了原本的 RFP，改採「agent 優先」重新評估；稱因為有開發者平台底子，SASE／Zero Trust 近六個月明顯拿下市占。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">早期簽的 pool-of-funds 合約續約是否已度過營收逆風？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Seifert：商業模式正從純粹按期認列（ratable）的 SaaS，轉向 pool of funds 與用量型混合；客戶消耗預付額度的速度更快，使個別客戶之間的「標準差」變大，但整體軌跡「向右上」。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 管理層承認收入的波動度在上升，卻沒說明程度</div><div class="q-text">「更高的標準差」是一句風險自白：預付池消耗速度不一，會讓季度之間的營收與續約時點更難預測。對照 10-Q：RPO $27.32 億、季增 7.4%、年增 38%（新聞稿稱 current RPO 年增 35%），RPO 在成長，但並沒有給出任何 pool-of-funds 的占比或續約率。英國政府案例也沒有指名。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Gabriela Borges（Goldman Sachs）</div><div class="qa-topic">結構性成長率能否更高、微支付三合一（Monetization Gateway／Wallets／身分）</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">未來三年的結構性成長率會不會高於歷史的 20 幾到 30 出頭？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Seifert：成長動能來自創新飛輪、可服務市場（IPO 時約 $300 億，現在逾 $3,000 億）、每升一個「Act」合約規模大一個量級（Act 1 約百萬美元、Act 2 兩位數百萬、Act 3 三位數百萬）；Prince 補充：身為創辦人，不介意回到更高成長。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">三合一產品為何難做？護城河是什麼？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：網路每秒約 5 億個請求，估計其中 1%–10% 可變現，因此上線第一天就要能處理每秒約 1,000 萬筆金融交易、之後擴到每秒約 1 億筆；對照 Visa 在假期尖峰約每秒 2 萬筆。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 每秒交易量的算術與口述區間對不上</div><div class="q-text">第三方稿頁轉述的口述數字是：5 億請求／秒 × 1%–10% ＝ 500 萬–5,000 萬筆／秒，但後面說「第一天要 1,000 萬、擴到 1 億」。1 億筆／秒需要約 20% 的請求可變現，超出他自己說的區間（本報告換算；數字取自第三方稿頁，原話可能略有出入，建議對照逐字稿）。更關鍵的是：連 Prince 都形容這比全球最大支付網路大三個以上量級，<b>Act 4（微支付）的可行性仍是願景而非已建成的能力</b>。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Fatima Boolani（Citi）</div><div class="qa-topic">Workers／Workers AI 營收貢獻、PLG 還是企業銷售</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">Workers 與 Workers AI 對營收的量化貢獻？是否回到產品導向成長（PLG）？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：不拆分產品營收，但稱 Workers 已是「有意義的營收貢獻者」；以前是「為採用度而打」，現在這個轉折已經發生；付費客戶數顯示 PLG 很好，合約金額上升則顯示企業銷售團隊也在發揮作用，並說銷售團隊正變得更技術化。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「已轉成營收」沒有金額，與 Q1 自承的毛利率問題並存</div><div class="q-text">Q1 法說會管理層自認開發者平台是毛利最低的產品線；Q2 說 Workers「是有意義的營收來源」但仍不給數字。同一季營業成本中第三方技術服務增加 $30.1M。三件事（營收未量化、毛利最低、第三方成本上升）放在一起，投資人無法判斷這條成長路徑的單位獲利。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Jonathan Ho（William Blair）</div><div class="qa-topic">2028 年 GAAP 獲利目標進度、各 Act 管線強度</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">距離 2028 年前達成 GAAP 獲利的目標進度如何？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">管理層（兩個稿頁對回答者的記載不同，一說 Prince、一說 Seifert）：進度「明顯超前」；若扣除重組費用，Q2 GAAP 淨損約 $1,800 萬，「已在可及範圍」。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">各產品線管線強度如何排序？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Seifert：Workers（Act 3）仍是成長最快；其次是 SASE（Act 2）；自投資人日以來動態沒有改變。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「扣除重組」的框架只扣掉一個項目</div><div class="q-text">新聞稿：GAAP 淨損 $1.70 億，重組費用 $1.507 億，相減約 $1,930 萬（本報告簡算，未計稅，與口述約 $1,800 萬相近）。但同一季股權薪酬與相關薪資稅 $1.406 億（占營收 20.2%）仍在 GAAP 數字裡——GAAP 損益接近打平，靠的是營運槓桿能否持續壓過股權薪酬，而不是單靠重組結束。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Adam Borg（Stifel）</div><div class="qa-topic">合作夥伴占比 31%，還能走多高</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">夥伴營收已占 31%，考慮 Act 2 比 Act 3／4 更依賴通路，夥伴占比還有多少空間？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：「肯定還有空間」，不意外會上到 50% 以上、甚至超過 60%（無時間表）；夥伴生態會改變，因為 AI 工具會改變服務交付方式；Cloudflare OS 對系統整合商是新機會；SASE／Zero Trust 以夥伴為主，其他產品多為加購。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 通路占比的上升是已揭露的事實，但沒有人問它的經濟意義</div><div class="q-text">10-Q：Q2 通路營收 $217.7M，年增 66.9%，直接客戶 $478.4M 僅年增 25.3%；通路占比由 25% 升到 31.3%。占比再升到 50% 以上會如何影響毛利、銷售費用與客戶關係（管理層談的是機會，沒有談夥伴佣金或折扣），三者都沒有被問到。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Ryan McWilliams（Wells Fargo；Investing.com 稿頁標示為 William Blair）</div><div class="qa-topic">agent 複雜度與邊緣推論、淨留存率模型</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">agent 需要更多 LLM 呼叫時，邊緣推論是否更重要？客戶是否在做高效能、低延遲的 AI 建置？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：推論只是其中一環，agent 需要短暫、低成本的地方來寫程式、做推論、存取網路、彙整資訊；理想情況 agent 不只跑在一處，而是整張網路「就是電腦」；他不愛用「edge」這個詞；若每個知識工作者都有 agent 跑在容器裡，CPU 根本不夠，所以用較輕量的 Isolates 沙箱。</div></div><div class="q-block"><div class="q-label q">問題 2</div><div class="q-text">下半年淨留存率怎麼建模？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Seifert：表現是全面性的，跨產品、跨客戶群、跨合約型態，沒有單一推手。</div></div></div></div><div class="qa-item"><div class="qa-header" onclick="toggleQA(this)"><div><div class="qa-analyst">Patrick Colville（Scotiabank）</div><div class="qa-topic">為何不加入 AI 資本支出軍備競賽</div></div><div class="qa-arrow">▼</div></div><div class="qa-body"><div class="q-block"><div class="q-label q">問題 1</div><div class="q-text">有同業揭露了接近 $30 億的 AI 基礎建設合約，Cloudflare 為何不參與這場資本支出競賽？</div></div><div class="q-block"><div class="q-label a">管理層回應</div><div class="q-text">Prince：「不是所有營收都一樣好」，只是把公司資產負債表與信用借給 AI 公司買跟別人一樣的伺服器，並不是吸引人的生意；Cloudflare 一向把每一塊錢資本支出榨到最大，賣的是「把事做完」而不是出租伺服器；稱可相對超大規模業者取得更高的 GPU 利用率。</div></div><div class="flag-box obs"><div class="q-label">⚑ 觀察 ─ 「不打軍備競賽」與全年資本支出指引並存</div><div class="q-text">管理層全年網路資本支出指引為營收的 14%–15%；Q2 實際約 7%。以全年營收指引中位 $28.67 億推算，全年約 $4.0–4.3 億，而上半年購置不動產及設備只有 $1.152 億，<b>下半年隱含約 $2.9–3.1 億，約為上半年的 2.5–2.7 倍</b>（本報告推算）。「不軍備競賽」並不等於資本支出不會明顯加速。</div></div></div></div><div class="orig-box"><div class="orig-label">逐字稿來源（以上為大意轉述，非逐字引用）</div><div class="orig-text"><a href="https://www.investing.com/news/transcripts/earnings-call-transcript-cloudflare-tops-estimates-in-q2-2026-shares-jump-17-93CH-4844728" target="_blank" rel="noopener">Investing.com：Cloudflare Q2 2026 逐字稿頁</a>；<a href="https://equibles.com/stocks/net/calls/2026-q2" target="_blank" rel="noopener">Equibles：Cloudflare Q2 2026 法說會頁</a>；<a href="https://finance.yahoo.com/technology/ai/articles/cloudflare-inc-net-q2-2026-050349210.html" target="_blank" rel="noopener">Yahoo Finance：Cloudflare Q2 2026 法說會重點</a>；<a href="https://seekingalpha.com/article/4932502-cloudflare-inc-net-q2-2026-earnings-call-transcript" target="_blank" rel="noopener">Seeking Alpha：Cloudflare Q2 2026 Earnings Call Transcript</a></div></div>
+  </div>
+
+  <div id="panel-deal" class="panel">
+<div class="quad-grid"><div class="quad-box blue"><h4>規模</h4><ul><li><b>重組：</b>2026/5/7 宣布，裁員約 <b>20%（約 1,100 人）</b>；Q2 認列重組費用 <b>$1.507 億</b>（資遣費與福利 $1.213 億、股權薪酬 $2,785 萬、其他 $157 萬）</li><li>預估總額上調為「最多 <b>$1.65 億</b>」（現金資遣 $1.25 億、股權薪酬 $3,500 萬、其他 $500 萬），Q1 時的預估為 $1.4–1.5 億</li><li><b>再融資：</b>8/13 發行 <b>$25 億</b> 0% 可轉債（2031 年到期；基礎 $21.75 億＋承銷商全數行使 $3.25 億選擇權），淨收入約 $24.623 億</li><li><b>購併：</b>6/1 以 $1.642 億收購 VoidZero（$9,870 萬股票＋$6,550 萬現金）</li></ul></div><div class="quad-box green"><h4>期限</h4><ul><li>重組預計 <b>2026/9/30 前</b>大致完成，剩餘費用落在 Q3</li><li><b>2026 年可轉債 8/15 到期</b>（10-Q：本金 $12.938 億；公司已選擇「本金付現、超額發股」）</li><li>2031 年債 2031/8/15 到期；2029/8/20 前不得贖回</li><li>2030 年債 $20 億，2030/6/15 到期</li></ul></div><div class="quad-box orange"><h4>財務影響</h4><ul><li>Q2 GAAP 營業損失 <b>$2.057 億</b>（−29.6%）；非 GAAP 營業利益 <b>$9,611 萬</b>（13.8%）</li><li>截至 6/30 重組現金支付 $9,857 萬，應計未付 $2,427 萬</li><li>新債淨收入 $24.623 億，扣掉 capped call 成本 <b>$2.595 億</b>，約 $22.0 億可用；原現金與有價證券 $41.628 億（6/30）</li><li>Q3 指引非 GAAP 營業利益 $1.29–1.30 億（約 17.6% 利益率）</li></ul></div><div class="quad-box red"><h4>尚待驗證</h4><ul><li>重組「省多少」：公司只給費用，沒給年化節省額</li><li>2026 年債的實際付現金額：10-Q 本金 $12.938 億，但 8/13 的 8-K 寫的未償本金是 $11.25 億，差約 $1.69 億，原因（提前轉換？）申報文件未說明</li><li>新債轉換價 $496.94（較 8/10 收盤 $310.59 溢價 60%）、capped call 上限 $854.12（溢價 175%）：上限以下稀釋被對沖，以上不被</li><li>$25 億的用途只寫「一般公司用途，可能含償債、資本支出、購併」</li></ul></div></div><div class="tbl-wrap"><div class="tbl-title">資本事件彙整</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>數字</th><th>說明</th></tr></thead><tbody><tr><td>Q2 重組費用</td><td class="wrap">$150.7M</td><td class="wrap">資遣費與福利 $121.3M；股權薪酬 $27.9M；其他 $1.6M（10-Q Note 15）</td></tr><tr><td>重組累計現金支付</td><td class="wrap">$98.6M</td><td class="wrap">6/30 餘額 $24.3M（多在應計薪酬）</td></tr><tr><td>2026 年可轉債（0%）</td><td class="wrap">本金 $1,293.8M（10-Q）／$1,125M（8/13 8-K）</td><td class="wrap">轉換價 $191.34；6/30 的 if-converted 價值超過本金 $364.7M；capped call 上限 $250.94</td></tr><tr><td>2030 年可轉債（0%）</td><td class="wrap">$2,000M</td><td class="wrap">轉換價 $247.67；capped call 上限 $469.73</td></tr><tr><td>2031 年可轉債（0%，新）</td><td class="wrap">$2,500M；淨收入 $2,462.3M</td><td class="wrap">轉換價 $496.94；2029/8/20 前不可贖回；capped call $259.5M，上限 $854.12</td></tr><tr><td>信用額度修訂</td><td class="wrap">2026/8/10 第二次修訂</td><td class="wrap">槓桿比率中可扣除的現金與有價證券上限為 $20 億（8-K Item 8.01）</td></tr><tr><td>VoidZero 購併</td><td class="wrap">$164.2M；另有 $106.4M 股票獎酬安排</td><td class="wrap">商譽 $143.0M；未認列獎酬 $98.8M 分 3.9 年攤銷</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>為什麼這是本季的主軸，而法說會卻沒有談？</b>重組費用（Q2 $1.507 億）解釋了 GAAP 虧損擴大的大部分：不含重組，GAAP 淨損約 $1,930 萬（本報告簡算，未計稅），而非 $1.70 億。2026 年債到期、2031 年債發行都是在 8/6 法說會<b>之後</b>公告（8/10 開始、8/13 完成），法說會逐字稿稿頁均未見管理層談到可轉債。資料來源：新聞稿；10-Q Note 7／13／15；8/13 的 8-K。</div><div class="note grey">⚑ <b>本報告推算（粗略）：2026 年債的稀釋</b>。以 10-Q 本金 $12.938 億、轉換價 $191.34 算，約對應 676 萬股；若以 8/10 收盤 $310.59 估算，超過 capped call 上限（$250.94）的部分約 $59.65 × 676 萬股 ≈ $4.03 億的價值不被對沖（約 130 萬股）。實際金額取決於持有人實際轉換的本金、結算日平均價與 8-K 所述 $11.25 億是否為最終未償本金，僅供量級參考。</div><div class="card"><div class="card-title">資料中心專案融資條款（泛用追蹤項）</div><p>Cloudflare 的網路是自建並以商用伺服器、共置機房租約與頻寬合約組成，<b>沒有資料中心專案融資、JV 或 SPV</b>；擴張由自有現金與可轉債資金支應。唯一接近的承諾是共置機房租約（營運租賃）：10-Q 揭露已簽未開始、未列入資產負債表的租賃付款 $47.0M（2026/7–2027/12 起租，平均 4.3 年）。10-Q 沒有揭露預付款、擔保或表外 VIE。來源：10-Q Note 6、Note 8。</p></div><div class="diligence-box"><h4>核心疑問</h4><ol><li>2026 年債最終付現多少？$12.938 億（10-Q）與 $11.25 億（8-K）的差額是提前轉換還是其他？</li><li>重組的年化節省額為何？Q3 非 GAAP 營業利益率指引約 17.6%（Q2 為 13.8%），其中有多少來自人力成本下降？</li><li>新債 $25 億的使用規劃：下半年網路資本支出隱含約 $2.9–3.1 億，是否為主要用途？</li><li>VoidZero 的 $106.4M 股權獎酬安排，未來對股權薪酬占營收的影響？</li></ol></div>
+  </div>
+
+  <div id="panel-tech" class="panel">
+<div class="tech-grid"><div class="tech-card "><h4>Act 1：應用服務與安全</h4><div class="meta">CDN、DDoS、WAF、DNS</div><p>Cloudflare 的起家業務：網站與 API 流量經過它的網路，先過濾惡意流量再加速。管理層本季稱非人類流量首次超過人類流量；惡意流量免費擋掉，有益的 AI 流量要靠新的付費機制變現。</p></div><div class="tech-card g"><h4>Act 2：Zero Trust／SASE</h4><div class="meta">夥伴銷售為主；稱近六個月在奪取市占</div><p>以身分與政策取代傳統 VPN／防火牆：每次存取都驗證。管理層的論點是 agent 時代需要「細粒度的資料存取控制」，且英國政府案例中對方因舊供應商沒有 agent 策略而重啟 RFP（未具名）。</p></div><div class="tech-card o"><h4>Act 3：Workers 開發者平台</h4><div class="meta">成長最快；也是毛利最低（Q1 管理層說法）</div><p>Workers 是輕量的無伺服器運算環境（Isolates，比容器輕），只在實際執行時計費；搭配 Workers AI（GPU 推論）、AI Gateway、Vectorize（向量資料庫）、R2（物件儲存）、D1（資料庫）。管理層：開發者總數約 740 萬、Q2 新增近 200 萬。</p></div><div class="tech-card "><h4>Act 4：代理人商務與微支付</h4><div class="meta">Monetization Gateway、Wallets、cloudflare.pay</div><p>新發表的三件產品，讓網站對 AI 抓取收費、讓 agent 自動付款並建立身分信任。Prince 自己的說法：目標交易量是 Visa 假期尖峰（約每秒 2 萬筆）的數百到數千倍，現有支付網路都不是為此建的。</p></div><div class="tech-card g"><h4>Cloudflare OS</h4><div class="meta">已開源</div><p>企業內讓員工與 agent 在有稽核與權限控管下使用 AI 工具的平台；管理層稱開源後大型企業反應熱烈，系統整合商是主要推廣管道。</p></div></div><div class="note grey">⚑ 技術與時程說明來自法說會三個稿頁（Investing.com、Equibles、Yahoo Finance）與 FY2025 10-K Item 1 的產品描述；Cloudflare 不揭露各產品營收，產品層級的營收與毛利都無法用申報文件驗證。</div>
+  </div>
+
+  <div id="panel-chain" class="panel">
+<div class="chart-wrap"><div class="chart-title">供應鏈結構圖</div><div class="chain-scroll"><div style="min-width:820px;"><div style="max-width:940px;margin:0 auto;"><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 1065.2250000000001 702" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="1065.23" height="702" fill="#ffffff"/><text x="532.61" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#15181a" font-family="sans-serif">Cloudflare 供應鏈結構：上游資源 → 全球網路與產品 → 銷售通路 → 區域營收</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,76) rotate(-90)">上游資源與供應商</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,252) rotate(-90)">Cloudflare 全球網路與產品</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,428) rotate(-90)">銷售通路</text><text x="16" y="0" text-anchor="middle" font-size="10.5" fill="#9a9fa2" letter-spacing=".04em" font-family="ui-monospace,Consolas,Menlo,monospace" transform="translate(16,604) rotate(-90)">區域營收（Q2 2026）</text><defs><marker id="arr-7a8085" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7a8085"/></marker><marker id="arr-182456" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#182456"/></marker><marker id="arr-8f1f1f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#8f1f1f"/></marker></defs><polyline points="238.52500000000003,106 238.52500000000003,124 72,124 72,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="482.6625,106 482.6625,146 178,146 178,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="701.5,106 701.5,168 284,168 284,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="891.25,106 891.25,190 891.25,190 891.25,222" fill="none" stroke="#8f1f1f" stroke-width="1.6" marker-end="url(#arr-8f1f1f)" stroke-dasharray="6 5"/><polyline points="425.3125,282 425.3125,300 409.61250000000007,300 409.61250000000007,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="661.4125,282 661.4125,322 571.6125000000001,322 571.6125000000001,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="661.4125,282 661.4125,344 461.61250000000007,344 461.61250000000007,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="913.7125000000001,282 913.7125000000001,366 513.6125000000001,366 513.6125000000001,398" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><polyline points="913.7125000000001,282 913.7125000000001,384 675.6125000000001,384 675.6125000000001,398" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="461.61250000000007,458 461.61250000000007,476 351.61250000000007,476 351.61250000000007,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="461.61250000000007,458 461.61250000000007,498 461.61250000000007,498 461.61250000000007,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="623.6125000000001,458 623.6125000000001,520 623.6125000000001,520 623.6125000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="623.6125000000001,458 623.6125000000001,542 733.6125000000001,542 733.6125000000001,574" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="296,252 330,252" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="296,252 554.625,252" fill="none" stroke="#7a8085" stroke-width="1.6" marker-end="url(#arr-7a8085)"/><polyline points="296,252 802.2,252" fill="none" stroke="#182456" stroke-width="1.6" marker-end="url(#arr-182456)"/><g><rect x="125.73" y="46" width="225.6" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="238.53" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">頻寬與 ISP 互連</text><text x="238.53" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">不可取消承諾 $1.79 億（2025 年末）</text></g><g><rect x="385.33" y="46" width="194.68" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="482.66" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">共置機房（co-location）</text><text x="482.66" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">租約剩餘最長 9.8 年</text></g><g><rect x="614" y="46" width="175" height="60" rx="9" fill="rgb(239,224,224)" stroke="#8f1f1f" stroke-width="1.4"/><text x="701.5" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">商用伺服器與 GPU</text><text x="701.5" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">標準商用硬體；供應商未具名</text></g><g><rect x="823" y="46" width="136.5" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="891.25" y="72.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">第三方技術服務</text><text x="891.25" y="87.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">Q2 成本年增 $30.1M</text></g><g><rect x="60" y="222" width="236" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="178" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">全球網路（每台伺服器跑所有服…</text><text x="178" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">網路 CapEx：全年指引 14%–15% 營收</text></g><g><rect x="330" y="222" width="190.63" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="425.31" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">應用服務／安全（Act 1）</text><text x="425.31" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">CDN、DDoS、WAF</text></g><g><rect x="554.63" y="222" width="213.58" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="661.41" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">Zero Trust／SASE（Act 2）</text><text x="661.41" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">夥伴顧問式銷售</text></g><g><rect x="802.2" y="222" width="223.03" height="60" rx="12" fill="#15181a" stroke="#15181a" stroke-width="1.4"/><text x="913.71" y="248.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#f5f6f5" font-family="sans-serif" opacity="1">Workers 開發者平台（Act 3）</text><text x="913.71" y="263.68" text-anchor="middle" font-size="11" font-weight="400" fill="#c9cdce" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">成長最快、毛利最低</text></g><g><rect x="397.61" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="461.61" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">直接客戶</text><text x="461.61" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$478.4M（68.7%）</text></g><g><rect x="559.61" y="398" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="623.61" y="424.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">通路夥伴</text><text x="623.61" y="439.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$217.7M（31.3%）</text></g><g><rect x="235.61" y="574" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="299.61" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">美國</text><text x="299.61" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$354.4M（50.9%）</text></g><g><rect x="397.61" y="574" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="461.61" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">EMEA</text><text x="461.61" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$187.0M（26.9%）</text></g><g><rect x="559.61" y="574" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="623.61" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">亞太</text><text x="623.61" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$99.4M（14.3%）</text></g><g><rect x="721.61" y="574" width="128" height="60" rx="9" fill="#ffffff" stroke="#cfd3d1" stroke-width="1.4"/><text x="785.61" y="600.68" text-anchor="middle" font-size="13.5" font-weight="700" fill="#15181a" font-family="sans-serif" opacity="1">其他</text><text x="785.61" y="615.68" text-anchor="middle" font-size="11" font-weight="400" fill="#5a6167" font-family="ui-monospace,Consolas,Menlo,monospace" opacity="1">$55.1M（7.9%）</text></g><line x1="401.56" y1="664" x2="423.56" y2="664" stroke="#8f1f1f" stroke-width="2" stroke-dasharray="5 4"/><text x="431.56" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">成本壓力來源</text><rect x="515.56" y="663" width="22" height="2.4" fill="#182456"/><text x="545.56" y="668" font-size="11" fill="#5a6167" font-family="sans-serif">AI／開發者平台路徑</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：FY2025 10-K Item 1／Note 8；Q2 2026 10-Q Note 3、MD&amp;A。伺服器、GPU 供應商名稱 10-K 未具名；圖中第三方技術服務為 10-Q 成本項目</div>
+</div></div></div></div><div class="note">⚑ 10-K：網路由商用伺服器、共置機房與頻寬合約構成；10-Q 成本說明：第三方技術服務、機房與頻寬、折舊為本季成本主要增加項。伺服器與 GPU 供應商 10-K 未具名；本圖不推測品牌。</div></div><div class="chart-wrap"><div class="chart-title">營收流量：依客戶類型（Q2 2026，百萬美元）</div><div id="sankeyEmbed_05xq52y" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"r","label":"Cloudflare Q2 2026 營收 $696.1M","color":"#182456"},{"id":"dir","label":"直接客戶","color":"#0f6f8a"},{"id":"chn","label":"通路夥伴","color":"#b3760f"}],"links":[{"source":"r","target":"dir","value":478.4},{"source":"r","target":"chn","value":217.7}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_05xq52y");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 10-Q Note 3：直接客戶 $478.4M（68.7%）、通路夥伴 $217.7M（31.3%）；兩張 Sankey 與上方結構圖的節點名稱一致。</div></div><div class="chart-wrap"><div class="chart-title">營收流量：依區域（Q2 2026，百萬美元）</div><div id="sankeyEmbed_rnhoshi" style="width:100%;height:520px;background:#fff;border:1px solid #eee;border-radius:6px;position:relative;"></div>
+<script>
+(function(){
+  var DATA = {"nodes":[{"id":"r","label":"Cloudflare Q2 2026 營收 $696.1M","color":"#182456"},{"id":"us","label":"美國","color":"#8f1f1f"},{"id":"emea","label":"EMEA","color":"#0f6f8a"},{"id":"apac","label":"亞太","color":"#b1408a"},{"id":"oth","label":"其他","color":"#57a0cf"}],"links":[{"source":"r","target":"us","value":354.4},{"source":"r","target":"emea","value":187},{"source":"r","target":"apac","value":99.4},{"source":"r","target":"oth","value":55.1}]};
+  function render(){
+    var container = document.getElementById("sankeyEmbed_rnhoshi");
+    if (!container) return;
+    var svg = d3.select(container).append("svg").attr("width","100%").attr("height","100%").style("display","block");
+    var gMain = svg.append("g");
+    var tooltip = document.createElement("div");
+    tooltip.style.cssText = "position:absolute;pointer-events:none;background:#fff;border:1px solid #ddd;border-radius:4px;padding:6px 10px;font:12px 'Noto Serif TC',serif;color:#0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.12);display:none;z-index:10;white-space:pre-line;";
+    container.appendChild(tooltip);
+    function showTooltip(event, text){
+      var rect = container.getBoundingClientRect();
+      tooltip.textContent = text;
+      tooltip.style.display = "block";
+      tooltip.style.left = (event.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (event.clientY - rect.top + 12) + 'px';
+    }
+    function hideTooltip(){ tooltip.style.display = "none"; }
+    function draw(){
+      var rect = container.getBoundingClientRect();
+      var w = rect.width, h = rect.height;
+      if (w < 50 || h < 50) return;
+      svg.attr("viewBox", [0,0,w,h]).attr("preserveAspectRatio","xMidYMid meet");
+      gMain.selectAll("*").remove();
+      if (!DATA.nodes.length) return;
+      try {
+        var nodePadding = 16;
+        function makeGen(extentH){
+          return d3.sankey().nodeId(function(d){return d.id;}).nodeWidth(14).nodePadding(nodePadding).iterations(64).nodeAlign(d3.sankeyJustify).extent([[10,10],[w-10,extentH-10]]);
+        }
+        var nodesCopy1 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+        var linksCopy1 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+        var graph1 = makeGen(h)({nodes:nodesCopy1, links:linksCopy1});
+        var colCounts = {};
+        graph1.nodes.forEach(function(n){ var cx = Math.round(n.x0); colCounts[cx] = (colCounts[cx]||0)+1; });
+        var maxPerColumn = 0;
+        for (var ck in colCounts) { if (colCounts[ck] > maxPerColumn) maxPerColumn = colCounts[ck]; }
+        var virtualH = Math.max(h, maxPerColumn*26);
+        var graph;
+        if (virtualH > h) {
+          var nodesCopy2 = DATA.nodes.map(function(n){ return {id:n.id,label:n.label,color:n.color}; });
+          var linksCopy2 = DATA.links.map(function(l){ return {source:l.source,target:l.target,value:l.value}; });
+          graph = makeGen(virtualH)({nodes:nodesCopy2, links:linksCopy2});
+        } else {
+          graph = graph1;
+          virtualH = h;
+        }
+        svg.attr("viewBox", [0,0,w,virtualH]).attr("preserveAspectRatio","xMidYMid meet");
+        var k = Math.min(1, h / virtualH);
+        var fontSize = Math.min(10.5/k, 10.5/0.45);
+        var minSep = fontSize + 3;
+        var dodgeGroups = {};
+        graph.nodes.forEach(function(d){
+          var anchorLeft = d.x0 < w/2;
+          var gx = Math.round(anchorLeft ? d.x1 : d.x0);
+          var gkey = (anchorLeft ? "L" : "R") + "_" + gx;
+          (dodgeGroups[gkey] = dodgeGroups[gkey] || []).push(d);
+        });
+        Object.keys(dodgeGroups).forEach(function(gkey){
+          var arr = dodgeGroups[gkey];
+          arr.sort(function(a,b){ return (a.y0+a.y1)/2 - (b.y0+b.y1)/2; });
+          var prevY = null;
+          arr.forEach(function(d){
+            var y = (d.y0+d.y1)/2;
+            if (prevY !== null && y - prevY < minSep) y = prevY + minSep;
+            d._labelY = y;
+            prevY = y;
+          });
+        });
+        var linkSel = gMain.append("g").attr("fill","none").selectAll("path").data(graph.links).enter().append("path")
+          .attr("d", d3.sankeyLinkHorizontal())
+          .attr("stroke", function(d){ return d.source.color; })
+          .attr("stroke-width", function(d){ return Math.max(1, d.width); })
+          .attr("stroke-opacity", 0.38);
+        var nodeSel = gMain.append("g").selectAll("g").data(graph.nodes).enter().append("g");
+        nodeSel.append("rect")
+          .attr("x", function(d){ return d.x0; })
+          .attr("y", function(d){ return d.y0; })
+          .attr("width", function(d){ return d.x1-d.x0; })
+          .attr("height", function(d){ return Math.max(1, d.y1-d.y0); })
+          .attr("fill", function(d){ return d.color; })
+          .attr("rx", 1);
+        nodeSel.append("text")
+          .attr("x", function(d){ return d.x0 < w/2 ? d.x1+6 : d.x0-6; })
+          .attr("y", function(d){ return d._labelY; })
+          .attr("text-anchor", function(d){ return d.x0 < w/2 ? "start" : "end"; })
+          .attr("dominant-baseline", "middle")
+          .style("font", "500 " + fontSize + "px 'Noto Serif TC', serif")
+          .style("paint-order", "stroke")
+          .style("stroke", "#fff")
+          .style("stroke-width", "3px")
+          .style("stroke-linejoin", "round")
+          .attr("fill", "#333")
+          .text(function(d){ return d.label; });
+        var connectedMap = {};
+        graph.links.forEach(function(l){
+          (connectedMap[l.source.id] = connectedMap[l.source.id] || {})[l.target.id] = true;
+          (connectedMap[l.target.id] = connectedMap[l.target.id] || {})[l.source.id] = true;
+        });
+        nodeSel.on("mousemove", function(event, d){
+          showTooltip(event, d.label + "\n流量 " + d.value.toLocaleString());
+          var connected = connectedMap[d.id] || {};
+          linkSel.attr("stroke-opacity", function(l){ return (l.source.id===d.id || l.target.id===d.id) ? 0.65 : 0.08; });
+          nodeSel.select("rect").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.35; });
+          nodeSel.select("text").attr("opacity", function(n){ return (n.id===d.id || connected[n.id]) ? 1 : 0.25; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+          nodeSel.select("rect").attr("opacity", 1);
+          nodeSel.select("text").attr("opacity", 1);
+        });
+        linkSel.on("mousemove", function(event, d){
+          showTooltip(event, d.source.label + " → " + d.target.label + "\n" + d.value.toLocaleString());
+          linkSel.attr("stroke-opacity", function(l){ return l===d ? 0.7 : 0.08; });
+        }).on("mouseleave", function(){
+          hideTooltip();
+          linkSel.attr("stroke-opacity", 0.38);
+        });
+      } catch (err) { /* layout error: leave blank rather than crash the host page */ }
+    }
+    draw();
+    if (window.ResizeObserver) {
+      var t;
+      new ResizeObserver(function(){ clearTimeout(t); t = setTimeout(draw, 150); }).observe(container);
+    }
+    // ResizeObserver (and IntersectionObserver) do not reliably fire when a display:none
+    // ancestor (e.g. a hidden tab panel) becomes visible again, since the element had no
+    // box to begin with. Cover that case with a poll that keeps checking UNTIL the container
+    // actually has a size and gets drawn -- not bounded by a fixed try count, since a real
+    // reader may not click into a hidden tab until well after page load. It stops for good
+    // the moment a draw succeeds (or a lightweight cap if the element never appears at all).
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting) draw();
+      }).observe(container);
+    }
+    var pollTries = 0;
+    var pollId = setInterval(function(){
+      pollTries++;
+      if (container.querySelector('rect') || pollTries > 1800) { clearInterval(pollId); return; }
+      var pr = container.getBoundingClientRect();
+      if (pr.width >= 50 && pr.height >= 50) draw();
+    }, 400);
+    // Zero-latency real-world backstop: the instant a reader's cursor enters the now-visible
+    // container (e.g. right after clicking into its tab), draw immediately if not done yet.
+    // This is a plain hit-tested DOM event, unaffected by observer/timer edge cases above.
+    container.addEventListener('mouseenter', function(){ if (!container.querySelector('rect')) draw(); });
+  }
+  if (window.d3 && d3.sankey) { render(); return; }
+  if (!window.__sankeyD3Load) {
+    window.__sankeyD3Load = new Promise(function(resolve){
+      var s1 = document.createElement("script");
+      s1.src = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js";
+      s1.onload = function(){
+        var s2 = document.createElement("script");
+        s2.src = "https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js";
+        s2.onload = resolve;
+        document.head.appendChild(s2);
+      };
+      document.head.appendChild(s1);
+    });
+  }
+  window.__sankeyD3Load.then(render);
+})();
+</script><div class="note">⚑ 10-Q Note 3：依客戶帳單地址；公司僅揭露這兩種拆分，未揭露「區域 × 通路」交叉表，因此兩張 Sankey 分開畫，不猜測交叉數字。</div></div><div class="chart-wrap"><div class="chart-title">直接客戶與通路夥伴對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">直接客戶與通路夥伴營收：Q2 2025 vs Q2 2026</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2025</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2026</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="380" x2="876" y2="380" stroke="#eeeeee" stroke-width="1"/><text x="68" y="384" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="78" y1="304" x2="876" y2="304" stroke="#eeeeee" stroke-width="1"/><text x="68" y="308" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="228" x2="876" y2="228" stroke="#eeeeee" stroke-width="1"/><text x="68" y="232" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">300</text><line x1="78" y1="152" x2="876" y2="152" stroke="#eeeeee" stroke-width="1"/><text x="68" y="156" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">500 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="134.86" y="165.76" width="141.64" height="290.24" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="205.68" y="159.76" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">381.9</text><rect x="278.5" y="92.42" width="141.64" height="363.58" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="349.32" y="86.42" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">478.4</text><text x="277.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">直接客戶</text><rect x="533.86" y="356.9" width="141.64" height="99.1" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="604.68" y="350.9" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">130.4</text><rect x="677.5" y="290.55" width="141.64" height="165.45" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="748.32" y="284.55" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">217.7</text><text x="676.5" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">通路夥伴</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Cloudflare 10-Q（2026/8/6）Note 3 依客戶類型分的營收</text></svg>
+</div><div class="note">⚑ 通路營收年增 66.9%，直接客戶年增 25.3%；通路占比由 25.5% 升到 31.3%（Q2 2025：130.4／512.3）。</div></div><div class="tbl-wrap"><div class="tbl-title">上下游與集中度揭露</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>揭露內容</th><th>出處</th></tr></thead><tbody><tr><td>客戶集中</td><td class="wrap">沒有單一客戶超過 10%（2023–2025 年度）；大客戶（年化營收 &gt; $10 萬）4,698 家，占營收約 73%（法說會說法）</td><td class="wrap">FY2025 10-K Item 1；法說會</td></tr><tr><td>通路</td><td class="wrap">通路夥伴占營收 31.3%（Q2 2025：25.5%）；管理層稱長期可到 50% 以上</td><td class="wrap">10-Q Note 3；法說會</td></tr><tr><td>區域</td><td class="wrap">美國 50.9%、EMEA 26.9%、亞太 14.3%、其他 7.9%；美國年增 40.7%</td><td class="wrap">10-Q Note 3</td></tr><tr><td>上游：頻寬與機房</td><td class="wrap">與各網路與 ISP 簽有長期不可取消的頻寬與共置承諾；共置租約剩餘最長 9.8 年</td><td class="wrap">FY2025 10-K Note 8；10-Q Note 6</td></tr><tr><td>上游：硬體</td><td class="wrap">標準商用硬體、「每台伺服器跑所有服務」的無伺服器架構；網路加入 GPU 伺服器支援 AI 產品；供應商未具名</td><td class="wrap">FY2025 10-K Item 1</td></tr><tr><td>上游：第三方技術服務</td><td class="wrap">Q2 成本年增 $30.1M（上半年 $61.0M）；10-Q 未說明內容與供應商</td><td class="wrap">10-Q MD&A（營業成本）</td></tr></tbody></table></div></div><div class="note yellow">⚑ <b>採購承諾</b>：FY2025 10-K Note 8 揭露的不可取消承諾為 <b>$2.552 億</b>（2025/12/31）：開放採購協議 $6,502 萬、頻寬與共置承諾 $1.794 億、其他 $1,082 萬；依到期年度：2026 年 $1.019 億、2027 年 $7,592 萬、2028 年 $4,055 萬、2029 年 $2,103 萬、2030 年 $1,192 萬、其後 $387 萬。Q2 10-Q 稱承諾「與 10-K 相比無超出一般營運範圍的重大變動」，因此未更新金額。另有未開始租賃付款 $4,700 萬。</div>
+  </div>
+
+  <div id="panel-risk" class="panel">
+<div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">毛利結構：成本增速遠高於營收</div>營業成本年增 53%、營收年增 36%；非 GAAP 毛利率 73.1%，較去年同期低 320bps，只比 Q1 高 30bps。成本增加項：第三方技術服務 +$30.1M、頻寬與機房 +$20.9M、折舊 +$10.1M。公司說毛利率會「穩定在目前水準」，但沒有量化單位經濟。<div class="risk-source">來源：10-Q MD&A；新聞稿；Q&A（Kalia）</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">獨創前瞻風險：下半年資本支出加速、毛利「穩定」與 Q3 利益率大幅跳升三件事同時成立</div>把分散的訊息拼起來：① 全年網路資本支出指引 14%–15% 營收，上半年購置不動產及設備僅 $1.152 億，隱含下半年約 $2.9–3.1 億（約上半年 2.5–2.7 倍）；② 管理層說毛利率「穩定」，但新增資產的折舊與 GPU 利用率尚未反映；③ Q3 非 GAAP 營業利益 $1.29–1.30 億（約 17.6%）比 Q2 13.8% 高約 3.8 個百分點，全年指引隱含 Q4 約 18.3%，且全年營收指引隱含 Q4 年增約 29%（低於 Q2 的 36%）。這三件事要同時成立，需要重組省下的營運費用抵得過新增折舊；公司沒有給重組節省額，也沒有給折舊預估，所以這是一個沒有量化的假設（本報告推算，均以指引中位數計算）。<div class="risk-source">來源：新聞稿財務展望；10-Q 現金流量表；Q&A（Colville、Kalia）</div></div></div><div class="risk-item"><span class="risk-badge high">高</span><div class="risk-text"><div class="risk-title">GAAP 損益與股權薪酬</div>GAAP 營業損失 $2.057 億（含重組 $1.507 億）；扣除重組後約 $5,500 萬，仍為損失。股權薪酬與相關薪資稅 $1.406 億，占營收 20.2%，VoidZero 另有 $98.8M 未認列獎酬。非 GAAP 淨利 $1.078 億與 GAAP 淨損 $1.70 億的差距近 $2.78 億。<div class="risk-source">來源：新聞稿；10-Q Note 13</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">可轉債再融資與稀釋</div>2026 年債 8/15 到期，本金約 $12.9 億付現、超額發股；新債 $25 億（轉換價 $496.94、capped call 上限 $854.12）使 2030 與 2031 兩檔 0% 可轉債合計 $45 億。8/10 的信用額度修訂，把槓桿比率中可扣除的現金上限訂為 $20 億——是發行前一天簽的，法說會沒提。2026 年債 10-Q 與 8-K 的未償本金不一致（$12.938 億 vs $11.25 億）。<div class="risk-source">來源：10-Q Note 7；8/13 8-K</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">內部人賣出（Form 4，2026/5/15 至 9/22）</div>僅有出售、<b>沒有公開市場買進</b>。公開市場賣出合計約 <b>$3.2 億</b>：CEO Matthew Prince 約 <b>$1.52 億</b>（628,641 股，5/19–8/5，195 筆）；總裁 Michelle Zatlyn 約 <b>$1.19 億</b>（460,367 股，5/22–9/8）；CFO Thomas Seifert 約 <b>$3,001 萬</b>（105,000 股，5/18–9/17）；董事 Carl Ledbetter 約 <b>$977 萬</b>（35,000 股，6/1–9/22）；CLO Alissa Starzak 約 $532 萬；CAO Janel Riley 約 $291 萬；董事 John Graham-Cumming 約 $198 萬。多數賣出前有 B 類轉 A 類或選擇權行使（Form 4 代碼 C／M），另有稅款代扣（代碼 F）。價格約 $193–353。Form 4 是否屬 10b5-1 計畫，本報告未逐筆核對、不下結論。<div class="risk-source">來源：SEC EDGAR Form 4（2026/5/8 後申報）</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">收入模式轉向用量型、波動度上升</div>CFO 自承 pool-of-funds 與用量型合約使個別客戶「標準差」變大。美元淨留存率 118%→120%，RPO $27.32 億（季增 7.4%）；但沒有 pool-of-funds 占比、續約率或預付池消耗速度。<div class="risk-source">來源：Q&A（Singh、McWilliams）；10-Q</div></div></div><div class="risk-item"><span class="risk-badge med">中</span><div class="risk-text"><div class="risk-title">AI 取代網站訪問的長期風險</div>10-Q 風險因素列出「消費者愈來愈依賴 AI 聊天機器人、減少造訪網站，使網站營運方對速度與安全的需求下降」。管理層正把這個趨勢說成機會（agent 流量變現），但變現的微支付基礎建設仍是願景。<div class="risk-source">來源：10-Q 風險因素；Q&A（Borges）</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">出口管制自願揭露已了結</div>10-Q：2026/4/9 收到 OFAC 的「不採取行動」函，結案、無罰款；10-Q 未認列損失。Q1 報告曾將此列為中度風險，本季降為低。<div class="risk-source">來源：10-Q Note 8</div></div></div><div class="risk-item"><span class="risk-badge low">低</span><div class="risk-text"><div class="risk-title">客戶集中度與流動性</div>沒有單一客戶超過 10% 營收；現金與有價證券 $41.628 億，另有新債淨收入約 $22.0 億（扣除 capped call）。<div class="risk-source">來源：FY2025 10-K；新聞稿；8-K</div></div></div><div class="tbl-wrap"><div class="tbl-title">互證對照表：管理層說法 vs 可驗證事實</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>管理層說法</th><th>可驗證事實</th><th>出處</th><th>結論</th></tr></thead><tbody><tr><td class="wrap">毛利率「穩定在目前水準」、單位經濟今年改善</td><td class="wrap">非 GAAP 毛利率 72.8%→73.1%（+30bps），YoY −320bps；營業成本 +53% vs 營收 +36%；單位經濟無數字</td><td class="wrap">新聞稿；10-Q</td><td class="wrap">△ 一季持平，無法驗證單位經濟</td></tr><tr><td class="wrap">大客戶數創單年新高（年增 986 家）</td><td class="wrap">年化營收 &gt; $10 萬客戶 4,698 家 vs 3,712 家 ＝ +986；QoQ +282</td><td class="wrap">10-Q</td><td class="wrap">✓ 吻合</td></tr><tr><td class="wrap">淨留存率各產品、各客戶群、各合約型態都強</td><td class="wrap">美元淨留存率 120%（Q1 118%、Q2'25 114%）；未揭露分群數字</td><td class="wrap">10-Q</td><td class="wrap">△ 總數吻合、分群無法驗證</td></tr><tr><td class="wrap">夥伴占營收 31%，未來可到 50% 以上</td><td class="wrap">通路營收 $217.7M ＝ 31.3%，年增 66.9%（直接客戶 +25.3%）</td><td class="wrap">10-Q Note 3</td><td class="wrap">✓ 31% 吻合；50% 為前瞻</td></tr><tr><td class="wrap">扣除重組，GAAP 淨損約 $1,800 萬，接近 2028 年 GAAP 獲利目標</td><td class="wrap">$1.70 億 − $1.507 億 ≈ $1,930 萬（未計稅）；股權薪酬 $1.406 億仍在內</td><td class="wrap">新聞稿</td><td class="wrap">△ 數字相近，但只扣重組一項</td></tr><tr><td class="wrap">重組總額最多 $1.65 億（現金約 $1.3 億）</td><td class="wrap">Note 15：現金資遣 $1.25 億＋股權薪酬 $3,500 萬＋其他 $500 萬；Q2 已認列 $1.507 億</td><td class="wrap">10-Q Note 15</td><td class="wrap">✓ 吻合（現金約 $1.3 億＝資遣＋其他）</td></tr><tr><td class="wrap">全年網路資本支出約營收 14%–15%；Q2 約 7%</td><td class="wrap">上半年購置不動產及設備 $1.152 億（占營收 8.6%）；Q2 $4,996 萬（7.2%）；隱含下半年約 $2.9–3.1 億</td><td class="wrap">新聞稿現金流量表</td><td class="wrap">△ 下半年需大幅加速</td></tr><tr><td class="wrap">Workers 已是有意義的營收貢獻者</td><td class="wrap">10-Q 未揭露任何產品營收；僅見第三方技術服務成本 +$30.1M</td><td class="wrap">10-Q</td><td class="wrap">△ 無法驗證金額</td></tr><tr><td class="wrap">（沉默）2026 年到期可轉債 8/15 如何處理、新債發行</td><td class="wrap">10-Q 已選擇本金付現、超額發股；8/10 起發行 $25 億 2031 年債；法說會稿頁均未見提及</td><td class="wrap">10-Q Note 7；8-K</td><td class="wrap">✗ 無人提問、管理層未談</td></tr></tbody></table></div></div>
+  </div>
+
+  <div id="panel-bu" class="panel">
+<div class="kpi-row"><div class="kpi"><div class="kpi-val">$6.961 億</div><div class="kpi-lbl">Q2 營收</div><div class="kpi-sub">+8.8% QoQ／+35.9% YoY</div></div><div class="kpi"><div class="kpi-val">73.1%</div><div class="kpi-lbl">非 GAAP 毛利率</div><div class="kpi-sub">Q1 72.8%；去年同期 76.3%</div></div><div class="kpi"><div class="kpi-val">$0.29</div><div class="kpi-lbl">非 GAAP EPS</div><div class="kpi-sub">GAAP −$0.48（含重組 $0.43／股）</div></div><div class="kpi"><div class="kpi-val">$7.37 億</div><div class="kpi-lbl">Q3 營收指引中位</div><div class="kpi-sub">+5.8% QoQ／+31.0% YoY</div></div></div><div class="note grey">⚑ Cloudflare 只有<b>單一申報分部</b>，沒有產品別或事業部營收。本分頁以 10-Q 揭露的三個維度取代：區域、客戶類型（直接／通路）、客戶規模（大客戶數與淨留存率），再於下方說明各產品線。「Act 1–4」是管理層的敘事框架，不是申報分部。</div><div class="bu-grid"><div class="bu-card b"><div class="bu-name">直接客戶</div><div class="bu-abbr">Enterprise 合約、自助式付費方案</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$478.4M（68.7%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">YoY</span><span class="bu-stat-val">+25.3%</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q1'26</span><span class="bu-stat-val">$446.8M（69.8%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">上半年</span><span class="bu-stat-val">$925.2M（+23.6%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:69%;background:#182456"></div></div></div><div class="bu-card g"><div class="bu-name">通路夥伴</div><div class="bu-abbr">經銷商、系統整合商</div><div class="bu-stat"><span class="bu-stat-lbl">Q2 營收</span><span class="bu-stat-val">$217.7M（31.3%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">YoY</span><span class="bu-stat-val">+66.9%</span></div><div class="bu-stat"><span class="bu-stat-lbl">Q1'26</span><span class="bu-stat-val">$193.0M（30.2%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">上半年</span><span class="bu-stat-val">$410.6M（+69.0%）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:31%;background:#0f6f8a"></div></div></div><div class="bu-card o"><div class="bu-name">大客戶（年化營收 &gt; $10 萬）</div><div class="bu-abbr">付費客戶數與留存</div><div class="bu-stat"><span class="bu-stat-lbl">客戶數</span><span class="bu-stat-val">4,698（Q2'25 3,712）</span></div><div class="bu-stat"><span class="bu-stat-lbl">QoQ／YoY</span><span class="bu-stat-val">+282／+986（+26.6%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">淨留存率</span><span class="bu-stat-val">120%（Q1 118%）</span></div><div class="bu-stat"><span class="bu-stat-lbl">RPO</span><span class="bu-stat-val">$27.32 億（+7.4% QoQ）</span></div><div class="margin-bar-wrap"><div class="margin-bar" style="width:73%;background:#b3760f"></div></div></div></div><div class="chart-wrap"><div class="chart-title">區域營收對比</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="22" y="22" text-anchor="start" font-size="16.5" font-weight="700" fill="#161616" font-family="sans-serif">區域營收：Q2 2025 vs Q2 2026</text><line x1="22" y1="36" x2="876" y2="36" stroke="#dcdcdc" stroke-width="1"/><rect x="22" y="51" width="10" height="10" rx="1" fill="#57a0cf"/><text x="40" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2025</text><rect x="108.28" y="51" width="10" height="10" rx="1" fill="#182456"/><text x="126.28" y="60" font-size="11.5" fill="#333333" font-family="sans-serif">Q2 2026</text><line x1="78" y1="456" x2="876" y2="456" stroke="#bbbbbb" stroke-width="1"/><text x="68" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="78" y1="361" x2="876" y2="361" stroke="#eeeeee" stroke-width="1"/><text x="68" y="365" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">100</text><line x1="78" y1="266" x2="876" y2="266" stroke="#eeeeee" stroke-width="1"/><text x="68" y="270" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="78" y1="171" x2="876" y2="171" stroke="#eeeeee" stroke-width="1"/><text x="68" y="175" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">300</text><line x1="78" y1="76" x2="876" y2="76" stroke="#eeeeee" stroke-width="1"/><text x="68" y="80" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400 百萬美元</text><line x1="78" y1="456" x2="876" y2="456" stroke="#111111" stroke-width="1.2"/><rect x="106.93" y="216.7" width="69.82" height="239.31" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="141.84" y="210.7" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">251.9</text><rect x="178.75" y="119.32" width="69.82" height="336.68" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="213.66" y="113.32" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">354.4</text><text x="177.75" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">美國</text><rect x="306.43" y="319.77" width="69.82" height="136.23" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="341.34" y="313.77" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">143.4</text><rect x="378.25" y="278.35" width="69.82" height="177.65" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="413.16" y="272.35" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">187</text><text x="377.25" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">EMEA</text><rect x="505.93" y="384.66" width="69.82" height="71.34" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="540.84" y="378.66" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">75.1</text><rect x="577.75" y="361.57" width="69.82" height="94.43" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="612.66" y="355.57" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">99.4</text><text x="576.75" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">亞太</text><rect x="705.43" y="416.29" width="69.82" height="39.71" fill="#57a0cf" rx="1" data-dim="Q2 2025"/><text x="740.34" y="410.29" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2025">41.8</text><rect x="777.25" y="403.66" width="69.82" height="52.35" fill="#182456" rx="1" data-dim="Q2 2026"/><text x="812.16" y="397.66" text-anchor="middle" font-size="10" fill="#444444" font-family="sans-serif" data-dim="Q2 2026">55.1</text><text x="776.25" y="476" text-anchor="middle" font-size="11" fill="#333333" font-family="sans-serif">其他</text><text x="22" y="508" text-anchor="start" font-size="10.5" fill="#8a8a8a" font-family="sans-serif">資料來源：Cloudflare 10-Q（2026/8/6）Note 3 依客戶帳單地址分區的營收</text></svg>
+</div><div class="note">⚑ 美國年增 40.7%、EMEA +30.4%、亞太 +32.3%、其他 +31.8%；美國占比由 49.2% 升到 50.9%。資料來源：10-Q Note 3。</div></div><div class="chart-wrap"><div class="chart-title">逐季營收與非 GAAP 利潤率趨勢</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">逐季營收與非 GAAP 利潤率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#c9c9c9" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">0</text><line x1="76" y1="355.5" x2="824" y2="355.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="359.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">200</text><line x1="76" y1="255" x2="824" y2="255" stroke="#eeeeee" stroke-width="1"/><text x="66" y="259" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">400</text><line x1="76" y1="154.5" x2="824" y2="154.5" stroke="#eeeeee" stroke-width="1"/><text x="66" y="158.5" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">600</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">800</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">0</text><text x="834" y="359.5" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">20</text><text x="834" y="259" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">40</text><text x="834" y="158.5" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">60</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">80</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">百萬美元</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'25</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'25</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3'25</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4'25</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'26</text><polyline points="76,215.25 225.6,198.57 375.2,173.59 524.8,147.21 674.4,134.5 824,106.21" fill="none" stroke="#182456" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="215.25" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="225.6" cy="198.57" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="375.2" cy="173.59" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="524.8" cy="147.21" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="674.4" cy="134.5" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><circle cx="824" cy="106.21" r="3.6" fill="#ffffff" stroke="#182456" stroke-width="2"/><polyline points="76,68.57 225.6,72.59 375.2,77.62 524.8,79.63 674.4,90.18 824,88.67" fill="none" stroke="#8f1f1f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="68.57" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="225.6" cy="72.59" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="375.2" cy="77.62" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="524.8" cy="79.63" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="674.4" cy="90.18" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><circle cx="824" cy="88.67" r="3.6" fill="#ffffff" stroke="#8f1f1f" stroke-width="2"/><polyline points="76,397.21 225.6,385.15 375.2,379.12 524.8,382.64 674.4,398.72 824,386.66" fill="none" stroke="#b3760f" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="397.21" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="225.6" cy="385.15" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="375.2" cy="379.12" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="524.8" cy="382.64" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="674.4" cy="398.72" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><circle cx="824" cy="386.66" r="3.6" fill="#ffffff" stroke="#b3760f" stroke-width="2"/><line x1="277.05" y1="40" x2="293.05" y2="40" stroke="#182456" stroke-width="2.4"/><text x="299.05" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">營收</text><line x1="344.05" y1="40" x2="360.05" y2="40" stroke="#8f1f1f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="366.05" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 毛利率</text><line x1="472" y1="40" x2="488" y2="40" stroke="#b3760f" stroke-width="2.4" stroke-dasharray="5 3"/><text x="494" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">非 GAAP 營業利益率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：Cloudflare Q1 2025～Q2 2026 各季新聞稿（8-K Ex.99.1）；Q1&#39;25 營收由 Q2&#39;25 新聞稿六個月累計減單季推得</div>
+</div><div class="note">⚑ 營收六季由 $4.79 億到 $6.96 億；非 GAAP 毛利率由 77.1% 降到 73.1%（本期較上季小升）；營業利益率 11.4%–15.3% 間波動，Q3 指引約 17.6%（本報告由指引中位數推算）。</div></div><div class="chart-wrap"><div class="chart-title">大客戶數與淨留存率</div><div style="max-width:900px;margin:0 auto;">
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;"><rect x="0" y="0" width="900" height="520" fill="#ffffff"/><text x="450" y="26" text-anchor="middle" font-size="15" font-weight="600" fill="#111111" font-family="sans-serif">大客戶數與美元淨留存率</text><line x1="76" y1="456" x2="824" y2="456" stroke="#eeeeee" stroke-width="1"/><text x="66" y="460" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3,500</text><line x1="76" y1="375.6" x2="824" y2="375.6" stroke="#eeeeee" stroke-width="1"/><text x="66" y="379.6" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">3,750</text><line x1="76" y1="295.2" x2="824" y2="295.2" stroke="#eeeeee" stroke-width="1"/><text x="66" y="299.2" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,000</text><line x1="76" y1="214.8" x2="824" y2="214.8" stroke="#eeeeee" stroke-width="1"/><text x="66" y="218.8" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,250</text><line x1="76" y1="134.4" x2="824" y2="134.4" stroke="#eeeeee" stroke-width="1"/><text x="66" y="138.4" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,500</text><line x1="76" y1="54" x2="824" y2="54" stroke="#eeeeee" stroke-width="1"/><text x="66" y="58" text-anchor="end" font-size="11" fill="#555555" font-family="sans-serif">4,750</text><text x="834" y="460" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">110</text><text x="834" y="379.6" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">112</text><text x="834" y="299.2" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">114</text><text x="834" y="218.8" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">116</text><text x="834" y="138.4" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">118</text><text x="834" y="58" text-anchor="start" font-size="11" fill="#555555" font-family="sans-serif">120</text><line x1="76" y1="54" x2="76" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="76" y1="456" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><line x1="824" y1="54" x2="824" y2="456" stroke="#111111" stroke-width="1.2"/><text x="66" y="42" text-anchor="end" font-size="11" fill="#777777" font-family="sans-serif">大客戶數（家）</text><text x="834" y="42" text-anchor="start" font-size="11" fill="#777777" font-family="sans-serif">%</text><line x1="76" y1="456" x2="76" y2="460" stroke="#999999" stroke-width="1"/><text x="76" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'25</text><line x1="225.6" y1="456" x2="225.6" y2="460" stroke="#999999" stroke-width="1"/><text x="225.6" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'25</text><line x1="375.2" y1="456" x2="375.2" y2="460" stroke="#999999" stroke-width="1"/><text x="375.2" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q3'25</text><line x1="524.8" y1="456" x2="524.8" y2="460" stroke="#999999" stroke-width="1"/><text x="524.8" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q4'25</text><line x1="674.4" y1="456" x2="674.4" y2="460" stroke="#999999" stroke-width="1"/><text x="674.4" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q1'26</text><line x1="824" y1="456" x2="824" y2="460" stroke="#999999" stroke-width="1"/><text x="824" y="475" text-anchor="middle" font-size="11" fill="#444444" font-family="sans-serif">Q2'26</text><polyline points="76,447.32 225.6,387.82 375.2,292.31 524.8,199.36 674.4,161.41 824,70.72" fill="none" stroke="#0f6f8a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="76" cy="447.32" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="225.6" cy="387.82" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="375.2" cy="292.31" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="524.8" cy="199.36" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="674.4" cy="161.41" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><circle cx="824" cy="70.72" r="3.6" fill="#ffffff" stroke="#0f6f8a" stroke-width="2"/><polyline points="76,415.8 225.6,295.2 375.2,94.2 524.8,54 674.4,134.4 824,54" fill="none" stroke="#b1408a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="6 4"/><circle cx="76" cy="415.8" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="225.6" cy="295.2" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="375.2" cy="94.2" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="524.8" cy="54" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="674.4" cy="134.4" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><circle cx="824" cy="54" r="3.6" fill="#ffffff" stroke="#b1408a" stroke-width="2"/><line x1="348.5" y1="40" x2="364.5" y2="40" stroke="#0f6f8a" stroke-width="2.4"/><text x="370.5" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">大客戶數</text><line x1="438.5" y1="40" x2="454.5" y2="40" stroke="#b1408a" stroke-width="2.4" stroke-dasharray="5 3"/><text x="460.5" y="44" font-size="11.5" fill="#333333" font-family="sans-serif">美元淨留存率</text></svg>
+  <div style="font-size:12px;color:#666;text-align:center;margin-top:6px;">資料來源：10-Q／10-K 的 Key Business Metrics（年化營收 &gt; $10 萬美元的付費客戶；dollar-based net retention）</div>
+</div><div class="note">⚑ 大客戶數自 3,527 增至 4,698（六季 +33%）；淨留存率 Q1'26 短暫下滑 2 個百分點後回到 120%（Q4'25 為 120%）。</div></div><div class="tbl-wrap"><div class="tbl-title">逐季收入與經營指標</div><div class="tbl-scroll"><table class="wide"><thead><tr><th>項目</th><th>Q1'25</th><th>Q2'25</th><th>Q3'25</th><th>Q4'25</th><th>Q1'26</th><th>Q2'26</th></tr></thead><tbody><tr><td>營收（百萬美元）</td><td>479.1</td><td>512.3</td><td>562.0</td><td>614.5</td><td>639.8</td><td>696.1</td></tr><tr><td>非 GAAP 毛利率</td><td>77.1%</td><td>76.3%</td><td>75.3%</td><td>74.9%</td><td>72.8%</td><td>73.1%</td></tr><tr><td>非 GAAP 營業利益率</td><td>11.7%</td><td>14.1%</td><td>15.3%</td><td>14.6%</td><td>11.4%</td><td>13.8%</td></tr><tr><td>大客戶數</td><td>3,527</td><td>3,712</td><td>4,009</td><td>4,298</td><td>4,416</td><td>4,698</td></tr><tr><td>美元淨留存率</td><td>111%</td><td>114%</td><td>119%</td><td>120%</td><td>118%</td><td>120%</td></tr><tr><td>RPO（百萬美元）</td><td>—</td><td>—</td><td>2,143.1</td><td>2,495.8</td><td>2,543.5</td><td>2,732.0</td></tr></tbody></table></div></div><div class="note grey">⚑ 資料來源：各季新聞稿（8-K Ex.99.1）、Q3'25／Q1'26／Q2'26 10-Q、FY2025 10-K 的 Key Business Metrics。Q1'25、Q2'25 的 RPO 未取得，留空。量價拆分：Cloudflare 不揭露出貨量或單價，不適用。</div><div class="card"><div class="card-title">營收背後的產品：Cloudflare 賣的是什麼、客戶為何需要</div><p><b>應用服務與安全（Act 1）</b>：網站、API 與應用程式的流量先經過 Cloudflare 的全球網路，再到客戶自己的伺服器。網路會擋掉攻擊（DDoS、機器人、應用層攻擊）、快取內容並加速。客戶需要它，是因為自己很難同時扛住大流量、維持速度與阻擋攻擊。</p><p><b>Zero Trust／SASE（Act 2）</b>：員工連到公司應用與網際網路時，不再靠 VPN 與一道防火牆，而是每次存取都檢查身分、裝置與政策；管理層本季的論點是 agent 也需要同樣的「細粒度存取控制」。這條產品線的銷售週期長、多透過夥伴與顧問式銷售（通路占營收 31.3%）。</p><p><b>Workers 開發者平台（Act 3）</b>：開發者把程式放到 Cloudflare 的網路上執行，不必管理伺服器，只在實際執行時付費；搭配 Workers AI（在網路上跑 GPU 推論）、R2、D1、AI Gateway 等。對客戶的價值是低延遲、全球部署、用量計費，對 Cloudflare 的代價是較低的毛利率（Q1 管理層說法）與較高的第三方技術服務成本（10-Q 成本說明）。</p><p><b>Act 4（代理人商務與微支付）</b>：讓內容擁有者對 AI 抓取收費、讓 agent 能付款與證明身分。目前是新產品與願景，沒有營收揭露。</p><p>⚑ 以上為 10-K Item 1 的產品描述與法說會說法；Cloudflare 未揭露各產品線營收或毛利，因此上面每段都無法用申報文件驗證金額。</p></div>
+  </div>
+
+<div class="foot-note">僅供資訊參考，非投資建議。</div>
+</div>
+<script>
+function sw(id, el) {
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleQA(el) {
+  el.parentElement.classList.toggle('open');
+}
+</script>
+</body>
+</html>
