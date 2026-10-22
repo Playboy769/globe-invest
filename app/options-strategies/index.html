@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>期權交易策略大全 · 互動學習</title>
+<style>
+:root{
+  --ink:#111827;--ink2:#374151;--mute:#6b7280;--line:#e5e7eb;--bg:#fff;--soft:#f9fafb;
+  --bull:#15803d;--bear:#b91c1c;--yield:#b45309;--hedge:#6d28d9;--neutral:#1d4ed8;--vol:#0f766e;
+  --pos:#15803d;--neg:#b91c1c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+header.top{padding:22px 20px 14px;border-bottom:1px solid var(--line);text-align:center}
+header.top h1{margin:0;font-size:28px;font-weight:800;letter-spacing:.04em}
+header.top p{margin:6px 0 0;color:var(--mute);font-size:14px}
+.tip{display:inline-block;margin-top:10px;background:#f3e8ff;color:#4c1d95;border-radius:8px;padding:5px 14px;font-weight:700;font-size:14px}
+nav.tabs{display:flex;gap:6px;justify-content:center;padding:10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:20;flex-wrap:wrap}
+nav.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 18px;font-weight:700}
+nav.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.wrap{max-width:1240px;margin:0 auto;padding:18px 16px 60px}
+.view{display:none}.view.on{display:block}
+
+/* catalog layout */
+.cat-layout{display:grid;grid-template-columns:290px 1fr;gap:22px;align-items:start}
+@media(max-width:900px){.cat-layout{grid-template-columns:1fr}}
+.side{position:sticky;top:62px;max-height:calc(100vh - 80px);overflow:auto;padding-right:4px}
+@media(max-width:900px){.side{position:static;max-height:none}}
+.cat-block{margin-bottom:14px}
+.cat-title{font-weight:800;font-size:14px;padding:4px 10px;border-left:5px solid var(--c);color:var(--c);background:var(--soft);border-radius:0 6px 6px 0}
+.cat-title small{color:var(--mute);font-weight:500;margin-left:6px}
+.slist{display:flex;flex-direction:column;gap:3px;margin-top:5px}
+.sbtn{text-align:left;border:1px solid transparent;background:#fff;border-radius:8px;padding:5px 10px;line-height:1.35}
+.sbtn:hover{background:var(--soft)}
+.sbtn.on{border-color:var(--c);background:var(--soft);box-shadow:inset 3px 0 0 var(--c)}
+.sbtn b{display:block;font-size:14px}.sbtn span{font-size:12px;color:var(--mute)}
+.star{color:#d97706;font-size:12px;margin-left:4px}
+
+/* detail */
+.dhead{border-left:6px solid var(--c);padding:2px 0 2px 14px;margin-bottom:12px}
+.dhead h2{margin:0;font-size:25px}
+.dhead h2 small{font-size:15px;color:var(--mute);font-weight:500;margin-left:8px}
+.dhead p{margin:4px 0 0;color:var(--ink2)}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.bd{font-size:12px;font-weight:700;border:1px solid var(--c);color:var(--c);border-radius:999px;padding:1px 10px;background:#fff}
+.bd.g{--c:#6b7280}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;background:#fff}
+.card h3{margin:0 0 8px;font-size:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+@media(max-width:700px){.facts{grid-template-columns:repeat(2,1fr)}}
+.fact{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--soft)}
+.fact small{display:block;color:var(--mute);font-size:12px}
+.fact b{font-size:16px}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+
+/* controls */
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 16px;margin-bottom:10px}
+.ctl label{font-size:12px;color:var(--mute);display:block}
+.ctl .row{display:flex;align-items:center;gap:8px}
+.ctl input[type=range]{flex:1;accent-color:var(--c)}
+.ctl output{min-width:48px;text-align:right;font-weight:700;font-size:13px;color:var(--ink)}
+select,input[type=number]{border:1px solid var(--line);border-radius:6px;padding:3px 6px;font:inherit;background:#fff}
+.stagebar{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.stagebar button{border:1px solid var(--c);border-radius:8px;background:#fff;padding:3px 12px;font-weight:700;color:var(--c)}
+.stagebar button.on{background:var(--c);color:#fff}
+.chartbox{border:1px solid var(--line);border-radius:12px;padding:6px;background:#fff}
+svg.ch{width:100%;height:auto;display:block;touch-action:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin:4px 8px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px}
+table.legs{width:100%;border-collapse:collapse;font-size:13.5px}
+table.legs th,table.legs td{border-bottom:1px solid var(--line);padding:5px 6px;text-align:left}
+table.legs th{color:var(--mute);font-weight:600;font-size:12px}
+.tag{display:inline-block;border-radius:5px;padding:0 7px;font-size:12px;font-weight:700;color:#fff}
+.tag.buy{background:var(--pos)}.tag.sell{background:var(--neg)}
+ul.pl{margin:0;padding-left:18px}ul.pl li{margin:3px 0}
+.pros li::marker{color:var(--pos)}.cons li::marker{color:var(--neg)}
+.warn{background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:10px 14px;color:#7c2d12}
+.formula{font-family:Consolas,monospace;background:var(--soft);border-radius:6px;padding:1px 6px;font-size:13px}
+.gk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:600px){.gk{grid-template-columns:repeat(2,1fr)}}
+.gk div{border:1px solid var(--line);border-radius:8px;padding:6px 8px;text-align:center}
+.gk small{display:block;color:var(--mute);font-size:12px}
+.gk b{font-size:15px}
+.flow{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.flow .st{flex:1;min-width:150px;border:2px solid var(--c);border-radius:10px;padding:8px 10px;background:#fff}
+.flow .ar{align-self:center;font-size:20px;color:var(--mute)}
+
+/* selector */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:#fff;font-weight:700}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rec{border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;padding:10px 14px;margin-bottom:10px;background:#fff;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.rec b{font-size:16px}.rec p{margin:2px 0 0;color:var(--ink2);font-size:13.5px}
+.rec button{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:8px;padding:4px 14px}
+.mini{width:150px;height:60px;flex:none}
+
+/* basics */
+.basic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.glos dt{font-weight:800;margin-top:10px}.glos dd{margin:2px 0 0;color:var(--ink2)}
+footer{color:var(--mute);font-size:12.5px;text-align:center;padding:30px 16px;border-top:1px solid var(--line)}
+@media print{nav.tabs,.side{display:none}.cat-layout{display:block}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>期權交易策略大全</h1>
+  <p>按：用途 ＋ 行情判斷 ＋ 風險結構 分類 · 28 種策略 · 即時損益圖</p>
+  <div class="tip">新手期權入門建議：單買方、四個垂直價差、反比例價差（標 ★）</div>
+</header>
+<nav class="tabs">
+  <button data-v="cat" class="on">策略圖鑑</button>
+  <button data-v="pick">策略選擇器</button>
+  <button data-v="basic">基礎觀念</button>
+</nav>
+<div class="wrap">
+  <section id="v-cat" class="view on">
+    <div class="cat-layout">
+      <aside class="side" id="side"></aside>
+      <main id="detail"></main>
+    </div>
+  </section>
+  <section id="v-pick" class="view">
+    <div class="card">
+      <h3>① 你對行情的看法？</h3>
+      <div class="chips" id="pk-out"></div>
+      <h3>② 目前隱含波動率（IV）水位？</h3>
+      <div class="chips" id="pk-iv"></div>
+      <h3>③ 風險偏好？</h3>
+      <div class="chips" id="pk-risk"></div>
+    </div>
+    <div id="pk-res"></div>
+  </section>
+  <section id="v-basic" class="view"></section>
+</div>
+<footer>僅供教學與資訊參考，非投資建議。模型為 Black-Scholes（歐式、無股息），實際報價因買賣價差、波動率偏斜與稅費而異。<br>裸賣選擇權風險極高，新手請先了解保證金、流動性與到期日行為再下單。</footer>
+
+<script>
+'use strict';
+/* ============ 分類 ============ */
+const CATS=[
+ {id:'bull',n:'看漲策略',en:'Bullish',c:'#15803d'},
+ {id:'bear',n:'看跌策略',en:'Bearish',c:'#b91c1c'},
+ {id:'yield',n:'收租策略',en:'Yield',c:'#b45309'},
+ {id:'hedge',n:'保護 / 對沖策略',en:'Hedging',c:'#6d28d9'},
+ {id:'neutral',n:'震盪 / 區間策略',en:'Neutral / Range',c:'#1d4ed8'},
+ {id:'vol',n:'波動率 / 時間價值策略',en:'Volatility / Time',c:'#0f766e'}
+];
+const buy=(t,k=0,q=1,o={})=>({s:1,t,k,q,...o});
+const sell=(t,k=0,q=1,o={})=>({s:-1,t,k,q,...o});
+const stk=(cost=0)=>({s:1,t:'S',k:cost,q:1});
+
+/* ============ 策略資料 ============
+ legs: k = 與 ATM 履約價的距離（單位＝履約價間距）；stock 的 k = 成本相對 ATM 的位移
+ far:true = 遠月（天數為近月的 3 倍） */
+const ST=[
+{id:'long-call',cat:'bull',en:'Long Call',zh:'買Call',star:1,outlooks:['strongUp'],iv:'buy',risk:'limited',
+ lead:'最單純的看多：付權利金，換取「標的上漲」的無限獲利空間，最大虧損就是權利金。',
+ setup:'買進 1 口 Call（常選平價或小幅價外）。',
+ when:'預期短期內有明確、強勢的上漲催化（財報、政策、技術突破），且 IV 不高。',
+ legs:[buy('C',0)],
+ mp:'無限（標的越漲賺越多）',ml:'已付權利金',be:'履約價 ＋ 權利金',
+ pros:['風險有限、槓桿高','無需保證金','操作與理解最簡單'],
+ cons:['時間價值每天流失（Theta 為負）','方向對但漲太慢也會虧','IV 高時買貴，IV 下降（IV Crush）會傷害'],
+ tips:['常見錯誤：買到期日太近的深度價外 Call，勝率極低。','原則：到期日留足 30–60 天，Delta 約 0.4–0.6。','財報前 IV 偏高，財報後 IV 崩落，方向對也可能賠。'],
+ exit:'獲利達 50–100% 分批停利；虧損達權利金 50% 或論點失效即停損；到期前 1–2 週避免持有時間價值極低的部位。'},
+{id:'bull-call',cat:'bull',en:'Bull Call Spread',zh:'牛市看漲期權價差',star:1,outlooks:['mildUp'],iv:'neutral',risk:'limited',
+ lead:'買低履約價 Call、賣高履約價 Call：用賣出的 Call 抵掉一部分成本，換成有限的獲利上限。',
+ setup:'買進較低履約價 Call ＋ 賣出較高履約價 Call（同到期日、同張數）。',
+ when:'溫和看漲，預期漲到某個目標價位附近而不是飆太多。',
+ legs:[buy('C',0),sell('C',2)],
+ mp:'價差寬度 − 淨支出',ml:'淨支出（權利金差）',be:'低履約價 ＋ 淨支出',
+ pros:['成本低於單買 Call','最大虧損明確','Vega 與 Theta 影響較單買小'],
+ cons:['獲利有上限','漲過高履約價後等於放棄超額報酬'],
+ tips:['價差寬度越大，潛在報酬與成本都越大。','賣出的高履約價可設在你認為的「合理目標價」。'],
+ exit:'標的接近高履約價時多半已吃到大部分獲利，可提前平倉；不必死守到期。'},
+{id:'bull-put',cat:'bull',en:'Bull Put Spread',zh:'牛市看跌期權價差',star:1,outlooks:['mildUp','income'],iv:'sell',risk:'limited',
+ lead:'賣高履約價 Put、買低履約價 Put 當保險：先收權利金，只要不大跌就賺。',
+ setup:'賣出較高履約價 Put ＋ 買進較低履約價 Put（同到期日）。',
+ when:'看漲或「至少不跌」，IV 偏高時（賣方有利）。',
+ legs:[sell('P',0),buy('P',-2)],
+ mp:'淨收入（權利金）',ml:'價差寬度 − 淨收入',be:'高履約價 − 淨收入',
+ pros:['先收權利金，Theta 站在你這邊','勝率通常高','風險有限（有買保險）'],
+ cons:['獲利有上限，風險報酬比通常不對稱（賺小賠大）','急跌時虧損可達最大值','提前被指派風險（美式）'],
+ tips:['常見錯誤：只看勝率高就把部位放太大，一次大跌賠光多次收益。','賣的履約價設在支撐位下方。'],
+ exit:'收到的權利金賺進 50–70% 就可平倉，不必等到期；跌破支撐則停損。'},
+{id:'syn-long',cat:'bull',en:'Synthetic Long',zh:'合成多頭',outlooks:['strongUp'],iv:'neutral',risk:'unlimited',
+ lead:'買 Call ＋ 賣 Put（同履約價、同到期日），損益幾乎等同持有標的，但只需保證金。',
+ setup:'買進 1 口 Call ＋ 賣出 1 口 Put，履約價與到期日相同。',
+ when:'極度看漲且想用槓桿持有標的、或標的無法融資/放空時。',
+ legs:[buy('C',0),sell('P',0)],
+ mp:'無限',ml:'接近標的歸零（巨大）',be:'履約價 ＋ 淨支出（或 − 淨收入）',
+ pros:['槓桿大、成本幾乎為零','等同期貨多單的損益形狀'],
+ cons:['下跌時虧損與持股一樣大','賣 Put 需保證金','被指派時需接股'],
+ tips:['Put-Call Parity：Call − Put ≈ 標的價 − 履約價現值。','這是「裸」風險，務必設好停損。'],
+ exit:'等同期貨：設價格停損，而非等到期。'},
+{id:'risk-rev',cat:'bull',en:'Risk Reversal',zh:'多頭風險逆轉',outlooks:['strongUp'],iv:'neutral',risk:'unlimited',
+ lead:'賣出價外 Put 的權利金，來買價外 Call：成本近乎零的看多，但承擔下跌風險。',
+ setup:'賣出較低履約價 Put ＋ 買進較高履約價 Call（同到期日、不同履約價）。',
+ when:'強烈看多，且願意在較低價位接股（Put 被指派也不排斥）。',
+ legs:[sell('P',-2),buy('C',2)],
+ mp:'無限',ml:'低履約價 − 淨收入（標的歸零時巨大）',be:'視淨權利金；中間區間約為零成本平坦帶',
+ pros:['成本低甚至可收錢','保留上檔無限獲利'],
+ cons:['中間有一段「不賺不賠」區','下跌風險等同持股','Put 端需保證金'],
+ tips:['波動率偏斜（Skew）下，價外 Put 通常較貴，常可零成本甚至收錢。','與 Collar 相反：Collar 是持股後買 Put 賣 Call 保護。'],
+ exit:'跌破低履約價前先評估是否接股，否則平倉。'},
+
+{id:'long-put',cat:'bear',en:'Long Put',zh:'買Put',star:1,outlooks:['strongDown'],iv:'buy',risk:'limited',
+ lead:'最單純的看空：付權利金，標的下跌就賺，最大虧損僅為權利金。',
+ setup:'買進 1 口 Put。',
+ when:'預期強烈下跌（技術破位、利空），也可作為持股避險。',
+ legs:[buy('P',0)],
+ mp:'履約價 − 權利金（標的歸零時）',ml:'已付權利金',be:'履約價 − 權利金',
+ pros:['風險有限','下跌時 Gamma 與 Vega 帶來加速獲利','不需放空與借券'],
+ cons:['Theta 流失','恐慌時 IV 飆高，買貴','市場長期向上，做空逆勢'],
+ tips:['急跌時 IV 通常暴衝，這時才買 Put 往往買在高點。','需要避險宜「事先」買而非恐慌後買。'],
+ exit:'急跌後 IV 與價格雙高時可分批獲利了結。'},
+{id:'bear-put',cat:'bear',en:'Bear Put Spread',zh:'熊市看跌期權價差',star:1,outlooks:['mildDown'],iv:'neutral',risk:'limited',
+ lead:'買高履約價 Put、賣低履約價 Put：用賣出的 Put 降低成本，換取有限獲利。',
+ setup:'買進較高履約價 Put ＋ 賣出較低履約價 Put。',
+ when:'溫和看跌，預期跌到某目標價附近。',
+ legs:[buy('P',0),sell('P',-2)],
+ mp:'價差寬度 − 淨支出',ml:'淨支出',be:'高履約價 − 淨支出',
+ pros:['成本低於單買 Put','風險報酬明確'],cons:['獲利有上限','跌過低履約價後不再增加獲利'],
+ tips:['低履約價可設在預期的支撐位。'],exit:'接近低履約價時即可獲利了結。'},
+{id:'bear-call',cat:'bear',en:'Bear Call Spread',zh:'熊市看漲期權價差',star:1,outlooks:['mildDown','income'],iv:'sell',risk:'limited',
+ lead:'賣低履約價 Call、買高履約價 Call 當保險：先收錢，只要不大漲就賺。',
+ setup:'賣出較低履約價 Call ＋ 買進較高履約價 Call。',
+ when:'看跌或「至少不漲」，IV 偏高時。',
+ legs:[sell('C',0),buy('C',2)],
+ mp:'淨收入（權利金）',ml:'價差寬度 − 淨收入',be:'低履約價 ＋ 淨收入',
+ pros:['先收權利金','風險有限','勝率高'],cons:['賺小賠大','急漲時虧損最大','提前被指派風險'],
+ tips:['賣的履約價設在壓力位上方。','常見錯誤：財報或消息前賣 Call 價差，跳空最痛。'],
+ exit:'賺進權利金 50–70% 平倉；突破壓力停損。'},
+{id:'syn-short',cat:'bear',en:'Synthetic Short',zh:'合成空頭',outlooks:['strongDown'],iv:'neutral',risk:'unlimited',
+ lead:'買 Put ＋ 賣 Call（同履約價、同到期日），損益等同放空標的。',
+ setup:'買進 1 口 Put ＋ 賣出 1 口 Call，履約價與到期日相同。',
+ when:'極度看跌，且想以槓桿放空或標的難以借券。',
+ legs:[sell('C',0),buy('P',0)],
+ mp:'履約價 ＋ 淨收入（標的歸零時）',ml:'無限（標的越漲虧越多）',be:'履約價 ± 淨權利金',
+ pros:['槓桿大','形狀等同空單'],cons:['上漲虧損無限','賣 Call 需保證金','軋空風險'],
+ tips:['裸賣 Call 的風險最大，務必設停損或搭配保護。'],exit:'等同空單：設停損。'},
+
+{id:'csp',cat:'yield',en:'Cash Secured Put',zh:'現金擔保賣Put',outlooks:['income','mildUp'],iv:'sell',risk:'limited',
+ lead:'準備好現金，賣出你「願意買」的價位的 Put：沒跌破就賺權利金，跌破就以折價接股。',
+ setup:'賣出 1 口價外 Put，並預留「履約價 × 契約股數」的現金。',
+ when:'想低價買進股票、IV 偏高時收租。',
+ legs:[sell('P',-1)],
+ mp:'權利金',ml:'履約價 − 權利金（標的歸零時）',be:'履約價 − 權利金',
+ pros:['長期看好的標的收租','被指派＝以更低成本買股','權利金增加報酬'],
+ cons:['下跌時被動接股、虧損與持股相同','收益上限固定','錯過大漲'],
+ tips:['只賣你真心願意持有的標的。','別為了權利金去賣體質差的股票。'],
+ exit:'賺到 50–70% 權利金可平倉重賣；被指派後可轉賣 Covered Call（Wheel）。'},
+{id:'covered-call',cat:'yield',en:'Covered Call',zh:'現貨掛免費Call',outlooks:['ownStock','income'],iv:'sell',risk:'limited',
+ lead:'持有現貨再賣出價外 Call，收權利金增加報酬，換取上檔被封頂。',
+ setup:'持有標的股票 ＋ 賣出 1 口價外 Call（股數對應契約股數）。',
+ when:'持股，預期橫盤或緩慢上漲，想增加現金流。',
+ legs:[stk(0),sell('C',2)],
+ mp:'（Call 履約價 − 持股成本）＋ 權利金',ml:'成本 − 權利金（標的歸零時）',be:'持股成本 − 權利金',
+ pros:['增加持股收益','下跌有權利金緩衝','最簡單的收租方式'],
+ cons:['上檔被封頂','下跌保護有限（只有權利金）','可能被「叫走」股票'],
+ tips:['常見錯誤：把 Call 賣得太近、錯過大波段。','想保留持股就選較高履約價、或股價大漲前 Roll Up。'],
+ exit:'被突破時可 Roll（往上、往後展期）；不想被叫走就在到期前處理。'},
+{id:'pmcc',cat:'yield',en:"Poor Man's Covered Call",zh:'小資Call',outlooks:['income','mildUp'],iv:'sell',risk:'limited',
+ lead:'用遠月深度價內 Call 取代持股，再賣近月價外 Call 收租：小資金版的 Covered Call。',
+ setup:'買進遠月（如 3–12 個月）深度價內 Call（Delta ≥ 0.8）＋ 賣出近月價外 Call。',
+ when:'想做 Covered Call 但資金不夠買 100 股。',
+ legs:[buy('C',-3,1,{far:true}),sell('C',1)],
+ mp:'近月到期時的最大值，約＝價差寬度＋遠月殘值 − 淨支出（依圖）',ml:'淨支出（遠月 Call 成本 − 近月權利金）',be:'見圖（依遠月 Call 剩餘價值）',
+ pros:['資金效率高','風險有限','可滾動收租'],
+ cons:['遠月 Call 也有時間價值與 IV 風險','需管理兩條腿到期日','獲利上限固定'],
+ tips:['短 Call 履約價務必高於長 Call 履約價＋已付成本，避免被叫走反而虧。','本圖：近月到期時，以 BS 估算遠月 Call 價值。'],
+ exit:'近月 Call 賺 50–70% 即可買回、重賣新近月。'},
+{id:'wheel',cat:'yield',en:'Wheel Strategy',zh:'滾輪策略',outlooks:['income'],iv:'sell',risk:'limited',
+ lead:'賣 Put 收租 → 被指派接股 → 改賣 Covered Call → 被叫走 → 再賣 Put，循環收權利金。',
+ setup:'循環流程（不是單一損益結構），下面可切換兩個階段看損益。',
+ when:'標的穩健、可長期持有，追求穩定現金流。',
+ stages:[{n:'階段 1：賣 Put',legs:[sell('P',-1)]},{n:'階段 2：持股＋賣 Call',legs:[stk(-1),sell('C',1)]}],
+ flow:['① 賣出現金擔保 Put','② 未被指派：收權利金，重賣','② 被指派：以履約價接股','③ 持股改賣 Covered Call','④ 被叫走：賣出股票，回到 ①'],
+ mp:'各階段累積權利金 ＋ 價差',ml:'標的長期下跌時，持股虧損大於權利金',be:'平均持股成本 − 累積權利金',
+ pros:['有紀律的收租流程','把「被指派」變成計畫的一部分','散戶實務可操作'],
+ cons:['單一標的集中風險','長期下跌會套牢','收益上限在上漲市場落後買進持有'],
+ tips:['挑你願意長期持有的標的。','手續費、稅與流動性要計入。'],
+ exit:'標的基本面轉壞時應停止循環並處分持股。'},
+{id:'short-strangle',cat:'yield',en:'Short Strangle',zh:'雙賣策略',outlooks:['flat','income'],iv:'sell',risk:'unlimited',
+ lead:'同時賣出價外 Call 與價外 Put：只要價格在區間內就賺兩邊的權利金，風險極高。',
+ setup:'賣出價外 Put ＋ 賣出價外 Call（同到期日）。',
+ when:'預期區間盤整、IV 偏高、預期之後 IV 下降。',
+ legs:[sell('P',-2),sell('C',2)],
+ mp:'兩邊權利金合計',ml:'無限（Call 端）／巨大（Put 端）',be:'低履約價 − 總權利金；高履約價 ＋ 總權利金',
+ pros:['雙邊收租、勝率高','Theta 與 Vega 皆有利（賣方）'],
+ cons:['虧損可能無限','保證金高、需嚴格風控','黑天鵝事件致命'],
+ tips:['新手請勿裸賣；想控制風險改用 Iron Condor。','常見錯誤：IV 低時賣，收益不足以補償風險。'],
+ exit:'賺到 50% 平倉；任一邊被突破前移倉或補保護腿。'},
+
+{id:'protected-put',cat:'hedge',en:'Protected Put',zh:'保護性Put',outlooks:['ownStock'],iv:'buy',risk:'limited',
+ lead:'持股同時買 Put：像幫持股買保險，下跌時 Put 補償，上漲仍保有。',
+ setup:'持有標的 ＋ 買進 1 口 Put（常選價外）。',
+ when:'擔心持股短期下跌、不想賣股票。',
+ legs:[stk(0),buy('P',-1)],
+ mp:'無限（扣掉保險費）',ml:'（持股成本 − Put 履約價）＋ 權利金',be:'持股成本 ＋ 權利金',
+ pros:['下檔明確有限','不犧牲上檔','不必賣股'],cons:['保險費（權利金）持續花費','長期使用拖累報酬','需週期性續買'],
+ tips:['履約價越近、保護越強，保費越貴。','需要時再買（事件前）比長期掛著更經濟。'],
+ exit:'事件結束後可賣出 Put 回收殘值。'},
+{id:'collar',cat:'hedge',en:'Collar',zh:'領口策略',outlooks:['ownStock'],iv:'neutral',risk:'limited',
+ lead:'持股 ＋ 買 Put ＋ 賣 Call：用賣 Call 的權利金買 Put 保險，用部分上檔換取便宜保護。',
+ setup:'持有標的 ＋ 買進價外 Put ＋ 賣出價外 Call。',
+ when:'手上有大額獲利股，想鎖住風險又不想花錢。',
+ legs:[stk(0),buy('P',-2),sell('C',2)],
+ mp:'（Call 履約價 − 成本）− 淨支出',ml:'（成本 − Put 履約價）＋ 淨支出',be:'成本 ＋ 淨支出（或 − 淨收入）',
+ pros:['成本低甚至零成本','下檔有限、上檔仍有空間'],cons:['犧牲超額上漲','兩端被限制，報酬區間窄'],
+ tips:['零成本 Collar（Zero-cost）：Call 權利金 ≈ Put 權利金。','稅務與到期日需一併考慮。'],
+ exit:'到期前決定是否展期、調整履約價。'},
+{id:'stock-repair',cat:'hedge',en:'Stock Repair',zh:'股票修復策略',outlooks:['ownStock'],iv:'neutral',risk:'limited',
+ lead:'股價已跌、成本偏高時：買 1 張平價 Call、賣 2 張較高履約價 Call，用「1 比 2」降低回本門檻。',
+ setup:'持有被套股票 ＋ 買進 1 口 ATM Call ＋ 賣出 2 口較高履約價 Call（淨支出約零）。',
+ when:'股票被套，預期溫和反彈但不一定回到原始成本。',
+ legs:[stk(2),buy('C',0),sell('C',1,2)],
+ mp:'反彈越過賣出 Call 履約價後損益持平（≈ −淨支出），目標是「回本」而非賺錢',ml:'仍保留持股下跌風險（持股成本 − 標的價）',be:'回本價下移至賣出 Call 履約價附近（見圖，原本需漲回成本）',
+ pros:['幾乎零成本','回本價下移','不需追加資金'],cons:['犧牲大幅反彈的上檔','過高會因賣兩口而放空 Call','仍有下跌風險'],
+ tips:['賣兩口 Call 的總 Delta 要小於持股，避免上檔轉為虧損。'],exit:'反彈到目標區後平倉，或展期重新設置。'},
+
+{id:'iron-condor',cat:'neutral',en:'Iron Condor',zh:'鐵禿鷹',outlooks:['flat','income'],iv:'sell',risk:'limited',
+ lead:'賣出價外 Call 價差 ＋ 賣出價外 Put 價差：區間內賺權利金，兩端都有買保險，風險有限。',
+ setup:'賣價外 Put、買更低 Put；賣價外 Call、買更高 Call（同到期日）。',
+ when:'預期區間盤整、IV 偏高。',
+ legs:[buy('P',-3),sell('P',-2),sell('C',2),buy('C',3)],
+ mp:'淨收入',ml:'單邊價差寬度 − 淨收入',be:'低履約價 − 淨收入；高履約價 ＋ 淨收入',
+ pros:['雙邊收租','風險有限','勝率較高'],cons:['獲利有限，賺小賠大','突破任一邊都會虧','管理較複雜（四條腿）'],
+ tips:['翼寬（Wing）越窄，風險越小、收的錢也越少。','常見錯誤：在重大事件前建倉。'],
+ exit:'賺 50% 平倉；一邊被碰觸時調整或停損。'},
+{id:'iron-bfly',cat:'neutral',en:'Iron Butterfly',zh:'鐵蝴蝶',outlooks:['flat'],iv:'sell',risk:'limited',
+ lead:'賣出 ATM Call 與 ATM Put，再各買價外保護：收權利金最多，但獲利帶最窄。',
+ setup:'賣 ATM Call ＋ 賣 ATM Put；買進價外 Call 與價外 Put（等距）。',
+ when:'預期價格釘在某一價位附近（如選擇權結算日）。',
+ legs:[buy('P',-2),sell('P',0),sell('C',0),buy('C',2)],
+ mp:'淨收入（標的到期恰好在中心履約價）',ml:'翼寬 − 淨收入',be:'中心履約價 ± 淨收入',
+ pros:['權利金收取多','風險有限'],cons:['獲利區間窄','中心被突破快速虧損'],
+ tips:['比 Iron Condor 勝率低但報酬高。'],exit:'快接近中心時獲利了結。'},
+{id:'butterfly',cat:'neutral',en:'Butterfly Spread',zh:'蝶式價差',outlooks:['flat'],iv:'neutral',risk:'limited',
+ lead:'買 1 低、賣 2 中、買 1 高（同為 Call 或 Put）：付很少成本，賭價格收在中間履約價。',
+ setup:'買進 1 低履約價 Call ＋ 賣出 2 中間履約價 Call ＋ 買進 1 高履約價 Call。',
+ when:'預期到期價格非常接近某一目標價。',
+ legs:[buy('C',-2),sell('C',0,2),buy('C',2)],
+ mp:'翼寬 − 淨支出（到期在中間履約價）',ml:'淨支出',be:'低履約價 ＋ 淨支出；高履約價 − 淨支出',
+ pros:['成本低','風險明確','高報酬/風險比'],cons:['命中區間窄','Theta 前期可能不利','手續費吃掉一部分'],
+ tips:['Call、Put 蝶式在到期時損益幾乎相同。','期望值常取決於你比市場更準確預測「到期價位」。'],
+ exit:'期權價值離到期還遠時就可獲利了結，不必等到期。'},
+{id:'bwb',cat:'neutral',en:'Broken Wing Butterfly',zh:'不對稱蝶式價差',outlooks:['flat'],iv:'neutral',risk:'limited',
+ lead:'把蝶式的一翼拉遠：可降低成本甚至收錢，並讓其中一邊零風險、另一邊風險略大。',
+ setup:'買 1 低、賣 2 中、買 1 更高（兩翼寬度不同）。',
+ when:'帶方向偏好的區間策略（如偏多的區間）。',
+ legs:[buy('C',-2),sell('C',0,2),buy('C',4)],
+ mp:'在中間履約價時最大',ml:'較寬一翼 − 淨收入（另一邊可能為零風險）',be:'見圖',
+ pros:['可淨收入建倉','一邊風險可為零','方向更有彈性'],cons:['另一邊風險加大','策略更複雜'],
+ tips:['寬翼那邊的最大虧損較大，請設定停損。'],exit:'接近中心獲利了結；破寬翼那一側停損。'},
+{id:'jade-lizard',cat:'neutral',en:'Jade Lizard',zh:'玉蜥蜴',outlooks:['mildUp','income','flat'],iv:'sell',risk:'limited',
+ lead:'賣 Put ＋ 賣 Call 價差：收的權利金若大於 Call 價差寬度，上檔就零風險。',
+ setup:'賣出價外 Put ＋ 賣出價外 Call ＋ 買進更高 Call（Call 價差）。',
+ when:'偏多或中性、IV 高，不想承擔上檔無限風險。',
+ legs:[sell('P',-2),sell('C',1),buy('C',2)],
+ mp:'淨收入',ml:'Put 端：低履約價 − 淨收入（標的歸零）；Call 端可為零',be:'低履約價 − 淨收入',
+ pros:['上檔風險可為零','收權利金','勝率高'],cons:['下跌風險大（等於賣 Put）','須權利金足夠大','保證金需求'],
+ tips:['檢查：淨收入 ≥ Call 價差寬度 → 上檔零風險。','可在圖上調 IV 與間距驗證。'],
+ exit:'賺 50% 平倉；跌破 Put 履約價時考慮接股或停損。'},
+
+{id:'straddle',cat:'vol',en:'Straddle',zh:'跨式',outlooks:['bigMove'],iv:'buy',risk:'limited',
+ lead:'同時買 ATM Call 與 Put：不賭方向，只賭「會有大波動」。',
+ setup:'買進 1 口 ATM Call ＋ 1 口 ATM Put（同履約價、同到期日）。',
+ when:'事件前（財報、央行決議）預期大漲或大跌，且 IV 尚未過度墊高。',
+ legs:[buy('C',0),buy('P',0)],
+ mp:'無限（上檔）／履約價 − 成本（下檔）',ml:'兩邊權利金總和',be:'履約價 ± 總權利金',
+ pros:['雙向獲利','不需判斷方向'],cons:['成本高','Theta 流失快','IV Crush 殺傷大'],
+ tips:['事件前 IV 通常已墊高，真正需要的是「實際波動 > 隱含波動」。'],exit:'事件後 IV 回落前獲利了結。'},
+{id:'strangle',cat:'vol',en:'Strangle',zh:'寬跨式',outlooks:['bigMove'],iv:'buy',risk:'limited',
+ lead:'同時買價外 Call 與價外 Put：比跨式便宜，但需要更大的波動才賺。',
+ setup:'買進價外 Call ＋ 買進價外 Put。',
+ when:'預期大波動但想降低成本。',
+ legs:[buy('C',2),buy('P',-2)],
+ mp:'無限（上檔）／低履約價 − 成本（下檔）',ml:'兩邊權利金總和',be:'低履約價 − 總權利金；高履約價 ＋ 總權利金',
+ pros:['成本比 Straddle 低','雙向獲利'],cons:['需更大波動才回本','中間盤整區全虧'],
+ tips:['履約價越遠越便宜，勝率越低。'],exit:'波動出現後及早獲利了結。'},
+{id:'calendar',cat:'vol',en:'Calendar Spread',zh:'日曆價差',outlooks:['flat'],iv:'buy',risk:'limited',
+ lead:'賣近月、買遠月（同履約價）：吃近月 Theta 衰減較快的差，同時做多波動率。',
+ setup:'賣出近月 Call ＋ 買進遠月 Call（同履約價、不同到期日）。',
+ when:'預期近月盤整、遠月仍有行情，或預期 IV 上升。',
+ legs:[sell('C',0),buy('C',0,1,{far:true})],
+ mp:'近月到期、標的在履約價附近時最大（取決於遠月 IV）',ml:'淨支出',be:'見圖（以 BS 估遠月殘值）',
+ pros:['成本低','Theta 為正、Vega 為正','風險有限'],cons:['需管理兩個到期日','價格遠離履約價時虧損','受 IV 變動影響大'],
+ tips:['本圖為近月到期時損益，遠月以 BS 估值。','拖動「剩餘時間」可看到 Theta 變化。'],exit:'近月到期前處理（買回或平倉），避免被指派。'},
+{id:'diagonal',cat:'vol',en:'Diagonal Spread',zh:'對角價差',outlooks:['mildUp','flat'],iv:'buy',risk:'limited',
+ lead:'日曆價差的升級：近月與遠月用不同履約價，兼具方向性與時間價值。',
+ setup:'賣出近月價外 Call ＋ 買進遠月較低履約價 Call。',
+ when:'溫和看漲、想兼顧收租與保留遠月上檔（類似 PMCC 的簡化版）。',
+ legs:[sell('C',1),buy('C',0,1,{far:true})],
+ mp:'近月到期時，標的在賣出履約價附近最大',ml:'淨支出',be:'見圖',
+ pros:['同時做多方向與時間價值','成本低於單買遠月'],cons:['管理較複雜','IV、時間與方向多重因素'],
+ tips:['配置不同到期日，可在近月到期後重賣新的近月 Call。'],exit:'近月 Call 賺 50% 即可買回重賣。'},
+{id:'ratio',cat:'vol',en:'Ratio Spread',zh:'比例價差',outlooks:['mildUp','flat'],iv:'sell',risk:'unlimited',
+ lead:'買 1 張低履約價 Call、賣 2 張較高履約價 Call：溫和上漲賺得最多，但大漲會虧。',
+ setup:'買進 1 低履約價 Call ＋ 賣出 2 高履約價 Call。',
+ when:'溫和看漲、預期漲到特定價位、IV 偏高。',
+ legs:[buy('C',0),sell('C',2,2)],
+ mp:'高履約價處（價差寬度 ＋ 淨收入）',ml:'上檔無限（多賣一口 Call）',be:'兩個（見圖）',
+ pros:['常可淨收入或零成本','溫和上漲獲利大'],cons:['大漲時虧損無限','賣方保證金'],
+ tips:['上檔等同裸賣 1 口 Call，務必設停損或換成 Butterfly。'],exit:'接近高履約價時獲利了結；破損益兩平上方停損。'},
+{id:'back',cat:'vol',en:'Back Spread',zh:'反比例價差',star:1,outlooks:['bigMove','strongUp'],iv:'buy',risk:'limited',
+ lead:'賣 1 張低履約價 Call、買 2 張高履約價 Call：大漲時獲利無限，且可能零成本。',
+ setup:'賣出 1 低履約價 Call ＋ 買進 2 高履約價 Call（Call Back Spread）。',
+ when:'預期單方向大行情（大漲），但擔心判斷錯誤時損失有限。',
+ legs:[sell('C',0),buy('C',2,2)],
+ mp:'上檔無限',ml:'兩履約價之間：價差寬度 − 淨收入（約在高履約價處）',be:'見圖',
+ pros:['上檔無限獲利','常可零成本或收錢建倉','下檔（跌）時損失小甚至賺錢（若淨收入）'],
+ cons:['盤整在中間價位時虧損最大','需要「真的有大行情」'],
+ tips:['最大虧損發生在高履約價；要避開「剛好漲到那裡就停住」。'],exit:'大行情啟動即可持有；若價位停在虧損區，及早停損。'}
+];
+const BYID=Object.fromEntries(ST.map(s=>[s.id,s]));
+const OUT=[
+ ['strongUp','強烈看漲'],['mildUp','溫和看漲'],['flat','盤整 / 區間'],['mildDown','溫和看跌'],
+ ['strongDown','強烈看跌'],['bigMove','預期大波動（不知方向）'],['ownStock','已持有現股'],['income','想長期收租']
+];
+const OUT_NOTE={
+ strongUp:'強勢上漲：單買方或合成多頭可放大報酬。',mildUp:'溫和上漲：垂直價差、賣 Put 類策略更划算。',
+ flat:'盤整：賣方、蝶式、鐵禿鷹吃時間價值。',mildDown:'溫和下跌：熊市價差。',strongDown:'強烈下跌：買 Put 或合成空頭。',
+ bigMove:'大波動：買跨式、寬跨式或 Back Spread。',ownStock:'持股：Covered Call、保護性 Put、Collar。',income:'收租：賣權利金系列，注意風險結構。'
+};
+
+/* ============ 定價與損益 ============ */
+const R_FREE=0.015;
+const ncdf=x=>{const t=1/(1+0.2316419*Math.abs(x)),d=0.3989423*Math.exp(-x*x/2);
+ const p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return x>0?1-p:p;};
+const npdf=x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI);
+function bs(S,K,T,sig,type){
+  if(T<=1e-9||sig<=0){return type==='C'?Math.max(S-K,0):Math.max(K-S,0);}
+  const r=R_FREE,sq=sig*Math.sqrt(T),d1=(Math.log(S/K)+(r+sig*sig/2)*T)/sq,d2=d1-sq;
+  return type==='C'?S*ncdf(d1)-K*Math.exp(-r*T)*ncdf(d2):K*Math.exp(-r*T)*ncdf(-d2)-S*ncdf(-d1);
+}
+function greeksOf(S,K,T,sig,type){
+  const r=R_FREE,sq=sig*Math.sqrt(T),d1=(Math.log(S/K)+(r+sig*sig/2)*T)/sq,d2=d1-sq;
+  const delta=type==='C'?ncdf(d1):ncdf(d1)-1,gamma=npdf(d1)/(S*sq),vega=S*npdf(d1)*Math.sqrt(T)/100;
+  const th=(-(S*npdf(d1)*sig)/(2*Math.sqrt(T))-(type==='C'?1:-1)*r*K*Math.exp(-r*T)*(type==='C'?ncdf(d2):ncdf(-d2)))/365;
+  return {delta,gamma,vega,theta:th};
+}
+
+const P={S:100,iv:25,days:30,step:5,mult:1,f:0.5};
+let curId=ST[0].id,stageIdx=0;
+
+function build(st){
+  const legsDef=st.stages?st.stages[stageIdx].legs:st.legs;
+  const base=Math.round(P.S/P.step)*P.step,Tn=P.days/365,Tf=Tn*3,sig=P.iv/100;
+  const legs=legsDef.map(l=>{
+    const o={...l};
+    if(l.t==='S'){o.cost=base+l.k*P.step;o.price=0;}
+    else{o.K=base+l.k*P.step;o.T0=l.far?Tf:Tn;o.price=bs(P.S,o.K,o.T0,sig,l.t);}
+    return o;});
+  return {legs,base,Tn,Tf,sig};
+}
+function legVal(o,S,f,B){
+  const T=o.far?(B.Tf-B.Tn)+f*B.Tn:f*B.Tn;return bs(S,o.K,T,B.sig,o.t);
+}
+function pnl(B,S,f){
+  let t=0;for(const o of B.legs){
+    if(o.t==='S')t+=o.s*o.q*(S-o.cost);
+    else t+=o.s*o.q*(legVal(o,S,f,B)-o.price);}
+  return t;
+}
+function stats(B){
+  const N=4000,hi=P.S*4,xs=[],ys=[];
+  for(let i=0;i<=N;i++){const x=hi*(0.0005+i/N);xs.push(x);ys.push(pnl(B,x,0));}
+  let mx=-1e18,mn=1e18;for(const y of ys){if(y>mx)mx=y;if(y<mn)mn=y;}
+  const slope=(ys[N]-ys[N-40])/(xs[N]-xs[N-40]);
+  const unlProfit=slope>1e-4,unlLoss=slope<-1e-4;
+  const be=[];for(let i=1;i<=N;i++){if((ys[i-1]<0&&ys[i]>=0)||(ys[i-1]>0&&ys[i]<=0)){
+    const t=ys[i-1]/(ys[i-1]-ys[i]);be.push(xs[i-1]+t*(xs[i]-xs[i-1]));}}
+  return {mx,mn,unlProfit,unlLoss,be};
+}
+function netPrem(B){let t=0;for(const o of B.legs){if(o.t!=='S')t+=o.s*o.q*o.price;}return t;}
+function netGreeks(B){
+  const g={delta:0,gamma:0,theta:0,vega:0};
+  for(const o of B.legs){
+    if(o.t==='S'){g.delta+=o.s*o.q;continue;}
+    const gg=greeksOf(P.S,o.K,o.T0,B.sig,o.t);
+    for(const k in g)g[k]+=o.s*o.q*gg[k];
+  }
+  return g;
+}
+
+/* ============ 繪圖 ============ */
+function fmt(n,d=2){return (Math.abs(n)>=1000?n.toLocaleString('en-US',{maximumFractionDigits:0}):n.toFixed(d));}
+function chartSVG(st,B,c,W=760,H=380,opts={}){
+  const mini=opts.mini,padL=mini?6:58,padR=mini?6:20,padT=mini?6:22,padB=mini?6:34;
+  const x0=P.S*0.7,x1=P.S*1.3,N=160;
+  const exp=[],th=[];let lo=0,hi=0;
+  for(let i=0;i<=N;i++){const x=x0+(x1-x0)*i/N;const a=pnl(B,x,0),b=mini?a:pnl(B,x,P.f);
+    exp.push([x,a]);th.push([x,b]);lo=Math.min(lo,a,b);hi=Math.max(hi,a,b);}
+  if(hi===lo){hi=1;lo=-1;}const pad=(hi-lo)*0.12;lo-=pad;hi+=pad;
+  const X=x=>padL+(x-x0)/(x1-x0)*(W-padL-padR),Y=y=>padT+(hi-y)/(hi-lo)*(H-padT-padB),y0=Y(0);
+  const path=a=>a.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join('');
+  const area=path(exp)+`L${X(x1)} ${y0}L${X(x0)} ${y0}Z`;
+  const id='cp'+Math.random().toString(36).slice(2,7);
+  let s=`<svg class="ch" viewBox="0 0 ${W} ${H}" ${opts.mini?'':'id="mainchart"'}>`;
+  s+=`<defs><clipPath id="${id}u"><rect x="0" y="0" width="${W}" height="${y0}"/></clipPath><clipPath id="${id}d"><rect x="0" y="${y0}" width="${W}" height="${H}"/></clipPath></defs>`;
+  if(!mini){
+    for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,y=Y(v);
+      s+=`<line x1="${padL}" x2="${W-padR}" y1="${y}" y2="${y}" stroke="#eef0f3"/><text x="${padL-6}" y="${y+4}" text-anchor="end" font-size="11" fill="#6b7280">${fmt(v*P.mult,0)}</text>`;}
+    for(let i=0;i<=6;i++){const v=x0+(x1-x0)*i/6;
+      s+=`<text x="${X(v)}" y="${H-12}" text-anchor="middle" font-size="11" fill="#6b7280">${v.toFixed(0)}</text>`;}
+  }
+  s+=`<path d="${area}" fill="#16a34a" opacity=".16" clip-path="url(#${id}u)"/><path d="${area}" fill="#dc2626" opacity=".16" clip-path="url(#${id}d)"/>`;
+  s+=`<line x1="${padL}" x2="${W-padR}" y1="${y0}" y2="${y0}" stroke="#111" stroke-width="1.2"/>`;
+  if(!mini){
+    s+=`<path d="${path(th)}" fill="none" stroke="#9ca3af" stroke-width="2.2" stroke-dasharray="6 5"/>`;
+    s+=`<line x1="${X(P.S)}" x2="${X(P.S)}" y1="${padT}" y2="${H-padB}" stroke="#374151" stroke-width="1" stroke-dasharray="2 4"/><text x="${X(P.S)}" y="${padT-6}" text-anchor="middle" font-size="11" fill="#374151">現價 ${P.S}</text>`;
+    for(const o of B.legs){if(o.t==='S')continue;if(o.K<x0||o.K>x1)continue;
+      s+=`<line x1="${X(o.K)}" x2="${X(o.K)}" y1="${H-padB}" y2="${H-padB-7}" stroke="${o.s>0?'#15803d':'#b91c1c'}" stroke-width="3"/>`;}
+  }
+  s+=`<path d="${path(exp)}" fill="none" stroke="${c}" stroke-width="${mini?2:3}" stroke-linejoin="round"/>`;
+  if(!mini){
+    const stt=stats(B);
+    for(const b of stt.be){if(b<x0||b>x1)continue;
+      s+=`<circle cx="${X(b)}" cy="${y0}" r="5.5" fill="#fff" stroke="#111" stroke-width="2"/><text x="${X(b)}" y="${y0-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#111">${b.toFixed(1)}</text>`;}
+    s+=`<g id="xh" style="display:none"><line id="xhl" y1="${padT}" y2="${H-padB}" stroke="#111" stroke-opacity=".5"/><circle id="xhc" r="4.5" fill="${c}" stroke="#fff" stroke-width="2"/></g>`;
+  }
+  return s+'</svg>';
+}
+function attachHover(st,B,c){
+  const svg=document.getElementById('mainchart');if(!svg)return;
+  const W=760,padL=58,padR=20,x0=P.S*0.7,x1=P.S*1.3,out=document.getElementById('hov');
+  const g=svg.querySelector('#xh'),l=svg.querySelector('#xhl'),dot=svg.querySelector('#xhc');
+  const move=e=>{const r=svg.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W;
+    let x=x0+(px-padL)/(W-padL-padR)*(x1-x0);x=Math.max(x0,Math.min(x1,x));
+    const a=pnl(B,x,0),b=pnl(B,x,P.f),hh=svg.viewBox.baseVal.height;
+    const lo=chartRange.lo,hi=chartRange.hi,Y=y=>22+(hi-y)/(hi-lo)*(hh-22-34);
+    const X=padL+(x-x0)/(x1-x0)*(W-padL-padR);
+    g.style.display='';l.setAttribute('x1',X);l.setAttribute('x2',X);dot.setAttribute('cx',X);dot.setAttribute('cy',Y(a));
+    out.innerHTML=`標的價 <b>${x.toFixed(1)}</b>　到期損益 <b class="${a>=0?'pos':'neg'}">${a>=0?'+':''}${fmt(a*P.mult)}</b>　理論現值損益（剩餘 ${Math.round(P.f*100)}%）<b class="${b>=0?'pos':'neg'}">${b>=0?'+':''}${fmt(b*P.mult)}</b>`;};
+  svg.addEventListener('pointermove',move);svg.addEventListener('pointerdown',move);
+  svg.addEventListener('pointerleave',()=>{g.style.display='none';});
+}
+let chartRange={lo:0,hi:0};
+function computeRange(B){
+  const x0=P.S*0.7,x1=P.S*1.3;let lo=0,hi=0;
+  for(let i=0;i<=160;i++){const x=x0+(x1-x0)*i/160;const a=pnl(B,x,0),b=pnl(B,x,P.f);lo=Math.min(lo,a,b);hi=Math.max(hi,a,b);}
+  if(hi===lo){hi=1;lo=-1;}const pad=(hi-lo)*0.12;chartRange={lo:lo-pad,hi:hi+pad};
+}
+
+/* ============ 圖鑑 ============ */
+const $=id=>document.getElementById(id);
+function renderSide(){
+  $('side').innerHTML=CATS.map(c=>`<div class="cat-block" style="--c:${c.c}"><div class="cat-title">${c.n}<small>${c.en}</small></div><div class="slist">`+
+   ST.filter(s=>s.cat===c.id).map(s=>`<button class="sbtn${s.id===curId?' on':''}" style="--c:${c.c}" data-id="${s.id}"><b>${s.en}${s.star?'<span class="star">★</span>':''}</b><span>${s.zh}</span></button>`).join('')+`</div></div>`).join('');
+  $('side').querySelectorAll('.sbtn').forEach(b=>b.onclick=()=>{go(b.dataset.id);});
+}
+function go(id){curId=id;stageIdx=0;location.hash=id;showView('cat');renderSide();renderDetail();window.scrollTo({top:0,behavior:'smooth'});}
+const RISKTXT={limited:'風險有限',unlimited:'含無限風險'};
+const IVTXT={buy:'偏買方（IV 低較有利）',sell:'偏賣方（IV 高較有利）',neutral:'對 IV 較不敏感'};
+function ctl(label,key,min,max,step,unit=''){
+  return `<div><label>${label}</label><div class="row"><input type="range" data-k="${key}" min="${min}" max="${max}" step="${step}" value="${P[key]}"><output id="o-${key}">${P[key]}${unit}</output></div></div>`;
+}
+function renderDetail(){
+  const st=BYID[curId],cat=CATS.find(c=>c.id===st.cat),B=build(st),stt=stats(B),np=netPrem(B),gk=netGreeks(B);
+  computeRange(B);
+  const c=cat.c,m=P.mult;
+  const mpTxt=stt.unlProfit?'無限':'+'+fmt(stt.mx*m),mlTxt=stt.unlLoss?'無限':fmt(stt.mn*m);
+  const hasStock=B.legs.some(o=>o.t==='S');
+  const stageHtml=st.stages?`<div class="stagebar">${st.stages.map((g,i)=>`<button data-st="${i}" class="${i===stageIdx?'on':''}">${g.n}</button>`).join('')}</div>`:'';
+  const legRows=B.legs.map(o=>o.t==='S'?
+    `<tr><td><span class="tag buy">持有</span></td><td>現股</td><td>成本 ${o.cost}</td><td>${o.q}</td><td>—</td><td>—</td></tr>`:
+    `<tr><td><span class="tag ${o.s>0?'buy':'sell'}">${o.s>0?'買進':'賣出'}</span></td><td>${o.t==='C'?'Call':'Put'}</td><td>${o.K}</td><td>${o.q}</td><td>${fmt(o.price)}</td><td>${o.far?'遠月 '+Math.round(P.days*3)+'天':'近月 '+P.days+'天'}</td></tr>`).join('');
+  const flow=st.flow?`<div class="card"><h3>循環流程</h3><div class="flow" style="--c:${c}">${st.flow.map((t,i)=>`<div class="st">${t}</div>${i<st.flow.length-1?'<div class="ar">→</div>':''}`).join('')}</div></div>`:'';
+  $('detail').innerHTML=`
+  <div style="--c:${c}">
+  <div class="dhead"><h2>${st.en} <small>${st.zh}</small></h2><p>${st.lead}</p></div>
+  <div class="badges">
+    <span class="bd">${cat.n}</span>${st.star?'<span class="bd" style="--c:#d97706">★ 新手可先學</span>':''}
+    <span class="bd g">${RISKTXT[st.risk]}</span><span class="bd g">${IVTXT[st.iv]}</span>
+  </div>
+  ${stageHtml}
+  <div class="grid2" style="grid-template-columns:1.5fr 1fr">
+   <div>
+    <div class="card" style="padding:10px">
+      <div class="ctl" style="--c:${c}">
+        ${ctl('標的現價','S',50,200,1)}${ctl('隱含波動率 IV','iv',10,90,1,'%')}${ctl('到期天數','days',7,120,1,'天')}${ctl('履約價間距','step',1,10,1)}
+        ${ctl('理論曲線：距到期剩餘','f',0,1,0.05)}
+        <div><label>契約乘數（TXO=50、TMO=10）</label><div class="row"><select id="mult"><option value="1">1（每股）</option><option value="50">50（TXO）</option><option value="10">10（TMO）</option><option value="100">100（美股）</option></select></div></div>
+      </div>
+      <div class="chartbox">${chartSVG(st,B,c)}</div>
+      <div class="legend"><span><i style="border-color:${c}"></i>到期損益</span><span><i style="border-color:#9ca3af;border-top-style:dashed"></i>理論現值損益（BS）</span><span>○ 損益兩平　▍履約價（綠買/紅賣）</span></div>
+      <div id="hov" style="font-size:13px;margin:6px 8px;min-height:22px;color:var(--ink2)">把滑鼠移到圖上看每個價位的損益</div>
+    </div>
+   </div>
+   <div>
+    <div class="facts" style="grid-template-columns:1fr 1fr">
+      <div class="fact"><small>${np>=0?'淨支出 (Debit)':'淨收入 (Credit)'}${hasStock?'（不含持股）':''}</small><b>${fmt(Math.abs(np)*m)}</b></div>
+      <div class="fact"><small>模型最大獲利</small><b class="pos">${mpTxt}</b></div>
+      <div class="fact"><small>模型最大虧損</small><b class="neg">${mlTxt}</b></div>
+      <div class="fact"><small>損益兩平</small><b>${stt.be.length?stt.be.map(b=>b.toFixed(1)).join(' / '):'—'}</b></div>
+    </div>
+    <div class="card"><h3>組合腳位</h3>
+      <table class="legs"><tr><th>方向</th><th>類型</th><th>履約價</th><th>口</th><th>權利金</th><th>到期</th></tr>${legRows}</table>
+    </div>
+    <div class="card"><h3>淨 Greeks（建倉當下，每股）</h3>
+      <div class="gk"><div><small>Delta</small><b>${gk.delta.toFixed(2)}</b></div><div><small>Gamma</small><b>${gk.gamma.toFixed(3)}</b></div><div><small>Theta/天</small><b>${gk.theta.toFixed(2)}</b></div><div><small>Vega/1%IV</small><b>${gk.vega.toFixed(2)}</b></div></div>
+      <p style="font-size:12.5px;color:var(--mute);margin:8px 0 0">${greekHint(gk)}</p>
+    </div>
+   </div>
+  </div>
+  ${flow}
+  <div class="grid2">
+   <div class="card"><h3>📌 怎麼建倉</h3><p style="margin:0">${st.setup}</p><h3 style="margin-top:12px">🎯 適用行情</h3><p style="margin:0">${st.when}</p></div>
+   <div class="card"><h3>📐 損益公式（每股）</h3>
+     <p style="margin:2px 0"><b>最大獲利：</b><span class="formula">${st.mp}</span></p>
+     <p style="margin:2px 0"><b>最大虧損：</b><span class="formula">${st.ml}</span></p>
+     <p style="margin:2px 0"><b>損益兩平：</b><span class="formula">${st.be}</span></p></div>
+  </div>
+  <div class="grid2">
+   <div class="card"><h3>✅ 優點</h3><ul class="pl pros">${st.pros.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+   <div class="card"><h3>⚠️ 缺點</h3><ul class="pl cons">${st.cons.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  </div>
+  <div class="card"><h3>💡 實戰重點與常見錯誤</h3><ul class="pl">${st.tips.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div class="card"><h3>🚪 出場思路</h3><p style="margin:0">${st.exit}</p></div>
+  <div class="warn">${st.risk==='unlimited'?'⚠️ 此策略含<b>無限或極大風險</b>（裸賣腿）。新手請先用 Paper Trading，並確認保證金與停損規則。':'此策略風險有限，但仍需注意流動性、買賣價差、提前被指派（美式）與到期日行為。'}</div>
+  </div>`;
+  $('detail').querySelectorAll('input[data-k]').forEach(inp=>inp.oninput=()=>{
+    P[inp.dataset.k]=+inp.value;$('o-'+inp.dataset.k).textContent=inp.value+(inp.dataset.k==='iv'?'%':inp.dataset.k==='days'?'天':'');
+    if(inp.dataset.k==='f'){$('o-f').textContent=Math.round(P.f*100)+'%';}
+    refreshLive();});
+  $('o-f').textContent=Math.round(P.f*100)+'%';
+  const ms=$('mult');ms.value=String(P.mult);ms.onchange=()=>{P.mult=+ms.value;renderDetail();};
+  $('detail').querySelectorAll('.stagebar button').forEach(b=>b.onclick=()=>{stageIdx=+b.dataset.st;renderDetail();});
+  attachHover(st,B,c);
+}
+function refreshLive(){ // 重畫整個詳細頁但保留捲動與焦點
+  const y=window.scrollY,act=document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.k;
+  renderDetail();window.scrollTo(0,y);
+  if(act){const el=document.querySelector(`input[data-k="${act}"]`);if(el)el.focus();}
+}
+function greekHint(g){
+  const t=[];
+  t.push(g.delta>0.15?'Delta 為正：偏多':g.delta<-0.15?'Delta 為負：偏空':'Delta 接近 0：方向中性');
+  t.push(g.theta>0.005?'Theta 為正：時間站在你這邊':g.theta<-0.005?'Theta 為負：時間流逝對你不利':'Theta 近零');
+  t.push(g.vega>0.01?'Vega 為正：IV 上升有利':g.vega<-0.01?'Vega 為負：IV 下降有利':'Vega 近零');
+  return t.join('；')+'。';
+}
+
+/* ============ 選擇器 ============ */
+const SEL={out:'mildUp',iv:'unsure',risk:'any'};
+function chips(id,items,key){
+  $(id).innerHTML=items.map(([v,t])=>`<button class="chip${SEL[key]===v?' on':''}" data-v="${v}">${t}</button>`).join('');
+  $(id).querySelectorAll('.chip').forEach(b=>b.onclick=()=>{SEL[key]=b.dataset.v;renderPick();});
+}
+function renderPick(){
+  chips('pk-out',OUT,'out');
+  chips('pk-iv',[['high','IV 偏高（貴）'],['low','IV 偏低（便宜）'],['unsure','不確定']],'iv');
+  chips('pk-risk',[['limited','只要風險有限'],['any','都可以']],'risk');
+  let list=ST.filter(s=>s.outlooks.includes(SEL.out));
+  if(SEL.risk==='limited')list=list.filter(s=>s.risk==='limited');
+  list=list.map(s=>{let sc=1+(s.star?0.5:0),why=[];
+    if(SEL.iv==='high'){if(s.iv==='sell'){sc+=1;why.push('IV 高：賣方佔優，權利金豐厚');}else if(s.iv==='buy'){sc-=1;why.push('IV 高：買方成本偏貴');}}
+    if(SEL.iv==='low'){if(s.iv==='buy'){sc+=1;why.push('IV 低：買方成本便宜');}else if(s.iv==='sell'){sc-=1;why.push('IV 低：賣方收得少');}}
+    if(s.star)why.push('新手可先學');
+    return {s,sc,why};}).sort((a,b)=>b.sc-a.sc);
+  $('pk-res').innerHTML=`<div class="card" style="background:var(--soft)"><b>${OUT.find(o=>o[0]===SEL.out)[1]}</b>：${OUT_NOTE[SEL.out]}</div>`+
+   (list.length?list.map(({s,sc,why})=>{const c=CATS.find(x=>x.id===s.cat).c,B0=build(s);
+     return `<div class="rec" style="--c:${c}"><div style="flex:1;min-width:220px"><b>${s.en}（${s.zh}）</b>${sc>=2?' <span class="bd" style="--c:#15803d">推薦</span>':''}
+       <p>${s.lead}</p><p style="color:var(--mute)">${RISKTXT[s.risk]} · ${IVTXT[s.iv]}${why.length?' · '+why.join('；'):''}</p></div>
+       <div class="mini">${chartSVG(s,B0,c,300,120,{mini:true})}</div><button data-id="${s.id}">看詳解</button></div>`;}).join(''):'<div class="warn">沒有符合條件的策略，請放寬風險偏好。</div>');
+  $('pk-res').querySelectorAll('button[data-id]').forEach(b=>b.onclick=()=>go(b.dataset.id));
+}
+
+/* ============ 基礎觀念 ============ */
+function renderBasic(){
+  const four=[['long-call','買 Call','買方｜看漲'],['long-put','買 Put','買方｜看跌']].map(x=>BYID[x[0]]);
+  const sellers=[{...BYID['csp'],_n:'賣 Put'}];
+  const mk=(legs,c,t,d)=>{const old=P.f;const B={legs:legs.map(l=>{const o={...l};if(l.t==='S'){o.cost=100;o.price=0;}else{o.K=100+l.k*5;o.T0=30/365;o.price=bs(100,o.K,o.T0,.25,l.t);}return o;}),Tn:30/365,Tf:90/365,sig:.25};
+    const sv=P.S;P.S=100;const h=`<div class="card"><h3>${t}</h3><div class="chartbox">${chartSVG({}, B, c, 300,150,{mini:true})}</div><p style="margin:6px 0 0;font-size:13.5px">${d}</p></div>`;P.S=sv;return h;};
+  $('v-basic').innerHTML=`
+  <div class="card"><h3>四種基本部位（Long / Short × Call / Put）</h3>
+   <div class="basic-grid">
+    ${mk([buy('C',0)],'#15803d','買 Call（Long Call）','看漲。最大虧損＝權利金；獲利無限。')}
+    ${mk([sell('C',0)],'#b91c1c','賣 Call（Short Call）','看不漲。最大獲利＝權利金；虧損無限（裸賣）。')}
+    ${mk([buy('P',0)],'#b91c1c','買 Put（Long Put）','看跌。最大虧損＝權利金；下跌賺錢。')}
+    ${mk([sell('P',0)],'#15803d','賣 Put（Short Put）','看不跌。最大獲利＝權利金；下跌虧損大。')}
+   </div></div>
+  <div class="grid2">
+   <div class="card"><h3>學習路徑建議</h3><ol class="pl" style="padding-left:22px">
+    <li>先吃透「買 Call / 買 Put」與時間價值衰減。</li>
+    <li>學「四個垂直價差」：兩買兩賣，風險有限、成本低。</li>
+    <li>進階到「Covered Call、Cash Secured Put、Collar」。</li>
+    <li>再學「Iron Condor、Butterfly」等區間策略。</li>
+    <li>最後才碰「Straddle/Strangle」與「裸賣」類。</li></ol></div>
+   <div class="card"><h3>選擇權口訣</h3><ul class="pl">
+    <li>買方：<b>方向 ＋ 時間 ＋ 波動</b>都要對。</li>
+    <li>賣方：<b>勝率高、賺小賠大</b>，必須控風險。</li>
+    <li>IV 高 → 偏賣；IV 低 → 偏買。</li>
+    <li>價差策略＝用賣出的腿「降低成本」並「限制風險」。</li></ul></div>
+  </div>
+  <div class="card"><h3>名詞速查</h3><dl class="glos">
+   <dt>權利金 Premium</dt><dd>買方付、賣方收的選擇權價格。＝內含價值 ＋ 時間價值。</dd>
+   <dt>價內 / 價平 / 價外（ITM / ATM / OTM）</dt><dd>Call：標的 > 履約價為價內；Put 相反。價外選擇權只有時間價值。</dd>
+   <dt>Delta</dt><dd>標的漲 1 元，選擇權約變動多少；也是「到期價內機率」的粗略估計。Call 為 0~1，Put 為 −1~0。</dd>
+   <dt>Gamma</dt><dd>Delta 的變化速度。買方為正（越賺越快），賣方為負（越虧越快）。</dd>
+   <dt>Theta</dt><dd>每天流失的時間價值。買方為負（付錢給時間），賣方為正（賺時間）。</dd>
+   <dt>Vega</dt><dd>IV 變動 1% 時價格的變動。買方為正，賣方為負。</dd>
+   <dt>隱含波動率 IV</dt><dd>市場對未來波動的「定價」。事件前常墊高、事件後崩落（IV Crush）。</dd>
+   <dt>指派 / 履約 Assignment / Exercise</dt><dd>美式可提前履約；台指選擇權（TXO）為歐式、現金結算，只在到期日。</dd>
+   <dt>垂直 / 水平 / 對角價差</dt><dd>垂直＝同到期日不同履約價；水平（日曆）＝同履約價不同到期日；對角＝兩者都不同。</dd>
+   <dt>Roll（展期）</dt><dd>平掉現有部位，再建立更遠或更不同履約價的新部位。</dd>
+  </dl></div>
+  <div class="warn"><b>風險提示：</b>裸賣風險極高，新手慎用；策略皆有弱點，先了解再交易；留意選擇權流動性與到期日；先理解盈虧結構，再下單。</div>`;
+}
+
+/* ============ 切換 ============ */
+function showView(v){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));
+  try{localStorage.setItem('osg-view',v);}catch(e){}
+  if(v==='pick')renderPick();if(v==='basic')renderBasic();
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>showView(b.dataset.v));
+const h=location.hash.slice(1);if(BYID[h])curId=h;
+renderSide();renderDetail();
+</script>
+</body>
+</html>
